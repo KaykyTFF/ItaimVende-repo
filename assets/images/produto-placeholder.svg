@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+  <rect width="400" height="300" fill="#16222F"/>
+  <rect x="16" y="16" width="368" height="268" rx="14" fill="#1A2837" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"/>
+  <g transform="translate(160, 95)" stroke="#44BD32" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="4" y="8" width="72" height="54" rx="8"/>
+    <circle cx="26" cy="26" r="6"/>
+    <path d="M10 52l18-18 16 16 16-16 14 14"/>
+  </g>
+  <text x="200" y="195" fill="#94A3B8" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="600" text-anchor="middle">Itaim Vende</text>
+</svg>

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Itaim Vende - O maior marketplace de compra, venda e trocas em Paulistana, Itaim e região.">
+  <title>Itaim Vende - Marketplace</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/images/header-logo.png">
+
+  <!-- Estilos da Aplicação -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/layout.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+</head>
+<body>
+
+  <!-- Barra Superior de Avisos -->
+  <div class="top-bar">
+    <div class="top-bar-inner">
+      <span>🎉 Bem-vindo ao <strong>Itaim Vende</strong>: Negocie com segurança e rapidez perto de você!</span>
+      <span>📍 Paulistana, Itaim e Região</span>
+    </div>
+  </div>
+
+  <!-- Header da Aplicação -->
+  <header class="app-header">
+    <div class="header-container">
+      
+      <!-- Marca / Logotipo -->
+      <a href="#" class="brand-logo" id="brand-logo" aria-label="Itaim Vende Início">
+        <img src="assets/images/header1-logo.png" alt="Itaim Vende" onerror="this.src='assets/images/header-logo.png'">
+      </a>
+
+      <!-- Barra de Pesquisa Global -->
+      <div class="search-container">
+        <div class="search-input-wrapper">
+          <span class="search-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </span>
+          <input 
+            type="search" 
+            id="search-input" 
+            class="search-input" 
+            placeholder="Buscar produtos, marcas e muito mais..." 
+            autocomplete="off"
+            aria-label="Buscar produtos no catálogo"
+          >
+          <button type="button" class="search-clear" id="search-clear" aria-label="Limpar busca">✕</button>
+        </div>
+      </div>
+
+      <!-- Ações do Usuário: Favoritos, Usuário & Carrinho -->
+      <div class="header-actions">
+        <!-- Botão Favoritos -->
+        <a href="#favoritos" class="btn-icon" id="header-fav-btn" aria-label="Meus Favoritos" title="Meus Favoritos">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+          <span class="badge-pill" id="header-fav-count" style="background-color: #ef4444;">0</span>
+        </a>
+
+        <!-- Botão Usuário / Login -->
+        <button type="button" class="user-profile-btn" id="header-user-btn" aria-label="Conta de usuário">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <span>Entrar</span>
+        </button>
+
+        <!-- Botão Carrinho -->
+        <button type="button" class="btn-icon" id="header-cart-btn" aria-label="Abrir carrinho de compras" title="Meu Carrinho">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+          </svg>
+          <span class="badge-pill" id="header-cart-count">0</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Banner Promocional de Destaque -->
+  <section class="hero-banner-section" aria-label="Destaques e Ofertas da Semana">
+    <div class="hero-banner">
+      <div class="hero-content">
+        <span class="hero-tag">🔥 Oportunidade da Semana</span>
+        <h1 class="hero-title">Encontre tudo o que procura direto de quem vende perto de você</h1>
+        <p class="hero-subtitle">Negocie diretamente com vendedores de confiança em Paulistana e região com comodidade.</p>
+        <a href="#products-view-section" class="btn btn-primary">
+          Explorar Ofertas
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Navegação Rápida por Categorias -->
+  <nav class="category-quick-nav" aria-label="Categorias Rápidas">
+    <div class="category-scroll" id="category-quick-nav">
+      <!-- Inserido dinamicamente pelo app.js -->
+    </div>
+  </nav>
+
+  <!-- Conteúdo Principal: 2 Colunas (Sidebar Filtros + Catálogo de Produtos) -->
+  <main class="main-wrapper" id="products-view-section">
+    <div class="marketplace-layout">
+
+      <!-- Barra Lateral de Filtros -->
+      <aside class="filters-sidebar" id="filters-sidebar" aria-label="Filtros de Busca">
+        <!-- Renderizado dinamicamente pelo filter-bar.js -->
+      </aside>
+
+      <!-- Visualização de Produtos -->
+      <section class="products-view" aria-label="Catálogo de Produtos">
+        
+        <div class="view-header">
+          <div class="view-header-title">
+            <span>Catálogo Geral</span>
+            <span class="product-count" id="products-count">Carregando anúncios...</span>
+          </div>
+          
+          <div class="view-controls">
+            <button type="button" class="btn btn-outline btn-sm mobile-filter-btn" id="btn-mobile-filters">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+              </svg>
+              Filtrar
+            </button>
+          </div>
+        </div>
+
+        <!-- Grade Dinâmica de Produtos -->
+        <div class="products-grid" id="products-grid">
+          <!-- Cards gerados dinamicamente pelo product-card.js -->
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Rodapé Institucional -->
+  <footer class="app-footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <h3>Itaim Vende</h3>
+        <p>A plataforma digital que conecta a comunidade de Paulistana e região para compras, vendas e negociações seguras.</p>
+      </div>
+      <div class="footer-column">
+        <h4>Departamentos</h4>
+        <ul>
+          <li><a href="#cat=Eletrônicos">Eletrônicos</a></li>
+          <li><a href="#cat=Móveis">Móveis</a></li>
+          <li><a href="#cat=Moda">Moda & Vestuário</a></li>
+          <li><a href="#cat=Esportes">Esportes & Lazer</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Ajuda & Suporte</h4>
+        <ul>
+          <li><a href="#">Central de Ajuda</a></li>
+          <li><a href="#">Dicas de Segurança</a></li>
+          <li><a href="#">Fale Conosco</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Segurança</h4>
+        <ul>
+          <li><a href="#">Termos de Uso</a></li>
+          <li><a href="#">Política de Privacidade</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Itaim Vende. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- ========================================================================
+       MODAIS DO SISTEMA
+       ======================================================================== -->
+
+  <!-- Modal de Autenticação (Login / Cadastro) -->
+  <div class="modal-overlay" id="modal-auth" role="dialog" aria-modal="true" aria-labelledby="modal-auth-title">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 id="modal-auth-title">Acesse sua Conta</h3>
+        <button type="button" class="btn-icon" data-modal-close aria-label="Fechar modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="form-auth-modal">
+          <div class="form-group">
+            <label for="auth-email">E-mail ou Usuário</label>
+            <input type="text" id="auth-email" class="form-control" placeholder="admin@gmail.com ou raili" required>
+          </div>
+          <div class="form-group">
+            <label for="auth-password">Senha</label>
+            <input type="password" id="auth-password" class="form-control" placeholder="••••••••" required>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+            Entrar no Itaim Vende
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Checkout -->
+  <div class="modal-overlay" id="modal-checkout" role="dialog" aria-modal="true" aria-labelledby="modal-checkout-title">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 id="modal-checkout-title">Finalizar Pedido</h3>
+        <button type="button" class="btn-icon" data-modal-close aria-label="Fechar modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="form-checkout-modal">
+          <p id="checkout-summary-text" style="font-weight: 700; color: var(--color-primary); margin-bottom: 1rem;"></p>
+          
+          <div class="form-group">
+            <label for="checkout-address">Endereço de Entrega / Retirada</label>
+            <input type="text" id="checkout-address" class="form-control" placeholder="Rua, Bairro, Paulistana - PI" required>
+          </div>
+
+          <div class="form-group">
+            <label>Forma de Pagamento</label>
+            <div style="display: flex; gap: 1rem; margin-top: 0.5rem;">
+              <label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer; font-size: 0.9rem;">
+                <input type="radio" name="paymentMethod" value="pix" checked>
+                PIX
+              </label>
+              <label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer; font-size: 0.9rem;">
+                <input type="radio" name="paymentMethod" value="credit_card">
+                Cartão de Crédito
+              </label>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.25rem;">
+            Confirmar Pedido
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Detalhes Rápidos do Produto -->
+  <div class="modal-overlay" id="modal-quick-view" role="dialog" aria-modal="true" aria-labelledby="modal-quick-title">
+    <div class="modal-container" style="max-width: 620px;">
+      <div class="modal-header">
+        <h3 id="modal-quick-title">Detalhes do Anúncio</h3>
+        <button type="button" class="btn-icon" data-modal-close aria-label="Fechar modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <!-- Preenchido via app.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Contêiner de Notificações Toast -->
+  <div id="toast-container" aria-live="polite"></div>
+
+  <!-- Inicializador da Aplicação -->
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>

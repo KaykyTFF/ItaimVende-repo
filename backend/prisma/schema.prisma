@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int       @id @default(autoincrement())
+  name         String
+  username     String?   @unique
+  email        String    @unique
+  password     String
+  phone        String?
+  city         String?   @default("Paulistana")
+  neighborhood String?   @default("Centro")
+  avatar       String?   @default("assets/images/icon-user.png")
+  bio          String?
+  role         String    @default("buyer") // "admin", "seller", "buyer"
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  products     Product[]
+  orders       Order[]
+}
+
+model Category {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  slug      String    @unique
+  icon      String?
+  createdAt DateTime  @default(now())
+
+  products  Product[]
+}
+
+model Product {
+  id            Int         @id @default(autoincrement())
+  title         String
+  description   String
+  price         Float
+  originalPrice Float?
+  discount      Int?        @default(0)
+  condition     String      @default("NOVO") // "NOVO", "USADO"
+  status        String      @default("ATIVO") // "ATIVO", "VENDIDO", "PAUSADO"
+  isFeatured    Boolean     @default(false)
+  images        String      // JSON string array de imagens: '["url1", "url2"]'
+  
+  categoryId    Int
+  category      Category    @relation(fields: [categoryId], references: [id])
+  
+  sellerId      Int
+  seller        User        @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  
+  orderItems    OrderItem[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Order {
+  id              String      @id // ex: "ord_17123..."
+  buyerId         Int
+  buyer           User        @relation(fields: [buyerId], references: [id])
+  total           Float
+  status          String      @default("CONFIRMADO") // "PENDENTE", "CONFIRMADO", "ENVIADO", "CANCELADO"
+  paymentMethod   String      @default("pix")        // "pix", "credit_card", "boleto"
+  shippingAddress String                             // JSON string com endereço completo
+  
+  items           OrderItem[]
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model OrderItem {
+  id        Int      @id @default(autoincrement())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id])
+  quantity  Int      @default(1)
+  unitPrice Float
+}

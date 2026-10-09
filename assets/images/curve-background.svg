@@ -1,0 +1,13 @@
+<svg width="300" height="500" xmlns="http://www.w3.org/2000/svg">
+    <!-- Fundo branco -->
+    <rect width="300" height="500" fill="white" rx="15"/>
+
+    <!-- Área cinza escura APENAS embaixo -->
+    <path d="M 0 350 Q 150 450, 300 500 L 300 500 L 0 500 Z" fill="#2C3E50"/>
+
+    <!-- Linha verde -->
+    <path d="M 0 350 Q 150 450, 300 500"
+          stroke="#59AA59"
+          stroke-width="4"
+          fill="none"/>
+</svg>
