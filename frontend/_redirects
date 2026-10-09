@@ -1,0 +1,20 @@
+# Regras de redirecionamento quando o Netlify publica a pasta frontend
+/frontend/*              /:splat                                  301!
+
+/home                    /pages/home/home.html                    200
+/login                   /index.html                              200
+/cadastro                /pages/auth/cadastro.html                200
+/categoria               /pages/produtos/categoria.html           200
+/produto                 /pages/produtos/produto.html             200
+/vender                  /pages/vender/vender.html                200
+/meus-anuncios           /pages/vender/meus-anuncios.html         200
+/conversas               /pages/mensagens/conversas.html          200
+/chat                    /pages/mensagens/conversas.html          200
+/perfil                  /pages/perfil/perfil.html                200
+/vendedor                /pages/perfil/vendedor.html              200
+/configuracoes           /pages/perfil/configuracoes.html         200
+/favoritos               /pages/favoritos/favoritos.html          200
+/notificacoes            /pages/notificacoes/notificacoes.html    200
+
+# Página 404 personalizada
+/*                       /404.html                                404

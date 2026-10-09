@@ -1,0 +1,26 @@
+# Regras de redirecionamento caso o Netlify publique a raiz do repositório
+/                        /frontend/index.html                     200
+/index.html              /frontend/index.html                     200
+/home                    /frontend/pages/home/home.html           200
+/login                   /frontend/index.html                     200
+/cadastro                /frontend/pages/auth/cadastro.html       200
+/categoria               /frontend/pages/produtos/categoria.html  200
+/produto                 /frontend/pages/produtos/produto.html    200
+/vender                  /frontend/pages/vender/vender.html       200
+/meus-anuncios           /frontend/pages/vender/meus-anuncios.html 200
+/conversas               /frontend/pages/mensagens/conversas.html 200
+/chat                    /frontend/pages/mensagens/conversas.html 200
+/perfil                  /frontend/pages/perfil/perfil.html       200
+/vendedor                /frontend/pages/perfil/vendedor.html     200
+/configuracoes           /frontend/pages/perfil/configuracoes.html 200
+/favoritos               /frontend/pages/favoritos/favoritos.html 200
+/notificacoes            /frontend/pages/notificacoes/notificacoes.html 200
+
+# Fallback para ativos e páginas internas
+/assets/*                /frontend/assets/:splat                  200
+/css/*                   /frontend/css/:splat                     200
+/js/*                    /frontend/js/:splat                      200
+/pages/*                 /frontend/pages/:splat                   200
+
+# Página 404 personalizada
+/*                       /frontend/404.html                       404
