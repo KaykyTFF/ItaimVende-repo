@@ -52,3 +52,10 @@ npm run dev:frontend
 # Executar a API Backend
 npm run dev:backend
 ```
+
+---
+
+## 👥 Contribuição da Equipe
+
+Membros da equipe de desenvolvimento que precisam clonar o repositório e enviar commits devem seguir o guia passo a passo:  
+👉 **Consulte o [Guia de Contribuição (GUIA_CONTRIBUICAO.md)](file:///c:/Users/kayky/Downloads/Itaim%20Vende%20%282%29/Itaim%20Vende/marketplace-frontend/GUIA_CONTRIBUICAO.md)** para instruções completas de Git, convenções de commits e deploy automático.
