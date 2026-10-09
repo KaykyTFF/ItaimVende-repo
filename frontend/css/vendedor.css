@@ -1,0 +1,943 @@
+@import url('perfil.css');
+
+/* ==========================================================================
+   ITAIM VENDE - ESTILOS DA PÁGINA DE PERFIL PÚBLICO DO VENDEDOR (css/vendedor.css)
+   ========================================================================== */
+
+body.pagina-vendedor {
+    background-color: #F8FAFC;
+    color: #1E293B;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+}
+
+.vendedor-page-wrapper {
+    max-width: 1200px;
+    margin: 24px auto 80px;
+    padding: 0 20px;
+}
+
+.vendedor-banner-acoes {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.estrelas-seletor .estrela-item {
+    cursor: pointer;
+    font-size: 22px;
+    color: #CBD5E1;
+    transition: color 0.15s, transform 0.15s;
+    user-select: none;
+}
+
+.estrelas-seletor .estrela-item.ativa,
+.estrelas-seletor .estrela-item:hover {
+    color: #F59E0B;
+}
+
+.estrelas-seletor .estrela-item:hover {
+    transform: scale(1.2);
+}
+
+/* Breadcrumb */
+.vendedor-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13.5px;
+    color: #64748B;
+    margin-bottom: 24px;
+}
+
+.vendedor-breadcrumb a {
+    color: #475569;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.vendedor-breadcrumb a:hover {
+    color: #44BD32;
+}
+
+.vendedor-breadcrumb-sep {
+    color: #CBD5E1;
+}
+
+.vendedor-breadcrumb-current {
+    color: #0F172A;
+    font-weight: 700;
+}
+
+/* Toast de Notificação */
+.vendedor-toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 9999;
+    background: #0F172A;
+    color: #FFFFFF;
+    padding: 14px 22px;
+    border-radius: 14px;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(15px);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.vendedor-toast.visivel {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+/* ==========================================================================
+   1. HERO CARD DO VENDEDOR (BANNER PRINCIPAL)
+   ========================================================================== */
+.card-vendedor-hero {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(15, 23, 42, 0.04);
+    margin-bottom: 28px;
+}
+
+/* Capa decorativa no topo */
+.vendedor-capa-header {
+    height: 120px;
+    background: linear-gradient(135deg, #1E293B 0%, #0F172A 50%, #166534 100%);
+    position: relative;
+}
+
+.vendedor-capa-padrao {
+    position: absolute;
+    inset: 0;
+    opacity: 0.12;
+    background-image: radial-gradient(#FFFFFF 1px, transparent 1px);
+    background-size: 16px 16px;
+}
+
+/* Corpo do Perfil */
+.vendedor-hero-conteudo {
+    padding: 0 36px 32px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 28px;
+    position: relative;
+}
+
+.vendedor-avatar-e-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    flex: 1;
+}
+
+/* Avatar com borda destacada e selo */
+.vendedor-avatar-box {
+    position: relative;
+    margin-top: -50px;
+    flex-shrink: 0;
+}
+
+.vendedor-avatar-img {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid #FFFFFF;
+    background-color: #F1F5F9;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    display: block;
+}
+
+.vendedor-selo-verificado-badge {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    width: 28px;
+    height: 28px;
+    background: #44BD32;
+    color: #FFFFFF;
+    border: 3px solid #FFFFFF;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(68, 189, 50, 0.4);
+}
+
+.vendedor-selo-verificado-badge svg {
+    width: 14px;
+    height: 14px;
+}
+
+/* Informações de Texto */
+.vendedor-dados-coluna {
+    padding-top: 14px;
+    flex: 1;
+}
+
+.vendedor-nome-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+}
+
+.vendedor-nome-titulo {
+    font-size: 26px;
+    font-weight: 800;
+    color: #0F172A;
+    letter-spacing: -0.02em;
+    margin: 0;
+}
+
+.vendedor-tag-tipo {
+    background: #E8F5E9;
+    color: #2E7D32;
+    font-size: 12.5px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid #C8E6C9;
+}
+
+.vendedor-tag-tipo svg {
+    width: 13px;
+    height: 13px;
+}
+
+.vendedor-username-sub {
+    font-size: 14px;
+    color: #64748B;
+    font-weight: 500;
+    margin-bottom: 12px;
+}
+
+.vendedor-meta-itens {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    font-size: 14px;
+    color: #475569;
+    margin-bottom: 16px;
+}
+
+.vendedor-meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.vendedor-meta-item svg {
+    color: #64748B;
+}
+
+.vendedor-avaliacao-box {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #FFFBEB;
+    border: 1px solid #FDE68A;
+    padding: 3px 10px;
+    border-radius: 8px;
+    color: #B45309;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+/* Bio */
+.vendedor-bio-paragrafo {
+    font-size: 14.5px;
+    color: #334155;
+    line-height: 1.6;
+    max-width: 650px;
+    margin-top: 4px;
+}
+
+/* Coluna de Ações (WhatsApp + Compartilhar) */
+.vendedor-acoes-hero {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 220px;
+    padding-top: 14px;
+}
+
+.btn-vendedor-wpp {
+    background: #44BD32;
+    color: #FFFFFF;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 13px 20px;
+    border-radius: 14px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 4px 16px rgba(68, 189, 50, 0.3);
+    transition: all 0.25s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-vendedor-wpp:hover {
+    background: #38a529;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(68, 189, 50, 0.4);
+    color: #FFFFFF;
+}
+
+.btn-vendedor-compartilhar {
+    background: #F1F5F9;
+    color: #334155;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 11px 18px;
+    border-radius: 12px;
+    border: 1px solid #CBD5E1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-vendedor-compartilhar:hover {
+    background: #E2E8F0;
+    color: #0F172A;
+}
+
+/* ==========================================================================
+   2. GRID DE ESTATÍSTICAS E REPUTAÇÃO DO VENDEDOR
+   ========================================================================== */
+.vendedor-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.stat-vendedor-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 18px;
+    padding: 20px 22px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.02);
+    transition: transform 0.2s;
+}
+
+.stat-vendedor-card:hover {
+    transform: translateY(-2px);
+}
+
+.stat-icone-wrapper {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.stat-icone-verde,
+.stat-icone-azul,
+.stat-icone-amarelo,
+.stat-icone-roxo { 
+    background: #E8F5E9; 
+    color: #2E7D32; 
+}
+
+.stat-dados-textos {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-valor-num {
+    font-size: 20px;
+    font-weight: 800;
+    color: #0F172A;
+    line-height: 1.2;
+}
+
+.stat-rotulo-txt {
+    font-size: 13px;
+    color: #64748B;
+    font-weight: 500;
+    margin-top: 3px;
+}
+
+/* ==========================================================================
+   3. SEÇÃO PRINCIPAL: VITRINE DE ANÚNCIOS DO VENDEDOR
+   ========================================================================== */
+.vendedor-secao-anuncios {
+    margin-bottom: 48px;
+}
+
+.vendedor-anuncios-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 22px;
+    border-bottom: 1.5px solid #E2E8F0;
+    padding-bottom: 16px;
+}
+
+.vendedor-anuncios-titulos {
+    display: flex;
+    flex-direction: column;
+}
+
+.vendedor-anuncios-titulos h2 {
+    font-size: 22px;
+    font-weight: 800;
+    color: #0F172A;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+}
+
+.vendedor-badge-qtd {
+    background: #E2E8F0;
+    color: #334155;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+
+.vendedor-anuncios-titulos p {
+    font-size: 14px;
+    color: #64748B;
+    margin: 4px 0 0;
+}
+
+/* Barra de Filtro / Ordenação */
+.vendedor-filtro-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.vendedor-filtro-label {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #64748B;
+}
+
+.vendedor-select-ordem {
+    background: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    border-radius: 10px;
+    padding: 8px 14px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #334155;
+    outline: none;
+    cursor: pointer;
+    font-family: inherit;
+    transition: border-color 0.2s;
+}
+
+.vendedor-select-ordem:focus {
+    border-color: #44BD32;
+}
+
+/* Grade de Produtos */
+.grade-produtos-vendedor {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 20px;
+}
+
+/* Card Individual de Produto */
+.card-produto-vendedor {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.03);
+    transition: all 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+}
+
+.card-produto-vendedor:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+    border-color: #CBD5E1;
+}
+
+.card-prod-foto-box {
+    width: 100%;
+    height: 180px;
+    background: #F1F5F9;
+    position: relative;
+    overflow: hidden;
+}
+
+.card-prod-foto-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.card-produto-vendedor:hover .card-prod-foto-box img {
+    transform: scale(1.05);
+}
+
+.card-prod-badge-cat {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(4px);
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.card-prod-conteudo {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.card-prod-preco {
+    font-size: 19px;
+    font-weight: 800;
+    color: #44BD32;
+    margin-bottom: 6px;
+}
+
+.card-prod-titulo {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #1E293B;
+    line-height: 1.4;
+    margin-bottom: 12px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    flex: 1;
+}
+
+.card-prod-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #64748B;
+    border-top: 1px solid #F1F5F9;
+    padding-top: 10px;
+    margin-top: auto;
+}
+
+.card-prod-loc {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Estado Vazio */
+.vendedor-anuncios-vazio {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 56px 20px;
+    background: #FFFFFF;
+    border-radius: 20px;
+    border: 1px dashed #CBD5E1;
+}
+
+.vendedor-anuncios-vazio-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+}
+
+.vendedor-anuncios-vazio h3 {
+    font-size: 18px;
+    font-weight: 800;
+    color: #0F172A;
+    margin-bottom: 6px;
+}
+
+.vendedor-anuncios-vazio p {
+    font-size: 14px;
+    color: #64748B;
+    max-width: 440px;
+    margin: 0 auto;
+}
+
+/* ==========================================================================
+   4. AVALIAÇÕES DA COMUNIDADE & DICAS DE SEGURANÇA
+   ========================================================================== */
+.vendedor-duas-colunas {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 24px;
+    margin-bottom: 48px;
+}
+
+.card-secao-vendedor {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 20px;
+    padding: 28px;
+    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.02);
+}
+
+.card-secao-vendedor h3 {
+    font-size: 18px;
+    font-weight: 800;
+    color: #0F172A;
+    margin: 0 0 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Lista de Avaliações */
+.lista-avaliacoes-vendedor {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.avaliacoes-vazio {
+    text-align: center;
+    padding: 34px 18px;
+    background: #F8FAFC;
+    border-radius: 14px;
+    border: 1px dashed #CBD5E1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.avaliacoes-vazio-icone {
+    font-size: 32px;
+    color: #94A3B8;
+    margin-bottom: 2px;
+}
+
+.avaliacoes-vazio-titulo {
+    font-size: 15px;
+    font-weight: 700;
+    color: #334155;
+    margin: 0;
+}
+
+.avaliacoes-vazio-desc {
+    font-size: 13.5px;
+    color: #64748B;
+    margin: 0;
+    max-width: 320px;
+    line-height: 1.4;
+}
+
+.item-avaliacao-card {
+    border-bottom: 1px solid #F1F5F9;
+    padding-bottom: 16px;
+}
+
+.item-avaliacao-card:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.avaliacao-topo-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.avaliacao-autor-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.avaliacao-avatar-mini {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #E2E8F0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 12px;
+    color: #334155;
+}
+
+.avaliacao-autor-nome {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #1E293B;
+}
+
+.avaliacao-estrelas {
+    color: #F59E0B;
+    font-size: 13px;
+    letter-spacing: 2px;
+}
+
+.avaliacao-comentario-txt {
+    font-size: 13.5px;
+    color: #475569;
+    line-height: 1.5;
+    margin: 0 0 6px;
+}
+
+.avaliacao-data-item {
+    font-size: 12px;
+    color: #94A3B8;
+}
+
+/* Card Dicas de Segurança */
+.box-dicas-seguranca {
+    background: #F8FAFC;
+    border-radius: 14px;
+    padding: 18px;
+    border: 1px solid #E2E8F0;
+}
+
+.dica-linha {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.dica-linha:last-child {
+    margin-bottom: 0;
+}
+
+.dica-linha-icone {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: #E8F5E9;
+    color: #2E7D32;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.dica-linha-icone svg {
+    width: 15px;
+    height: 15px;
+}
+
+.dica-linha-texto strong {
+    display: block;
+    font-size: 13.5px;
+    color: #1E293B;
+    margin-bottom: 2px;
+}
+
+.dica-linha-texto span {
+    font-size: 12.5px;
+    color: #64748B;
+    line-height: 1.4;
+}
+
+/* ==========================================================================
+   RESPONSIVIDADE (MOBILE & TABLET)
+   ========================================================================== */
+@media (max-width: 768px) {
+    .vendedor-page-wrapper {
+        padding: 0 12px;
+        margin: 14px auto 40px;
+    }
+
+    .vendedor-breadcrumb {
+        font-size: 12.5px;
+        margin-bottom: 14px;
+    }
+
+    .vendedor-banner-acoes {
+        width: 100%;
+        margin-top: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .btn-banner-wpp,
+    .btn-banner-compartilhar {
+        width: 100% !important;
+        justify-content: center !important;
+        box-sizing: border-box !important;
+    }
+
+    .vendedor-stats-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        width: 100%;
+        margin-bottom: 24px;
+    }
+
+    .stat-vendedor-card,
+    .vendedor-stat-card {
+        padding: 14px 12px;
+        border-radius: 14px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+        box-sizing: border-box;
+        text-align: left;
+    }
+
+    .stat-icone-wrapper {
+        width: 42px;
+        height: 42px;
+        min-width: 42px;
+        border-radius: 12px;
+    }
+
+    .stat-icone-wrapper svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .stat-dados-textos {
+        align-items: flex-start;
+        text-align: left;
+        min-width: 0;
+    }
+
+    .stat-valor-num {
+        font-size: 17px;
+        font-weight: 800;
+        line-height: 1.2;
+    }
+
+    .stat-rotulo-txt {
+        font-size: 12px;
+        color: #64748B;
+        font-weight: 600;
+        white-space: normal;
+        word-break: normal;
+        line-height: 1.3;
+        margin-top: 2px;
+    }
+
+    .vendedor-anuncios-header-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+
+    .vendedor-filtro-box {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .vendedor-select-ordem {
+        flex: 1;
+    }
+
+    .grade-produtos-vendedor {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 10px !important;
+    }
+
+    .vendedor-duas-colunas {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .card-secao-vendedor {
+        padding: 18px 14px;
+        border-radius: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .grade-produtos-vendedor {
+        gap: 8px !important;
+    }
+
+    .vendedor-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+
+    .stat-vendedor-card,
+    .vendedor-stat-card {
+        padding: 12px 10px;
+        gap: 10px;
+    }
+
+    .stat-icone-wrapper {
+        width: 38px;
+        height: 38px;
+        min-width: 38px;
+    }
+
+    .stat-icone-wrapper svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .stat-valor-num {
+        font-size: 15.5px;
+    }
+
+    .stat-rotulo-txt {
+        font-size: 11px;
+    }
+}
+
+/* Ocultar listras geométricas decorativas do banner do vendedor */
+.perfil-banner-stripes,
+.perfil-banner-stripes-desktop,
+.perfil-banner-stripes-mobile {
+    display: none !important;
+}

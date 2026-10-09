@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Itaim Vende - Plataforma de Compra, Venda e Trocas. Acesse sua conta ou cadastre-se agora.">
+    <title>ItaimVende - Autenticação</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Segoe+UI&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/header-logo.png">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <main class="auth-wrapper">
+        <!-- ÁREA SUPERIOR (LOGO E MASCOTE) -->
+        <header class="topo-container" id="topo-container">
+            <div class="logo-box">
+                <img src="assets/header-logo.png" alt="Itaim Vende - Compra, Venda e Trocas" class="logo-img" id="img-logo">
+            </div>
+
+            <!-- Seletor de visualização (Login / Cadastro) -->
+            <nav class="nav-abas" aria-label="Navegação entre Login e Cadastro">
+                <button type="button" class="btn-aba aba-ativa" id="aba-login" data-target="login">Entrar</button>
+                <button type="button" class="btn-aba" id="aba-cadastro" data-target="cadastro">Cadastre-se</button>
+            </nav>
+        </header>
+
+        <!-- ÁREA INFERIOR (PAINEL ESCURO) -->
+        <section class="painel-inferior painel-curvo" id="painel-principal" aria-label="Painel de Autenticação">
+            
+            <!-- ==========================================================
+                 VISÃO 1: TELA DE LOGIN
+                 ========================================================== -->
+            <div class="view-secao secao-ativa container-login" id="secao-login">
+                <h1 class="titulo-login">LOGIN</h1>
+
+                <form id="form-login" class="form-auth" novalidate>
+                    <!-- Campo E-mail -->
+                    <div class="grupo-campo">
+                        <label for="input-email" class="label-campo">E-mail:</label>
+                        <div class="input-wrapper">
+                            <input 
+                                type="email" 
+                                id="input-email" 
+                                name="email" 
+                                class="campo-texto" 
+                                placeholder="Digite seu e-mail" 
+                                autocomplete="email" 
+                                required
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Campo Senha -->
+                    <div class="grupo-campo">
+                        <label for="input-senha" class="label-campo">Senha:</label>
+                        <div class="input-wrapper">
+                            <input 
+                                type="password" 
+                                id="input-senha" 
+                                name="senha" 
+                                class="campo-texto" 
+                                placeholder="Digite sua senha" 
+                                autocomplete="current-password" 
+                                required
+                            >
+                            <button type="button" class="btn-toggle-senha" id="btn-toggle-senha-login" aria-label="Mostrar ou ocultar senha">
+                                <svg class="icone-olho icone-aberto" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                                <svg class="icone-olho icone-fechado icone-oculto" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Link Esqueceu a Senha -->
+                    <div class="box-esqueceu">
+                        <a href="#recuperar-senha" class="link-esqueceu" id="link-esqueceu">Esqueceu a senha?</a>
+                    </div>
+
+                    <!-- Botões -->
+                    <div class="box-botoes">
+                        <button type="submit" class="btn-entrar" id="btn-entrar">
+                            <span class="btn-texto">ENTRAR</span>
+                            <span class="btn-spinner" aria-hidden="true"></span>
+                        </button>
+
+                        <span class="label-ou">ou</span>
+
+                        <button type="button" class="btn-cadastrar" id="btn-ir-para-cadastro">
+                            CADASTRE-SE
+                        </button>
+                    </div>
+
+                    <!-- Feedback de Status -->
+                    <div class="status-msg" id="status-msg-login" role="alert" aria-live="polite"></div>
+                </form>
+            </div>
+
+            <!-- ==========================================================
+                 VISÃO 2: TELA DE CADASTRO (EXATAMENTE COMO NAS IMAGENS, SEM CPF)
+                 ========================================================== -->
+            <div class="view-secao container-cadastro" id="secao-cadastro">
+                <form id="form-cadastro-completo" class="form-auth" novalidate>
+                    
+                    <!-- Campo Nome Completo -->
+                    <div class="grupo-campo">
+                        <label for="cad-nome" class="label-campo">Nome Completo:</label>
+                        <input 
+                            type="text" 
+                            id="cad-nome" 
+                            name="nome" 
+                            class="campo-texto" 
+                            placeholder="Seu nome completo" 
+                            required
+                        >
+                    </div>
+
+                    <!-- Campo Nome de Usuário (@) posicionado logo abaixo do Nome Completo -->
+                    <div class="grupo-campo">
+                        <label for="cad-username" class="label-campo">Nome de Usuário (@):</label>
+                        <input 
+                            type="text" 
+                            id="cad-username" 
+                            name="username" 
+                            class="campo-texto" 
+                            placeholder="ex: joaosilva" 
+                            required
+                        >
+                    </div>
+
+                    <!-- Campo Cidade -->
+                    <div class="grupo-campo">
+                        <label for="cad-cidade" class="label-campo">Cidade:</label>
+                        <div class="select-wrapper">
+                            <select id="cad-cidade" name="cidade" class="select-campo" required>
+                                <option value="" disabled selected>Selecione sua cidade</option>
+                                <option value="Paulistana">Paulistana</option>
+                                <option value="Acauã">Acauã</option>
+                                <option value="Betânia do Piauí">Betânia do Piauí</option>
+                                <option value="Curral Novo">Curral Novo</option>
+                                <option value="Jacobina">Jacobina</option>
+                                <option value="Queimada Nova">Queimada Nova</option>
+                                <option value="Patos">Patos</option>
+                                <option value="Simões">Simões</option>
+                                <option value="Caridade">Caridade</option>
+                                <option value="Marcolândia">Marcolândia</option>
+                                <option value="Jaicós">Jaicós</option>
+                                <option value="Massapê">Massapê</option>
+                                <option value="Picos">Picos</option>
+                                <option value="Petrolina">Petrolina</option>
+                            </select>
+                            <svg class="select-seta" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Campo Bairro -->
+                    <div class="grupo-campo">
+                        <label for="cad-bairro" class="label-campo">Bairro:</label>
+                        <input 
+                            type="text" 
+                            id="cad-bairro" 
+                            name="bairro" 
+                            class="campo-texto" 
+                            placeholder="Seu Bairro"
+                        >
+                    </div>
+
+                    <!-- Campo WhatsApp / Contato -->
+                    <div class="grupo-campo">
+                        <label for="cad-telefone" class="label-campo">WhatsApp / Contato:</label>
+                        <input 
+                            type="tel" 
+                            id="cad-telefone" 
+                            name="telefone" 
+                            class="campo-texto" 
+                            placeholder="(00) 00000-0000"
+                            maxlength="15"
+                        >
+                    </div>
+
+                    <div class="grupo-campo">
+                        <label for="cad-email-completo" class="label-campo">E-mail:</label>
+                        <input 
+                            type="email" 
+                            id="cad-email-completo" 
+                            name="email" 
+                            class="campo-texto" 
+                            placeholder="email@exemplo.com" 
+                            required
+                        >
+                    </div>
+
+                    <div class="grupo-campo">
+                        <label for="cad-senha-completo" class="label-campo">Senha:</label>
+                        <div class="input-wrapper">
+                            <input 
+                                type="password" 
+                                id="cad-senha-completo" 
+                                name="senha" 
+                                class="campo-texto" 
+                                placeholder="Mín 8 chars, 1 Maiúscula, 1 Símbolo" 
+                                required
+                            >
+                            <button type="button" class="btn-toggle-senha" id="btn-toggle-cad-senha" aria-label="Mostrar ou ocultar senha">
+                                <svg class="icone-olho icone-aberto" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                                <svg class="icone-olho icone-fechado icone-oculto" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grupo-campo">
+                        <label for="cad-confirma-senha" class="label-campo">Confirmar Senha:</label>
+                        <div class="input-wrapper">
+                            <input 
+                                type="password" 
+                                id="cad-confirma-senha" 
+                                name="confirmaSenha" 
+                                class="campo-texto" 
+                                placeholder="Confirme sua senha" 
+                                required
+                            >
+                            <button type="button" class="btn-toggle-senha" id="btn-toggle-cad-confirma" aria-label="Mostrar ou ocultar confirmação de senha">
+                                <svg class="icone-olho icone-aberto" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                                <svg class="icone-olho icone-fechado icone-oculto" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Botão CONCLUIR CADASTRO -->
+                    <button type="submit" class="btn-concluir-cadastro" id="btn-concluir-cadastro">
+                        <span class="btn-texto">CONCLUIR CADASTRO</span>
+                        <span class="btn-spinner" aria-hidden="true"></span>
+                    </button>
+
+                    <!-- Link Voltar ao Login -->
+                    <div class="box-voltar-login">
+                        <button type="button" class="link-voltar" id="btn-voltar-ao-login">
+                            Voltar ao Login
+                        </button>
+                    </div>
+
+                    <!-- Feedback de Status Cadastro -->
+                    <div class="status-msg" id="status-msg-cadastro" role="alert" aria-live="polite"></div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- MODAL ESQUECEU A SENHA / CONFIRMAÇÃO DE CÓDIGO -->
+    <div class="modal-backdrop" id="modal-esqueceu" aria-hidden="true" role="dialog" aria-labelledby="modal-titulo-recuperar">
+        <div class="modal-card">
+            <button class="modal-close" id="modal-close-btn" aria-label="Fechar">&times;</button>
+            <div class="modal-icon-topo" id="modal-icon-topo">
+                <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#44BD32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+            </div>
+            <h2 class="modal-titulo" id="modal-titulo-recuperar">Recuperar Senha</h2>
+            <p class="modal-descricao" id="modal-descricao-recuperar">Informe o e-mail cadastrado na sua conta para enviarmos o código de confirmação.</p>
+            
+            <!-- ETAPA 1: INFORMAR E-MAIL -->
+            <form id="form-recuperar-etapa1" class="form-auth" novalidate>
+                <div class="grupo-campo">
+                    <label for="recuperar-email" class="label-campo">E-mail cadastrado:</label>
+                    <input type="email" id="recuperar-email" class="campo-texto" placeholder="exemplo@email.com" required>
+                </div>
+                <button type="submit" class="btn-entrar btn-modal" id="btn-enviar-recuperacao">
+                    <span class="btn-texto">ENVIAR CÓDIGO</span>
+                    <span class="btn-spinner" aria-hidden="true"></span>
+                </button>
+                <div class="status-msg" id="status-modal-recuperar"></div>
+            </form>
+
+            <!-- ETAPA 2: DIGITAR CÓDIGO DE 6 DÍGITOS -->
+            <div id="form-recuperar-etapa2" class="etapa-codigo" style="display: none;">
+                <!-- Destaque para testes com o código gerado -->
+                <div class="box-codigo-teste" id="box-codigo-teste">
+                    <span class="box-codigo-label">Código gerado para teste:</span>
+                    <div class="box-codigo-valor-wrap">
+                        <strong id="codigo-gerado-display">123456</strong>
+                        <button type="button" class="btn-copiar-codigo-teste" id="btn-copiar-codigo" title="Preencher automaticamente">
+                            Usar este código
+                        </button>
+                    </div>
+                </div>
+
+                <div class="codigo-inputs-grid" id="codigo-inputs-container">
+                    <input type="text" inputmode="numeric" maxlength="1" class="input-digito-codigo" data-idx="0" autocomplete="off">
+                    <input type="text" inputmode="numeric" maxlength="1" class="input-digito-codigo" data-idx="1" autocomplete="off">
+                    <input type="text" inputmode="numeric" maxlength="1" class="input-digito-codigo" data-idx="2" autocomplete="off">
+                    <input type="text" inputmode="numeric" maxlength="1" class="input-digito-codigo" data-idx="3" autocomplete="off">
+                    <input type="text" inputmode="numeric" maxlength="1" class="input-digito-codigo" data-idx="4" autocomplete="off">
+                    <input type="text" inputmode="numeric" maxlength="1" class="input-digito-codigo" data-idx="5" autocomplete="off">
+                </div>
+
+                <button type="button" class="btn-entrar btn-modal" id="btn-validar-codigo">
+                    <span class="btn-texto">CONFIRMAR CÓDIGO</span>
+                    <span class="btn-spinner" aria-hidden="true"></span>
+                </button>
+
+                <div class="status-msg" id="status-modal-codigo"></div>
+
+                <div class="rodape-reenviar-codigo">
+                    <span>Não recebeu o código?</span>
+                    <button type="button" class="btn-reenviar-link" id="btn-reenviar-codigo">Reenviar agora</button>
+                    <span id="timer-reenviar-codigo" class="timer-reenviar" style="display: none;">(aguarde <b id="timer-segundos">30</b>s)</span>
+                </div>
+                
+                <div style="margin-top: 14px;">
+                    <a href="javascript:void(0)" class="link-voltar" id="btn-voltar-etapa1" style="font-size: 13px; color: #BDC3C7;">← Alterar e-mail</a>
+                </div>
+            </div>
+
+            <!-- ETAPA 3: DEFINIR NOVA SENHA -->
+            <form id="form-recuperar-etapa3" class="form-auth" style="display: none;" novalidate>
+                <div class="grupo-campo">
+                    <label for="recuperar-nova-senha" class="label-campo">Nova Senha:</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="recuperar-nova-senha" class="campo-texto" placeholder="Mín 8 chars, 1 Maiúscula, 1 Símbolo" required>
+                        <button type="button" class="btn-toggle-senha" id="btn-toggle-nova-senha" aria-label="Mostrar ou ocultar senha">
+                            <svg class="icone-olho icone-aberto" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            <svg class="icone-olho icone-fechado icone-oculto" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                <line x1="1" y1="1" x2="23" y2="23"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="grupo-campo">
+                    <label for="recuperar-confirma-senha" class="label-campo">Confirmar Nova Senha:</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="recuperar-confirma-senha" class="campo-texto" placeholder="Repita a nova senha" required>
+                        <button type="button" class="btn-toggle-senha" id="btn-toggle-confirma-nova-senha" aria-label="Mostrar ou ocultar senha">
+                            <svg class="icone-olho icone-aberto" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            <svg class="icone-olho icone-fechado icone-oculto" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                <line x1="1" y1="1" x2="23" y2="23"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <button type="submit" class="btn-entrar btn-modal" id="btn-salvar-nova-senha">
+                    <span class="btn-texto">SALVAR NOVA SENHA</span>
+                    <span class="btn-spinner" aria-hidden="true"></span>
+                </button>
+                <div class="status-msg" id="status-modal-senha"></div>
+            </form>
+
+            <!-- ETAPA 4: SUCESSO -->
+            <div id="box-recuperar-sucesso" style="display: none; text-align: center; padding: 10px 0;">
+                <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(68,189,50,0.18); color: #44BD32; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 12px;">
+                    <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                </div>
+                <h3 style="color: #FFFFFF; font-size: 20px; font-weight: 800; margin-bottom: 8px;">Senha atualizada!</h3>
+                <p style="color: #CBD5E1; font-size: 14px; margin-bottom: 20px;">Sua senha foi redefinida com sucesso. Você já pode fazer login com as novas credenciais.</p>
+                <button type="button" class="btn-entrar btn-modal" id="btn-ir-para-login-pos-recuperacao">
+                    FAZER LOGIN
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script JS -->
+    <script src="js/core/rotas.js"></script>
+    <script src="js/core/sessao.js"></script>
+    <script src="js/pages/app.js"></script>
+</body>
+</html>

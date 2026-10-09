@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Itaim Vende - Cadastro de Novo Usuário.">
+    <title>Novo Cadastro - ItaimVende</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Segoe+UI&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../assets/header-logo.png">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <main class="auth-wrapper">
+        <!-- ÁREA SUPERIOR (LOGO E MASCOTE) -->
+        <header class="topo-container topo-compacto">
+            <div class="logo-box">
+                <a href="../../index.html" title="Ir para o início">
+                    <img src="../../assets/header-logo.png" alt="Itaim Vende - Compra, Venda e Trocas" class="logo-img">
+                </a>
+            </div>
+        </header>
+
+        <!-- ÁREA INFERIOR (PAINEL ESCURO COM LINHA VERDE RETINHA COMO NO DESKTOP) -->
+        <section class="painel-inferior painel-reto" aria-label="Painel de Cadastro">
+            <div class="container-cadastro">
+                <form id="form-cadastro-direto" class="form-auth" novalidate>
+                    
+                    <!-- Campo Nome Completo -->
+                    <div class="grupo-campo">
+                        <label for="cad-nome" class="label-campo">Nome Completo:</label>
+                        <input 
+                            type="text" 
+                            id="cad-nome" 
+                            name="nome" 
+                            class="campo-texto" 
+                            placeholder="Seu nome completo" 
+                            required
+                        >
+                    </div>
+
+                    <!-- Campo Nome de Usuário (@) posicionado logo abaixo do Nome Completo -->
+                    <div class="grupo-campo">
+                        <label for="cad-username" class="label-campo">Nome de Usuário (@):</label>
+                        <input 
+                            type="text" 
+                            id="cad-username" 
+                            name="username" 
+                            class="campo-texto" 
+                            placeholder="ex: joaosilva" 
+                            required
+                        >
+                    </div>
+
+                    <!-- Campo Cidade -->
+                    <div class="grupo-campo">
+                        <label for="cad-cidade" class="label-campo">Cidade:</label>
+                        <div class="select-wrapper">
+                            <select id="cad-cidade" name="cidade" class="select-campo" required>
+                                <option value="" disabled selected>Selecione sua cidade</option>
+                                <option value="Paulistana">Paulistana</option>
+                                <option value="Acauã">Acauã</option>
+                                <option value="Betânia do Piauí">Betânia do Piauí</option>
+                                <option value="Curral Novo">Curral Novo</option>
+                                <option value="Jacobina">Jacobina</option>
+                                <option value="Queimada Nova">Queimada Nova</option>
+                                <option value="Patos">Patos</option>
+                                <option value="Simões">Simões</option>
+                                <option value="Caridade">Caridade</option>
+                                <option value="Marcolândia">Marcolândia</option>
+                                <option value="Jaicós">Jaicós</option>
+                                <option value="Massapê">Massapê</option>
+                                <option value="Picos">Picos</option>
+                                <option value="Petrolina">Petrolina</option>
+                            </select>
+                            <svg class="select-seta" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Campo Bairro -->
+                    <div class="grupo-campo">
+                        <label for="cad-bairro" class="label-campo">Bairro:</label>
+                        <input 
+                            type="text" 
+                            id="cad-bairro" 
+                            name="bairro" 
+                            class="campo-texto" 
+                            placeholder="Seu Bairro"
+                        >
+                    </div>
+
+                    <!-- Campo WhatsApp / Contato -->
+                    <div class="grupo-campo">
+                        <label for="cad-telefone" class="label-campo">WhatsApp / Contato:</label>
+                        <input 
+                            type="tel" 
+                            id="cad-telefone" 
+                            name="telefone" 
+                            class="campo-texto" 
+                            placeholder="(00) 00000-0000"
+                            maxlength="15"
+                        >
+                    </div>
+
+                    <div class="grupo-campo">
+                        <label for="cad-email" class="label-campo">E-mail:</label>
+                        <input 
+                            type="email" 
+                            id="cad-email" 
+                            name="email" 
+                            class="campo-texto" 
+                            placeholder="email@exemplo.com" 
+                            required
+                        >
+                    </div>
+
+                    <div class="grupo-campo">
+                        <label for="cad-senha" class="label-campo">Senha:</label>
+                        <div class="input-wrapper">
+                            <input 
+                                type="password" 
+                                id="cad-senha" 
+                                name="senha" 
+                                class="campo-texto" 
+                                placeholder="Mín 8 chars, 1 Maiúscula, 1 Símbolo" 
+                                required
+                            >
+                            <button type="button" class="btn-toggle-senha" id="btn-toggle-cad-senha" aria-label="Mostrar ou ocultar senha">
+                                <svg class="icone-olho icone-aberto" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                                <svg class="icone-olho icone-fechado icone-oculto" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grupo-campo">
+                        <label for="cad-confirma" class="label-campo">Confirmar Senha:</label>
+                        <div class="input-wrapper">
+                            <input 
+                                type="password" 
+                                id="cad-confirma" 
+                                name="confirma" 
+                                class="campo-texto" 
+                                placeholder="Confirme sua senha" 
+                                required
+                            >
+                            <button type="button" class="btn-toggle-senha" id="btn-toggle-cad-confirma" aria-label="Mostrar ou ocultar confirmação de senha">
+                                <svg class="icone-olho icone-aberto" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                                <svg class="icone-olho icone-fechado icone-oculto" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Botão CONCLUIR CADASTRO -->
+                    <button type="submit" class="btn-concluir-cadastro" id="btn-concluir-cadastro">
+                        <span class="btn-texto">CONCLUIR CADASTRO</span>
+                        <span class="btn-spinner" aria-hidden="true"></span>
+                    </button>
+
+                    <!-- Link Voltar ao Login -->
+                    <div class="box-voltar-login">
+                        <a href="../../index.html" class="link-voltar" id="link-voltar-login">
+                            Voltar ao Login
+                        </a>
+                    </div>
+
+                    <!-- Feedback de Status -->
+                    <div class="status-msg" id="status-msg-cadastro" role="alert" aria-live="polite"></div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Script JS -->
+    <script src="../../js/core/rotas.js"></script>
+    <script src="../../js/core/sessao.js"></script>
+    <script src="../../js/pages/app.js"></script>
+</body>
+</html>

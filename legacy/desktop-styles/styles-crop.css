@@ -1,0 +1,82 @@
+/* --- FUNDO (Overlay) --- */
+.modal-overlay {
+    -fx-background-color: rgba(0, 0, 0, 0.7); /* Fundo preto transparente */
+    -fx-alignment: center;
+}
+
+/* --- JANELA MODAL --- */
+.modal-window {
+    -fx-background-color: #242526; /* Fundo escuro da janela */
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 15, 0, 0, 5);
+    -fx-padding: 20;
+    -fx-min-height: -1;
+}
+
+/* --- TEXTOS E BOTÕES DE CABEÇALHO --- */
+.titulo-modal {
+    -fx-text-fill: #E4E6EB; /* Branco suave */
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.btn-fechar-modal {
+    -fx-background-color: transparent;
+    -fx-text-fill: #B0B3B8; /* Cinza claro */
+    -fx-font-size: 16px;
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+}
+.btn-fechar-modal:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 20px;
+}
+
+/* --- ÁREA DE CROP --- */
+
+.area-crop-container {
+    /* CORRIGIDO: De Preto (#000000) para Cinza Claro (#E4E6EB) */
+    -fx-background-color: #242526;
+    -fx-background-radius: 5px;
+    -fx-border-color: #3E4042;
+    -fx-border-width: 1px;
+}
+
+/* --- SLIDER (Estilo Azul) --- */
+.slider-zoom .track {
+    -fx-background-color: #3A3B3C;
+    -fx-pref-height: 4px;
+}
+.slider-zoom .thumb {
+    -fx-background-color: #1877F2; /* Azul vibrante */
+    -fx-pref-width: 16px;
+    -fx-pref-height: 16px;
+    -fx-background-radius: 50%;
+    -fx-cursor: hand;
+}
+
+/* --- BOTÕES RODAPÉ --- */
+.btn-cancelar {
+    -fx-background-color: transparent;
+    -fx-text-fill: #1877F2; /* Azul */
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-font-size: 14px;
+}
+.btn-cancelar:hover {
+    -fx-underline: true;
+}
+
+.btn-salvar {
+    -fx-background-color: #1877F2;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 8 30;
+    -fx-background-radius: 6px;
+    -fx-cursor: hand;
+}
+.btn-salvar:hover {
+    -fx-background-color: #166FE5;
+}

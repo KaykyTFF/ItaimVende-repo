@@ -1,0 +1,108 @@
+
+
+/* --- CONTAINER PRINCIPAL (Fundo Escuro + Borda Verde) --- */
+.header-container {
+    -fx-background-color: #2D3236; /* Cinza Chumbo Profundo (Dark Theme) */
+    -fx-padding: 10px 30px;
+
+    /* Borda Verde na parte inferior (Identidade Visual) */
+    -fx-border-color: transparent transparent #44BD32 transparent;
+    -fx-border-width: 0 0 4px 0;
+
+    /* Sombra para dar profundidade em relação ao conteúdo */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 10, 0, 0, 2);
+}
+
+/* --- MENU HAMBÚRGUER --- */
+.btn-menu-hamburguer {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 24px;
+    -fx-cursor: hand;
+    -fx-padding: 0 10 0 0;
+}
+.btn-menu-hamburguer:hover {
+    -fx-text-fill: #44BD32; /* Fica verde ao passar o mouse */
+}
+
+/* --- BARRA DE PESQUISA (Estilo Pílula) --- */
+
+
+.campo-busca-header {
+    -fx-background-color: #f1f2f6; /* Cinza bem clarinho (quase branco) */
+    -fx-background-radius: 30;     /* Totalmente arredondado (Pílula) */
+    -fx-border-radius: 30;
+    -fx-border-color: transparent;
+
+    -fx-font-size: 14px;
+    -fx-text-fill: #333;
+    -fx-prompt-text-fill: #a4b0be;
+
+    /* Padding especial:
+       40px na direita para o botão da lupa não ficar em cima do texto
+       15px na esquerda para o texto não colar na borda
+    */
+    -fx-padding: 8 40 8 15;
+}
+
+.campo-busca-header:focused {
+    -fx-background-color: #ffffff; /* Fica branco puro ao digitar */
+    -fx-effect: dropshadow(three-pass-box, rgba(68, 189, 50, 0.4), 5, 0, 0, 0); /* Glow verde suave */
+}
+
+/* Botão Lupa (Que fica sobreposto no canto direito) */
+.btn-lupa-header {
+    -fx-background-color: transparent;
+    -fx-text-fill: #636e72;
+    -fx-font-size: 16px;
+    -fx-cursor: hand;
+    -fx-min-width: 35px;
+    -fx-padding: 0 5 0 0;
+}
+.btn-lupa-header:hover {
+    -fx-text-fill: #2d3436;
+    -fx-background-color: rgba(0,0,0,0.05); /* Círculo sutil no hover */
+    -fx-background-radius: 50%;
+}
+
+/* --- BOTÕES DE NAVEGAÇÃO (Direita) --- */
+
+/* "Meus Anúncios" */
+.btn-texto-nav {
+    -fx-background-color: transparent;
+    -fx-text-fill: #ecf0f1; /* Branco Gelo */
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+    -fx-cursor: hand;
+}
+.btn-texto-nav:hover {
+    -fx-text-fill: #44BD32; /* Verde no hover */
+    -fx-underline: true;
+}
+
+/* Botão "Vender" (Destaque Oval) */
+.btn-vender-header {
+    -fx-background-color: #dfe6e9; /* Cinza claro para contraste com fundo escuro */
+    -fx-text-fill: #2d3436;        /* Texto escuro */
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+    -fx-background-radius: 20;     /* Oval */
+    -fx-padding: 8 30;             /* Largura interna */
+    -fx-cursor: hand;
+}
+.btn-vender-header:hover {
+    -fx-background-color: #44BD32; /* Fundo Verde */
+    -fx-text-fill: white;          /* Texto Branco */
+    -fx-effect: dropshadow(three-pass-box, rgba(68, 189, 50, 0.4), 5, 0, 0, 1);
+}
+
+/* --- ÍCONES (Carrinho, Sino, Perfil) --- */
+.btn-imagem-icone {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+    -fx-padding: 8; /* Espaço para o efeito hover funcionar bem */
+}
+.btn-imagem-icone:hover {
+    -fx-background-color: rgba(255,255,255,0.1); /* Fundo branco translúcido */
+    -fx-background-radius: 50%; /* Círculo perfeito */
+}

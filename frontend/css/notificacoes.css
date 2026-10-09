@@ -1,0 +1,306 @@
+/* ==========================================================================
+   ITAIM VENDE - PÁGINA DE NOTIFICAÇÕES (NOTIFICACOES.HTML)
+   Estilos da central de notificações, badges, ícones e estados
+   ========================================================================== */
+
+.breadcrumb-container {
+    margin-bottom: 16px;
+}
+
+.notificacoes-container {
+    max-width: 800px;
+    margin: 24px auto 60px;
+    padding: 0 16px;
+}
+
+.notificacoes-topo-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.notificacoes-titulos h1 {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.5px;
+}
+
+.notificacoes-titulos p {
+    color: var(--text-secondary);
+    font-size: 14.5px;
+    margin-top: 4px;
+}
+
+.notificacoes-acoes-topo {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-marcar-lidas {
+    background: #FFFFFF;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    font-size: 13.5px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: all var(--transition);
+    font-family: inherit;
+}
+
+.btn-marcar-lidas:hover {
+    color: var(--primary);
+    border-color: var(--primary);
+    background: rgba(68, 189, 50, 0.05);
+}
+
+/* Lista de Notificações */
+.notificacoes-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.notificacao-card {
+    background: #FFFFFF;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 18px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    transition: all var(--transition);
+    cursor: pointer;
+    position: relative;
+}
+
+.notificacao-card:hover {
+    border-color: #CBD5E1;
+    box-shadow: var(--shadow-sm);
+    transform: translateX(2px);
+}
+
+.notificacao-card.nao-lida {
+    background: rgba(68, 189, 50, 0.04);
+    border-color: rgba(68, 189, 50, 0.3);
+}
+
+.notificacao-card.nao-lida::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 8px;
+    height: 8px;
+    background: var(--primary);
+    border-radius: 50%;
+}
+
+.notificacao-icone-circulo {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 20px;
+}
+
+/* Símbolos das notificações unificados na cor verde da marca */
+.notificacao-icone-circulo,
+.icone-chat,
+.icone-avaliacao,
+.icone-preco,
+.icone-sucesso,
+.icone-favorito,
+.icone-seguranca {
+    background: rgba(68, 189, 50, 0.12) !important;
+    color: #44BD32 !important;
+}
+
+/* Abas de Filtro */
+.notificacoes-tabs-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+    padding: 2px 2px 8px 2px;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE e Edge */
+    -webkit-overflow-scrolling: touch;
+}
+
+.notificacoes-tabs-bar::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Edge */
+    width: 0;
+    height: 0;
+}
+
+.tab-notif-btn {
+    background: #FFFFFF;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    font-size: 13.5px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: all var(--transition);
+    white-space: nowrap;
+    font-family: inherit;
+}
+
+.tab-notif-btn:hover {
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+.tab-notif-btn.ativo {
+    background: var(--primary);
+    color: #FFFFFF;
+    border-color: var(--primary);
+}
+
+/* Ações no card */
+.notificacao-acoes {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.btn-acao-notif {
+    background: none;
+    border: 1px solid #E2E8F0;
+    color: #64748B;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all var(--transition);
+}
+
+.btn-acao-notif:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: rgba(68, 189, 50, 0.08);
+}
+
+.btn-acao-notif.btn-excluir-notif:hover {
+    border-color: #EF4444;
+    color: #EF4444;
+    background: rgba(239, 68, 68, 0.08);
+}
+
+.notificacao-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.notificacao-titulo {
+    font-size: 15.5px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.notificacao-texto {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 6px;
+}
+
+.notificacao-data {
+    font-size: 12px;
+    color: #94A3B8;
+    font-weight: 500;
+}
+
+/* Vazio */
+.notificacoes-vazio {
+    text-align: center;
+    padding: 70px 20px;
+    background: #FFFFFF;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+}
+
+.notificacoes-vazio-icon {
+    font-size: 50px;
+    margin-bottom: 12px;
+    opacity: 0.5;
+}
+
+.notificacoes-vazio h2 {
+    font-size: 19px;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.notificacoes-vazio p {
+    color: var(--text-secondary);
+    font-size: 14.5px;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+@media (max-width: 600px) {
+    .notificacoes-container {
+        padding: 0 12px;
+        margin: 14px auto 40px;
+    }
+
+    .notificacoes-header-topo {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+
+    .notificacoes-titulos h1 {
+        font-size: 22px;
+    }
+
+    .notificacoes-acoes-topo {
+        width: 100%;
+    }
+
+    .btn-marcar-lidas {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .notificacao-card {
+        padding: 14px 14px;
+        gap: 12px;
+        border-radius: 14px;
+    }
+
+    .notificacao-icone-circulo {
+        width: 38px;
+        height: 38px;
+        font-size: 17px;
+    }
+
+    .notificacao-titulo {
+        font-size: 14.5px;
+    }
+
+    .notificacao-texto {
+        font-size: 13.5px;
+    }
+}

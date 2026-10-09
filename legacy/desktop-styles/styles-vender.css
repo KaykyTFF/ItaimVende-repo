@@ -1,0 +1,223 @@
+/* --- FUNDO GERAL --- */
+.fundo-pagina {
+    -fx-background-color: #D9D9D9;
+}
+
+/* --- TÍTULOS --- */
+.titulo-tela {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: black;
+}
+
+.titulo-secao {
+    -fx-font-weight: bold;
+    -fx-text-fill: #555555;
+    -fx-font-size: 15px;
+}
+
+.texto-comum {
+    -fx-text-fill: #777777;
+    -fx-font-size: 14px;
+}
+
+/* --- BOTÕES --- */
+.btn-voltar {
+    -fx-background-color: #59AA59;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 50;
+    -fx-min-width: 40;
+    -fx-min-height: 40;
+    -fx-cursor: hand;
+}
+
+.btn-editar-pequeno {
+    -fx-background-color: #59AA59;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 15;
+    -fx-font-size: 12px;
+    -fx-padding: 5 20;
+    -fx-cursor: hand;
+}
+
+.btn-anunciar-grande {
+    -fx-background-color: #59AA59;
+    -fx-text-fill: white;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 30;
+    -fx-padding: 10 60;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 5);
+}
+.btn-anunciar-grande:hover {
+    -fx-background-color: #4e964e;
+}
+
+/* --- CARTÕES (CARDS) --- */
+.card-padrao {
+    -fx-background-color: #EDEDED;
+    -fx-background-radius: 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 10, 0, 0, 4);
+}
+
+/* --- CAMPOS DE TEXTO (INPUTS) --- */
+.input-padrao {
+    -fx-background-color: #D9D9D9;
+    -fx-background-radius: 10;
+    -fx-prompt-text-fill: #888888;
+    -fx-text-fill: #555555;
+    -fx-font-size: 14px;
+    -fx-padding: 0 15;
+}
+
+/* --- TEXT AREA --- */
+.text-area-padrao {
+    -fx-background-color: #D9D9D9;
+    -fx-background-radius: 10;
+    -fx-font-size: 14px;
+    -fx-text-fill: #555555;
+}
+.text-area-padrao .content {
+    -fx-background-color: #D9D9D9;
+    -fx-background-radius: 10;
+    -fx-padding: 10px;
+}
+.text-area-padrao .prompt-text-fill {
+    -fx-fill: #888888;
+}
+
+/* --- ÁREAS DE FOTO --- */
+.area-foto {
+    -fx-background-color: #EDEDED;
+    -fx-background-radius: 10;
+    -fx-border-color: #AAAAAA;
+    -fx-border-radius: 10;
+    -fx-border-style: dashed;
+    -fx-border-width: 2;
+    -fx-cursor: hand;
+}
+.icone-camera { -fx-font-size: 40px; -fx-text-fill: #999999; }
+.icone-mais { -fx-font-size: 30px; -fx-text-fill: #999999; }
+
+/* --- DROPDOWNS (COMBOBOX) --- */
+.combo-verde {
+    -fx-background-color: #59AA59;
+    -fx-background-radius: 25; /* Arredondamento forte */
+    -fx-cursor: hand;
+}
+
+.combo-verde .list-cell {
+    -fx-text-fill: white;
+    -fx-background-color: transparent;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 0 0 0 10;
+}
+
+.combo-verde .arrow-button .arrow {
+    -fx-background-color: white;
+}
+
+/* Lista Popup */
+.combo-verde .list-view {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);
+    -fx-padding: 5px;
+}
+
+.combo-verde .list-view .list-cell {
+    -fx-text-fill: #333333;
+    -fx-background-color: transparent;
+    -fx-padding: 8 10;
+    -fx-font-weight: normal;
+}
+
+.combo-verde .list-view .list-cell:filled:hover {
+    -fx-background-color: #E0E0E0;
+    -fx-background-radius: 5;
+    -fx-text-fill: black;
+}
+
+.combo-verde .list-view .list-cell:filled:selected {
+    -fx-background-color: #D9D9D9;
+    -fx-background-radius: 5;
+}
+
+/* --- TITLED PANE (MAIS DETALHES) --- */
+.titled-pane-custom {
+    -fx-text-fill: white;
+    -fx-background-color: transparent; /* Remove borda do container */
+}
+
+/* Cabeçalho Verde (Fechado) */
+.titled-pane-custom > .title {
+    -fx-background-color: #59AA59; /* Verde igual aos botões */
+    -fx-background-radius: 25; /* Redondo quando fechado */
+    -fx-padding: 12px;
+    -fx-cursor: hand;
+}
+
+/* Quando expandido, removemos o radius de baixo para colar no conteúdo */
+.titled-pane-custom:expanded > .title {
+    -fx-background-radius: 25 25 0 0;
+}
+
+.titled-pane-custom > .title > .text {
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-fill: white;
+}
+
+.titled-pane-custom > .title > .arrow-button > .arrow {
+    -fx-background-color: white;
+}
+
+/* Conteúdo Interno */
+.titled-pane-custom > .content {
+    -fx-background-color: #EDEDED; /* Mesmo cinza do card */
+    -fx-border-color: transparent;
+    -fx-background-radius: 0 0 20 20; /* Fecha redondo embaixo */
+    -fx-padding: 20;
+}
+
+/* --- SISTEMA DE TAGS (CHIPS) --- */
+
+/* Container onde as tags ficam */
+.container-tags {
+    -fx-padding: 5 0 0 0;
+}
+
+/* A Tag individual (O "Chip") */
+.tag-chip {
+    -fx-background-color: #E0E0E0; /* Cinza claro fundo */
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+    -fx-padding: 5 10 5 10;
+    -fx-alignment: center-left;
+    -fx-spacing: 5; /* Espaço entre texto e o X */
+    -fx-cursor: default;
+}
+
+/* O Texto dentro da tag */
+.tag-text {
+    -fx-text-fill: #333333;
+    -fx-font-size: 13px;
+}
+
+/* O botão de remover (X) */
+.tag-remove-btn {
+    -fx-text-fill: #999999;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+    -fx-padding: 0 0 0 2;
+}
+
+/* Efeito ao passar o mouse no X */
+.tag-remove-btn:hover {
+    -fx-text-fill: #FF5252; /* Fica vermelho */
+}

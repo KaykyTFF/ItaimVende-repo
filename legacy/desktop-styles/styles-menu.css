@@ -1,0 +1,134 @@
+/* --- CONTAINER PRINCIPAL --- */
+.menu-lateral {
+    -fx-background-color: #2F3640; /* Cinza Escuro Profundo */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 15, 0, 5, 0);
+    -fx-border-color: transparent #44BD32 transparent transparent;
+    -fx-border-width: 0 4 0 0;
+}
+
+/*  BOTÃO DE FECHAR SUTIL */
+.btn-fechar-sutil {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-background-radius: 6px;
+    -fx-min-width: 28px;
+    -fx-min-height: 28px;
+    -fx-max-width: 28px;
+    -fx-max-height: 28px;
+    -fx-border-color: rgba(255, 255, 255, 0.08);
+    -fx-border-width: 1px;
+    -fx-border-radius: 6px;
+}
+
+.btn-fechar-sutil:hover {
+    -fx-background-color: rgba(68, 189, 50, 0.15);
+    -fx-border-color: rgba(68, 189, 50, 0.4);
+    -fx-effect: dropshadow(gaussian, rgba(68, 189, 50, 0.3), 6, 0.4, 0, 0);
+}
+
+.icone-fechar-sutil {
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.btn-fechar-sutil:hover .icone-fechar-sutil {
+    -fx-text-fill: #44BD32;
+}
+
+/* Header */
+.menu-header {
+    -fx-background-color: #2F3640;
+    -fx-border-color: transparent transparent rgba(255,255,255,0.1) transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+/* --- ITENS DO MENU PRINCIPAL --- */
+.menu-item {
+    -fx-background-color: rgba(0,0,0,0);
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+
+.menu-item:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+}
+
+.menu-item-texto {
+    -fx-text-fill: #dfe6e9;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+.menu-item:hover .menu-item-texto {
+    -fx-text-fill: white;
+}
+
+.menu-item-seta {
+    -fx-text-fill: #636e72;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.menu-item:hover .menu-item-seta {
+    -fx-text-fill: white;
+}
+
+/* --- SUBCATEGORIAS --- */
+.menu-item-sub {
+    -fx-background-color: rgba(0,0,0,0);
+    -fx-border-color: transparent transparent transparent #444;
+    -fx-border-width: 0 0 0 1;
+    -fx-cursor: hand;
+}
+
+.menu-item-sub:hover {
+    -fx-background-color: rgba(68, 189, 50, 0.1);
+    -fx-border-color: transparent transparent transparent #44BD32;
+    -fx-border-width: 0 0 0 3;
+}
+
+.menu-sub-texto {
+    -fx-text-fill: #b2bec3;
+    -fx-font-size: 14px;
+}
+
+.menu-item-sub:hover .menu-sub-texto {
+    -fx-text-fill: #44BD32;
+    -fx-font-weight: bold;
+}
+
+.menu-item-sub:hover .image-view {
+    -fx-opacity: 1.0;
+}
+
+/* --- SCROLLBAR CUSTOMIZADA --- */
+.scroll-menu-lateral {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+
+.scroll-menu-lateral > .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-menu-lateral .scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll-menu-lateral .scroll-bar:vertical .thumb {
+    -fx-background-color: #555;
+    -fx-background-radius: 10em;
+    -fx-background-insets: 2;
+}
+
+.scroll-menu-lateral .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #888;
+}
+
+.scroll-menu-lateral .scroll-bar:vertical .increment-button,
+.scroll-menu-lateral .scroll-bar:vertical .decrement-button {
+    -fx-padding: 0;
+    -fx-pref-height: 0;
+}

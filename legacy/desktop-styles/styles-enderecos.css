@@ -1,0 +1,350 @@
+/* styles-enderecos.css */
+
+.fundo-enderecos {
+    -fx-background-color: #E8E8E8;
+}
+
+.scroll-pane-enderecos {
+    -fx-background: #E8E8E8;
+    -fx-background-color: #E8E8E8;
+}
+
+.scroll-pane-enderecos .viewport {
+    -fx-background-color: #E8E8E8;
+}
+
+.btn-voltar-endereco {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-background-radius: 50;
+    -fx-min-width: 36px;
+    -fx-min-height: 36px;
+    -fx-cursor: hand;
+}
+
+.btn-voltar-endereco:hover {
+    -fx-background-color: #45a049;
+}
+
+.titulo-enderecos {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.card-endereco {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 5, 0, 0, 2);
+    -fx-min-width: 500px;
+    -fx-max-width: 500px;
+}
+
+.card-endereco:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.12), 8, 0, 0, 3);
+}
+
+.endereco-rua {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.endereco-cep {
+    -fx-font-size: 13px;
+    -fx-text-fill: #666666;
+}
+
+.link-editar {
+    -fx-font-size: 13px;
+    -fx-text-fill: #888888;
+    -fx-cursor: hand;
+    -fx-padding: 5 0 0 0;
+}
+
+.link-editar:hover {
+    -fx-text-fill: #4CAF50;
+    -fx-underline: true;
+}
+
+.seta-editar {
+    -fx-font-size: 18px;
+    -fx-text-fill: #888888;
+    -fx-padding: 3 0 0 0;
+}
+
+/* CORREÇÃO: Centraliza e define largura fixa igual aos cards */
+.btn-adicionar-endereco {
+    -fx-background-color: linear-gradient(to right, #4CAF50, #66BB6A);
+    -fx-background-radius: 8;
+    -fx-min-width: 500px;
+    -fx-max-width: 500px;
+    -fx-pref-width: 500px; /* Adiciona largura preferencial */
+    -fx-min-height: 45px;
+    -fx-cursor: hand;
+}
+
+.btn-adicionar-endereco:hover {
+    -fx-background-color: linear-gradient(to right, #45a049, #5cb860);
+}
+
+.conteudo-btn-adicionar {
+    -fx-alignment: center;
+}
+
+.conteudo-btn-adicionar .label {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.icone-plus {
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.label-vazio {
+    -fx-text-fill: #888888;
+    -fx-font-size: 14px;
+    -fx-padding: 20 0 20 0;
+}
+/* Formulário de adicionar/editar */
+.card-formulario-endereco {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 5, 0, 0, 2);
+}
+
+.titulo-formulario {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+    -fx-alignment: center;
+}
+
+.label-campo-endereco {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.campo-endereco {
+    -fx-background-color: #f5f5f5;
+    -fx-background-radius: 8;
+    -fx-border-color: transparent;
+    -fx-padding: 12 15;
+    -fx-font-size: 14px;
+    -fx-prompt-text-fill: #999999;
+}
+
+.campo-endereco:focused {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #4CAF50;
+    -fx-border-radius: 8;
+}
+
+.btn-salvar-endereco {
+    -fx-background-color: linear-gradient(to right, #4CAF50, #66BB6A);
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-min-height: 45px;
+    -fx-cursor: hand;
+    -fx-padding: 10 30;
+}
+
+.btn-salvar-endereco:hover {
+    -fx-background-color: linear-gradient(to right, #45a049, #5cb860);
+}
+
+.combo-box-branco {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-border-color: #dddddd;
+    -fx-border-radius: 8;
+    -fx-padding: 2;
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+}
+
+.combo-box-branco:hover {
+    -fx-border-color: #aaaaaa;
+}
+
+.combo-box-branco:focused {
+    -fx-border-color: #59AA59; /* Verde suave no foco */
+    -fx-effect: dropshadow(three-pass-box, rgba(89, 170, 89, 0.2), 5, 0, 0, 0);
+}
+
+.combo-box-branco .cell:selected {
+    -fx-text-fill: #333333;
+}
+
+.combo-box-branco .list-cell {
+    -fx-text-fill: #333333;
+    -fx-padding: 8 10 8 10;
+}
+
+.combo-box-branco .list-view {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 10, 0, 0, 5);
+}
+
+.combo-box-branco .list-view .list-cell:hover {
+    -fx-background-color: #f5f5f5;
+}
+
+.combo-box-branco .list-view .list-cell:filled:selected,
+.combo-box-branco .list-view .list-cell:filled:selected:hover {
+    -fx-background-color: #e8f5e9; /* Fundo verde bem clarinho na seleção */
+    -fx-text-fill: #2e7d32;
+}
+
+/* Botão de excluir (link) */
+.link-excluir {
+    -fx-text-fill: #e53935; /* Vermelho */
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+    -fx-underline: false;
+    -fx-font-weight: bold;
+}
+
+.link-excluir:hover {
+    -fx-underline: true;
+    -fx-text-fill: #b71c1c;
+}
+
+/* =========================================
+   ESTILOS DO DIÁLOGO DE SELEÇÃO
+   ========================================= */
+
+/* Títulos */
+.titulo-dialogo {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333;
+}
+
+.subtitulo-dialogo {
+    -fx-font-size: 14px;
+    -fx-text-fill: #777;
+}
+
+/* ScrollPane Limpo (Sem borda, sem fundo feio) */
+.scroll-pane-clean {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+    -fx-padding: 0;
+}
+.scroll-pane-clean > .viewport {
+    -fx-background-color: transparent;
+}
+/* Esconde scrollbars nativas feias (opcional, ou estiliza elas) */
+.scroll-pane-clean .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-unit-increment-button-visible: false;
+    -fx-unit-decrement-button-visible: false;
+    -fx-pref-width: 8px;
+}
+.scroll-pane-clean .scroll-bar:vertical .thumb {
+    -fx-background-color: #ccc;
+    -fx-background-radius: 4px;
+}
+
+/* Card de Seleção (Miniatura) */
+.card-selecao {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.03), 5, 0, 0, 2);
+    -fx-padding: 15;
+}
+
+.card-selecao:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 8, 0, 0, 3);
+    -fx-translate-y: -1;
+}
+
+/* Textos dentro do Card */
+.texto-rua-card {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333;
+}
+
+.texto-cep-card {
+    -fx-font-size: 12px;
+    -fx-text-fill: #888;
+    -fx-padding: 0 0 0 28; /* Alinha com o texto da rua (pula o radio) */
+}
+
+/* Botão "Adicionar" (Estilo Sólido/Cheio) */
+.btn-verde-cheio {
+    -fx-background-color: #59AA59; /* Verde Principal */
+    -fx-text-fill: white;          /* Texto Branco */
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-background-radius: 20;     /* Bordas bem arredondadas */
+    -fx-border-radius: 20;
+    -fx-cursor: hand;
+    -fx-padding: 12;               /* Um pouco mais de altura */
+    /* Sombra suave verde para dar profundidade */
+    -fx-effect: dropshadow(three-pass-box, rgba(89, 170, 89, 0.4), 8, 0, 0, 3);
+}
+
+.btn-verde-cheio:hover {
+    -fx-background-color: #4a994a; /* Verde mais escuro ao passar o mouse */
+    -fx-effect: dropshadow(three-pass-box, rgba(89, 170, 89, 0.6), 10, 0, 0, 4);
+    -fx-translate-y: -1;
+}
+
+.btn-verde-cheio:pressed {
+    -fx-background-color: #3d8b3d;
+    -fx-effect: none;
+    -fx-translate-y: 1;
+}
+
+/* Botões do Rodapé (Confirmar/Cancelar) */
+.btn-dialogo-confirmar {
+    -fx-background-color: #59AA59;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+.btn-dialogo-confirmar:hover {
+    -fx-background-color: #4a994a;
+}
+
+.btn-dialogo-cancelar {
+    -fx-background-color: transparent;
+    -fx-text-fill: #777;
+    -fx-cursor: hand;
+}
+.btn-dialogo-cancelar:hover {
+    -fx-text-fill: #333;
+    -fx-background-color: #f0f0f0;
+}
+
+/* =========================================
+   ESTILOS DO DIÁLOGO DE SELEÇÃO
+   ========================================= */
+
+/* Aplica a cor de fundo na janela inteira (Conteúdo + Rodapé dos botões) */
+.dialog-pane {
+    -fx-background-color: #f8f9fa; /* Cinza bem claro uniforme */
+    -fx-border-color: #cccccc;     /* Borda fina ao redor da janela toda */
+    -fx-border-width: 1;
+}
+
+/* Remove qualquer cor de fundo da barra de botões nativa para não dar diferença */
+.dialog-pane > .button-bar {
+    -fx-background-color: transparent;
+    -fx-padding: 0 20 20 0; /* Ajuste de margem para os botões não colarem na borda */
+}

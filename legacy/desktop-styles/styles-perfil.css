@@ -1,0 +1,76 @@
+.fundo-perfil {
+    -fx-background-color: #E6E6E6;
+}
+
+/* ScrollPane Transparente e Viewport Cinza */
+.scroll-pane-perfil {
+    -fx-background: #E6E6E6;
+    -fx-background-color: #E6E6E6;
+}
+
+/* ISSO CORRIGE O FUNDO BRANCO EMBAIXO */
+.scroll-pane-perfil > .viewport {
+    -fx-background-color: #E6E6E6;
+}
+
+/* Título */
+.titulo-pagina {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 38px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #000000;
+}
+
+/* Botão Voltar */
+.btn-voltar-verde {
+    -fx-background-color: #5BA358;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 18px;
+    -fx-background-radius: 50%;
+    -fx-min-width: 40px;
+    -fx-min-height: 40px;
+    -fx-cursor: hand;
+    -fx-alignment: center;
+    -fx-padding: 0;
+}
+.btn-voltar-verde:hover {
+    -fx-background-color: #488A45;
+}
+
+/* Usuário */
+.nome-usuario {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 30px;
+    -fx-text-fill: #1C1E21;
+}
+.email-usuario {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 15px;
+    -fx-text-fill: #555555;
+}
+
+/* --- CARD --- */
+.card-opcao {
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 8, 0, 0, 2);
+    -fx-alignment: center;
+    -fx-padding: 20;
+    -fx-cursor: hand;
+}
+
+/* Tipografia Card */
+.titulo-card {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 18px;
+    -fx-text-fill: #333333;
+    -fx-padding: 5 0 0 0;
+}
+
+.subtitulo-card {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 13px;
+    -fx-text-fill: #888888;
+    -fx-text-alignment: center;
+}

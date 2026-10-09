@@ -1,0 +1,1000 @@
+/* ==========================================================================
+   ITAIM VENDE - ESTILOS DA PÁGINA "CRIAR ANÚNCIO / VENDER"
+   Design moderno, elegante, com cards elevados e efeitos suaves.
+   ========================================================================== */
+
+/* --- VARIÁVEIS EXCLUSIVAS DA TELA DE VENDER --- */
+:root {
+    --vender-bg: #DCE1E6;
+    --vender-card-bg: #EDEDED;
+    --vender-card-surface: #F5F6F7;
+    --vender-input-bg: #D9DDE0;
+    --vender-input-hover: #D0D5D9;
+    --vender-green: #59AA59;
+    --vender-green-hover: #4C9B4C;
+    --vender-green-dark: #3F833F;
+    --vender-green-glow: rgba(89, 170, 89, 0.4);
+    --vender-text-dark: #1F2937;
+    --vender-text-sub: #4B5563;
+    --vender-text-placeholder: #88929D;
+    --vender-border-dashed: #B2BCC5;
+    --vender-shadow-card: 0 14px 36px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.06);
+    --vender-shadow-btn: 0 8px 24px var(--vender-green-glow);
+}
+
+/* Fundo geral da página vender */
+body.pagina-vender {
+    background-color: var(--vender-bg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* ==========================================================================
+   CONTEÚDO PRINCIPAL (MAIN VENDER)
+   ========================================================================== */
+.vender-main {
+    flex: 1;
+    width: 100%;
+    max-width: 1020px;
+    margin: 0 auto;
+    padding: 20px 20px 40px;
+    position: relative;
+}
+
+/* Topo do formulário: Botão voltar e Título */
+.vender-header-bar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 22px;
+}
+
+.btn-voltar-vender {
+    position: absolute;
+    left: 0;
+    margin-bottom: 0 !important;
+}
+
+.btn-voltar-redondo {
+    position: absolute;
+    left: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: var(--vender-green);
+    color: #FFFFFF;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(89, 170, 89, 0.35);
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s, box-shadow 0.25s;
+}
+
+.btn-voltar-redondo:hover {
+    background-color: var(--vender-green-hover);
+    transform: scale(1.08) translateX(-2px);
+    box-shadow: 0 6px 18px rgba(89, 170, 89, 0.5);
+}
+
+.btn-voltar-redondo:active {
+    transform: scale(0.96);
+}
+
+.btn-voltar-redondo svg {
+    width: 22px;
+    height: 22px;
+    stroke-width: 2.6;
+}
+
+.vender-titulo-pagina {
+    font-size: 32px;
+    font-weight: 800;
+    color: #111827;
+    letter-spacing: -0.5px;
+    text-align: center;
+    margin: 0;
+}
+
+/* Container do Grid de Cards */
+.vender-cards-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 36px;
+    align-items: start;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+/* Estilo Base dos Cards (Neumorphic Soft Card) */
+.card-vender {
+    background-color: var(--vender-card-bg);
+    border-radius: 24px;
+    padding: 22px;
+    box-shadow: var(--vender-shadow-card);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.card-vender:hover {
+    box-shadow: 0 20px 42px rgba(0, 0, 0, 0.15), 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* ==========================================================================
+   CARD DA ESQUERDA: FOTOS E LOCALIZAÇÃO
+   ========================================================================== */
+.card-fotos-container {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Grid de Fotos: 3 colunas x 3 linhas */
+.grid-fotos-upload {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 86px);
+    gap: 10px;
+}
+
+/* Slot de Upload Base */
+.slot-foto-upload {
+    background-color: var(--vender-card-bg);
+    border: 2px dashed var(--vender-border-dashed);
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.25s ease;
+    user-select: none;
+}
+
+.slot-foto-upload:hover {
+    border-color: var(--vender-green);
+    background-color: rgba(89, 170, 89, 0.06);
+    transform: translateY(-2px);
+}
+
+.slot-foto-upload.drag-over {
+    border-color: var(--vender-green);
+    background-color: rgba(89, 170, 89, 0.15);
+    border-style: solid;
+    transform: scale(1.02);
+}
+
+/* Foto Principal (Destaque grande: ocupa 2x2 colunas/linhas) */
+.slot-foto-principal {
+    grid-column: span 2;
+    grid-row: span 2;
+    border-radius: 18px;
+    background-color: #E6EAEB;
+}
+
+.slot-foto-principal .icone-slot {
+    width: 48px;
+    height: 48px;
+    color: #94A3B8;
+    margin-bottom: 6px;
+    transition: color 0.2s, transform 0.2s;
+}
+
+.slot-foto-principal:hover .icone-slot {
+    color: var(--vender-green);
+    transform: scale(1.1);
+}
+
+.slot-foto-principal .rotulo-slot {
+    font-size: 13px;
+    font-weight: 600;
+    color: #64748B;
+}
+
+.slot-foto-principal .subrotulo-slot {
+    font-size: 11px;
+    color: #94A3B8;
+    margin-top: 2px;
+}
+
+/* Slots Secundários (+) */
+.slot-foto-secundario {
+    border-radius: 12px;
+    background-color: #EAEFF1;
+}
+
+.slot-foto-secundario .icone-slot-plus {
+    font-size: 28px;
+    font-weight: 300;
+    color: #94A3B8;
+    line-height: 1;
+    transition: color 0.2s, transform 0.2s;
+}
+
+.slot-foto-secundario:hover .icone-slot-plus {
+    color: var(--vender-green);
+    transform: scale(1.25);
+}
+
+/* Input file invisível em cada slot */
+.slot-foto-upload input[type="file"] {
+    display: none;
+}
+
+/* Visualização da imagem selecionada */
+.slot-preview-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: inherit;
+    transition: transform 0.3s ease;
+}
+
+.slot-foto-upload:hover .slot-preview-img {
+    transform: scale(1.05);
+}
+
+/* Overlay para remover ou trocar foto */
+.slot-overlay-remover {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 26px;
+    height: 26px;
+    background: rgba(0, 0, 0, 0.65);
+    color: #FFF;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s, background 0.2s, transform 0.2s;
+    z-index: 2;
+}
+
+.slot-foto-upload:hover .slot-overlay-remover {
+    opacity: 1;
+}
+
+.slot-overlay-remover:hover {
+    background: #EF4444;
+    transform: scale(1.15);
+}
+
+/* Bloco da Localização */
+.secao-localizacao-card {
+    margin-top: 24px;
+    padding-top: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.localizacao-titulo {
+    font-size: 15px;
+    font-weight: 700;
+    color: #374151;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.localizacao-titulo svg {
+    width: 18px;
+    height: 18px;
+    stroke: var(--vender-green);
+}
+
+.localizacao-endereco {
+    font-size: 14px;
+    color: #6B7280;
+    font-weight: 500;
+}
+
+.btn-editar-localizacao {
+    align-self: flex-start;
+    margin-top: 6px;
+    background-color: var(--vender-green);
+    color: #FFFFFF;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    padding: 6px 18px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(89, 170, 89, 0.3);
+    transition: all 0.2s ease;
+}
+
+.btn-editar-localizacao:hover {
+    background-color: var(--vender-green-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(89, 170, 89, 0.45);
+}
+
+.btn-editar-localizacao:active {
+    transform: translateY(1px);
+}
+
+/* ==========================================================================
+   CARD DA DIREITA: FORMULÁRIO DE DADOS DO ANÚNCIO
+   ========================================================================== */
+.card-form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Inputs com visual suave e moderno */
+.campo-vender-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.input-vender-padrao {
+    width: 100%;
+    background-color: var(--vender-input-bg);
+    border: 2px solid transparent;
+    border-radius: 14px;
+    padding: 13px 18px;
+    font-size: 14.5px;
+    font-family: inherit;
+    color: var(--vender-text-dark);
+    font-weight: 500;
+    outline: none;
+    transition: all 0.25s ease;
+}
+
+.input-vender-padrao::placeholder {
+    color: var(--vender-text-placeholder);
+    font-weight: 400;
+}
+
+.input-vender-padrao:hover {
+    background-color: var(--vender-input-hover);
+}
+
+.input-vender-padrao:focus {
+    background-color: #FFFFFF;
+    border-color: var(--vender-green);
+    box-shadow: 0 0 0 4px rgba(89, 170, 89, 0.18);
+}
+
+/* Textarea de Descrição */
+.textarea-vender-padrao {
+    width: 100%;
+    height: 105px;
+    background-color: var(--vender-input-bg);
+    border: 2px solid transparent;
+    border-radius: 16px;
+    padding: 12px 18px;
+    font-size: 14.5px;
+    font-family: inherit;
+    color: var(--vender-text-dark);
+    outline: none;
+    resize: none;
+    transition: all 0.25s ease;
+    line-height: 1.45;
+}
+
+.textarea-vender-padrao::placeholder {
+    color: var(--vender-text-placeholder);
+}
+
+.textarea-vender-padrao:hover {
+    background-color: var(--vender-input-hover);
+}
+
+.textarea-vender-padrao:focus {
+    background-color: #FFFFFF;
+    border-color: var(--vender-green);
+    box-shadow: 0 0 0 4px rgba(89, 170, 89, 0.18);
+}
+
+.contador-caracteres {
+    display: flex;
+    justify-content: flex-end;
+    font-size: 11px;
+    color: #94A3B8;
+    margin-top: 4px;
+    padding-right: 4px;
+}
+
+/* ==========================================================================
+   DROPDOWNS EM PÍLULA VERDE (CATEGORIA E CONDIÇÃO)
+   ========================================================================== */
+.grupo-dropdowns-vender {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 4px;
+}
+
+.dropdown-pill-container {
+    position: relative;
+    width: 100%;
+}
+
+.btn-dropdown-pill {
+    width: 100%;
+    height: 44px;
+    background-color: var(--vender-green);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 25px;
+    padding: 0 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(89, 170, 89, 0.28);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-dropdown-pill:hover {
+    background-color: var(--vender-green-hover);
+    box-shadow: 0 6px 18px rgba(89, 170, 89, 0.45);
+    transform: translateY(-1px);
+}
+
+.btn-dropdown-pill:active {
+    transform: translateY(1px);
+}
+
+.btn-dropdown-pill .chevron-icon {
+    width: 20px;
+    height: 20px;
+    stroke-width: 2.8;
+    transition: transform 0.28s ease;
+}
+
+.dropdown-pill-container.aberto .btn-dropdown-pill .chevron-icon {
+    transform: rotate(180deg);
+}
+
+.dropdown-pill-container.aberto .btn-dropdown-pill {
+    background-color: var(--vender-green-dark);
+}
+
+/* Menu Flutuante de Opções */
+.menu-dropdown-opcoes {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    width: 100%;
+    background-color: #FFFFFF;
+    border-radius: 16px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18), 0 2px 8px rgba(0, 0, 0, 0.08);
+    padding: 8px;
+    z-index: 50;
+    max-height: 250px;
+    overflow-y: auto;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px) scale(0.98);
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dropdown-pill-container.aberto .menu-dropdown-opcoes {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+.item-opcao-dropdown {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #374151;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.item-opcao-dropdown:hover {
+    background-color: #F1F5F9;
+    color: var(--vender-green);
+}
+
+.item-opcao-dropdown.selecionado {
+    background-color: rgba(89, 170, 89, 0.12);
+    color: var(--vender-green-dark);
+}
+
+.item-opcao-dropdown.selecionado::after {
+    content: "✓";
+    font-weight: bold;
+    color: var(--vender-green);
+}
+
+/* ==========================================================================
+   BOTÃO DE AÇÃO PRINCIPAL: "ANUNCIAR"
+   ========================================================================== */
+.secao-acao-anunciar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 24px;
+    position: relative;
+}
+
+.btn-anunciar-destaque {
+    background-color: var(--vender-green);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 40px;
+    padding: 15px 74px;
+    font-size: 21px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    cursor: pointer;
+    box-shadow: 0 10px 28px rgba(89, 170, 89, 0.45);
+    transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.btn-anunciar-destaque::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+    transform: skewX(-20deg);
+    transition: 0.6s ease;
+}
+
+.btn-anunciar-destaque:hover::before {
+    left: 150%;
+}
+
+.btn-anunciar-destaque:hover {
+    background-color: var(--vender-green-hover);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 16px 36px rgba(89, 170, 89, 0.6);
+}
+
+.btn-anunciar-destaque:active {
+    transform: translateY(1px) scale(0.99);
+}
+
+/* Efeito de Loading do botão */
+.btn-anunciar-destaque.carregando {
+    pointer-events: none;
+    opacity: 0.9;
+}
+
+.spinner-vender {
+    display: none;
+    width: 22px;
+    height: 22px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #FFF;
+    animation: spin 0.8s linear infinite;
+}
+
+.btn-anunciar-destaque.carregando .spinner-vender {
+    display: inline-block;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Mensagem de validação de formulário */
+.feedback-msg-validacao {
+    color: #DC2626;
+    font-size: 13.5px;
+    font-weight: 600;
+    margin-top: 12px;
+    min-height: 20px;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.feedback-msg-validacao.visivel {
+    opacity: 1;
+}
+
+/* ==========================================================================
+   TELA DE SUCESSO ("ANUNCIO CRIADO COM SUCESSO!")
+   Fiel ao modelo da imagem fornecida
+   ========================================================================== */
+.tela-sucesso-container {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 70px 20px 90px;
+    animation: surgimentoSucesso 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.tela-sucesso-container.ativo {
+    display: flex;
+}
+
+@keyframes surgimentoSucesso {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.94);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Círculo verde com checkmark */
+.circulo-sucesso-grande {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background-color: var(--vender-green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 12px 36px rgba(89, 170, 89, 0.45);
+    margin-bottom: 30px;
+    position: relative;
+    animation: pulseCirculo 2s infinite alternate;
+}
+
+@keyframes pulseCirculo {
+    0% {
+        box-shadow: 0 10px 30px rgba(89, 170, 89, 0.4);
+        transform: scale(1);
+    }
+    100% {
+        box-shadow: 0 16px 45px rgba(89, 170, 89, 0.65);
+        transform: scale(1.03);
+    }
+}
+
+.icone-check-svg {
+    width: 76px;
+    height: 76px;
+    stroke: #FFFFFF;
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    animation: desenharCheck 0.7s 0.2s ease-out forwards;
+}
+
+@keyframes desenharCheck {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+/* Título de Sucesso */
+.titulo-sucesso {
+    font-size: 32px;
+    font-weight: 800;
+    color: #111827;
+    margin-bottom: 12px;
+    letter-spacing: -0.3px;
+}
+
+/* Link "clique aqui para ver anuncio" */
+.link-ver-anuncio-sucesso {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--vender-green);
+    text-decoration: none;
+    position: relative;
+    transition: color 0.2s ease;
+    padding-bottom: 4px;
+}
+
+.link-ver-anuncio-sucesso::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--vender-green);
+    transform: scaleX(0.9);
+    transition: transform 0.2s ease;
+}
+
+.link-ver-anuncio-sucesso:hover {
+    color: var(--vender-green-dark);
+}
+
+.link-ver-anuncio-sucesso:hover::after {
+    transform: scaleX(1);
+}
+
+/* Botões extras da tela de sucesso */
+.acoes-sucesso-secundarias {
+    display: flex;
+    gap: 14px;
+    margin-top: 36px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.btn-sucesso-secundario {
+    background-color: #FFFFFF;
+    color: #374151;
+    border: 1px solid #D1D5DB;
+    padding: 10px 24px;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.btn-sucesso-secundario:hover {
+    background-color: #F9FAFB;
+    border-color: #9CA3AF;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+/* ==========================================================================
+   MODAL DE EDIÇÃO DE LOCALIZAÇÃO
+   ========================================================================== */
+.modal-localizacao-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.modal-localizacao-backdrop.ativo {
+    display: flex;
+}
+
+.modal-localizacao-card {
+    background: #FFFFFF;
+    border-radius: 20px;
+    padding: 28px;
+    width: 100%;
+    max-width: 440px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    animation: modalScaleIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalScaleIn {
+    from { transform: scale(0.92); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.modal-localizacao-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.modal-localizacao-header h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.btn-fechar-modal-loc {
+    background: none;
+    border: none;
+    font-size: 22px;
+    color: #9CA3AF;
+    cursor: pointer;
+    padding: 4px;
+}
+
+.btn-fechar-modal-loc:hover {
+    color: #111827;
+}
+
+.form-grupo-modal {
+    margin-bottom: 16px;
+}
+
+.form-grupo-modal label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #4B5563;
+    margin-bottom: 6px;
+}
+
+.form-grupo-modal select,
+.form-grupo-modal input {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid #D1D5DB;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+}
+
+.form-grupo-modal select:focus,
+.form-grupo-modal input:focus {
+    border-color: var(--vender-green);
+    box-shadow: 0 0 0 3px rgba(89, 170, 89, 0.2);
+}
+
+.btn-salvar-localizacao {
+    width: 100%;
+    background-color: var(--vender-green);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.btn-salvar-localizacao:hover {
+    background-color: var(--vender-green-hover);
+}
+
+/* ==========================================================================
+   RESPONSIVIDADE (MOBILE & TABLETS)
+   ========================================================================== */
+@media (max-width: 900px) {
+    .vender-cards-wrapper {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .vender-main {
+        padding: 20px 16px 50px;
+    }
+
+    .vender-titulo-pagina {
+        font-size: 26px;
+    }
+
+    .btn-voltar-redondo {
+        width: 38px;
+        height: 38px;
+    }
+
+    .btn-anunciar-destaque {
+        width: 100%;
+        padding: 14px 20px;
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 600px) {
+    .vender-main {
+        padding: 14px 12px 40px;
+    }
+
+    .vender-header-bar {
+        margin-bottom: 20px;
+    }
+
+    .vender-titulo-pagina {
+        font-size: 22px;
+    }
+
+    .card-vender {
+        padding: 18px 14px;
+        border-radius: 18px;
+    }
+
+    /* Evita auto-zoom no iOS Safari */
+    .input-vender-padrao,
+    .textarea-vender-padrao,
+    .form-grupo-modal input,
+    .form-grupo-modal select {
+        font-size: 16px;
+    }
+
+    .grupo-dropdowns-vender {
+        gap: 10px;
+    }
+
+    .btn-dropdown-pill {
+        padding: 11px 16px;
+        font-size: 13.5px;
+    }
+
+    .secao-localizacao-card {
+        padding: 14px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .localizacao-endereco {
+        font-size: 13.5px;
+    }
+
+    .modal-localizacao-card {
+        padding: 22px 16px;
+        width: calc(100% - 24px);
+        border-radius: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .grid-fotos-upload {
+        grid-template-rows: repeat(3, 78px);
+        gap: 8px;
+    }
+
+    .slot-foto-principal .rotulo-slot {
+        font-size: 12px;
+    }
+
+    .slot-foto-principal .subrotulo-slot {
+        font-size: 10px;
+    }
+
+    .btn-anunciar-destaque {
+        font-size: 17px;
+        padding: 13px 16px;
+    }
+
+    .circulo-sucesso-grande {
+        width: 100px;
+        height: 100px;
+    }
+
+    .icone-check-svg {
+        width: 52px;
+        height: 52px;
+    }
+
+    .titulo-sucesso {
+        font-size: 22px;
+    }
+
+    .link-ver-anuncio-sucesso {
+        font-size: 15px;
+    }
+
+    .btn-sucesso-secundario {
+        width: 100%;
+        text-align: center;
+    }
+}

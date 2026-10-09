@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Detalhes do anúncio no Itaim Vende - Compra, Venda e Trocas no Piauí.">
+    <title>Detalhes do Anúncio - Itaim Vende</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Segoe+UI&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../assets/header-logo.png">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/home.css?v=2">
+    <link rel="stylesheet" href="../../css/header-global.css?v=7">
+    <link rel="stylesheet" href="../../css/produto.css?v=4">
+</head>
+<body>
+
+    <!-- ==========================================================
+         1. CABEÇALHO GLOBAL (NAVBAR UNIFICADA)
+         ========================================================== -->
+    <header class="header-principal">
+        <div class="header-container">
+            <!-- Esquerda: Menu Hambúrguer e Logo -->
+            <div class="header-left">
+                <button type="button" class="btn-menu-hamburguer" id="btn-abrir-drawer" aria-label="Abrir menu de navegação">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                <a href="../home/home.html" class="header-logo-link" title="Itaim Vende - Página Inicial">
+                    <img src="../../assets/header1-logo.png" alt="Itaim Vende" class="header-logo-img">
+                </a>
+            </div>
+
+            <!-- Centro: Barra de Pesquisa Estilo Pílula -->
+            <div class="header-center">
+                <form class="busca-form" id="form-busca" role="search" action="categoria.html" method="GET">
+                    <input 
+                        type="search" 
+                        class="campo-busca" 
+                        id="campo-busca" 
+                        name="q"
+                        placeholder="Buscar produtos, marcas e mais..." 
+                        autocomplete="off"
+                        aria-label="Buscar produtos, marcas e mais..."
+                    >
+                    <button type="submit" class="btn-busca-submit" id="btn-submit-busca" aria-label="Pesquisar">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Direita: Ações do Cabeçalho -->
+            <div class="header-right">
+                <!-- Desktop: Meus Anúncios (Ícone + Texto) -->
+                <a href="../vender/meus-anuncios.html" class="btn-nav-texto" id="link-meus-anuncios">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 11l19-9-9 19-2-8-8-2z"></path>
+                    </svg>
+                    <span>Meus Anúncios</span>
+                </a>
+
+                <!-- Botão Vender -->
+                <a href="../vender/vender.html" class="btn-vender-destaque" id="btn-abrir-modal-vender">
+                    <span>Vender</span>
+                </a>
+
+                <!-- Ícone Conversas -->
+                <a href="../mensagens/conversas.html" class="btn-icone-header" id="btn-chat" aria-label="Conversas" title="Conversas">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                </a>
+
+                <!-- Ícone Notificações -->
+                <a href="../notificacoes/notificacoes.html" class="btn-icone-header" id="btn-notificacoes" aria-label="Notificações" title="Notificações">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                </a>
+
+                <!-- Mobile: Ícone Meus Anúncios (substitui o coração no celular) -->
+                <a href="../vender/meus-anuncios.html" class="btn-icone-header btn-meus-anuncios-mobile" id="btn-meus-anuncios-mobile" aria-label="Meus Anúncios" title="Meus Anúncios">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 11l19-9-9 19-2-8-8-2z"></path>
+                    </svg>
+                </a>
+
+                <!-- Perfil do Usuário com Dropdown -->
+                <div class="perfil-wrapper">
+                    <button type="button" class="btn-avatar-header" id="btn-avatar-dropdown" aria-label="Abrir menu de perfil">
+                        <img src="../../assets/icon-user.png" alt="Foto de perfil" class="avatar-img" id="img-avatar-user">
+                    </button>
+
+                    <div class="dropdown-perfil" id="dropdown-perfil">
+                        <a href="../perfil/perfil.html" class="dropdown-header-user" title="Ir para Meu Perfil">
+                            <strong id="dropdown-user-name">Raili</strong>
+                            <span id="dropdown-user-email">admin@gmail.com</span>
+                        </a>
+                        <a href="../perfil/perfil.html" class="dropdown-item" id="link-menu-perfil">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                            Meu Perfil
+                        </a>
+                        <a href="../vender/meus-anuncios.html" class="dropdown-item" id="link-menu-anuncios">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l19-9-9 19-2-8-8-2z"></path></svg>
+                            Meus Anúncios
+                        </a>
+                        <a href="../favoritos/favoritos.html" class="dropdown-item" id="link-menu-favoritos">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                            Favoritos (<span id="favoritos-contador-badge">0</span>)
+                        </a>
+                        <a href="../perfil/configuracoes.html" class="dropdown-item" id="link-menu-configuracoes">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="3"></circle>
+                                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0 1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                            </svg>
+                            Configurações
+                        </a>
+                        <a href="../../index.html" class="dropdown-item item-sair">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                <polyline points="16 17 21 12 16 7"></polyline>
+                                <line x1="21" y1="12" x2="9" y2="12"></line>
+                            </svg>
+                            Sair
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==========================================================
+         2. MENU LATERAL DESLIZANTE (DRAWER GLOBAL)
+         ========================================================== -->
+    <div class="drawer-backdrop" id="drawer-backdrop">
+        <aside class="drawer-menu" aria-label="Menu principal">
+            <div class="drawer-header">
+                <img src="../../assets/header1-logo.png" alt="Itaim Vende" class="drawer-logo">
+                <button type="button" class="drawer-close" id="btn-fechar-drawer" aria-label="Fechar menu">&times;</button>
+            </div>
+
+            <!-- Perfil do Usuário no Drawer (Acesso rápido ao Perfil) -->
+            <a href="../perfil/perfil.html" class="drawer-user-card" id="drawer-user-card" title="Acessar Meu Perfil">
+                <div class="drawer-user-avatar-wrap">
+                    <img src="../../assets/icon-user.png" alt="Foto de perfil" class="drawer-user-avatar" id="drawer-user-avatar">
+                </div>
+                <div class="drawer-user-info">
+                    <span class="drawer-user-nome" id="drawer-user-name">Raili</span>
+                    <span class="drawer-user-sub">Ver meu perfil &rarr;</span>
+                </div>
+            </a>
+
+            <nav class="drawer-nav">
+                <a href="../home/home.html" class="drawer-link" id="drawer-link-home">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+                    Início
+                </a>
+                <a href="../perfil/perfil.html" class="drawer-link" id="drawer-link-perfil">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    Meu Perfil
+                </a>
+                <a href="../vender/meus-anuncios.html" class="drawer-link" id="drawer-link-anuncios">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l19-9-9 19-2-8-8-2z"></path></svg>
+                    Meus Anúncios
+                </a>
+                <a href="../favoritos/favoritos.html" class="drawer-link" id="drawer-link-favoritos">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    Meus Favoritos
+                </a>
+                <a href="../mensagens/conversas.html" class="drawer-link" id="drawer-link-chat">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    Conversas
+                </a>
+                <a href="../vender/vender.html" class="drawer-link" id="drawer-link-vender">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    Vender Produto
+                </a>
+                <a href="../notificacoes/notificacoes.html" class="drawer-link" id="drawer-link-notificacoes">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                    Notificações
+                </a>
+
+                <!-- SEÇÃO CATEGORIAS EM ACORDEÃO RETRÁTIL (SEM EMOJIS) -->
+                <div class="drawer-secao-divisor"></div>
+                <button type="button" class="drawer-accordion-btn" id="btn-toggle-categorias" aria-expanded="false">
+                    <span class="drawer-accordion-label">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="14" width="7" height="7"></rect>
+                            <rect x="3" y="14" width="7" height="7"></rect>
+                        </svg>
+                        <span>Categorias</span>
+                    </span>
+                    <svg class="chevron-accordion" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div class="drawer-categorias-conteudo" id="drawer-categorias-conteudo">
+                    <a href="categoria.html?cat=Eletrônicos" class="drawer-sublink">Eletrônicos</a>
+                    <a href="categoria.html?cat=Decoração" class="drawer-sublink">Decoração</a>
+                    <a href="categoria.html?cat=Móveis" class="drawer-sublink">Móveis</a>
+                    <a href="categoria.html?cat=Moda" class="drawer-sublink">Moda & Vestuário</a>
+                    <a href="categoria.html?cat=Infantil" class="drawer-sublink">Infantil & Bebês</a>
+                    <a href="categoria.html?cat=Esportes" class="drawer-sublink">Esportes & Lazer</a>
+                    <a href="categoria.html?cat=Hobbies" class="drawer-sublink">Hobbies & Games</a>
+                    <a href="categoria.html?cat=Serviços" class="drawer-sublink">Serviços</a>
+                </div>
+
+                <div class="drawer-secao-divisor"></div>
+                <a href="../perfil/configuracoes.html" class="drawer-link" id="drawer-link-configuracoes">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0 1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                    Configurações
+                </a>
+                <a href="../../index.html" class="drawer-link item-sair">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    Sair
+                </a>
+            </nav>
+        </aside>
+    </div>
+
+    <!-- ==========================================================
+         2. CAMINHO / BREADCRUMBS COM BOTÃO VOLTAR CIRCULAR
+         ========================================================== -->
+    <nav class="breadcrumb-ref-wrapper" aria-label="Navegação estrutural">
+        <!-- Botão Voltar -->
+        <button type="button" class="btn-voltar-cat" onclick="if(window.history.length > 1){window.history.back()}else{window.location.href="../home/home.html'}" aria-label="Voltar para a página anterior">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            Voltar
+        </button>
+
+        <div class="breadcrumb-barra-alinhamento">
+            <ul class="breadcrumb-ref-lista">
+                <li><a href="../home/home.html" class="breadcrumb-home-link" title="Página Inicial">Início</a></li>
+                <li class="sep">&gt;</li>
+                <li><a href="categoria.html?cat=Eletrônicos">Eletrônicos</a></li>
+                <li class="sep">&gt;</li>
+                <li><a href="categoria.html?cat=Acessórios">Acessórios</a></li>
+                <li class="sep">&gt;</li>
+                <li class="atual">Controles Remotos</li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ==========================================================
+         3. CONTEÚDO PRINCIPAL DO ANÚNCIO (ESTILO REFERÊNCIA)
+         ========================================================== -->
+    <main class="layout-anuncio-wrapper">
+        <div class="grid-anuncio-conteudo">
+            
+            <!-- COLUNA ESQUERDA & CENTRO: PRODUTO + SOBRE ESTE ANÚNCIO -->
+            <div class="coluna-conteudo-anuncio">
+                
+                <!-- Card Principal: Carrossel (Esquerda) e Detalhes (Centro) -->
+                <div class="card-anuncio-topo">
+                    <div class="grid-carrossel-detalhes">
+                        
+                        <!-- 1. Área do Produto: Carrossel de Imagens e Miniaturas -->
+                        <div class="carrossel-wrapper">
+                            <div class="carrossel-foto-box">
+                                <span class="badge-disponivel">
+                                    <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    Disponível
+                                </span>
+
+                                <button type="button" class="btn-favorito" id="btn-favoritar-detalhe" aria-label="Favoritar anúncio">
+                                    <svg class="icone-coracao" viewBox="0 0 24 24">
+                                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                    </svg>
+                                </button>
+
+                                <button type="button" class="carrossel-seta carrossel-seta-esq" id="btn-carrossel-prev" aria-label="Foto anterior">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                                </button>
+                                <button type="button" class="carrossel-seta carrossel-seta-dir" id="btn-carrossel-next" aria-label="Próxima foto">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                </button>
+
+                                <div class="foto-bg-blur" id="foto-bg-blur"></div>
+                                <img src="../../assets/produtos/anuncio_15.jpg" alt="Controle Remoto para Televisão SMART TV SAMSUNG" id="foto-principal-img" class="foto-principal-display">
+
+                                <div class="badge-contador-fotos" id="contador-fotos-badge">
+                                    <span id="contador-fotos-texto">1/2</span>
+                                </div>
+                            </div>
+
+                            <!-- Miniaturas -->
+                            <div class="miniaturas-row" id="miniaturas-row">
+                                <div class="thumb-box ativa" data-index="0" data-src="../../assets/produtos/anuncio_15.jpg" title="Foto 1">
+                                    <img src="../../assets/produtos/anuncio_15.jpg" alt="Miniatura 1">
+                                </div>
+                                <div class="thumb-box" data-index="1" data-src="../../assets/produtos/anuncio_15_2.jpg" title="Foto 2">
+                                    <img src="../../assets/produtos/anuncio_15_2.jpg" alt="Miniatura 2">
+                                </div>
+                                <div class="thumb-box" data-index="0" data-src="../../assets/produtos/anuncio_15.jpg" title="Foto 3 (Teclas)">
+                                    <img src="../../assets/produtos/anuncio_15.jpg" alt="Miniatura 3" style="transform: scale(1.6); object-fit: cover;">
+                                </div>
+                                <div class="thumb-box" data-index="1" data-src="../../assets/produtos/anuncio_15_2.jpg" title="Foto 4 (Design)">
+                                    <img src="../../assets/produtos/anuncio_15_2.jpg" alt="Miniatura 4" style="transform: scale(1.6); object-fit: cover;">
+                                </div>
+                                <div class="thumb-box" data-index="0" data-src="../../assets/produtos/anuncio_15.jpg" title="Foto 5 (Traseira)">
+                                    <img src="../../assets/produtos/anuncio_15.jpg" alt="Miniatura 5">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. Detalhes do Anúncio (Centro) -->
+                        <div class="info-detalhes-coluna">
+                            <div class="selo-anuncio-verificado">
+                                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                                <span>ANÚNCIO VERIFICADO</span>
+                            </div>
+
+                            <h1 class="produto-titulo-destaque" id="produto-titulo">Controle Remoto para Televisão SMART TV SAMSUNG</h1>
+
+                            <div class="produto-localizacao-linha" id="produto-localizacao">
+                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                <span>Betânia do Piauí - PI</span>
+                            </div>
+
+                            <hr class="divisor-suave">
+
+                            <div class="bloco-descricao-curta">
+                                <h2 class="subtitulo-secao">Descrição do produto</h2>
+                                <p class="texto-descricao-paragrafo" id="descricao-curta-texto">
+                                    Controle remoto para Smart TV Samsung, modelo ergonômico com teclas macias e resposta rápida. Ideal para reposição do controle original com todas as funções integradas, atalhos para streaming e navegação precisa.
+                                </p>
+                            </div>
+
+                            <div class="especificacoes-grid">
+                                <div class="espec-item">
+                                    <span class="espec-chave">Condição</span>
+                                    <span class="espec-valor" id="espec-condicao">Usado</span>
+                                </div>
+                                <div class="espec-item">
+                                    <span class="espec-chave">Categoria</span>
+                                    <span class="espec-valor" id="espec-categoria">Eletrônicos</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- COLUNA DIREITA: AÇÕES, PREÇO E VENDEDOR -->
+            <aside class="card-sidebar-acoes">
+                <div class="tag-otimo-preco">
+                    <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg>
+                    <span>Ótimo preço</span>
+                </div>
+
+                <div class="valor-preco-grande" id="preco-valor">R$ 30,00</div>
+
+                <div class="legenda-negociavel">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                    <span>Preço negociável com o vendedor</span>
+                </div>
+
+
+
+                <button type="button" class="btn-chat-vendedor" id="btn-chat-vendedor" title="Conversar com o vendedor">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    <span>Chat com o vendedor</span>
+                </button>
+
+                <a href="https://wa.me/5589999999999?text=Ol%C3%A1!%20Tenho%20interesse%20no%20Controle%20Remoto%20Samsung" target="_blank" rel="noopener noreferrer" class="btn-whatsapp-vendedor" id="btn-comprar-wpp">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2z"/></svg>
+                    <span>WhatsApp</span>
+                </a>
+
+                <div class="box-vendedor-sidebar">
+                    <a href="../perfil/vendedor.html" class="vendedor-topo-row-link" id="link-vendedor-topo" title="Ver perfil do vendedor">
+                        <div class="vendedor-avatar-circulo" id="vendedor-avatar-box">
+                            <img src="../../assets/icon-user.png" alt="Foto de perfil do Vendedor" id="vendedor-avatar-img">
+                        </div>
+                        <div class="vendedor-textos">
+                            <div class="vendedor-nome-selo">
+                                <strong id="vendedor-nome-txt">Raili</strong>
+                            </div>
+                            <span class="vendedor-cidade-txt" id="vendedor-cidade-txt">Paulistana - PI</span>
+                        </div>
+                    </a>
+                    <a href="../perfil/vendedor.html" class="link-perfil-vendedor" id="link-perfil-vendedor" title="Ver perfil completo do vendedor">
+                        <span>Ver perfil do vendedor</span>
+                        <span>&gt;</span>
+                    </a>
+                </div>
+            </aside>
+
+        </div>
+    </main>
+
+    <!-- ==========================================================
+         5. SEÇÃO: OUTROS ANÚNCIOS RECOMENDADOS / SUGESTÕES (PRESERVADA)
+         ========================================================== -->
+    <section class="secao-relacionados" style="max-width: 1380px; margin: 36px auto 60px; padding: 0 24px;">
+        <div class="secao-relacionados-topo" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
+            <div>
+                <h2 style="font-size: 22px; font-weight: 800; color: #1E293B;">Outros Anúncios da Região</h2>
+                <p style="font-size: 14px; color: #64748B; margin-top: 4px;">Confira ofertas e produtos semelhantes anunciados no Vale do Itaim</p>
+            </div>
+            <a href="categoria.html?cat=Eletrônicos" class="link-ver-mais-categoria" style="font-size: 14px; font-weight: 700; color: #44BD32; text-decoration: none; display: flex; align-items: center; gap: 4px;">
+                Ver todos em Eletrônicos &rarr;
+            </a>
+        </div>
+
+        <div class="grade-produtos" id="grade-relacionados">
+            <!-- Gerados dinamicamente via JS -->
+        </div>
+    </section>
+
+    <!-- ==========================================================
+         6. RODAPÉ (FOOTER)
+         ========================================================== -->
+    <footer class="footer-principal">
+        <div class="footer-container">
+            <div class="footer-col">
+                <img src="../../assets/header-logo.png" alt="Itaim Vende" class="footer-logo-img">
+                <p class="footer-sobre">
+                    O Itaim Vende é o maior portal de compra, venda e troca da região de Paulistana e cidades vizinhas no Piauí. Conectando pessoas e bons negócios.
+                </p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Categorias</h4>
+                <ul class="footer-links">
+                    <li><a href="categoria.html?cat=Eletrônicos">Eletrônicos</a></li>
+                    <li><a href="categoria.html?cat=Móveis">Móveis</a></li>
+                    <li><a href="categoria.html?cat=Decoração">Decoração</a></li>
+                    <li><a href="categoria.html?cat=Moda">Moda & Vestuário</a></li>
+                    <li><a href="categoria.html?cat=Serviços">Serviços</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Cidades Atendidas</h4>
+                <ul class="footer-links">
+                    <li><a href="../home/home.html">Paulistana - PI</a></li>
+                    <li><a href="../home/home.html">Acauã - PI</a></li>
+                    <li><a href="../home/home.html">Betânia do Piauí</a></li>
+                    <li><a href="../home/home.html">Curral Novo</a></li>
+                    <li><a href="../home/home.html">Picos e Região</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Minha Conta</h4>
+                <ul class="footer-links">
+                    <li><a href="../../index.html">Entrar / Cadastro</a></li>
+                    <li><a href="../vender/meus-anuncios.html" id="footer-link-anuncios">Meus Anúncios</a></li>
+                    <li><a href="../favoritos/favoritos.html" id="footer-link-favoritos">Meus Favoritos</a></li>
+
+                    <li><a href="../perfil/perfil.html">Meu Perfil</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <span>© 2026 Itaim Vende. Todos os direitos reservados.</span>
+            <span>Desenvolvido com carinho para o Piauí.</span>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../../js/core/produtos-dados.js"></script>
+    <script src="../../js/core/rotas.js"></script>
+    <script src="../../js/core/sessao.js?v=4"></script>
+    <script src="../../js/pages/produto.js?v=4"></script>
+</body>
+</html>

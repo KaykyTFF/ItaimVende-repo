@@ -1,0 +1,263 @@
+/* Estilo geral do container do diálogo */
+.dialog-root {
+    -fx-background-color: white;
+    -fx-background-radius: 12; /* Bordas arredondadas */
+    -fx-border-radius: 12;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1;
+    /* Sombra suave para destacar a janela */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 15, 0, 0, 4);
+    -fx-padding: 25;
+    -fx-min-width: 400px;
+}
+
+/* Título vermelho para indicar atenção */
+.dialog-titulo {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e53935; /* Mesmo vermelho do link-excluir */
+    -fx-padding: 0 0 10 0;
+}
+
+/* Texto principal da pergunta */
+.dialog-header {
+    -fx-font-size: 15px;
+    -fx-text-fill: #333333;
+    -fx-wrap-text: true;
+}
+
+/* Subtexto com detalhes */
+.dialog-content {
+    -fx-font-size: 13px;
+    -fx-text-fill: #666666;
+    -fx-padding: 5 0 20 0;
+    -fx-wrap-text: true;
+}
+
+/* --- BOTÕES --- */
+
+/* Botão Cancelar (Neutro) */
+.btn-dialog-cancelar {
+    -fx-background-color: white;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-text-fill: #555555;
+    -fx-font-size: 13px;
+    -fx-cursor: hand;
+    -fx-padding: 8 15;
+}
+
+.btn-dialog-cancelar:hover {
+    -fx-background-color: #f5f5f5;
+    -fx-border-color: #bbbbbb;
+}
+
+/* Botão Excluir (Destrutivo) */
+.btn-dialog-excluir {
+    -fx-background-color: #e53935; /* Vermelho */
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+    -fx-padding: 8 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(229, 57, 53, 0.3), 5, 0, 0, 2);
+}
+
+.btn-dialog-excluir:hover {
+    -fx-background-color: #b71c1c; /* Vermelho mais escuro */
+}
+
+
+/* --- DIÁLOGO DE PROPOSTA (MODERNO) --- */
+
+.dialog-proposta-root {
+    -fx-background-color: white;
+    -fx-background-radius: 12px;
+
+    /* Remove COMPLETAMENTE qualquer borda */
+    -fx-border-width: 0;
+    -fx-border-color: transparent;
+    -fx-border-radius: 0;
+
+    /* ZERO insets - crucial para transparência perfeita */
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+
+    -fx-padding: 30px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 15, 0, 0, 5);
+    -fx-min-width: 380px;
+    -fx-alignment: center;
+}
+
+.proposta-titulo-main {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 20px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #2d3436;
+}
+
+.proposta-subtitulo {
+    -fx-font-size: 14px;
+    -fx-text-fill: #636e72;
+    -fx-padding: 0 0 15 0;
+}
+
+.input-valor-grande {
+    -fx-font-size: 24px; /* Letra grande para o valor */
+    -fx-font-weight: bold;
+    -fx-text-fill: #44BD32; /* Verde ItaimVende */
+    -fx-alignment: center;
+    -fx-background-color: #f1f2f6;
+    -fx-background-radius: 8;
+    -fx-border-color: transparent;
+    -fx-padding: 10;
+}
+
+.input-valor-grande:focused {
+    -fx-background-color: white;
+    -fx-border-color: #44BD32;
+    -fx-border-width: 2px;
+}
+
+.btn-confirmar-proposta {
+    -fx-background-color: #44BD32;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+    -fx-padding: 10 20;
+    -fx-pref-width: 150;
+}
+.btn-confirmar-proposta:hover {
+    -fx-background-color: #389e29;
+}
+
+.btn-cancelar-proposta {
+    -fx-background-color: #dfe6e9;
+    -fx-text-fill: #636e72;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+    -fx-padding: 10 20;
+    -fx-pref-width: 120;
+}
+.btn-cancelar-proposta:hover {
+    -fx-background-color: #b2bec3;
+}
+
+/* =========================================
+   DIÁLOGOS MODERNOS (Bloqueio e Denúncia)
+   ========================================= */
+
+.card-dialog-root {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 15px;
+
+    /* Remove COMPLETAMENTE qualquer borda */
+    -fx-border-width: 0;
+    -fx-border-color: transparent;
+    -fx-border-radius: 0;
+
+    /* ZERO insets - crucial para transparência perfeita */
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+
+    /* Sombra suave */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 20, 0, 0, 5);
+
+    -fx-padding: 30px;
+    -fx-min-width: 380px;
+    -fx-max-width: 450px;
+}
+
+/* Títulos */
+.card-titulo-bloqueio {
+    -fx-font-size: 22px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #e74c3c; /* Vermelho */
+}
+
+.card-titulo-denuncia {
+    -fx-font-size: 22px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #f39c12; /* Laranja */
+}
+
+/* Texto */
+.card-texto {
+    -fx-font-size: 14px;
+    -fx-text-fill: #636e72;
+    -fx-wrap-text: true;
+    -fx-line-spacing: 3px;
+}
+
+/* Input de Texto (Denúncia e Proposta) */
+.card-textarea {
+    -fx-background-color: #f1f2f6;
+    -fx-background-radius: 10px; /* Mais arredondado */
+    -fx-border-color: transparent;
+    -fx-text-fill: #2d3436;
+    -fx-font-size: 14px;
+    -fx-prompt-text-fill: #b2bec3;
+}
+.card-textarea:focused {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #59AA59;
+    -fx-border-radius: 10px;
+}
+
+/* Botões */
+.btn-card-cancelar {
+    -fx-background-color: #f5f6fa;
+    -fx-text-fill: #7f8c8d;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-padding: 10 20 10 20;
+}
+.btn-card-cancelar:hover {
+    -fx-background-color: #dcdde1;
+}
+
+.btn-card-bloquear {
+    -fx-background-color: #e74c3c;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(231, 76, 60, 0.25), 8, 0, 0, 3);
+    -fx-padding: 10 20 10 20;
+}
+.btn-card-bloquear:hover { -fx-background-color: #c0392b; }
+
+.btn-card-denunciar {
+    -fx-background-color: #f39c12;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(243, 156, 18, 0.25), 8, 0, 0, 3);
+    -fx-padding: 10 20 10 20;
+}
+.btn-card-denunciar:hover { -fx-background-color: #d35400; }
+
+/* Para a Janela de Proposta (Reuso) */
+.proposta-titulo-main {
+    -fx-font-size: 22px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #27ae60;
+}
+.btn-confirmar-proposta {
+    -fx-background-color: #27ae60;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-padding: 10 20 10 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(39, 174, 96, 0.25), 8, 0, 0, 3);
+}
+.btn-confirmar-proposta:hover { -fx-background-color: #219150; }

@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Mensagens e Chat - Itaim Vende">
+    <title>Mensagens - Itaim Vende</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../assets/header1-logo.png">
+    
+    <!-- CSS Global e do Chat -->
+    <link rel="stylesheet" href="../../css/header-global.css?v=9">
+    <link rel="stylesheet" href="../../css/conversas.css?v=9">
+</head>
+<body class="pagina-chat">
+
+    <!-- ==========================================================
+         1. CABEÇALHO GLOBAL MODELO (NAVBAR UNIFICADA)
+         ========================================================== -->
+    <header class="header-principal" role="banner">
+        <div class="header-container">
+            <!-- Esquerda: Menu Hambúrguer + Logo -->
+            <div class="header-left">
+                <button type="button" class="btn-menu-hamburguer" id="btn-abrir-drawer" aria-label="Abrir menu de navegação">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                <a href="../home/home.html" class="header-logo-link" title="Itaim Vende - Página Inicial">
+                    <img src="../../assets/header1-logo.png" alt="Itaim Vende" class="header-logo-img">
+                </a>
+            </div>
+
+            <!-- Centro: Barra de Pesquisa Estilo Pílula -->
+            <div class="header-center">
+                <form class="busca-form" id="form-busca" role="search" action="categoria.html" method="GET">
+                    <input 
+                        type="search" 
+                        class="campo-busca" 
+                        id="campo-busca" 
+                        name="q"
+                        placeholder="Buscar produtos, marcas e muito mais..." 
+                        autocomplete="off"
+                        aria-label="Buscar produtos"
+                    >
+                    <button type="submit" class="btn-busca-submit" id="btn-submit-busca" aria-label="Pesquisar">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Direita: Ações do Cabeçalho -->
+            <div class="header-right">
+                <!-- Desktop: Meus Anúncios -->
+                <a href="../vender/meus-anuncios.html" class="btn-nav-texto" id="link-meus-anuncios">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 11l19-9-9 19-2-8-8-2z"></path>
+                    </svg>
+                    <span>Meus Anúncios</span>
+                </a>
+
+                <!-- Botão Vender -->
+                <a href="../vender/vender.html" class="btn-vender-destaque" id="btn-abrir-modal-vender">
+                    <span>Vender</span>
+                </a>
+
+                <!-- Ícone Conversas -->
+                <a href="conversas.html" class="btn-icone-header ativo-icone" id="btn-chat" aria-label="Conversas" title="Conversas">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                </a>
+
+                <!-- Ícone Notificações -->
+                <a href="../notificacoes/notificacoes.html" class="btn-icone-header" id="btn-notificacoes" aria-label="Notificações" title="Notificações">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                </a>
+
+                <!-- Mobile: Ícone Meus Anúncios -->
+                <a href="../vender/meus-anuncios.html" class="btn-icone-header btn-meus-anuncios-mobile" id="btn-meus-anuncios-mobile" aria-label="Meus Anúncios" title="Meus Anúncios">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 11l19-9-9 19-2-8-8-2z"></path>
+                    </svg>
+                </a>
+
+                <!-- Perfil do Usuário com Dropdown -->
+                <div class="perfil-wrapper">
+                    <button type="button" class="btn-avatar-header" id="btn-avatar-dropdown" aria-label="Abrir menu de perfil">
+                        <img src="../../assets/icon-user.png" alt="Foto de perfil" class="avatar-img" id="img-avatar-user">
+                    </button>
+
+                    <div class="dropdown-perfil" id="dropdown-perfil">
+                        <a href="../perfil/perfil.html" class="dropdown-header-user" title="Ir para Meu Perfil">
+                            <strong id="dropdown-user-name">Raili</strong>
+                            <span id="dropdown-user-email">admin@gmail.com</span>
+                        </a>
+                        <a href="../perfil/perfil.html" class="dropdown-item" id="link-menu-perfil">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                            Meu Perfil
+                        </a>
+                        <a href="../vender/meus-anuncios.html" class="dropdown-item" id="link-menu-anuncios">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l19-9-9 19-2-8-8-2z"></path></svg>
+                            Meus Anúncios
+                        </a>
+                        <a href="../favoritos/favoritos.html" class="dropdown-item" id="link-menu-favoritos">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                            Favoritos (<span id="favoritos-contador-badge">0</span>)
+                        </a>
+                        <a href="../perfil/configuracoes.html" class="dropdown-item" id="link-menu-configuracoes">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="3"></circle>
+                                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0 1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                            </svg>
+                            Configurações
+                        </a>
+                        <a href="../../index.html" class="dropdown-item item-sair">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                <polyline points="16 17 21 12 16 7"></polyline>
+                                <line x1="21" y1="12" x2="9" y2="12"></line>
+                            </svg>
+                            Sair
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==========================================================
+         2. MENU LATERAL DESLIZANTE (DRAWER GLOBAL)
+         ========================================================== -->
+    <div class="drawer-backdrop" id="drawer-backdrop">
+        <aside class="drawer-menu" aria-label="Menu principal">
+            <div class="drawer-header">
+                <img src="../../assets/header1-logo.png" alt="Itaim Vende" class="drawer-logo">
+                <button type="button" class="drawer-close" id="btn-fechar-drawer" aria-label="Fechar menu">&times;</button>
+            </div>
+
+            <a href="../perfil/perfil.html" class="drawer-user-card" id="drawer-user-card" title="Acessar Meu Perfil">
+                <div class="drawer-user-avatar-wrap">
+                    <img src="../../assets/icon-user.png" alt="Foto de perfil" class="drawer-user-avatar" id="drawer-user-avatar">
+                </div>
+                <div class="drawer-user-info">
+                    <span class="drawer-user-nome" id="drawer-user-name">Raili</span>
+                    <span class="drawer-user-sub">Ver meu perfil &rarr;</span>
+                </div>
+            </a>
+
+            <nav class="drawer-nav">
+                <a href="../home/home.html" class="drawer-link" id="drawer-link-home">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+                    Início
+                </a>
+                <a href="../perfil/perfil.html" class="drawer-link" id="drawer-link-perfil">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    Meu Perfil
+                </a>
+                <a href="../vender/meus-anuncios.html" class="drawer-link" id="drawer-link-anuncios">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l19-9-9 19-2-8-8-2z"></path></svg>
+                    Meus Anúncios
+                </a>
+                <a href="../favoritos/favoritos.html" class="drawer-link" id="drawer-link-favoritos">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    Meus Favoritos
+                </a>
+                <a href="conversas.html" class="drawer-link ativo" id="drawer-link-chat">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    Conversas
+                </a>
+                <a href="../vender/vender.html" class="drawer-link" id="drawer-link-vender">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    Vender Produto
+                </a>
+                <a href="../notificacoes/notificacoes.html" class="drawer-link" id="drawer-link-notificacoes">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                    Notificações
+                </a>
+
+                <!-- SEÇÃO CATEGORIAS EM ACORDEÃO RETRÁTIL (SEM EMOJIS) -->
+                <div class="drawer-secao-divisor"></div>
+                <button type="button" class="drawer-accordion-btn" id="btn-toggle-categorias" aria-expanded="false">
+                    <span class="drawer-accordion-label">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="14" width="7" height="7"></rect>
+                            <rect x="3" y="14" width="7" height="7"></rect>
+                        </svg>
+                        <span>Categorias</span>
+                    </span>
+                    <svg class="chevron-accordion" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div class="drawer-categorias-conteudo" id="drawer-categorias-conteudo">
+                    <a href="../produtos/categoria.html?cat=Eletrônicos" class="drawer-sublink">Eletrônicos</a>
+                    <a href="../produtos/categoria.html?cat=Decoração" class="drawer-sublink">Decoração</a>
+                    <a href="../produtos/categoria.html?cat=Móveis" class="drawer-sublink">Móveis</a>
+                    <a href="../produtos/categoria.html?cat=Moda" class="drawer-sublink">Moda & Vestuário</a>
+                    <a href="../produtos/categoria.html?cat=Infantil" class="drawer-sublink">Infantil & Bebês</a>
+                    <a href="../produtos/categoria.html?cat=Esportes" class="drawer-sublink">Esportes & Lazer</a>
+                    <a href="../produtos/categoria.html?cat=Hobbies" class="drawer-sublink">Hobbies & Games</a>
+                    <a href="../produtos/categoria.html?cat=Serviços" class="drawer-sublink">Serviços</a>
+                </div>
+
+                <div class="drawer-secao-divisor"></div>
+                <a href="../perfil/configuracoes.html" class="drawer-link" id="drawer-link-configuracoes">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0 1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                    Configurações
+                </a>
+                <a href="../../index.html" class="drawer-link item-sair">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    Sair
+                </a>
+            </nav>
+        </aside>
+    </div>
+
+    <!-- ==========================================================
+         3. APLICAÇÃO DE CHAT - LAYOUT RESPONSIVO (3 COLUNAS)
+         ========================================================== -->
+    <main class="chat-app-root">
+        <div class="chat-layout-grid" id="chat-layout-grid">
+            
+            <!-- ==================================================
+                 COLUNA 1: BARRA ESQUERDA (AZUL ESCURO) - CONVERSAS
+                 ================================================== -->
+            <aside class="chat-col-conversas" id="chat-col-conversas">
+                
+                <!-- Topo da Barra: Botão Voltar + Título Mensagens -->
+                <div class="chat-barra-topo">
+                    <button type="button" class="btn-voltar-chat" onclick="if(window.history.length > 1){window.history.back()}else{window.location.href="../home/home.html'}" aria-label="Voltar para a página anterior">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                        <span>Voltar</span>
+                    </button>
+
+                    <div class="chat-titulo-box">
+                        <div class="chat-icon-circulo">
+                            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#44BD32" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                        </div>
+                        <h1 class="chat-titulo-texto">Mensagens</h1>
+                    </div>
+                </div>
+
+                <!-- Campo de Pesquisa de Conversas -->
+                <div class="chat-busca-box">
+                    <div class="chat-busca-input-wrap">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" class="chat-busca-icon">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <input type="search" id="input-busca-conversas" class="chat-busca-input" placeholder="Pesquisar conversa..." autocomplete="off">
+                    </div>
+                </div>
+
+                <!-- Lista de Conversas com Scroll -->
+                <div class="chat-lista-scroll" id="chat-lista-scroll">
+                    <!-- Gerado dinamicamente via conversas.js -->
+                </div>
+            </aside>
+
+            <!-- ==================================================
+                 COLUNA 2: CENTRO - MENSAGENS TROCADAS (TONS PASTÉIS)
+                 ================================================== -->
+            <section class="chat-col-mensagens" id="chat-col-mensagens">
+                
+                <!-- Estado Vazio Central: exibido quando nenhuma conversa foi selecionada -->
+                <div class="chat-centro-vazio" id="chat-centro-vazio">
+                    <div class="chat-centro-vazio-icone">
+                        <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 id="chat-centro-vazio-titulo">Selecione uma conversa</h3>
+                    <p id="chat-centro-vazio-desc">
+                        Escolha uma conversa na barra lateral para ver as mensagens e responder, ou explore os anúncios da plataforma para iniciar uma nova conversa.
+                    </p>
+                    <a href="../home/home.html" class="btn-centro-explorar">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        <span>Explorar anúncios</span>
+                    </a>
+                </div>
+
+                <!-- Cabeçalho do Chat Ativo (oculto inicialmente quando nenhuma conversa está aberta) -->
+                <div class="chat-topo-ativo" id="chat-topo-ativo" style="display: none;">
+                    <!-- Botão Voltar para lista no Mobile -->
+                    <button type="button" class="btn-voltar-mobile-chat" id="btn-voltar-mobile-chat" aria-label="Voltar para conversas">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                    </button>
+
+                    <a href="javascript:void(0)" class="chat-perfil-conversa" id="chat-perfil-conversa" title="Ver perfil deste usuário">
+                        <div class="chat-avatar-wrap">
+                            <img src="../../assets/icon-user.png" alt="Avatar" id="chat-header-avatar" class="chat-header-avatar">
+                        </div>
+                        <div class="chat-nome-status">
+                            <strong id="chat-header-nome">Nome do Contato</strong>
+                            <span class="chat-header-status-txt" id="chat-header-status-txt">Vendedor(a)</span>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Mini Resumo do Produto no Mobile (visível apenas em telas menores) -->
+                <div class="mobile-resumo-produto-topo" id="mobile-resumo-produto-topo" style="display: none;">
+                    <img src="../../assets/produto-placeholder.svg" alt="Foto do produto" id="mobile-mini-foto" class="mobile-mini-foto">
+                    <div class="mobile-mini-info">
+                        <strong id="mobile-mini-titulo" class="mobile-mini-titulo">Produto</strong>
+                        <span id="mobile-mini-preco" class="mobile-mini-preco">R$ 0,00</span>
+                    </div>
+                    <a href="../produtos/produto.html" id="mobile-mini-link-anuncio" class="btn-mobile-ver-anuncio-topo">
+                        <span>Ver anúncio</span>
+                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                    </a>
+                </div>
+
+                <!-- Área de Mensagens (Scroll) -->
+                <div class="chat-feed-mensagens" id="chat-feed-mensagens" style="display: none;">
+                    <!-- Balões gerados dinamicamente via conversas.js -->
+                </div>
+
+                <!-- Barra de Digitação e Envio -->
+                <form id="form-chat-envio" class="chat-envio-form" autocomplete="off" style="display: none;">
+                    <div class="chat-input-wrapper">
+                        <input type="text" id="chat-input-texto" class="chat-input-texto" placeholder="Digite uma mensagem..." autocomplete="off">
+                    </div>
+                    <button type="submit" id="btn-enviar-mensagem" class="btn-enviar-mensagem" aria-label="Enviar mensagem" title="Enviar">
+                        <svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor">
+                            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
+                        </svg>
+                    </button>
+                </form>
+            </section>
+
+            <!-- ==================================================
+                 COLUNA 3: DIREITA NO COMPUTADOR - RESUMO DO PRODUTO
+                 ================================================== -->
+            <aside class="chat-col-produto" id="chat-col-produto">
+                <!-- Estado Vazio: Exibido quando nenhuma conversa foi selecionada ou não há conversas -->
+                <div class="chat-produto-vazio-estado" id="chat-produto-vazio-estado">
+                    <div class="chat-produto-vazio-icone">
+                        <svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="chat-produto-vazio-titulo" id="chat-produto-vazio-titulo">Nenhuma conversa selecionada</h3>
+                    <p class="chat-produto-vazio-desc" id="chat-produto-vazio-desc">
+                        Selecione uma conversa ao lado para ver os detalhes do produto ou acesse um anúncio e clique em <strong>"Chat com o vendedor"</strong> para iniciar uma negociação.
+                    </p>
+                    <a href="../home/home.html" class="btn-chat-explorar-anuncios">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        <span>Explorar anúncios</span>
+                    </a>
+                </div>
+
+                <!-- Detalhes do Produto: Exibido apenas quando uma conversa estiver selecionada -->
+                <div class="chat-produto-card" id="chat-produto-card" style="display: none;">
+                    <div class="chat-produto-card-header">
+                        <h3>Detalhes do anúncio</h3>
+                    </div>
+
+                    <div class="chat-produto-foto-box">
+                        <img src="../../assets/produto-placeholder.svg" alt="Produto" id="painel-produto-foto" class="painel-produto-foto">
+                        <div class="chat-badge-fotos" id="painel-badge-fotos">
+                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                            <span>1/1</span>
+                        </div>
+                    </div>
+
+                    <div class="chat-produto-dados-corpo">
+                        <h2 class="chat-produto-nome" id="painel-produto-nome">Título do Produto</h2>
+                        <div class="chat-produto-preco-destaque" id="painel-produto-preco">R$ 0,00</div>
+                        
+                        <div class="chat-produto-cidade-linha" id="painel-produto-cidade-linha">
+                            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                            <span id="painel-produto-cidade-txt">Paulistana, PI</span>
+                        </div>
+
+                        <div class="chat-produto-especs-bloco">
+                            <div class="chat-espec-item">
+                                <span class="espec-tag-label">Condição:</span>
+                                <strong class="espec-tag-val" id="painel-espec-condicao">Usado</strong>
+                            </div>
+                            <div class="chat-espec-item">
+                                <span class="espec-tag-label">Categoria:</span>
+                                <strong class="espec-tag-val" id="painel-espec-categoria">Geral</strong>
+                            </div>
+                        </div>
+
+                        <div class="chat-produto-desc-bloco">
+                            <span class="desc-bloco-titulo">Descrição:</span>
+                            <p class="desc-bloco-paragrafo" id="painel-produto-desc">
+                                Detalhes do anúncio selecionado.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="chat-produto-card-rodape">
+                        <a href="../produtos/produto.html" id="btn-painel-ver-anuncio" class="btn-painel-ver-anuncio" target="_blank">
+                            <span>Ver anúncio</span>
+                            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                <polyline points="15 3 21 3 21 9"></polyline>
+                                <line x1="10" y1="14" x2="21" y2="3"></line>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </aside>
+
+        </div>
+    </main>
+
+    <!-- Scripts da Plataforma -->
+    <script src="../../js/core/rotas.js"></script>
+    <script src="../../js/core/sessao.js"></script>
+    <script src="../../js/pages/conversas.js?v=9"></script>
+</body>
+</html>

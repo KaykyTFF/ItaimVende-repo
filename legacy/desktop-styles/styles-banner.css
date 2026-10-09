@@ -1,0 +1,63 @@
+
+
+/* Container principal do banner */
+.container-banner-wrapper {
+    -fx-spacing: 20;
+    -fx-alignment: center;
+    -fx-padding: 20 0 10 0;
+}
+
+/* Área do banner (card vazio se não tiver imagem) */
+.banner-card-vazio {
+    -fx-background-color: #E0E0E0;
+    -fx-background-radius: 20;
+    -fx-effect: dropshadow(three-pass-box, #00000019, 10, 0, 0, 2);
+}
+
+/* Botões de navegação (< e >) */
+.btn-nav-banner {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #333333;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 50%;
+    -fx-min-width: 50px;
+    -fx-min-height: 50px;
+    -fx-max-width: 50px;
+    -fx-max-height: 50px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, #00000026, 8, 0, 0, 2);
+}
+
+.btn-nav-banner:hover {
+    -fx-background-color: #F5F5F5;
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+}
+
+.btn-nav-banner:pressed {
+    -fx-background-color: #E0E0E0;
+    -fx-scale-x: 0.95;
+    -fx-scale-y: 0.95;
+}
+
+/* =========================================
+   INDICADORES (BARRINHAS EM BAIXO)
+   ========================================= */
+
+/* Container dos indicadores */
+.indicador-container {
+    -fx-spacing: 8;
+    -fx-alignment: center;
+    -fx-padding: 15 0 0 0;
+}
+
+/* Barrinha INATIVA (cinza) */
+.indicador-inativo {
+    -fx-fill: #CCCCCC;
+}
+
+/* Barrinha ATIVA (verde) */
+.indicador-ativo {
+    -fx-fill: #59AA59;
+}

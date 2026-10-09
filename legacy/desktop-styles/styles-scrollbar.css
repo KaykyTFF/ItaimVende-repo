@@ -1,0 +1,58 @@
+
+/* --- Configuração Geral da Barra Vertical --- */
+.scroll-bar:vertical {
+    -fx-background-color: transparent; /* Fundo transparente */
+    -fx-pref-width: 12px;              /* Largura total da área de rolagem (fina) */
+    -fx-padding: 0;
+}
+
+/* --- O Caminho (Track) --- */
+.scroll-bar:vertical .track {
+    -fx-background-color: transparent; /* Fundo transparente para parecer flutuante */
+    -fx-background-radius: 10em;       /* Bordas totalmente redondas */
+    -fx-border-radius: 10em;
+}
+
+/* --- A "Pílula" de Arrastar (Thumb) --- */
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #b2bec3; /* Cinza suave (discreto) */
+    -fx-background-radius: 10em;   /* Redondo */
+
+    /* Truque para afinar a barra visualmente sem diminuir a área de clique:
+       Cria uma margem invisível de 3px esquerda/direita */
+    -fx-background-insets: 0 3 0 3;
+}
+
+/* --- Interação: Mouse em cima (Hover) --- */
+.scroll-bar:vertical:hover .thumb {
+    -fx-background-color: #59AA59; /* Verde da Marca quando foca */
+}
+
+/* --- Interação: Clicando (Pressed) --- */
+.scroll-bar:vertical .thumb:pressed {
+    -fx-background-color: #44BD32; /* Verde mais vibrante ao arrastar */
+}
+
+/* --- ESCONDER AS SETAS (Increment/Decrement Buttons) --- */
+.scroll-bar > .increment-button,
+.scroll-bar > .decrement-button {
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-shape: null;
+    -fx-visibility: collapse; /* Remove do layout */
+}
+
+
+.scroll-bar:horizontal {
+    -fx-background-color: transparent;
+    -fx-pref-height: 12px;
+}
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: #b2bec3;
+    -fx-background-radius: 10em;
+    -fx-background-insets: 3 0 3 0;
+}
+.scroll-bar:horizontal:hover .thumb {
+    -fx-background-color: #59AA59;
+}

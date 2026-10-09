@@ -1,0 +1,246 @@
+
+
+/* --- BARRA DE INFORMAÇÕES (Faixa Branca no Topo) --- */
+.barra-info-busca {
+    -fx-background-color: #ffffff;
+    -fx-padding: 20px 40px;
+    -fx-alignment: center-left;
+    /* Borda sutil embaixo para separar do conteúdo cinza */
+    -fx-border-color: transparent transparent #e0e0e0 transparent;
+    -fx-border-width: 0 0 1px 0;
+    /* Sombra leve para dar profundidade */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.03), 0, 4, 0, 0);
+}
+
+/* --- TIPOGRAFIA --- */
+
+/* Título Grande: "Celulares" */
+.titulo-termo-busca {
+    -fx-font-family: "Segoe UI", "System", sans-serif;
+    -fx-font-size: 26px;
+    -fx-font-weight: 900; /* Extra Bold */
+    -fx-text-fill: #2d3436;
+    -fx-padding: 0 0 2 0;
+}
+
+/* Subtítulo: "Encontramos X anúncios" */
+.contador-resultados {
+    -fx-font-family: "Segoe UI", "System", sans-serif;
+    -fx-font-size: 14px;
+    -fx-text-fill: #636e72; /* Cinza médio */
+}
+
+/* Label "Ordenar por:" */
+.label-ordenar {
+    -fx-font-family: "Segoe UI", "System", sans-serif;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2d3436;
+}
+
+/* --- COMBOBOX MODERNO (Adeus visual Windows 98) --- */
+
+.combo-ordenacao {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #b2bec3; /* Borda cinza suave */
+    -fx-border-width: 1px;
+    -fx-border-radius: 6px;    /* Cantos arredondados modernos */
+    -fx-background-radius: 6px;
+    -fx-padding: 4px 10px;
+    -fx-cursor: hand;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2d3436;
+}
+
+/* Quando passa o mouse ou clica */
+.combo-ordenacao:hover,
+.combo-ordenacao:showing {
+    -fx-border-color: #44BD32; /* Verde ItaimVende */
+    -fx-background-color: #f9fff9; /* Fundo levemente verde */
+}
+
+/* A seta do dropdown */
+.combo-ordenacao .arrow-button {
+    -fx-background-color: transparent;
+}
+.combo-ordenacao .arrow {
+    -fx-background-color: #636e72; /* Seta cinza escuro */
+    -fx-padding: 3px; /* Tamanho da seta */
+}
+.combo-ordenacao:hover .arrow {
+    -fx-background-color: #44BD32; /* Seta verde no hover */
+}
+
+/* A LISTA DE OPÇÕES (Popup) */
+.combo-ordenacao .list-view {
+    -fx-background-color: white;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-border-color: #e0e0e0;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 0, 4, 0, 0);
+}
+
+.combo-ordenacao .list-cell {
+    -fx-text-fill: #2d3436;
+    -fx-background-color: white;
+    -fx-padding: 8px 10px;
+    -fx-font-size: 13px;
+}
+
+/* Item selecionado ou hover na lista */
+.combo-ordenacao .list-cell:hover,
+.combo-ordenacao .list-cell:filled:selected {
+    -fx-background-color: #f0fdf4; /* Verde muito claro */
+    -fx-text-fill: #44BD32; /* Texto Verde */
+    -fx-cursor: hand;
+}
+
+/* --- FUNDO DA PÁGINA --- */
+.scroll-busca {
+    -fx-background: #f4f4f4; /* Cinza claro para destacar os cards brancos */
+    -fx-background-color: #f4f4f4;
+}
+.scroll-busca > .viewport {
+    -fx-background-color: #f4f4f4;
+}
+
+/* --- ESTADO VAZIO --- */
+.container-vazio {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 5, 5, 0, 0);
+    -fx-alignment: center;
+    -fx-padding: 40;
+    -fx-max-width: 600;
+}
+
+/* --- BARRA LATERAL DE FILTROS --- */
+.sidebar-filtros {
+    -fx-background-color: white;
+    -fx-padding: 20px;
+    -fx-pref-width: 260px;
+    -fx-min-width: 260px;
+    /* Borda direita sutil */
+    -fx-border-color: transparent #e0e0e0 transparent transparent;
+    -fx-border-width: 0 1px 0 0;
+}
+
+.titulo-filtro {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2d3436;
+    -fx-padding: 10 0 5 0;
+}
+
+.campo-filtro {
+    -fx-background-color: #f1f2f6;
+    -fx-background-radius: 4px;
+    -fx-border-width: 0;
+    -fx-padding: 8px;
+    -fx-font-size: 13px;
+}
+.campo-filtro:focused {
+    -fx-background-color: white;
+    -fx-border-color: #44BD32;
+    -fx-border-width: 1px;
+}
+
+.btn-aplicar-filtro {
+    -fx-background-color: #44BD32;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+    -fx-padding: 8px 15px;
+}
+.btn-aplicar-filtro:hover {
+    -fx-background-color: #3aa828;
+}
+
+.combo-categoria {
+    -fx-background-color: #f1f2f6;
+    -fx-background-radius: 4px;
+    -fx-pref-width: 220px;
+}
+
+/* --- BOTÃO DE FILTRO (Toggle) --- */
+.btn-filtro-toggle {
+    -fx-background-color: white;
+    -fx-border-color: #b2bec3;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-text-fill: #2d3436;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-padding: 5px 15px;
+}
+.btn-filtro-toggle:selected,
+.btn-filtro-toggle:hover {
+    -fx-border-color: #44BD32;
+    -fx-text-fill: #44BD32;
+    -fx-background-color: #f0fdf4;
+}
+
+.painel-filtros-topo {
+    -fx-background-color: #ffffff;
+    -fx-padding: 0px 40px; /* Padding vertical zerado inicialmente para animação */
+    -fx-border-color: transparent transparent #e0e0e0 transparent;
+    -fx-border-width: 0 0 1px 0;
+    /* Ocultar o que exceder a altura durante a animação */
+    -fx-background-radius: 0 0 4 4;
+}
+
+/* Labels acima dos inputs (Categoria, Preço) */
+.label-filtro-topo {
+    -fx-font-family: "Segoe UI", "System", sans-serif;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #636e72;
+    -fx-padding: 0 0 5px 0; /* Espaço entre label e input */
+}
+
+/* Container de cada grupo (Label + Input) */
+.grupo-filtro {
+    -fx-alignment: center-left;
+    -fx-spacing: 0;
+}
+
+/* Inputs (TextField e ComboBox) */
+.campo-filtro,
+.combo-categoria {
+    -fx-pref-height: 35px; /* Altura fixa para alinhar tudo */
+    -fx-min-height: 35px;
+    -fx-background-color: #f1f2f6;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-border-color: transparent;
+    -fx-font-size: 13px;
+}
+
+.campo-filtro:focused,
+.combo-categoria:focused,
+.combo-categoria:showing {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #44BD32;
+}
+
+/* Botão Aplicar */
+.btn-aplicar-filtro {
+    -fx-pref-height: 35px; /* Mesma altura dos inputs */
+    -fx-min-height: 35px;
+    -fx-background-color: #44BD32;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+    -fx-padding: 0 20px;
+    -fx-effect: null; /* Remove sombra padrão feia */
+}
+.btn-aplicar-filtro:hover {
+    -fx-background-color: #3aa828;
+}
+.btn-aplicar-filtro:pressed {
+    -fx-background-color: #2e8520;
+}

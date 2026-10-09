@@ -1,0 +1,96 @@
+
+
+/* Card com Altura Fixa para alinhar tudo */
+.card-produto {
+    -fx-background-color: #E6E6E6; /* Fundo cinza (Sua preferência atual) */
+    -fx-background-radius: 20;
+    -fx-padding: 10; /* Moldura na foto */
+
+    /* DEFININDO TAMANHO FIXO DO BLOCO */
+    -fx-min-width: 220px;
+    -fx-max-width: 220px;
+    -fx-min-height: 320px; /* Altura fixa garantida */
+    -fx-max-height: 320px;
+
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);
+    -fx-cursor: hand;
+    -fx-alignment: TOP_LEFT; /* Conteúdo começa do topo */
+}
+
+/* Efeito ao passar o mouse */
+.card-produto:hover {
+    -fx-background-color: #D9D9D9; /* Fica um pouco mais escuro */
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+/* --- TEXTOS --- */
+
+.card-titulo {
+    -fx-font-size: 14px;
+    -fx-text-fill: #1A1A1A;
+    -fx-padding: 5 0 0 2;
+    -fx-label-padding: 0;
+}
+
+/* Preço (Destaque) */
+.card-preco {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #000;
+}
+
+/* Footer (Localização) */
+.card-footer {
+    -fx-font-size: 11px;
+    -fx-text-fill: #666;
+}
+
+/* --- O CORAÇÃO (Favorito) --- */
+.card-heart {
+    -fx-text-fill: #B0B0B0; /* Cinza claro inativo */
+    -fx-font-size: 22px;
+    -fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.2), 2, 0, 0, 1); /* Sombra para ler em cima de fotos claras */
+    -fx-cursor: hand;
+}
+
+.card-heart:hover {
+    -fx-text-fill: #FF4D4D; /* Vermelho ao passar o mouse */
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+}
+
+/* Container da Imagem  */
+.card-img-container {
+    -fx-background-color: transparent;
+    -fx-alignment: CENTER;
+    -fx-pref-width: 210px;
+    -fx-pref-height: 180px;
+    -fx-min-width: 210px;
+    -fx-min-height: 180px;
+    -fx-max-width: 210px;
+    -fx-max-height: 180px;
+}
+
+/* Imagem do card */
+.card-img {
+    -fx-background-color: #CCCCCC;
+    -fx-background-radius: 12;
+}
+/* Coração favorito */
+.card-heart {
+    -fx-font-size: 20px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 2, 0, 0, 1);
+}
+
+.card-heart:hover {
+    -fx-scale-x: 1.2;
+    -fx-scale-y: 1.2;
+}
+
+/* Título da seção */
+.titulo-secao {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}

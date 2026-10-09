@@ -1,0 +1,106 @@
+
+.fundo-notificacoes-scroll {
+    -fx-background: #f5f5f5;
+    -fx-background-color: #f5f5f5;
+}
+
+/* Remove bordas e fundos do ScrollPane para ficar clean */
+.scroll-pane-clean {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+    -fx-padding: 0;
+}
+.scroll-pane-clean > .viewport {
+    -fx-background-color: transparent;
+}
+
+/* Título da Página */
+.titulo-pagina {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+.label-vazio {
+    -fx-font-size: 16px;
+    -fx-text-fill: #999999;
+    -fx-padding: 20;
+}
+
+/* =========================================
+   CARDS DE NOTIFICAÇÃO
+   ========================================= */
+.card-notificacao {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 8, 0, 0, 2);
+    -fx-padding: 20;
+    -fx-cursor: hand;
+    -fx-min-height: 100px;
+}
+
+.card-notificacao:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 10, 0, 0, 4);
+    -fx-translate-y: -1; /* Leve subida ao passar o mouse */
+}
+
+/* Estilo visual para notificações já lidas */
+.card-lido {
+    -fx-background-color: #ffffff;
+    -fx-opacity: 0.8;
+}
+
+/* =========================================
+   CONTEÚDO DO CARD
+   ========================================= */
+
+/* Indicador (Bolinha) */
+.indicador-nao-lido {
+    -fx-fill: #007bff; /* Azul destaque */
+    -fx-stroke: transparent;
+}
+
+.indicador-lido {
+    -fx-fill: transparent;
+    -fx-stroke: #cccccc;
+    -fx-stroke-width: 1;
+}
+
+/* Título da Notificação */
+.card-titulo {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+/* Texto da Mensagem */
+.card-mensagem {
+    -fx-font-size: 14px;
+    -fx-text-fill: #666666;
+    -fx-padding: 5 0 10 0;
+}
+
+/* Data no canto superior direito */
+.card-data {
+    -fx-font-size: 12px;
+    -fx-text-fill: #999999;
+}
+
+/* =========================================
+   BOTÕES
+   ========================================= */
+.btn-ver-detalhes {
+    -fx-background-color: #e3f2fd; /* Azul bem claro */
+    -fx-text-fill: #1565c0; /* Azul escuro */
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-background-radius: 6;
+    -fx-padding: 8 15;
+    -fx-cursor: hand;
+}
+
+.btn-ver-detalhes:hover {
+    -fx-background-color: #bbdefb;
+}

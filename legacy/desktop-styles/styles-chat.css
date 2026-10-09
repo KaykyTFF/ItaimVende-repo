@@ -1,0 +1,248 @@
+/* =========================================
+   CHAT - DESIGN FINAL
+   ========================================= */
+
+/* LAYOUT GERAL */
+.sidebar-container {
+    -fx-background-color: #2C3E50;
+    -fx-border-color: transparent;
+}
+
+.painel-direito-vazio {
+    -fx-background-color: #ECF0F1;
+}
+
+.painel-direito-ativo {
+    -fx-background-color: #ECF0F1;
+}
+
+/* ScrollPane */
+.scroll-clean {
+    -fx-background-color: transparent;
+}
+.scroll-clean > .viewport {
+    -fx-background-color: transparent;
+}
+
+/* =========================================
+   SIDEBAR (ESQUERDA)
+   ========================================= */
+.sidebar-titulo {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #FFFFFF;
+}
+
+.sidebar-busca {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 8;
+    -fx-padding: 10 15 10 15;
+    -fx-text-fill: #FFFFFF;
+    -fx-prompt-text-fill: rgba(255, 255, 255, 0.5);
+    -fx-border-color: transparent;
+}
+
+.sidebar-busca:focused {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-border-color: #59AA59;
+    -fx-border-width: 1;
+}
+
+.sidebar-item {
+    -fx-background-color: transparent;
+    -fx-border-color: rgba(255, 255, 255, 0.1);
+    -fx-border-width: 0 0 1 0;
+    -fx-cursor: hand;
+}
+
+.sidebar-item:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+}
+
+.sidebar-nome {
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+    -fx-text-fill: #FFFFFF;
+}
+
+.sidebar-produto {
+    -fx-font-size: 12px;
+    -fx-text-fill: #59AA59;
+    -fx-font-weight: 600;
+}
+
+.sidebar-msg {
+    -fx-font-size: 13px;
+    -fx-text-fill: rgba(255, 255, 255, 0.7);
+}
+
+.badge-contador {
+    -fx-background-color: #59AA59;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+    -fx-background-radius: 12;
+    -fx-min-width: 20px;
+    -fx-min-height: 20px;
+    -fx-alignment: center;
+    -fx-padding: 2 6 2 6;
+}
+
+/* =========================================
+   HEADER DO CHAT
+   ========================================= */
+.chat-header {
+    -fx-background-color: #34495E;
+    -fx-padding: 15 20 15 20;
+}
+
+.header-nome {
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #FFFFFF;
+}
+
+.header-produto {
+    -fx-font-size: 13px;
+    -fx-text-fill: rgba(255, 255, 255, 0.7);
+}
+
+/* =========================================
+   FOOTER (ÁREA DE DIGITAÇÃO)
+   ========================================= */
+.chat-footer {
+    -fx-background-color: #34495E;
+    -fx-padding: 15 20 15 20;
+}
+
+.chat-input {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 25;
+    -fx-padding: 12 20 12 20;
+    -fx-text-fill: #FFFFFF;
+    -fx-prompt-text-fill: rgba(255, 255, 255, 0.5);
+    -fx-font-size: 14px;
+}
+
+.chat-input:focused {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-border-color: #59AA59;
+    -fx-border-width: 2;
+    -fx-border-radius: 25;
+}
+
+.btn-enviar {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #34495E;
+    -fx-background-radius: 25;
+    -fx-min-width: 50px;
+    -fx-min-height: 50px;
+    -fx-cursor: hand;
+    -fx-font-size: 16px;
+}
+
+.btn-enviar:hover {
+    -fx-background-color: #ECF0F1;
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+.btn-enviar:pressed {
+    -fx-scale-x: 0.95;
+    -fx-scale-y: 0.95;
+}
+
+/* =========================================
+   BALÕES DE MENSAGEM
+   ========================================= */
+
+.msg-texto {
+    -fx-font-size: 14px;
+    -fx-text-fill: #000000;
+}
+
+/* Suas mensagens (direita) */
+.balao-eu {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 18 18 4 18;
+    -fx-padding: 12 16 12 16;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 3, 0, 0, 1);
+}
+
+/* Mensagens recebidas (esquerda) */
+.balao-outro {
+    -fx-background-color: #E8E8E8;
+    -fx-background-radius: 18 18 18 4;
+    -fx-padding: 12 16 12 16;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 3, 0, 0, 1);
+}
+
+/* =========================================
+   SCROLLBAR
+   ========================================= */
+.scroll-bar {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: rgba(0, 0, 0, 0.2);
+    -fx-background-radius: 5;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: rgba(0, 0, 0, 0.3);
+}
+
+.scroll-bar .track {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+/* Adicione ao final do styles-chat.css */
+
+/* --- CARD DE PROPOSTA NO CHAT --- */
+.card-chat-proposta {
+    -fx-background-color: white;
+    -fx-background-radius: 12px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 3, 3, 0, 0);
+    -fx-padding: 15px;
+    -fx-min-width: 220px;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1px;
+}
+
+.proposta-titulo {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #636e72;
+}
+
+.proposta-valor {
+    -fx-font-size: 20px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #44BD32; /* Verde Dinheiro */
+}
+
+.btn-chat-aceitar {
+    -fx-background-color: #44BD32;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+    -fx-pref-width: 90px;
+}
+.btn-chat-recusar {
+    -fx-background-color: white;
+    -fx-border-color: #e74c3c;
+    -fx-text-fill: #e74c3c;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-cursor: hand;
+    -fx-pref-width: 90px;
+}

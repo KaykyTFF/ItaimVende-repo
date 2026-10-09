@@ -1,0 +1,214 @@
+
+
+/* Fundo da tela */
+.fundo-seguranca {
+    -fx-background-color: #f0f0f0; /* Cinza claro */
+    -fx-pref-width: 100%;
+    -fx-min-height: 800px;
+}
+
+/* Título da página (Cabeçalho principal) */
+.titulo-seguranca {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+/* Botão de voltar (setinha verde) */
+.btn-voltar-verde {
+    -fx-background-color: #5BA358;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 18px;
+    -fx-background-radius: 50%;
+    -fx-min-width: 40px;
+    -fx-min-height: 40px;
+    -fx-cursor: hand;
+    -fx-alignment: center;
+    -fx-padding: 0;
+}
+.btn-voltar-verde:hover {
+    -fx-background-color: #488A45;
+}
+
+/* =========================================
+   CARD EXPANSÍVEL E LISTAS
+   ========================================= */
+
+/* O Card Branco (Barra "Trocar Senha") */
+.card-opcao-linha {
+    -fx-background-color: white;
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 5);
+    -fx-cursor: hand;
+    -fx-padding: 15 25 15 25;
+}
+
+.card-opcao-linha:hover {
+    -fx-background-color: #ffffff;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);
+    -fx-translate-y: -2;
+}
+
+/* Texto da opção */
+.texto-opcao {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+/* Seta cinza na direita (>) */
+.seta-opcao {
+    -fx-font-size: 18px;
+    -fx-text-fill: #999999;
+    -fx-font-weight: bold;
+}
+
+/* Wrapper para a animação de deslizar (esconde scrollbars) */
+.scroll-animacao {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+}
+.scroll-animacao > .viewport {
+    -fx-background-color: transparent;
+}
+.scroll-animacao .scroll-bar:horizontal,
+.scroll-animacao .scroll-bar:vertical {
+    -fx-opacity: 0;
+    -fx-padding: 0;
+    -fx-pref-width: 0;
+    -fx-pref-height: 0;
+}
+
+/* =========================================
+   FORMULÁRIOS E CAMPOS
+   ========================================= */
+
+/* Input arredondado cinza */
+.input-senha-arredondado {
+    -fx-background-color: #e0e0e0;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-border-width: 0;
+    -fx-padding: 10 40 10 15;
+    -fx-font-size: 14px;
+    -fx-text-fill: #333;
+}
+
+.input-senha-arredondado:focused {
+    -fx-background-color: #d0d0d0;
+    -fx-effect: none;
+}
+
+.container-campo-senha {
+    -fx-alignment: center-left;
+}
+
+.label-campo-senha {
+    -fx-font-size: 14px;
+    -fx-text-fill: #333;
+    -fx-padding: 0 0 5 10;
+}
+
+/* Ícone do olho */
+.btn-olho {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+    -fx-padding: 5;
+    -fx-text-fill: #777;
+    -fx-font-size: 16px;
+}
+.btn-olho:hover {
+    -fx-text-fill: #333;
+}
+
+/* Botão Verde Largo (Salvar Senha) */
+.btn-verde-largo {
+    -fx-background-color: #59AA59;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-cursor: hand;
+    -fx-padding: 10 15;
+    -fx-pref-width: 100%;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(three-pass-box, rgba(89, 170, 89, 0.2), 5, 0, 0, 2);
+}
+
+.btn-verde-largo:hover {
+    -fx-background-color: #4a994a;
+}
+.btn-verde-largo:pressed {
+    -fx-background-color: #3d8b3d;
+    -fx-effect: none;
+    -fx-translate-y: 1;
+}
+.btn-verde-largo:disabled {
+    -fx-background-color: #cccccc;
+    -fx-text-fill: #777777;
+    -fx-effect: none;
+    -fx-cursor: default;
+}
+
+
+/* Título dentro do card */
+.titulo-secao {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+/* Subtítulo explicativo */
+.subtitulo-secao {
+    -fx-font-size: 13px;
+    -fx-text-fill: #777777;
+    -fx-padding: 0 0 10 0;
+}
+
+/* Descrição acima dos botões (ex: "Oculta seus anúncios...") */
+.label-descricao {
+    -fx-font-size: 13px;
+    -fx-text-fill: #555555;
+    -fx-padding: 10 0 5 0;
+}
+
+/* --- Botão Laranja (Outline/Borda) --- */
+.btn-outline-laranja {
+    -fx-background-color: white;
+    -fx-text-fill: #F57C00; /* Laranja forte */
+    -fx-border-color: #F57C00;
+    -fx-border-width: 1;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+    -fx-padding: 10;
+}
+
+.btn-outline-laranja:hover {
+    -fx-background-color: #FFF3E0; /* Fundo laranja bem claro */
+}
+
+/* --- Botão Vermelho (Outline/Borda) --- */
+.btn-outline-vermelho {
+    -fx-background-color: white;
+    -fx-text-fill: #D32F2F; /* Vermelho forte */
+    -fx-border-color: #D32F2F;
+    -fx-border-width: 1;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+    -fx-padding: 10;
+}
+
+.btn-outline-vermelho:hover {
+    -fx-background-color: #FFEBEE; /* Fundo vermelho bem claro */
+}

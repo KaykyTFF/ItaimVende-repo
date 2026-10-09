@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Configurações da conta no Itaim Vende: dados, segurança, endereços, notificações e privacidade.">
+    <title>Configurações - Itaim Vende</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Segoe+UI&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="../../assets/header-logo.png">
+
+    <link rel="stylesheet" href="../../css/home.css">
+    <link rel="stylesheet" href="../../css/header-global.css?v=7">
+    <link rel="stylesheet" href="../../css/configuracoes.css?v=3">
+</head>
+<body>
+
+    <header class="header-principal">
+        <div class="header-container">
+            <!-- Esquerda: Menu Hambúrguer e Logo -->
+            <div class="header-left">
+                <button type="button" class="btn-menu-hamburguer" id="btn-abrir-drawer" aria-label="Abrir menu de navegação">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                <a href="../home/home.html" class="header-logo-link" title="Itaim Vende - Página Inicial">
+                    <img src="../../assets/header1-logo.png" alt="Itaim Vende" class="header-logo-img">
+                </a>
+            </div>
+
+            <!-- Centro: Barra de Pesquisa Estilo Pílula -->
+            <div class="header-center">
+                <form class="busca-form" id="form-busca" role="search" action="categoria.html" method="GET">
+                    <input 
+                        type="search" 
+                        class="campo-busca" 
+                        id="campo-busca" 
+                        name="q"
+                        placeholder="Buscar produtos, marcas e mais..." 
+                        autocomplete="off"
+                        aria-label="Buscar produtos, marcas e mais..."
+                    >
+                    <button type="submit" class="btn-busca-submit" id="btn-submit-busca" aria-label="Pesquisar">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Direita: Ações do Cabeçalho -->
+            <div class="header-right">
+                <!-- Desktop: Meus Anúncios (Ícone + Texto) -->
+                <a href="../vender/meus-anuncios.html" class="btn-nav-texto" id="link-meus-anuncios">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 11l19-9-9 19-2-8-8-2z"></path>
+                    </svg>
+                    <span>Meus Anúncios</span>
+                </a>
+
+                <!-- Botão Vender -->
+                <a href="../vender/vender.html" class="btn-vender-destaque" id="btn-abrir-modal-vender">
+                    <span>Vender</span>
+                </a>
+
+                <!-- Ícone Conversas -->
+                <a href="../mensagens/conversas.html" class="btn-icone-header" id="btn-chat" aria-label="Conversas" title="Conversas">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                </a>
+
+                <!-- Ícone Notificações -->
+                <a href="../notificacoes/notificacoes.html" class="btn-icone-header" id="btn-notificacoes" aria-label="Notificações" title="Notificações">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                </a>
+
+                <!-- Mobile: Ícone Meus Anúncios (substitui o coração no celular) -->
+                <a href="../vender/meus-anuncios.html" class="btn-icone-header btn-meus-anuncios-mobile" id="btn-meus-anuncios-mobile" aria-label="Meus Anúncios" title="Meus Anúncios">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 11l19-9-9 19-2-8-8-2z"></path>
+                    </svg>
+                </a>
+
+                <!-- Perfil do Usuário com Dropdown -->
+                <div class="perfil-wrapper">
+                    <button type="button" class="btn-avatar-header" id="btn-avatar-dropdown" aria-label="Abrir menu de perfil">
+                        <img src="../../assets/icon-user.png" alt="Foto de perfil" class="avatar-img" id="img-avatar-user">
+                    </button>
+
+                    <div class="dropdown-perfil" id="dropdown-perfil">
+                        <a href="perfil.html" class="dropdown-header-user" title="Ir para Meu Perfil">
+                            <strong id="dropdown-user-name">Raili</strong>
+                            <span id="dropdown-user-email">admin@gmail.com</span>
+                        </a>
+                        <a href="perfil.html" class="dropdown-item" id="link-menu-perfil">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                            Meu Perfil
+                        </a>
+                        <a href="../vender/meus-anuncios.html" class="dropdown-item" id="link-menu-anuncios">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l19-9-9 19-2-8-8-2z"></path></svg>
+                            Meus Anúncios
+                        </a>
+                        <a href="../favoritos/favoritos.html" class="dropdown-item" id="link-menu-favoritos">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                            Favoritos (<span id="favoritos-contador-badge">0</span>)
+                        </a>
+                        <a href="configuracoes.html" class="dropdown-item" id="link-menu-configuracoes">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="3"></circle>
+                                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0 1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                            </svg>
+                            Configurações
+                        </a>
+                        <a href="../../index.html" class="dropdown-item item-sair">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                <polyline points="16 17 21 12 16 7"></polyline>
+                                <line x1="21" y1="12" x2="9" y2="12"></line>
+                            </svg>
+                            Sair
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==========================================================
+         2. MENU LATERAL DESLIZANTE (DRAWER)
+         ========================================================== -->
+    <div class="drawer-backdrop" id="drawer-backdrop">
+        <aside class="drawer-menu" aria-label="Menu principal">
+            <div class="drawer-header">
+                <img src="../../assets/header1-logo.png" alt="Itaim Vende" class="drawer-logo">
+                <button type="button" class="drawer-close" id="btn-fechar-drawer" aria-label="Fechar menu">&times;</button>
+            </div>
+
+            <!-- Perfil do Usuário no Drawer (Acesso rápido ao Perfil) -->
+            <a href="perfil.html" class="drawer-user-card" id="drawer-user-card" title="Acessar Meu Perfil">
+                <div class="drawer-user-avatar-wrap">
+                    <img src="../../assets/icon-user.png" alt="Foto de perfil" class="drawer-user-avatar" id="drawer-user-avatar">
+                </div>
+                <div class="drawer-user-info">
+                    <span class="drawer-user-nome" id="drawer-user-name">Raili</span>
+                    <span class="drawer-user-sub">Ver meu perfil &rarr;</span>
+                </div>
+            </a>
+
+            <nav class="drawer-nav">
+                <a href="../home/home.html" class="drawer-link" id="drawer-link-home">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+                    Início
+                </a>
+                <a href="perfil.html" class="drawer-link" id="drawer-link-perfil">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    Meu Perfil
+                </a>
+                <a href="../vender/meus-anuncios.html" class="drawer-link" id="drawer-link-anuncios">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l19-9-9 19-2-8-8-2z"></path></svg>
+                    Meus Anúncios
+                </a>
+                <a href="../favoritos/favoritos.html" class="drawer-link" id="drawer-link-favoritos">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    Meus Favoritos
+                </a>
+                <a href="../mensagens/conversas.html" class="drawer-link" id="drawer-link-chat">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    Conversas
+                </a>
+                <a href="../vender/vender.html" class="drawer-link" id="drawer-link-vender">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    Vender Produto
+                </a>
+                <a href="../notificacoes/notificacoes.html" class="drawer-link" id="drawer-link-notificacoes">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                    Notificações
+                </a>
+
+                <!-- SEÇÃO CATEGORIAS EM ACORDEÃO RETRÁTIL (SEM EMOJIS) -->
+                <div class="drawer-secao-divisor"></div>
+                <button type="button" class="drawer-accordion-btn" id="btn-toggle-categorias" aria-expanded="false">
+                    <span class="drawer-accordion-label">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="14" width="7" height="7"></rect>
+                            <rect x="3" y="14" width="7" height="7"></rect>
+                        </svg>
+                        <span>Categorias</span>
+                    </span>
+                    <svg class="chevron-accordion" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div class="drawer-categorias-conteudo" id="drawer-categorias-conteudo">
+                    <a href="../produtos/categoria.html?cat=Eletrônicos" class="drawer-sublink">Eletrônicos</a>
+                    <a href="../produtos/categoria.html?cat=Decoração" class="drawer-sublink">Decoração</a>
+                    <a href="../produtos/categoria.html?cat=Móveis" class="drawer-sublink">Móveis</a>
+                    <a href="../produtos/categoria.html?cat=Moda" class="drawer-sublink">Moda & Vestuário</a>
+                    <a href="../produtos/categoria.html?cat=Infantil" class="drawer-sublink">Infantil & Bebês</a>
+                    <a href="../produtos/categoria.html?cat=Esportes" class="drawer-sublink">Esportes & Lazer</a>
+                    <a href="../produtos/categoria.html?cat=Hobbies" class="drawer-sublink">Hobbies & Games</a>
+                    <a href="../produtos/categoria.html?cat=Serviços" class="drawer-sublink">Serviços</a>
+                </div>
+
+                <div class="drawer-secao-divisor"></div>
+                <a href="configuracoes.html" class="drawer-link ativo" id="drawer-link-configuracoes">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0 1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                    Configurações
+                </a>
+                <a href="../../index.html" class="drawer-link item-sair">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    Sair
+                </a>
+            </nav>
+        </aside>
+    </div>
+
+    <main class="cfg-container">
+        <!-- Botão Voltar -->
+        <button type="button" class="btn-voltar-cat" onclick="if(window.history.length > 1){window.history.back()}else{window.location.href="../home/home.html'}" aria-label="Voltar para a página anterior">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            Voltar
+        </button>
+
+        <nav class="cfg-breadcrumb" aria-label="Navegação">
+            <a href="../home/home.html">Início</a><span>/</span><span class="ativo">Configurações</span>
+        </nav>
+        <h1 class="cfg-titulo-pagina">Configurações</h1>
+        <p class="cfg-subtitulo-pagina">Gerencie sua conta, segurança, endereços e preferências de aviso.</p>
+
+        <div class="cfg-layout">
+            <nav class="cfg-nav" aria-label="Seções de configurações" role="tablist">
+                <button type="button" class="cfg-nav-item ativo" data-alvo="conta" role="tab" aria-selected="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>Conta</button>
+                <button type="button" class="cfg-nav-item" data-alvo="seguranca" role="tab" aria-selected="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Segurança</button>
+                <button type="button" class="cfg-nav-item" data-alvo="enderecos" role="tab" aria-selected="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>Endereços</button>
+                <button type="button" class="cfg-nav-item" data-alvo="notificacoes" role="tab" aria-selected="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>Notificações</button>
+                <button type="button" class="cfg-nav-item" data-alvo="privacidade" role="tab" aria-selected="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>Privacidade</button>
+            </nav>
+
+            <div class="cfg-paineis">
+                <!-- CONTA -->
+                <section class="cfg-painel ativo" id="painel-conta" role="tabpanel">
+                    <form class="cfg-card" id="form-conta" novalidate>
+                        <h2>Dados da conta</h2>
+                        <p class="cfg-desc">Essas informações aparecem para compradores e vendedores nos seus anúncios.</p>
+                        <div class="cfg-grid">
+                            <div class="cfg-campo">
+                                <label for="cfg-nome">Nome completo</label>
+                                <input class="cfg-input" type="text" id="cfg-nome" autocomplete="name" maxlength="80">
+                                <span class="cfg-erro" id="erro-nome"></span>
+                            </div>
+                            <div class="cfg-campo">
+                                <label for="cfg-usuario">Nome de usuário</label>
+                                <input class="cfg-input" type="text" id="cfg-usuario" autocomplete="username" maxlength="30" placeholder="seunome">
+                                <span class="cfg-erro" id="erro-usuario"></span>
+                            </div>
+                            <div class="cfg-campo">
+                                <label for="cfg-email">E-mail</label>
+                                <input class="cfg-input" type="email" id="cfg-email" autocomplete="email">
+                                <span class="cfg-erro" id="erro-email"></span>
+                            </div>
+                            <div class="cfg-campo">
+                                <label for="cfg-telefone">WhatsApp / Celular</label>
+                                <input class="cfg-input" type="tel" id="cfg-telefone" autocomplete="tel" placeholder="(89) 99999-9999" inputmode="numeric">
+                                <span class="cfg-erro" id="erro-telefone"></span>
+                            </div>
+                            <div class="cfg-campo">
+                                <label for="cfg-cidade">Cidade</label>
+                                <select class="cfg-select" id="cfg-cidade"><option value="Paulistana">Paulistana</option><option value="Acauã">Acauã</option><option value="Betânia do Piauí">Betânia do Piauí</option><option value="Curral Novo">Curral Novo</option><option value="Jacobina do Piauí">Jacobina do Piauí</option><option value="Queimada Nova">Queimada Nova</option><option value="Picos">Picos</option><option value="Afrânio">Afrânio</option></select>
+                            </div>
+                            <div class="cfg-campo">
+                                <label for="cfg-bairro">Bairro</label>
+                                <input class="cfg-input" type="text" id="cfg-bairro" maxlength="60" placeholder="Centro">
+                            </div>
+                        </div>
+                        <div class="cfg-acoes">
+                            <button type="submit" class="cfg-btn cfg-btn-primario">Salvar alterações</button>
+                        </div>
+                    </form>
+                </section>
+
+                <!-- SEGURANÇA -->
+                <section class="cfg-painel" id="painel-seguranca" role="tabpanel">
+                    <form class="cfg-card" id="form-senha" novalidate>
+                        <h2>Alterar senha</h2>
+                        <p class="cfg-desc">Use pelo menos 8 caracteres, misturando letras e números.</p>
+                        <div class="cfg-grid">
+                            <div class="cfg-campo cheio">
+                                <label for="cfg-senha-atual">Senha atual</label>
+                                <div class="cfg-senha-wrap">
+                                    <input class="cfg-input" type="password" id="cfg-senha-atual" autocomplete="current-password">
+                                    <button type="button" class="cfg-ver-senha" data-alvo="cfg-senha-atual">Mostrar</button>
+                                </div>
+                                <span class="cfg-erro" id="erro-senha-atual"></span>
+                            </div>
+                            <div class="cfg-campo">
+                                <label for="cfg-senha-nova">Nova senha</label>
+                                <div class="cfg-senha-wrap">
+                                    <input class="cfg-input" type="password" id="cfg-senha-nova" autocomplete="new-password">
+                                    <button type="button" class="cfg-ver-senha" data-alvo="cfg-senha-nova">Mostrar</button>
+                                </div>
+                                <div class="cfg-forca"><div class="cfg-forca-barra" id="forca-barra"></div></div>
+                                <span class="cfg-forca-texto" id="forca-texto">Digite uma nova senha</span>
+                                <span class="cfg-erro" id="erro-senha-nova"></span>
+                            </div>
+                            <div class="cfg-campo">
+                                <label for="cfg-senha-confirma">Confirmar nova senha</label>
+                                <div class="cfg-senha-wrap">
+                                    <input class="cfg-input" type="password" id="cfg-senha-confirma" autocomplete="new-password">
+                                    <button type="button" class="cfg-ver-senha" data-alvo="cfg-senha-confirma">Mostrar</button>
+                                </div>
+                                <span class="cfg-erro" id="erro-senha-confirma"></span>
+                            </div>
+                        </div>
+                        <div class="cfg-acoes">
+                            <button type="submit" class="cfg-btn cfg-btn-primario">Atualizar senha</button>
+                        </div>
+                    </form>
+
+                    <div class="cfg-card">
+                        <h2>Proteção da conta</h2>
+                        <p class="cfg-desc">Camadas extras de segurança para o seu perfil.</p>
+                        <div class="cfg-linha">
+                            <div class="cfg-linha-texto"><strong>Avisar sobre novos acessos</strong><span>Receba um aviso quando sua conta for acessada em outro aparelho.</span></div>
+                            <label class="cfg-switch" aria-label="Avisar sobre novos acessos">
+                                <input type="checkbox" id="seg-alerta-login" data-chave="seg-alerta-login" checked>
+                                <span class="cfg-switch-trilho"></span>
+                            </label>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ENDEREÇOS -->
+                <section class="cfg-painel" id="painel-enderecos" role="tabpanel">
+                    <div class="cfg-card">
+                        <h2>Meus endereços</h2>
+                        <p class="cfg-desc">Locais de retirada ou entrega que você usa nos anúncios e negociações.</p>
+                        <div class="cfg-enderecos" id="lista-enderecos"></div>
+
+                        <form class="cfg-form-endereco" id="form-endereco" novalidate>
+                            <h3 id="titulo-form-endereco">Adicionar endereço</h3>
+                            <div class="cfg-grid">
+                                <div class="cfg-campo">
+                                    <label for="end-apelido">Apelido</label>
+                                    <input class="cfg-input" type="text" id="end-apelido" maxlength="30" placeholder="Casa, Trabalho...">
+                                    <span class="cfg-erro" id="erro-end-apelido"></span>
+                                </div>
+                                <div class="cfg-campo">
+                                    <label for="end-cep">CEP</label>
+                                    <input class="cfg-input" type="text" id="end-cep" maxlength="9" placeholder="64750-000" inputmode="numeric">
+                                    <span class="cfg-erro" id="erro-end-cep"></span>
+                                </div>
+                                <div class="cfg-campo cheio">
+                                    <label for="end-rua">Rua e número</label>
+                                    <input class="cfg-input" type="text" id="end-rua" maxlength="100" placeholder="Rua das Flores, 120">
+                                    <span class="cfg-erro" id="erro-end-rua"></span>
+                                </div>
+                                <div class="cfg-campo">
+                                    <label for="end-bairro">Bairro</label>
+                                    <input class="cfg-input" type="text" id="end-bairro" maxlength="60">
+                                </div>
+                                <div class="cfg-campo">
+                                    <label for="end-cidade">Cidade</label>
+                                    <select class="cfg-select" id="end-cidade"><option value="Paulistana">Paulistana</option><option value="Acauã">Acauã</option><option value="Betânia do Piauí">Betânia do Piauí</option><option value="Curral Novo">Curral Novo</option><option value="Jacobina do Piauí">Jacobina do Piauí</option><option value="Queimada Nova">Queimada Nova</option><option value="Picos">Picos</option><option value="Afrânio">Afrânio</option></select>
+                                </div>
+                            </div>
+                            <div class="cfg-acoes">
+                                <button type="submit" class="cfg-btn cfg-btn-primario" id="btn-salvar-endereco">Adicionar endereço</button>
+                                <button type="button" class="cfg-btn cfg-btn-neutro" id="btn-cancelar-endereco" hidden>Cancelar edição</button>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- NOTIFICAÇÕES -->
+                <section class="cfg-painel" id="painel-notificacoes" role="tabpanel">
+                    <div class="cfg-card">
+                        <h2>Avisos no site</h2>
+                        <p class="cfg-desc">Escolha quais tipos de notificações aparecem na sua central e no sino do cabeçalho.</p>
+                        
+                        <div class="cfg-linha">
+                            <div class="cfg-linha-texto"><strong>Novas mensagens</strong><span>Quando alguém enviar uma mensagem sobre seu anúncio.</span></div>
+                            <label class="cfg-switch" aria-label="Novas mensagens">
+                                <input type="checkbox" id="not-mensagens" data-chave="not-mensagens" checked>
+                                <span class="cfg-switch-trilho"></span>
+                            </label>
+                        </div>
+
+                        <div class="cfg-linha">
+                            <div class="cfg-linha-texto"><strong>Avaliações no perfil</strong><span>Quando um usuário avaliar o seu perfil ou deixar uma recomendação.</span></div>
+                            <label class="cfg-switch" aria-label="Avaliações no perfil">
+                                <input type="checkbox" id="not-avaliacoes" data-chave="not-avaliacoes" checked>
+                                <span class="cfg-switch-trilho"></span>
+                            </label>
+                        </div>
+
+                        <div class="cfg-linha">
+                            <div class="cfg-linha-texto"><strong>Anúncio favoritado</strong><span>Quando alguém salvar um dos seus anúncios nos favoritos.</span></div>
+                            <label class="cfg-switch" aria-label="Anúncio favoritado">
+                                <input type="checkbox" id="not-favoritos" data-chave="not-favoritos" checked>
+                                <span class="cfg-switch-trilho"></span>
+                            </label>
+                        </div>
+
+                        <div class="cfg-linha">
+                            <div class="cfg-linha-texto"><strong>Avisos e novidades</strong><span>Dicas de segurança, novidades e alertas da plataforma.</span></div>
+                            <label class="cfg-switch" aria-label="Avisos e novidades">
+                                <input type="checkbox" id="not-avisos" data-chave="not-avisos" checked>
+                                <span class="cfg-switch-trilho"></span>
+                            </label>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PRIVACIDADE -->
+                <section class="cfg-painel" id="painel-privacidade" role="tabpanel">
+                    <div class="cfg-card">
+                        <h2>O que os outros veem</h2>
+                        <p class="cfg-desc">Controle as informações visíveis no seu perfil e nos anúncios.</p>
+                        <div class="cfg-linha">
+                            <div class="cfg-linha-texto"><strong>Mostrar meu telefone nos anúncios</strong><span>Compradores veem seu WhatsApp sem precisar abrir o chat.</span></div>
+                            <label class="cfg-switch" aria-label="Mostrar meu telefone nos anúncios">
+                                <input type="checkbox" id="priv-telefone" data-chave="priv-telefone" checked>
+                                <span class="cfg-switch-trilho"></span>
+                            </label>
+                        </div>
+                        <div class="cfg-linha">
+                            <div class="cfg-linha-texto"><strong>Mostrar meu bairro</strong><span>Exibe o bairro além da cidade no anúncio.</span></div>
+                            <label class="cfg-switch" aria-label="Mostrar meu bairro">
+                                <input type="checkbox" id="priv-bairro" data-chave="priv-bairro" checked>
+                                <span class="cfg-switch-trilho"></span>
+                            </label>
+                        </div>
+                        <div class="cfg-linha">
+                            <div class="cfg-linha-texto"><strong>Mostrar quando estive online</strong><span>Indica no chat a última vez que você usou o site.</span></div>
+                            <label class="cfg-switch" aria-label="Mostrar quando estive online">
+                                <input type="checkbox" id="priv-online" data-chave="priv-online">
+                                <span class="cfg-switch-trilho"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="cfg-card cfg-zona-perigo">
+                        <h2>Zona de risco</h2>
+                        <p class="cfg-desc">Gerencie a suspensão temporária da conta ou sua exclusão definitiva.</p>
+                        <div class="cfg-acoes" style="margin-top:0; display: flex; gap: 12px; flex-wrap: wrap;">
+                            <button type="button" class="cfg-btn cfg-btn-suspender" id="btn-suspender-conta" style="background: #FEF3C7; color: #92400E; border: 1px solid #FCD34D; font-weight: 700; display: inline-flex; align-items: center; gap: 8px;">
+                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><line x1="10" y1="15" x2="10" y2="9"></line><line x1="14" y1="15" x2="14" y2="9"></line></svg>
+                                <span>Suspender conta</span>
+                            </button>
+                            <button type="button" class="cfg-btn cfg-btn-perigo" id="btn-excluir-conta" style="display: inline-flex; align-items: center; gap: 8px;">
+                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                                <span>Excluir conta permanentemente</span>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <div class="cfg-toast" id="cfg-toast" role="status" aria-live="polite"></div>
+
+    <div class="cfg-modal-fundo" id="cfg-modal" role="dialog" aria-modal="true" aria-labelledby="cfg-modal-titulo">
+        <div class="cfg-modal">
+            <h3 id="cfg-modal-titulo">Confirmar</h3>
+            <p id="cfg-modal-texto"></p>
+            <div class="cfg-acoes">
+                <button type="button" class="cfg-btn cfg-btn-neutro" id="cfg-modal-cancelar">Cancelar</button>
+                <button type="button" class="cfg-btn cfg-btn-perigo" id="cfg-modal-confirmar">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer-principal">
+        <div class="footer-container">
+            <div class="footer-col">
+                <img src="../../assets/header-logo.png" alt="Itaim Vende" class="footer-logo-img">
+                <p class="footer-sobre">
+                    O Itaim Vende é o maior portal de compra, venda e troca da região de Paulistana e cidades vizinhas no Piauí. Conectando pessoas e bons negócios.
+                </p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Categorias</h4>
+                <ul class="footer-links">
+                    <li><a href="../produtos/categoria.html?cat=Eletrônicos">Eletrônicos</a></li>
+                    <li><a href="../produtos/categoria.html?cat=Móveis">Móveis</a></li>
+                    <li><a href="../produtos/categoria.html?cat=Decoração">Decoração</a></li>
+                    <li><a href="../produtos/categoria.html?cat=Moda">Moda & Vestuário</a></li>
+                    <li><a href="../produtos/categoria.html?cat=Serviços">Serviços</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Cidades Atendidas</h4>
+                <ul class="footer-links">
+                    <li><a href="../home/home.html">Paulistana - PI</a></li>
+                    <li><a href="../home/home.html">Acauã - PI</a></li>
+                    <li><a href="../home/home.html">Betânia do Piauí</a></li>
+                    <li><a href="../home/home.html">Curral Novo</a></li>
+                    <li><a href="../home/home.html">Picos e Região</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Minha Conta</h4>
+                <ul class="footer-links">
+                    <li><a href="../../index.html">Entrar / Cadastro</a></li>
+                    <li><a href="../vender/meus-anuncios.html" id="footer-link-anuncios">Meus Anúncios</a></li>
+                    <li><a href="../favoritos/favoritos.html" id="footer-link-favoritos">Meus Favoritos</a></li>
+
+                    <li><a href="perfil.html">Meu Perfil</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <span>© 2026 Itaim Vende. Todos os direitos reservados.</span>
+            <span>Desenvolvido com carinho para o Piauí.</span>
+        </div>
+    </footer>
+
+    <script src="../../js/core/rotas.js"></script>
+    <script src="../../js/core/sessao.js"></script>
+    <script src="../../js/pages/configuracoes.js"></script>
+</body>
+</html>

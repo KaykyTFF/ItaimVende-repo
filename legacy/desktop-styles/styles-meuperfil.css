@@ -1,0 +1,122 @@
+/* --- CONFIGURAÇÃO GERAL --- */
+.root {
+    -fx-background-color: #F2F2F2; /* Fundo cinza claro igual à imagem */
+    -fx-font-family: 'Segoe UI', sans-serif;
+}
+
+.scroll-pane {
+    -fx-background-color: #F2F2F2;
+    -fx-background: #F2F2F2;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: #F2F2F2;
+}
+
+.btn-voltar-verde {
+    -fx-background-color: #5BA358;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 18px;
+    -fx-background-radius: 50%;
+    -fx-min-width: 40px;
+    -fx-min-height: 40px;
+    -fx-cursor: hand;
+    -fx-alignment: center;
+    -fx-padding: 0;
+}
+.btn-voltar-verde:hover {
+    -fx-background-color: #488A45;
+}
+
+/* --- SIDEBAR (Barra Lateral Esquerda) --- */
+.sidebar-perfil {
+    -fx-background-image: url('/images/curve-background.svg');
+    -fx-background-size: cover;
+    -fx-background-radius: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 2, 2);
+    -fx-padding: 25;
+}
+
+/* Títulos dos dados (ex: Localização, E-mail) - VERDE na imagem */
+.label-dado-titulo {
+    -fx-font-size: 13px;
+    -fx-text-fill: #59AA59; /* Verde Itaim */
+    -fx-font-weight: bold;
+    -fx-padding: 5 0 0 0;
+}
+
+/* Valores dos dados (ex: Paulistana, email@...) - PRETO na imagem */
+.label-dado-valor {
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+    -fx-font-weight: bold; /* Parece negrito na imagem */
+    -fx-padding: 0 0 5 0;
+}
+
+/* Separadores */
+.separator *.line {
+    -fx-border-style: solid;
+    -fx-border-width: 1px;
+    -fx-border-color: #EEEEEE; /* Cinza bem claro */
+    -fx-background-color: transparent;
+}
+
+/* --- CARDS DE ESTATÍSTICAS (Topo Direita) --- */
+.card-estatistica {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 5, 0, 1, 1);
+    -fx-padding: 20;
+    -fx-alignment: center; /* Centralizado como na imagem */
+    -fx-min-width: 160px;
+    -fx-min-height: 100px;
+}
+
+.numero-estatistica {
+    -fx-font-size: 28px;
+    -fx-font-weight: 900; /* Extra bold */
+    -fx-text-fill: #59AA59; /* Verde Destaque */
+}
+
+.texto-estatistica {
+    -fx-font-size: 12px;
+    -fx-text-fill: #888888;
+    -fx-font-weight: normal;
+}
+
+/* --- CARDS DE ANÚNCIO (Produtos) --- */
+.card-anuncio {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 2, 2);
+    -fx-cursor: hand;
+}
+
+.card-anuncio:hover {
+    -fx-translate-y: -4;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 12, 0, 2, 5);
+}
+
+/* Container da Imagem (Para arredondar apenas o topo) */
+.card-anuncio .stack-pane {
+    -fx-background-radius: 12 12 0 0; /* Arredonda só em cima */
+}
+
+.preco-anuncio {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.titulo-anuncio {
+    -fx-font-size: 13px;
+    -fx-text-fill: #666666;
+}
+
+/* Combo Box de Filtro */
+.combo-box {
+    -fx-background-color: #E0E0E0;
+    -fx-background-radius: 15;
+    -fx-font-size: 12px;
+}

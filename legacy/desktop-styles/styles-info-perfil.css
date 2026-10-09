@@ -1,0 +1,124 @@
+/* --- FUNDO GERAL --- */
+.fundo-perfil {
+    -fx-background-color: #E6E6E6;
+}
+.scroll-pane-info {
+    -fx-background: #E6E6E6;
+    -fx-background-color: #E6E6E6;
+}
+.scroll-pane-info > .viewport {
+    -fx-background-color: #E6E6E6;
+}
+
+/* --- CABEÇALHO --- */
+.titulo-pagina {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #000000;
+}
+
+.subtitulo-pagina {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 14px;
+    -fx-text-fill: #555555;
+}
+
+.btn-voltar-verde {
+    -fx-background-color: #5BA358;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+    -fx-background-radius: 50%;
+    -fx-min-width: 35px;
+    -fx-min-height: 35px;
+    -fx-cursor: hand;
+    -fx-padding: 0;
+}
+.btn-voltar-verde:hover {
+    -fx-background-color: #488A45;
+}
+
+/* --- CARDS BRANCOS --- */
+.card-info-branco {
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 10, 0, 0, 2);
+    -fx-padding: 30;
+}
+
+/* --- CARD ESQUERDA (AVATAR) --- */
+.nome-destaque {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #000000;
+}
+
+/* --- LISTA EDITÁVEL (DIREITA) --- */
+
+/* Cada linha da lista */
+.item-editavel {
+    -fx-background-color: transparent;
+    -fx-padding: 10 5 10 5; /* Espaçamento interno */
+    -fx-cursor: hand;
+    -fx-border-color: #EEEEEE;
+    -fx-border-width: 0 0 1 0; /* Linha divisória suave embaixo */
+}
+
+/* Efeito ao passar o mouse */
+.item-editavel:hover {
+    -fx-background-color: #F7F7F7; /* Cinza bem clarinho */
+}
+
+/* Título do campo (Ex: Nome de Usuário) */
+.label-campo {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #000000;
+}
+
+/* Valor do campo (Ex: Peba Souza) */
+.valor-campo {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 16px;
+    -fx-text-fill: #444444;
+}
+
+/* A Seta (>) */
+.seta-navegacao {
+    -fx-font-family: "Consolas", monospace; /* Fonte monoespaçada para a seta ficar bonita */
+    -fx-font-size: 20px;
+    -fx-text-fill: #333333;
+    -fx-font-weight: lighter;
+}
+
+/* --- CARD ESQUERDA (AVATAR) --- */
+.nome-destaque {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #000000;
+}
+
+/* --- OVERLAY DA FOTO DE PERFIL (NOVO) --- */
+.avatar-overlay {
+    /* Fundo preto com 60% de opacidade */
+    -fx-background-color: rgba(0, 0, 0, 0.6);
+    -fx-alignment: center;
+    /* Transição suave para o efeito de aparecer/desaparecer */
+    -fx-transition: opacity 0.3s ease;
+}
+
+.icone-editar {
+    -fx-font-size: 40px; /* Ícone de lápis grande */
+    -fx-text-fill: white;
+}
+
+.texto-editar {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}

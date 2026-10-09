@@ -1,0 +1,51 @@
+/* --- CONTAINER DAS CATEGORIAS --- */
+.container-categorias {
+    -fx-padding: 10 0 20 0;
+    -fx-alignment: center;
+    -fx-spacing: 25; /* Espaço entre cada item */
+    -fx-background-color: transparent;
+}
+
+/* --- O ITEM (CIRCULO + TEXTO) --- */
+.item-categoria {
+    -fx-alignment: center;
+    -fx-spacing: 8;
+    -fx-cursor: hand;
+}
+
+/* Efeito ao passar o mouse no conjunto todo */
+.item-categoria:hover {
+    -fx-translate-y: -3; /* Sobe um pouquinho */
+}
+
+/* --- O CÍRCULO DO ÍCONE --- */
+.circulo-icon-categoria {
+    -fx-background-color: white;
+    -fx-background-radius: 100; /* Círculo perfeito */
+    -fx-min-width: 70px;
+    -fx-min-height: 70px;
+    -fx-max-width: 70px;
+    -fx-max-height: 70px;
+    -fx-alignment: center;
+
+    /* Sombra suave embaixo (Drop Shadow) */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 10, 0, 0, 5);
+}
+
+/* Efeito extra no círculo ao passar o mouse */
+.item-categoria:hover .circulo-icon-categoria {
+    -fx-effect: dropshadow(three-pass-box, rgba(89, 170, 89, 0.4), 15, 0, 0, 5); /* Sombra verde */
+    -fx-background-color: #ffffff;
+}
+
+/* --- O TEXTO DA CATEGORIA --- */
+.label-categoria {
+    -fx-font-family: "System";
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333; /* Cinza escuro / Quase preto */
+}
+
+.item-categoria:hover .label-categoria {
+    -fx-text-fill: #59AA59; /* Texto fica verde no hover */
+}

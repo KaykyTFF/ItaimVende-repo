@@ -1,0 +1,19 @@
+{
+  "name": "itaim-vende",
+  "version": "1.0.0",
+  "description": "Itaim Vende - Plataforma de Compra, Venda e Trocas",
+  "private": true,
+  "scripts": {
+    "dev:frontend": "npx serve frontend -p 5500",
+    "dev:backend": "npm --prefix backend run dev",
+    "start:backend": "npm --prefix backend run start",
+    "install:backend": "npm --prefix backend install"
+  },
+  "keywords": [
+    "marketplace",
+    "itaim-vende",
+    "ecommerce"
+  ],
+  "author": "Kayky Terles",
+  "license": "ISC"
+}

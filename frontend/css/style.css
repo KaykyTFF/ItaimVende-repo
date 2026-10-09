@@ -1,0 +1,853 @@
+/* ==========================================================================
+   ITAIM VENDE - ESTILOS DO SISTEMA DE AUTENTICAÇÃO (LOGIN & CADASTRO)
+   Fidelidade 100% à versão Desktop + Design Moderno e Responsivo
+   ========================================================================== */
+
+:root {
+    --color-primary: #44BD32;
+    --color-primary-hover: #3ca82b;
+    --color-primary-glow: rgba(68, 189, 50, 0.25);
+    --color-bg-dark: #2F3640;
+    --color-bg-dark-deep: #242B33;
+    --color-bg-light: #FFFFFF;
+    --color-input-bg: #F0F2F5;
+    --color-text-dark: #2F3640;
+    --color-text-white: #FFFFFF;
+    --color-text-muted: #A4B0BE;
+    --color-error: #FF6B6B;
+    --color-success: #44BD32;
+    --font-main: 'Plus Jakarta Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Reset Global */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    min-height: 100%;
+    font-family: var(--font-main);
+    background-color: var(--color-bg-light);
+    color: var(--color-text-dark);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+}
+
+/* Container Principal */
+.auth-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--color-bg-light);
+}
+
+/* ==========================================================================
+   1. TOPO COM LOGO E MASCOTE
+   ========================================================================== */
+.topo-container {
+    width: 100%;
+    background-color: var(--color-bg-light);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 24px 20px 20px 20px;
+    flex: 0 0 auto;
+    position: relative;
+    z-index: 2;
+}
+
+.logo-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 440px;
+    width: 100%;
+}
+
+.logo-img {
+    max-height: 220px;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.04));
+    transition: transform var(--transition-smooth);
+}
+
+.logo-img:hover {
+    transform: scale(1.02);
+}
+
+/* Versão compacta do logo para o cadastro */
+.topo-compacto .logo-img {
+    max-height: 130px;
+}
+
+.topo-compacto {
+    padding: 16px 20px 14px 20px;
+}
+
+/* Barra de Alternância (Abas Login / Cadastro) */
+.nav-abas {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+    background: #EDF0F2;
+    padding: 4px;
+    border-radius: 30px;
+}
+
+.btn-aba {
+    padding: 8px 22px;
+    border: none;
+    border-radius: 24px;
+    background: transparent;
+    font-size: 14px;
+    font-weight: 700;
+    color: #57606F;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.btn-aba.aba-ativa {
+    background: var(--color-primary);
+    color: var(--color-text-white);
+    box-shadow: 0 2px 8px rgba(68, 189, 50, 0.3);
+}
+
+/* ==========================================================================
+   2. PAINEL INFERIOR ESCURO
+   ========================================================================== */
+.painel-inferior {
+    flex: 1 1 auto;
+    background-color: var(--color-bg-dark);
+    position: relative;
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 40px 24px 60px 24px;
+}
+
+/* Estilo Curvo (Login Original do Desktop) */
+.painel-curvo {
+    border-top: 6px solid var(--color-primary);
+    border-top-left-radius: 80px;
+    border-top-right-radius: 0;
+}
+
+/* Estilo Linha Reta (Cadastro Original do Desktop) */
+.painel-reto {
+    border-top: 5px solid var(--color-primary);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+/* ==========================================================================
+   3. FORMULÁRIO DE LOGIN
+   ========================================================================== */
+.view-secao {
+    width: 100%;
+    display: none;
+    animation: fadeIn 0.4s ease forwards;
+}
+
+.view-secao.secao-ativa {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container-login {
+    max-width: 380px;
+    width: 100%;
+}
+
+.titulo-login {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--color-text-white);
+    letter-spacing: 1.5px;
+    margin-bottom: 26px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.form-auth {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Grupos de Campos e Labels */
+.grupo-campo {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 6px;
+}
+
+.label-campo {
+    color: var(--color-primary);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    user-select: none;
+}
+
+/* Inputs */
+.input-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.campo-texto {
+    width: 100%;
+    background-color: var(--color-input-bg);
+    color: #2F3640;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    padding: 13px 16px;
+    font-size: 15px;
+    font-family: inherit;
+    font-weight: 500;
+    outline: none;
+    height: 48px;
+    transition: all var(--transition-fast);
+}
+
+.input-wrapper .campo-texto {
+    padding-right: 48px;
+}
+
+.campo-texto::placeholder {
+    color: #9AA0A6;
+    font-weight: 400;
+    opacity: 0.85;
+}
+
+.campo-texto:focus {
+    background-color: var(--color-bg-light);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 4px var(--color-primary-glow);
+}
+
+/* Select Estilizado */
+.select-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.select-campo {
+    width: 100%;
+    background-color: var(--color-input-bg);
+    color: #2F3640;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    padding: 12px 42px 12px 16px;
+    font-size: 15px;
+    font-family: inherit;
+    font-weight: 500;
+    outline: none;
+    height: 48px;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    transition: all var(--transition-fast);
+}
+
+.select-campo:focus {
+    background-color: var(--color-bg-light);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 4px var(--color-primary-glow);
+}
+
+.select-seta {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #57606F;
+}
+
+/* Botão de Toggle da Senha */
+.btn-toggle-senha {
+    position: absolute;
+    right: 12px;
+    background: none;
+    border: none;
+    color: #718093;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    border-radius: 6px;
+    transition: color var(--transition-fast);
+}
+
+.btn-toggle-senha:hover {
+    color: var(--color-primary);
+}
+
+.icone-oculto {
+    display: none;
+}
+
+/* Link Esqueceu a Senha */
+.box-esqueceu {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    margin-top: -4px;
+    margin-bottom: 6px;
+}
+
+.link-esqueceu {
+    color: var(--color-primary);
+    font-size: 13px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color var(--transition-fast);
+}
+
+.link-esqueceu:hover {
+    color: #5ed64c;
+}
+
+/* Botões do Login */
+.box-botoes {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: 6px;
+}
+
+.btn-entrar {
+    width: 260px;
+    max-width: 100%;
+    height: 48px;
+    background-color: var(--color-primary);
+    color: var(--color-text-white);
+    border: none;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+    transition: all var(--transition-fast);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-entrar:hover {
+    background-color: var(--color-primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(68, 189, 50, 0.35);
+}
+
+.btn-entrar:active {
+    transform: translateY(1px);
+}
+
+.label-ou {
+    color: var(--color-text-white);
+    font-size: 14px;
+    font-weight: 500;
+    margin: 12px 0;
+    user-select: none;
+}
+
+.btn-cadastrar {
+    width: 260px;
+    max-width: 100%;
+    height: 48px;
+    background-color: var(--color-bg-light);
+    color: var(--color-primary);
+    border: none;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all var(--transition-fast);
+}
+
+.btn-cadastrar:hover {
+    background-color: #F5F6FA;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.btn-cadastrar:active {
+    transform: translateY(1px);
+}
+
+/* ==========================================================================
+   4. FORMULÁRIO DE CADASTRO (EXATAMENTE COMO NAS IMAGENS, SEM CPF)
+   ========================================================================== */
+.container-cadastro {
+    max-width: 480px;
+    width: 100%;
+}
+
+/* Títulos de Seção em Verde */
+.titulo-secao-verde {
+    color: var(--color-primary);
+    font-size: 17px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-align: center;
+    text-transform: uppercase;
+    margin-top: 18px;
+    margin-bottom: 8px;
+    user-select: none;
+}
+
+.titulo-secao-verde:first-of-type {
+    margin-top: 0;
+}
+
+.btn-concluir-cadastro {
+    width: 100%;
+    max-width: 480px;
+    height: 52px;
+    background-color: var(--color-primary);
+    color: var(--color-text-white);
+    border: none;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    transition: all var(--transition-fast);
+    margin-top: 16px;
+}
+
+.btn-concluir-cadastro:hover {
+    background-color: var(--color-primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(68, 189, 50, 0.4);
+}
+
+.btn-concluir-cadastro:active {
+    transform: translateY(1px);
+}
+
+.box-voltar-login {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 16px;
+}
+
+.link-voltar {
+    color: var(--color-text-white);
+    font-size: 14px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    font-weight: 500;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-family: inherit;
+    transition: color var(--transition-fast);
+}
+
+.link-voltar:hover {
+    color: var(--color-primary);
+}
+
+/* ==========================================================================
+   5. STATUS E SPINNERS
+   ========================================================================== */
+.status-msg {
+    min-height: 24px;
+    margin-top: 14px;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    border-radius: 6px;
+    transition: all var(--transition-fast);
+}
+
+.status-msg.status-erro {
+    color: var(--color-error);
+    animation: shake 0.4s ease;
+}
+
+.status-msg.status-sucesso {
+    color: var(--color-primary);
+}
+
+.status-msg.status-info {
+    color: #00D2D3;
+}
+
+.btn-spinner {
+    display: none;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #FFFFFF;
+    animation: spin 0.8s linear infinite;
+}
+
+.btn-loading .btn-texto {
+    display: none;
+}
+
+.btn-loading .btn-spinner {
+    display: inline-block;
+}
+
+/* ==========================================================================
+   6. MODAL ESQUECEU A SENHA
+   ========================================================================== */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(15, 20, 25, 0.75);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    padding: 20px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal-backdrop.modal-ativo {
+    display: flex;
+    opacity: 1;
+}
+
+.modal-card {
+    background-color: var(--color-bg-dark);
+    border: 2px solid var(--color-primary);
+    border-radius: 20px;
+    width: 100%;
+    max-width: 420px;
+    padding: 32px 28px;
+    position: relative;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
+    transform: scale(0.92);
+    transition: transform 0.3s ease;
+    text-align: center;
+}
+
+.modal-backdrop.modal-ativo .modal-card {
+    transform: scale(1);
+}
+
+.modal-close {
+    position: absolute;
+    top: 14px;
+    right: 18px;
+    background: none;
+    border: none;
+    color: var(--color-text-white);
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity var(--transition-fast);
+}
+
+.modal-close:hover {
+    opacity: 1;
+    color: var(--color-error);
+}
+
+.modal-icon-topo {
+    display: inline-flex;
+    padding: 12px;
+    background: rgba(68, 189, 50, 0.12);
+    border-radius: 50%;
+    margin-bottom: 12px;
+}
+
+.modal-titulo {
+    color: var(--color-text-white);
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.modal-descricao {
+    color: #BDC3C7;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 22px;
+}
+
+.btn-modal {
+    width: 100%;
+    margin-top: 8px;
+}
+
+/* Box informativo de teste com código gerado */
+.box-codigo-teste {
+    background: rgba(68, 189, 50, 0.12);
+    border: 1px dashed #44BD32;
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.box-codigo-label {
+    font-size: 12.5px;
+    color: #CBD5E1;
+}
+
+.box-codigo-valor-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.box-codigo-valor-wrap strong {
+    font-size: 26px;
+    letter-spacing: 4px;
+    color: #44BD32;
+    font-weight: 800;
+    font-family: monospace;
+}
+
+.btn-copiar-codigo-teste {
+    background: #44BD32;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 6px;
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-copiar-codigo-teste:hover {
+    background: #3ca82b;
+    transform: scale(1.04);
+}
+
+/* Grid de 6 dígitos */
+.codigo-inputs-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+    margin: 16px 0 20px;
+}
+
+.input-digito-codigo {
+    width: 100%;
+    height: 52px;
+    background-color: var(--color-input-bg, #FFFFFF);
+    color: #1E293B;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    font-size: 22px;
+    font-weight: 800;
+    text-align: center;
+    outline: none;
+    transition: all var(--transition-fast, 0.2s ease);
+}
+
+.input-digito-codigo:focus {
+    background-color: #FFFFFF;
+    border-color: var(--color-primary, #44BD32);
+    box-shadow: 0 0 0 4px var(--color-primary-glow, rgba(68, 189, 50, 0.3));
+    transform: translateY(-2px);
+}
+
+.input-digito-codigo.erro-digito {
+    border-color: #FF4757;
+    background-color: #FFF5F5;
+    animation: shake 0.4s ease;
+}
+
+.input-digito-codigo.sucesso-digito {
+    border-color: #44BD32;
+    background-color: #F0FFF4;
+}
+
+/* Rodapé Reenviar Código */
+.rodape-reenviar-codigo {
+    margin-top: 18px;
+    font-size: 13.5px;
+    color: #CBD5E1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.btn-reenviar-link {
+    background: none;
+    border: none;
+    color: #44BD32;
+    font-weight: 700;
+    font-size: 13.5px;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0;
+}
+
+.btn-reenviar-link:hover {
+    color: #2ed573;
+}
+
+.btn-reenviar-link:disabled {
+    color: #64748B;
+    cursor: not-allowed;
+    text-decoration: none;
+}
+
+.timer-reenviar {
+    color: #94A3B8;
+    font-size: 12.5px;
+}
+
+/* ==========================================================================
+   7. ANIMAÇÕES E RESPONSIVIDADE
+   ========================================================================== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-6px); }
+    40%, 80% { transform: translateX(6px); }
+}
+
+@media (max-width: 640px) {
+    .topo-container {
+        padding: 16px 14px 14px 14px;
+    }
+
+    .logo-img {
+        max-height: 150px;
+    }
+
+    .topo-compacto .logo-img {
+        max-height: 90px;
+    }
+
+    .nav-abas {
+        margin-top: 10px;
+        width: 100%;
+        max-width: 320px;
+    }
+
+    .btn-aba {
+        flex: 1;
+        padding: 8px 14px;
+        font-size: 13.5px;
+    }
+
+    .painel-inferior {
+        padding: 28px 16px 45px 16px;
+    }
+
+    .painel-curvo {
+        border-top-left-radius: 45px;
+    }
+
+    .titulo-login {
+        font-size: 28px;
+        margin-bottom: 20px;
+    }
+
+    /* 16px nos inputs previne auto-zoom no iOS Safari */
+    .campo-texto,
+    .select-campo {
+        font-size: 16px;
+        height: 48px;
+    }
+
+    .btn-entrar, .btn-cadastrar, .btn-concluir-cadastro {
+        width: 100%;
+        height: 48px;
+        font-size: 15.5px;
+    }
+
+    .modal-card {
+        padding: 24px 18px;
+        border-radius: 18px;
+        width: calc(100% - 24px);
+    }
+}
+
+@media (max-width: 400px) {
+    .topo-container {
+        padding: 14px 12px 10px 12px;
+    }
+
+    .logo-img {
+        max-height: 125px;
+    }
+
+    .topo-compacto .logo-img {
+        max-height: 75px;
+    }
+
+    .titulo-login {
+        font-size: 24px;
+        margin-bottom: 16px;
+    }
+
+    .painel-inferior {
+        padding: 22px 12px 35px 12px;
+    }
+}

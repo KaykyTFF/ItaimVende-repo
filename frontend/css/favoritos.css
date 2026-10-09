@@ -1,0 +1,312 @@
+/* ==========================================================================
+   ITAIM VENDE - PÁGINA DE FAVORITOS (FAVORITOS.HTML)
+   Estilos da lista de favoritos, cards de itens e ações
+   ========================================================================== */
+
+.breadcrumb-container {
+    margin-bottom: 16px;
+}
+
+.favoritos-container {
+    max-width: 1200px;
+    margin: 24px auto 60px;
+    padding: 0 16px;
+}
+
+.favoritos-topo-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.favoritos-titulos h1 {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.5px;
+}
+
+.favoritos-titulos p {
+    color: var(--text-secondary);
+    font-size: 14.5px;
+    margin-top: 4px;
+}
+
+.favoritos-badge-contador {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(68, 189, 50, 0.12);
+    color: var(--primary-dark);
+    font-size: 14px;
+    font-weight: 700;
+    padding: 8px 16px;
+    border-radius: var(--radius-full);
+}
+
+/* ==========================================================
+   GRADE DE PRODUTOS FAVORITADOS (ORGANIZADO POR CAIXINHAS)
+   ========================================================== */
+.grade-produtos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 22px;
+    width: 100%;
+}
+
+/* Card Individual em Caixinha */
+.card-produto {
+    background-color: #FFFFFF;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+    border: 1px solid #E2E8F0;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    position: relative;
+}
+
+.card-produto:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.09);
+    border-color: #44BD32;
+}
+
+.card-img-box {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background-color: #F1F5F9;
+    overflow: hidden;
+}
+
+.card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.35s ease;
+}
+
+.card-produto:hover .card-img {
+    transform: scale(1.05);
+}
+
+/* Botão de Remover Favorito (Coração Flutuante) */
+.btn-favorito {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.95);
+    border: 1px solid #E2E8F0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    transition: all 0.2s ease;
+    z-index: 2;
+}
+
+.btn-favorito:hover {
+    transform: scale(1.12);
+    background-color: #FEE2E2;
+    border-color: #EF4444;
+}
+
+.icone-coracao {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: #747D8C;
+    stroke-width: 2;
+    transition: all 0.2s ease;
+}
+
+.btn-favorito.ativo .icone-coracao {
+    fill: #EF4444;
+    stroke: #EF4444;
+}
+
+/* Corpo da Caixinha */
+.card-corpo {
+    padding: 14px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.card-categoria-tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #44BD32;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.card-titulo {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #1E293B;
+    line-height: 1.35;
+    margin-bottom: 8px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    height: 38px;
+}
+
+.card-preco {
+    font-size: 19px;
+    font-weight: 800;
+    color: #0F172A;
+    margin-bottom: 10px;
+}
+
+.card-preco.doacao {
+    color: #44BD32;
+    font-size: 16px;
+}
+
+.card-rodape {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12.5px;
+    color: #64748B;
+    border-top: 1px solid #F1F5F9;
+    padding-top: 10px;
+}
+
+.card-local {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Estado Vazio */
+.favoritos-vazio {
+    text-align: center;
+    padding: 70px 20px;
+    background: #FFFFFF;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+}
+
+.favoritos-vazio-icon {
+    font-size: 50px;
+    margin-bottom: 12px;
+    color: #CBD5E1;
+}
+
+.favoritos-vazio h2 {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.favoritos-vazio p {
+    color: var(--text-secondary);
+    font-size: 15px;
+    max-width: 420px;
+    margin: 0 auto 24px;
+}
+
+.btn-explorar-ofertas {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--primary);
+    color: #FFFFFF;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 12px 24px;
+    border-radius: var(--radius-full);
+    text-decoration: none;
+    box-shadow: 0 4px 14px rgba(68, 189, 50, 0.3);
+    transition: all var(--transition);
+}
+
+.btn-explorar-ofertas:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   RESPONSIVIDADE (MOBILE & TABLET)
+   ========================================================================== */
+@media (max-width: 768px) {
+    .favoritos-container {
+        padding: 0 12px;
+        margin: 14px auto 40px;
+    }
+
+    .favoritos-topo-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+
+    .favoritos-titulos h1 {
+        font-size: 22px;
+    }
+
+    .favoritos-badge-contador {
+        font-size: 12.5px;
+        padding: 6px 14px;
+    }
+
+    .grade-produtos {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 10px !important;
+    }
+
+    .card-corpo {
+        padding: 10px 10px 12px;
+    }
+
+    .card-titulo {
+        font-size: 13px;
+        height: 34px;
+    }
+
+    .card-preco {
+        font-size: 16px;
+    }
+
+    .card-rodape {
+        font-size: 11.5px;
+        padding-top: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .grade-produtos {
+        gap: 8px !important;
+    }
+
+    .card-corpo {
+        padding: 8px 8px 10px;
+    }
+
+    .card-titulo {
+        font-size: 12px;
+        height: 30px;
+    }
+
+    .card-preco {
+        font-size: 15px;
+    }
+}

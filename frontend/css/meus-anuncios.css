@@ -1,0 +1,479 @@
+/* ==========================================================================
+   ITAIM VENDE - PÁGINA MEUS ANÚNCIOS (MEUS-ANUNCIOS.HTML)
+   Estilos de gerenciamento de anúncios, abas de status, listagem e ações
+   ========================================================================== */
+
+.breadcrumb-container {
+    margin-bottom: 16px;
+}
+
+.anuncios-container {
+    max-width: 1200px;
+    margin: 24px auto 60px;
+    padding: 0 16px;
+}
+
+.anuncios-header-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.anuncios-titulos h1 {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.5px;
+}
+
+.anuncios-titulos p {
+    color: var(--text-secondary);
+    font-size: 14.5px;
+    margin-top: 4px;
+}
+
+.btn-novo-anuncio {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--primary);
+    color: #FFFFFF;
+    font-weight: 700;
+    font-size: 14.5px;
+    padding: 12px 22px;
+    border-radius: var(--radius-full);
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(68, 189, 50, 0.28);
+    transition: all var(--transition);
+}
+
+.btn-novo-anuncio:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(68, 189, 50, 0.38);
+}
+
+/* Tabs de Status */
+.anuncios-tabs-bar {
+    display: flex;
+    gap: 10px;
+    border-bottom: 2px solid #E2E8F0;
+    margin-bottom: 24px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.anuncios-tabs-bar::-webkit-scrollbar {
+    display: none;
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    padding: 12px 18px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    position: relative;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all var(--transition);
+}
+
+.tab-btn:hover {
+    color: var(--text-primary);
+}
+
+.tab-btn.ativo {
+    color: var(--primary);
+    font-weight: 700;
+}
+
+.tab-btn.ativo::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--primary);
+    border-radius: 3px 3px 0 0;
+}
+
+.tab-badge {
+    background: #E2E8F0;
+    color: #475569;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    transition: all var(--transition);
+}
+
+.tab-btn.ativo .tab-badge {
+    background: rgba(68, 189, 50, 0.16);
+    color: var(--primary-dark);
+}
+
+/* Lista de Itens */
+.anuncios-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.anuncio-item-card {
+    background: #FFFFFF;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    display: grid;
+    grid-template-columns: 140px minmax(0, 1fr) auto;
+    gap: 20px;
+    align-items: center;
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition);
+    overflow: hidden;
+}
+
+.anuncio-item-card:hover {
+    border-color: #CBD5E1;
+    box-shadow: var(--shadow-md);
+}
+
+.anuncio-card-foto {
+    width: 140px;
+    height: 110px;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: #F1F5F9;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.anuncio-card-foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.anuncio-info-meio {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.anuncio-topo-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.badge-status {
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: var(--radius-full);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.badge-status.ativo {
+    background: rgba(68, 189, 50, 0.14);
+    color: #2e8522;
+}
+
+.badge-status.vendido {
+    background: #E2E8F0;
+    color: #64748B;
+}
+
+.badge-status.pausado {
+    background: #FEF3C7;
+    color: #B45309;
+}
+
+.anuncio-data {
+    font-size: 12.5px;
+    color: #94A3B8;
+}
+
+.anuncio-titulo {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color var(--transition);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.anuncio-titulo:hover {
+    color: var(--primary);
+}
+
+.anuncio-preco {
+    font-size: 19px;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+.anuncio-metricas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+    align-items: center;
+}
+
+.anuncio-metricas span {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+}
+
+.anuncio-metrica-wpp {
+    color: #1E293B;
+    font-weight: 600;
+}
+
+/* Ações */
+.anuncio-acoes-coluna {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 140px;
+}
+
+.btn-acao-anuncio {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 9px 14px;
+    border-radius: var(--radius-md);
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all var(--transition);
+    border: 1px solid transparent;
+    font-family: inherit;
+}
+
+.btn-acao-ver {
+    background: #F1F5F9;
+    color: var(--text-primary);
+    border-color: #E2E8F0;
+}
+
+.btn-acao-ver:hover {
+    background: #E2E8F0;
+}
+
+.btn-acao-status {
+    background: #FFFFFF;
+    color: #475569;
+    border-color: #CBD5E1;
+}
+
+.btn-acao-status:hover {
+    background: #F8FAFC;
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-acao-excluir {
+    background: #FFFFFF;
+    color: #EF4444;
+    border-color: #FEE2E2;
+}
+
+.btn-acao-excluir:hover {
+    background: #FEF2F2;
+    border-color: #EF4444;
+}
+
+/* Estado Vazio */
+.anuncios-vazio {
+    text-align: center;
+    padding: 60px 20px;
+    background: #FFFFFF;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+}
+
+.anuncios-vazio-icon {
+    font-size: 46px;
+    margin-bottom: 12px;
+    opacity: 0.6;
+}
+
+.anuncios-vazio h2 {
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.anuncios-vazio p {
+    color: var(--text-secondary);
+    font-size: 14.5px;
+    max-width: 440px;
+    margin: 0 auto 20px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .anuncios-container {
+        padding: 0 12px;
+        margin: 14px auto 40px;
+    }
+
+    .anuncios-header-topo {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+
+    .anuncios-titulos h1 {
+        font-size: 22px;
+    }
+
+    .btn-novo-anuncio {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .anuncio-item-card {
+        grid-template-columns: 100px minmax(0, 1fr);
+        gap: 12px;
+        padding: 14px;
+        overflow: hidden;
+    }
+
+    .anuncio-card-foto {
+        width: 100px;
+        height: 90px;
+        flex-shrink: 0;
+    }
+
+    .anuncio-info-meio {
+        min-width: 0;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .anuncio-titulo {
+        font-size: 15px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .anuncio-preco {
+        font-size: 17px;
+    }
+
+    .anuncio-metricas {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px 10px;
+        font-size: 11.5px;
+        margin-top: 4px;
+    }
+
+    .anuncio-metricas span {
+        white-space: nowrap;
+    }
+
+    .anuncio-metrica-wpp {
+        width: 100%;
+        display: flex !important;
+        align-items: center;
+        margin-top: 2px;
+        color: #1E293B;
+        font-weight: 600;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .anuncio-acoes-coluna {
+        grid-column: 1 / -1;
+        flex-direction: row;
+        flex-wrap: wrap;
+        min-width: 100%;
+        border-top: 1px solid #F1F5F9;
+        padding-top: 10px;
+        margin-top: 4px;
+        gap: 6px;
+    }
+
+    .btn-acao-anuncio {
+        flex: 1;
+        padding: 8px 10px;
+        font-size: 12.5px;
+    }
+}
+
+@media (max-width: 480px) {
+    .anuncio-item-card {
+        grid-template-columns: 85px minmax(0, 1fr);
+        gap: 10px;
+        padding: 12px;
+        overflow: hidden;
+    }
+
+    .anuncio-card-foto {
+        width: 85px;
+        height: 80px;
+        flex-shrink: 0;
+    }
+
+    .anuncio-info-meio {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .anuncio-titulo {
+        font-size: 14px;
+    }
+
+    .anuncio-preco {
+        font-size: 16px;
+    }
+
+    .anuncio-metricas {
+        gap: 4px 8px;
+        font-size: 11px;
+    }
+
+    .anuncio-metricas span {
+        font-size: 11px;
+    }
+
+    .anuncio-metrica-wpp {
+        font-size: 11px;
+    }
+
+    .btn-acao-anuncio {
+        font-size: 12px;
+        padding: 7px 6px;
+    }
+}

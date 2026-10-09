@@ -1,0 +1,294 @@
+/* ==========================================================================
+   ITAIM VENDE - PÁGINA DE CATEGORIA (CATEGORIA.HTML)
+   Estilos específicos do banner hero da categoria e navegação estrutural
+   ========================================================================== */
+
+.categoria-hero {
+    background: linear-gradient(135deg, #FFFFFF 0%, #F9FBFA 100%);
+    border: 1px solid var(--border-color);
+    border-left: 5px solid var(--primary);
+    border-radius: var(--radius-lg);
+    padding: 28px 32px;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+    position: relative;
+    overflow: hidden;
+}
+
+.categoria-hero::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 250px;
+    height: 100%;
+    background: radial-gradient(circle at 100% 50%, rgba(68, 189, 50, 0.07) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.categoria-hero-info h1 {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+}
+
+.categoria-hero-info p {
+    color: var(--text-secondary);
+    font-size: 14.5px;
+}
+
+.categoria-hero-badge {
+    background: rgba(68, 189, 50, 0.1);
+    border: 1px solid rgba(68, 189, 50, 0.28);
+    color: #27811d;
+    padding: 8px 18px;
+    border-radius: var(--radius-full);
+    font-weight: 700;
+    font-size: 13.5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    white-space: nowrap;
+    position: relative;
+    z-index: 1;
+}
+
+.categoria-hero-badge::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--primary);
+    display: inline-block;
+}
+
+.btn-voltar-cat {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #FFFFFF;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-full);
+    padding: 8px 16px 8px 12px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    cursor: pointer;
+    margin-bottom: 14px;
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition);
+}
+
+.btn-voltar-cat:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    transform: translateX(-2px);
+}
+
+.breadcrumb-cat {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    margin-bottom: 18px;
+}
+
+.breadcrumb-cat a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color var(--transition);
+}
+
+.breadcrumb-cat a:hover {
+    color: var(--primary);
+}
+
+.breadcrumb-cat .ativo {
+    color: var(--primary);
+    font-weight: 700;
+}
+
+/* --- CONTAINER DAS CATEGORIAS --- */
+.container-categorias {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+    padding: 10px 0 20px 0;
+    background-color: transparent;
+    flex-wrap: wrap;
+    -fx-padding: 10 0 20 0;
+    -fx-alignment: center;
+    -fx-spacing: 25;
+    -fx-background-color: transparent;
+}
+
+/* --- O ITEM (CIRCULO + TEXTO) --- */
+.item-categoria {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.2s ease;
+    -fx-alignment: center;
+    -fx-spacing: 8;
+    -fx-cursor: hand;
+}
+
+/* Efeito ao passar o mouse no conjunto todo */
+.item-categoria:hover {
+    transform: translateY(-3px);
+    -fx-translate-y: -3;
+}
+
+/* --- O CÍRCULO DO ÍCONE --- */
+.circulo-icon-categoria {
+    background-color: white;
+    border-radius: 100px;
+    width: 70px;
+    height: 70px;
+    min-width: 70px;
+    min-height: 70px;
+    max-width: 70px;
+    max-height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.15);
+    transition: all 0.2s ease;
+    -fx-background-color: white;
+    -fx-background-radius: 100;
+    -fx-min-width: 70px;
+    -fx-min-height: 70px;
+    -fx-max-width: 70px;
+    -fx-max-height: 70px;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 10, 0, 0, 5);
+}
+
+/* Efeito extra no círculo ao passar o mouse */
+.item-categoria:hover .circulo-icon-categoria {
+    box-shadow: 0 5px 15px rgba(89, 170, 89, 0.4);
+    background-color: #ffffff;
+    -fx-effect: dropshadow(three-pass-box, rgba(89, 170, 89, 0.4), 15, 0, 0, 5);
+    -fx-background-color: #ffffff;
+}
+
+/* --- O TEXTO DA CATEGORIA --- */
+.label-categoria {
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: bold;
+    color: #333333;
+    transition: color 0.2s ease;
+    -fx-font-family: "System";
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.item-categoria:hover .label-categoria {
+    color: #59AA59;
+    -fx-text-fill: #59AA59;
+}
+
+@media (max-width: 768px) {
+    .main-conteudo {
+        padding: 14px 12px 40px 12px;
+    }
+
+    .categoria-hero {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 20px 16px;
+        border-radius: 14px;
+        margin-bottom: 20px;
+    }
+
+    .categoria-hero-info h1 {
+        font-size: 22px;
+    }
+
+    .categoria-hero-info p {
+        font-size: 13.5px;
+    }
+
+    .categoria-hero-badge {
+        font-size: 12px;
+        padding: 6px 14px;
+    }
+
+    .barra-filtros-vitrine {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        margin-bottom: 18px;
+    }
+
+    .controles-filtros {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        width: 100%;
+    }
+
+    .grade-produtos {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 10px !important;
+    }
+
+    .card-produto {
+        border-radius: 12px;
+    }
+
+    .card-info {
+        padding: 10px 10px 12px;
+    }
+
+    .card-titulo {
+        font-size: 13px;
+        height: 34px;
+    }
+
+    .card-preco {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .categoria-hero {
+        padding: 16px 14px;
+    }
+
+    .categoria-hero-info h1 {
+        font-size: 19px;
+    }
+
+    .grade-produtos {
+        gap: 8px !important;
+    }
+
+    .card-info {
+        padding: 8px 8px 10px;
+    }
+
+    .card-titulo {
+        font-size: 12px;
+        height: 30px;
+    }
+
+    .card-preco {
+        font-size: 15px;
+    }
+}
