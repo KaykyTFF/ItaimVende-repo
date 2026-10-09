@@ -1,0 +1,11 @@
+[build]
+  # Define a pasta que o Netlify deve publicar na web
+  publish = "frontend"
+
+# Configurações de cabeçalhos e otimização
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
