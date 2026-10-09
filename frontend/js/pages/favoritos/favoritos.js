@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="favoritos-vazio-icon">🤍</div>
                     <h2>Sua lista de favoritos está vazia</h2>
                     <p>Você ainda não favoritou nenhum item. Navegue pelos anúncios e clique no coração para salvá-los aqui!</p>
-                    <a href="home.html" class="btn-explorar-ofertas">
+                    <a href="${window.ItaimRotas ? window.ItaimRotas.obterUrl('home') : '../home/home.html'}" class="btn-explorar-ofertas">
                         Explorar Ofertas
                     </a>
                 </div>
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="favoritos-vazio-icon">🔍</div>
                         <h2>Nenhum favorito encontrado para "${termoBusca}"</h2>
                         <p>Nenhum anúncio salvo nos seus favoritos corresponde à sua busca. Deseja pesquisar em todo o catálogo?</p>
-                        <a href="categoria.html?q=${encodeURIComponent(termoBusca)}" class="btn-explorar-ofertas">
+                        <a href="${window.ItaimRotas ? window.ItaimRotas.obterUrl('categoria', `q=${encodeURIComponent(termoBusca)}`) : `../produtos/categoria.html?q=${encodeURIComponent(termoBusca)}`}" class="btn-explorar-ofertas">
                             Buscar em todo o Itaim Vende
                         </a>
                     </div>

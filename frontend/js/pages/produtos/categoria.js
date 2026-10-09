@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div style="font-size: 48px; margin-bottom: 12px;">📦</div>
                     <h3>Nenhum anúncio encontrado</h3>
                     <p style="color: #777; margin-top: 6px;">Não há anúncios cadastrados nesta categoria com os filtros atuais.</p>
-                    <a href="vender.html" style="display: inline-block; margin-top: 18px; background: #44BD32; color: #fff; padding: 10px 22px; border-radius: 25px; text-decoration: none; font-weight: 700;">
+                    <a href="${window.ItaimRotas ? window.ItaimRotas.obterUrl('vender') : '../vender/vender.html'}" style="display: inline-block; margin-top: 18px; background: #44BD32; color: #fff; padding: 10px 22px; border-radius: 25px; text-decoration: none; font-weight: 700;">
                         Seja o primeiro a anunciar nesta categoria!
                     </a>
                 </div>

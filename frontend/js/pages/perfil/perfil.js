@@ -425,14 +425,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p style="color: #64748B; font-size: 13.5px; margin-bottom: 16px;">
                         Você ainda não possui anúncios publicados.
                     </p>
-                    <a href="vender.html" style="background: #44BD32; color: #FFFFFF; font-weight: 700; padding: 10px 20px; border-radius: 20px; text-decoration: none; font-size: 14px; display: inline-block;">
+                    <a href="${window.ItaimRotas ? window.ItaimRotas.obterUrl('vender') : '../vender/vender.html'}" style="background: #44BD32; color: #FFFFFF; font-weight: 700; padding: 10px 20px; border-radius: 20px; text-decoration: none; font-size: 14px; display: inline-block;">
                         + Anunciar um Produto
                     </a>
                 </div>
             `;
         } else {
             gradeAnuncios.innerHTML = anunciosDoUsuario.map(item => `
-                <article class="card-produto" onclick="window.location.href='produto.html?id=${item.id}'" style="cursor: pointer;">
+                <article class="card-produto" onclick="window.location.href='${window.ItaimRotas ? window.ItaimRotas.obterUrl('produto', `id=${item.id}`) : `../produtos/produto.html?id=${item.id}`}'" style="cursor: pointer;">
                     <div class="card-img-box">
                         <img src="${item.imagem || 'assets/produto-placeholder.svg'}" alt="${item.titulo}" class="card-img" onerror="this.src='assets/produto-placeholder.svg'">
                         <span class="badge-card-condicao" style="position: absolute; bottom: 8px; left: 8px; background: rgba(0,0,0,0.7); color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">

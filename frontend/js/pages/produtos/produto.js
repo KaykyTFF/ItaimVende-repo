@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div style="font-size: 48px; margin-bottom: 12px;">📦</div>
                 <h2 style="font-size: 24px; color: #1E293B; font-weight: 800; margin-bottom: 8px;">Nenhum anúncio disponível</h2>
                 <p style="color: #64748B; font-size: 15px; margin: 0 auto 24px; max-width: 450px;">Ainda não há produtos à venda no momento ou o anúncio solicitado foi encerrado.</p>
-                <a href="home.html" style="background: #44BD32; color: #fff; padding: 12px 28px; text-decoration: none; border-radius: 30px; font-weight: 700; font-size: 15px; display: inline-block;">
+                <a href="${window.ItaimRotas ? window.ItaimRotas.obterUrl('home') : '../home/home.html'}" style="background: #44BD32; color: #fff; padding: 12px 28px; text-decoration: none; border-radius: 30px; font-weight: 700; font-size: 15px; display: inline-block;">
                     ← Voltar para a Página Inicial
                 </a>
             </div>
@@ -102,9 +102,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const breadcrumbLista = document.querySelector('.breadcrumb-ref-lista');
     if (breadcrumbLista && produto.categoria) {
         breadcrumbLista.innerHTML = `
-            <li><a href="home.html" class="breadcrumb-home-link" title="Página Inicial">Início</a></li>
+            <li><a href="${window.ItaimRotas ? window.ItaimRotas.obterUrl('home') : '../home/home.html'}" class="breadcrumb-home-link" title="Página Inicial">Início</a></li>
             <li class="sep">&gt;</li>
-            <li><a href="categoria.html?cat=${encodeURIComponent(produto.categoria)}">${produto.categoria}</a></li>
+            <li><a href="${window.ItaimRotas ? window.ItaimRotas.obterUrl('categoria', `cat=${encodeURIComponent(produto.categoria)}`) : `categoria.html?cat=${encodeURIComponent(produto.categoria)}`}">${produto.categoria}</a></li>
             <li class="sep">&gt;</li>
             <li class="atual" style="max-width: 280px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${produto.titulo}</li>
         `;

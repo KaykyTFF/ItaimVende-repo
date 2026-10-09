@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             ? `Você ainda não publicou anúncios no perfil de <strong>${userLogado.nome}</strong>. Desapegue de itens que você não usa mais no Itaim Vende!`
                             : `Não há anúncios com status "<strong>${statusFiltro}</strong>" no momento.`}
                     </p>
-                    <a href="vender.html" class="btn-novo-anuncio" style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none;">
+                    <a href="${window.ItaimRotas ? window.ItaimRotas.obterUrl('vender') : '../vender/vender.html'}" class="btn-novo-anuncio" style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none;">
                         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                         <span>Anunciar Novo Produto</span>
                     </a>
@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <span class="anuncio-data">• ${item.categoria || 'Geral'}</span>
                     </div>
 
-                    <a href="produto.html?id=${item.id}" class="anuncio-titulo">${item.titulo}</a>
+                    <a href="${window.ItaimRotas ? window.ItaimRotas.obterUrl('produto', `id=${item.id}`) : `../produtos/produto.html?id=${item.id}`}" class="anuncio-titulo">${item.titulo}</a>
 
                     <div class="anuncio-preco">${formatarPreco(item.preco)}</div>
 
@@ -175,7 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             tipo: 'compra',
                             titulo: 'Compra e venda finalizada!',
                             texto: `Seu anúncio "${titulo}" foi marcado como vendido e finalizado com sucesso.`,
-                            link: 'meus-anuncios.html'
+                            link: (window.ItaimRotas ? window.ItaimRotas.obterUrl('meus-anuncios') : '../vender/meus-anuncios.html')
                         });
                     }
                     carregarAnunciosDoUsuario();

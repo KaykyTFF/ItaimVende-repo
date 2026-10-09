@@ -1,6 +1,7 @@
 /**
  * ITAIM VENDE - RESOLVEDOR CENTRAL DE ROTAS E ASSETS (JS/CORE/ROTAS.JS)
- * Garante compatibilidade total e navegação fluida em qualquer nível de pasta.
+ * Garante compatibilidade total e navegação fluida em qualquer nível de pasta,
+ * com suporte completo a parâmetros de busca (?query), âncoras (#hash) e URLs amigáveis.
  */
 
 (function() {
@@ -24,6 +25,7 @@
         mapa: {
             'index': 'index.html',
             'login': 'index.html',
+            'index.html': 'index.html',
             'home': 'pages/home/home.html',
             'home.html': 'pages/home/home.html',
             'categoria': 'pages/produtos/categoria.html',
@@ -36,7 +38,7 @@
             'meus-anuncios.html': 'pages/vender/meus-anuncios.html',
             'conversas': 'pages/mensagens/conversas.html',
             'conversas.html': 'pages/mensagens/conversas.html',
-            'chat': 'pages/mensagens/chat.html',
+            'chat': 'pages/mensagens/conversas.html',
             'chat.html': 'pages/mensagens/chat.html',
             'perfil': 'pages/perfil/perfil.html',
             'perfil.html': 'pages/perfil/perfil.html',
@@ -53,24 +55,49 @@
         },
 
         /**
-         * Retorna a URL correta a partir de qualquer página
+         * Retorna a URL correta a partir de qualquer página, suportando query params e hash
          */
         obterUrl(destino, params = '') {
             const raiz = this.obterRaiz();
-            let rotaBase = this.mapa[destino] || destino;
+            let rotaBase = destino || '';
+            let hash = '';
 
-            // Se destino tiver query string acoplada
+            // 1. Extrai âncora (#hash) caso venha em params ou em destino
+            if (params && params.includes('#')) {
+                const idxHash = params.indexOf('#');
+                hash = params.slice(idxHash);
+                params = params.slice(0, idxHash);
+            }
+            if (rotaBase.includes('#')) {
+                const idxHash = rotaBase.indexOf('#');
+                if (!hash) hash = rotaBase.slice(idxHash);
+                rotaBase = rotaBase.slice(0, idxHash);
+            }
+
+            // 2. Extrai parâmetros de busca (?query) do destino
             if (rotaBase.includes('?')) {
                 const partes = rotaBase.split('?');
                 rotaBase = partes[0];
-                params = partes[1] + (params ? '&' + params.replace(/^\?/, '') : '');
+                const queryEmRota = partes[1];
+                params = queryEmRota + (params ? '&' + params.replace(/^\?/, '') : '');
             }
 
+            // 3. Mapeia para a rota canônica
+            rotaBase = this.mapa[rotaBase] || rotaBase;
+
+            // 4. Monta a URL final
             let urlFinal = raiz + rotaBase;
             if (params) {
-                const prefixoParam = (params.startsWith('?') || params.startsWith('#')) ? '' : '?';
-                urlFinal += prefixoParam + params;
+                const prefixo = (params.startsWith('?') || params.startsWith('&')) ? params.charAt(0) : '?';
+                const limpo = params.replace(/^[\?&]/, '');
+                if (limpo) {
+                    urlFinal += '?' + limpo;
+                }
             }
+            if (hash) {
+                urlFinal += (hash.startsWith('#') ? '' : '#') + hash;
+            }
+
             return urlFinal;
         },
 

@@ -701,7 +701,7 @@
     }
 
     // Cria notificação real para um usuário específico
-    function criarNotificacao({ destinatario, tipo = 'aviso', titulo, texto, link = 'notificacoes.html', icone, tempo = 'Agora' }) {
+    function criarNotificacao({ destinatario, tipo = 'aviso', titulo, texto, link = (window.ItaimRotas ? window.ItaimRotas.obterUrl('notificacoes') : 'notificacoes.html'), icone, tempo = 'Agora' }) {
         const cfg = obterConfiguracoesNotificacoes();
         
         // Valida preferências
@@ -720,7 +720,7 @@
             tipo,
             titulo: titulo || 'Nova notificação',
             texto: texto || '',
-            link: link || 'notificacoes.html',
+            link: link || (window.ItaimRotas ? window.ItaimRotas.obterUrl('notificacoes') : 'notificacoes.html'),
             icone: icone || tipo,
             tempo: tempo || 'Agora',
             data: 'Hoje',
@@ -765,7 +765,7 @@
                 tipo: 'favorito',
                 titulo: 'Anúncio salvo por outro usuário',
                 texto: `${remetente.nome || 'Um usuário'} salvou seu anúncio "${produto.titulo}" nos favoritos.`,
-                link: `produto.html?id=${produto.id}`,
+                link: (window.ItaimRotas ? window.ItaimRotas.obterUrl('produto', `id=${produto.id}`) : `produto.html?id=${produto.id}`),
                 icone: 'favorito',
                 tempo: 'Agora'
             });
@@ -795,7 +795,7 @@
                 tipo: 'mensagem',
                 titulo: tit,
                 texto: `${userRemetente.nome}: "${previewTexto}"`,
-                link: conversaId ? `conversas.html?id=${conversaId}` : 'conversas.html',
+                link: (window.ItaimRotas ? (conversaId ? window.ItaimRotas.obterUrl('conversas', `id=${conversaId}`) : window.ItaimRotas.obterUrl('conversas')) : 'conversas.html'),
                 icone: 'chat',
                 tempo: 'Agora'
             });
@@ -823,7 +823,7 @@
                 tipo: 'compra',
                 titulo: 'Venda finalizada com sucesso!',
                 texto: `Parabéns! Seu anúncio "${produto.titulo}" foi finalizado e marcado como vendido.`,
-                link: 'meus-anuncios.html',
+                link: (window.ItaimRotas ? window.ItaimRotas.obterUrl('meus-anuncios') : 'meus-anuncios.html'),
                 icone: 'sucesso',
                 tempo: 'Agora'
             });
@@ -840,7 +840,7 @@
                             tipo: 'compra',
                             titulo: 'Anúncio vendido',
                             texto: `O anúncio "${produto.titulo}" que estava nos seus favoritos foi finalizado/vendido.`,
-                            link: `produto.html?id=${produto.id}`,
+                            link: (window.ItaimRotas ? window.ItaimRotas.obterUrl('produto', `id=${produto.id}`) : `produto.html?id=${produto.id}`),
                             icone: 'sucesso',
                             tempo: 'Agora'
                         });
@@ -883,7 +883,7 @@
                             tipo: 'preco',
                             titulo: 'Mudança de preço em item salvo',
                             texto: textoPreco,
-                            link: `produto.html?id=${produto.id}`,
+                            link: (window.ItaimRotas ? window.ItaimRotas.obterUrl('produto', `id=${produto.id}`) : `produto.html?id=${produto.id}`),
                             icone: 'preco',
                             tempo: 'Agora'
                         });
@@ -930,7 +930,7 @@
                 tipo: 'avaliacao',
                 titulo: 'Nova avaliação no seu perfil',
                 texto: textoNotif,
-                link: 'perfil.html#perfil-secao-avaliacoes',
+                link: (window.ItaimRotas ? window.ItaimRotas.obterUrl('perfil', '#perfil-secao-avaliacoes') : 'perfil.html#perfil-secao-avaliacoes'),
                 icone: 'avaliacao',
                 tempo: 'Agora'
             });

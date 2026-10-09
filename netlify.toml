@@ -1,11 +1,100 @@
 [build]
-  # Define a pasta que o Netlify deve publicar na web
+  # Define a pasta oficial publicada na web
   publish = "frontend"
 
-# Configurações de cabeçalhos e otimização
+# Redirecionamento 301 para URLs legadas contendo o prefixo /frontend/*
+[[redirects]]
+  from = "/frontend/*"
+  to = "/:splat"
+  status = 301
+  force = true
+
+# ==============================================================================
+# REESCRITAS DE URL AMIGÁVEIS (STATUS 200)
+# ==============================================================================
+[[redirects]]
+  from = "/home"
+  to = "/pages/home/home.html"
+  status = 200
+
+[[redirects]]
+  from = "/login"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/cadastro"
+  to = "/pages/auth/cadastro.html"
+  status = 200
+
+[[redirects]]
+  from = "/categoria"
+  to = "/pages/produtos/categoria.html"
+  status = 200
+
+[[redirects]]
+  from = "/produto"
+  to = "/pages/produtos/produto.html"
+  status = 200
+
+[[redirects]]
+  from = "/vender"
+  to = "/pages/vender/vender.html"
+  status = 200
+
+[[redirects]]
+  from = "/meus-anuncios"
+  to = "/pages/vender/meus-anuncios.html"
+  status = 200
+
+[[redirects]]
+  from = "/conversas"
+  to = "/pages/mensagens/conversas.html"
+  status = 200
+
+[[redirects]]
+  from = "/chat"
+  to = "/pages/mensagens/conversas.html"
+  status = 200
+
+[[redirects]]
+  from = "/perfil"
+  to = "/pages/perfil/perfil.html"
+  status = 200
+
+[[redirects]]
+  from = "/vendedor"
+  to = "/pages/perfil/vendedor.html"
+  status = 200
+
+[[redirects]]
+  from = "/configuracoes"
+  to = "/pages/perfil/configuracoes.html"
+  status = 200
+
+[[redirects]]
+  from = "/favoritos"
+  to = "/pages/favoritos/favoritos.html"
+  status = 200
+
+[[redirects]]
+  from = "/notificacoes"
+  to = "/pages/notificacoes/notificacoes.html"
+  status = 200
+
+# Página de Erro 404 personalizada
+[[redirects]]
+  from = "/*"
+  to = "/404.html"
+  status = 404
+
+# ==============================================================================
+# CABEÇALHOS DE SEGURANÇA E CACHE
+# ==============================================================================
 [[headers]]
   for = "/*"
   [headers.values]
     X-Frame-Options = "DENY"
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"

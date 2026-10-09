@@ -249,7 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         lista.forEach(item => {
             const card = document.createElement('a');
-            card.href = `produto.html?id=${item.id}`;
+            card.href = (window.ItaimRotas ? window.ItaimRotas.obterUrl('produto', `id=${item.id}`) : `../produtos/produto.html?id=${item.id}`);
             card.className = 'card-produto-vendedor';
             card.title = item.titulo;
 

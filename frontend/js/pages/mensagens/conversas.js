@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                         <div class="chat-vazio-titulo">Nenhuma conversa ainda</div>
                         <p class="chat-vazio-desc">Quando você encontrar um produto e clicar em <strong>"Chat com o vendedor"</strong>, suas conversas aparecerão aqui.</p>
-                        <a href="home.html" class="btn-voltar-chat" style="display: inline-flex; justify-content: center; width: auto; margin: 0 auto;">
+                        <a href="${window.ItaimRotas ? window.ItaimRotas.obterUrl('home') : '../home/home.html'}" class="btn-voltar-chat" style="display: inline-flex; justify-content: center; width: auto; margin: 0 auto;">
                             Explorar anúncios
                         </a>
                     </div>
@@ -316,7 +316,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (outro.id) paramsPerfil.set('id', outro.id);
             urlPerfil = (window.ItaimRotas ? window.ItaimRotas.obterUrl('vendedor', paramsPerfil.toString()) : `../perfil/vendedor.html?${paramsPerfil.toString()}`);
         } else {
-            urlPerfil = 'perfil.html';
+            urlPerfil = (window.ItaimRotas ? window.ItaimRotas.obterUrl('perfil') : '../perfil/perfil.html');
         }
 
         const linkPerfil = document.getElementById('chat-perfil-conversa');
@@ -349,7 +349,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Atualiza Resumo do Produto (Mobile)
         const prod = conv.produto || {};
-        const urlProduto = `produto.html?id=${conv.produtoId || prod.id || ''}`;
+        const urlProduto = (window.ItaimRotas ? window.ItaimRotas.obterUrl('produto', `id=${conv.produtoId || prod.id || ''}`) : `../produtos/produto.html?id=${conv.produtoId || prod.id || ''}`);
 
         if (mobileResumoBox) {
             mobileResumoBox.style.display = 'flex';

@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             ? 'Ainda não há produtos à venda. Desapegue do que você não usa mais ou seja o primeiro a anunciar!' 
                             : 'Tente buscar por outro termo ou remova os filtros selecionados.'}
                     </p>
-                    <a href="vender.html" style="background: #44BD32; color: #FFFFFF; font-weight: 700; padding: 12px 24px; border-radius: 30px; text-decoration: none; font-size: 15px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(68,189,50,0.25);">
+                    <a href="${window.ItaimRotas ? window.ItaimRotas.obterUrl('vender') : '../vender/vender.html'}" style="background: #44BD32; color: #FFFFFF; font-weight: 700; padding: 12px 24px; border-radius: 30px; text-decoration: none; font-size: 15px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(68,189,50,0.25);">
                         + Anunciar Produto Agora
                     </a>
                 </div>
