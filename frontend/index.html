@@ -283,115 +283,20 @@
                 </svg>
             </div>
             <h2 class="modal-titulo" id="modal-titulo-recuperar">Recuperar Senha</h2>
-            <p class="modal-descricao" id="modal-descricao-recuperar">Informe o e-mail cadastrado na sua conta para enviarmos o código de confirmação.</p>
+            <p class="modal-descricao" id="modal-descricao-recuperar">Informe o e-mail cadastrado na sua conta para enviarmos as instruções de recuperação de senha.</p>
             
-            <!-- ETAPA 1: INFORMAR E-MAIL -->
+            <!-- FORMULÁRIO DE RECUPERAÇÃO -->
             <form id="form-recuperar-etapa1" class="form-auth" novalidate>
                 <div class="grupo-campo">
                     <label for="recuperar-email" class="label-campo">E-mail cadastrado:</label>
                     <input type="email" id="recuperar-email" class="campo-texto" placeholder="exemplo@email.com" required>
                 </div>
                 <button type="submit" class="btn-entrar btn-modal" id="btn-enviar-recuperacao">
-                    <span class="btn-texto">ENVIAR CÓDIGO</span>
+                    <span class="btn-texto">ENVIAR INSTRUÇÕES</span>
                     <span class="btn-spinner" aria-hidden="true"></span>
                 </button>
                 <div class="status-msg" id="status-modal-recuperar"></div>
             </form>
-
-            <!-- ETAPA 2: DIGITAR CÓDIGO DE 6 DÍGITOS -->
-            <div id="form-recuperar-etapa2" class="etapa-codigo" style="display: none;">
-                <!-- Destaque para testes com o código gerado -->
-                <div class="box-codigo-teste" id="box-codigo-teste">
-                    <span class="box-codigo-label">Código gerado para teste:</span>
-                    <div class="box-codigo-valor-wrap">
-                        <strong id="codigo-gerado-display">123456</strong>
-                        <button type="button" class="btn-copiar-codigo-teste" id="btn-copiar-codigo" title="Preencher automaticamente">
-                            Usar este código
-                        </button>
-                    </div>
-                </div>
-
-                <div class="codigo-inputs-grid" id="codigo-inputs-container">
-                    <input type="text" inputmode="numeric" maxlength="1" class="input-digito-codigo" data-idx="0" autocomplete="off">
-                    <input type="text" inputmode="numeric" maxlength="1" class="input-digito-codigo" data-idx="1" autocomplete="off">
-                    <input type="text" inputmode="numeric" maxlength="1" class="input-digito-codigo" data-idx="2" autocomplete="off">
-                    <input type="text" inputmode="numeric" maxlength="1" class="input-digito-codigo" data-idx="3" autocomplete="off">
-                    <input type="text" inputmode="numeric" maxlength="1" class="input-digito-codigo" data-idx="4" autocomplete="off">
-                    <input type="text" inputmode="numeric" maxlength="1" class="input-digito-codigo" data-idx="5" autocomplete="off">
-                </div>
-
-                <button type="button" class="btn-entrar btn-modal" id="btn-validar-codigo">
-                    <span class="btn-texto">CONFIRMAR CÓDIGO</span>
-                    <span class="btn-spinner" aria-hidden="true"></span>
-                </button>
-
-                <div class="status-msg" id="status-modal-codigo"></div>
-
-                <div class="rodape-reenviar-codigo">
-                    <span>Não recebeu o código?</span>
-                    <button type="button" class="btn-reenviar-link" id="btn-reenviar-codigo">Reenviar agora</button>
-                    <span id="timer-reenviar-codigo" class="timer-reenviar" style="display: none;">(aguarde <b id="timer-segundos">30</b>s)</span>
-                </div>
-                
-                <div style="margin-top: 14px;">
-                    <a href="javascript:void(0)" class="link-voltar" id="btn-voltar-etapa1" style="font-size: 13px; color: #BDC3C7;">← Alterar e-mail</a>
-                </div>
-            </div>
-
-            <!-- ETAPA 3: DEFINIR NOVA SENHA -->
-            <form id="form-recuperar-etapa3" class="form-auth" style="display: none;" novalidate>
-                <div class="grupo-campo">
-                    <label for="recuperar-nova-senha" class="label-campo">Nova Senha:</label>
-                    <div class="input-wrapper">
-                        <input type="password" id="recuperar-nova-senha" class="campo-texto" placeholder="Mín 8 chars, 1 Maiúscula, 1 Símbolo" required>
-                        <button type="button" class="btn-toggle-senha" id="btn-toggle-nova-senha" aria-label="Mostrar ou ocultar senha">
-                            <svg class="icone-olho icone-aberto" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                <circle cx="12" cy="12" r="3"></circle>
-                            </svg>
-                            <svg class="icone-olho icone-fechado icone-oculto" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
-                                <line x1="1" y1="1" x2="23" y2="23"></line>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                <div class="grupo-campo">
-                    <label for="recuperar-confirma-senha" class="label-campo">Confirmar Nova Senha:</label>
-                    <div class="input-wrapper">
-                        <input type="password" id="recuperar-confirma-senha" class="campo-texto" placeholder="Repita a nova senha" required>
-                        <button type="button" class="btn-toggle-senha" id="btn-toggle-confirma-nova-senha" aria-label="Mostrar ou ocultar senha">
-                            <svg class="icone-olho icone-aberto" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path>
-                                <circle cx="12" cy="12" r="3"></circle>
-                            </svg>
-                            <svg class="icone-olho icone-fechado icone-oculto" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
-                                <line x1="1" y1="1" x2="23" y2="23"></line>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                <button type="submit" class="btn-entrar btn-modal" id="btn-salvar-nova-senha">
-                    <span class="btn-texto">SALVAR NOVA SENHA</span>
-                    <span class="btn-spinner" aria-hidden="true"></span>
-                </button>
-                <div class="status-msg" id="status-modal-senha"></div>
-            </form>
-
-            <!-- ETAPA 4: SUCESSO -->
-            <div id="box-recuperar-sucesso" style="display: none; text-align: center; padding: 10px 0;">
-                <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(68,189,50,0.18); color: #44BD32; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 12px;">
-                    <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                </div>
-                <h3 style="color: #FFFFFF; font-size: 20px; font-weight: 800; margin-bottom: 8px;">Senha atualizada!</h3>
-                <p style="color: #CBD5E1; font-size: 14px; margin-bottom: 20px;">Sua senha foi redefinida com sucesso. Você já pode fazer login com as novas credenciais.</p>
-                <button type="button" class="btn-entrar btn-modal" id="btn-ir-para-login-pos-recuperacao">
-                    FAZER LOGIN
-                </button>
-            </div>
         </div>
     </div>
 
