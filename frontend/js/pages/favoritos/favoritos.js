@@ -2,18 +2,46 @@
  * Itaim Vende - Meus Favoritos (js/favoritos.js)
  */
 
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. Obter todos os produtos da base
+document.addEventListener('DOMContentLoaded', async () => {
+    // 1. Obter produtos da base (API com fallback local)
     let todosProdutos = [];
-    if (window.ItaimSessao && typeof window.ItaimSessao.obterTodosProdutos === 'function') {
-        todosProdutos = window.ItaimSessao.obterTodosProdutos();
-    } else if (typeof obterTodosProdutos === 'function') {
-        todosProdutos = obterTodosProdutos();
-    } else if (typeof PRODUTOS_INICIAIS !== 'undefined') {
-        todosProdutos = [...PRODUTOS_INICIAIS];
+
+    async function carregarCatalogoEFavoritos() {
+        if (window.ItaimApi) {
+            try {
+                const resProd = await window.ItaimApi.produtos.listar();
+                if (resProd && resProd.success && Array.isArray(resProd.data)) {
+                    todosProdutos = resProd.data;
+                }
+            } catch (e) {}
+
+            // Se logado, busca favoritos sincronizados na nuvem
+            if (window.ItaimApi.auth.obterToken()) {
+                try {
+                    const resFavs = await window.ItaimApi.favoritos.listar();
+                    if (resFavs && resFavs.success && Array.isArray(resFavs.data)) {
+                        const idsApi = resFavs.data.map(f => f.productId || f.product?.id || f.id).filter(Boolean);
+                        if (idsApi.length > 0) {
+                            favoritosIds = idsApi;
+                            localStorage.setItem('itaim_favoritos', JSON.stringify(favoritosIds));
+                        }
+                    }
+                } catch (e) {}
+            }
+        }
+
+        if (todosProdutos.length === 0) {
+            if (window.ItaimSessao && typeof window.ItaimSessao.obterTodosProdutos === 'function') {
+                todosProdutos = window.ItaimSessao.obterTodosProdutos();
+            } else if (typeof PRODUTOS_INICIAIS !== 'undefined') {
+                todosProdutos = [...PRODUTOS_INICIAIS];
+            }
+        }
+
+        renderizarFavoritos();
     }
 
-    // 2. Carregar IDs favoritados reais do localStorage
+    // 2. Carregar IDs favoritados do localStorage
     let favoritosIds = [];
     try {
         const salvos = JSON.parse(localStorage.getItem('itaim_favoritos') || '[]');
@@ -90,9 +118,16 @@ document.addEventListener('DOMContentLoaded', () => {
             card.className = 'card-produto';
             card.dataset.id = produto.id;
 
-            const foto = (produto.imagens && produto.imagens.length > 0)
+            const placeholderSrc = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
+                ? window.ItaimRotas.obterAsset('assets/produto-placeholder.svg')
+                : '../../assets/produto-placeholder.svg';
+
+            const rawFoto = (produto.imagens && produto.imagens.length > 0)
                 ? produto.imagens[0] 
-                : (produto.imagem || 'assets/produto-placeholder.svg');
+                : (produto.imagem || '');
+            const foto = (window.ItaimApi && typeof window.ItaimApi.resolverUrlImagem === 'function')
+                ? window.ItaimApi.resolverUrlImagem(rawFoto)
+                : (rawFoto || placeholderSrc);
 
             card.innerHTML = `
                 <div class="card-img-box">
@@ -100,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         src="${foto}" 
                         alt="${produto.titulo}" 
                         class="card-img"
-                        onerror="this.src='assets/produto-placeholder.svg'"
+                        onerror="this.onerror=null; this.src='${placeholderSrc}'"
                         loading="lazy"
                     >
                     <button type="button" class="btn-favorito ativo btn-remover-favorito-card" data-id="${produto.id}" title="Remover dos favoritos" aria-label="Remover dos favoritos">
@@ -136,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Eventos para remover dos favoritos ao clicar no coração
         grade.querySelectorAll('.btn-remover-favorito-card').forEach(btn => {
-            btn.addEventListener('click', (e) => {
+            btn.addEventListener('click', async (e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 const id = String(btn.dataset.id);
@@ -144,6 +179,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 try {
                     localStorage.setItem('itaim_favoritos', JSON.stringify(favoritosIds));
                 } catch(e) {}
+
+                if (window.ItaimApi && window.ItaimApi.auth.obterToken()) {
+                    try {
+                        await window.ItaimApi.favoritos.toggle(id);
+                    } catch(e) {}
+                }
+
                 renderizarFavoritos();
             });
         });
@@ -166,6 +208,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Header e Menu Lateral (Drawer) são gerenciados de forma centralizada e global por sessao.js
-    renderizarFavoritos();
+    // Carga inicial assíncrona
+    carregarCatalogoEFavoritos();
 });

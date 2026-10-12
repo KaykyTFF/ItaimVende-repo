@@ -36,3 +36,10 @@ desktop.ini
 *.njsproj
 *.sln
 *.sw?
+
+# Backups e arquivos temporários
+*.bak
+
+# Uploads de mídia do backend (mantém apenas o .gitkeep)
+backend/uploads/*
+!backend/uploads/.gitkeep

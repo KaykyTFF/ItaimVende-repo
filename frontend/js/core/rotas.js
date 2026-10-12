@@ -115,6 +115,12 @@
             if (!caminho || caminho.startsWith('data:') || caminho.startsWith('http://') || caminho.startsWith('https://')) {
                 return caminho;
             }
+            if (caminho.startsWith('/uploads/')) {
+                const backendHost = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+                    ? 'http://localhost:3000'
+                    : '';
+                return `${backendHost}${caminho}`;
+            }
             const limpo = caminho.replace(/^(\.\.\/)+/, '').replace(/^\.\//, '');
             return this.obterRaiz() + limpo;
         }

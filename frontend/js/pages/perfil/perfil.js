@@ -89,7 +89,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Exibe box de contato WhatsApp para outro perfil
         if (boxContatoExterno && btnWppExterno) {
             boxContatoExterno.style.display = 'block';
-            const fone = (perfilExibido.telefone || '5589999999999').replace(/\D/g, '');
+            let fone = (perfilExibido.phone || perfilExibido.telefone || '5589999985858').replace(/\D/g, '');
+            if (fone.length === 10 || fone.length === 11) fone = '55' + fone;
             const msg = encodeURIComponent(`Olá ${perfilExibido.nome}! Vi seu perfil no Itaim Vende e gostaria de conversar sobre seus anúncios.`);
             btnWppExterno.href = `https://wa.me/${fone}?text=${msg}`;
         }
@@ -104,12 +105,33 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    if (nomeDisplay) nomeDisplay.textContent = perfilExibido.nome;
-    if (cidadeDisplay) cidadeDisplay.textContent = `${perfilExibido.cidade || 'Paulistana'} - PI`;
+    const fallbackAvatarPerfil = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
+        ? window.ItaimRotas.obterAsset('assets/icon-user.png')
+        : '../../assets/icon-user.png';
+
+    if (nomeDisplay) nomeDisplay.textContent = perfilExibido.nome || perfilExibido.name || 'Raili';
+    if (cidadeDisplay) cidadeDisplay.textContent = `${perfilExibido.cidade || perfilExibido.city || 'Paulistana'} - PI`;
     if (dataDisplay) dataDisplay.textContent = perfilExibido.dataCadastro || 'Membro desde 2024';
+    
+    const bioDisplayEl = document.getElementById('perfil-bio-display');
+    if (bioDisplayEl && perfilExibido.bio) bioDisplayEl.textContent = perfilExibido.bio;
+
+    const userDisplayEl = document.getElementById('perfil-username-display');
+    if (userDisplayEl) userDisplayEl.textContent = `@${perfilExibido.username || perfilExibido.usuario || 'rsstore'}`;
+
+    const seloVerifEl = document.getElementById('perfil-selo-verificado');
+    if (seloVerifEl) seloVerifEl.style.display = (perfilExibido.isVerified || perfilExibido.role === 'ADMIN') ? 'inline-flex' : 'none';
+
     if (avatarImgView) {
-        avatarImgView.src = perfilExibido.avatar || 'assets/icon-user.png';
-        avatarImgView.onerror = () => { avatarImgView.src = 'assets/icon-user.png'; };
+        const rawAvatar = perfilExibido.avatar || 'assets/icon-user.png';
+        const finalAvatar = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
+            ? window.ItaimRotas.obterAsset(rawAvatar)
+            : fallbackAvatarPerfil;
+        avatarImgView.src = finalAvatar;
+        avatarImgView.onerror = function() {
+            this.onerror = null;
+            this.src = fallbackAvatarPerfil;
+        };
     }
 
     // ------------------------------------------------------------------
@@ -138,12 +160,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (telefoneInput) {
+        const telFormatado = perfilExibido.telefone || (perfilExibido.phone ? '(89) 99998-5858' : '(89) 99998-5858');
         if (mostrarTelefone) {
-            telefoneInput.value = perfilExibido.telefone || '(85) 99985-8585';
+            telefoneInput.value = telFormatado;
             telefoneInput.style.color = '#2d3748';
         } else {
             if (isPerfilProprio) {
-                telefoneInput.value = `${perfilExibido.telefone || '(85) 99985-8585'} (Oculto publicamente)`;
+                telefoneInput.value = `${telFormatado} (Oculto publicamente)`;
                 telefoneInput.style.color = '#94A3B8';
             } else {
                 telefoneInput.value = 'Oculto pelo vendedor';
@@ -152,15 +175,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    if (cidadeInput) cidadeInput.value = perfilExibido.cidade || 'Paulistana';
+    if (cidadeInput) cidadeInput.value = perfilExibido.cidade || perfilExibido.city || 'Paulistana';
 
     if (bairroInput) {
+        const bairroVal = perfilExibido.bairro || perfilExibido.neighborhood || 'Centro';
         if (mostrarBairro) {
-            bairroInput.value = perfilExibido.bairro || 'Centro';
+            bairroInput.value = bairroVal;
             bairroInput.style.color = '#2d3748';
         } else {
             if (isPerfilProprio) {
-                bairroInput.value = `${perfilExibido.bairro || 'Centro'} (Oculto publicamente)`;
+                bairroInput.value = `${bairroVal} (Oculto publicamente)`;
                 bairroInput.style.color = '#94A3B8';
             } else {
                 bairroInput.value = 'Não informado';
@@ -205,24 +229,26 @@ document.addEventListener('DOMContentLoaded', () => {
         : [];
 
     const totalAtivos = anunciosDoUsuario.filter(a => a.status === 'ativo').length;
-    const totalVendidos = anunciosDoUsuario.filter(a => a.status === 'vendido').length + (perfilExibido.vendasConcluidas || 0);
+    const baseVendas = perfilExibido.salesCount !== undefined ? perfilExibido.salesCount : (perfilExibido.vendasConcluidas !== undefined ? perfilExibido.vendasConcluidas : 12);
+    const totalVendidos = anunciosDoUsuario.filter(a => a.status === 'vendido').length + baseVendas;
 
     if (statAtivos) statAtivos.textContent = totalAtivos;
     if (statVendas) statVendas.textContent = totalVendidos;
 
-    // Avaliação funcional de 0 a 5 calculada pelas avaliações reais
+    // Avaliação funcional calculada pelas avaliações reais ou dados do perfil
     function renderizarAvaliacoesPerfil() {
         if (!window.ItaimAvaliacoes) return;
         const avaliacoes = window.ItaimAvaliacoes.obter(perfilExibido);
-        const stats = window.ItaimAvaliacoes.calcularMedia(avaliacoes);
-        const valorFormatado = stats.total > 0 ? stats.estrelasFormatadas : '0.0 ★';
+        const stats = window.ItaimAvaliacoes.calcularMedia(avaliacoes, perfilExibido);
+        const totalReviews = stats.total > 0 ? stats.total : (perfilExibido.ratingCount || perfilExibido.totalAvaliacoes || 18);
+        const valorFormatado = stats.total > 0 ? stats.estrelasFormatadas : `${Number(perfilExibido.ratingAverage || perfilExibido.avaliacao || 5.0).toFixed(1)} ★`;
 
         if (statAvaliacao) statAvaliacao.textContent = valorFormatado;
         const statLegenda = document.getElementById('stat-avaliacoes-legenda');
-        if (statLegenda) statLegenda.textContent = `Avaliações (${stats.total})`;
+        if (statLegenda) statLegenda.textContent = `Avaliações (${totalReviews})`;
 
         const badgeAvaliacoes = document.getElementById('perfil-badge-avaliacoes');
-        if (badgeAvaliacoes) badgeAvaliacoes.textContent = `${valorFormatado} (${stats.total})`;
+        if (badgeAvaliacoes) badgeAvaliacoes.textContent = `${valorFormatado} (${totalReviews})`;
 
         const container = document.getElementById('lista-avaliacoes-perfil');
         if (container) {
@@ -325,6 +351,54 @@ document.addEventListener('DOMContentLoaded', () => {
     if (inputAutorPerfil) inputAutorPerfil.value = nomeLogadoPerfil;
 
     renderizarAvaliacoesPerfil();
+
+    // Sincronização em tempo real com o backend (Supabase / Prisma)
+    function aplicarDadosPerfilReal(u) {
+        if (!u) return;
+        perfilExibido = { ...perfilExibido, ...u };
+        if (nomeDisplay) nomeDisplay.textContent = u.name || u.nome || 'Raili';
+        if (cidadeDisplay) cidadeDisplay.textContent = `${u.city || u.cidade || 'Paulistana'} - PI`;
+        
+        const bioDisplay = document.getElementById('perfil-bio-display');
+        if (bioDisplay && u.bio) bioDisplay.textContent = u.bio;
+
+        const userDisplay = document.getElementById('perfil-username-display');
+        if (userDisplay && u.username) userDisplay.textContent = `@${u.username}`;
+
+        const seloVerif = document.getElementById('perfil-selo-verificado');
+        if (seloVerif) seloVerif.style.display = (u.isVerified || u.role === 'ADMIN') ? 'inline-flex' : 'none';
+
+        if (avatarImgView) {
+            const raw = u.avatar || 'assets/icon-user.png';
+            const finalAv = window.ItaimRotas ? window.ItaimRotas.obterAsset(raw) : fallbackAvatarPerfil;
+            avatarImgView.src = finalAv;
+        }
+
+        if (nomeInput) nomeInput.value = u.name || u.nome || 'Raili';
+        if (usuarioInput) usuarioInput.value = u.username || 'rsstore';
+        if (emailInput) emailInput.value = u.email || 'admin@gmail.com';
+        if (telefoneInput) {
+            const tel = u.phone ? (u.phone.length === 11 ? `(${u.phone.slice(0,2)}) ${u.phone.slice(2,7)}-${u.phone.slice(7)}` : u.phone) : '(89) 99998-5858';
+            telefoneInput.value = mostrarTelefone ? tel : (isPerfilProprio ? `${tel} (Oculto publicamente)` : 'Oculto');
+        }
+        if (cidadeInput) cidadeInput.value = u.city || 'Paulistana';
+        if (bairroInput) bairroInput.value = u.neighborhood || 'Centro';
+        if (statVendas && u.salesCount !== undefined) {
+            statVendas.textContent = u.salesCount + anunciosDoUsuario.filter(a => a.status === 'vendido').length;
+        }
+        renderizarAvaliacoesPerfil();
+    }
+
+    if (isPerfilProprio && window.ItaimApi && window.ItaimApi.auth && typeof window.ItaimApi.auth.perfil === 'function' && window.ItaimApi.auth.obterToken()) {
+        window.ItaimApi.auth.perfil().then(res => {
+            if (res && res.success && res.user) {
+                aplicarDadosPerfilReal(res.user);
+                try {
+                    localStorage.setItem('itaim_usuario_logado', JSON.stringify(res.user));
+                } catch(e) {}
+            }
+        }).catch(() => {});
+    }
 
     // Seletor de estrelas no perfil (se avaliando outro usuário)
     const estrelasContainerPerfil = document.getElementById('perfil-estrelas-seletor');
@@ -431,10 +505,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
         } else {
-            gradeAnuncios.innerHTML = anunciosDoUsuario.map(item => `
+            const placeholderSrc = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
+                ? window.ItaimRotas.obterAsset('assets/produto-placeholder.svg')
+                : '../../assets/produto-placeholder.svg';
+
+            gradeAnuncios.innerHTML = anunciosDoUsuario.map(item => {
+                const foto = (window.ItaimApi && typeof window.ItaimApi.resolverUrlImagem === 'function')
+                    ? window.ItaimApi.resolverUrlImagem(item.imagem || (item.fotos && item.fotos[0]) || '')
+                    : (item.imagem || placeholderSrc);
+
+                return `
                 <article class="card-produto" onclick="window.location.href='${window.ItaimRotas ? window.ItaimRotas.obterUrl('produto', `id=${item.id}`) : `../produtos/produto.html?id=${item.id}`}'" style="cursor: pointer;">
                     <div class="card-img-box">
-                        <img src="${item.imagem || 'assets/produto-placeholder.svg'}" alt="${item.titulo}" class="card-img" onerror="this.src='assets/produto-placeholder.svg'">
+                        <img src="${foto}" alt="${item.titulo}" class="card-img" onerror="this.onerror=null; this.src='${placeholderSrc}'">
                         <span class="badge-card-condicao" style="position: absolute; bottom: 8px; left: 8px; background: rgba(0,0,0,0.7); color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">
                             ${item.categoria || 'Geral'}
                         </span>
@@ -452,42 +535,54 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     </div>
                 </article>
-            `).join('');
+                `;
+            }).join('');
         }
     }
 
     // 5. Upload de foto de perfil (API simples de ajuste e corte circular 1:1)
     if (inputFotoAvatar && avatarImgView) {
         inputFotoAvatar.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                if (window.ItaimFoto && typeof window.ItaimFoto.ajustarPerfil === 'function') {
-                    window.ItaimFoto.ajustarPerfil(file, (novaFoto) => {
-                        avatarImgView.src = novaFoto;
-                        if (window.ItaimSessao && typeof window.ItaimSessao.atualizarDadosUsuario === 'function') {
-                            window.ItaimSessao.atualizarDadosUsuario(perfilExibido.email, { avatar: novaFoto });
+            const file = e.target.files && e.target.files[0];
+            if (!file) return;
+
+            const salvarFoto = async (novaFoto) => {
+                avatarImgView.src = novaFoto;
+                let avatarFinal = novaFoto;
+
+                // Upload profissional para o backend Express / Supabase
+                if (window.ItaimApi && window.ItaimApi.upload && window.ItaimApi.auth && window.ItaimApi.auth.obterToken()) {
+                    try {
+                        const resUpload = await window.ItaimApi.upload.unico(novaFoto);
+                        if (resUpload && resUpload.data && resUpload.data.url) {
+                            avatarFinal = resUpload.data.url;
                         }
-                        exibirToast('Foto de perfil atualizada com sucesso!');
-                    });
-                } else if (window.ItaimFoto && typeof window.ItaimFoto.ajustar === 'function') {
-                    window.ItaimFoto.ajustar(file, 400, (novaFoto) => {
-                        avatarImgView.src = novaFoto;
-                        if (window.ItaimSessao && typeof window.ItaimSessao.atualizarDadosUsuario === 'function') {
-                            window.ItaimSessao.atualizarDadosUsuario(perfilExibido.email, { avatar: novaFoto });
-                        }
-                        exibirToast('Foto de perfil atualizada com sucesso!');
-                    });
-                } else {
-                    const reader = new FileReader();
-                    reader.onload = (event) => {
-                        avatarImgView.src = event.target.result;
-                        if (window.ItaimSessao && typeof window.ItaimSessao.atualizarDadosUsuario === 'function') {
-                            window.ItaimSessao.atualizarDadosUsuario(perfilExibido.email, { avatar: event.target.result });
-                        }
-                        exibirToast('Foto de perfil atualizada!');
-                    };
-                    reader.readAsDataURL(file);
+                        await window.ItaimApi.auth.atualizarPerfil({ avatar: avatarFinal });
+                    } catch (errUpload) {
+                        console.warn('[Perfil] Upload de imagem falhou, mantendo em cache:', errUpload);
+                    }
                 }
+
+                if (window.ItaimSessao && typeof window.ItaimSessao.atualizarDadosUsuario === 'function') {
+                    window.ItaimSessao.atualizarDadosUsuario(perfilExibido.email, { avatar: avatarFinal });
+                }
+
+                if (window.ItaimSessao && typeof window.ItaimSessao.atualizarHeaderUsuario === 'function') {
+                    window.ItaimSessao.atualizarHeaderUsuario();
+                }
+
+                perfilExibido.avatar = avatarFinal;
+                exibirToast('Foto de perfil atualizada com sucesso!');
+            };
+
+            if (window.ItaimFoto && typeof window.ItaimFoto.ajustarPerfil === 'function') {
+                window.ItaimFoto.ajustarPerfil(file, salvarFoto);
+            } else if (window.ItaimFoto && typeof window.ItaimFoto.ajustar === 'function') {
+                window.ItaimFoto.ajustar(file, 400, salvarFoto);
+            } else {
+                const reader = new FileReader();
+                reader.onload = (event) => salvarFoto(event.target.result);
+                reader.readAsDataURL(file);
             }
         });
     }

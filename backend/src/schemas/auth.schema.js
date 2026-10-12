@@ -4,11 +4,14 @@ export const registerSchema = z.object({
   name: z.string().min(2, 'O nome deve ter pelo menos 2 caracteres.'),
   username: z.string().min(3, 'O username deve ter pelo menos 3 caracteres.').optional(),
   email: z.string().email('E-mail informado é inválido.'),
-  password: z.string().min(6, 'A senha deve possuir pelo menos 6 caracteres.'),
+  password: z
+    .string()
+    .min(6, 'A senha deve possuir pelo menos 6 caracteres.')
+    .regex(/^(?=.*[A-Za-z])(?=.*\d)/, 'A senha deve conter pelo menos uma letra e um número para sua segurança.'),
   phone: z.string().optional(),
   city: z.string().optional(),
   neighborhood: z.string().optional(),
-  role: z.enum(['buyer', 'seller', 'admin']).optional(),
+  role: z.enum(['buyer', 'seller', 'admin', 'BUYER', 'SELLER', 'ADMIN']).optional(),
 });
 
 export const loginSchema = z.object({

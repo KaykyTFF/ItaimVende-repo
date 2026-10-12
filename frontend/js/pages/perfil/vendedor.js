@@ -109,14 +109,14 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         } else {
             vendedor = {
-                id: 1,
+                id: "cmv5iacmv0000ttiwu9wtemar",
                 nome: "Raili",
-                username: "admin",
+                username: "rsstore",
                 email: "admin@gmail.com",
-                telefone: "(89) 99999-9999",
+                telefone: "(89) 99998-5858",
                 cidade: "Paulistana",
                 avatar: "assets/icon-user.png",
-                bio: "Administrador e vendedor oficial da plataforma Itaim Vende na região de Paulistana e cidades vizinhas.",
+                bio: "Perfil oficial e verificado da administração do Itaim Vende.",
                 dataCadastro: "Membro desde 2024",
                 avaliacao: "5.0",
                 vendasConcluidas: 12
@@ -150,10 +150,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const elBreadcrumbNome = document.getElementById('vendedor-breadcrumb-nome');
     if (elBreadcrumbNome) elBreadcrumbNome.textContent = vendedor.nome;
 
+    const fallbackAvatar = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
+        ? window.ItaimRotas.obterAsset('assets/icon-user.png')
+        : '../../assets/icon-user.png';
+
     const elAvatar = document.getElementById('vendedor-avatar-img');
     if (elAvatar) {
-        elAvatar.src = vendedor.avatar || 'assets/icon-user.png';
-        elAvatar.onerror = () => { elAvatar.src = 'assets/icon-user.png'; };
+        const rawAvatar = vendedor.avatar || 'assets/icon-user.png';
+        const finalAvatar = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
+            ? window.ItaimRotas.obterAsset(rawAvatar)
+            : fallbackAvatar;
+        elAvatar.src = finalAvatar;
+        elAvatar.onerror = function() {
+            this.onerror = null;
+            this.src = fallbackAvatar;
+        };
     }
 
     const elNome = document.getElementById('vendedor-nome-display');
@@ -181,10 +192,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const elBadgeQtd = document.getElementById('vendedor-badge-qtd');
     if (elBadgeQtd) elBadgeQtd.textContent = `${anunciosVendedor.length} ${anunciosVendedor.length === 1 ? 'anúncio' : 'anúncios'}`;
 
-    // Botão WhatsApp com mensagem pré-configurada
     const btnWpp = document.getElementById('btn-vendedor-wpp');
     if (btnWpp) {
-        const foneLimpo = (vendedor.telefone || '5589999999999').replace(/\D/g, '');
+        let foneLimpo = (vendedor.phone || vendedor.telefone || '5589999985858').replace(/\D/g, '');
+        if (foneLimpo.length === 10 || foneLimpo.length === 11) foneLimpo = '55' + foneLimpo;
         const msg = encodeURIComponent(`Olá ${vendedor.nome}! Vi seu perfil de vendedor no portal Itaim Vende e gostaria de conversar sobre seus anúncios.`);
         btnWpp.href = `https://wa.me/${foneLimpo}?text=${msg}`;
     }
@@ -251,13 +262,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const card = document.createElement('a');
             card.href = (window.ItaimRotas ? window.ItaimRotas.obterUrl('produto', `id=${item.id}`) : `../produtos/produto.html?id=${item.id}`);
             card.className = 'card-produto-vendedor';
-            card.title = item.titulo;
-
-            const fotoImg = item.imagem || (item.fotos && item.fotos[0]) || 'assets/produto-placeholder.svg';
+            const placeholderSrc = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
+                ? window.ItaimRotas.obterAsset('assets/produto-placeholder.svg')
+                : '../../assets/produto-placeholder.svg';
+            const fotoImg = (window.ItaimApi && typeof window.ItaimApi.resolverUrlImagem === 'function')
+                ? window.ItaimApi.resolverUrlImagem(item.imagem || (item.fotos && item.fotos[0]) || '')
+                : (item.imagem || (item.fotos && item.fotos[0]) || placeholderSrc);
 
             card.innerHTML = `
                 <div class="card-prod-foto-box">
-                    <img src="${fotoImg}" alt="${item.titulo}" onerror="this.src='assets/produto-placeholder.svg'" loading="lazy">
+                    <img src="${fotoImg}" alt="${item.titulo}" onerror="this.onerror=null; this.src='${placeholderSrc}'" loading="lazy">
                     <span class="card-prod-badge-cat">${item.categoria || 'Geral'}</span>
                 </div>
                 <div class="card-prod-conteudo">
@@ -308,10 +322,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!window.ItaimAvaliacoes) return;
 
         const lista = window.ItaimAvaliacoes.obter(vendedor);
-        const stats = window.ItaimAvaliacoes.calcularMedia(lista);
+        const stats = window.ItaimAvaliacoes.calcularMedia(lista, vendedor);
 
-        // Atualiza métricas (0 a 5 com base nas avaliações reais)
-        const mediaTexto = stats.total > 0 ? stats.estrelasFormatadas : '0.0 ★';
+        // Atualiza métricas (0 a 5 com base nas avaliações reais e reputação oficial)
+        const mediaTexto = stats.estrelasFormatadas;
         if (elReputacaoMedia) elReputacaoMedia.textContent = mediaTexto;
         if (elReputacaoLegenda) elReputacaoLegenda.textContent = `Avaliações (${stats.total})`;
         if (elBadgeAvaliacoes) elBadgeAvaliacoes.textContent = `${mediaTexto} (${stats.total})`;

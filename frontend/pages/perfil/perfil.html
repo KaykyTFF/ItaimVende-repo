@@ -295,7 +295,7 @@
             <div class="perfil-banner-content">
                 <!-- Foto de Perfil (Esquerda) com borda circular verde clara e ícone de câmera -->
                 <div class="perfil-avatar-wrapper">
-                    <img src="../../assets/icon-user.png" alt="Foto de perfil de Raili" class="perfil-avatar-img" id="perfil-avatar-view" onerror="this.src="../../assets/icon-user.png'">
+                    <img src="../../assets/icon-user.png" alt="Foto de perfil de Raili" class="perfil-avatar-img" id="perfil-avatar-view" onerror="this.onerror=null; this.src='../../assets/icon-user.png';">
                     <label for="input-foto-avatar" class="btn-avatar-camera" title="Alterar foto de perfil" aria-label="Alterar foto de perfil">
                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
@@ -307,7 +307,15 @@
 
                 <!-- Informações do Usuário (Centro-Esquerda) -->
                 <div class="perfil-banner-info">
-                    <h1 class="perfil-nome-titulo" id="perfil-nome-display">Raili</h1>
+                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                        <h1 class="perfil-nome-titulo" id="perfil-nome-display" style="margin: 0;">Raili</h1>
+                        <span id="perfil-selo-verificado" style="display: inline-flex; align-items: center; gap: 4px; background: #DCFCE7; color: #166534; font-size: 12px; font-weight: 700; padding: 2px 9px; border-radius: 20px;" title="Perfil Oficial Verificado">
+                            <svg viewBox="0 0 24 24" width="13" height="13" fill="#166534"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                            Verificado
+                        </span>
+                    </div>
+                    <span id="perfil-username-display" style="font-size: 13.5px; font-weight: 600; color: #64748B;">@rsstore</span>
+                    <p id="perfil-bio-display" style="font-size: 13.5px; color: #475569; margin: 2px 0 6px; line-height: 1.4;">Perfil oficial e verificado da administração do Itaim Vende.</p>
 
                     <div class="perfil-banner-detalhes">
                         <div class="perfil-detalhe-item">
@@ -324,7 +332,7 @@
                                 <line x1="8" y1="2" x2="8" y2="6"></line>
                                 <line x1="3" y1="10" x2="21" y2="10"></line>
                             </svg>
-                            <span id="perfil-data-display">Membro desde Março de 2025</span>
+                            <span id="perfil-data-display">Membro desde 2024</span>
                         </div>
                     </div>
                 </div>
@@ -375,8 +383,8 @@
                     </svg>
                 </div>
                 <div class="stat-info-texto">
-                    <div class="stat-numero-destaque" id="stat-avaliacoes-texto">0.0 ★</div>
-                    <div class="stat-legenda" id="stat-avaliacoes-legenda">Avaliações (0)</div>
+                    <div class="stat-numero-destaque" id="stat-avaliacoes-texto">5.0 ★</div>
+                    <div class="stat-legenda" id="stat-avaliacoes-legenda">Avaliações (18)</div>
                 </div>
             </div>
 
@@ -390,7 +398,7 @@
                     </svg>
                 </div>
                 <div class="stat-info-texto">
-                    <div class="stat-numero-destaque" id="stat-vendas-concluidas">0</div>
+                    <div class="stat-numero-destaque" id="stat-vendas-concluidas">12</div>
                     <div class="stat-legenda">Vendas Concluídas</div>
                 </div>
             </div>
@@ -431,7 +439,7 @@
                         <p>Feedback e notas deixadas por outros usuários sobre as negociações.</p>
                     </div>
                 </div>
-                <span id="perfil-badge-avaliacoes" style="font-size: 13px; font-weight: 700; background: #DCFCE7; color: #166534; padding: 4px 14px; border-radius: 20px;">0.0 ★ (0)</span>
+                <span id="perfil-badge-avaliacoes" style="font-size: 13px; font-weight: 700; background: #DCFCE7; color: #166534; padding: 4px 14px; border-radius: 20px;">5.0 ★ (18)</span>
             </div>
 
             <!-- Formulário para outros usuários avaliarem se estiverem vendo o perfil público de outro vendedor -->
@@ -547,7 +555,7 @@
                         </svg>
                         <span>WhatsApp / Celular</span>
                     </label>
-                    <input type="tel" id="perfil-telefone" class="campo-input-perfil" value="(85) 99985-8585" readonly style="background-color: #F8FAFC; cursor: default;">
+                    <input type="tel" id="perfil-telefone" class="campo-input-perfil" value="(89) 99998-5858" readonly style="background-color: #F8FAFC; cursor: default;">
                 </div>
 
                 <!-- 5. Cidade -->
@@ -632,6 +640,7 @@
     <!-- Scripts -->
     <script src="../../js/core/produtos-dados.js"></script>
     <script src="../../js/core/rotas.js"></script>
+    <script src="../../js/core/api.js"></script>
     <script src="../../js/core/sessao.js"></script>
     <script src="../../js/core/ajustar-foto.js"></script>
     <script src="../../js/pages/perfil/perfil.js"></script>

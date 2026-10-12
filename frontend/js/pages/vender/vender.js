@@ -291,7 +291,57 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let ultimoAnuncioCriadoId = null;
 
-    btnAnunciar?.addEventListener('click', () => {
+    // Mapeamento auxiliar de categorias do formulário para IDs do banco de dados
+    const CATEGORIA_MAPA = {
+        'veiculos': 1,
+        'carros e motos': 1,
+        'imoveis': 2,
+        'imoveis & terrenos': 2,
+        'eletronicos': 3,
+        'celulares e smartphones': 3,
+        'eletronicos e audio': 3,
+        'computadores e informatica': 3,
+        'informatica & pc': 3,
+        'moda': 4,
+        'moda e acessorios': 4,
+        'moda e calcados': 4,
+        'moveis': 5,
+        'moveis e decoracao': 5,
+        'moveis & casa': 5,
+        'agro': 6,
+        'esportes': 7,
+        'esportes & lazer': 7,
+        'infantil': 8,
+        'infantil & brinquedos': 8,
+        'games e brinquedos': 8,
+        'servicos': 9,
+        'servicos e trabalhos': 9,
+        'servicos e negocios': 9,
+        'outros': 10,
+        'outros produtos': 10,
+        'geral': 10
+    };
+
+    function obterCategoriaId(nome) {
+        if (!nome) return 10;
+        const limpo = nome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+        for (const [chave, id] of Object.entries(CATEGORIA_MAPA)) {
+            if (limpo.includes(chave) || chave.includes(limpo)) {
+                return id;
+            }
+        }
+        return 10;
+    }
+
+    function normalizarCondicao(texto) {
+        const t = (texto || '').toUpperCase();
+        if (t.includes('NOVO')) return 'NOVO';
+        if (t.includes('EXCELENTE') || t.includes('SEMINOVO')) return 'SEMINOVO';
+        if (t.includes('PEÇAS') || t.includes('PECAS') || t.includes('DEFEITO')) return 'DEFEITO';
+        return 'USADO';
+    }
+
+    btnAnunciar?.addEventListener('click', async () => {
         // Validação simples dos campos
         const titulo = inputTitulo?.value.trim();
         const precoRaw = inputPreco?.value.replace(/\D/g, '') || '0';
@@ -310,12 +360,17 @@ document.addEventListener('DOMContentLoaded', () => {
             condicao = 'Usado';
         }
 
-        if (!titulo) {
-            exibirFeedback('Por favor, informe o título do seu anúncio.');
+        if (!titulo || titulo.length < 3) {
+            exibirFeedback('O título do anúncio deve ter no mínimo 3 caracteres.');
             inputTitulo?.focus();
             inputTitulo?.scrollIntoView({ behavior: 'smooth', block: 'center' });
             return;
         }
+
+        // Descrição mínima de segurança para o Zod / Banco
+        const descricaoFinal = (descricao && descricao.length >= 5) 
+            ? descricao 
+            : `${titulo} anunciado para venda no Itaim Vende.`;
 
         // Coleta fotos carregadas nos slots
         const fotosColetadas = [];
@@ -326,44 +381,90 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Simula publicação com loading state moderno
+        // Estado de carregamento na interface
         btnAnunciar.classList.add('carregando');
         const spanTexto = btnAnunciar.querySelector('.texto-btn-anunciar');
         if (spanTexto) spanTexto.textContent = 'PUBLICANDO...';
 
-        setTimeout(() => {
+        let cidadeAnuncio = 'Paulistana';
+        let cepAnuncio = '64750-000';
+        if (textoLocalizacao && textoLocalizacao.textContent) {
+            const partes = textoLocalizacao.textContent.split('-');
+            if (partes[0]) cidadeAnuncio = partes[0].trim();
+            if (partes[1]) cepAnuncio = partes[1].trim();
+        }
+
+        let fotosUrlsBackend = [];
+
+        // 1. Tenta upload de fotos reais no Backend se houver conexão e token
+        if (window.ItaimApi && fotosColetadas.length > 0 && window.ItaimApi.auth.obterToken()) {
+            try {
+                if (spanTexto) spanTexto.textContent = 'ENVIANDO FOTOS...';
+                const uploadRes = await window.ItaimApi.upload.multiplo(fotosColetadas);
+                if (uploadRes && Array.isArray(uploadRes.urls) && uploadRes.urls.length > 0) {
+                    fotosUrlsBackend = uploadRes.urls;
+                }
+            } catch (upErr) {
+                console.warn('[Vender] Falha no upload multipart para o backend, mantendo fotos locais:', upErr.message);
+            }
+        }
+
+        let idCriado = null;
+
+        // 2. Publica o anúncio na API central do Backend se autenticado
+        if (window.ItaimApi && window.ItaimApi.auth.obterToken()) {
+            try {
+                if (spanTexto) spanTexto.textContent = 'SALVANDO NO BANCO...';
+                const dadosPayload = {
+                    title: titulo,
+                    description: descricaoFinal,
+                    price: isNaN(preco) ? 0 : preco,
+                    categoryId: obterCategoriaId(categoria),
+                    condition: normalizarCondicao(condicao),
+                    city: cidadeAnuncio,
+                    neighborhood: cepAnuncio,
+                    images: fotosUrlsBackend.length > 0 ? fotosUrlsBackend : ['assets/images/produtos/anuncio_11.jpg']
+                };
+
+                const resProduto = await window.ItaimApi.produtos.criar(dadosPayload);
+                if (resProduto && resProduto.data && resProduto.data.id) {
+                    idCriado = resProduto.data.id;
+                }
+            } catch (apiErr) {
+                console.warn('[Vender] Falha ao salvar produto na API do backend:', apiErr.message);
+            }
+        }
+
+        // 3. Sincroniza também localmente como cache offline e fallback garantido
+        try {
+            if (window.ItaimSessao && typeof window.ItaimSessao.adicionarNovoAnuncio === 'function') {
+                const novoAnuncio = window.ItaimSessao.adicionarNovoAnuncio({
+                    id: idCriado || undefined,
+                    titulo: titulo,
+                    preco: preco,
+                    categoria: categoria,
+                    condicao: condicao,
+                    descricao: descricaoFinal,
+                    cidade: cidadeAnuncio,
+                    bairro: cepAnuncio,
+                    imagens: fotosUrlsBackend.length > 0 
+                        ? fotosUrlsBackend 
+                        : (fotosColetadas.length > 0 ? fotosColetadas : ['assets/produtos/anuncio_11.jpg'])
+                });
+                ultimoAnuncioCriadoId = idCriado || novoAnuncio.id;
+            } else {
+                ultimoAnuncioCriadoId = idCriado || Date.now();
+            }
+
             btnAnunciar.classList.remove('carregando');
             if (spanTexto) spanTexto.textContent = 'ANUNCIAR';
-
-            let cidadeAnuncio = 'Paulistana';
-            let cepAnuncio = '64750-000';
-            if (textoLocalizacao && textoLocalizacao.textContent) {
-                const partes = textoLocalizacao.textContent.split('-');
-                if (partes[0]) cidadeAnuncio = partes[0].trim();
-                if (partes[1]) cepAnuncio = partes[1].trim();
-            }
-
-            try {
-                if (window.ItaimSessao && typeof window.ItaimSessao.adicionarNovoAnuncio === 'function') {
-                    const novoAnuncio = window.ItaimSessao.adicionarNovoAnuncio({
-                        titulo: titulo,
-                        preco: preco,
-                        categoria: categoria,
-                        condicao: condicao,
-                        descricao: descricao,
-                        cidade: cidadeAnuncio,
-                        bairro: cepAnuncio,
-                        imagens: fotosColetadas.length > 0 ? fotosColetadas : ['assets/produtos/anuncio_11.jpg']
-                    });
-                    ultimoAnuncioCriadoId = novoAnuncio.id;
-                }
-
-                alternarParaSucesso();
-            } catch (err) {
-                console.error('Erro ao anunciar:', err);
-                exibirFeedback('Ocorreu um erro ao salvar o anúncio. Tente novamente.');
-            }
-        }, 600);
+            alternarParaSucesso();
+        } catch (err) {
+            console.error('Erro ao anunciar:', err);
+            btnAnunciar.classList.remove('carregando');
+            if (spanTexto) spanTexto.textContent = 'ANUNCIAR';
+            exibirFeedback('Ocorreu um erro ao salvar o anúncio. Tente novamente.');
+        }
     });
 
     function exibirFeedback(mensagem) {

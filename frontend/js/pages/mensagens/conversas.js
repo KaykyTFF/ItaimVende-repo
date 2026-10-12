@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. Obter usuário logado atual
     const userLogado = (window.ItaimSessao && typeof window.ItaimSessao.obterUsuarioLogado === 'function')
         ? window.ItaimSessao.obterUsuarioLogado()
-        : { id: 1, nome: 'Raili', email: 'admin@gmail.com', avatar: 'assets/icon-user.png' };
+        : { id: 'cmv5iacmv0000ttiwu9wtemar', nome: 'Raili', username: 'rsstore', email: 'admin@gmail.com', avatar: (window.ItaimRotas ? window.ItaimRotas.obterAsset('assets/icon-user.png') : '../../assets/icon-user.png') };
 
     const emailLogado = (userLogado.email || 'admin@gmail.com').toLowerCase().trim();
 
@@ -167,12 +167,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }).length;
 
             const card = document.createElement('div');
-            card.className = `chat-card-item ${c.id === conversaAtivaId ? 'ativo' : ''}`;
-            card.dataset.id = c.id;
+            const avatarFallback = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
+                ? window.ItaimRotas.obterAsset('assets/icon-user.png')
+                : '../../assets/icon-user.png';
+            const avatarSrc = outro.avatar || avatarFallback;
 
             card.innerHTML = `
                 <div class="chat-avatar-wrap">
-                    <img src="${outro.avatar}" alt="${outro.nome}" class="chat-card-avatar" onerror="this.src='assets/icon-user.png'">
+                    <img src="${avatarSrc}" alt="${outro.nome}" class="chat-card-avatar" onerror="this.onerror=null; this.src='${avatarFallback}'">
                 </div>
                 <div class="chat-card-detalhes">
                     <div class="chat-card-linha-topo">
@@ -299,8 +301,14 @@ document.addEventListener('DOMContentLoaded', () => {
         // Atualiza cabeçalho central com o papel real (SEM bolinha de online)
         if (headerNome) headerNome.textContent = outro.nome;
         if (headerAvatar) {
-            headerAvatar.src = outro.avatar;
-            headerAvatar.onerror = () => { headerAvatar.src = 'assets/icon-user.png'; };
+            const avatarPadraoChat = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
+                ? window.ItaimRotas.obterAsset('assets/icon-user.png')
+                : '../../assets/icon-user.png';
+            headerAvatar.src = (window.ItaimRotas && outro.avatar) ? window.ItaimRotas.obterAsset(outro.avatar) : (outro.avatar || avatarPadraoChat);
+            headerAvatar.onerror = function() {
+                this.onerror = null;
+                this.src = avatarPadraoChat;
+            };
         }
         if (headerStatusTxt) {
             headerStatusTxt.textContent = outro.papel || 'Vendedor(a)';

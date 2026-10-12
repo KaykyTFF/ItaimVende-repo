@@ -130,13 +130,132 @@ document.addEventListener('DOMContentLoaded', () => {
         const nome = $('dropdown-user-name'), email = $('dropdown-user-email');
         if (nome && dados.nome) nome.textContent = dados.nome;
         if (email && dados.email) email.textContent = dados.email;
+
+        const avatarPreview = $('cfg-avatar-preview');
+        if (avatarPreview) {
+            const rawAv = dados.avatar || 'assets/icon-user.png';
+            const finalAv = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
+                ? window.ItaimRotas.obterAsset(rawAv)
+                : rawAv;
+            avatarPreview.src = finalAv;
+        }
     }
     atualizarCabecalhoUsuario();
+
+    // ------------------------------------------------------------------
+    // Upload e Gestão de Foto de Perfil nas Configurações
+    // ------------------------------------------------------------------
+    const inputFotoCfg = $('cfg-input-foto');
+    const btnRemoverFotoCfg = $('cfg-btn-remover-foto');
+    const avatarPreviewCfg = $('cfg-avatar-preview');
+
+    if (inputFotoCfg && avatarPreviewCfg) {
+        inputFotoCfg.addEventListener('change', (e) => {
+            const file = e.target.files && e.target.files[0];
+            if (!file) return;
+
+            const salvarFoto = async (novaFoto) => {
+                avatarPreviewCfg.src = novaFoto;
+                let avatarFinal = novaFoto;
+
+                if (window.ItaimApi && window.ItaimApi.upload && window.ItaimApi.auth && window.ItaimApi.auth.obterToken()) {
+                    try {
+                        const resUpload = await window.ItaimApi.upload.unico(novaFoto);
+                        if (resUpload && resUpload.data && resUpload.data.url) {
+                            avatarFinal = resUpload.data.url;
+                        }
+                        await window.ItaimApi.auth.atualizarPerfil({ avatar: avatarFinal });
+                    } catch (err) {
+                        console.warn('[Configurações] Upload de imagem falhou, mantendo em cache:', err);
+                    }
+                }
+
+                if (window.ItaimSessao && typeof window.ItaimSessao.atualizarDadosUsuario === 'function') {
+                    window.ItaimSessao.atualizarDadosUsuario(emailOriginal, { avatar: avatarFinal });
+                }
+
+                const perfilAtual = ler(CHAVE_PERFIL, {});
+                perfilAtual.avatar = avatarFinal;
+                gravar(CHAVE_PERFIL, perfilAtual);
+
+                atualizarCabecalhoUsuario();
+                toast('Foto de perfil atualizada com sucesso!');
+            };
+
+            if (window.ItaimFoto && typeof window.ItaimFoto.ajustarPerfil === 'function') {
+                window.ItaimFoto.ajustarPerfil(file, salvarFoto);
+            } else if (window.ItaimFoto && typeof window.ItaimFoto.ajustar === 'function') {
+                window.ItaimFoto.ajustar(file, 400, salvarFoto);
+            } else {
+                const reader = new FileReader();
+                reader.onload = (evt) => salvarFoto(evt.target.result);
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    if (btnRemoverFotoCfg) {
+        btnRemoverFotoCfg.addEventListener('click', async () => {
+            const avatarPadrao = 'assets/icon-user.png';
+            if (avatarPreviewCfg) {
+                avatarPreviewCfg.src = window.ItaimRotas ? window.ItaimRotas.obterAsset(avatarPadrao) : '../../assets/icon-user.png';
+            }
+
+            if (window.ItaimApi && window.ItaimApi.auth && typeof window.ItaimApi.auth.atualizarPerfil === 'function' && window.ItaimApi.auth.obterToken()) {
+                await window.ItaimApi.auth.atualizarPerfil({ avatar: avatarPadrao }).catch(() => {});
+            }
+
+            if (window.ItaimSessao && typeof window.ItaimSessao.atualizarDadosUsuario === 'function') {
+                window.ItaimSessao.atualizarDadosUsuario(emailOriginal, { avatar: avatarPadrao });
+            }
+
+            const perfilAtual = ler(CHAVE_PERFIL, {});
+            perfilAtual.avatar = avatarPadrao;
+            gravar(CHAVE_PERFIL, perfilAtual);
+
+            atualizarCabecalhoUsuario();
+            toast('Foto de perfil removida.');
+        });
+    }
 
     $('cfg-telefone').addEventListener('input', (e) => { e.target.value = maskTelefone(e.target.value); });
     $('cfg-usuario').addEventListener('input', (e) => {
         e.target.value = e.target.value.replace(/\s+/g, '').toLowerCase();
     });
+
+    function sincronizarCamposConta(dados) {
+        if (!dados) return;
+        if (dados.name || dados.nome) $('cfg-nome').value = dados.name || dados.nome;
+        if (dados.username || dados.usuario) $('cfg-usuario').value = dados.username || dados.usuario;
+        if (dados.email) $('cfg-email').value = dados.email;
+        if (dados.phone || dados.telefone) $('cfg-telefone').value = maskTelefone(dados.phone || dados.telefone);
+        if (dados.neighborhood || dados.bairro) $('cfg-bairro').value = dados.neighborhood || dados.bairro;
+        if (dados.avatar && avatarPreviewCfg) {
+            avatarPreviewCfg.src = window.ItaimRotas ? window.ItaimRotas.obterAsset(dados.avatar) : dados.avatar;
+        }
+        const cid = dados.city || dados.cidade;
+        if (cid) {
+            const selectCidade = $('cfg-cidade');
+            if (selectCidade) {
+                const existe = Array.from(selectCidade.options).some(o => o.value.toLowerCase() === cid.toLowerCase());
+                if (!existe) {
+                    const opt = document.createElement('option');
+                    opt.value = cid;
+                    opt.textContent = cid;
+                    selectCidade.appendChild(opt);
+                }
+                selectCidade.value = cid;
+            }
+        }
+    }
+
+    if (window.ItaimApi && window.ItaimApi.auth && typeof window.ItaimApi.auth.perfil === 'function' && window.ItaimApi.auth.obterToken()) {
+        window.ItaimApi.auth.perfil().then(res => {
+            if (res && res.success && res.user) {
+                sincronizarCamposConta(res.user);
+            }
+        }).catch(() => {});
+    }
 
     $('form-conta').addEventListener('submit', (e) => {
         e.preventDefault();
@@ -156,19 +275,37 @@ document.addEventListener('DOMContentLoaded', () => {
             telefone && dig !== 10 && dig !== 11 ? 'Informe o DDD e o número completo.' : '');
         if (!(okNome && okUser && okEmail && okTel)) { toast('Corrija os campos destacados.', true); return; }
 
+        const perfilAntigo = ler(CHAVE_PERFIL, {});
+        const avatarAtual = perfilAntigo.avatar || usuarioAtivo.avatar || 'assets/icon-user.png';
+
         const atualizado = {
-            ...ler(CHAVE_PERFIL, {}),
+            ...perfilAntigo,
             nome,
+            name: nome,
             username: usuario,
             usuario: usuario,
             email,
             telefone,
             bairro,
-            cidade
+            neighborhood: bairro,
+            cidade,
+            city: cidade,
+            avatar: avatarAtual
         };
 
         if (window.ItaimSessao && typeof window.ItaimSessao.atualizarDadosUsuario === 'function') {
             window.ItaimSessao.atualizarDadosUsuario(emailOriginal, atualizado);
+        }
+
+        if (window.ItaimApi && window.ItaimApi.auth && typeof window.ItaimApi.auth.atualizarPerfil === 'function' && window.ItaimApi.auth.obterToken()) {
+            window.ItaimApi.auth.atualizarPerfil({
+                name: nome,
+                username: usuario,
+                phone: telefone.replace(/\D/g, ''),
+                city: cidade,
+                neighborhood: bairro,
+                avatar: avatarAtual
+            }).catch(() => {});
         }
 
         if (!gravar(CHAVE_PERFIL, atualizado)) { toast('Não foi possível salvar neste navegador.', true); return; }

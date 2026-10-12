@@ -3,82 +3,366 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id           Int       @id @default(autoincrement())
-  name         String
-  username     String?   @unique
-  email        String    @unique
-  password     String
-  phone        String?
-  city         String?   @default("Paulistana")
-  neighborhood String?   @default("Centro")
-  avatar       String?   @default("assets/images/icon-user.png")
-  bio          String?
-  role         String    @default("buyer") // "admin", "seller", "buyer"
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+// =============================================================================
+// 1. MÓDULO DE IDENTIDADE, PERFIS & SEGURANÇA (IAM)
+// =============================================================================
 
-  products     Product[]
-  orders       Order[]
+enum UserRole {
+  BUYER
+  SELLER
+  MODERATOR
+  ADMIN
 }
 
-model Category {
-  id        Int       @id @default(autoincrement())
-  name      String    @unique
-  slug      String    @unique
-  icon      String?
-  createdAt DateTime  @default(now())
+enum AccountStatus {
+  ACTIVE
+  SUSPENDED
+  BANNED
+  PENDING_VERIFICATION
+}
 
-  products  Product[]
+model User {
+  id              String        @id @default(cuid())
+  email           String        @unique
+  password        String
+  name            String
+  username        String?       @unique
+  phone           String?
+  avatar          String?       @default("assets/images/icon-user.png")
+  bio             String?
+  role            UserRole      @default(BUYER)
+  status          AccountStatus @default(ACTIVE)
+
+  // Localização padrão do usuário em Paulistana e região
+  city            String        @default("Paulistana")
+  state           String        @default("PI")
+  neighborhood    String?       @default("Centro")
+  postalCode      String?
+
+  // Métricas e Reputação
+  isVerified      Boolean       @default(false)
+  ratingAverage   Decimal       @default(5.00) @db.Decimal(3, 2)
+  ratingCount     Int           @default(0)
+  salesCount      Int           @default(0)
+
+  // Segurança & Auditoria
+  lastLoginAt     DateTime?
+  emailVerifiedAt DateTime?
+  phoneVerifiedAt DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  deletedAt       DateTime?
+
+  // Relações
+  products        Product[]
+  orders          Order[]
+  favorites       Favorite[]
+  reviewsGiven    Review[]      @relation("ReviewsGiven")
+  reviewsReceived Review[]      @relation("ReviewsReceived")
+  sentMessages    Message[]     @relation("SentMessages")
+  conversationsAsBuyer  Conversation[] @relation("BuyerConversations")
+  conversationsAsSeller Conversation[] @relation("SellerConversations")
+  auditLogs       AuditLog[]
+
+  @@index([email])
+  @@index([city, state])
+  @@index([status])
+}
+
+// =============================================================================
+// 2. MÓDULO DE CATÁLOGO, ANÚNCIOS & MÍDIA
+// =============================================================================
+
+model Category {
+  id          Int        @id @default(autoincrement())
+  name        String     @unique
+  slug        String     @unique
+  icon        String?
+  orderIndex  Int        @default(0)
+  isActive    Boolean    @default(true)
+
+  // Subcategorias hierárquicas
+  parentId    Int?
+  parent      Category?  @relation("SubCategories", fields: [parentId], references: [id])
+  children    Category[] @relation("SubCategories")
+
+  products    Product[]
+  createdAt   DateTime   @default(now())
+
+  @@index([slug])
+  @@index([parentId])
+}
+
+enum ProductCondition {
+  NOVO
+  SEMINOVO
+  USADO
+  DEFEITO
+}
+
+enum ListingType {
+  VENDA
+  TROCA
+  DOACAO
+  SERVICO
+}
+
+enum ProductStatus {
+  RASCUNHO
+  PENDENTE
+  ATIVO
+  PAUSADO
+  VENDIDO
+  REJEITADO
+  EXPIRADO
+  ARQUIVADO
 }
 
 model Product {
-  id            Int         @id @default(autoincrement())
-  title         String
-  description   String
-  price         Float
-  originalPrice Float?
-  discount      Int?        @default(0)
-  condition     String      @default("NOVO") // "NOVO", "USADO"
-  status        String      @default("ATIVO") // "ATIVO", "VENDIDO", "PAUSADO"
-  isFeatured    Boolean     @default(false)
-  images        String      // JSON string array de imagens: '["url1", "url2"]'
-  
-  categoryId    Int
-  category      Category    @relation(fields: [categoryId], references: [id])
-  
-  sellerId      Int
-  seller        User        @relation(fields: [sellerId], references: [id], onDelete: Cascade)
-  
-  orderItems    OrderItem[]
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  id              String           @id @default(cuid())
+  slug            String           @unique
+  title           String
+  description     String           @db.Text
+  price           Decimal          @db.Decimal(10, 2)
+  originalPrice   Decimal?         @db.Decimal(10, 2)
+  condition       ProductCondition @default(USADO)
+  listingType     ListingType      @default(VENDA)
+  status          ProductStatus    @default(ATIVO)
+  isFeatured      Boolean          @default(false)
+  acceptsTrade    Boolean          @default(false)
+
+  // Localização específica do anúncio
+  city            String           @default("Paulistana")
+  state           String           @default("PI")
+  neighborhood    String?          @default("Centro")
+  postalCode      String?
+
+  // Métricas de Engajamento
+  viewsCount      Int              @default(0)
+  contactsCount   Int              @default(0) // Cliques no WhatsApp
+  favoritesCount  Int              @default(0)
+
+  // Relações Obrigatórias
+  sellerId        String
+  seller          User             @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  categoryId      Int
+  category        Category         @relation(fields: [categoryId], references: [id])
+
+  images          ProductImage[]
+  orderItems      OrderItem[]
+  conversations   Conversation[]
+  favorites       Favorite[]
+  reports         Report[]
+
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  deletedAt       DateTime?
+
+  @@index([status, city, categoryId, createdAt(sort: Desc)])
+  @@index([sellerId])
+  @@index([slug])
+  @@index([price])
+}
+
+model ProductImage {
+  id           String   @id @default(cuid())
+  productId    String
+  product      Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url          String
+  thumbnailUrl String?
+  orderIndex   Int      @default(0)
+  isCover      Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  @@index([productId, orderIndex])
+}
+
+// =============================================================================
+// 3. MÓDULO DE COMUNICAÇÃO (CHAT & NEGOCIAÇÃO)
+// =============================================================================
+
+enum ConversationStatus {
+  ACTIVE
+  ARCHIVED
+  BLOCKED
+}
+
+model Conversation {
+  id            String             @id @default(cuid())
+  productId     String
+  product       Product            @relation(fields: [productId], references: [id])
+  buyerId       String
+  buyer         User               @relation("BuyerConversations", fields: [buyerId], references: [id])
+  sellerId      String
+  seller        User               @relation("SellerConversations", fields: [sellerId], references: [id])
+  status        ConversationStatus @default(ACTIVE)
+
+  messages      Message[]
+  lastMessageAt DateTime           @default(now())
+  createdAt     DateTime           @default(now())
+
+  @@unique([productId, buyerId, sellerId])
+  @@index([buyerId])
+  @@index([sellerId])
+}
+
+enum MessageType {
+  TEXT
+  IMAGE
+  OFFER_PROPOSAL
+  SYSTEM
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  senderId       String
+  sender         User         @relation("SentMessages", fields: [senderId], references: [id])
+  content        String       @db.Text
+  messageType    MessageType  @default(TEXT)
+  offerValue     Decimal?     @db.Decimal(10, 2)
+  isRead         Boolean      @default(false)
+  readAt         DateTime?
+  createdAt      DateTime     @default(now())
+
+  @@index([conversationId, createdAt])
+}
+
+// =============================================================================
+// 4. MÓDULO DE TRANSAÇÕES, PEDIDOS & PAGAMENTOS
+// =============================================================================
+
+enum OrderStatus {
+  PENDING_PAYMENT
+  PAID
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  COMPLETED
+  CANCELLED
+  DISPUTED
+}
+
+enum PaymentMethod {
+  PIX
+  CREDIT_CARD
+  IN_PERSON
 }
 
 model Order {
-  id              String      @id // ex: "ord_17123..."
-  buyerId         Int
-  buyer           User        @relation(fields: [buyerId], references: [id])
-  total           Float
-  status          String      @default("CONFIRMADO") // "PENDENTE", "CONFIRMADO", "ENVIADO", "CANCELADO"
-  paymentMethod   String      @default("pix")        // "pix", "credit_card", "boleto"
-  shippingAddress String                             // JSON string com endereço completo
-  
+  id              String        @id @default(cuid())
+  code            String        @unique
+  buyerId         String
+  buyer           User          @relation(fields: [buyerId], references: [id])
+  totalAmount     Decimal       @db.Decimal(10, 2)
+  status          OrderStatus   @default(PENDING_PAYMENT)
+  shippingAddress String        @db.Text
+  notes           String?
+
   items           OrderItem[]
-  createdAt       DateTime    @default(now())
-  updatedAt       DateTime    @updatedAt
+  payments        Payment[]
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([buyerId])
+  @@index([status])
 }
 
 model OrderItem {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(cuid())
   orderId   String
   order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  productId Int
+  productId String
   product   Product  @relation(fields: [productId], references: [id])
+  title     String
   quantity  Int      @default(1)
-  unitPrice Float
+  unitPrice Decimal  @db.Decimal(10, 2)
+
+  @@index([orderId])
+}
+
+model Payment {
+  id         String        @id @default(cuid())
+  orderId    String
+  order      Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  method     PaymentMethod @default(PIX)
+  amount     Decimal       @db.Decimal(10, 2)
+  status     String        @default("PENDING")
+  gatewayId  String?
+  qrCode     String?       @db.Text
+  paidAt     DateTime?
+  createdAt  DateTime      @default(now())
+
+  @@index([orderId])
+}
+
+// =============================================================================
+// 5. MÓDULO DE CONFIANÇA, REPUTAÇÃO E MODERAÇÃO
+// =============================================================================
+
+model Review {
+  id        String   @id @default(cuid())
+  authorId  String
+  author    User     @relation("ReviewsGiven", fields: [authorId], references: [id])
+  targetId  String
+  target    User     @relation("ReviewsReceived", fields: [targetId], references: [id])
+  rating    Int
+  comment   String?  @db.Text
+  reply     String?  @db.Text
+  createdAt DateTime @default(now())
+
+  @@index([targetId])
+}
+
+model Favorite {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId])
+  @@index([userId])
+}
+
+enum ReportReason {
+  FRAUD
+  INAPPROPRIATE_CONTENT
+  SPAM
+  COUNTERFEIT
+  ALREADY_SOLD
+  OTHER
+}
+
+model Report {
+  id          String       @id @default(cuid())
+  productId   String
+  product     Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
+  reason      ReportReason
+  description String?      @db.Text
+  status      String       @default("PENDING")
+  createdAt   DateTime     @default(now())
+
+  @@index([productId, status])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action    String
+  entity    String
+  entityId  String
+  ipAddress String?
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  @@index([entity, entityId])
 }

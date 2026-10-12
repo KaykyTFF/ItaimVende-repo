@@ -97,24 +97,32 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================================================
-    // 2. DADOS E GERENCIAMENTO DE PRODUTOS
+    // 2. DADOS E GERENCIAMENTO DE PRODUTOS (API CENTRAL COM FALLBACK)
     // ==========================================================================
     let produtos = [];
-    if (window.ItaimSessao && typeof window.ItaimSessao.obterTodosProdutos === 'function') {
-        produtos = window.ItaimSessao.obterTodosProdutos();
-    } else if (typeof PRODUTOS_INICIAIS !== 'undefined' && Array.isArray(PRODUTOS_INICIAIS)) {
-        produtos = [...PRODUTOS_INICIAIS];
-        try {
-            const locais = JSON.parse(localStorage.getItem('itaim_produtos_cadastrados') || '[]');
-            if (Array.isArray(locais)) produtos = [...locais, ...produtos];
-        } catch(e) {}
+
+    // Inicializa fallback local caso a API esteja indisponível
+    function carregarProdutosLocais() {
+        let locais = [];
+        if (window.ItaimSessao && typeof window.ItaimSessao.obterTodosProdutos === 'function') {
+            locais = window.ItaimSessao.obterTodosProdutos();
+        } else if (typeof PRODUTOS_INICIAIS !== 'undefined' && Array.isArray(PRODUTOS_INICIAIS)) {
+            locais = [...PRODUTOS_INICIAIS];
+            try {
+                const cadastrados = JSON.parse(localStorage.getItem('itaim_produtos_cadastrados') || '[]');
+                if (Array.isArray(cadastrados)) locais = [...cadastrados, ...locais];
+            } catch(e) {}
+        }
+        return locais;
     }
 
-    // Carregar favoritos do localStorage
+    produtos = carregarProdutosLocais();
+
+    // Carregar favoritos do localStorage (com IDs padronizados como String)
     let favoritosSet = new Set();
     try {
         const salvos = JSON.parse(localStorage.getItem('itaim_favoritos') || '[]');
-        favoritosSet = new Set(salvos);
+        favoritosSet = new Set(salvos.map(String));
     } catch (e) {}
 
     function atualizarContadorFavoritos() {
@@ -169,7 +177,12 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (ordemFiltro === 'maior-preco') {
             lista.sort((a, b) => (b.preco || 0) - (a.preco || 0));
         } else {
-            lista.sort((a, b) => b.id - a.id);
+            lista.sort((a, b) => {
+                if (a.createdAt && b.createdAt) {
+                    return new Date(b.createdAt) - new Date(a.createdAt);
+                }
+                return (b.id || 0) > (a.id || 0) ? 1 : -1;
+            });
         }
 
         // Atualizar contador
@@ -204,14 +217,23 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        const placeholderSrc = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
+            ? window.ItaimRotas.obterAsset('assets/produto-placeholder.svg')
+            : '../../assets/produto-placeholder.svg';
+
         // Gerar Cards
         gradeProdutos.innerHTML = lista.map(p => {
-            const isFav = favoritosSet.has(p.id);
+            const pId = String(p.id);
+            const isFav = favoritosSet.has(pId);
+            const imagemUrl = (window.ItaimApi && typeof window.ItaimApi.resolverUrlImagem === 'function')
+                ? window.ItaimApi.resolverUrlImagem(p.imagem || (p.images && p.images[0]) || '')
+                : (window.ItaimRotas ? window.ItaimRotas.obterAsset('assets/produtos/anuncio_13.jpg') : '../../assets/produtos/anuncio_13.jpg');
+
             return `
-                <article class="card-produto" data-id="${p.id}">
+                <article class="card-produto" data-id="${pId}">
                     <div class="card-img-box">
-                        <img src="${p.imagem}" alt="${p.titulo}" class="card-img" onerror="this.src='assets/produto-placeholder.svg'">
-                        <button type="button" class="btn-favorito ${isFav ? 'ativo' : ''}" data-id="${p.id}" aria-label="Favoritar anúncio">
+                        <img src="${imagemUrl}" alt="${p.titulo}" class="card-img" onerror="this.onerror=null; this.src='${placeholderSrc}'">
+                        <button type="button" class="btn-favorito ${isFav ? 'ativo' : ''}" data-id="${pId}" aria-label="Favoritar anúncio">
                             <svg class="icone-coracao" viewBox="0 0 24 24">
                                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                             </svg>
@@ -238,16 +260,16 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.card-produto').forEach(card => {
             card.addEventListener('click', (e) => {
                 if (e.target.closest('.btn-favorito')) return;
-                const id = parseInt(card.getAttribute('data-id'), 10);
+                const id = card.getAttribute('data-id');
                 window.location.href = window.ItaimRotas ? window.ItaimRotas.obterUrl('produto', `id=${id}`) : `produto.html?id=${id}`;
             });
         });
 
         // Eventos nos botões de favoritos
         document.querySelectorAll('.btn-favorito').forEach(btn => {
-            btn.addEventListener('click', (e) => {
+            btn.addEventListener('click', async (e) => {
                 e.stopPropagation();
-                const id = parseInt(btn.getAttribute('data-id'), 10);
+                const id = String(btn.getAttribute('data-id'));
                 if (favoritosSet.has(id)) {
                     favoritosSet.delete(id);
                     btn.classList.remove('ativo');
@@ -267,11 +289,52 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 } catch (err) {}
                 atualizarContadorFavoritos();
+
+                // Sincroniza com a API se usuário autenticado
+                if (window.ItaimApi && typeof window.ItaimApi.favoritos.toggle === 'function' && window.ItaimApi.auth.obterToken()) {
+                    try {
+                        await window.ItaimApi.favoritos.toggle(id);
+                    } catch (err) {
+                        // Mantém persistência local caso a API retorne erro
+                    }
+                }
             });
         });
     }
 
-    renderizarVitrine();
+    // Carrega dados da API do Backend com fallback automático
+    async function carregarProdutosApi() {
+        if (window.ItaimApi && typeof window.ItaimApi.produtos.listar === 'function') {
+            try {
+                const res = await window.ItaimApi.produtos.listar();
+                if (res && res.success && Array.isArray(res.data)) {
+                    const apiProdutos = res.data.map(p => ({
+                        ...p,
+                        id: p.id,
+                        titulo: p.titulo || p.title,
+                        preco: Number(p.preco !== undefined ? p.preco : p.price),
+                        categoria: p.categoria || (p.category ? p.category.name : 'Geral'),
+                        cidade: p.cidade || p.city || 'Paulistana',
+                        bairro: p.bairro || p.neighborhood || 'Centro',
+                        imagem: (window.ItaimApi && window.ItaimApi.resolverUrlImagem)
+                            ? window.ItaimApi.resolverUrlImagem(p.imagem || (p.images && p.images[0]) || '')
+                            : (window.ItaimRotas ? window.ItaimRotas.obterAsset('assets/produtos/anuncio_13.jpg') : '../../assets/produtos/anuncio_13.jpg')
+                    }));
+
+                    // Se a API retornou anúncios (ou vitrine vazia do banco), atualiza
+                    produtos = apiProdutos;
+                    renderizarVitrine();
+                    return;
+                }
+            } catch (err) {
+                console.info('[Home] API backend indisponível no momento, exibindo anúncios locais.');
+            }
+        }
+        renderizarVitrine();
+    }
+
+    // Inicialização da vitrine
+    carregarProdutosApi();
 
     // ==========================================================================
     // 4. FILTROS E BUSCA INTERATIVA

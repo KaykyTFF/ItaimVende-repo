@@ -263,6 +263,27 @@
                     <form class="cfg-card" id="form-conta" novalidate>
                         <h2>Dados da conta</h2>
                         <p class="cfg-desc">Essas informações aparecem para compradores e vendedores nos seus anúncios.</p>
+                        <!-- FOTO DE PERFIL -->
+                        <div class="cfg-avatar-box">
+                            <div class="cfg-avatar-preview-wrap">
+                                <img src="../../assets/icon-user.png" alt="Foto de perfil" id="cfg-avatar-preview" class="cfg-avatar-img" onerror="this.onerror=null; this.src='../../assets/icon-user.png';">
+                            </div>
+                            <div class="cfg-avatar-info">
+                                <span class="cfg-avatar-titulo">Foto do Perfil</span>
+                                <span class="cfg-avatar-sub">JPG, PNG ou WebP. Corte quadrado automático (1:1).</span>
+                                <div class="cfg-avatar-botoes">
+                                    <label for="cfg-input-foto" class="cfg-btn-avatar-upload" tabindex="0">
+                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                                        Alterar foto
+                                    </label>
+                                    <input type="file" id="cfg-input-foto" accept="image/*" style="display: none;">
+                                    <button type="button" id="cfg-btn-remover-foto" class="cfg-btn-avatar-remover">
+                                        Remover
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="cfg-grid">
                             <div class="cfg-campo">
                                 <label for="cfg-nome">Nome completo</label>
@@ -542,7 +563,9 @@
     </footer>
 
     <script src="../../js/core/rotas.js"></script>
+    <script src="../../js/core/api.js"></script>
     <script src="../../js/core/sessao.js"></script>
+    <script src="../../js/core/ajustar-foto.js"></script>
     <script src="../../js/pages/perfil/configuracoes.js"></script>
 </body>
 </html>

@@ -42,30 +42,52 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 2. Carregar produtos
+    // 2. Carregar produtos (API com fallback local)
     let todosProdutos = [];
-    if (window.ItaimSessao && typeof window.ItaimSessao.obterTodosProdutos === 'function') {
-        todosProdutos = window.ItaimSessao.obterTodosProdutos();
-    } else {
-        if (typeof PRODUTOS_INICIAIS !== 'undefined' && Array.isArray(PRODUTOS_INICIAIS)) {
-            todosProdutos = [...PRODUTOS_INICIAIS];
-        }
-        try {
-            const produtosLocais = JSON.parse(localStorage.getItem('itaim_produtos_cadastrados') || '[]');
-            if (Array.isArray(produtosLocais)) {
-                todosProdutos = [...produtosLocais, ...todosProdutos];
+
+    async function carregarProdutosCategoria() {
+        if (window.ItaimApi && typeof window.ItaimApi.produtos.listar === 'function') {
+            try {
+                const res = await window.ItaimApi.produtos.listar();
+                if (res && res.success && Array.isArray(res.data)) {
+                    todosProdutos = res.data.map(p => ({
+                        ...p,
+                        id: p.id,
+                        titulo: p.titulo || p.title,
+                        preco: Number(p.preco !== undefined ? p.preco : p.price),
+                        categoria: p.categoria || (p.category ? p.category.name : 'Geral'),
+                        cidade: p.cidade || p.city || 'Paulistana',
+                        imagem: window.ItaimApi.resolverUrlImagem(p.imagem || (p.images && p.images[0]) || '')
+                    }));
+                    renderizar();
+                    return;
+                }
+            } catch (err) {
+                console.info('[Categoria] API offline ou sem resposta, utilizando base local de fallback.');
             }
-        } catch (e) {}
+        }
+
+        if (window.ItaimSessao && typeof window.ItaimSessao.obterTodosProdutos === 'function') {
+            todosProdutos = window.ItaimSessao.obterTodosProdutos();
+        } else {
+            if (typeof PRODUTOS_INICIAIS !== 'undefined' && Array.isArray(PRODUTOS_INICIAIS)) {
+                todosProdutos = [...PRODUTOS_INICIAIS];
+            }
+            try {
+                const produtosLocais = JSON.parse(localStorage.getItem('itaim_produtos_cadastrados') || '[]');
+                if (Array.isArray(produtosLocais)) {
+                    todosProdutos = [...produtosLocais, ...todosProdutos];
+                }
+            } catch (e) {}
+        }
+        renderizar();
     }
 
     // Sincronizar favoritos com localStorage
     let favoritosSet = new Set();
     try {
-        favoritosSet = new Set(JSON.parse(localStorage.getItem('itaim_favoritos') || '[]'));
+        favoritosSet = new Set(JSON.parse(localStorage.getItem('itaim_favoritos') || '[]').map(String));
     } catch (e) {}
-    todosProdutos.forEach(p => {
-        p.favorito = favoritosSet.has(p.id);
-    });
 
     let cidadeFiltro = 'todas';
     let ordemFiltro = 'recentes';
@@ -122,12 +144,16 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        const placeholderSrc = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
+            ? window.ItaimRotas.obterAsset('assets/produto-placeholder.svg')
+            : '../../assets/produto-placeholder.svg';
+
         gradeProdutos.innerHTML = lista.map(p => {
             const isFav = favoritosSet.has(p.id);
             return `
                 <article class="card-produto" data-id="${p.id}">
                     <div class="card-img-box">
-                        <img src="${p.imagem}" alt="${p.titulo}" class="card-img" onerror="this.src='assets/produto-placeholder.svg'">
+                        <img src="${p.imagem}" alt="${p.titulo}" class="card-img" onerror="this.onerror=null; this.src='${placeholderSrc}'">
                         <button type="button" class="btn-favorito ${isFav ? 'ativo' : ''}" data-id="${p.id}" aria-label="Favoritar anúncio">
                             <svg class="icone-coracao" viewBox="0 0 24 24">
                                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
@@ -155,38 +181,41 @@ document.addEventListener('DOMContentLoaded', () => {
         gradeProdutos.querySelectorAll('.card-produto').forEach(card => {
             card.addEventListener('click', (e) => {
                 if (e.target.closest('.btn-favorito')) return;
-                const id = parseInt(card.getAttribute('data-id'), 10);
+                const id = card.getAttribute('data-id');
                 window.location.href = (window.ItaimRotas ? window.ItaimRotas.obterUrl('produto', `id=${id}`) : `produto.html?id=${id}`);
             });
         });
 
         // Eventos dos botões de favoritar
         gradeProdutos.querySelectorAll('.btn-favorito').forEach(btn => {
-            btn.addEventListener('click', (e) => {
+            btn.addEventListener('click', async (e) => {
                 e.stopPropagation();
-                const id = parseInt(btn.getAttribute('data-id'), 10);
-                const produtoItem = todosProdutos.find(p => p.id === id);
-                if (produtoItem) {
-                    produtoItem.favorito = !produtoItem.favorito;
-                    if (produtoItem.favorito) {
-                        favoritosSet.add(id);
-                        btn.classList.add('ativo');
-                        if (window.ItaimNotificacoes && typeof window.ItaimNotificacoes.notificarItemSalvo === 'function') {
-                            window.ItaimNotificacoes.notificarItemSalvo(id);
-                        }
-                    } else {
-                        favoritosSet.delete(id);
-                        btn.classList.remove('ativo');
+                const id = String(btn.getAttribute('data-id'));
+                if (favoritosSet.has(id)) {
+                    favoritosSet.delete(id);
+                    btn.classList.remove('ativo');
+                } else {
+                    favoritosSet.add(id);
+                    btn.classList.add('ativo');
+                    if (window.ItaimNotificacoes && typeof window.ItaimNotificacoes.notificarItemSalvo === 'function') {
+                        window.ItaimNotificacoes.notificarItemSalvo(id);
                     }
+                }
+
+                try {
+                    const favArr = [...favoritosSet];
+                    localStorage.setItem('itaim_favoritos', JSON.stringify(favArr));
+                    const userEmail = window.ItaimSessao ? window.ItaimSessao.obterUsuarioLogado()?.email : null;
+                    if (userEmail) {
+                        localStorage.setItem('itaim_favoritos_' + userEmail.toLowerCase().trim(), JSON.stringify(favArr));
+                    }
+                } catch (err) {}
+                atualizarContadorFavoritos();
+
+                if (window.ItaimApi && window.ItaimApi.auth.obterToken()) {
                     try {
-                        const favArr = [...favoritosSet];
-                        localStorage.setItem('itaim_favoritos', JSON.stringify(favArr));
-                        const userEmail = window.ItaimSessao ? window.ItaimSessao.obterUsuarioLogado()?.email : null;
-                        if (userEmail) {
-                            localStorage.setItem('itaim_favoritos_' + userEmail.toLowerCase().trim(), JSON.stringify(favArr));
-                        }
+                        await window.ItaimApi.favoritos.toggle(id);
                     } catch (err) {}
-                    atualizarContadorFavoritos();
                 }
             });
         });
@@ -208,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderizar();
     });
 
-    renderizar();
+    carregarProdutosCategoria();
 
     // Header e Menu Lateral (Drawer) são gerenciados de forma centralizada e global por sessao.js
 });

@@ -31,23 +31,33 @@ backend/
 │   │   ├── env.js         # Variáveis de ambiente validadas
 │   │   └── prisma.js      # Conexão singleton com o banco
 │   ├── controllers/
-│   │   ├── auth.controller.js     # Registro, login e perfil
-│   │   ├── product.controller.js  # Busca, filtros e CRUD de anúncios
-│   │   ├── category.controller.js # Listagem de categorias
-│   │   └── order.controller.js    # Pedidos com cálculo seguro de preços
+│   │   ├── auth.controller.js     # Orquestrador HTTP (Login, Registro, Perfil)
+│   │   ├── product.controller.js  # Orquestrador HTTP (Anúncios e Vitrine)
+│   │   ├── chat.controller.js     # Orquestrador HTTP (Conversas e Mensagens)
+│   │   ├── category.controller.js # Orquestrador HTTP (Categorias)
+│   │   └── order.controller.js    # Orquestrador HTTP (Pedidos e Checkout)
+│   ├── services/
+│   │   ├── auth.service.js        # Regras de negócio de usuários e tokens
+│   │   ├── product.service.js     # Regras de vitrine, slugs, filtros e soft-delete
+│   │   ├── chat.service.js        # Negociação, mensagens e controle de leitura
+│   │   ├── category.service.js    # Gestão e contagem de categorias
+│   │   └── order.service.js       # Transações e cálculo de preços seguros
 │   ├── middlewares/
 │   │   ├── auth.middleware.js     # Validação de token JWT e roles
-│   │   ├── error.middleware.js    # Tratamento central de erros
+│   │   ├── error.middleware.js    # Tratamento central de erros operacionais
 │   │   └── validate.middleware.js # Validador automático com esquemas Zod
 │   ├── routes/
 │   │   ├── auth.routes.js
 │   │   ├── product.routes.js
+│   │   ├── chat.routes.js
 │   │   ├── category.routes.js
 │   │   └── order.routes.js
 │   ├── schemas/
 │   │   ├── auth.schema.js
 │   │   ├── product.schema.js
 │   │   └── order.schema.js
+│   └── utils/
+│       └── errors.js              # Classe AppError para erros operacionais
 │   └── server.js          # Ponto de entrada do servidor HTTP
 ├── .env                   # Variáveis locais
 ├── .env.example           # Modelo para produção

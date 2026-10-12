@@ -402,7 +402,7 @@
             return `
             <article class="card-produto" data-id="${p.id}" onclick="window.location.href='${linkProduto}'" style="cursor: pointer;">
                 <div class="card-img-box">
-                    <img src="${foto}" alt="${p.titulo}" class="card-img" onerror="this.src='${placeholder}'" loading="lazy">
+                    <img src="${foto}" alt="${p.titulo}" class="card-img" onerror="this.onerror=null; this.src='${placeholder}'" loading="lazy">
                     <button type="button" class="btn-favorito ${isFav ? 'ativo' : ''}" data-id="${p.id}" aria-label="Favoritar anúncio" onclick="event.stopPropagation(); ItaimProdutos.alternarFavorito(${p.id});">
                         <svg class="icone-coracao" viewBox="0 0 24 24">
                             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>

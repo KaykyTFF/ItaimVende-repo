@@ -6,21 +6,46 @@
 (function() {
     'use strict';
 
-    // 1. USUÁRIO ADMIN PADRÃO DO SISTEMA
+    // Formata telefone padrão brasileiro para visualização
+    function formatarTelefoneBR(tel) {
+        if (!tel) return '(89) 99998-5858';
+        const num = String(tel).replace(/\D/g, '');
+        if (num.length === 11) {
+            return `(${num.substring(0, 2)}) ${num.substring(2, 7)}-${num.substring(7)}`;
+        }
+        if (num.length === 10) {
+            return `(${num.substring(0, 2)}) ${num.substring(2, 6)}-${num.substring(6)}`;
+        }
+        return tel;
+    }
+
+    // 1. USUÁRIO ADMIN PADRÃO DO SISTEMA (DADOS EXATOS DO SEED DO BANCO DE DADOS)
     const USUARIO_ADMIN = {
-        id: 1,
+        id: "cmv5iacmv0000ttiwu9wtemar",
         nome: "Raili",
+        name: "Raili",
         username: "rsstore",
+        usuario: "rsstore",
         email: "admin@gmail.com",
-        telefone: "(85) 99985-8585",
+        telefone: "(89) 99998-5858",
+        phone: "89999858585",
         cidade: "Paulistana",
+        city: "Paulistana",
         bairro: "Centro",
+        neighborhood: "Centro",
+        estado: "PI",
+        state: "PI",
         avatar: "assets/icon-user.png",
-        bio: "Perfil de Raili no Itaim Vende.",
+        bio: "Perfil oficial e verificado da administração do Itaim Vende.",
+        role: "ADMIN",
+        isVerified: true,
         dataCadastro: "Membro desde 2024",
         avaliacao: "5.0",
-        totalAvaliacoes: 0,
-        vendasConcluidas: 0
+        ratingAverage: 5.0,
+        totalAvaliacoes: 18,
+        ratingCount: 18,
+        vendasConcluidas: 12,
+        salesCount: 12
     };
 
     // Inicializa a base de usuários com Admin e mantém novos perfis criados
@@ -29,7 +54,7 @@
         try {
             let perfilCustom = null;
             try {
-                perfilCustom = JSON.parse(localStorage.getItem('itaim_perfil_usuario') || 'null');
+                perfilCustom = JSON.parse(localStorage.getItem('itaim_usuario_logado') || localStorage.getItem('itaim_perfil_usuario') || 'null');
             } catch(e) {}
 
             const salvos = JSON.parse(localStorage.getItem('itaim_usuarios_db') || '[]');
@@ -42,33 +67,45 @@
                            em !== 'joao@itaimvende.com';
                 });
 
-                // Garante que o Admin existe
-                const adminIdx = filtrados.findIndex(u => (u.email || '').toLowerCase() === 'admin@gmail.com' || u.id === 1);
+                // Garante que o Admin existe com todos os dados oficiais
+                const adminIdx = filtrados.findIndex(u => (u.email || '').toLowerCase() === 'admin@gmail.com' || u.id === 'cmv5iacmv0000ttiwu9wtemar' || u.id === 1);
                 if (adminIdx !== -1) {
                     filtrados[adminIdx] = { ...USUARIO_ADMIN, ...filtrados[adminIdx] };
-                    if (perfilCustom && (perfilCustom.nome || perfilCustom.usuario || perfilCustom.telefone || perfilCustom.avatar)) {
+                    if (perfilCustom && (perfilCustom.nome || perfilCustom.name || perfilCustom.usuario || perfilCustom.username)) {
                         filtrados[adminIdx] = {
                             ...filtrados[adminIdx],
-                            nome: perfilCustom.nome || filtrados[adminIdx].nome,
-                            username: perfilCustom.usuario || perfilCustom.username || filtrados[adminIdx].username,
-                            telefone: perfilCustom.telefone || filtrados[adminIdx].telefone,
-                            cidade: perfilCustom.cidade || filtrados[adminIdx].cidade,
-                            bairro: perfilCustom.bairro || filtrados[adminIdx].bairro,
+                            nome: perfilCustom.nome || perfilCustom.name || filtrados[adminIdx].nome,
+                            name: perfilCustom.name || perfilCustom.nome || filtrados[adminIdx].name,
+                            username: perfilCustom.username || perfilCustom.usuario || filtrados[adminIdx].username,
+                            telefone: perfilCustom.telefone || (perfilCustom.phone ? formatarTelefoneBR(perfilCustom.phone) : filtrados[adminIdx].telefone),
+                            phone: perfilCustom.phone || filtrados[adminIdx].phone,
+                            cidade: perfilCustom.cidade || perfilCustom.city || filtrados[adminIdx].cidade,
+                            bairro: perfilCustom.bairro || perfilCustom.neighborhood || filtrados[adminIdx].bairro,
+                            bio: perfilCustom.bio || filtrados[adminIdx].bio,
                             email: perfilCustom.email || filtrados[adminIdx].email,
-                            avatar: perfilCustom.avatar || filtrados[adminIdx].avatar
+                            avatar: perfilCustom.avatar || filtrados[adminIdx].avatar,
+                            isVerified: perfilCustom.isVerified !== undefined ? perfilCustom.isVerified : filtrados[adminIdx].isVerified,
+                            salesCount: perfilCustom.salesCount !== undefined ? perfilCustom.salesCount : filtrados[adminIdx].salesCount,
+                            vendasConcluidas: perfilCustom.salesCount !== undefined ? perfilCustom.salesCount : filtrados[adminIdx].vendasConcluidas,
+                            ratingAverage: perfilCustom.ratingAverage !== undefined ? perfilCustom.ratingAverage : filtrados[adminIdx].ratingAverage,
+                            ratingCount: perfilCustom.ratingCount !== undefined ? perfilCustom.ratingCount : filtrados[adminIdx].ratingCount,
+                            totalAvaliacoes: perfilCustom.ratingCount !== undefined ? perfilCustom.ratingCount : filtrados[adminIdx].totalAvaliacoes
                         };
                     }
                     lista = filtrados;
                 } else {
                     let adminObj = { ...USUARIO_ADMIN };
-                    if (perfilCustom && (perfilCustom.nome || perfilCustom.usuario || perfilCustom.telefone || perfilCustom.avatar)) {
+                    if (perfilCustom && (perfilCustom.nome || perfilCustom.name || perfilCustom.usuario || perfilCustom.username)) {
                         adminObj = {
                             ...adminObj,
-                            nome: perfilCustom.nome || adminObj.nome,
-                            username: perfilCustom.usuario || perfilCustom.username || adminObj.username,
-                            telefone: perfilCustom.telefone || adminObj.telefone,
-                            cidade: perfilCustom.cidade || adminObj.cidade,
-                            bairro: perfilCustom.bairro || adminObj.bairro,
+                            nome: perfilCustom.nome || perfilCustom.name || adminObj.nome,
+                            name: perfilCustom.name || perfilCustom.nome || adminObj.name,
+                            username: perfilCustom.username || perfilCustom.usuario || adminObj.username,
+                            telefone: perfilCustom.telefone || (perfilCustom.phone ? formatarTelefoneBR(perfilCustom.phone) : adminObj.telefone),
+                            phone: perfilCustom.phone || adminObj.phone,
+                            cidade: perfilCustom.cidade || perfilCustom.city || adminObj.cidade,
+                            bairro: perfilCustom.bairro || perfilCustom.neighborhood || adminObj.bairro,
+                            bio: perfilCustom.bio || adminObj.bio,
                             email: perfilCustom.email || adminObj.email,
                             avatar: perfilCustom.avatar || adminObj.avatar
                         };
@@ -141,24 +178,86 @@
             user = lista[0] || USUARIO_ADMIN;
             localStorage.setItem('itaim_usuario_logado_email', user.email);
         }
+
+        // Incorpora dados reais e atualizados do backend salvos na sessão
+        try {
+            const backendUser = JSON.parse(localStorage.getItem('itaim_usuario_logado') || 'null');
+            if (backendUser && (backendUser.email || '').toLowerCase() === (user.email || '').toLowerCase()) {
+                user = {
+                    ...user,
+                    id: backendUser.id || user.id,
+                    nome: backendUser.name || backendUser.nome || user.nome,
+                    name: backendUser.name || backendUser.nome || user.name,
+                    username: backendUser.username || user.username,
+                    usuario: backendUser.username || user.usuario,
+                    telefone: backendUser.phone ? formatarTelefoneBR(backendUser.phone) : (user.telefone || '(89) 99998-5858'),
+                    phone: backendUser.phone || user.phone || '89999858585',
+                    cidade: backendUser.city || user.cidade || 'Paulistana',
+                    city: backendUser.city || user.city || 'Paulistana',
+                    bairro: backendUser.neighborhood || user.bairro || 'Centro',
+                    neighborhood: backendUser.neighborhood || user.neighborhood || 'Centro',
+                    bio: backendUser.bio || user.bio || 'Perfil oficial e verificado da administração do Itaim Vende.',
+                    avatar: backendUser.avatar || user.avatar || 'assets/icon-user.png',
+                    role: backendUser.role || user.role || 'ADMIN',
+                    isVerified: backendUser.isVerified !== undefined ? backendUser.isVerified : true,
+                    ratingAverage: backendUser.ratingAverage !== undefined ? Number(backendUser.ratingAverage) : 5.0,
+                    avaliacao: (Number(backendUser.ratingAverage || user.ratingAverage || 5)).toFixed(1),
+                    ratingCount: backendUser.ratingCount !== undefined ? backendUser.ratingCount : (user.totalAvaliacoes || 18),
+                    totalAvaliacoes: backendUser.ratingCount !== undefined ? backendUser.ratingCount : (user.totalAvaliacoes || 18),
+                    salesCount: backendUser.salesCount !== undefined ? backendUser.salesCount : (user.vendasConcluidas || 12),
+                    vendasConcluidas: backendUser.salesCount !== undefined ? backendUser.salesCount : (user.vendasConcluidas || 12)
+                };
+            }
+        } catch(e) {}
+
         return user;
     }
 
     // Define o usuário logado e atualiza a interface
-    function definirUsuarioLogado(emailOuUser) {
-        if (!emailOuUser) return USUARIO_ADMIN;
-        let user = obterUsuarioPorEmail(emailOuUser) || obterUsuarioPorUsername(emailOuUser);
+    function definirUsuarioLogado(emailOuUser, dadosCompletos = null) {
+        if (!emailOuUser && !dadosCompletos) return USUARIO_ADMIN;
+        const chaveBusca = dadosCompletos?.email || emailOuUser || '';
+        let user = obterUsuarioPorEmail(chaveBusca) || obterUsuarioPorUsername(chaveBusca);
         
-        // Se for admin ou admin@admin.com
-        if (!user && (emailOuUser.toLowerCase() === 'admin' || emailOuUser.toLowerCase() === 'admin@gmail.com')) {
-            user = USUARIO_ADMIN;
+        // Se for admin ou admin@gmail.com
+        if (!user && (chaveBusca.toLowerCase() === 'admin' || chaveBusca.toLowerCase() === 'admin@gmail.com')) {
+            user = { ...USUARIO_ADMIN };
+        }
+
+        // Se forneceu dados completos do backend, mescla imediatamente
+        if (dadosCompletos && typeof dadosCompletos === 'object') {
+            user = {
+                ...(user || USUARIO_ADMIN),
+                id: dadosCompletos.id || user?.id || USUARIO_ADMIN.id,
+                nome: dadosCompletos.name || dadosCompletos.nome || user?.nome || USUARIO_ADMIN.nome,
+                name: dadosCompletos.name || dadosCompletos.nome || user?.name || USUARIO_ADMIN.name,
+                username: dadosCompletos.username || user?.username || USUARIO_ADMIN.username,
+                usuario: dadosCompletos.username || user?.usuario || USUARIO_ADMIN.usuario,
+                email: dadosCompletos.email || user?.email || USUARIO_ADMIN.email,
+                telefone: dadosCompletos.phone ? formatarTelefoneBR(dadosCompletos.phone) : (dadosCompletos.telefone || user?.telefone || USUARIO_ADMIN.telefone),
+                phone: dadosCompletos.phone || user?.phone || USUARIO_ADMIN.phone,
+                cidade: dadosCompletos.city || dadosCompletos.cidade || user?.cidade || USUARIO_ADMIN.cidade,
+                city: dadosCompletos.city || dadosCompletos.cidade || user?.city || USUARIO_ADMIN.city,
+                bairro: dadosCompletos.neighborhood || dadosCompletos.bairro || user?.bairro || USUARIO_ADMIN.bairro,
+                neighborhood: dadosCompletos.neighborhood || dadosCompletos.bairro || user?.neighborhood || USUARIO_ADMIN.neighborhood,
+                avatar: dadosCompletos.avatar || user?.avatar || USUARIO_ADMIN.avatar,
+                bio: dadosCompletos.bio || user?.bio || USUARIO_ADMIN.bio,
+                role: dadosCompletos.role || user?.role || USUARIO_ADMIN.role,
+                isVerified: dadosCompletos.isVerified !== undefined ? dadosCompletos.isVerified : true,
+                ratingAverage: dadosCompletos.ratingAverage !== undefined ? Number(dadosCompletos.ratingAverage) : 5.0,
+                avaliacao: (Number(dadosCompletos.ratingAverage || 5)).toFixed(1),
+                ratingCount: dadosCompletos.ratingCount !== undefined ? dadosCompletos.ratingCount : 18,
+                totalAvaliacoes: dadosCompletos.ratingCount !== undefined ? dadosCompletos.ratingCount : 18,
+                salesCount: dadosCompletos.salesCount !== undefined ? dadosCompletos.salesCount : 12,
+                vendasConcluidas: dadosCompletos.salesCount !== undefined ? dadosCompletos.salesCount : 12
+            };
         }
 
         // Se for um novo e-mail válido que ainda não estava cadastrado, cadastra-o automaticamente
-        if (!user && emailOuUser.includes('@')) {
+        if (!user && chaveBusca.includes('@')) {
             const res = cadastrarNovoUsuario({
-                nome: emailOuUser.split('@')[0],
-                email: emailOuUser
+                nome: chaveBusca.split('@')[0],
+                email: chaveBusca
             });
             user = res.usuario;
         }
@@ -168,16 +267,24 @@
             if (user.status === 'suspenso' || user.suspenso) {
                 user.status = 'ativo';
                 delete user.suspenso;
-                const todos = carregarUsuarios();
-                const uIdx = todos.findIndex(u => (u.email || '').toLowerCase() === (user.email || '').toLowerCase());
-                if (uIdx !== -1) {
-                    todos[uIdx].status = 'ativo';
-                    delete todos[uIdx].suspenso;
-                    localStorage.setItem('itaim_usuarios_db', JSON.stringify(todos));
-                }
             }
+
+            const todos = carregarUsuarios();
+            const uIdx = todos.findIndex(u => (u.email || '').toLowerCase() === (user.email || '').toLowerCase());
+            if (uIdx !== -1) {
+                todos[uIdx] = { ...todos[uIdx], ...user };
+            } else {
+                todos.push(user);
+            }
+            localStorage.setItem('itaim_usuarios_db', JSON.stringify(todos));
             localStorage.setItem('itaim_usuario_logado_email', user.email);
             localStorage.setItem('itaim_ultimo_email', user.email);
+
+            // Persiste também o perfil detalhado em itaim_perfil_usuario
+            try {
+                localStorage.setItem('itaim_perfil_usuario', JSON.stringify(user));
+            } catch(e) {}
+
             atualizarHeaderUsuario();
             return user;
         }
@@ -248,6 +355,23 @@
                     ...lista[idx],
                     usuario: lista[idx].username || lista[idx].usuario
                 }));
+            } catch(e) {}
+
+            // Sincroniza itaim_usuario_logado para não ser sobrescrito pelo cache
+            try {
+                const bUser = JSON.parse(localStorage.getItem('itaim_usuario_logado') || 'null');
+                if (bUser) {
+                    const bEmail = (bUser.email || '').toLowerCase();
+                    if (bEmail === (antigoEmail || '').toLowerCase() || 
+                        bEmail === (novoEmail || '').toLowerCase() || 
+                        bUser.id === lista[idx].id) {
+                        localStorage.setItem('itaim_usuario_logado', JSON.stringify({
+                            ...bUser,
+                            ...novosDados,
+                            email: novoEmail
+                        }));
+                    }
+                }
             } catch(e) {}
 
             // Atualiza produtos cadastrados pelo usuário para manter dados sincronizados
@@ -396,8 +520,8 @@
         try {
             const excluidos = JSON.parse(localStorage.getItem('itaim_produtos_excluidos') || '[]');
             if (Array.isArray(excluidos) && excluidos.length > 0) {
-                const setExcluidos = new Set(excluidos.map(id => parseInt(id, 10)));
-                todos = todos.filter(p => !setExcluidos.has(parseInt(p.id, 10)));
+                const setExcluidos = new Set(excluidos.map(id => String(id)));
+                todos = todos.filter(p => !setExcluidos.has(String(p.id)));
             }
         } catch (e) {}
 
@@ -405,8 +529,9 @@
         try {
             const statusMap = JSON.parse(localStorage.getItem('itaim_produtos_status_map') || '{}');
             todos = todos.map(p => {
-                if (statusMap[p.id]) {
-                    return { ...p, status: statusMap[p.id] };
+                const sId = String(p.id);
+                if (statusMap[sId]) {
+                    return { ...p, status: statusMap[sId] };
                 }
                 return p;
             });
@@ -422,7 +547,10 @@
 
         const raw = emailOuUsername.toLowerCase().trim();
         const semArroba = raw.replace('@', '');
-        const isUserAdmin = raw === 'admin@gmail.com' || semArroba === 'admin';
+        const isUserAdmin = raw === 'admin@gmail.com' || 
+                            semArroba === 'admin' || 
+                            semArroba === 'rsstore' ||
+                            raw === 'cmv5iacmv0000ttiwu9wtemar';
 
         if (isUserAdmin) {
             // Admin gerencia todos os produtos do catálogo e seus próprios
@@ -433,7 +561,8 @@
         return todos.filter(p => {
             const pEmail = (p.vendedorEmail || '').toLowerCase().trim();
             const pUser = (p.vendedorUsername || '').toLowerCase().trim();
-            return pEmail === raw || pEmail === semArroba || (pUser && (pUser === semArroba || pUser === raw));
+            const pId = String(p.vendedorId || p.sellerId || '');
+            return pEmail === raw || pEmail === semArroba || (pUser && (pUser === semArroba || pUser === raw)) || pId === raw;
         });
     }
 
@@ -499,11 +628,11 @@
 
     // Atualiza status do anúncio ('ativo', 'pausado', 'vendido')
     function atualizarStatusAnuncio(id, novoStatus) {
-        id = parseInt(id, 10);
+        const idStr = String(id);
         
         let locais = JSON.parse(localStorage.getItem('itaim_produtos_cadastrados') || '[]');
         locais = locais.map(p => {
-            if (parseInt(p.id, 10) === id) {
+            if (String(p.id) === idStr) {
                 return { ...p, status: novoStatus };
             }
             return p;
@@ -511,7 +640,7 @@
         localStorage.setItem('itaim_produtos_cadastrados', JSON.stringify(locais));
 
         let statusMap = JSON.parse(localStorage.getItem('itaim_produtos_status_map') || '{}');
-        statusMap[id] = novoStatus;
+        statusMap[idStr] = novoStatus;
         localStorage.setItem('itaim_produtos_status_map', JSON.stringify(statusMap));
 
         return true;
@@ -519,15 +648,15 @@
 
     // Exclui um anúncio
     function excluirAnuncio(id) {
-        id = parseInt(id, 10);
+        const idStr = String(id);
         
         let locais = JSON.parse(localStorage.getItem('itaim_produtos_cadastrados') || '[]');
-        locais = locais.filter(p => parseInt(p.id, 10) !== id);
+        locais = locais.filter(p => String(p.id) !== idStr);
         localStorage.setItem('itaim_produtos_cadastrados', JSON.stringify(locais));
 
         let excluidos = JSON.parse(localStorage.getItem('itaim_produtos_excluidos') || '[]');
-        if (!excluidos.includes(id)) {
-            excluidos.push(id);
+        if (!excluidos.includes(idStr)) {
+            excluidos.push(idStr);
             localStorage.setItem('itaim_produtos_excluidos', JSON.stringify(excluidos));
         }
 
@@ -987,19 +1116,30 @@
         if (!user) return;
 
         // Avatar
-        const avatarImgs = document.querySelectorAll('#img-avatar-user, .avatar-img, .perfil-avatar-view, #drawer-user-avatar');
+        const avatarPadrao = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
+            ? window.ItaimRotas.obterAsset('assets/icon-user.png')
+            : (window.location.pathname.toLowerCase().includes('/pages/') ? '../../assets/icon-user.png' : './assets/icon-user.png');
+        
+        const rawAvatar = user.avatar || 'assets/icon-user.png';
+        const avatarUrl = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
+            ? window.ItaimRotas.obterAsset(rawAvatar)
+            : (rawAvatar.startsWith('data:') || rawAvatar.startsWith('http') ? rawAvatar : avatarPadrao);
+
+        const avatarImgs = document.querySelectorAll('#img-avatar-user, .avatar-img, #perfil-avatar-view, .perfil-avatar-view, .perfil-avatar-img, #drawer-user-avatar, #vendedor-avatar-img');
         avatarImgs.forEach(img => {
-            const avatarPadrao = window.ItaimRotas ? window.ItaimRotas.obterAsset('assets/icon-user.png') : 'assets/icon-user.png';
-            const avatarUrl = user.avatar ? (window.ItaimRotas ? window.ItaimRotas.obterAsset(user.avatar) : user.avatar) : avatarPadrao;
             img.src = avatarUrl;
-            img.onerror = () => { img.src = avatarPadrao; };
+            img.onerror = function() {
+                this.onerror = null;
+                this.src = avatarPadrao;
+            };
         });
 
         // Nome no dropdown e no drawer
+        const nomeFinal = user.nome || user.name || 'Raili';
         const nomeEl = document.getElementById('dropdown-user-name');
-        if (nomeEl) nomeEl.textContent = user.nome;
+        if (nomeEl) nomeEl.textContent = nomeFinal;
         const drawerNomeEl = document.getElementById('drawer-user-name');
-        if (drawerNomeEl) drawerNomeEl.textContent = user.nome;
+        if (drawerNomeEl) drawerNomeEl.textContent = nomeFinal;
 
         // E-mail no dropdown e no drawer
         const emailEl = document.getElementById('dropdown-user-email');
@@ -1207,8 +1347,18 @@
             return lista;
         },
 
-        calcularMedia: function(lista) {
+        calcularMedia: function(lista, perfil = null) {
             if (!lista || !Array.isArray(lista) || lista.length === 0) {
+                if (perfil && (perfil.totalAvaliacoes || perfil.ratingCount || (perfil.email && perfil.email.toLowerCase() === 'admin@gmail.com'))) {
+                    const totalRatings = perfil.ratingCount || perfil.totalAvaliacoes || 18;
+                    const mediaVal = Number(perfil.ratingAverage || perfil.avaliacao || 5.0).toFixed(1);
+                    return {
+                        media: mediaVal,
+                        mediaNum: parseFloat(mediaVal),
+                        total: totalRatings,
+                        estrelasFormatadas: `${mediaVal} ★`
+                    };
+                }
                 return {
                     media: '0.0',
                     mediaNum: 0,

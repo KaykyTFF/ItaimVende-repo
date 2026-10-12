@@ -28,6 +28,7 @@ export async function authenticateToken(req, res, next) {
         username: true,
         email: true,
         role: true,
+        status: true,
         city: true,
         neighborhood: true,
         phone: true,
@@ -42,12 +43,23 @@ export async function authenticateToken(req, res, next) {
       });
     }
 
+    if (user.status === 'BANNED' || user.status === 'SUSPENDED') {
+      return res.status(403).json({
+        success: false,
+        message: 'Acesso negado. Esta conta foi suspensa ou desativada.',
+      });
+    }
+
     req.user = user;
     next();
   } catch (error) {
-    return res.status(403).json({
+    const isExpired = error.name === 'TokenExpiredError';
+    return res.status(401).json({
       success: false,
-      message: 'Token inválido ou expirado.',
+      code: isExpired ? 'TOKEN_EXPIRED' : 'TOKEN_INVALID',
+      message: isExpired
+        ? 'Sua sessão expirou por tempo limite. Por favor, faça login novamente.'
+        : 'Token de autenticação inválido.',
       error: error.message,
     });
   }

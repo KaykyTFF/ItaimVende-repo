@@ -3,13 +3,15 @@
  * Carrega dados dinâmicos do anúncio selecionado, fotos, favoritos, WhatsApp e perfil do vendedor
  */
 
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. Obter ID do Produto via URL
+document.addEventListener('DOMContentLoaded', async () => {
+    // 1. Obter ID do Produto via URL (suporta ?id=, ?produto=, ?slug= e #hash)
     const params = new URLSearchParams(window.location.search);
-    const produtoIdParam = params.get('id');
-    const produtoId = produtoIdParam ? parseInt(produtoIdParam, 10) : null;
+    let produtoIdParam = params.get('id') || params.get('produto') || params.get('slug');
+    if (!produtoIdParam && window.location.hash) {
+        produtoIdParam = window.location.hash.replace(/^#/, '');
+    }
 
-    // 2. Carregar produtos através da sessão ou dados iniciais
+    // 2. Carregar produtos através da sessão ou dados iniciais (fallback local)
     let todosProdutos = [];
     if (window.ItaimSessao && typeof window.ItaimSessao.obterTodosProdutos === 'function') {
         todosProdutos = window.ItaimSessao.obterTodosProdutos();
@@ -25,13 +27,55 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (e) {}
     }
 
-    // 3. Encontrar o produto selecionado (padrão id 15 ou primeiro disponível)
+    // 3. Encontrar o produto selecionado
     let produto = null;
-    if (produtoId) {
-        produto = todosProdutos.find(p => parseInt(p.id, 10) === produtoId);
+
+    // 3.1 Busca Direta na API por ID ou Slug
+    if (produtoIdParam && window.ItaimApi && typeof window.ItaimApi.produtos.obter === 'function') {
+        try {
+            const resApi = await window.ItaimApi.produtos.obter(produtoIdParam);
+            if (resApi && resApi.success && resApi.data) {
+                produto = resApi.data;
+            }
+        } catch (errApi) {
+            console.info('[Produto] Busca direta por ID falhou, buscando na listagem da vitrine.');
+        }
     }
-    if (!produto) {
-        produto = todosProdutos.find(p => parseInt(p.id, 10) === 15) || todosProdutos[0];
+
+    // 3.2 Se não encontrou por ID direto ou não passou parâmetro, busca na vitrine pública da API
+    if (!produto && window.ItaimApi && typeof window.ItaimApi.produtos.listar === 'function') {
+        try {
+            const resList = await window.ItaimApi.produtos.listar();
+            if (resList && resList.success && Array.isArray(resList.data) && resList.data.length > 0) {
+                if (produtoIdParam) {
+                    produto = resList.data.find(p => 
+                        String(p.id) === String(produtoIdParam) || 
+                        String(p.slug) === String(produtoIdParam)
+                    );
+                    // Suporte a índice numérico legado (0, 1, 2...)
+                    if (!produto && !isNaN(Number(produtoIdParam))) {
+                        const idx = Number(produtoIdParam);
+                        if (idx >= 0 && idx < resList.data.length) {
+                            produto = resList.data[idx];
+                        }
+                    }
+                }
+                // Fallback seguro: exibe o primeiro anúncio ativo da base de dados
+                if (!produto) {
+                    produto = resList.data[0];
+                }
+            }
+        } catch (errList) {
+            console.info('[Produto] API indisponível, buscando no cache local.');
+        }
+    }
+
+    // 3.3 Fallback em cache local / mock
+    if (!produto && produtoIdParam) {
+        produto = todosProdutos.find(p => String(p.id) === String(produtoIdParam));
+    }
+    if (!produto && todosProdutos.length > 0) {
+        produto = todosProdutos.find(p => String(p.id) === '15') || todosProdutos[0];
     }
 
     if (!produto) {
@@ -112,16 +156,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 6. Carrossel de Imagens Dinâmico para o Produto Selecionado
     let fotosCarrossel = [];
+    const placeholderAsset = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
+        ? window.ItaimRotas.obterAsset('assets/produto-placeholder.svg')
+        : '../../assets/produto-placeholder.svg';
+
     if (Array.isArray(produto.fotos) && produto.fotos.length > 0) {
         fotosCarrossel = [...produto.fotos];
+    } else if (Array.isArray(produto.images) && produto.images.length > 0) {
+        fotosCarrossel = [...produto.images];
     } else if (produto.imagem) {
         fotosCarrossel = [produto.imagem];
     } else {
-        fotosCarrossel = ['assets/produto-placeholder.svg'];
+        fotosCarrossel = [placeholderAsset];
+    }
+
+    if (window.ItaimApi && typeof window.ItaimApi.resolverUrlImagem === 'function') {
+        fotosCarrossel = fotosCarrossel.map(src => window.ItaimApi.resolverUrlImagem(src));
     }
 
     let fotoAtualIndex = 0;
     const fotoDisplay = document.getElementById('foto-principal-img');
+    if (fotoDisplay) {
+        fotoDisplay.onerror = function() {
+            this.onerror = null;
+            this.src = placeholderAsset;
+        };
+    }
     const contadorTexto = document.getElementById('contador-fotos-texto');
     const btnCarrosselPrev = document.getElementById('btn-carrossel-prev');
     const btnCarrosselNext = document.getElementById('btn-carrossel-next');
@@ -136,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
             thumb.dataset.index = idx;
             thumb.dataset.src = src;
             thumb.title = `Foto ${idx + 1}`;
-            thumb.innerHTML = `<img src="${src}" alt="Miniatura ${idx + 1}" onerror="this.src='assets/produto-placeholder.svg'">`;
+            thumb.innerHTML = `<img src="${src}" alt="Miniatura ${idx + 1}" onerror="this.onerror=null; this.src='${placeholderAsset}'">`;
             thumb.addEventListener('click', () => {
                 exibirFotoIndex(idx);
             });
@@ -179,7 +239,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 7. Dados do Vendedor no Sidebar
     let dadosVendedor = null;
-    let avatarVendedor = 'assets/icon-user.png';
+    const fallbackAvatarVendedor = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
+        ? window.ItaimRotas.obterAsset('assets/icon-user.png')
+        : '../../assets/icon-user.png';
+    let avatarVendedor = fallbackAvatarVendedor;
     const boxVendedor = document.querySelector('.box-vendedor-sidebar');
     if (boxVendedor) {
         const nomeVendedorEl = document.getElementById('vendedor-nome-txt') || boxVendedor.querySelector('.vendedor-nome-selo strong');
@@ -189,13 +252,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const linkTopoVendedor = document.getElementById('link-vendedor-topo') || boxVendedor.querySelector('.vendedor-topo-row-link');
 
         // Busca o vendedor no banco de usuários para obter a foto de perfil real e mais recente
+        if (produto.seller && typeof produto.seller === 'object') {
+            dadosVendedor = produto.seller;
+        }
+
         const vId = produto.vendedorId ? String(produto.vendedorId) : null;
         const vEmail = (produto.vendedorEmail || '').toLowerCase().trim();
         const vNome = (produto.vendedorNome || '').toLowerCase().trim();
         const vUsername = (produto.vendedorUsername || '').toLowerCase().trim();
 
         // 1. Procura em todos os usuários gerenciados pela sessão
-        if (window.ItaimSessao && typeof window.ItaimSessao.obterTodosUsuarios === 'function') {
+        if (!dadosVendedor && window.ItaimSessao && typeof window.ItaimSessao.obterTodosUsuarios === 'function') {
             const todosUsuarios = window.ItaimSessao.obterTodosUsuarios();
             dadosVendedor = todosUsuarios.find(u => {
                 const uId = String(u.id || '');
@@ -268,20 +335,25 @@ document.addEventListener('DOMContentLoaded', () => {
         const cidadeVendedor = (dadosVendedor && dadosVendedor.cidade) || produto.vendedorCidade || produto.cidade || 'Paulistana';
         
         // Foto de perfil real do vendedor: prioriza foto personalizada do perfil do usuário
-        if (dadosVendedor && dadosVendedor.avatar && dadosVendedor.avatar !== 'assets/icon-user.png') {
-            avatarVendedor = dadosVendedor.avatar;
-        } else if (produto.vendedorAvatar && produto.vendedorAvatar !== 'assets/icon-user.png') {
-            avatarVendedor = produto.vendedorAvatar;
-        } else if (dadosVendedor && dadosVendedor.avatar) {
-            avatarVendedor = dadosVendedor.avatar;
+        if (dadosVendedor && dadosVendedor.avatar) {
+            avatarVendedor = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
+                ? window.ItaimRotas.obterAsset(dadosVendedor.avatar)
+                : dadosVendedor.avatar;
+        } else if (produto.vendedorAvatar) {
+            avatarVendedor = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
+                ? window.ItaimRotas.obterAsset(produto.vendedorAvatar)
+                : produto.vendedorAvatar;
         }
 
         if (nomeVendedorEl) nomeVendedorEl.textContent = nomeVendedor;
         if (cidadeVendedorEl) cidadeVendedorEl.textContent = `${cidadeVendedor} - PI`;
         if (avatarVendedorEl) {
-            avatarVendedorEl.src = avatarVendedor;
+            avatarVendedorEl.src = avatarVendedor || fallbackAvatarVendedor;
             avatarVendedorEl.alt = `Foto de ${nomeVendedor}`;
-            avatarVendedorEl.onerror = () => { avatarVendedorEl.src = 'assets/icon-user.png'; };
+            avatarVendedorEl.onerror = function() {
+                this.onerror = null;
+                this.src = fallbackAvatarVendedor;
+            };
         }
 
         // URL para o perfil público do vendedor com todos os identificadores
@@ -324,15 +396,15 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
 
             const usuarioLogado = window.ItaimSessao ? window.ItaimSessao.obterUsuarioLogado() : {
-                id: 1,
+                id: 'cmv5iacmv0000ttiwu9wtemar',
                 nome: 'Raili',
                 email: 'admin@gmail.com',
-                avatar: 'assets/icon-user.png'
+                avatar: fallbackAvatarVendedor
             };
 
             const vendedorEmailFinal = ((dadosVendedor && dadosVendedor.email) || produto.vendedorEmail || 'admin@gmail.com').toLowerCase().trim();
             const vendedorNomeFinal = (dadosVendedor && dadosVendedor.nome) || produto.vendedorNome || 'Vendedor';
-            const vendedorAvatarFinal = avatarVendedor || 'assets/icon-user.png';
+            const vendedorAvatarFinal = avatarVendedor || fallbackAvatarVendedor;
             const userEmailLogado = (usuarioLogado.email || '').toLowerCase().trim();
 
             let vendedorEmailUsado = vendedorEmailFinal;
@@ -352,9 +424,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 conversas = [];
             }
 
-            const pId = parseInt(produto.id, 10);
+            const pId = String(produto.id || '');
             let convExistente = conversas.find(c => {
-                const mesmoProduto = parseInt(c.produtoId, 10) === pId;
+                const mesmoProduto = String(c.produtoId || '') === pId;
                 const cComprador = (c.compradorEmail || '').toLowerCase().trim();
                 const cVendedor = (c.vendedorEmail || '').toLowerCase().trim();
                 return mesmoProduto && (
@@ -383,7 +455,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     },
                     compradorEmail: usuarioLogado.email || 'admin@gmail.com',
                     compradorNome: usuarioLogado.nome || 'Comprador',
-                    compradorAvatar: usuarioLogado.avatar || 'assets/icon-user.png',
+                    compradorAvatar: (window.ItaimRotas && usuarioLogado.avatar ? window.ItaimRotas.obterAsset(usuarioLogado.avatar) : fallbackAvatarVendedor),
                     vendedorEmail: vendedorEmailUsado,
                     vendedorNome: vendedorNomeUsado,
                     vendedorAvatar: vendedorAvatarUsado,
@@ -403,7 +475,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // 8.2 Botão WhatsApp (com mensagem personalizada)
     const btnWpp = document.getElementById('btn-comprar-wpp');
     if (btnWpp) {
-        const telVendedor = (produto.vendedorTelefone || '5589999999999').replace(/\D/g, '');
+        let telVendedor = (produto.vendedorTelefone || (dadosVendedor && (dadosVendedor.phone || dadosVendedor.telefone)) || '5589999985858').replace(/\D/g, '');
+        if (telVendedor.length === 10 || telVendedor.length === 11) telVendedor = '55' + telVendedor;
         const precoTexto = (produto.preco && produto.preco > 0) 
             ? `por R$ ${Number(produto.preco).toFixed(2).replace('.', ',')}` 
             : 'para doação/troca';
