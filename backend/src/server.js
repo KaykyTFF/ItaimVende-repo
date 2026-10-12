@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
+import path from 'path';
+import fs from 'fs';
 import { ENV } from './config/env.js';
 import { errorHandler } from './middlewares/error.middleware.js';
 import { requestLogger } from './middlewares/logger.middleware.js';
@@ -71,8 +73,18 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Servir pasta de uploads de imagens de forma estática
+// Servir pasta de uploads de imagens de forma estática com fallback gracioso para placeholder
 app.use('/uploads', express.static(UPLOAD_DIR));
+app.use('/uploads', (req, res) => {
+  const candidate1 = path.resolve(process.cwd(), 'frontend/assets/produto-placeholder.svg');
+  const candidate2 = path.resolve(process.cwd(), '../frontend/assets/produto-placeholder.svg');
+  const placeholderPath = fs.existsSync(candidate1) ? candidate1 : (fs.existsSync(candidate2) ? candidate2 : null);
+  if (placeholderPath) {
+    res.setHeader('Content-Type', 'image/svg+xml');
+    return res.sendFile(placeholderPath);
+  }
+  res.status(404).json({ success: false, message: 'Imagem não encontrada.' });
+});
 
 // Montagem das Rotas da API
 app.use('/api/auth', authRoutes);
