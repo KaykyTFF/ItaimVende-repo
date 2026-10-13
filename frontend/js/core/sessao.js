@@ -547,21 +547,14 @@
 
         const raw = emailOuUsername.toLowerCase().trim();
         const semArroba = raw.replace('@', '');
-        const isUserAdmin = raw === 'admin@gmail.com' || 
-                            semArroba === 'admin' || 
-                            semArroba === 'rsstore' ||
-                            raw === 'cmv5iacmv0000ttiwu9wtemar';
-
-        if (isUserAdmin) {
-            // Admin gerencia todos os produtos do catálogo e seus próprios
-            return todos;
-        }
-
-        // Outro perfil de usuário: retorna estritamente os anúncios que ele publicou
         return todos.filter(p => {
             const pEmail = (p.vendedorEmail || '').toLowerCase().trim();
             const pUser = (p.vendedorUsername || '').toLowerCase().trim();
             const pId = String(p.vendedorId || p.sellerId || '');
+            const pNome = (p.vendedorNome || p.vendedor || '').toLowerCase().trim();
+            if (raw === 'admin@gmail.com' || semArroba === 'admin' || semArroba === 'rsstore') {
+                return pEmail === 'admin@gmail.com' || pUser === 'admin' || pUser === 'rsstore' || pNome.includes('raili') || pId === 'cmv5iacmv0000ttiwu9wtemar';
+            }
             return pEmail === raw || pEmail === semArroba || (pUser && (pUser === semArroba || pUser === raw)) || pId === raw;
         });
     }
