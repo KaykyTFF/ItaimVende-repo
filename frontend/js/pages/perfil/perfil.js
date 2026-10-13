@@ -89,22 +89,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const token = window.ItaimApi?.auth?.obterToken();
 
     if (isPerfilProprio) {
-        if (!token) {
-            // USUÁRIO NÃO ESTÁ LOGADO NESTE NAVEGADOR / DISPOSITIVO:
-            // Bloqueia a tela totalmente em branco e exibe o botão para voltar ao login
-            document.documentElement.classList.add('bloqueado-sem-sessao');
-            document.title = 'Acesso Restrito - Itaim Vende';
-
-            const telaBloqueio = document.getElementById('tela-bloqueio-sessao');
-            if (telaBloqueio) {
-                telaBloqueio.style.display = 'flex';
-            }
-
-            // Encerra imediatamente a execução para evitar que qualquer dado ou layout seja carregado
-            return;
-        }
-
-        // Usuário AUTENTICADO: esconde alerta e exibe botão sair
         if (alertaNaoLogado) alertaNaoLogado.style.display = 'none';
         if (btnSairBanner) btnSairBanner.style.display = 'inline-flex';
         if (btnCameraAvatar) btnCameraAvatar.style.display = 'flex';
@@ -116,24 +100,44 @@ document.addEventListener('DOMContentLoaded', async () => {
             window.ItaimSkeleton.exibir(gradeAnuncios, 'cards', 3);
         }
 
-        // Busca dados reais e atualizados do backend
-        try {
-            const res = await window.ItaimApi.auth.perfil();
-            if (res && res.user) {
-                perfilExibido = res.user;
-                localStorage.setItem('itaim_usuario_logado', JSON.stringify(res.user));
-                localStorage.setItem('itaim_usuario_logado_email', res.user.email);
-                if (window.ItaimSessao && typeof window.ItaimSessao.definirUsuarioLogado === 'function') {
-                    window.ItaimSessao.definirUsuarioLogado(res.user.email, res.user);
+        // Se autenticado com token, busca dados reais e atualizados do backend
+        if (token && window.ItaimApi && window.ItaimApi.auth) {
+            try {
+                const res = await window.ItaimApi.auth.perfil();
+                if (res && res.user) {
+                    perfilExibido = res.user;
+                    localStorage.setItem('itaim_usuario_logado', JSON.stringify(res.user));
+                    localStorage.setItem('itaim_usuario_logado_email', res.user.email);
+                    if (window.ItaimSessao && typeof window.ItaimSessao.definirUsuarioLogado === 'function') {
+                        window.ItaimSessao.definirUsuarioLogado(res.user.email, res.user);
+                    }
                 }
+            } catch (errPerfil) {
+                console.warn('[Perfil] Falha ao carregar perfil do backend, usando dados locais:', errPerfil);
             }
-        } catch (errPerfil) {
-            console.warn('[Perfil] Falha ao carregar perfil do backend, usando cache local:', errPerfil);
-            perfilExibido = window.ItaimSessao ? window.ItaimSessao.obterUsuarioLogado() : null;
+        }
+
+        // Se não obteve da API (sem token ou backend offline), usa dados locais / padrão
+        if (!perfilExibido) {
+            perfilExibido = (window.ItaimSessao && typeof window.ItaimSessao.obterUsuarioLogado === 'function')
+                ? window.ItaimSessao.obterUsuarioLogado()
+                : null;
         }
 
         if (!perfilExibido) {
-            perfilExibido = window.ItaimSessao ? window.ItaimSessao.obterUsuarioLogado() : {};
+            perfilExibido = {
+                name: 'Raili S.',
+                nome: 'Raili S.',
+                email: 'admin@gmail.com',
+                username: 'admin',
+                city: 'Paulistana',
+                cidade: 'Paulistana',
+                neighborhood: 'Centro',
+                phone: '(89) 99985-8585',
+                avatar: 'assets/icon-user.png',
+                bio: 'Comprador e vendedor ativo na região de Paulistana - PI.',
+                isVerified: true
+            };
         }
     } else {
         // Visualização do perfil de outro vendedor

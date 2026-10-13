@@ -4,17 +4,14 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Bloqueia a tela em branco se não estiver autenticado
-    if (window.ItaimSessao && typeof window.ItaimSessao.protegerPagina === 'function') {
-        if (!window.ItaimSessao.protegerPagina('Faça login para gerenciar e visualizar seus anúncios publicados.')) {
-            return;
-        }
-    }
-
-    // 1. Obter usuário logado atual
+    // 1. Obter usuário logado atual ou padrão sem bloquear a tela
     const userLogado = (window.ItaimSessao && typeof window.ItaimSessao.obterUsuarioLogado === 'function')
         ? window.ItaimSessao.obterUsuarioLogado()
-        : { nome: 'Raili', email: 'admin@gmail.com', cidade: 'Paulistana' };
+        : null;
+
+    const nomeUsuario = userLogado?.name || userLogado?.nome || 'Raili';
+    const emailUsuario = userLogado?.email || 'admin@gmail.com';
+    const cidadeUsuario = userLogado?.city || userLogado?.cidade || 'Paulistana';
 
     // Elementos DOM
     const container = document.getElementById('container-meus-anuncios');
@@ -26,8 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Atualiza subtítulo com o nome do usuário logado
     const titulosBox = document.querySelector('.anuncios-titulos p');
-    if (titulosBox && userLogado.nome) {
-        titulosBox.innerHTML = `Gerenciando anúncios de <strong>${userLogado.nome}</strong> (${userLogado.email}) em ${userLogado.cidade} - PI.`;
+    if (titulosBox && userLogado) {
+        titulosBox.innerHTML = `Gerenciando anúncios de <strong>${nomeUsuario}</strong> (${emailUsuario}) em ${cidadeUsuario} - PI.`;
     }
 
     let statusFiltro = 'todos';
@@ -39,17 +36,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 const res = await window.ItaimApi.produtos.meusAnuncios();
                 if (res && res.success && Array.isArray(res.data)) {
                     meusAnuncios = res.data.map(item => {
-                        const st = (item.status || 'ATIVO').toLowerCase();
+                        const st = String(item.status || 'ATIVO').toLowerCase();
                         const fotoSrc = item.imagem || (item.images && item.images[0]) || (item.fotos && item.fotos[0]) || '';
                         return {
                             ...item,
                             id: item.id,
-                            titulo: item.titulo || item.title,
-                            preco: Number(item.preco !== undefined ? item.preco : item.price),
-                            categoria: item.categoria || (item.category ? item.category.name : 'Geral'),
+                            titulo: item.titulo || item.title || 'Anúncio sem título',
+                            preco: Number(item.preco !== undefined ? item.preco : (item.price || 0)),
+                            categoria: item.categoria || (item.category ? (item.category.name || item.category) : 'Geral'),
                             status: st === 'pausado' ? 'pausado' : (st === 'vendido' ? 'vendido' : 'ativo'),
                             imagem: window.ItaimApi.resolverUrlImagem(fotoSrc),
-                            data: item.createdAt ? new Date(item.createdAt).toLocaleDateString('pt-BR') : 'Hoje'
+                            data: item.createdAt ? new Date(item.createdAt).toLocaleDateString('pt-BR') : 'Hoje',
+                            visualizacoes: item.viewsCount !== undefined ? item.viewsCount : (item.visualizacoes || 0),
+                            conversas: item.contactsCount !== undefined ? item.contactsCount : (item.conversas || 0),
+                            cidade: item.city || item.cidade || cidadeUsuario,
+                            vendedorTelefone: item.vendedorTelefone || item.phone || userLogado?.phone || userLogado?.telefone || ''
                         };
                     });
                     atualizarBadges();
@@ -57,12 +58,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
             } catch (err) {
-                console.info('[Meus Anúncios] Não foi possível carregar da API, usando cache local.');
+                console.warn('[Meus Anúncios] Não foi possível carregar da API, usando cache local:', err);
             }
         }
 
         if (window.ItaimSessao && typeof window.ItaimSessao.obterAnunciosDoUsuario === 'function') {
-            meusAnuncios = window.ItaimSessao.obterAnunciosDoUsuario(userLogado.email);
+            meusAnuncios = window.ItaimSessao.obterAnunciosDoUsuario(emailUsuario);
         } else {
             meusAnuncios = [];
         }
@@ -115,10 +116,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h2 style="font-size: 20px; color: #1E293B; font-weight: 800; margin-bottom: 8px;">Nenhum anúncio encontrado</h2>
                     <p style="color: #64748B; font-size: 14.5px; max-width: 480px; margin: 0 auto 24px; line-height: 1.6;">
                         ${meusAnuncios.length === 0 
-                            ? `Você ainda não publicou anúncios no perfil de <strong>${userLogado.nome}</strong>. Desapegue de itens que você não usa mais no Itaim Vende!`
+                            ? `Você ainda não publicou anúncios no perfil de <strong>${nomeUsuario}</strong>. Desapegue de itens que você não usa mais no Itaim Vende!`
                             : `Não há anúncios com status "<strong>${statusFiltro}</strong>" no momento.`}
                     </p>
-                    <a href="${window.ItaimRotas ? window.ItaimRotas.obterUrl('vender') : '../vender/vender.html'}" class="btn-novo-anuncio" style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none;">
+                    <a href="${window.ItaimRotas ? window.ItaimRotas.obterUrl('vender') : 'vender.html'}" class="btn-novo-anuncio" style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none;">
                         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                         <span>Anunciar Novo Produto</span>
                     </a>
@@ -137,6 +138,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 ? window.ItaimRotas.obterAsset('assets/produto-placeholder.svg')
                 : '../../assets/produto-placeholder.svg';
             const fotoImg = item.imagem || (item.fotos && item.fotos[0]) || placeholderSrc;
+            const linkProduto = (window.ItaimRotas && typeof window.ItaimRotas.obterUrl === 'function')
+                ? window.ItaimRotas.obterUrl('produto', `id=${item.id}`)
+                : `../produtos/produto.html?id=${item.id}`;
+            const textoBtnPausar = statusClass === 'ativo' ? 'Pausar' : 'Reativar';
 
             card.innerHTML = `
                 <div class="anuncio-card-foto">
@@ -150,14 +155,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         <span class="anuncio-data">• ${item.categoria || 'Geral'}</span>
                     </div>
 
-                    <a href="${window.ItaimRotas ? window.ItaimRotas.obterUrl('produto', `id=${item.id}`) : `../produtos/produto.html?id=${item.id}`}" class="anuncio-titulo">${item.titulo}</a>
+                    <a href="${linkProduto}" class="anuncio-titulo">${item.titulo}</a>
 
                     <div class="anuncio-preco">${formatarPreco(item.preco)}</div>
 
                     <div class="anuncio-metricas">
-                        <span>${item.visualizacoes || item.viewsCount || 0} visualizações</span>
+                        <span>${item.visualizacoes || 0} visualizações</span>
                         <span>${item.conversas || 0} conversas</span>
-                        <span><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -1px; margin-right: 2px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>${item.cidade || userLogado.cidade || 'Paulistana'}</span>
+                        <span><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -1px; margin-right: 2px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>${item.cidade || cidadeUsuario}</span>
                         ${item.vendedorTelefone ? `<span class="anuncio-metrica-wpp" title="WhatsApp: ${formatarTelefone(item.vendedorTelefone)}"><svg viewBox="0 0 24 24" width="13" height="13" fill="#25D366" style="vertical-align: -2px; margin-right: 3px;"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2z"/></svg>${formatarTelefone(item.vendedorTelefone)}</span>` : ''}
                     </div>
                 </div>
@@ -192,6 +197,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const novoStatusBackend = atual === 'ativo' ? 'PAUSADO' : 'ATIVO';
                 const novoStatusLocal = atual === 'ativo' ? 'pausado' : 'ativo';
 
+                btn.disabled = true;
+                btn.textContent = 'Salvando...';
+
                 if (window.ItaimApi && window.ItaimApi.auth.obterToken()) {
                     try {
                         await window.ItaimApi.produtos.alterarStatus(id, novoStatusBackend);
@@ -203,7 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (window.ItaimSessao && typeof window.ItaimSessao.atualizarStatusAnuncio === 'function') {
                     window.ItaimSessao.atualizarStatusAnuncio(id, novoStatusLocal);
                 }
-                carregarAnunciosDoUsuario();
+                await carregarAnunciosDoUsuario();
             });
         });
 
@@ -213,6 +221,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (confirm('Deseja marcar este anúncio como vendido?')) {
                     const itemAnuncio = meusAnuncios.find(a => String(a.id) === String(id));
                     const titulo = itemAnuncio ? itemAnuncio.titulo : 'Produto';
+
+                    btn.disabled = true;
+                    btn.textContent = 'Salvando...';
 
                     if (window.ItaimApi && window.ItaimApi.auth.obterToken()) {
                         try {
@@ -230,10 +241,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             tipo: 'compra',
                             titulo: 'Compra e venda finalizada!',
                             texto: `Seu anúncio "${titulo}" foi marcado como vendido e finalizado com sucesso.`,
-                            link: (window.ItaimRotas ? window.ItaimRotas.obterUrl('meus-anuncios') : '../vender/meus-anuncios.html')
+                            link: (window.ItaimRotas ? window.ItaimRotas.obterUrl('meus-anuncios') : 'meus-anuncios.html')
                         });
                     }
-                    carregarAnunciosDoUsuario();
+                    await carregarAnunciosDoUsuario();
                 }
             });
         });
@@ -242,6 +253,9 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.addEventListener('click', async (e) => {
                 const id = e.currentTarget.dataset.id;
                 if (confirm('Tem certeza que deseja remover este anúncio definitivamente?')) {
+                    btn.disabled = true;
+                    btn.textContent = 'Excluindo...';
+
                     if (window.ItaimApi && window.ItaimApi.auth.obterToken()) {
                         try {
                             await window.ItaimApi.produtos.excluir(id);
@@ -253,7 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (window.ItaimSessao && typeof window.ItaimSessao.excluirAnuncio === 'function') {
                         window.ItaimSessao.excluirAnuncio(id);
                     }
-                    carregarAnunciosDoUsuario();
+                    await carregarAnunciosDoUsuario();
                 }
             });
         });

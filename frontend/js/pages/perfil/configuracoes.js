@@ -8,13 +8,6 @@
  * A senha nunca é guardada.
  */
 document.addEventListener('DOMContentLoaded', () => {
-    // Bloqueia a tela em branco se não estiver autenticado
-    if (window.ItaimSessao && typeof window.ItaimSessao.protegerPagina === 'function') {
-        if (!window.ItaimSessao.protegerPagina('Faça login para acessar e editar as configurações da sua conta.')) {
-            return;
-        }
-    }
-
     const CHAVE_PERFIL = 'itaim_perfil_usuario';
     const CHAVE_ENDERECOS = 'itaim_enderecos';
     const CHAVE_CONFIG = 'itaim_configuracoes';

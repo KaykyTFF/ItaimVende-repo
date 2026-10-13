@@ -49,19 +49,9 @@
         try {
             const resposta = await fetch(url, opcoes);
             
-            // 1. Detecta reinicialização do backend pelo header X-Server-Boot
+            // 1. Registra header X-Server-Boot se disponível
             const serverBoot = resposta.headers.get('X-Server-Boot');
             if (serverBoot) {
-                const bootSalvo = localStorage.getItem('itaim_server_boot');
-                if (bootSalvo && bootSalvo !== serverBoot && obterToken()) {
-                    localStorage.setItem('itaim_server_boot', serverBoot);
-                    if (window.ItaimApi && window.ItaimApi.auth && typeof window.ItaimApi.auth.expirarSessao === 'function') {
-                        window.ItaimApi.auth.expirarSessao('O servidor foi reiniciado. Por favor, faça login novamente para sua segurança.');
-                    }
-                    const erro = new Error('Servidor reiniciado');
-                    erro.status = 401;
-                    throw erro;
-                }
                 localStorage.setItem('itaim_server_boot', serverBoot);
             }
 
@@ -72,12 +62,11 @@
 
             const dados = await resposta.json().catch(() => ({}));
 
-            // 2. Detecta expiração de token ou 401 Unauthorized
+            // 2. Se 401 Unauthorized, limpa token inválido sem forçar redirecionamento de tela
             if (resposta.status === 401) {
                 if (obterToken() && !endpoint.includes('/auth/login') && !endpoint.includes('/auth/register')) {
-                    if (window.ItaimApi && window.ItaimApi.auth && typeof window.ItaimApi.auth.expirarSessao === 'function') {
-                        window.ItaimApi.auth.expirarSessao(dados.message || 'Sua sessão expirou por tempo limite. Por favor, faça login novamente.');
-                    }
+                    console.info('[ItaimApi] Token expirado ou inválido.');
+                    localStorage.removeItem('itaim_token');
                 }
             }
 
@@ -171,8 +160,7 @@
              * Encerra a sessão imediatamente por expiração ou reset do servidor,
              * notificando o usuário e redirecionando para a tela de login.
              */
-            expirarSessao(motivo = 'Sua sessão expirou. Por favor, faça login novamente.') {
-                const tinhaToken = Boolean(obterToken());
+            expirarSessao(motivo = 'Sua sessão expirou.') {
                 localStorage.removeItem('itaim_token');
                 localStorage.removeItem('itaim_usuario_logado');
                 localStorage.removeItem('itaim_ultima_atividade');
@@ -181,17 +169,7 @@
                     window.ItaimSessao.deslogarUsuario();
                 }
 
-                if (tinhaToken) {
-                    sessionStorage.setItem('itaim_sessao_expirada_msg', motivo);
-                }
-
-                const path = window.location.pathname.toLowerCase().replace(/\\/g, '/');
-                const isLoginPage = path.endsWith('/index.html') || path.endsWith('/marketplace-frontend/') || path === '/' || path.endsWith('/frontend/') || path.endsWith('/frontend/index.html');
-                
-                if (!isLoginPage) {
-                    const destino = window.ItaimRotas ? window.ItaimRotas.obterUrl('login') : '../../index.html';
-                    window.location.href = destino;
-                }
+                console.info('[ItaimApi] Sessão limpa:', motivo);
             },
 
             async login(email, password) {
@@ -504,19 +482,11 @@
             window.addEventListener(evt, registrarAtividade, { passive: true });
         });
 
-        // Monitor em tempo real a cada 10 segundos
+        // Sincronização passiva de boot do servidor
         setInterval(async () => {
             const token = obterToken();
             if (!token) return;
 
-            // 1. Checagem de inatividade local no frontend
-            const ultimaAtividade = parseInt(localStorage.getItem('itaim_ultima_atividade') || '0', 10);
-            if (ultimaAtividade && (Date.now() - ultimaAtividade > TEMPO_EXPIRACAO_INATIVIDADE_MS)) {
-                ItaimApi.auth.expirarSessao('Sua sessão expirou por inatividade. Faça login novamente.');
-                return;
-            }
-
-            // 2. Checagem de reinicialização do backend (Heartbeat / Healthcheck)
             try {
                 const res = await fetch(`${API_BASE_URL}/health`, {
                     method: 'GET',
@@ -524,22 +494,13 @@
                     headers: { 'Cache-Control': 'no-cache' }
                 });
                 const bootId = res.headers.get('X-Server-Boot');
-                const dataHealth = await res.json().catch(() => ({}));
-                const bootAtual = bootId || dataHealth.bootId;
-
-                if (bootAtual) {
-                    const bootSalvo = localStorage.getItem('itaim_server_boot');
-                    if (bootSalvo && bootSalvo !== bootAtual) {
-                        localStorage.setItem('itaim_server_boot', bootAtual);
-                        ItaimApi.auth.expirarSessao('O servidor foi reiniciado. Por favor, faça login novamente para sua segurança.');
-                        return;
-                    }
-                    localStorage.setItem('itaim_server_boot', bootAtual);
+                if (bootId) {
+                    localStorage.setItem('itaim_server_boot', bootId);
                 }
             } catch (err) {
-                // Servidor pode estar temporariamente reiniciando
+                // Servidor offline ou reiniciando
             }
-        }, 10000);
+        }, 30000);
     }
 
 })();
