@@ -85,6 +85,15 @@
             // 3. Mapeia para a rota canônica
             rotaBase = this.mapa[rotaBase] || rotaBase;
 
+            // Se o ambiente estiver usando Clean URLs (ex: npx serve sem extensão .html na URL do navegador)
+            const usaCleanUrls = !window.location.pathname.toLowerCase().endsWith('.html') && 
+                                 window.location.protocol !== 'file:' &&
+                                 window.location.pathname !== '/' &&
+                                 !window.location.pathname.endsWith('/');
+            if (usaCleanUrls && rotaBase.endsWith('.html')) {
+                rotaBase = rotaBase.replace(/\.html$/, '');
+            }
+
             // 4. Monta a URL final
             let urlFinal = raiz + rotaBase;
             if (params) {

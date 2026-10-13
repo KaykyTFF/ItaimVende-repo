@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // 3.2 Se não encontrou por ID direto ou não passou parâmetro, busca na vitrine pública da API
+    // 3.2 Se não encontrou por ID direto, busca na vitrine pública da API
     if (!produto && window.ItaimApi && typeof window.ItaimApi.produtos.listar === 'function') {
         try {
             const resList = await window.ItaimApi.produtos.listar();
@@ -52,17 +52,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                         String(p.id) === String(produtoIdParam) || 
                         String(p.slug) === String(produtoIdParam)
                     );
-                    // Suporte a índice numérico legado (0, 1, 2...)
-                    if (!produto && !isNaN(Number(produtoIdParam))) {
-                        const idx = Number(produtoIdParam);
-                        if (idx >= 0 && idx < resList.data.length) {
-                            produto = resList.data[idx];
-                        }
-                    }
-                }
-                // Fallback seguro: exibe o primeiro anúncio ativo da base de dados
-                if (!produto) {
-                    produto = resList.data[0];
                 }
             }
         } catch (errList) {
@@ -70,12 +59,28 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // 3.3 Fallback em cache local / mock
+    // 3.3 Fallback em cache local / mock (se produtoIdParam foi informado)
     if (!produto && produtoIdParam) {
-        produto = todosProdutos.find(p => String(p.id) === String(produtoIdParam));
+        produto = todosProdutos.find(p => 
+            String(p.id) === String(produtoIdParam) ||
+            String(p.slug) === String(produtoIdParam) ||
+            (p.titulo && String(p.titulo).toLowerCase() === String(produtoIdParam).toLowerCase())
+        );
     }
-    if (!produto && todosProdutos.length > 0) {
-        produto = todosProdutos.find(p => String(p.id) === '15') || todosProdutos[0];
+
+    // 3.4 APENAS se o usuário entrou direto na página sem nenhum parâmetro (?id=...)
+    if (!produto && !produtoIdParam) {
+        if (window.ItaimApi && typeof window.ItaimApi.produtos.listar === 'function') {
+            try {
+                const resList = await window.ItaimApi.produtos.listar();
+                if (resList && resList.success && Array.isArray(resList.data) && resList.data.length > 0) {
+                    produto = resList.data[0];
+                }
+            } catch (errFallback) {}
+        }
+        if (!produto && todosProdutos.length > 0) {
+            produto = todosProdutos[0];
+        }
     }
 
     if (!produto) {
