@@ -261,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
         lista.forEach(item => {
             const card = document.createElement('a');
             card.href = (window.ItaimRotas ? window.ItaimRotas.obterUrl('produto', `id=${item.id}`) : `../produtos/produto.html?id=${item.id}`);
-            card.className = 'card-produto-vendedor';
+            card.className = 'card-produto-vendedor fade-in-content';
             const placeholderSrc = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
                 ? window.ItaimRotas.obterAsset('assets/produto-placeholder.svg')
                 : '../../assets/produto-placeholder.svg';

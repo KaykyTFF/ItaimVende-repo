@@ -18,8 +18,71 @@
     <link rel="stylesheet" href="../../css/home.css">
     <link rel="stylesheet" href="../../css/header-global.css?v=7">
     <link rel="stylesheet" href="../../css/perfil.css?v=3">
+    <link rel="stylesheet" href="../../css/skeleton.css">
+
+    <!-- Guard de Sessão: Impede que a tela e dados sejam visualizados sem autenticação -->
+    <script>
+        (function() {
+            var params = new URLSearchParams(window.location.search);
+            var isOutro = params.get('id') || params.get('vendedor') || params.get('nome') || params.get('email');
+            var token = localStorage.getItem('itaim_token');
+            if (!isOutro && !token) {
+                document.documentElement.classList.add('bloqueado-sem-sessao');
+            }
+        })();
+    </script>
+    <style>
+        .bloqueado-sem-sessao body > *:not(#tela-bloqueio-sessao) {
+            display: none !important;
+        }
+        .bloqueado-sem-sessao body {
+            background: #FFFFFF !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: hidden !important;
+        }
+        .bloqueado-sem-sessao #tela-bloqueio-sessao {
+            display: flex !important;
+        }
+    </style>
 </head>
-<body class="pagina-perfil">    <!-- ==========================================================
+<body class="pagina-perfil">
+    <!-- ==========================================================
+         TELA DE BLOQUEIO / SESSÃO NÃO ATIVA (TELA EM BRANCO)
+         ========================================================== -->
+    <div id="tela-bloqueio-sessao" style="display: none; position: fixed; inset: 0; width: 100vw; height: 100vh; background: #FFFFFF; z-index: 9999999; flex-direction: column; align-items: center; justify-content: center; padding: 24px; box-sizing: border-box; text-align: center;">
+        <div style="max-width: 440px; width: 100%; display: flex; flex-direction: column; align-items: center;">
+            <a href="../../index.html" style="display: inline-block; margin-bottom: 26px;">
+                <img src="../../assets/header1-logo.png" alt="Itaim Vende" style="height: 52px; object-fit: contain;">
+            </a>
+
+            <div style="width: 80px; height: 80px; border-radius: 50%; background: #F8FAFC; border: 1.5px solid #E2E8F0; display: flex; align-items: center; justify-content: center; margin-bottom: 22px; box-shadow: 0 4px 16px rgba(0,0,0,0.04);">
+                <svg viewBox="0 0 24 24" width="38" height="38" fill="none" stroke="#44BD32" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+            </div>
+
+            <h1 style="font-size: 24px; font-weight: 800; color: #0F172A; margin: 0 0 10px; letter-spacing: -0.5px;">
+                Acesso Restrito
+            </h1>
+
+            <p style="font-size: 15px; color: #64748B; margin: 0 0 28px; line-height: 1.6; max-width: 360px;">
+                Para sua segurança e privacidade, faça login para acessar os dados do seu perfil e gerenciar sua conta.
+            </p>
+
+            <a href="../../index.html" class="btn-voltar-login" style="display: inline-flex; align-items: center; justify-content: center; gap: 10px; background: #44BD32; color: #FFFFFF; font-weight: 700; font-size: 15.5px; padding: 14px 34px; border-radius: 30px; text-decoration: none; box-shadow: 0 4px 18px rgba(68,189,50,0.35); transition: transform 0.2s, background 0.2s; width: 100%; max-width: 280px; box-sizing: border-box;">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                    <polyline points="10 17 15 12 10 7"></polyline>
+                    <line x1="15" y1="12" x2="3" y2="12"></line>
+                </svg>
+                <span>Voltar para o Login</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- ==========================================================
          1. CABEÇALHO GLOBAL (NAVBAR UNIFICADA)
          ========================================================== -->
     <header class="header-principal">
@@ -308,14 +371,14 @@
                 <!-- Informações do Usuário (Centro-Esquerda) -->
                 <div class="perfil-banner-info">
                     <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                        <h1 class="perfil-nome-titulo" id="perfil-nome-display" style="margin: 0;">Raili</h1>
-                        <span id="perfil-selo-verificado" style="display: inline-flex; align-items: center; gap: 4px; background: #DCFCE7; color: #166534; font-size: 12px; font-weight: 700; padding: 2px 9px; border-radius: 20px;" title="Perfil Oficial Verificado">
+                        <h1 class="perfil-nome-titulo" id="perfil-nome-display" style="margin: 0;">Carregando...</h1>
+                        <span id="perfil-selo-verificado" style="display: none; align-items: center; gap: 4px; background: #DCFCE7; color: #166534; font-size: 12px; font-weight: 700; padding: 2px 9px; border-radius: 20px;" title="Perfil Oficial Verificado">
                             <svg viewBox="0 0 24 24" width="13" height="13" fill="#166534"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
                             Verificado
                         </span>
                     </div>
-                    <span id="perfil-username-display" style="font-size: 13.5px; font-weight: 600; color: #64748B;">@rsstore</span>
-                    <p id="perfil-bio-display" style="font-size: 13.5px; color: #475569; margin: 2px 0 6px; line-height: 1.4;">Perfil oficial e verificado da administração do Itaim Vende.</p>
+                    <span id="perfil-username-display" style="font-size: 13.5px; font-weight: 600; color: #64748B;">@...</span>
+                    <p id="perfil-bio-display" style="font-size: 13.5px; color: #475569; margin: 2px 0 6px; line-height: 1.4;"></p>
 
                     <div class="perfil-banner-detalhes">
                         <div class="perfil-detalhe-item">
@@ -370,7 +433,7 @@
                     </svg>
                 </div>
                 <div class="stat-info-texto">
-                    <div class="stat-numero-destaque" id="stat-anuncios-ativos">0</div>
+                    <div class="stat-numero-destaque" id="stat-anuncios-ativos">-</div>
                     <div class="stat-legenda">Anúncios Ativos</div>
                 </div>
             </div>
@@ -383,8 +446,8 @@
                     </svg>
                 </div>
                 <div class="stat-info-texto">
-                    <div class="stat-numero-destaque" id="stat-avaliacoes-texto">5.0 ★</div>
-                    <div class="stat-legenda" id="stat-avaliacoes-legenda">Avaliações (18)</div>
+                    <div class="stat-numero-destaque" id="stat-avaliacoes-texto">-</div>
+                    <div class="stat-legenda" id="stat-avaliacoes-legenda">Avaliações (0)</div>
                 </div>
             </div>
 
@@ -398,7 +461,7 @@
                     </svg>
                 </div>
                 <div class="stat-info-texto">
-                    <div class="stat-numero-destaque" id="stat-vendas-concluidas">12</div>
+                    <div class="stat-numero-destaque" id="stat-vendas-concluidas">-</div>
                     <div class="stat-legenda">Vendas Concluídas</div>
                 </div>
             </div>
@@ -520,7 +583,7 @@
                         </svg>
                         <span>Nome Completo</span>
                     </label>
-                    <input type="text" id="perfil-nome" class="campo-input-perfil" value="Raili" readonly style="background-color: #F8FAFC; cursor: default;">
+                    <input type="text" id="perfil-nome" class="campo-input-perfil" placeholder="Nome Completo" readonly style="background-color: #F8FAFC; cursor: default;">
                 </div>
 
                 <!-- 2. Nome de Usuário -->
@@ -532,7 +595,7 @@
                         </svg>
                         <span>Nome de Usuário</span>
                     </label>
-                    <input type="text" id="perfil-usuario" class="campo-input-perfil" value="rsstore" readonly style="background-color: #F8FAFC; cursor: default;">
+                    <input type="text" id="perfil-usuario" class="campo-input-perfil" placeholder="Nome de usuário" readonly style="background-color: #F8FAFC; cursor: default;">
                 </div>
 
                 <!-- 3. E-mail -->
@@ -544,7 +607,7 @@
                         </svg>
                         <span>E-mail</span>
                     </label>
-                    <input type="email" id="perfil-email" class="campo-input-perfil" value="admin@gmail.com" readonly style="background-color: #F8FAFC; cursor: default;">
+                    <input type="email" id="perfil-email" class="campo-input-perfil" placeholder="E-mail" readonly style="background-color: #F8FAFC; cursor: default;">
                 </div>
 
                 <!-- 4. WhatsApp / Celular -->
@@ -555,7 +618,7 @@
                         </svg>
                         <span>WhatsApp / Celular</span>
                     </label>
-                    <input type="tel" id="perfil-telefone" class="campo-input-perfil" value="(89) 99998-5858" readonly style="background-color: #F8FAFC; cursor: default;">
+                    <input type="tel" id="perfil-telefone" class="campo-input-perfil" placeholder="Telefone" readonly style="background-color: #F8FAFC; cursor: default;">
                 </div>
 
                 <!-- 5. Cidade -->
@@ -567,7 +630,7 @@
                         </svg>
                         <span>Cidade</span>
                     </label>
-                    <input type="text" id="perfil-cidade" class="campo-input-perfil" value="Paulistana" readonly style="background-color: #F8FAFC; cursor: default;">
+                    <input type="text" id="perfil-cidade" class="campo-input-perfil" placeholder="Cidade" readonly style="background-color: #F8FAFC; cursor: default;">
                 </div>
 
                 <!-- 6. Bairro / Região -->
@@ -579,7 +642,7 @@
                         </svg>
                         <span>Bairro / Região</span>
                     </label>
-                    <input type="text" id="perfil-bairro" class="campo-input-perfil" value="Centro" readonly style="background-color: #F8FAFC; cursor: default;">
+                    <input type="text" id="perfil-bairro" class="campo-input-perfil" placeholder="Bairro" readonly style="background-color: #F8FAFC; cursor: default;">
                 </div>
             </div>
         </section>
@@ -642,6 +705,7 @@
     <script src="../../js/core/rotas.js"></script>
     <script src="../../js/core/api.js"></script>
     <script src="../../js/core/sessao.js"></script>
+    <script src="../../js/core/skeleton.js"></script>
     <script src="../../js/core/ajustar-foto.js"></script>
     <script src="../../js/pages/perfil/perfil.js"></script>
 </body>

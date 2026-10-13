@@ -230,7 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 : (window.ItaimRotas ? window.ItaimRotas.obterAsset('assets/produtos/anuncio_13.jpg') : '../../assets/produtos/anuncio_13.jpg');
 
             return `
-                <article class="card-produto" data-id="${pId}">
+                <article class="card-produto fade-in-content" data-id="${pId}">
                     <div class="card-img-box">
                         <img src="${imagemUrl}" alt="${p.titulo}" class="card-img" onerror="this.onerror=null; this.src='${placeholderSrc}'">
                         <button type="button" class="btn-favorito ${isFav ? 'ativo' : ''}" data-id="${pId}" aria-label="Favoritar anúncio">
@@ -333,7 +333,10 @@ document.addEventListener('DOMContentLoaded', () => {
         renderizarVitrine();
     }
 
-    // Inicialização da vitrine
+    // Inicialização da vitrine com Skeleton Shimmer imediato
+    if (window.ItaimSkeleton && typeof window.ItaimSkeleton.renderizarCards === 'function') {
+        window.ItaimSkeleton.renderizarCards(gradeProdutos, 8);
+    }
     carregarProdutosApi();
 
     // ==========================================================================

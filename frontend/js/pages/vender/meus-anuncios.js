@@ -4,6 +4,13 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Bloqueia a tela em branco se não estiver autenticado
+    if (window.ItaimSessao && typeof window.ItaimSessao.protegerPagina === 'function') {
+        if (!window.ItaimSessao.protegerPagina('Faça login para gerenciar e visualizar seus anúncios publicados.')) {
+            return;
+        }
+    }
+
     // 1. Obter usuário logado atual
     const userLogado = (window.ItaimSessao && typeof window.ItaimSessao.obterUsuarioLogado === 'function')
         ? window.ItaimSessao.obterUsuarioLogado()
@@ -122,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         filtrados.forEach(item => {
             const card = document.createElement('article');
-            card.className = 'anuncio-item-card';
+            card.className = 'anuncio-item-card fade-in-content';
 
             const statusClass = item.status || 'ativo';
             const statusLabel = statusClass === 'ativo' ? 'Ativo' : (statusClass === 'pausado' ? 'Pausado' : 'Vendido');
@@ -262,7 +269,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Header e Menu Lateral (Drawer) são gerenciados de forma centralizada e global por sessao.js
+    // Exibe skeletons enquanto carrega da API
+    if (window.ItaimSkeleton && container && typeof window.ItaimSkeleton.renderizarMeusAnuncios === 'function') {
+        window.ItaimSkeleton.renderizarMeusAnuncios(container, 3);
+    }
+
     // Carga inicial
     carregarAnunciosDoUsuario();
 });

@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         produtosFavoritados.forEach(produto => {
             const card = document.createElement('article');
-            card.className = 'card-produto';
+            card.className = 'card-produto fade-in-content';
             card.dataset.id = produto.id;
 
             const placeholderSrc = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
@@ -207,6 +207,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             e.preventDefault();
         }
     });
+
+    // Exibe skeletons enquanto carrega os anúncios favoritos
+    if (window.ItaimSkeleton && typeof window.ItaimSkeleton.renderizarCards === 'function') {
+        window.ItaimSkeleton.renderizarCards(grade, 6);
+    }
 
     // Carga inicial assíncrona
     carregarCatalogoEFavoritos();

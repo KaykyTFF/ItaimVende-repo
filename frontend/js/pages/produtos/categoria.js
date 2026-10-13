@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
         gradeProdutos.innerHTML = lista.map(p => {
             const isFav = favoritosSet.has(p.id);
             return `
-                <article class="card-produto" data-id="${p.id}">
+                <article class="card-produto fade-in-content" data-id="${p.id}">
                     <div class="card-img-box">
                         <img src="${p.imagem}" alt="${p.titulo}" class="card-img" onerror="this.onerror=null; this.src='${placeholderSrc}'">
                         <button type="button" class="btn-favorito ${isFav ? 'ativo' : ''}" data-id="${p.id}" aria-label="Favoritar anúncio">
@@ -237,6 +237,10 @@ document.addEventListener('DOMContentLoaded', () => {
         renderizar();
     });
 
+    // Exibe skeletons na grade imediatamente durante o carregamento
+    if (window.ItaimSkeleton && typeof window.ItaimSkeleton.renderizarCards === 'function') {
+        window.ItaimSkeleton.renderizarCards(gradeProdutos, 8);
+    }
     carregarProdutosCategoria();
 
     // Header e Menu Lateral (Drawer) são gerenciados de forma centralizada e global por sessao.js

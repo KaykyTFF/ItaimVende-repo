@@ -4,6 +4,16 @@
  */
 
 document.addEventListener('DOMContentLoaded', async () => {
+    // 0. Exibir Skeleton Screen imediatamente enquanto busca o anúncio no Supabase/API
+    const skeletonContainer = document.getElementById('skeleton-produto-container');
+    const mainConteudo = document.getElementById('main-anuncio-conteudo');
+    if (skeletonContainer && window.ItaimSkeleton && typeof window.ItaimSkeleton.obterDetalhesProdutoHtml === 'function') {
+        skeletonContainer.innerHTML = window.ItaimSkeleton.obterDetalhesProdutoHtml();
+        if (mainConteudo) {
+            mainConteudo.style.display = 'none';
+        }
+    }
+
     // 1. Obter ID do Produto via URL (suporta ?id=, ?produto=, ?slug= e #hash)
     const params = new URLSearchParams(window.location.search);
     let produtoIdParam = params.get('id') || params.get('produto') || params.get('slug');
@@ -105,7 +115,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         return Number(val).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     }
 
-    // 5. Preencher Informações na Página
+    // 5. Ocultar Skeleton e exibir o conteúdo real preenchido
+    if (skeletonContainer) {
+        skeletonContainer.style.display = 'none';
+    }
+    if (mainConteudo) {
+        mainConteudo.style.display = '';
+        mainConteudo.classList.add('fade-in-content');
+    }
+
     document.title = `${produto.titulo} - Itaim Vende`;
 
     const elTitulo = document.getElementById('produto-titulo');

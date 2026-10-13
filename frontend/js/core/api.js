@@ -241,6 +241,13 @@
                 });
             },
 
+            async obterUsuario(id) {
+                return requisicao(`/auth/user/${id}`, {
+                    method: 'GET',
+                    headers: obterHeaders(true)
+                });
+            },
+
             async atualizarPerfil(dados) {
                 const resposta = await requisicao('/auth/me', {
                     method: 'PUT',

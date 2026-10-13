@@ -3,6 +3,8 @@
  * Componente unificado para todas as páginas (Desktop & Mobile)
  */
 
+@import url('skeleton.css');
+
 :root {
     --primary: #44BD32;
     --primary-hover: #3ca92c;

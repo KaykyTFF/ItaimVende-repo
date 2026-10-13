@@ -4,6 +4,9 @@
   "description": "Itaim Vende - Plataforma de Compra, Venda e Trocas",
   "private": true,
   "scripts": {
+    "start": "npm --prefix backend run start",
+    "dev": "npm --prefix backend run dev",
+    "tunnel": "\"C:\\Program Files (x86)\\cloudflared\\cloudflared.exe\" tunnel --url http://localhost:3000",
     "dev:frontend": "npx -y serve frontend -p 5500",
     "dev:backend": "npm --prefix backend run dev",
     "start:backend": "npm --prefix backend run start",

@@ -1,49 +1,17 @@
 /**
  * ITAIM VENDE - LÓGICA DA PÁGINA DE PERFIL (PERFIL.HTML)
- * Perfil Admin (Raili - admin@gmail.com) com gestão de dados, estatísticas reais e grade de anúncios.
+ * Suporte completo a dados reais do banco de dados (Supabase PostgreSQL),
+ * sincronização em tempo real de foto de perfil (/uploads/...), anúncios e estatísticas.
  */
 
-document.addEventListener('DOMContentLoaded', () => {
-    const usuarioLogado = (window.ItaimSessao && typeof window.ItaimSessao.obterUsuarioLogado === 'function')
-        ? window.ItaimSessao.obterUsuarioLogado()
-        : { 
-            nome: 'Raili', 
-            email: 'admin@gmail.com', 
-            cidade: 'Paulistana', 
-            bairro: 'Centro', 
-            telefone: '(89) 99999-9999',
-            avatar: 'assets/icon-user.png',
-            dataCadastro: 'Membro desde 2024'
-        };
-
-    // Parâmetros da URL para visualizar perfil de outros usuários
+document.addEventListener('DOMContentLoaded', async () => {
+    // Parâmetros da URL para perfil de outros vendedores
     const urlParams = new URLSearchParams(window.location.search);
     const paramEmail = (urlParams.get('email') || '').toLowerCase().trim();
     const paramNome = (urlParams.get('vendedor') || urlParams.get('nome') || '').trim();
     const paramId = urlParams.get('id');
 
-    let perfilExibido = usuarioLogado;
-    let isPerfilProprio = true;
-
-    if (paramEmail || paramNome || paramId) {
-        const todosUsuarios = (window.ItaimSessao && typeof window.ItaimSessao.obterTodosUsuarios === 'function')
-            ? window.ItaimSessao.obterTodosUsuarios()
-            : [];
-        let encontrado = null;
-        if (paramEmail) encontrado = todosUsuarios.find(u => (u.email || '').toLowerCase() === paramEmail);
-        if (!encontrado && paramNome) {
-            const b = paramNome.toLowerCase();
-            encontrado = todosUsuarios.find(u => (u.nome || '').toLowerCase() === b || (u.username || '').toLowerCase() === b);
-        }
-        if (!encontrado && paramId) {
-            encontrado = todosUsuarios.find(u => String(u.id) === String(paramId));
-        }
-
-        if (encontrado && ((encontrado.email || '').toLowerCase() !== (usuarioLogado.email || '').toLowerCase())) {
-            perfilExibido = encontrado;
-            isPerfilProprio = false;
-        }
-    }
+    const isPerfilProprio = !paramEmail && !paramNome && !paramId;
 
     // Elementos DOM do Banner
     const nomeDisplay = document.getElementById('perfil-nome-display');
@@ -57,14 +25,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const boxContatoExterno = document.getElementById('box-contato-vendedor-externo');
     const btnWppExterno = document.getElementById('btn-whatsapp-perfil');
     const boxFormAvaliacao = document.getElementById('perfil-box-form-avaliacao');
+    const alertaNaoLogado = document.getElementById('perfil-alerta-nao-logado');
+    const userDisplayEl = document.getElementById('perfil-username-display');
+    const bioDisplayEl = document.getElementById('perfil-bio-display');
+    const seloVerifEl = document.getElementById('perfil-selo-verificado');
 
     // Elementos de Estatísticas
     const statAtivos = document.getElementById('stat-anuncios-ativos');
     const statAvaliacao = document.getElementById('stat-avaliacoes-texto');
     const statVendas = document.getElementById('stat-vendas-concluidas');
+    const statLegenda = document.getElementById('stat-avaliacoes-legenda');
+    const badgeAvaliacoes = document.getElementById('perfil-badge-avaliacoes');
 
-    // Formulário de Dados
-    const formDados = document.getElementById('form-dados-perfil');
+    // Formulário de Dados Pessoais
     const nomeInput = document.getElementById('perfil-nome');
     const usuarioInput = document.getElementById('perfil-usuario');
     const emailInput = document.getElementById('perfil-email');
@@ -72,61 +45,187 @@ document.addEventListener('DOMContentLoaded', () => {
     const cidadeInput = document.getElementById('perfil-cidade');
     const bairroInput = document.getElementById('perfil-bairro');
     const toast = document.getElementById('toast-sucesso');
-
-    // Ajustes para visualização do próprio perfil vs perfil de outro usuário
-    if (isPerfilProprio) {
-        document.title = `${perfilExibido.nome} - Meu Perfil - Itaim Vende`;
-        if (breadcrumbCurrent) breadcrumbCurrent.textContent = 'Meu Perfil';
-        if (boxContatoExterno) boxContatoExterno.style.display = 'none';
-        if (boxFormAvaliacao) boxFormAvaliacao.style.display = 'none';
-        if (btnSairBanner) btnSairBanner.style.display = 'inline-flex';
-    } else {
-        document.title = `${perfilExibido.nome} - Perfil no Itaim Vende`;
-        if (breadcrumbCurrent) breadcrumbCurrent.textContent = `Perfil de ${perfilExibido.nome}`;
-        if (btnCameraAvatar) btnCameraAvatar.style.display = 'none';
-        if (btnSairBanner) btnSairBanner.style.display = 'none';
-
-        // Exibe box de contato WhatsApp para outro perfil
-        if (boxContatoExterno && btnWppExterno) {
-            boxContatoExterno.style.display = 'block';
-            let fone = (perfilExibido.phone || perfilExibido.telefone || '5589999985858').replace(/\D/g, '');
-            if (fone.length === 10 || fone.length === 11) fone = '55' + fone;
-            const msg = encodeURIComponent(`Olá ${perfilExibido.nome}! Vi seu perfil no Itaim Vende e gostaria de conversar sobre seus anúncios.`);
-            btnWppExterno.href = `https://wa.me/${fone}?text=${msg}`;
-        }
-
-        // Exibe formulário para deixar avaliação no perfil do outro usuário
-        if (boxFormAvaliacao) {
-            boxFormAvaliacao.style.display = 'block';
-            const inputAutor = document.getElementById('perfil-input-autor');
-            if (inputAutor && usuarioLogado && usuarioLogado.nome) {
-                inputAutor.value = usuarioLogado.nome;
-            }
-        }
-    }
+    const gradeAnuncios = document.getElementById('grade-anuncios-perfil');
+    const tituloSecaoAnuncios = document.getElementById('titulo-secao-anuncios');
+    const subtituloSecaoAnuncios = document.getElementById('subtitulo-secao-anuncios');
 
     const fallbackAvatarPerfil = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
         ? window.ItaimRotas.obterAsset('assets/icon-user.png')
         : '../../assets/icon-user.png';
 
-    if (nomeDisplay) nomeDisplay.textContent = perfilExibido.nome || perfilExibido.name || 'Raili';
-    if (cidadeDisplay) cidadeDisplay.textContent = `${perfilExibido.cidade || perfilExibido.city || 'Paulistana'} - PI`;
-    if (dataDisplay) dataDisplay.textContent = perfilExibido.dataCadastro || 'Membro desde 2024';
+    function formatarTelefoneBR(tel) {
+        if (!tel) return '';
+        const num = String(tel).replace(/\D/g, '');
+        if (num.length === 11) {
+            return `(${num.substring(0, 2)}) ${num.substring(2, 7)}-${num.substring(7)}`;
+        }
+        if (num.length === 10) {
+            return `(${num.substring(0, 2)}) ${num.substring(2, 6)}-${num.substring(6)}`;
+        }
+        return tel;
+    }
+
+    function formatarPreco(val) {
+        if (val === 0 || val === '0' || val === null || val === undefined) {
+            return '<span style="color: #44BD32; font-weight: 800;">Grátis / Doação</span>';
+        }
+        return Number(val).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function exibirToast(mensagem = 'Informações salvas com sucesso!') {
+        if (!toast) return;
+        const span = toast.querySelector('span');
+        if (span) span.textContent = mensagem;
+        toast.classList.add('visivel');
+        setTimeout(() => {
+            toast.classList.remove('visivel');
+        }, 3500);
+    }
+
+    // -------------------------------------------------------------------------
+    // 1. CARREGAMENTO DOS DADOS DO PERFIL
+    // -------------------------------------------------------------------------
+    let perfilExibido = null;
+    const token = window.ItaimApi?.auth?.obterToken();
+
+    if (isPerfilProprio) {
+        if (!token) {
+            // USUÁRIO NÃO ESTÁ LOGADO NESTE NAVEGADOR / DISPOSITIVO:
+            // Bloqueia a tela totalmente em branco e exibe o botão para voltar ao login
+            document.documentElement.classList.add('bloqueado-sem-sessao');
+            document.title = 'Acesso Restrito - Itaim Vende';
+
+            const telaBloqueio = document.getElementById('tela-bloqueio-sessao');
+            if (telaBloqueio) {
+                telaBloqueio.style.display = 'flex';
+            }
+
+            // Encerra imediatamente a execução para evitar que qualquer dado ou layout seja carregado
+            return;
+        }
+
+        // Usuário AUTENTICADO: esconde alerta e exibe botão sair
+        if (alertaNaoLogado) alertaNaoLogado.style.display = 'none';
+        if (btnSairBanner) btnSairBanner.style.display = 'inline-flex';
+        if (btnCameraAvatar) btnCameraAvatar.style.display = 'flex';
+        if (boxContatoExterno) boxContatoExterno.style.display = 'none';
+        if (boxFormAvaliacao) boxFormAvaliacao.style.display = 'none';
+
+        // Mostra skeleton nos anúncios enquanto busca do backend
+        if (window.ItaimSkeleton && typeof window.ItaimSkeleton.exibir === 'function' && gradeAnuncios) {
+            window.ItaimSkeleton.exibir(gradeAnuncios, 'cards', 3);
+        }
+
+        // Busca dados reais e atualizados do backend
+        try {
+            const res = await window.ItaimApi.auth.perfil();
+            if (res && res.user) {
+                perfilExibido = res.user;
+                localStorage.setItem('itaim_usuario_logado', JSON.stringify(res.user));
+                localStorage.setItem('itaim_usuario_logado_email', res.user.email);
+                if (window.ItaimSessao && typeof window.ItaimSessao.definirUsuarioLogado === 'function') {
+                    window.ItaimSessao.definirUsuarioLogado(res.user.email, res.user);
+                }
+            }
+        } catch (errPerfil) {
+            console.warn('[Perfil] Falha ao carregar perfil do backend, usando cache local:', errPerfil);
+            perfilExibido = window.ItaimSessao ? window.ItaimSessao.obterUsuarioLogado() : null;
+        }
+
+        if (!perfilExibido) {
+            perfilExibido = window.ItaimSessao ? window.ItaimSessao.obterUsuarioLogado() : {};
+        }
+    } else {
+        // Visualização do perfil de outro vendedor
+        if (alertaNaoLogado) alertaNaoLogado.style.display = 'none';
+        if (btnCameraAvatar) btnCameraAvatar.style.display = 'none';
+        if (btnSairBanner) btnSairBanner.style.display = 'none';
+
+        if (paramId) {
+            try {
+                const resOutro = await window.ItaimApi.auth.obterUsuario(paramId);
+                if (resOutro && resOutro.user) {
+                    perfilExibido = resOutro.user;
+                }
+            } catch (err) {
+                console.warn('[Perfil] Erro ao carregar usuário por ID:', err);
+            }
+        }
+
+        if (!perfilExibido) {
+            const todosUsuarios = (window.ItaimSessao && typeof window.ItaimSessao.obterTodosUsuarios === 'function')
+                ? window.ItaimSessao.obterTodosUsuarios()
+                : [];
+            if (paramEmail) perfilExibido = todosUsuarios.find(u => (u.email || '').toLowerCase() === paramEmail);
+            if (!perfilExibido && paramNome) {
+                const b = paramNome.toLowerCase();
+                perfilExibido = todosUsuarios.find(u => (u.name || u.nome || '').toLowerCase() === b || (u.username || '').toLowerCase() === b);
+            }
+        }
+
+        if (!perfilExibido) {
+            perfilExibido = {
+                name: paramNome || 'Vendedor',
+                username: paramNome ? paramNome.toLowerCase().replace(/\s+/g, '') : 'vendedor',
+                city: 'Paulistana',
+                state: 'PI',
+                avatar: 'assets/icon-user.png'
+            };
+        }
+
+        // Box de contato WhatsApp com vendedor externo
+        if (boxContatoExterno && btnWppExterno) {
+            boxContatoExterno.style.display = 'block';
+            let fone = (perfilExibido.phone || perfilExibido.telefone || '89999858585').replace(/\D/g, '');
+            if (fone.length === 10 || fone.length === 11) fone = '55' + fone;
+            const nomeVendedor = perfilExibido.name || perfilExibido.nome || 'Vendedor';
+            const msg = encodeURIComponent(`Olá ${nomeVendedor}! Vi seu perfil no Itaim Vende e gostaria de conversar sobre seus anúncios.`);
+            btnWppExterno.href = `https://wa.me/${fone}?text=${msg}`;
+        }
+
+        // Formulário de avaliação
+        if (boxFormAvaliacao) {
+            boxFormAvaliacao.style.display = 'block';
+            const userLogadoAtual = window.ItaimSessao ? window.ItaimSessao.obterUsuarioLogado() : null;
+            const inputAutor = document.getElementById('perfil-input-autor');
+            const labelAutorLogado = document.getElementById('perfil-nome-autor-logado');
+            if (inputAutor && userLogadoAtual) {
+                inputAutor.value = userLogadoAtual.name || userLogadoAtual.nome || 'Comprador';
+                if (labelAutorLogado) labelAutorLogado.textContent = inputAutor.value;
+            }
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // 2. ATUALIZAR INFORMAÇÕES VISUAIS DO BANNER
+    // -------------------------------------------------------------------------
+    const nomePrincipal = perfilExibido.name || perfilExibido.nome || 'Usuário';
+    document.title = `${nomePrincipal} - ${isPerfilProprio ? 'Meu Perfil' : 'Perfil'} - Itaim Vende`;
+    if (breadcrumbCurrent) breadcrumbCurrent.textContent = isPerfilProprio ? 'Meu Perfil' : `Perfil de ${nomePrincipal}`;
+
+    if (nomeDisplay) nomeDisplay.textContent = nomePrincipal;
+    if (userDisplayEl) userDisplayEl.textContent = perfilExibido.username ? `@${perfilExibido.username}` : (perfilExibido.usuario ? `@${perfilExibido.usuario}` : '');
+    if (bioDisplayEl) bioDisplayEl.textContent = perfilExibido.bio || (isPerfilProprio ? 'Nenhuma biografia informada. Acesse Configurações para adicionar uma bio.' : 'Vendedor cadastrado no Itaim Vende.');
     
-    const bioDisplayEl = document.getElementById('perfil-bio-display');
-    if (bioDisplayEl && perfilExibido.bio) bioDisplayEl.textContent = perfilExibido.bio;
+    const cidadeFormatada = `${perfilExibido.city || perfilExibido.cidade || 'Paulistana'} - ${perfilExibido.state || perfilExibido.estado || 'PI'}`;
+    if (cidadeDisplay) cidadeDisplay.textContent = cidadeFormatada;
 
-    const userDisplayEl = document.getElementById('perfil-username-display');
-    if (userDisplayEl) userDisplayEl.textContent = `@${perfilExibido.username || perfilExibido.usuario || 'rsstore'}`;
+    const anoMembro = perfilExibido.createdAt ? new Date(perfilExibido.createdAt).getFullYear() : '2024';
+    if (dataDisplay) dataDisplay.textContent = `Membro desde ${anoMembro}`;
 
-    const seloVerifEl = document.getElementById('perfil-selo-verificado');
-    if (seloVerifEl) seloVerifEl.style.display = (perfilExibido.isVerified || perfilExibido.role === 'ADMIN') ? 'inline-flex' : 'none';
+    if (seloVerifEl) {
+        seloVerifEl.style.display = (perfilExibido.isVerified || perfilExibido.role === 'ADMIN') ? 'inline-flex' : 'none';
+    }
 
+    // Resolução da foto de perfil com suporte a /uploads/... do backend
     if (avatarImgView) {
         const rawAvatar = perfilExibido.avatar || 'assets/icon-user.png';
-        const finalAvatar = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
-            ? window.ItaimRotas.obterAsset(rawAvatar)
-            : fallbackAvatarPerfil;
+        const finalAvatar = (window.ItaimApi && typeof window.ItaimApi.resolverUrlImagem === 'function')
+            ? window.ItaimApi.resolverUrlImagem(rawAvatar)
+            : ((window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
+                ? window.ItaimRotas.obterAsset(rawAvatar)
+                : fallbackAvatarPerfil);
+
         avatarImgView.src = finalAvatar;
         avatarImgView.onerror = function() {
             this.onerror = null;
@@ -134,320 +233,271 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // ------------------------------------------------------------------
-    // Configurações de Privacidade e Visibilidade no Perfil
-    // ------------------------------------------------------------------
-    const configPrivacidade = (window.ItaimSessao && typeof window.ItaimSessao.obterConfiguracoes === 'function')
-        ? window.ItaimSessao.obterConfiguracoes()
-        : (function() {
-            try {
-                return JSON.parse(localStorage.getItem('itaim_configuracoes') || '{}');
-            } catch(e) { return {}; }
-        })();
+    // Preenche dados pessoais (modo somente leitura no perfil)
+    if (nomeInput) nomeInput.value = nomePrincipal;
+    if (usuarioInput) usuarioInput.value = perfilExibido.username || perfilExibido.usuario || '';
+    if (emailInput) emailInput.value = perfilExibido.email || '';
+    if (telefoneInput) telefoneInput.value = formatarTelefoneBR(perfilExibido.phone || perfilExibido.telefone || '');
+    if (cidadeInput) cidadeInput.value = perfilExibido.city || perfilExibido.cidade || 'Paulistana';
+    if (bairroInput) bairroInput.value = perfilExibido.neighborhood || perfilExibido.bairro || 'Centro';
 
-    const mostrarTelefone = configPrivacidade['priv-telefone'] !== false;
-    const mostrarBairro = configPrivacidade['priv-bairro'] !== false;
-    const mostrarOnline = !!configPrivacidade['priv-online'];
+    // -------------------------------------------------------------------------
+    // 3. ESTATÍSTICAS REAIS (ANÚNCIOS, AVALIAÇÕES E VENDAS)
+    // -------------------------------------------------------------------------
+    const baseVendas = perfilExibido.salesCount !== undefined ? perfilExibido.salesCount : (perfilExibido.vendasConcluidas !== undefined ? perfilExibido.vendasConcluidas : 0);
+    if (statVendas) statVendas.textContent = baseVendas;
 
-    // Preenche os campos do formulário de dados (sincronizados com Configurações e respeitando Privacidade)
-    if (nomeInput) nomeInput.value = perfilExibido.nome || 'Raili';
-    if (usuarioInput) usuarioInput.value = perfilExibido.username || perfilExibido.usuario || 'rsstore';
-    if (emailInput) {
-        emailInput.value = perfilExibido.email || 'admin@gmail.com';
-        emailInput.readOnly = true;
-        emailInput.style.backgroundColor = '#F8FAFC';
-        emailInput.style.cursor = 'default';
+    const qtdAvaliacoes = perfilExibido.ratingCount !== undefined ? perfilExibido.ratingCount : (perfilExibido.totalAvaliacoes || 0);
+    const mediaAvaliacao = Number(perfilExibido.ratingAverage || perfilExibido.avaliacao || 5.0).toFixed(1);
+    const avaliacaoFormatada = qtdAvaliacoes > 0 ? `${mediaAvaliacao} ★` : 'Novo';
+    const legendaAvaliacao = qtdAvaliacoes > 0 ? `Avaliações (${qtdAvaliacoes})` : 'Sem avaliações';
+
+    if (statAvaliacao) statAvaliacao.textContent = avaliacaoFormatada;
+    if (statLegenda) statLegenda.textContent = legendaAvaliacao;
+    if (badgeAvaliacoes) badgeAvaliacoes.textContent = `${avaliacaoFormatada} (${qtdAvaliacoes})`;
+
+    // -------------------------------------------------------------------------
+    // 4. ANÚNCIOS REAIS DO USUÁRIO
+    // -------------------------------------------------------------------------
+    if (tituloSecaoAnuncios) {
+        tituloSecaoAnuncios.textContent = isPerfilProprio ? 'Meus Anúncios Publicados' : `Anúncios de ${nomePrincipal}`;
+    }
+    if (subtituloSecaoAnuncios) {
+        subtituloSecaoAnuncios.textContent = isPerfilProprio
+            ? 'Esses são os anúncios do seu perfil visíveis para outros compradores no Itaim Vende.'
+            : `Todos os produtos anunciados por ${nomePrincipal} disponíveis para negociação.`;
     }
 
-    if (telefoneInput) {
-        const telFormatado = perfilExibido.telefone || (perfilExibido.phone ? '(89) 99998-5858' : '(89) 99998-5858');
-        if (mostrarTelefone) {
-            telefoneInput.value = telFormatado;
-            telefoneInput.style.color = '#2d3748';
-        } else {
-            if (isPerfilProprio) {
-                telefoneInput.value = `${telFormatado} (Oculto publicamente)`;
-                telefoneInput.style.color = '#94A3B8';
-            } else {
-                telefoneInput.value = 'Oculto pelo vendedor';
-                telefoneInput.style.color = '#94A3B8';
-            }
+    let listaAnuncios = [];
+    try {
+        if (isPerfilProprio && window.ItaimApi && window.ItaimApi.produtos) {
+            const resMeus = await window.ItaimApi.produtos.meusAnuncios();
+            listaAnuncios = resMeus.data || resMeus.products || [];
+        } else if (!isPerfilProprio && perfilExibido.id && window.ItaimApi && window.ItaimApi.produtos) {
+            const resVendedor = await window.ItaimApi.produtos.doVendedor(perfilExibido.id);
+            listaAnuncios = resVendedor.data || resVendedor.products || [];
+        }
+    } catch (errAds) {
+        console.warn('[Perfil] Erro ao carregar anúncios via API, buscando localmente:', errAds);
+    }
+
+    // Se API não retornou produtos, faz fallback para anúncios locais
+    if ((!listaAnuncios || listaAnuncios.length === 0) && window.ItaimSessao && typeof window.ItaimSessao.obterAnunciosDoUsuario === 'function') {
+        const anunciosLocais = window.ItaimSessao.obterAnunciosDoUsuario(perfilExibido.email);
+        if (anunciosLocais && anunciosLocais.length > 0) {
+            listaAnuncios = anunciosLocais;
         }
     }
 
-    if (cidadeInput) cidadeInput.value = perfilExibido.cidade || perfilExibido.city || 'Paulistana';
+    const totalAtivos = (listaAnuncios || []).filter(a => {
+        const st = String(a.status || 'ATIVO').toUpperCase();
+        return st === 'ATIVO' || st === 'ACTIVE';
+    }).length;
 
-    if (bairroInput) {
-        const bairroVal = perfilExibido.bairro || perfilExibido.neighborhood || 'Centro';
-        if (mostrarBairro) {
-            bairroInput.value = bairroVal;
-            bairroInput.style.color = '#2d3748';
-        } else {
-            if (isPerfilProprio) {
-                bairroInput.value = `${bairroVal} (Oculto publicamente)`;
-                bairroInput.style.color = '#94A3B8';
-            } else {
-                bairroInput.value = 'Não informado';
-                bairroInput.style.color = '#94A3B8';
-            }
-        }
+    if (statAtivos) {
+        statAtivos.textContent = perfilExibido._count?.products !== undefined ? perfilExibido._count.products : totalAtivos;
     }
 
-    // Se outro usuário estiver vendo o perfil e o telefone estiver oculto nas configurações, não exibe box de WhatsApp externo
-    if (!isPerfilProprio && boxContatoExterno) {
-        if (!mostrarTelefone) {
-            boxContatoExterno.style.display = 'none';
-        }
-    }
-
-    // Indicador Online no Banner (ativado/desativado pela chave priv-online)
-    const detalhesBanner = document.querySelector('.perfil-banner-detalhes');
-    if (detalhesBanner) {
-        let elOnline = document.getElementById('perfil-badge-online-banner');
-        if (!elOnline) {
-            elOnline = document.createElement('div');
-            elOnline.id = 'perfil-badge-online-banner';
-            elOnline.className = 'perfil-detalhe-item';
-            detalhesBanner.appendChild(elOnline);
-        }
-        if (mostrarOnline) {
-            elOnline.innerHTML = `
-                <span style="display: inline-flex; align-items: center; gap: 6px; font-weight: 700; color: #166534; background: #DCFCE7; padding: 2px 10px; border-radius: 12px; font-size: 12px;">
-                    <span style="width: 7px; height: 7px; border-radius: 50%; background: #22C55E; display: inline-block;"></span>
-                    Online recentemente
-                </span>
+    // Renderiza os cards de produtos
+    if (gradeAnuncios) {
+        if (!listaAnuncios || listaAnuncios.length === 0) {
+            gradeAnuncios.innerHTML = `
+                <div style="grid-column: 1 / -1; text-align: center; padding: 44px 20px; background: #F8FAFC; border-radius: 14px; border: 1px dashed #CBD5E1;">
+                    <div style="font-size: 40px; margin-bottom: 8px;">📦</div>
+                    <h3 style="font-size: 17px; font-weight: 800; color: #1E293B; margin-bottom: 6px;">Nenhum anúncio ativo no momento</h3>
+                    <p style="color: #64748B; font-size: 13.5px; margin-bottom: 16px;">
+                        ${isPerfilProprio ? 'Você ainda não possui anúncios publicados.' : 'Este vendedor ainda não possui anúncios ativos.'}
+                    </p>
+                    ${isPerfilProprio ? `
+                    <a href="${window.ItaimRotas ? window.ItaimRotas.obterUrl('vender') : '../vender/vender.html'}" style="background: #44BD32; color: #FFFFFF; font-weight: 700; padding: 10px 22px; border-radius: 20px; text-decoration: none; font-size: 14px; display: inline-block; box-shadow: 0 4px 12px rgba(68,189,50,0.3);">
+                        + Anunciar um Produto
+                    </a>` : ''}
+                </div>
             `;
-            elOnline.style.display = 'flex';
         } else {
-            elOnline.style.display = 'none';
+            const placeholderSrc = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
+                ? window.ItaimRotas.obterAsset('assets/produto-placeholder.svg')
+                : '../../assets/produto-placeholder.svg';
+
+            gradeAnuncios.innerHTML = listaAnuncios.map(item => {
+                const fotoSrc = item.imagem || (item.fotos && item.fotos[0]) || (item.images && item.images[0]) || '';
+                const fotoFinal = (window.ItaimApi && typeof window.ItaimApi.resolverUrlImagem === 'function')
+                    ? window.ItaimApi.resolverUrlImagem(fotoSrc)
+                    : (fotoSrc || placeholderSrc);
+
+                const linkProduto = window.ItaimRotas 
+                    ? window.ItaimRotas.obterUrl('produto', `id=${item.id}`) 
+                    : `../produtos/produto.html?id=${item.id}`;
+
+                return `
+                <article class="card-produto" onclick="window.location.href='${linkProduto}'" style="cursor: pointer;">
+                    <div class="card-img-box">
+                        <img src="${fotoFinal}" alt="${item.titulo || item.title}" class="card-img" onerror="this.onerror=null; this.src='${placeholderSrc}'">
+                        <span class="badge-card-condicao" style="position: absolute; bottom: 8px; left: 8px; background: rgba(0,0,0,0.7); color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">
+                            ${item.categoria || item.category?.name || 'Geral'}
+                        </span>
+                    </div>
+                    <div class="card-info" style="padding: 14px;">
+                        <h3 class="card-titulo" title="${item.titulo || item.title}" style="font-size: 14.5px; font-weight: 700; color: #1E293B; margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            ${item.titulo || item.title}
+                        </h3>
+                        <div class="card-preco" style="font-size: 17px; font-weight: 800; color: #44BD32; margin-bottom: 8px;">
+                            ${formatarPreco(item.preco !== undefined ? item.preco : item.price)}
+                        </div>
+                        <div class="card-rodape" style="display: flex; justify-content: space-between; font-size: 12px; color: #64748B;">
+                            <span class="card-local"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -1px; margin-right: 2px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>${item.cidade || item.city || perfilExibido.city || 'Paulistana'}</span>
+                            <span style="color: #44BD32; font-weight: 600;">Ver anúncio &rarr;</span>
+                        </div>
+                    </div>
+                </article>
+                `;
+            }).join('');
         }
     }
 
-    // 3. Carregar e calcular estatísticas reais a partir dos anúncios do usuário
-    const anunciosDoUsuario = (window.ItaimSessao && typeof window.ItaimSessao.obterAnunciosDoUsuario === 'function')
-        ? window.ItaimSessao.obterAnunciosDoUsuario(perfilExibido.email)
-        : [];
+    // -------------------------------------------------------------------------
+    // 5. UPLOAD DE FOTO DE PERFIL (PROFISSIONAL MULTIPART + ATUALIZAÇÃO NO BD)
+    // -------------------------------------------------------------------------
+    if (inputFotoAvatar && avatarImgView) {
+        inputFotoAvatar.addEventListener('change', (e) => {
+            const file = e.target.files && e.target.files[0];
+            if (!file) return;
 
-    const totalAtivos = anunciosDoUsuario.filter(a => a.status === 'ativo').length;
-    const baseVendas = perfilExibido.salesCount !== undefined ? perfilExibido.salesCount : (perfilExibido.vendasConcluidas !== undefined ? perfilExibido.vendasConcluidas : 12);
-    const totalVendidos = anunciosDoUsuario.filter(a => a.status === 'vendido').length + baseVendas;
+            const salvarFoto = async (novaFoto) => {
+                // Atualização visual imediata (otimista)
+                if (typeof novaFoto === 'string') {
+                    avatarImgView.src = novaFoto;
+                }
 
-    if (statAtivos) statAtivos.textContent = totalAtivos;
-    if (statVendas) statVendas.textContent = totalVendidos;
+                // Upload profissional para o backend Express / Supabase
+                if (window.ItaimApi && window.ItaimApi.upload && window.ItaimApi.auth && window.ItaimApi.auth.obterToken()) {
+                    try {
+                        const resUpload = await window.ItaimApi.upload.unico(novaFoto);
+                        if (resUpload && resUpload.data && resUpload.data.url) {
+                            const urlFotoServidor = resUpload.data.url;
+                            
+                            // Atualiza a URL do avatar no PostgreSQL via PUT /api/auth/me
+                            await window.ItaimApi.auth.atualizarPerfil({ avatar: urlFotoServidor });
+                            
+                            // Atualiza visualização final resolvida
+                            const urlResolvida = window.ItaimApi.resolverUrlImagem(urlFotoServidor);
+                            avatarImgView.src = urlResolvida;
 
-    // Avaliação funcional calculada pelas avaliações reais ou dados do perfil
+                            // Atualiza cache e Header Global
+                            if (window.ItaimSessao && typeof window.ItaimSessao.atualizarDadosUsuario === 'function') {
+                                window.ItaimSessao.atualizarDadosUsuario(perfilExibido.email, { avatar: urlFotoServidor });
+                            }
+                            if (window.ItaimSessao && typeof window.ItaimSessao.atualizarHeaderUsuario === 'function') {
+                                window.ItaimSessao.atualizarHeaderUsuario();
+                            }
+
+                            perfilExibido.avatar = urlFotoServidor;
+                            exibirToast('Foto de perfil salva com sucesso no servidor!');
+                            return;
+                        }
+                    } catch (errUpload) {
+                        console.error('[Perfil] Erro no upload da imagem:', errUpload);
+                        alert('Não foi possível salvar a imagem no servidor. Verifique sua conexão.');
+                    }
+                } else {
+                    // Sem token, salva apenas localmente
+                    if (window.ItaimSessao && typeof window.ItaimSessao.atualizarDadosUsuario === 'function') {
+                        window.ItaimSessao.atualizarDadosUsuario(perfilExibido.email, { avatar: novaFoto });
+                    }
+                    if (window.ItaimSessao && typeof window.ItaimSessao.atualizarHeaderUsuario === 'function') {
+                        window.ItaimSessao.atualizarHeaderUsuario();
+                    }
+                    exibirToast('Foto atualizada localmente!');
+                }
+            };
+
+            // Processa com corte 1:1 se a biblioteca de recorte estiver carregada
+            if (window.ItaimFoto && typeof window.ItaimFoto.ajustarPerfil === 'function') {
+                window.ItaimFoto.ajustarPerfil(file, salvarFoto);
+            } else if (window.ItaimFoto && typeof window.ItaimFoto.ajustar === 'function') {
+                window.ItaimFoto.ajustar(file, 400, salvarFoto);
+            } else {
+                salvarFoto(file);
+            }
+        });
+    }
+
+    // -------------------------------------------------------------------------
+    // 6. AVALIAÇÕES RECEBIDAS
+    // -------------------------------------------------------------------------
     function renderizarAvaliacoesPerfil() {
         if (!window.ItaimAvaliacoes) return;
         const avaliacoes = window.ItaimAvaliacoes.obter(perfilExibido);
         const stats = window.ItaimAvaliacoes.calcularMedia(avaliacoes, perfilExibido);
-        const totalReviews = stats.total > 0 ? stats.total : (perfilExibido.ratingCount || perfilExibido.totalAvaliacoes || 18);
-        const valorFormatado = stats.total > 0 ? stats.estrelasFormatadas : `${Number(perfilExibido.ratingAverage || perfilExibido.avaliacao || 5.0).toFixed(1)} ★`;
+        const totalReviews = stats.total > 0 ? stats.total : qtdAvaliacoes;
+        const valorFormatado = stats.total > 0 ? stats.estrelasFormatadas : avaliacaoFormatada;
 
         if (statAvaliacao) statAvaliacao.textContent = valorFormatado;
-        const statLegenda = document.getElementById('stat-avaliacoes-legenda');
         if (statLegenda) statLegenda.textContent = `Avaliações (${totalReviews})`;
-
-        const badgeAvaliacoes = document.getElementById('perfil-badge-avaliacoes');
         if (badgeAvaliacoes) badgeAvaliacoes.textContent = `${valorFormatado} (${totalReviews})`;
 
         const container = document.getElementById('lista-avaliacoes-perfil');
-        if (container) {
-            if (avaliacoes.length === 0) {
-                container.innerHTML = `
-                    <div style="text-align: center; padding: 32px 18px; background: #F8FAFC; border-radius: 12px; border: 1px dashed #CBD5E1;">
-                        <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#94A3B8" stroke-width="1.8" style="margin-bottom: 8px;">
-                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                        </svg>
-                        <h4 style="font-size: 15px; font-weight: 700; color: #1E293B; margin: 0 0 6px;">Nenhuma avaliação ainda</h4>
-                        <p style="font-size: 13.5px; color: #64748B; margin: 0;">As avaliações e comentários deixados por outros usuários aparecerão aqui.</p>
-                    </div>
-                `;
-            } else {
-                container.innerHTML = avaliacoes.map(item => {
-                    const notaNum = Math.round(item.nota || 5);
-                    const estrelasTxt = '★'.repeat(notaNum) + '☆'.repeat(5 - notaNum);
-                    const inicial = (item.autor || 'C').charAt(0).toUpperCase();
+        if (!container) return;
 
-                    return `
-                        <div class="item-avaliacao-card" style="padding: 14px 0; border-bottom: 1px solid #F1F5F9;">
-                            <div class="avaliacao-topo-row" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; flex-wrap: wrap; gap: 8px;">
-                                <div class="avaliacao-autor-box" style="display: flex; align-items: center; gap: 10px;">
-                                    <div class="avaliacao-avatar-mini" style="width: 34px; height: 34px; border-radius: 50%; background: #DCFCE7; color: #166534; font-weight: 800; display: flex; align-items: center; justify-content: center; font-size: 14px; border: 1px solid #BBF7D0;">
-                                        ${inicial}
-                                    </div>
-                                    <div>
-                                        <div class="avaliacao-autor-nome" style="font-weight: 700; font-size: 13.5px; color: #1E293B;">
-                                            ${item.autor}
-                                        </div>
-                                        <div style="font-size: 11.5px; color: #94A3B8;">
-                                            ${item.data || 'Recente'}
-                                        </div>
-                                    </div>
+        if (avaliacoes.length === 0) {
+            container.innerHTML = `
+                <div style="text-align: center; padding: 32px 18px; background: #F8FAFC; border-radius: 12px; border: 1px dashed #CBD5E1;">
+                    <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#94A3B8" stroke-width="1.8" style="margin-bottom: 8px;">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                    <h4 style="font-size: 15px; font-weight: 700; color: #1E293B; margin: 0 0 6px;">Nenhuma avaliação ainda</h4>
+                    <p style="font-size: 13.5px; color: #64748B; margin: 0;">As avaliações e comentários deixados por compradores aparecerão aqui.</p>
+                </div>
+            `;
+        } else {
+            container.innerHTML = avaliacoes.map(item => {
+                const notaNum = Math.round(item.nota || 5);
+                const estrelasTxt = '★'.repeat(notaNum) + '☆'.repeat(5 - notaNum);
+                const inicial = (item.autor || 'C').charAt(0).toUpperCase();
+
+                return `
+                    <div class="item-avaliacao-card" style="padding: 14px 0; border-bottom: 1px solid #F1F5F9;">
+                        <div class="avaliacao-topo-row" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; flex-wrap: wrap; gap: 8px;">
+                            <div class="avaliacao-autor-box" style="display: flex; align-items: center; gap: 10px;">
+                                <div class="avaliacao-avatar-mini" style="width: 34px; height: 34px; border-radius: 50%; background: #DCFCE7; color: #166534; font-weight: 800; display: flex; align-items: center; justify-content: center; font-size: 14px; border: 1px solid #BBF7D0;">
+                                    ${inicial}
                                 </div>
-                                <div style="display: flex; align-items: center; gap: 12px;">
-                                    <div class="avaliacao-estrelas" style="color: #F59E0B; font-size: 14px; letter-spacing: 2px;">
-                                        ${estrelasTxt} <span style="font-size: 12px; font-weight: 700; color: #64748B;">(${Number(item.nota).toFixed(1)})</span>
+                                <div>
+                                    <div class="avaliacao-autor-nome" style="font-weight: 700; font-size: 13.5px; color: #1E293B;">
+                                        ${item.autor}
                                     </div>
-                                    <button type="button" class="btn-excluir-avaliacao" data-id="${item.id}" title="Excluir este comentário">
-                                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                                        <span>Excluir</span>
-                                    </button>
+                                    <div style="font-size: 11.5px; color: #94A3B8;">
+                                        ${item.data || 'Recente'}
+                                    </div>
                                 </div>
                             </div>
-                            <p class="avaliacao-comentario-txt" style="font-size: 13.5px; color: #475569; line-height: 1.5; margin: 4px 0 0 44px;">
-                                ${item.comentario}
-                            </p>
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div class="avaliacao-estrelas" style="color: #F59E0B; font-size: 14px; letter-spacing: 2px;">
+                                    ${estrelasTxt} <span style="font-size: 12px; font-weight: 700; color: #64748B;">(${Number(item.nota).toFixed(1)})</span>
+                                </div>
+                            </div>
                         </div>
-                    `;
-                }).join('');
-
-                // Adiciona ouvinte para exclusão de comentários (com confirmação inline elegante)
-                container.querySelectorAll('.btn-excluir-avaliacao').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        const id = btn.getAttribute('data-id');
-                        if (btn.getAttribute('data-confirming') === 'true') {
-                            if (window.ItaimAvaliacoes) {
-                                window.ItaimAvaliacoes.excluir(perfilExibido, id);
-                                renderizarAvaliacoesPerfil();
-                                if (typeof exibirToast === 'function') {
-                                    exibirToast('Comentário excluído com sucesso!');
-                                }
-                            }
-                        } else {
-                            btn.setAttribute('data-confirming', 'true');
-                            btn.innerHTML = `
-                                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                                <span>Confirmar?</span>
-                            `;
-                            btn.style.backgroundColor = '#DC2626';
-                            btn.style.color = '#FFFFFF';
-                            btn.style.borderColor = '#B91C1C';
-
-                            setTimeout(() => {
-                                if (btn && btn.getAttribute('data-confirming') === 'true') {
-                                    btn.removeAttribute('data-confirming');
-                                    btn.innerHTML = `
-                                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                                        <span>Excluir</span>
-                                    `;
-                                    btn.style.backgroundColor = '#FEF2F2';
-                                    btn.style.color = '#EF4444';
-                                    btn.style.borderColor = '#FECACA';
-                                }
-                            }, 4000);
-                        }
-                    });
-                });
-            }
+                        <p class="avaliacao-comentario-txt" style="font-size: 13.5px; color: #475569; line-height: 1.5; margin: 4px 0 0 44px;">
+                            ${item.comentario}
+                        </p>
+                    </div>
+                `;
+            }).join('');
         }
     }
-
-    // Sincroniza nome do autor logado no formulário de avaliação
-    const nomeLogadoPerfil = (usuarioLogado && (usuarioLogado.nome || usuarioLogado.username)) || 'Raili';
-    const labelAutorPerfil = document.getElementById('perfil-nome-autor-logado');
-    if (labelAutorPerfil) labelAutorPerfil.textContent = nomeLogadoPerfil;
-    const inputAutorPerfil = document.getElementById('perfil-input-autor');
-    if (inputAutorPerfil) inputAutorPerfil.value = nomeLogadoPerfil;
 
     renderizarAvaliacoesPerfil();
 
-    // Sincronização em tempo real com o backend (Supabase / Prisma)
-    function aplicarDadosPerfilReal(u) {
-        if (!u) return;
-        perfilExibido = { ...perfilExibido, ...u };
-        if (nomeDisplay) nomeDisplay.textContent = u.name || u.nome || 'Raili';
-        if (cidadeDisplay) cidadeDisplay.textContent = `${u.city || u.cidade || 'Paulistana'} - PI`;
-        
-        const bioDisplay = document.getElementById('perfil-bio-display');
-        if (bioDisplay && u.bio) bioDisplay.textContent = u.bio;
-
-        const userDisplay = document.getElementById('perfil-username-display');
-        if (userDisplay && u.username) userDisplay.textContent = `@${u.username}`;
-
-        const seloVerif = document.getElementById('perfil-selo-verificado');
-        if (seloVerif) seloVerif.style.display = (u.isVerified || u.role === 'ADMIN') ? 'inline-flex' : 'none';
-
-        if (avatarImgView) {
-            const raw = u.avatar || 'assets/icon-user.png';
-            const finalAv = window.ItaimRotas ? window.ItaimRotas.obterAsset(raw) : fallbackAvatarPerfil;
-            avatarImgView.src = finalAv;
-        }
-
-        if (nomeInput) nomeInput.value = u.name || u.nome || 'Raili';
-        if (usuarioInput) usuarioInput.value = u.username || 'rsstore';
-        if (emailInput) emailInput.value = u.email || 'admin@gmail.com';
-        if (telefoneInput) {
-            const tel = u.phone ? (u.phone.length === 11 ? `(${u.phone.slice(0,2)}) ${u.phone.slice(2,7)}-${u.phone.slice(7)}` : u.phone) : '(89) 99998-5858';
-            telefoneInput.value = mostrarTelefone ? tel : (isPerfilProprio ? `${tel} (Oculto publicamente)` : 'Oculto');
-        }
-        if (cidadeInput) cidadeInput.value = u.city || 'Paulistana';
-        if (bairroInput) bairroInput.value = u.neighborhood || 'Centro';
-        if (statVendas && u.salesCount !== undefined) {
-            statVendas.textContent = u.salesCount + anunciosDoUsuario.filter(a => a.status === 'vendido').length;
-        }
-        renderizarAvaliacoesPerfil();
-    }
-
-    if (isPerfilProprio && window.ItaimApi && window.ItaimApi.auth && typeof window.ItaimApi.auth.perfil === 'function' && window.ItaimApi.auth.obterToken()) {
-        window.ItaimApi.auth.perfil().then(res => {
-            if (res && res.success && res.user) {
-                aplicarDadosPerfilReal(res.user);
-                try {
-                    localStorage.setItem('itaim_usuario_logado', JSON.stringify(res.user));
-                } catch(e) {}
-            }
-        }).catch(() => {});
-    }
-
-    // Seletor de estrelas no perfil (se avaliando outro usuário)
-    const estrelasContainerPerfil = document.getElementById('perfil-estrelas-seletor');
-    const inputNotaPerfil = document.getElementById('perfil-input-nota');
-    const labelNotaPerfil = document.getElementById('perfil-label-nota');
-
-    if (estrelasContainerPerfil) {
-        const estrelas = estrelasContainerPerfil.querySelectorAll('.estrela-item');
-        function destacarEstrelasPerfil(qtd) {
-            estrelas.forEach(estrela => {
-                const valor = parseInt(estrela.dataset.valor);
-                if (valor <= qtd) {
-                    estrela.classList.add('ativa');
-                    estrela.style.color = '#F59E0B';
-                } else {
-                    estrela.classList.remove('ativa');
-                    estrela.style.color = '#CBD5E1';
-                }
-            });
-        }
-
-        estrelas.forEach(estrela => {
-            estrela.addEventListener('click', () => {
-                const valor = parseInt(estrela.dataset.valor);
-                if (inputNotaPerfil) inputNotaPerfil.value = valor;
-                if (labelNotaPerfil) labelNotaPerfil.textContent = `(${valor}.0)`;
-                destacarEstrelasPerfil(valor);
-            });
-            estrela.addEventListener('mouseenter', () => {
-                const valor = parseInt(estrela.dataset.valor);
-                destacarEstrelasPerfil(valor);
-            });
-        });
-
-        estrelasContainerPerfil.addEventListener('mouseleave', () => {
-            const notaAtual = parseInt(inputNotaPerfil?.value || '5');
-            destacarEstrelasPerfil(notaAtual);
-        });
-    }
-
-    // Formulário de submissão de avaliação no perfil
+    // Formulário de nova avaliação no perfil
     const formAvaliacaoPerfil = document.getElementById('perfil-form-nova-avaliacao');
     if (formAvaliacaoPerfil) {
         formAvaliacaoPerfil.addEventListener('submit', (e) => {
             e.preventDefault();
+            const inputNotaPerfil = document.getElementById('perfil-input-nota');
             const nota = parseFloat(inputNotaPerfil?.value || '5');
             const inputAutor = document.getElementById('perfil-input-autor');
             const textarea = document.getElementById('perfil-textarea-comentario');
-            const autor = inputAutor?.value.trim() || usuarioLogado.nome || 'Comprador';
+            const autor = inputAutor?.value.trim() || 'Comprador';
             const comentario = textarea?.value.trim() || '';
 
             if (!comentario) {
@@ -468,136 +518,4 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-
-    // 4. Renderizar grade de anúncios deste perfil
-    const gradeAnuncios = document.getElementById('grade-anuncios-perfil');
-    const tituloSecaoAnuncios = document.getElementById('titulo-secao-anuncios');
-    const subtituloSecaoAnuncios = document.getElementById('subtitulo-secao-anuncios');
-
-    if (tituloSecaoAnuncios) {
-        tituloSecaoAnuncios.textContent = isPerfilProprio ? 'Meus Anúncios Publicados' : `Anúncios de ${perfilExibido.nome}`;
-    }
-    if (subtituloSecaoAnuncios) {
-        subtituloSecaoAnuncios.textContent = isPerfilProprio 
-            ? 'Esses são os anúncios do seu perfil visíveis para outros compradores no Itaim Vende.'
-            : `Todos os produtos anunciados por ${perfilExibido.nome} disponíveis para negociação.`;
-    }
-
-    function formatarPreco(val) {
-        if (val === 0 || val === '0' || val === null || val === undefined) {
-            return '<span style="color: #44BD32; font-weight: 800;">Grátis / Doação</span>';
-        }
-        return Number(val).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    }
-
-    if (gradeAnuncios) {
-        if (anunciosDoUsuario.length === 0) {
-            gradeAnuncios.innerHTML = `
-                <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; background: #F8FAFC; border-radius: 14px; border: 1px dashed #CBD5E1;">
-                    <div style="font-size: 40px; margin-bottom: 8px;">📦</div>
-                    <h3 style="font-size: 17px; font-weight: 800; color: #1E293B; margin-bottom: 6px;">Nenhum anúncio ativo no momento</h3>
-                    <p style="color: #64748B; font-size: 13.5px; margin-bottom: 16px;">
-                        Você ainda não possui anúncios publicados.
-                    </p>
-                    <a href="${window.ItaimRotas ? window.ItaimRotas.obterUrl('vender') : '../vender/vender.html'}" style="background: #44BD32; color: #FFFFFF; font-weight: 700; padding: 10px 20px; border-radius: 20px; text-decoration: none; font-size: 14px; display: inline-block;">
-                        + Anunciar um Produto
-                    </a>
-                </div>
-            `;
-        } else {
-            const placeholderSrc = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
-                ? window.ItaimRotas.obterAsset('assets/produto-placeholder.svg')
-                : '../../assets/produto-placeholder.svg';
-
-            gradeAnuncios.innerHTML = anunciosDoUsuario.map(item => {
-                const foto = (window.ItaimApi && typeof window.ItaimApi.resolverUrlImagem === 'function')
-                    ? window.ItaimApi.resolverUrlImagem(item.imagem || (item.fotos && item.fotos[0]) || '')
-                    : (item.imagem || placeholderSrc);
-
-                return `
-                <article class="card-produto" onclick="window.location.href='${window.ItaimRotas ? window.ItaimRotas.obterUrl('produto', `id=${item.id}`) : `../produtos/produto.html?id=${item.id}`}'" style="cursor: pointer;">
-                    <div class="card-img-box">
-                        <img src="${foto}" alt="${item.titulo}" class="card-img" onerror="this.onerror=null; this.src='${placeholderSrc}'">
-                        <span class="badge-card-condicao" style="position: absolute; bottom: 8px; left: 8px; background: rgba(0,0,0,0.7); color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">
-                            ${item.categoria || 'Geral'}
-                        </span>
-                    </div>
-                    <div class="card-info" style="padding: 14px;">
-                        <h3 class="card-titulo" title="${item.titulo}" style="font-size: 14.5px; font-weight: 700; color: #1E293B; margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                            ${item.titulo}
-                        </h3>
-                        <div class="card-preco" style="font-size: 17px; font-weight: 800; color: #44BD32; margin-bottom: 8px;">
-                            ${formatarPreco(item.preco)}
-                        </div>
-                        <div class="card-rodape" style="display: flex; justify-content: space-between; font-size: 12px; color: #64748B;">
-                            <span class="card-local"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -1px; margin-right: 2px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>${item.cidade || perfilExibido.cidade || 'Paulistana'}</span>
-                            <span style="color: #44BD32; font-weight: 600;">Ver anúncio &rarr;</span>
-                        </div>
-                    </div>
-                </article>
-                `;
-            }).join('');
-        }
-    }
-
-    // 5. Upload de foto de perfil (API simples de ajuste e corte circular 1:1)
-    if (inputFotoAvatar && avatarImgView) {
-        inputFotoAvatar.addEventListener('change', (e) => {
-            const file = e.target.files && e.target.files[0];
-            if (!file) return;
-
-            const salvarFoto = async (novaFoto) => {
-                avatarImgView.src = novaFoto;
-                let avatarFinal = novaFoto;
-
-                // Upload profissional para o backend Express / Supabase
-                if (window.ItaimApi && window.ItaimApi.upload && window.ItaimApi.auth && window.ItaimApi.auth.obterToken()) {
-                    try {
-                        const resUpload = await window.ItaimApi.upload.unico(novaFoto);
-                        if (resUpload && resUpload.data && resUpload.data.url) {
-                            avatarFinal = resUpload.data.url;
-                        }
-                        await window.ItaimApi.auth.atualizarPerfil({ avatar: avatarFinal });
-                    } catch (errUpload) {
-                        console.warn('[Perfil] Upload de imagem falhou, mantendo em cache:', errUpload);
-                    }
-                }
-
-                if (window.ItaimSessao && typeof window.ItaimSessao.atualizarDadosUsuario === 'function') {
-                    window.ItaimSessao.atualizarDadosUsuario(perfilExibido.email, { avatar: avatarFinal });
-                }
-
-                if (window.ItaimSessao && typeof window.ItaimSessao.atualizarHeaderUsuario === 'function') {
-                    window.ItaimSessao.atualizarHeaderUsuario();
-                }
-
-                perfilExibido.avatar = avatarFinal;
-                exibirToast('Foto de perfil atualizada com sucesso!');
-            };
-
-            if (window.ItaimFoto && typeof window.ItaimFoto.ajustarPerfil === 'function') {
-                window.ItaimFoto.ajustarPerfil(file, salvarFoto);
-            } else if (window.ItaimFoto && typeof window.ItaimFoto.ajustar === 'function') {
-                window.ItaimFoto.ajustar(file, 400, salvarFoto);
-            } else {
-                const reader = new FileReader();
-                reader.onload = (event) => salvarFoto(event.target.result);
-                reader.readAsDataURL(file);
-            }
-        });
-    }
-
-    function exibirToast(mensagem = 'Informações salvas com sucesso!') {
-        if (!toast) return;
-        const span = toast.querySelector('span');
-        if (span) span.textContent = mensagem;
-        toast.classList.add('visivel');
-        setTimeout(() => {
-            toast.classList.remove('visivel');
-        }, 3500);
-    }
-
-
-
-    // Header e Menu Lateral (Drawer) são gerenciados de forma centralizada e global por sessao.js
 });

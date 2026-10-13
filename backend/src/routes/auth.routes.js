@@ -5,6 +5,7 @@ import {
   login,
   getProfile,
   updateProfile,
+  getPublicProfile,
 } from '../controllers/auth.controller.js';
 import { authenticateToken } from '../middlewares/auth.middleware.js';
 import { validate } from '../middlewares/validate.middleware.js';
@@ -32,6 +33,7 @@ router.post('/register', authLimiter, validate(registerSchema), register);
 router.post('/login', authLimiter, validate(loginSchema), login);
 router.get('/me', authenticateToken, getProfile);
 router.get('/profile', authenticateToken, getProfile);
+router.get('/user/:id', getPublicProfile);
 router.put('/me', authenticateToken, validate(updateProfileSchema), updateProfile);
 router.put('/profile', authenticateToken, validate(updateProfileSchema), updateProfile);
 

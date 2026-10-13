@@ -55,3 +55,31 @@ export async function updateProfile(req, res, next) {
     next(error);
   }
 }
+
+export async function getPublicProfile(req, res, next) {
+  try {
+    const user = await getUserProfile(req.params.id);
+    const publicUser = {
+      id: user.id,
+      name: user.name,
+      username: user.username,
+      city: user.city,
+      neighborhood: user.neighborhood,
+      phone: user.phone,
+      bio: user.bio,
+      avatar: user.avatar,
+      isVerified: user.isVerified,
+      ratingAverage: user.ratingAverage,
+      ratingCount: user.ratingCount,
+      salesCount: user.salesCount,
+      createdAt: user.createdAt,
+      _count: user._count,
+    };
+    res.status(200).json({
+      success: true,
+      user: publicUser,
+    });
+  } catch (error) {
+    next(error);
+  }
+}

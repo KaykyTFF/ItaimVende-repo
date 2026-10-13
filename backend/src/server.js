@@ -3,6 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import path from 'path';
 import fs from 'fs';
+import { fileURLToPath } from 'url';
 import { ENV } from './config/env.js';
 import { errorHandler } from './middlewares/error.middleware.js';
 import { requestLogger } from './middlewares/logger.middleware.js';
@@ -21,12 +22,16 @@ import reviewRoutes from './routes/review.routes.js';
 import reportRoutes from './routes/report.routes.js';
 import { UPLOAD_DIR } from './config/upload.js';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const FRONTEND_DIR = path.resolve(__dirname, '../../frontend');
+
 export const SERVER_BOOT_ID = `boot_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
 
 const app = express();
 
-// Middlewares de Segurança Global (permite carregar fotos estáticas no frontend)
-app.use(helmet({ crossOriginResourcePolicy: false }));
+// Middlewares de Segurança Global (permite scripts, estilos e fotos estáticas no frontend)
+app.use(helmet({ crossOriginResourcePolicy: false, contentSecurityPolicy: false }));
 
 // Configuração do CORS (aceita requisições do frontend local ou configurado e expõe X-Server-Boot)
 app.use(
@@ -97,12 +102,48 @@ app.use('/api/upload', uploadRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/reports', reportRoutes);
 
+// Servir arquivos estáticos da pasta frontend (CSS, JS, Assets, Pages)
+app.use(express.static(FRONTEND_DIR));
+app.use('/frontend', express.static(FRONTEND_DIR));
+
+// Rotas amigáveis (Clean URLs) para as páginas do Marketplace
+const PAGE_ROUTES = [
+  { route: '/', file: 'index.html' },
+  { route: '/login', file: 'index.html' },
+  { route: '/home', file: 'pages/home/home.html' },
+  { route: '/cadastro', file: 'pages/auth/cadastro.html' },
+  { route: '/categoria', file: 'pages/produtos/categoria.html' },
+  { route: '/produto', file: 'pages/produtos/produto.html' },
+  { route: '/vender', file: 'pages/vender/vender.html' },
+  { route: '/meus-anuncios', file: 'pages/vender/meus-anuncios.html' },
+  { route: '/conversas', file: 'pages/mensagens/conversas.html' },
+  { route: '/chat', file: 'pages/mensagens/conversas.html' },
+  { route: '/perfil', file: 'pages/perfil/perfil.html' },
+  { route: '/vendedor', file: 'pages/perfil/vendedor.html' },
+  { route: '/configuracoes', file: 'pages/perfil/configuracoes.html' },
+  { route: '/favoritos', file: 'pages/favoritos/favoritos.html' },
+  { route: '/notificacoes', file: 'pages/notificacoes/notificacoes.html' },
+];
+
+PAGE_ROUTES.forEach(({ route, file }) => {
+  app.get(route, (req, res) => {
+    res.sendFile(path.join(FRONTEND_DIR, file));
+  });
+});
+
 // Tratamento de rota não encontrada (404)
 app.use((req, res) => {
-  res.status(404).json({
-    success: false,
-    message: `A rota '${req.originalUrl}' não foi encontrada na API do Itaim Vende.`,
-  });
+  if (req.originalUrl.startsWith('/api')) {
+    return res.status(404).json({
+      success: false,
+      message: `A rota '${req.originalUrl}' não foi encontrada na API do Itaim Vende.`,
+    });
+  }
+  const notFoundPage = path.join(FRONTEND_DIR, '404.html');
+  if (fs.existsSync(notFoundPage)) {
+    return res.status(404).sendFile(notFoundPage);
+  }
+  res.status(404).send('Página não encontrada.');
 });
 
 // Middleware Global de Erros
