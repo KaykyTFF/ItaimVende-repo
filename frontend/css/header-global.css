@@ -710,29 +710,33 @@ html, body {
    Quebra fluida da barra de busca para a 2ª linha, garantindo cabeçalho 100% limpo
    ========================================================================== */
 @media (max-width: 960px) {
+    /* =====================================================================
+       MOBILE: CABEÇALHO EM UMA ÚNICA LINHA
+       Layout: [☰] [🦔] [── busca ──────────────] [👤]
+       ===================================================================== */
+
     .header-principal {
-        padding: 4px 0 6px 0;
+        padding: 0;
     }
 
     .header-container {
-        padding: 6px 12px;
+        padding: 6px 10px;
         display: flex;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;          /* UMA LINHA — sem quebra */
         align-items: center;
-        justify-content: space-between;
-        row-gap: 8px;
-        column-gap: 8px;
+        gap: 8px;
         box-sizing: border-box;
         width: 100%;
         max-width: 100%;
     }
 
+    /* --- Lado esquerdo: hambúrguer + animal --- */
     .header-left {
         order: 1;
         flex: 0 0 auto;
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 6px;
     }
 
     .btn-menu-hamburguer {
@@ -746,40 +750,44 @@ html, body {
         height: 20px;
     }
 
+    /* Janela que recorta somente o animal (esquerda da imagem) */
+    .header-logo-link {
+        width: 36px;
+        height: 36px;
+        overflow: hidden;
+        display: block;
+        flex-shrink: 0;
+        border-radius: 4px;
+    }
+
+    /* Imagem flui em altura total; a largura automática empurra o texto para fora da janela */
     .header-logo-img {
-        height: 32px;
-        max-width: 120px;
-        object-fit: contain;
+        height: 100%;
+        width: auto;
+        max-width: none;        /* anula qualquer max-width herdado */
+        object-fit: initial;    /* reset — deixamos o recorte para o overflow do link */
+        display: block;
+        flex-shrink: 0;
+        transform: none;
     }
 
-    /* Ações da Direita no Mobile/Tablet (Linha 1) */
-    .header-right {
-        order: 2;
-        flex: 0 0 auto;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        margin-left: auto;
-    }
-
-    /* Linha 2: Barra de Busca Ocupa 100% da Largura */
+    /* --- Centro: barra de busca ocupa o espaço restante --- */
     .header-center {
-        order: 3 !important;
-        flex: 1 0 100% !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        margin-top: 2px;
+        order: 2;
+        flex: 1 1 0;                /* cresce para preencher o espaço */
+        min-width: 0;
+        max-width: 100%;
     }
 
     .campo-busca {
-        height: 38px;
-        font-size: 13.5px;
-        padding: 0 42px 0 14px;
+        height: 36px;
+        font-size: 13px;
+        padding: 0 40px 0 12px;
     }
 
     .btn-busca-submit {
-        width: 36px;
-        height: 36px;
+        width: 34px;
+        height: 34px;
     }
 
     .btn-busca-submit svg {
@@ -787,105 +795,68 @@ html, body {
         height: 16px;
     }
 
-    /* Oculta o link textual do desktop */
-    .btn-nav-texto {
-        display: none !important;
-    }
-
-    /* Exibe o botão circular de Meus Anúncios no celular */
-    .btn-meus-anuncios-mobile {
-        display: flex !important;
+    /* --- Lado direito: somente avatar --- */
+    .header-right {
+        order: 3;
+        flex: 0 0 auto;
+        display: flex;
         align-items: center;
-        justify-content: center;
-        width: 34px !important;
-        height: 34px !important;
-        border-radius: 50%;
-        background-color: transparent !important;
-        color: #FFFFFF !important;
-        border: none;
-        text-decoration: none;
-        transition: all var(--transition);
-        flex-shrink: 0;
-        -webkit-tap-highlight-color: transparent;
-        outline: none;
+        gap: 4px;
     }
 
-    .btn-meus-anuncios-mobile svg {
-        width: 18px;
-        height: 18px;
-    }
-
-    .btn-meus-anuncios-mobile:hover {
-        background-color: rgba(255, 255, 255, 0.08) !important;
-        color: var(--primary) !important;
-    }
-
-    .btn-meus-anuncios-mobile.ativo,
-    .btn-meus-anuncios-mobile.ativo-icone {
-        background-color: rgba(68, 189, 50, 0.16) !important;
-        color: var(--primary) !important;
-    }
-
-    .btn-vender-destaque {
-        padding: 5px 12px;
-        font-size: 12.5px;
-        gap: 3px;
-        flex-shrink: 0;
-    }
-
-    .btn-icone-header {
-        width: 34px !important;
-        height: 34px !important;
-        flex-shrink: 0;
-    }
-
-    .btn-icone-header svg {
-        width: 18px;
-        height: 18px;
+    /* Ocultar tudo no header-right exceto o avatar */
+    .btn-nav-texto,
+    .btn-vender-destaque,
+    .btn-meus-anuncios-mobile,
+    #btn-chat,
+    #btn-notificacoes {
+        display: none !important;
     }
 
     .avatar-img {
         width: 32px;
         height: 32px;
         flex-shrink: 0;
+        display: block;         /* elimina espaço fantasma abaixo da imagem */
+    }
+
+    .btn-avatar-header {
+        padding: 0;             /* sem padding extra no mobile */
+        border-width: 0;        /* sem borda visível no mobile para não inflar */
+        line-height: 0;         /* evita espaço de linha abaixo da imagem */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .perfil-wrapper {
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
     }
 }
 
 @media (max-width: 540px) {
     .header-container {
-        padding: 5px 10px;
-        row-gap: 6px;
-        column-gap: 6px;
-    }
-
-    .header-left {
+        padding: 5px 8px;
         gap: 6px;
     }
 
-    .header-logo-img {
-        height: 28px;
-        max-width: 110px;
+    .header-left {
+        gap: 5px;
     }
 
-    .header-right {
-        gap: 4px;
+    /* Animal: ajuste fino para telas menores */
+    .header-logo-link {
+        width: 32px;
+        height: 32px;
     }
 
-    .btn-vender-destaque {
-        padding: 5px 9px;
-        font-size: 11.5px;
-    }
-
-    .btn-icone-header,
-    .btn-meus-anuncios-mobile {
-        width: 31px !important;
-        height: 31px !important;
-    }
-
-    .btn-icone-header svg,
-    .btn-meus-anuncios-mobile svg {
-        width: 16px !important;
-        height: 16px !important;
+    .campo-busca {
+        height: 34px;
+        font-size: 12.5px;
+        padding: 0 36px 0 10px;
     }
 
     .avatar-img {
@@ -897,8 +868,7 @@ html, body {
 @media (max-width: 380px) {
     .header-container {
         padding: 5px 6px;
-        row-gap: 5px;
-        column-gap: 4px;
+        gap: 5px;
     }
 
     .header-left {
@@ -914,30 +884,16 @@ html, body {
         height: 18px;
     }
 
-    .header-logo-img {
-        height: 26px;
-        max-width: 95px;
+    /* Animal: versão para telas muito pequenas */
+    .header-logo-link {
+        width: 28px;
+        height: 28px;
     }
 
-    .header-right {
-        gap: 3px;
-    }
-
-    .btn-vender-destaque {
-        padding: 4px 7px;
-        font-size: 11px;
-    }
-
-    .btn-icone-header,
-    .btn-meus-anuncios-mobile {
-        width: 28px !important;
-        height: 28px !important;
-    }
-
-    .btn-icone-header svg,
-    .btn-meus-anuncios-mobile svg {
-        width: 15px !important;
-        height: 15px !important;
+    .campo-busca {
+        height: 32px;
+        font-size: 12px;
+        padding: 0 34px 0 10px;
     }
 
     .avatar-img {
