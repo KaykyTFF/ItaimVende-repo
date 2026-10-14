@@ -133,7 +133,7 @@ export async function findOrCreateConversation(buyerId, productId) {
   }
 
   if (product.sellerId === buyerId) {
-    throw new AppError('Você é o anunciante deste produto. Suas negociações com compradores aparecem aqui.', 400);
+    throw new AppError('Você é o vendedor deste anúncio.', 400);
   }
 
   let conversation = await prisma.conversation.findUnique({

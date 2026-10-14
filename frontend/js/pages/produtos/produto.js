@@ -418,13 +418,57 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+    // Helper: Verifica se o usuário autenticado atual é o vendedor deste anúncio
+    function verificarSeUsuarioEhVendedor() {
+        const usuarioLogado = window.ItaimSessao ? window.ItaimSessao.obterUsuarioLogado() : null;
+        if (!usuarioLogado) return false;
+
+        const uId = String(usuarioLogado.id || usuarioLogado.userId || '').trim();
+        const uEmail = String(usuarioLogado.email || '').toLowerCase().trim();
+        const uUsername = String(usuarioLogado.username || usuarioLogado.usuario || '').toLowerCase().trim();
+
+        const vId = String(
+            (dadosVendedor && (dadosVendedor.id || dadosVendedor.userId)) ||
+            produto.vendedorId ||
+            produto.sellerId ||
+            (produto.seller && (produto.seller.id || produto.seller.userId)) ||
+            ''
+        ).trim();
+
+        const vEmail = String(
+            (dadosVendedor && dadosVendedor.email) ||
+            produto.vendedorEmail ||
+            (produto.seller && produto.seller.email) ||
+            ''
+        ).toLowerCase().trim();
+
+        const vUsername = String(
+            (dadosVendedor && (dadosVendedor.username || dadosVendedor.usuario)) ||
+            produto.vendedorUsername ||
+            (produto.seller && (produto.seller.username || produto.seller.usuario)) ||
+            ''
+        ).toLowerCase().trim();
+
+        return Boolean(
+            (uId && vId && uId === vId) ||
+            (uEmail && vEmail && uEmail === vEmail) ||
+            (uUsername && vUsername && uUsername === vUsername)
+        );
+    }
+
     // 8. Botão Iniciar Chat com o Vendedor (Integração 100% Real com a API do Backend)
     const btnChatVendedor = document.getElementById('btn-chat-vendedor');
     if (btnChatVendedor) {
         btnChatVendedor.addEventListener('click', async (e) => {
             e.preventDefault();
 
-            // 1. Verificar se o usuário está autenticado
+            // 1. Se o anúncio for do próprio usuário, exibe aviso e NÃO redireciona para o chat
+            if (verificarSeUsuarioEhVendedor()) {
+                mostrarToast('Você é o vendedor deste anúncio');
+                return;
+            }
+
+            // 2. Verificar se o usuário está autenticado
             const token = window.ItaimApi?.auth?.obterToken();
             if (!token) {
                 mostrarToast('Faça login para conversar com o vendedor.');
@@ -432,22 +476,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 setTimeout(() => {
                     window.location.href = urlLogin;
                 }, 900);
-                return;
-            }
-
-            // 2. Verificar se o usuário atual é o próprio dono do anúncio
-            const usuarioLogado = window.ItaimSessao ? window.ItaimSessao.obterUsuarioLogado() : null;
-            const usuarioId = usuarioLogado?.id;
-            const vendedorId = (dadosVendedor && dadosVendedor.id) || produto.vendedorId || produto.sellerId;
-            const usuarioEmail = (usuarioLogado?.email || '').toLowerCase().trim();
-            const vendedorEmail = ((dadosVendedor && dadosVendedor.email) || produto.vendedorEmail || '').toLowerCase().trim();
-
-            if ((usuarioId && vendedorId && usuarioId === vendedorId) || (usuarioEmail && vendedorEmail && usuarioEmail === vendedorEmail)) {
-                mostrarToast('Você é o anunciante deste produto!');
-                const urlConversas = window.ItaimRotas ? window.ItaimRotas.obterUrl('conversas') : '../mensagens/conversas.html';
-                setTimeout(() => {
-                    window.location.href = urlConversas;
-                }, 800);
                 return;
             }
 
@@ -479,18 +507,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                 console.error('Erro ao iniciar chat com vendedor:', err);
                 const msgErro = err?.message || 'Erro ao abrir chat com o vendedor.';
 
-                if (msgErro.includes('anunciante deste produto') || msgErro.includes('Você é o anunciante')) {
-                    mostrarToast('Você é o anunciante deste produto!');
-                    const urlConversas = window.ItaimRotas ? window.ItaimRotas.obterUrl('conversas') : '../mensagens/conversas.html';
-                    setTimeout(() => {
-                        window.location.href = urlConversas;
-                    }, 800);
+                btnChatVendedor.disabled = false;
+                btnChatVendedor.innerHTML = textoOriginal;
+
+                if (msgErro.includes('anunciante') || msgErro.includes('vendedor')) {
+                    mostrarToast('Você é o vendedor deste anúncio');
                     return;
                 }
 
                 mostrarToast(msgErro);
-                btnChatVendedor.disabled = false;
-                btnChatVendedor.innerHTML = textoOriginal;
             }
         });
     }
@@ -508,6 +533,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             `Ainda está disponível? Tenho interesse!`
         );
         btnWpp.href = `https://wa.me/${telVendedor}?text=${msg}`;
+
+        btnWpp.addEventListener('click', (e) => {
+            if (verificarSeUsuarioEhVendedor()) {
+                e.preventDefault();
+                mostrarToast('Você é o vendedor deste anúncio');
+            }
+        });
     }
 
     // 9. Favoritos
