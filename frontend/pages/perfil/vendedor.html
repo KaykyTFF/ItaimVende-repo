@@ -271,7 +271,15 @@
 
                 <!-- Informações do Usuário (Centro-Esquerda) -->
                 <div class="perfil-banner-info">
-                    <h1 class="perfil-nome-titulo" id="vendedor-nome-display">Carregando...</h1>
+                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                        <h1 class="perfil-nome-titulo" id="vendedor-nome-display" style="margin: 0;">Carregando...</h1>
+                        <span id="vendedor-selo-verificado" style="display: none; align-items: center; gap: 4px; background: #DCFCE7; color: #166534; font-size: 12px; font-weight: 700; padding: 2px 9px; border-radius: 20px;" title="Vendedor Verificado">
+                            <svg viewBox="0 0 24 24" width="13" height="13" fill="#166534"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                            Verificado
+                        </span>
+                    </div>
+                    <span id="vendedor-username-display" style="font-size: 13.5px; font-weight: 600; color: #64748B; margin-top: 2px; display: inline-block;"></span>
+                    <p id="vendedor-bio-display" style="font-size: 13.5px; color: #475569; margin: 4px 0 8px; line-height: 1.4; display: none;"></p>
 
                     <div class="perfil-banner-detalhes">
                         <div class="perfil-detalhe-item">
@@ -542,8 +550,8 @@
     <script src="../../js/core/produtos-dados.js"></script>
     <script src="../../js/core/rotas.js"></script>
     <script src="../../js/core/api.js"></script>
-    <script src="../../js/core/sessao.js?v=4"></script>
+    <script src="../../js/core/sessao.js?v=8"></script>
     <script src="../../js/core/skeleton.js"></script>
-    <script src="../../js/pages/perfil/vendedor.js?v=5"></script>
+    <script src="../../js/pages/perfil/vendedor.js?v=7"></script>
 </body>
 </html>

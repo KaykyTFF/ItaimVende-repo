@@ -402,6 +402,48 @@
         },
 
         // ---------------------------------------------------------------------
+        // MÓDULO DE CHAT & MENSAGENS EM TEMPO REAL
+        // ---------------------------------------------------------------------
+        chat: {
+            async listarConversas() {
+                return requisicao('/chat/conversations', {
+                    method: 'GET',
+                    headers: obterHeaders(true)
+                });
+            },
+
+            async obterConversa(id) {
+                return requisicao(`/chat/conversations/${encodeURIComponent(id)}`, {
+                    method: 'GET',
+                    headers: obterHeaders(true)
+                });
+            },
+
+            async iniciarConversa(productId) {
+                return requisicao('/chat/conversations', {
+                    method: 'POST',
+                    headers: obterHeaders(true),
+                    body: JSON.stringify({ productId })
+                });
+            },
+
+            async obterMensagens(conversationId) {
+                return requisicao(`/chat/conversations/${encodeURIComponent(conversationId)}/messages`, {
+                    method: 'GET',
+                    headers: obterHeaders(true)
+                });
+            },
+
+            async enviarMensagem(conversationId, content, messageType = 'TEXT', offerValue = null) {
+                return requisicao(`/chat/conversations/${encodeURIComponent(conversationId)}/messages`, {
+                    method: 'POST',
+                    headers: obterHeaders(true),
+                    body: JSON.stringify({ content, messageType, offerValue })
+                });
+            }
+        },
+
+        // ---------------------------------------------------------------------
         // MÓDULO DE UPLOAD DE ARQUIVOS (MULTIPART)
         // ---------------------------------------------------------------------
         upload: {

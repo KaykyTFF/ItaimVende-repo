@@ -21,7 +21,7 @@ export async function authenticateToken(req, res, next) {
     
     // Busca dados atualizados do usuário no banco
     const user = await prisma.user.findUnique({
-      where: { id: decoded.userId },
+      where: { id: decoded.userId || decoded.id },
       select: {
         id: true,
         name: true,

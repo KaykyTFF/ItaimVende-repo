@@ -354,18 +354,19 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         }
 
-        const nomeVendedor = (dadosVendedor && dadosVendedor.nome) || produto.vendedorNome || 'Raili';
-        const cidadeVendedor = (dadosVendedor && dadosVendedor.cidade) || produto.vendedorCidade || produto.cidade || 'Paulistana';
+        const nomeVendedor = (dadosVendedor && (dadosVendedor.name || dadosVendedor.nome)) || produto.vendedorNome || produto.vendedor || 'Vendedor';
+        const cidadeVendedor = (dadosVendedor && (dadosVendedor.city || dadosVendedor.cidade)) || produto.vendedorCidade || produto.cidade || 'Paulistana';
         
-        // Foto de perfil real do vendedor: prioriza foto personalizada do perfil do usuário
-        if (dadosVendedor && dadosVendedor.avatar) {
-            avatarVendedor = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
-                ? window.ItaimRotas.obterAsset(dadosVendedor.avatar)
-                : dadosVendedor.avatar;
-        } else if (produto.vendedorAvatar) {
-            avatarVendedor = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
-                ? window.ItaimRotas.obterAsset(produto.vendedorAvatar)
-                : produto.vendedorAvatar;
+        // Foto de perfil real do vendedor: prioriza foto personalizada do banco/perfil
+        const avatarBruto = (dadosVendedor && dadosVendedor.avatar) || produto.vendedorAvatar || fallbackAvatarVendedor;
+        if (avatarBruto && avatarBruto !== 'assets/icon-user.png') {
+            avatarVendedor = (window.ItaimApi && typeof window.ItaimApi.resolverUrlImagem === 'function')
+                ? window.ItaimApi.resolverUrlImagem(avatarBruto)
+                : ((window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
+                    ? window.ItaimRotas.obterAsset(avatarBruto)
+                    : avatarBruto);
+        } else {
+            avatarVendedor = fallbackAvatarVendedor;
         }
 
         if (nomeVendedorEl) nomeVendedorEl.textContent = nomeVendedor;
@@ -382,7 +383,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         // URL para o perfil público do vendedor com todos os identificadores
         const emailParam = (dadosVendedor && dadosVendedor.email) || produto.vendedorEmail || '';
         const idParam = (dadosVendedor && dadosVendedor.id) || produto.vendedorId || '';
-        const urlVendedor = (window.ItaimRotas ? window.ItaimRotas.obterUrl('vendedor', `email=${encodeURIComponent(emailParam)}&vendedor=${encodeURIComponent(nomeVendedor)}&id=${encodeURIComponent(idParam)}`) : `../perfil/vendedor.html?email=${encodeURIComponent(emailParam)}&vendedor=${encodeURIComponent(nomeVendedor)}&id=${encodeURIComponent(idParam)}`);
+        const queryParams = new URLSearchParams();
+        if (idParam) queryParams.set('id', idParam);
+        if (emailParam) queryParams.set('email', emailParam);
+        if (nomeVendedor) queryParams.set('vendedor', nomeVendedor);
+
+        const urlVendedor = (window.ItaimRotas ? window.ItaimRotas.obterUrl('vendedor', queryParams.toString()) : `../perfil/vendedor.html?${queryParams.toString()}`);
 
         if (linkPerfilVendedor) {
             linkPerfilVendedor.href = urlVendedor;
@@ -412,85 +418,79 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // 8. Botão Iniciar Chat com o Vendedor
+    // 8. Botão Iniciar Chat com o Vendedor (Integração 100% Real com a API do Backend)
     const btnChatVendedor = document.getElementById('btn-chat-vendedor');
     if (btnChatVendedor) {
-        btnChatVendedor.addEventListener('click', (e) => {
+        btnChatVendedor.addEventListener('click', async (e) => {
             e.preventDefault();
 
-            const usuarioLogado = window.ItaimSessao ? window.ItaimSessao.obterUsuarioLogado() : {
-                id: 'cmv5iacmv0000ttiwu9wtemar',
-                nome: 'Raili',
-                email: 'admin@gmail.com',
-                avatar: fallbackAvatarVendedor
-            };
-
-            const vendedorEmailFinal = ((dadosVendedor && dadosVendedor.email) || produto.vendedorEmail || 'admin@gmail.com').toLowerCase().trim();
-            const vendedorNomeFinal = (dadosVendedor && dadosVendedor.nome) || produto.vendedorNome || 'Vendedor';
-            const vendedorAvatarFinal = avatarVendedor || fallbackAvatarVendedor;
-            const userEmailLogado = (usuarioLogado.email || '').toLowerCase().trim();
-
-            let vendedorEmailUsado = vendedorEmailFinal;
-            let vendedorNomeUsado = vendedorNomeFinal;
-            let vendedorAvatarUsado = vendedorAvatarFinal;
-
-            if (userEmailLogado && vendedorEmailUsado && userEmailLogado === vendedorEmailUsado) {
-                // Se for o autor testando no próprio anúncio, direciona para o chat com interlocutor do anúncio
-                vendedorEmailUsado = 'anunciante_' + vendedorEmailUsado;
-                vendedorNomeUsado = vendedorNomeFinal + ' (Vendedor)';
+            // 1. Verificar se o usuário está autenticado
+            const token = window.ItaimApi?.auth?.obterToken();
+            if (!token) {
+                mostrarToast('Faça login para conversar com o vendedor.');
+                const urlLogin = window.ItaimRotas ? window.ItaimRotas.obterUrl('login') : '../../index.html';
+                setTimeout(() => {
+                    window.location.href = urlLogin;
+                }, 900);
+                return;
             }
 
-            let conversas = [];
+            // 2. Verificar se o usuário atual é o próprio dono do anúncio
+            const usuarioLogado = window.ItaimSessao ? window.ItaimSessao.obterUsuarioLogado() : null;
+            const usuarioId = usuarioLogado?.id;
+            const vendedorId = (dadosVendedor && dadosVendedor.id) || produto.vendedorId || produto.sellerId;
+            const usuarioEmail = (usuarioLogado?.email || '').toLowerCase().trim();
+            const vendedorEmail = ((dadosVendedor && dadosVendedor.email) || produto.vendedorEmail || '').toLowerCase().trim();
+
+            if ((usuarioId && vendedorId && usuarioId === vendedorId) || (usuarioEmail && vendedorEmail && usuarioEmail === vendedorEmail)) {
+                mostrarToast('Você é o anunciante deste produto!');
+                const urlConversas = window.ItaimRotas ? window.ItaimRotas.obterUrl('conversas') : '../mensagens/conversas.html';
+                setTimeout(() => {
+                    window.location.href = urlConversas;
+                }, 800);
+                return;
+            }
+
+            // 3. Desabilitar botão para evitar duplo clique
+            const textoOriginal = btnChatVendedor.innerHTML;
+            btnChatVendedor.disabled = true;
+            btnChatVendedor.innerHTML = `
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" style="animation: spin 0.8s linear infinite;">
+                    <circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle>
+                    <path d="M12 2a10 10 0 0 1 10 10"></path>
+                </svg>
+                <span>Conectando...</span>
+            `;
+
             try {
-                conversas = JSON.parse(localStorage.getItem('itaim_conversas') || '[]');
+                const prodIdParaChat = produto.id || produto.slug;
+                const resp = await window.ItaimApi.chat.iniciarConversa(prodIdParaChat);
+
+                if (resp && resp.success && resp.data) {
+                    const convId = resp.data.id;
+                    const urlDestino = window.ItaimRotas 
+                        ? window.ItaimRotas.obterUrl('conversas', `id=${encodeURIComponent(convId)}`)
+                        : `../mensagens/conversas.html?id=${encodeURIComponent(convId)}`;
+                    window.location.href = urlDestino;
+                    return;
+                }
+                throw new Error(resp?.message || 'Não foi possível iniciar o chat.');
             } catch (err) {
-                conversas = [];
-            }
+                console.error('Erro ao iniciar chat com vendedor:', err);
+                const msgErro = err?.message || 'Erro ao abrir chat com o vendedor.';
 
-            const pId = String(produto.id || '');
-            let convExistente = conversas.find(c => {
-                const mesmoProduto = String(c.produtoId || '') === pId;
-                const cComprador = (c.compradorEmail || '').toLowerCase().trim();
-                const cVendedor = (c.vendedorEmail || '').toLowerCase().trim();
-                return mesmoProduto && (
-                    (cComprador === userEmailLogado && cVendedor === vendedorEmailUsado) ||
-                    (cComprador === vendedorEmailUsado && cVendedor === userEmailLogado)
-                );
-            });
+                if (msgErro.includes('anunciante deste produto') || msgErro.includes('Você é o anunciante')) {
+                    mostrarToast('Você é o anunciante deste produto!');
+                    const urlConversas = window.ItaimRotas ? window.ItaimRotas.obterUrl('conversas') : '../mensagens/conversas.html';
+                    setTimeout(() => {
+                        window.location.href = urlConversas;
+                    }, 800);
+                    return;
+                }
 
-            if (convExistente) {
-                window.location.href = (window.ItaimRotas ? window.ItaimRotas.obterUrl('conversas', `id=${convExistente.id}`) : `../mensagens/conversas.html?id=${convExistente.id}`);
-            } else {
-                const agora = new Date();
-                const horaStr = agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-                const novaConversa = {
-                    id: 'conv_' + Date.now(),
-                    produtoId: pId,
-                    produto: {
-                        id: pId,
-                        titulo: produto.titulo,
-                        preco: produto.preco,
-                        imagem: fotosCarrossel[0] || produto.imagem || 'assets/produto-placeholder.svg',
-                        cidade: produto.cidade || 'Paulistana',
-                        condicao: produto.condicao || 'Usado',
-                        categoria: produto.categoria || 'Geral',
-                        descricao: produto.descricao || ''
-                    },
-                    compradorEmail: usuarioLogado.email || 'admin@gmail.com',
-                    compradorNome: usuarioLogado.nome || 'Comprador',
-                    compradorAvatar: (window.ItaimRotas && usuarioLogado.avatar ? window.ItaimRotas.obterAsset(usuarioLogado.avatar) : fallbackAvatarVendedor),
-                    vendedorEmail: vendedorEmailUsado,
-                    vendedorNome: vendedorNomeUsado,
-                    vendedorAvatar: vendedorAvatarUsado,
-                    mensagens: [],
-                    ultimaMensagemTexto: 'Conversa iniciada',
-                    ultimaMensagemHora: horaStr,
-                    dataCriacao: agora.toISOString()
-                };
-
-                conversas.unshift(novaConversa);
-                localStorage.setItem('itaim_conversas', JSON.stringify(conversas));
-                window.location.href = (window.ItaimRotas ? window.ItaimRotas.obterUrl('conversas', `id=${novaConversa.id}`) : `../mensagens/conversas.html?id=${novaConversa.id}`);
+                mostrarToast(msgErro);
+                btnChatVendedor.disabled = false;
+                btnChatVendedor.innerHTML = textoOriginal;
             }
         });
     }

@@ -492,6 +492,7 @@ export async function getSellerProducts(sellerId, includeAllStatuses = false) {
         { id: sellerId },
         { email: { equals: sellerId, mode: 'insensitive' } },
         { username: { equals: sellerId, mode: 'insensitive' } },
+        { name: { equals: sellerId, mode: 'insensitive' } },
       ],
     },
     select: {

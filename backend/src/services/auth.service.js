@@ -127,8 +127,15 @@ export async function loginUser({ email, password }) {
  * Busca perfil detalhado por ID
  */
 export async function getUserProfile(userId) {
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
+  const user = await prisma.user.findFirst({
+    where: {
+      OR: [
+        { id: userId },
+        { email: { equals: userId, mode: 'insensitive' } },
+        { username: { equals: userId, mode: 'insensitive' } },
+        { name: { equals: userId, mode: 'insensitive' } },
+      ],
+    },
     select: {
       id: true,
       name: true,

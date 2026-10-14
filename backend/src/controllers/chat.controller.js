@@ -1,5 +1,6 @@
 import {
   getUserConversations,
+  getConversationById,
   findOrCreateConversation,
   getConversationMessages,
   sendConversationMessage,
@@ -8,6 +9,15 @@ import {
 export async function listConversations(req, res, next) {
   try {
     const data = await getUserConversations(req.user.id);
+    res.status(200).json({ success: true, data });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function getConversation(req, res, next) {
+  try {
+    const data = await getConversationById(req.user.id, req.user.role, req.params.id);
     res.status(200).json({ success: true, data });
   } catch (error) {
     next(error);

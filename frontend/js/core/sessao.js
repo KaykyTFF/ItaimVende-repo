@@ -1120,7 +1120,8 @@
                 ? window.ItaimRotas.obterAsset(rawAvatar)
                 : (rawAvatar.startsWith('data:') || rawAvatar.startsWith('http') ? rawAvatar : avatarPadrao));
 
-        const avatarImgs = document.querySelectorAll('#img-avatar-user, .avatar-img, #perfil-avatar-view, .perfil-avatar-view, .perfil-avatar-img, #drawer-user-avatar, #vendedor-avatar-img');
+        // Atualiza apenas os avatares do Header e do Menu Lateral (Drawer) do usuário logado
+        const avatarImgs = document.querySelectorAll('#img-avatar-user, #drawer-user-avatar, .btn-avatar-header img, .drawer-user-avatar');
         avatarImgs.forEach(img => {
             img.src = avatarUrl;
             img.onerror = function() {
