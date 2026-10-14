@@ -485,9 +485,15 @@ export async function updateProductStatus(userId, userRole, productId, rawStatus
 /**
  * Busca vitrine pública de um vendedor específico
  */
-export async function getSellerProducts(sellerId) {
-  const seller = await prisma.user.findUnique({
-    where: { id: sellerId },
+export async function getSellerProducts(sellerId, includeAllStatuses = false) {
+  const seller = await prisma.user.findFirst({
+    where: {
+      OR: [
+        { id: sellerId },
+        { email: { equals: sellerId, mode: 'insensitive' } },
+        { username: { equals: sellerId, mode: 'insensitive' } },
+      ],
+    },
     select: {
       id: true,
       name: true,
@@ -510,12 +516,17 @@ export async function getSellerProducts(sellerId) {
     throw new AppError('Vendedor não encontrado.', 404);
   }
 
+  const where = {
+    sellerId: seller.id,
+    deletedAt: null,
+  };
+
+  if (!includeAllStatuses) {
+    where.status = 'ATIVO';
+  }
+
   const products = await prisma.product.findMany({
-    where: {
-      sellerId,
-      status: 'ATIVO',
-      deletedAt: null,
-    },
+    where,
     orderBy: { createdAt: 'desc' },
     include: {
       category: { select: { id: true, name: true, slug: true, icon: true } },

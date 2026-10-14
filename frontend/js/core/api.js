@@ -323,8 +323,9 @@
             /**
              * Listar produtos de um vendedor específico
              */
-            async doVendedor(sellerId) {
-                return requisicao(`/products/seller/${sellerId}`, {
+            async doVendedor(sellerId, todos = false) {
+                const queryStr = todos ? '?all=true' : '';
+                return requisicao(`/products/seller/${encodeURIComponent(sellerId)}${queryStr}`, {
                     method: 'GET',
                     headers: obterHeaders(true)
                 });

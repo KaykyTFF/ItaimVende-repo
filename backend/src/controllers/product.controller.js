@@ -38,7 +38,8 @@ export async function listMyProducts(req, res, next) {
 
 export async function listSellerProducts(req, res, next) {
   try {
-    const data = await getSellerProductsService(req.params.sellerId);
+    const all = req.query.all === 'true' || req.query.status === 'all';
+    const data = await getSellerProductsService(req.params.sellerId, all);
     res.status(200).json({
       success: true,
       ...data,

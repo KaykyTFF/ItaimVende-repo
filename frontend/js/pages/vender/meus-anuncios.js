@@ -31,42 +31,88 @@ document.addEventListener('DOMContentLoaded', () => {
     let meusAnuncios = [];
 
     async function carregarAnunciosDoUsuario() {
+        let listaBruta = [];
+
+        // 1. Tenta buscar da API autenticada se houver token
         if (window.ItaimApi && window.ItaimApi.auth.obterToken()) {
             try {
                 const res = await window.ItaimApi.produtos.meusAnuncios();
-                if (res && res.success && Array.isArray(res.data)) {
-                    meusAnuncios = res.data.map(item => {
-                        const st = String(item.status || 'ATIVO').toLowerCase();
-                        const fotoSrc = item.imagem || (item.images && item.images[0]) || (item.fotos && item.fotos[0]) || '';
-                        return {
-                            ...item,
-                            id: item.id,
-                            titulo: item.titulo || item.title || 'Anúncio sem título',
-                            preco: Number(item.preco !== undefined ? item.preco : (item.price || 0)),
-                            categoria: item.categoria || (item.category ? (item.category.name || item.category) : 'Geral'),
-                            status: st === 'pausado' ? 'pausado' : (st === 'vendido' ? 'vendido' : 'ativo'),
-                            imagem: window.ItaimApi.resolverUrlImagem(fotoSrc),
-                            data: item.createdAt ? new Date(item.createdAt).toLocaleDateString('pt-BR') : 'Hoje',
-                            visualizacoes: item.viewsCount !== undefined ? item.viewsCount : (item.visualizacoes || 0),
-                            conversas: item.contactsCount !== undefined ? item.contactsCount : (item.conversas || 0),
-                            cidade: item.city || item.cidade || cidadeUsuario,
-                            vendedorTelefone: item.vendedorTelefone || item.phone || userLogado?.phone || userLogado?.telefone || ''
-                        };
-                    });
-                    atualizarBadges();
-                    renderizar();
-                    return;
+                if (res && res.success && Array.isArray(res.data) && res.data.length > 0) {
+                    listaBruta = [...res.data];
                 }
             } catch (err) {
-                console.warn('[Meus Anúncios] Não foi possível carregar da API, usando cache local:', err);
+                console.warn('[Meus Anúncios] Falha ao consultar /products/me:', err.message);
             }
         }
 
-        if (window.ItaimSessao && typeof window.ItaimSessao.obterAnunciosDoUsuario === 'function') {
-            meusAnuncios = window.ItaimSessao.obterAnunciosDoUsuario(emailUsuario);
-        } else {
-            meusAnuncios = [];
+        // 2. Se a lista estiver vazia (sem token ou sem retorno), busca vitrine real do usuário no banco de dados
+        if (listaBruta.length === 0 && window.ItaimApi && window.ItaimApi.produtos) {
+            const identificador = userLogado?.id || emailUsuario || 'admin@gmail.com';
+            try {
+                const resVendedor = await window.ItaimApi.produtos.doVendedor(identificador, true);
+                if (resVendedor && Array.isArray(resVendedor.products) && resVendedor.products.length > 0) {
+                    listaBruta = [...resVendedor.products];
+                }
+            } catch (errVend) {
+                console.warn('[Meus Anúncios] Falha ao consultar doVendedor:', errVend.message);
+            }
         }
+
+        // 3. Mescla também anúncios criados localmente nesta sessão (ex: criados em vender.html)
+        if (window.ItaimSessao && typeof window.ItaimSessao.obterAnunciosDoUsuario === 'function') {
+            try {
+                const locais = window.ItaimSessao.obterAnunciosDoUsuario(emailUsuario);
+                if (Array.isArray(locais) && locais.length > 0) {
+                    locais.forEach(loc => {
+                        const jaExiste = listaBruta.some(b => String(b.id) === String(loc.id) || b.titulo === loc.titulo || b.title === loc.titulo);
+                        if (!jaExiste) {
+                            listaBruta.push(loc);
+                        }
+                    });
+                }
+            } catch(e) {}
+        }
+
+        // 4. Mapeia e normaliza todos os produtos para a interface
+        const mapaStatusModificados = (() => {
+            try {
+                return JSON.parse(localStorage.getItem('itaim_produtos_status_map') || '{}');
+            } catch(e) {
+                return {};
+            }
+        })();
+
+        const mapaExcluidos = (() => {
+            try {
+                const arr = JSON.parse(localStorage.getItem('itaim_produtos_excluidos') || '[]');
+                return new Set(arr.map(x => String(x)));
+            } catch(e) {
+                return new Set();
+            }
+        })();
+
+        meusAnuncios = listaBruta
+            .filter(item => !mapaExcluidos.has(String(item.id)))
+            .map(item => {
+                const statusLocal = mapaStatusModificados[String(item.id)];
+                const st = String(statusLocal || item.status || 'ATIVO').toLowerCase();
+                const fotoSrc = item.imagem || (item.images && item.images[0]) || (item.fotos && item.fotos[0]) || '';
+                return {
+                    ...item,
+                    id: item.id,
+                    titulo: item.titulo || item.title || 'Anúncio sem título',
+                    preco: Number(item.preco !== undefined ? item.preco : (item.price || 0)),
+                    categoria: item.categoria || (item.category ? (item.category.name || item.category) : 'Geral'),
+                    status: st === 'pausado' ? 'pausado' : (st === 'vendido' ? 'vendido' : 'ativo'),
+                    imagem: window.ItaimApi ? window.ItaimApi.resolverUrlImagem(fotoSrc) : fotoSrc,
+                    data: item.createdAt ? new Date(item.createdAt).toLocaleDateString('pt-BR') : (item.data || 'Hoje'),
+                    visualizacoes: item.viewsCount !== undefined ? item.viewsCount : (item.visualizacoes || 0),
+                    conversas: item.contactsCount !== undefined ? item.contactsCount : (item.conversas || 0),
+                    cidade: item.city || item.cidade || cidadeUsuario,
+                    vendedorTelefone: item.vendedorTelefone || item.phone || userLogado?.phone || userLogado?.telefone || ''
+                };
+            });
+
         atualizarBadges();
         renderizar();
     }
