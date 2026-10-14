@@ -24,7 +24,8 @@
     --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.18);
 }
 
-html, body {
+html,
+body {
     overflow-x: hidden;
     max-width: 100%;
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -344,6 +345,7 @@ html, body {
         opacity: 0;
         transform: translateY(-8px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -691,15 +693,19 @@ html, body {
         padding: 8px 16px;
         gap: 12px;
     }
+
     .header-center {
         max-width: 440px;
     }
+
     .header-right {
         gap: 10px;
     }
+
     .btn-nav-texto span {
         display: none;
     }
+
     .btn-nav-texto {
         padding: 8px;
     }
@@ -722,7 +728,8 @@ html, body {
     .header-container {
         padding: 6px 10px;
         display: flex;
-        flex-wrap: nowrap;          /* UMA LINHA — sem quebra */
+        flex-wrap: nowrap;
+        /* UMA LINHA — sem quebra */
         align-items: center;
         gap: 8px;
         box-sizing: border-box;
@@ -764,8 +771,10 @@ html, body {
     .header-logo-img {
         height: 100%;
         width: auto;
-        max-width: none;        /* anula qualquer max-width herdado */
-        object-fit: initial;    /* reset — deixamos o recorte para o overflow do link */
+        max-width: none;
+        /* anula qualquer max-width herdado */
+        object-fit: initial;
+        /* reset — deixamos o recorte para o overflow do link */
         display: block;
         flex-shrink: 0;
         transform: none;
@@ -774,7 +783,8 @@ html, body {
     /* --- Centro: barra de busca ocupa o espaço restante --- */
     .header-center {
         order: 2;
-        flex: 1 1 0;                /* cresce para preencher o espaço */
+        flex: 1 1 0;
+        /* cresce para preencher o espaço */
         min-width: 0;
         max-width: 100%;
     }
@@ -817,13 +827,17 @@ html, body {
         width: 32px;
         height: 32px;
         flex-shrink: 0;
-        display: block;         /* elimina espaço fantasma abaixo da imagem */
+        display: block;
+        /* elimina espaço fantasma abaixo da imagem */
     }
 
     .btn-avatar-header {
-        padding: 0;             /* sem padding extra no mobile */
-        border-width: 0;        /* sem borda visível no mobile para não inflar */
-        line-height: 0;         /* evita espaço de linha abaixo da imagem */
+        padding: 0;
+        /* sem padding extra no mobile */
+        border-width: 0;
+        /* sem borda visível no mobile para não inflar */
+        line-height: 0;
+        /* evita espaço de linha abaixo da imagem */
         display: flex;
         align-items: center;
         justify-content: center;
@@ -972,4 +986,3 @@ html, body {
     color: var(--primary);
     transform: translateX(-2px);
 }
-
