@@ -31,6 +31,18 @@ body {
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
+/* Box-sizing consistente para o cabeçalho e menu lateral em qualquer página (mesmo sem home.css) */
+.header-principal,
+.header-principal *,
+.header-principal *::before,
+.header-principal *::after,
+.drawer-menu,
+.drawer-menu *,
+.drawer-menu *::before,
+.drawer-menu *::after {
+    box-sizing: border-box;
+}
+
 /* ==========================================================================
    1. CABEÇALHO GLOBAL (NAVBAR)
    ========================================================================== */
@@ -309,6 +321,7 @@ body {
 }
 
 .btn-avatar-header {
+    box-sizing: border-box;
     display: flex;
     align-items: center;
     gap: 6px;
@@ -325,6 +338,7 @@ body {
 }
 
 .avatar-img {
+    box-sizing: border-box;
     width: 38px;
     height: 38px;
     border-radius: 50%;
@@ -332,6 +346,7 @@ body {
     border: 2px solid #FFFFFF;
     background-color: #2F3542;
     display: block;
+    flex-shrink: 0;
 }
 
 /* Menu Dropdown de Perfil Desativado (Avatar vai direto ao Perfil) */
@@ -824,6 +839,7 @@ body {
     }
 
     .avatar-img {
+        box-sizing: border-box;
         width: 32px;
         height: 32px;
         flex-shrink: 0;
@@ -874,6 +890,7 @@ body {
     }
 
     .avatar-img {
+        box-sizing: border-box;
         width: 29px;
         height: 29px;
     }
@@ -911,6 +928,7 @@ body {
     }
 
     .avatar-img {
+        box-sizing: border-box;
         width: 26px;
         height: 26px;
     }
