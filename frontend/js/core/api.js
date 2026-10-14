@@ -440,6 +440,13 @@
                     headers: obterHeaders(true),
                     body: JSON.stringify({ content, messageType, offerValue })
                 });
+            },
+
+            async contarNaoLidas() {
+                return requisicao('/chat/conversations/unread/total', {
+                    method: 'GET',
+                    headers: obterHeaders(true)
+                });
             }
         },
 
