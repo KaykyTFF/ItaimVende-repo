@@ -1,0 +1,50 @@
+import prisma from '../../config/prisma.js';
+import { AppError } from '../../utils/errors.js';
+
+/**
+ * Alterna favorito (adiciona se não existir, remove se já existir) de forma atômica
+ */
+export async function toggleFavorite(userId, productId) {
+  const product = await prisma.product.findUnique({
+    where: { id: productId },
+  });
+
+  if (!product || product.deletedAt) {
+    throw new AppError('Produto não encontrado.', 404);
+  }
+
+  const existing = await prisma.favorite.findUnique({
+    where: {
+      userId_productId: {
+        userId,
+        productId,
+      },
+    },
+  });
+
+  if (existing) {
+    // Remove dos favoritos e decrementa contador
+    await prisma.$transaction([
+      prisma.favorite.delete({ where: { id: existing.id } }),
+      prisma.product.update({
+        where: { id: productId },
+        data: { favoritesCount: { decrement: 1 } },
+      }),
+    ]);
+
+    return { favorited: false, message: 'Anúncio removido dos favoritos.' };
+  } else {
+    // Adiciona aos favoritos e incrementa contador
+    await prisma.$transaction([
+      prisma.favorite.create({
+        data: { userId, productId },
+      }),
+      prisma.product.update({
+        where: { id: productId },
+        data: { favoritesCount: { increment: 1 } },
+      }),
+    ]);
+
+    return { favorited: true, message: 'Anúncio salvo nos favoritos!' };
+  }
+}
