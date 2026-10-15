@@ -9,16 +9,58 @@ const __dirname = path.dirname(__filename);
 
 // Diretório público de uploads na raiz do backend
 export const UPLOAD_DIR = path.resolve(__dirname, '../../uploads');
+export const UPLOAD_PERFIL_DIR = path.resolve(UPLOAD_DIR, 'perfil');
+export const UPLOAD_VENDAS_DIR = path.resolve(UPLOAD_DIR, 'vendas');
 
-// Garante que o diretório exista
-if (!fs.existsSync(UPLOAD_DIR)) {
-  fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+// Garante que todos os diretórios existam
+[UPLOAD_DIR, UPLOAD_PERFIL_DIR, UPLOAD_VENDAS_DIR].forEach((dir) => {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+});
+
+/**
+ * Determina a categoria de upload ('perfil' ou 'vendas') de forma inteligente e segura
+ */
+export function resolverCategoriaUpload(req, file) {
+  // 1. Categoria definida explicitamente no request (ex: middleware de rota)
+  if (req.uploadCategory) {
+    const cat = String(req.uploadCategory).toLowerCase();
+    if (cat.includes('perfil') || cat.includes('avatar')) return 'perfil';
+    if (cat.includes('venda') || cat.includes('produto')) return 'vendas';
+  }
+
+  // 2. Parâmetro de rota ou query string (ex: ?tipo=perfil ou ?tipo=venda ou /:categoria)
+  const param = (req.params?.categoria || req.query?.tipo || req.query?.folder || req.query?.categoria || '').toLowerCase();
+  if (param.includes('perfil') || param.includes('avatar')) return 'perfil';
+  if (param.includes('venda') || param.includes('produto')) return 'vendas';
+
+  // 3. Pelo nome do campo no formulário
+  const field = (file?.fieldname || '').toLowerCase();
+  if (field === 'avatar' || field === 'foto_perfil' || field === 'perfil') return 'perfil';
+  if (field === 'venda' || field === 'vendas' || field === 'produtos' || field === 'images') return 'vendas';
+
+  // 4. Pela URL acessada
+  const url = (req.originalUrl || req.url || '').toLowerCase();
+  if (url.includes('perfil') || url.includes('avatar')) return 'perfil';
+  if (url.includes('venda') || url.includes('produto')) return 'vendas';
+
+  // 5. Fallback padrão: upload único assume 'perfil', upload múltiplo assume 'vendas'
+  return (req.path?.includes('single') || field === 'image') ? 'perfil' : 'vendas';
 }
 
-// Configuração de armazenamento no disco
+// Configuração de armazenamento no disco com separação por pastas
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, UPLOAD_DIR);
+    const categoria = resolverCategoriaUpload(req, file);
+    const targetDir = categoria === 'perfil' ? UPLOAD_PERFIL_DIR : UPLOAD_VENDAS_DIR;
+
+    if (!fs.existsSync(targetDir)) {
+      fs.mkdirSync(targetDir, { recursive: true });
+    }
+
+    file.uploadCategory = categoria;
+    cb(null, targetDir);
   },
   filename: (req, file, cb) => {
     // Determina a extensão estritamente a partir do MIME type já validado
@@ -29,8 +71,10 @@ const storage = multer.diskStorage({
       'image/webp': '.webp',
     };
     const safeExt = MIME_TO_EXT[file.mimetype] || '.jpg';
+    const categoria = file.uploadCategory || resolverCategoriaUpload(req, file);
+    const prefixo = categoria === 'perfil' ? 'perfil' : 'venda';
     const uniqueSuffix = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
-    cb(null, `itaim-${uniqueSuffix}${safeExt}`);
+    cb(null, `${prefixo}-${uniqueSuffix}${safeExt}`);
   },
 });
 

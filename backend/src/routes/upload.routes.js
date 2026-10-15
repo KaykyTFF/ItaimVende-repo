@@ -29,14 +29,28 @@ function handleMulterError(multerUpload) {
   };
 }
 
+// Middleware para fixar explicitamente a categoria de upload
+const setCategory = (category) => (req, res, next) => {
+  req.uploadCategory = category;
+  next();
+};
+
 // Todas as rotas de upload exigem login e proteção contra flood
 router.use(authenticateToken);
 router.use(uploadLimiter);
 
-// 1. Upload de foto única (campo 'image' ou 'foto')
-router.post('/single', handleMulterError(upload.single('image')), uploadSingle);
+// 1. Rotas dedicadas para Foto de Perfil (Avatar)
+router.post('/perfil', setCategory('perfil'), handleMulterError(upload.single('image')), uploadSingle);
+router.post('/avatar', setCategory('perfil'), handleMulterError(upload.single('image')), uploadSingle);
 
-// 2. Upload de múltiplas fotos para anúncios (campo 'images' ou 'fotos')
+// 2. Rotas dedicadas para Fotos de Anúncios / Vendas (Galeria de Produtos)
+router.post('/vendas', setCategory('vendas'), handleMulterError(upload.array('images', 6)), uploadMultiple);
+router.post('/venda', setCategory('vendas'), handleMulterError(upload.array('images', 6)), uploadMultiple);
+router.post('/venda/single', setCategory('vendas'), handleMulterError(upload.single('image')), uploadSingle);
+router.post('/produtos', setCategory('vendas'), handleMulterError(upload.array('images', 6)), uploadMultiple);
+
+// 3. Rotas retrocompatíveis (detectam categoria via query string ?tipo=perfil|venda ou padrão)
+router.post('/single', handleMulterError(upload.single('image')), uploadSingle);
 router.post('/multiple', handleMulterError(upload.array('images', 6)), uploadMultiple);
 
 export default router;
