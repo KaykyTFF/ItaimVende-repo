@@ -26,6 +26,7 @@ html, body.pagina-chat,
 .pagina-chat *,
 .pagina-chat *::before,
 .pagina-chat *::after {
+    box-sizing: border-box;
     font-family: var(--chat-font) !important;
 }
 

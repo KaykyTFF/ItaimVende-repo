@@ -547,21 +547,14 @@
 
         const raw = emailOuUsername.toLowerCase().trim();
         const semArroba = raw.replace('@', '');
-        const isUserAdmin = raw === 'admin@gmail.com' || 
-                            semArroba === 'admin' || 
-                            semArroba === 'rsstore' ||
-                            raw === 'cmv5iacmv0000ttiwu9wtemar';
-
-        if (isUserAdmin) {
-            // Admin gerencia todos os produtos do catálogo e seus próprios
-            return todos;
-        }
-
-        // Outro perfil de usuário: retorna estritamente os anúncios que ele publicou
         return todos.filter(p => {
             const pEmail = (p.vendedorEmail || '').toLowerCase().trim();
             const pUser = (p.vendedorUsername || '').toLowerCase().trim();
             const pId = String(p.vendedorId || p.sellerId || '');
+            const pNome = (p.vendedorNome || p.vendedor || '').toLowerCase().trim();
+            if (raw === 'admin@gmail.com' || semArroba === 'admin' || semArroba === 'rsstore') {
+                return pEmail === 'admin@gmail.com' || pUser === 'admin' || pUser === 'rsstore' || pNome.includes('raili') || pId === 'cmv5iacmv0000ttiwu9wtemar';
+            }
             return pEmail === raw || pEmail === semArroba || (pUser && (pUser === semArroba || pUser === raw)) || pId === raw;
         });
     }
@@ -1383,77 +1376,9 @@
     window.ItaimAvaliacoes = ItaimAvaliacoes;
 
     // ========================================================================
-    // GUARDIÃO DE PÁGINAS PROTEGIDAS (TELA EM BRANCO COM BOTÃO DE LOGIN)
+    // GUARDIÃO DE PÁGINAS (DESATIVADO PARA PERMITIR NAVEGAÇÃO LIVRE NO FRONT)
     // ========================================================================
-    function protegerPagina(motivo = 'Para sua segurança e privacidade, faça login para acessar os dados desta página.') {
-        const token = localStorage.getItem('itaim_token');
-        if (!token) {
-            document.documentElement.classList.add('bloqueado-sem-sessao');
-            document.title = 'Acesso Restrito - Itaim Vende';
-
-            // Injeta estilo global se necessário
-            if (!document.getElementById('estilo-bloqueio-sessao')) {
-                const st = document.createElement('style');
-                st.id = 'estilo-bloqueio-sessao';
-                st.textContent = `
-                    .bloqueado-sem-sessao body > *:not(#tela-bloqueio-sessao) {
-                        display: none !important;
-                    }
-                    .bloqueado-sem-sessao body {
-                        background: #FFFFFF !important;
-                        margin: 0 !important;
-                        padding: 0 !important;
-                        overflow: hidden !important;
-                    }
-                    .bloqueado-sem-sessao #tela-bloqueio-sessao {
-                        display: flex !important;
-                    }
-                `;
-                document.head.appendChild(st);
-            }
-
-            let telaBloqueio = document.getElementById('tela-bloqueio-sessao');
-            if (!telaBloqueio) {
-                const logoSrc = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
-                    ? window.ItaimRotas.obterAsset('assets/header1-logo.png')
-                    : (window.location.pathname.toLowerCase().includes('/pages/') ? '../../assets/header1-logo.png' : './assets/header1-logo.png');
-
-                const loginUrl = (window.ItaimRotas && typeof window.ItaimRotas.obterUrl === 'function')
-                    ? window.ItaimRotas.obterUrl('login')
-                    : (window.location.pathname.toLowerCase().includes('/pages/') ? '../../index.html' : './index.html');
-
-                telaBloqueio = document.createElement('div');
-                telaBloqueio.id = 'tela-bloqueio-sessao';
-                telaBloqueio.style.cssText = 'display: flex; position: fixed; inset: 0; width: 100vw; height: 100vh; background: #FFFFFF; z-index: 9999999; flex-direction: column; align-items: center; justify-content: center; padding: 24px; box-sizing: border-box; text-align: center;';
-                telaBloqueio.innerHTML = `
-                    <div style="max-width: 440px; width: 100%; display: flex; flex-direction: column; align-items: center;">
-                        <a href="${loginUrl}" style="display: inline-block; margin-bottom: 26px;">
-                            <img src="${logoSrc}" alt="Itaim Vende" style="height: 52px; object-fit: contain;">
-                        </a>
-                        <div style="width: 80px; height: 80px; border-radius: 50%; background: #F8FAFC; border: 1.5px solid #E2E8F0; display: flex; align-items: center; justify-content: center; margin-bottom: 22px; box-shadow: 0 4px 16px rgba(0,0,0,0.04);">
-                            <svg viewBox="0 0 24 24" width="38" height="38" fill="none" stroke="#44BD32" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                            </svg>
-                        </div>
-                        <h1 style="font-size: 24px; font-weight: 800; color: #0F172A; margin: 0 0 10px; letter-spacing: -0.5px;">Acesso Restrito</h1>
-                        <p style="font-size: 15px; color: #64748B; margin: 0 0 28px; line-height: 1.6; max-width: 360px;">${motivo}</p>
-                        <a href="${loginUrl}" class="btn-voltar-login" style="display: inline-flex; align-items: center; justify-content: center; gap: 10px; background: #44BD32; color: #FFFFFF; font-weight: 700; font-size: 15.5px; padding: 14px 34px; border-radius: 30px; text-decoration: none; box-shadow: 0 4px 18px rgba(68,189,50,0.35); transition: transform 0.2s, background 0.2s; width: 100%; max-width: 280px; box-sizing: border-box;">
-                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
-                                <polyline points="10 17 15 12 10 7"></polyline>
-                                <line x1="15" y1="12" x2="3" y2="12"></line>
-                            </svg>
-                            <span>Voltar para o Login</span>
-                        </a>
-                    </div>
-                `;
-                document.body.appendChild(telaBloqueio);
-            } else {
-                telaBloqueio.style.display = 'flex';
-            }
-            return false;
-        }
+    function protegerPagina() {
         return true;
     }
 
