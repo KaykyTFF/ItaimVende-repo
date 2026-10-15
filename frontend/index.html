@@ -17,104 +17,140 @@
     <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
-    <main class="auth-wrapper">
-        <!-- ÁREA SUPERIOR (LOGO E MASCOTE) -->
-        <header class="topo-container" id="topo-container">
-            <div class="logo-box">
-                <img src="assets/header-logo.png" alt="Itaim Vende - Compra, Venda e Trocas" class="logo-img" id="img-logo">
-            </div>
+<body>    <main class="auth-wrapper auth-floating-wrapper">
+        <!-- ==============================================================
+             CARTÃO FLUTUANTE CENTRALIZADO (LAYOUT MODERNO DIVIDIDO)
+             ============================================================== -->
+        <div class="auth-floating-card" role="region" aria-label="Painel de Acesso">
+            <!-- ==============================================================
+                 BLOCO ESQUERDO: IDENTIDADE VISUAL COM FUNDO GEOMÉTRICO ESCURO E VERDE
+                 ============================================================== -->
+            <aside class="auth-brand-block" id="painel-marca" aria-label="Marca Itaim Vende">
+                <div class="brand-logo-centered-box">
+                    <a href="index.html" class="brand-logo-link" title="Itaim Vende - Início">
+                        <img src="assets/logo-itaimvende-contorno-branco.png" alt="Itaim Vende - Compra, Venda e Trocas" class="brand-logo-center-img" id="img-logo">
+                    </a>
+                </div>
+            </aside>
 
-            <!-- Seletor de visualização (Login / Cadastro) -->
-            <nav class="nav-abas" aria-label="Navegação entre Login e Cadastro">
-                <button type="button" class="btn-aba aba-ativa" id="aba-login" data-target="login">Entrar</button>
-                <button type="button" class="btn-aba" id="aba-cadastro" data-target="cadastro">Cadastre-se</button>
-            </nav>
-        </header>
-
-        <!-- ÁREA INFERIOR (PAINEL ESCURO) -->
-        <section class="painel-inferior painel-curvo" id="painel-principal" aria-label="Painel de Autenticação">
-            
-            <!-- ==========================================================
-                 VISÃO 1: TELA DE LOGIN
-                 ========================================================== -->
-            <div class="view-secao secao-ativa container-login" id="secao-login">
-                <h1 class="titulo-login">LOGIN</h1>
-
-                <form id="form-login" class="form-auth" novalidate>
-                    <!-- Campo E-mail -->
-                    <div class="grupo-campo">
-                        <label for="input-email" class="label-campo">E-mail:</label>
-                        <div class="input-wrapper">
-                            <input 
-                                type="email" 
-                                id="input-email" 
-                                name="email" 
-                                class="campo-texto" 
-                                placeholder="Digite seu e-mail" 
-                                autocomplete="email" 
-                                required
-                            >
-                        </div>
-                    </div>
-
-                    <!-- Campo Senha -->
-                    <div class="grupo-campo">
-                        <label for="input-senha" class="label-campo">Senha:</label>
-                        <div class="input-wrapper">
-                            <input 
-                                type="password" 
-                                id="input-senha" 
-                                name="senha" 
-                                class="campo-texto" 
-                                placeholder="Digite sua senha" 
-                                autocomplete="current-password" 
-                                required
-                            >
-                            <button type="button" class="btn-toggle-senha" id="btn-toggle-senha-login" aria-label="Mostrar ou ocultar senha">
-                                <svg class="icone-olho icone-aberto" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                    <circle cx="12" cy="12" r="3"></circle>
-                                </svg>
-                                <svg class="icone-olho icone-fechado icone-oculto" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
-                                    <line x1="1" y1="1" x2="23" y2="23"></line>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Link Esqueceu a Senha -->
-                    <div class="box-esqueceu">
-                        <a href="#recuperar-senha" class="link-esqueceu" id="link-esqueceu">Esqueceu a senha?</a>
-                    </div>
-
-                    <!-- Botões -->
-                    <div class="box-botoes">
-                        <button type="submit" class="btn-entrar" id="btn-entrar">
-                            <span class="btn-texto">ENTRAR</span>
-                            <span class="btn-spinner" aria-hidden="true"></span>
-                        </button>
-
-                        <span class="label-ou">ou</span>
-
-                        <button type="button" class="btn-cadastrar" id="btn-ir-para-cadastro">
-                            CADASTRE-SE
-                        </button>
-                    </div>
-
-                    <!-- Feedback de Status -->
-                    <div class="status-msg" id="status-msg-login" role="alert" aria-live="polite"></div>
-                </form>
-            </div>
-
-            <!-- ==========================================================
-                 VISÃO 2: TELA DE CADASTRO (EXATAMENTE COMO NAS IMAGENS, SEM CPF)
-                 ========================================================== -->
-            <div class="view-secao container-cadastro" id="secao-cadastro">
-                <form id="form-cadastro-completo" class="form-auth" novalidate>
+            <!-- ==============================================================
+                 BLOCO DIREITO: FORMULÁRIO DE LOGIN (FUNDO BRANCO TOTAL)
+                 ============================================================== -->
+            <section class="auth-form-block" id="painel-principal" aria-label="Painel de Autenticação">
+                <div class="auth-card-inner">
                     
-                    <!-- Campo Nome Completo -->
+                    <!-- ==========================================================
+                         TELA DE LOGIN
+                         ========================================================== -->
+                    <div class="view-secao secao-ativa container-login" id="secao-login">
+                        <h1 class="titulo-login">LOGIN</h1>
+
+                        <form id="form-login" class="form-auth" novalidate>
+                            <!-- Campo E-mail -->
+                            <div class="grupo-campo">
+                                <label for="input-email" class="label-campo">E-mail:</label>
+                                <div class="input-wrapper">
+                                    <input 
+                                        type="email" 
+                                        id="input-email" 
+                                        name="email" 
+                                        class="campo-texto" 
+                                        placeholder="Digite seu e-mail" 
+                                        autocomplete="email" 
+                                        required
+                                    >
+                                </div>
+                            </div>
+
+                            <!-- Campo Senha -->
+                            <div class="grupo-campo">
+                                <label for="input-senha" class="label-campo">Senha:</label>
+                                <div class="input-wrapper">
+                                    <input 
+                                        type="password" 
+                                        id="input-senha" 
+                                        name="senha" 
+                                        class="campo-texto" 
+                                        placeholder="Digite sua senha" 
+                                        autocomplete="current-password" 
+                                        required
+                                    >
+                                    <button type="button" class="btn-toggle-senha" id="btn-toggle-senha-login" aria-label="Mostrar ou ocultar senha">
+                                        <svg class="icone-olho icone-aberto" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                            <circle cx="12" cy="12" r="3"></circle>
+                                        </svg>
+                                        <svg class="icone-olho icone-fechado icone-oculto" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Link Esqueceu a Senha -->
+                            <div class="box-esqueceu">
+                                <a href="#recuperar-senha" class="link-esqueceu" id="link-esqueceu">Esqueceu a senha?</a>
+                            </div>
+
+                            <!-- Botões -->
+                            <div class="box-botoes">
+                                <button type="submit" class="btn-entrar" id="btn-entrar">
+                                    <span class="btn-texto">ENTRAR</span>
+                                    <span class="btn-spinner" aria-hidden="true"></span>
+                                </button>
+
+                                <div class="divisor-ou">
+                                    <span class="linha-ou"></span>
+                                    <span class="label-ou">ou</span>
+                                    <span class="linha-ou"></span>
+                                </div>
+
+                                <button type="button" class="btn-cadastrar" id="btn-ir-para-cadastro">
+                                    CADASTRE-SE
+                                </button>
+                            </div>
+
+                            <!-- Feedback de Status -->
+                            <div class="status-msg" id="status-msg-login" role="alert" aria-live="polite"></div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- ==============================================================
+         MODAL DE CADASTRO (QUADRO BRANCO CENTRALIZADO / OVERLAY COM BLUR)
+         ============================================================== -->
+    <div class="modal-backdrop" id="modal-cadastro" aria-hidden="true" role="dialog" aria-labelledby="modal-titulo-cadastro">
+        <div class="modal-card modal-card-cadastro modal-card-white">
+            <div class="bottom-sheet-handle-area" id="bottom-sheet-handle-area" title="Arraste para fechar">
+                <div class="bottom-sheet-handle" id="bottom-sheet-handle" aria-hidden="true"></div>
+            </div>
+            <button class="modal-close" id="modal-cadastro-close-btn" aria-label="Fechar cadastro">&times;</button>
+            
+            <!-- Cabeçalho e Barra de Progresso do Wizard -->
+            <div class="cadastro-wizard-header">
+                <h2 class="titulo-login titulo-cadastro titulo-modal-cadastro" id="modal-titulo-cadastro">CADASTRO</h2>
+                
+                <div class="wizard-progresso-box">
+                    <div class="wizard-info-linha">
+                        <span class="wizard-etapa-badge" id="wizard-etapa-badge">Etapa 1 de 4</span>
+                        <span class="wizard-etapa-nome" id="wizard-etapa-nome">Dados Pessoais e Localização</span>
+                    </div>
+                    <div class="wizard-barra-trilha">
+                        <div class="wizard-barra-progresso" id="wizard-barra-progresso" style="width: 25%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <form id="form-cadastro-completo" class="form-auth form-wizard" novalidate>
+                
+                <!-- ==================================================
+                     ETAPA 1: Dados Pessoais e Localização
+                     ================================================== -->
+                <div class="wizard-etapa-painel etapa-ativa" id="etapa-1" data-step="1">
                     <div class="grupo-campo">
                         <label for="cad-nome" class="label-campo">Nome Completo:</label>
                         <input 
@@ -127,7 +163,6 @@
                         >
                     </div>
 
-                    <!-- Campo Nome de Usuário (@) posicionado logo abaixo do Nome Completo -->
                     <div class="grupo-campo">
                         <label for="cad-username" class="label-campo">Nome de Usuário (@):</label>
                         <input 
@@ -140,7 +175,6 @@
                         >
                     </div>
 
-                    <!-- Campo Cidade -->
                     <div class="grupo-campo">
                         <label for="cad-cidade" class="label-campo">Cidade:</label>
                         <div class="select-wrapper">
@@ -167,7 +201,6 @@
                         </div>
                     </div>
 
-                    <!-- Campo Bairro -->
                     <div class="grupo-campo">
                         <label for="cad-bairro" class="label-campo">Bairro:</label>
                         <input 
@@ -179,7 +212,23 @@
                         >
                     </div>
 
-                    <!-- Campo WhatsApp / Contato -->
+                    <div class="wizard-acoes-etapa">
+                        <button type="button" class="btn-avancar-etapa" id="btn-avancar-etapa-1">
+                            AVANÇAR &rarr;
+                        </button>
+                    </div>
+
+                    <div class="box-voltar-login">
+                        <button type="button" class="btn-voltar-login link-voltar" id="btn-voltar-ao-login">
+                            &larr; VOLTAR
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ==================================================
+                     ETAPA 2: Contato
+                     ================================================== -->
+                <div class="wizard-etapa-painel" id="etapa-2" data-step="2">
                     <div class="grupo-campo">
                         <label for="cad-telefone" class="label-campo">WhatsApp / Contato:</label>
                         <input 
@@ -189,9 +238,24 @@
                             class="campo-texto" 
                             placeholder="(00) 00000-0000"
                             maxlength="15"
+                            required
                         >
                     </div>
 
+                    <div class="wizard-botoes-duplos">
+                        <button type="button" class="btn-voltar-etapa" id="btn-voltar-etapa-2">
+                            &larr; VOLTAR
+                        </button>
+                        <button type="button" class="btn-avancar-etapa" id="btn-avancar-etapa-2">
+                            AVANÇAR &rarr;
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ==================================================
+                     ETAPA 3: Identificação
+                     ================================================== -->
+                <div class="wizard-etapa-painel" id="etapa-3" data-step="3">
                     <div class="grupo-campo">
                         <label for="cad-email-completo" class="label-campo">E-mail:</label>
                         <input 
@@ -204,6 +268,20 @@
                         >
                     </div>
 
+                    <div class="wizard-botoes-duplos">
+                        <button type="button" class="btn-voltar-etapa" id="btn-voltar-etapa-3">
+                            &larr; VOLTAR
+                        </button>
+                        <button type="button" class="btn-avancar-etapa" id="btn-avancar-etapa-3">
+                            AVANÇAR &rarr;
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ==================================================
+                     ETAPA 4: Segurança e Finalização
+                     ================================================== -->
+                <div class="wizard-etapa-painel" id="etapa-4" data-step="4">
                     <div class="grupo-campo">
                         <label for="cad-senha-completo" class="label-campo">Senha:</label>
                         <div class="input-wrapper">
@@ -241,7 +319,7 @@
                             >
                             <button type="button" class="btn-toggle-senha" id="btn-toggle-cad-confirma" aria-label="Mostrar ou ocultar confirmação de senha">
                                 <svg class="icone-olho icone-aberto" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path>
                                     <circle cx="12" cy="12" r="3"></circle>
                                 </svg>
                                 <svg class="icone-olho icone-fechado icone-oculto" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -252,25 +330,22 @@
                         </div>
                     </div>
 
-                    <!-- Botão CONCLUIR CADASTRO -->
-                    <button type="submit" class="btn-concluir-cadastro" id="btn-concluir-cadastro">
-                        <span class="btn-texto">CONCLUIR CADASTRO</span>
-                        <span class="btn-spinner" aria-hidden="true"></span>
-                    </button>
-
-                    <!-- Link Voltar ao Login -->
-                    <div class="box-voltar-login">
-                        <button type="button" class="link-voltar" id="btn-voltar-ao-login">
-                            Voltar ao Login
+                    <div class="wizard-botoes-duplos">
+                        <button type="button" class="btn-voltar-etapa" id="btn-voltar-etapa-4">
+                            &larr; VOLTAR
+                        </button>
+                        <button type="submit" class="btn-concluir-cadastro" id="btn-concluir-cadastro">
+                            <span class="btn-texto">CONCLUIR CADASTRO</span>
+                            <span class="btn-spinner" aria-hidden="true"></span>
                         </button>
                     </div>
+                </div>
 
-                    <!-- Feedback de Status Cadastro -->
-                    <div class="status-msg" id="status-msg-cadastro" role="alert" aria-live="polite"></div>
-                </form>
-            </div>
-        </section>
-    </main>
+                <!-- Feedback de Status Cadastro -->
+                <div class="status-msg" id="status-msg-cadastro" role="alert" aria-live="polite"></div>
+            </form>
+        </div>
+    </div>
 
     <!-- MODAL ESQUECEU A SENHA / CONFIRMAÇÃO DE CÓDIGO -->
     <div class="modal-backdrop" id="modal-esqueceu" aria-hidden="true" role="dialog" aria-labelledby="modal-titulo-recuperar">

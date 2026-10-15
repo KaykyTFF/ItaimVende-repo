@@ -24,11 +24,47 @@ document.addEventListener('DOMContentLoaded', () => {
     const topoContainer = document.getElementById('topo-container');
     const btnIrParaCadastro = document.getElementById('btn-ir-para-cadastro');
     const btnVoltarAoLogin = document.getElementById('btn-voltar-ao-login');
+    const modalCadastro = document.getElementById('modal-cadastro');
+    const modalCadastroCloseBtn = document.getElementById('modal-cadastro-close-btn');
+
+    function abrirModalCadastro() {
+        if (!modalCadastro) {
+            alternarTela('cadastro');
+            return;
+        }
+        modalCadastro.classList.add('modal-ativo');
+        modalCadastro.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+
+        // Foca no primeiro campo da etapa ativa
+        const etapaAtiva = modalCadastro.querySelector('.wizard-etapa-painel.etapa-ativa') || modalCadastro.querySelector('.wizard-etapa-painel');
+        const primeiroCampo = etapaAtiva?.querySelector('input, select');
+        if (primeiroCampo) {
+            setTimeout(() => primeiroCampo.focus(), 150);
+        }
+    }
+
+    function fecharModalCadastro() {
+        if (!modalCadastro) {
+            alternarTela('login');
+            return;
+        }
+        modalCadastro.classList.remove('modal-ativo');
+        modalCadastro.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+
+        if (window.location.hash === '#cadastro') {
+            history.replaceState(null, '', window.location.pathname + window.location.search);
+        }
+    }
 
     function alternarTela(tela) {
-        if (!secaoLogin || !secaoCadastro) return;
-
         if (tela === 'cadastro') {
+            if (modalCadastro) {
+                abrirModalCadastro();
+                return;
+            }
+            if (!secaoLogin || !secaoCadastro) return;
             secaoLogin.classList.remove('secao-ativa');
             secaoCadastro.classList.add('secao-ativa');
             if (abaLogin) abaLogin.classList.remove('aba-ativa');
@@ -41,8 +77,11 @@ document.addEventListener('DOMContentLoaded', () => {
             window.location.hash = 'cadastro';
             window.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
-            secaoCadastro.classList.remove('secao-ativa');
-            secaoLogin.classList.add('secao-ativa');
+            if (modalCadastro && modalCadastro.classList.contains('modal-ativo')) {
+                fecharModalCadastro();
+            }
+            if (secaoCadastro) secaoCadastro.classList.remove('secao-ativa');
+            if (secaoLogin) secaoLogin.classList.add('secao-ativa');
             if (abaCadastro) abaCadastro.classList.remove('aba-ativa');
             if (abaLogin) abaLogin.classList.add('aba-ativa');
             if (painelPrincipal) {
@@ -50,8 +89,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 painelPrincipal.classList.add('painel-curvo');
             }
             if (topoContainer) topoContainer.classList.remove('topo-compacto');
-            window.location.hash = 'login';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (window.location.hash === '#cadastro') {
+                history.replaceState(null, '', window.location.pathname + window.location.search);
+            }
         }
     }
 
@@ -61,18 +101,252 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (btnIrParaCadastro) {
-        btnIrParaCadastro.addEventListener('click', () => alternarTela('cadastro'));
+        btnIrParaCadastro.addEventListener('click', (e) => {
+            e.preventDefault();
+            abrirModalCadastro();
+        });
+    }
+
+    if (modalCadastroCloseBtn) {
+        modalCadastroCloseBtn.addEventListener('click', fecharModalCadastro);
     }
 
     if (btnVoltarAoLogin) {
-        btnVoltarAoLogin.addEventListener('click', () => alternarTela('login'));
+        btnVoltarAoLogin.addEventListener('click', (e) => {
+            e.preventDefault();
+            fecharModalCadastro();
+        });
+    }
+
+    if (modalCadastro) {
+        modalCadastro.addEventListener('click', (e) => {
+            if (e.target === modalCadastro) {
+                fecharModalCadastro();
+            }
+        });
+    }
+
+    // Suporte nativo a arrasto (drag/swipe down) para fechar o Bottom Sheet de cadastro no celular
+    const bottomSheetHandleArea = document.getElementById('bottom-sheet-handle-area') || document.getElementById('bottom-sheet-handle');
+    const modalCardCadastro = modalCadastro ? modalCadastro.querySelector('.modal-card-cadastro') : null;
+
+    if (bottomSheetHandleArea && modalCardCadastro) {
+        let startY = 0;
+        let currentY = 0;
+        let isDragging = false;
+
+        function startDrag(clientY) {
+            startY = clientY;
+            currentY = clientY;
+            isDragging = true;
+            modalCardCadastro.style.transition = 'none';
+        }
+
+        function moveDrag(clientY) {
+            if (!isDragging) return;
+            currentY = clientY;
+            const deltaY = currentY - startY;
+            if (deltaY > 0) {
+                modalCardCadastro.style.transform = `translateY(${deltaY}px)`;
+            } else {
+                modalCardCadastro.style.transform = `translateY(${deltaY * 0.15}px)`;
+            }
+        }
+
+        function endDrag() {
+            if (!isDragging) return;
+            isDragging = false;
+            const deltaY = currentY - startY;
+            if (deltaY > 60) {
+                modalCardCadastro.style.transition = 'transform 0.24s ease-out';
+                modalCardCadastro.style.transform = 'translateY(100%)';
+                setTimeout(() => {
+                    modalCardCadastro.style.transition = '';
+                    modalCardCadastro.style.transform = '';
+                    fecharModalCadastro();
+                }, 220);
+            } else {
+                modalCardCadastro.style.transition = 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1)';
+                modalCardCadastro.style.transform = 'translateY(0)';
+                setTimeout(() => {
+                    modalCardCadastro.style.transition = '';
+                    modalCardCadastro.style.transform = '';
+                }, 250);
+            }
+        }
+
+        // Touch (Mobile)
+        bottomSheetHandleArea.addEventListener('touchstart', (e) => {
+            startDrag(e.touches[0].clientY);
+        }, { passive: true });
+
+        window.addEventListener('touchmove', (e) => {
+            if (isDragging) {
+                moveDrag(e.touches[0].clientY);
+            }
+        }, { passive: true });
+
+        window.addEventListener('touchend', endDrag);
+
+        // Mouse (Simuladores / Desktop)
+        bottomSheetHandleArea.addEventListener('mousedown', (e) => {
+            startDrag(e.clientY);
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                moveDrag(e.clientY);
+            }
+        });
+
+        window.addEventListener('mouseup', () => {
+            if (isDragging) {
+                endDrag();
+            }
+        });
+
+        // Toque rápido no puxador também fecha
+        bottomSheetHandleArea.addEventListener('click', (e) => {
+            if (Math.abs(currentY - startY) < 5) {
+                fecharModalCadastro();
+            }
+        });
     }
 
     if (window.location.hash === '#cadastro') {
-        alternarTela('cadastro');
+        abrirModalCadastro();
     }
 
     // ==========================================================================
+    // 1.1 WIZARD DE CADASTRO PROGRESSIVO EM 4 ETAPAS SEQUENCIAIS
+    // ==========================================================================
+    const nomesEtapas = {
+        1: 'Dados Pessoais e Localização',
+        2: 'Contato',
+        3: 'Identificação',
+        4: 'Segurança e Finalização'
+    };
+
+    let resetarWizardFn = null;
+
+    function configurarWizardCadastro(formId) {
+        const form = document.getElementById(formId);
+        if (!form) return;
+
+        let etapaAtual = 1;
+        const totalEtapas = 4;
+        const badgeEtapa = document.getElementById('wizard-etapa-badge');
+        const nomeEtapa = document.getElementById('wizard-etapa-nome');
+        const barraProgresso = document.getElementById('wizard-barra-progresso');
+        const statusMsg = document.getElementById('status-msg-cadastro') || form.querySelector('.status-msg');
+
+        function atualizarIndicador(etapa) {
+            if (badgeEtapa) badgeEtapa.textContent = `Etapa ${etapa} de ${totalEtapas}`;
+            if (nomeEtapa) nomeEtapa.textContent = nomesEtapas[etapa] || '';
+            if (barraProgresso) barraProgresso.style.width = `${(etapa / totalEtapas) * 100}%`;
+        }
+
+        function irParaEtapa(proximaEtapa) {
+            const painelAtual = form.querySelector(`.wizard-etapa-painel[data-step="${etapaAtual}"]`);
+            const proximoPainel = form.querySelector(`.wizard-etapa-painel[data-step="${proximaEtapa}"]`);
+            
+            if (!proximoPainel) return;
+
+            if (painelAtual) {
+                painelAtual.classList.remove('etapa-ativa');
+            }
+
+            proximoPainel.classList.add('etapa-ativa');
+            etapaAtual = proximaEtapa;
+            atualizarIndicador(etapaAtual);
+
+            if (statusMsg) {
+                statusMsg.textContent = '';
+                statusMsg.className = 'status-msg';
+            }
+
+            const primeiroInput = proximoPainel.querySelector('input, select');
+            if (primeiroInput) primeiroInput.focus();
+        }
+
+        resetarWizardFn = () => {
+            irParaEtapa(1);
+        };
+
+        // Validação da Etapa 1
+        const btnAvancar1 = document.getElementById('btn-avancar-etapa-1') || form.querySelector('#btn-avancar-etapa-1');
+        if (btnAvancar1) {
+            btnAvancar1.addEventListener('click', () => {
+                const nome = form.querySelector('[name="nome"]')?.value.trim();
+                const username = form.querySelector('[name="username"]')?.value.trim();
+                const cidade = form.querySelector('[name="cidade"]')?.value;
+
+                if (!nome) {
+                    exibirStatus(statusMsg, 'Por favor, informe seu nome completo.', 'status-erro');
+                    form.querySelector('[name="nome"]')?.focus();
+                    return;
+                }
+                if (!username) {
+                    exibirStatus(statusMsg, 'Por favor, crie um nome de usuário (@).', 'status-erro');
+                    form.querySelector('[name="username"]')?.focus();
+                    return;
+                }
+                if (!cidade) {
+                    exibirStatus(statusMsg, 'Por favor, selecione sua cidade.', 'status-erro');
+                    form.querySelector('[name="cidade"]')?.focus();
+                    return;
+                }
+
+                irParaEtapa(2);
+            });
+        }
+
+        // Validação da Etapa 2
+        const btnAvancar2 = document.getElementById('btn-avancar-etapa-2') || form.querySelector('#btn-avancar-etapa-2');
+        const btnVoltar2 = document.getElementById('btn-voltar-etapa-2') || form.querySelector('#btn-voltar-etapa-2');
+        if (btnAvancar2) {
+            btnAvancar2.addEventListener('click', () => {
+                const tel = form.querySelector('[name="telefone"]')?.value.replace(/\D/g, '');
+                if (!tel || tel.length < 10) {
+                    exibirStatus(statusMsg, 'Informe um número de WhatsApp/Contato válido com DDD.', 'status-erro');
+                    form.querySelector('[name="telefone"]')?.focus();
+                    return;
+                }
+                irParaEtapa(3);
+            });
+        }
+        if (btnVoltar2) {
+            btnVoltar2.addEventListener('click', () => irParaEtapa(1));
+        }
+
+        // Validação da Etapa 3
+        const btnAvancar3 = document.getElementById('btn-avancar-etapa-3') || form.querySelector('#btn-avancar-etapa-3');
+        const btnVoltar3 = document.getElementById('btn-voltar-etapa-3') || form.querySelector('#btn-voltar-etapa-3');
+        if (btnAvancar3) {
+            btnAvancar3.addEventListener('click', () => {
+                const email = form.querySelector('[name="email"]')?.value.trim();
+                const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!email || !regexEmail.test(email)) {
+                    exibirStatus(statusMsg, 'Por favor, informe um endereço de e-mail válido.', 'status-erro');
+                    form.querySelector('[name="email"]')?.focus();
+                    return;
+                }
+                irParaEtapa(4);
+            });
+        }
+        if (btnVoltar3) {
+            btnVoltar3.addEventListener('click', () => irParaEtapa(2));
+        }
+
+        // Etapa 4 - Voltar
+        const btnVoltar4 = document.getElementById('btn-voltar-etapa-4') || form.querySelector('#btn-voltar-etapa-4');
+        if (btnVoltar4) {
+            btnVoltar4.addEventListener('click', () => irParaEtapa(3));
+        }
+    }
+
+    configurarWizardCadastro('form-cadastro-completo');
+    configurarWizardCadastro('form-cadastro-direto');
     // 2. TOGGLE DE VISIBILIDADE DE SENHA (UX)
     // ==========================================================================
     function configurarToggleSenha(btnId, inputId) {
@@ -300,17 +574,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 exibirStatus(statusMsg, data.message || 'Cadastro concluído com sucesso!', 'status-sucesso');
 
                 setTimeout(() => {
-                    if (secaoLogin) {
-                        alternarTela('login');
-                        if (inputEmail) inputEmail.value = email;
-                        if (inputSenha) {
-                            inputSenha.value = '';
-                            inputSenha.focus();
-                        }
+                    fecharModalCadastro();
+                    if (resetarWizardFn) resetarWizardFn();
+                    if (inputEmail) inputEmail.value = email;
+                    if (inputSenha) {
+                        inputSenha.value = '';
+                        inputSenha.focus();
+                    }
+                    if (statusMsgLogin) {
                         exibirStatus(statusMsgLogin, 'Cadastro realizado com sucesso! Faça login para continuar.', 'status-sucesso');
-                    } else {
-                        const destino = window.ItaimRotas ? window.ItaimRotas.obterUrl('index') : '../../index.html';
-                        window.location.href = destino;
                     }
                 }, 1200);
 
@@ -367,8 +639,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modalEsqueceu?.classList.contains('modal-ativo')) {
-            fecharModalRecuperacao();
+        if (e.key === 'Escape') {
+            if (modalCadastro?.classList.contains('modal-ativo')) {
+                fecharModalCadastro();
+            }
+            if (modalEsqueceu?.classList.contains('modal-ativo')) {
+                fecharModalRecuperacao();
+            }
         }
     });
 
