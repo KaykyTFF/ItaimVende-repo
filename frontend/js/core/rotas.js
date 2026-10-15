@@ -51,7 +51,11 @@
             'notificacoes': 'pages/notificacoes/notificacoes.html',
             'notificacoes.html': 'pages/notificacoes/notificacoes.html',
             'cadastro': 'pages/auth/cadastro.html',
-            'cadastro.html': 'pages/auth/cadastro.html'
+            'cadastro.html': 'pages/auth/cadastro.html',
+            'painel': 'pages/admin/painel.html',
+            'painel.html': 'pages/admin/painel.html',
+            'status': 'pages/admin/painel.html',
+            'status.html': 'pages/admin/painel.html'
         },
 
         /**

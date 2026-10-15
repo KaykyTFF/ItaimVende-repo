@@ -20,6 +20,7 @@ import favoriteRoutes from './routes/favorite/index.js';
 import uploadRoutes from './routes/upload/index.js';
 import reviewRoutes from './routes/review/index.js';
 import reportRoutes from './routes/report/index.js';
+import systemRoutes from './routes/system/index.js';
 import { UPLOAD_DIR, UPLOAD_PERFIL_DIR, UPLOAD_VENDAS_DIR } from './config/upload.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -29,6 +30,8 @@ const FRONTEND_DIR = path.resolve(__dirname, '../../frontend');
 export const SERVER_BOOT_ID = `boot_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
 
 const app = express();
+app.set('trust proxy', 1);
+app.set('SERVER_BOOT_ID', SERVER_BOOT_ID);
 
 // Middlewares de Segurança Global (permite scripts, estilos e fotos estáticas no frontend)
 app.use(helmet({ crossOriginResourcePolicy: false, contentSecurityPolicy: false }));
@@ -116,6 +119,7 @@ app.use('/api/favorites', favoriteRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/reports', reportRoutes);
+app.use('/api/system', systemRoutes);
 
 // Servir arquivos estáticos da pasta frontend (CSS, JS, Assets, Pages)
 app.use(express.static(FRONTEND_DIR));
@@ -138,6 +142,8 @@ const PAGE_ROUTES = [
   { route: '/configuracoes', file: 'pages/perfil/configuracoes.html' },
   { route: '/favoritos', file: 'pages/favoritos/favoritos.html' },
   { route: '/notificacoes', file: 'pages/notificacoes/notificacoes.html' },
+  { route: '/painel', file: 'pages/admin/painel.html' },
+  { route: '/status', file: 'pages/admin/painel.html' },
 ];
 
 PAGE_ROUTES.forEach(({ route, file }) => {

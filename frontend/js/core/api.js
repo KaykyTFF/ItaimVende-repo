@@ -555,6 +555,21 @@
             multiplos(fotos = [], categoria = 'vendas') {
                 return this.multiplo(fotos, categoria);
             }
+        },
+
+        /**
+         * Diagnósticos, Métricas e Saúde do Sistema
+         */
+        sistema: {
+            async obterStatus() {
+                return requisicao('/system/status');
+            },
+            async executarDiagnostico() {
+                return requisicao('/system/diagnostics', { method: 'POST' });
+            },
+            async health() {
+                return requisicao('/health');
+            }
         }
     };
 
