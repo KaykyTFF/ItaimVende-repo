@@ -3,7 +3,7 @@ import {
   listFavorites,
   toggleFavoriteProduct,
   checkProductFavoriteStatus,
-} from '../../controllers/favorite.controller.js';
+} from '../../controllers/favorite/index.js';
 import { authenticateToken } from '../../middlewares/auth.middleware.js';
 
 const router = Router();

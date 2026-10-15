@@ -1,4 +1,4 @@
-import { getCategories } from '../../services/category.service.js';
+import { getCategories } from '../../services/category/index.js';
 
 export async function listCategories(req, res, next) {
   try {

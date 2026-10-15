@@ -3,10 +3,10 @@ import {
   createOrder,
   getMyOrders,
   getOrderById,
-} from '../../controllers/order.controller.js';
+} from '../../controllers/order/index.js';
 import { authenticateToken } from '../../middlewares/auth.middleware.js';
 import { validate } from '../../middlewares/validate.middleware.js';
-import { createOrderSchema } from '../../schemas/order.schema.js';
+import { createOrderSchema } from '../../schemas/order/index.js';
 
 const router = Router();
 

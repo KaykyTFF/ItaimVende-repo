@@ -1,4 +1,4 @@
-import { getUserProfile, updateUserProfile } from '../../services/auth.service.js';
+import { getUserProfile, updateUserProfile } from '../../services/auth/index.js';
 
 export async function getProfile(req, res, next) {
   try {

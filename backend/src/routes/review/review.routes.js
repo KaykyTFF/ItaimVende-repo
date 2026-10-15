@@ -2,7 +2,7 @@ import { Router } from 'express';
 import {
   listUserReviews,
   addReview,
-} from '../../controllers/review.controller.js';
+} from '../../controllers/review/index.js';
 import { authenticateToken } from '../../middlewares/auth.middleware.js';
 
 const router = Router();

@@ -6,14 +6,14 @@ import {
   getMessages,
   sendMessage,
   getUnreadCount,
-} from '../../controllers/chat.controller.js';
+} from '../../controllers/chat/index.js';
 import { authenticateToken } from '../../middlewares/auth.middleware.js';
 import { validate } from '../../middlewares/validate.middleware.js';
 import {
   createConversationSchema,
   sendMessageSchema,
   conversationParamsSchema,
-} from '../../schemas/chat.schema.js';
+} from '../../schemas/chat/index.js';
 
 const router = Router();
 

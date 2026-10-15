@@ -1,7 +1,7 @@
 import {
   getUserReviews,
   createReview,
-} from '../../services/review.service.js';
+} from '../../services/review/index.js';
 
 export async function listUserReviews(req, res, next) {
   try {

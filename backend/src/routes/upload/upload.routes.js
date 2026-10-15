@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import multer from 'multer';
 import { upload } from '../../config/upload.js';
-import { uploadSingle, uploadMultiple } from '../../controllers/upload.controller.js';
+import { uploadSingle, uploadMultiple } from '../../controllers/upload/index.js';
 import { authenticateToken } from '../../middlewares/auth.middleware.js';
 import { uploadLimiter } from '../../middlewares/rateLimiter.middleware.js';
 import { AppError } from '../../utils/errors.js';

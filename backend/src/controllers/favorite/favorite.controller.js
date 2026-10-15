@@ -2,7 +2,7 @@ import {
   getUserFavorites,
   toggleFavorite,
   checkFavoriteStatus,
-} from '../../services/favorite.service.js';
+} from '../../services/favorite/index.js';
 
 export async function listFavorites(req, res, next) {
   try {

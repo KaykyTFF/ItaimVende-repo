@@ -2,7 +2,7 @@ import {
   createOrder as createOrderService,
   getUserOrders,
   getOrderDetails,
-} from '../../services/order.service.js';
+} from '../../services/order/index.js';
 
 export async function createOrder(req, res, next) {
   try {

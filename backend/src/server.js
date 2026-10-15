@@ -10,16 +10,16 @@ import { requestLogger } from './middlewares/logger.middleware.js';
 import { globalLimiter } from './middlewares/rateLimiter.middleware.js';
 import { sanitizeInput } from './middlewares/sanitize.middleware.js';
 
-// Rotas
-import authRoutes from './routes/auth.routes.js';
-import productRoutes from './routes/product.routes.js';
-import categoryRoutes from './routes/category.routes.js';
-import orderRoutes from './routes/order.routes.js';
-import chatRoutes from './routes/chat.routes.js';
-import favoriteRoutes from './routes/favorite.routes.js';
-import uploadRoutes from './routes/upload.routes.js';
-import reviewRoutes from './routes/review.routes.js';
-import reportRoutes from './routes/report.routes.js';
+// Rotas por Domínio
+import authRoutes from './routes/auth/index.js';
+import productRoutes from './routes/product/index.js';
+import categoryRoutes from './routes/category/index.js';
+import orderRoutes from './routes/order/index.js';
+import chatRoutes from './routes/chat/index.js';
+import favoriteRoutes from './routes/favorite/index.js';
+import uploadRoutes from './routes/upload/index.js';
+import reviewRoutes from './routes/review/index.js';
+import reportRoutes from './routes/report/index.js';
 import { UPLOAD_DIR, UPLOAD_PERFIL_DIR, UPLOAD_VENDAS_DIR } from './config/upload.js';
 
 const __filename = fileURLToPath(import.meta.url);

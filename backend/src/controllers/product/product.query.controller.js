@@ -3,7 +3,7 @@ import {
   getProductByIdOrSlug,
   getMyProducts as getMyProductsService,
   getSellerProducts as getSellerProductsService,
-} from '../../services/product.service.js';
+} from '../../services/product/index.js';
 
 export async function listProducts(req, res, next) {
   try {

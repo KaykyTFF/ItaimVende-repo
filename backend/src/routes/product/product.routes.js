@@ -9,13 +9,13 @@ import {
   changeProductStatus,
   deleteProduct,
   trackContact,
-} from '../../controllers/product.controller.js';
+} from '../../controllers/product/index.js';
 import { authenticateToken } from '../../middlewares/auth.middleware.js';
 import { validate } from '../../middlewares/validate.middleware.js';
 import {
   createProductSchema,
   updateProductSchema,
-} from '../../schemas/product.schema.js';
+} from '../../schemas/product/index.js';
 
 const router = Router();
 

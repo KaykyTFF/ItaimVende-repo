@@ -4,7 +4,7 @@ import {
   deleteProduct as deleteProductService,
   recordProductContact,
   updateProductStatus as updateProductStatusService,
-} from '../../services/product.service.js';
+} from '../../services/product/index.js';
 
 export async function createProduct(req, res, next) {
   try {

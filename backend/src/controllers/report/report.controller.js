@@ -1,4 +1,4 @@
-import { createReport } from '../../services/report.service.js';
+import { createReport } from '../../services/report/index.js';
 
 export async function addReport(req, res, next) {
   try {
