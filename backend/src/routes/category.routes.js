@@ -1,8 +1,8 @@
-import { Router } from 'express';
-import { listCategories } from '../controllers/category.controller.js';
+/**
+ * ITAIM VENDE - CATEGORY ROUTES
+ * Re-exporta as rotas de Categorias:
+ * - category/category.routes.js
+ */
 
-const router = Router();
+export { default } from './category/index.js';
 
-router.get('/', listCategories);
-
-export default router;

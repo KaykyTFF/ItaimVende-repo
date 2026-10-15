@@ -1,29 +1,8 @@
-import {
-  getUserReviews,
-  createReview,
-} from '../services/review.service.js';
+/**
+ * ITAIM VENDE - REVIEW CONTROLLER
+ * Re-exporta os handlers especializados do domínio de Avaliações:
+ * - review/review.controller.js (Listagem e Envio de Avaliações)
+ */
 
-export async function listUserReviews(req, res, next) {
-  try {
-    const data = await getUserReviews(req.params.userId);
-    res.status(200).json({
-      success: true,
-      ...data,
-    });
-  } catch (error) {
-    next(error);
-  }
-}
+export * from './review/index.js';
 
-export async function addReview(req, res, next) {
-  try {
-    const data = await createReview(req.user.id, req.params.userId, req.body);
-    res.status(201).json({
-      success: true,
-      message: 'Avaliação enviada com sucesso!',
-      ...data,
-    });
-  } catch (error) {
-    next(error);
-  }
-}

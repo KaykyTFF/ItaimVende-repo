@@ -1,13 +1,8 @@
-import { createReport } from '../services/report.service.js';
+/**
+ * ITAIM VENDE - REPORT CONTROLLER
+ * Re-exporta os handlers especializados do domínio de Denúncias:
+ * - report/report.controller.js (Envio de Denúncias)
+ */
 
-export async function addReport(req, res, next) {
-  try {
-    const data = await createReport(req.params.productId, req.body);
-    res.status(201).json({
-      success: true,
-      ...data,
-    });
-  } catch (error) {
-    next(error);
-  }
-}
+export * from './report/index.js';
+

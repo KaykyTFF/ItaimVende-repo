@@ -1,13 +1,8 @@
-import { getCategories } from '../services/category.service.js';
+/**
+ * ITAIM VENDE - CATEGORY CONTROLLER
+ * Re-exporta os handlers especializados do domínio de Categorias:
+ * - category/category.controller.js (Listagem de Categorias)
+ */
 
-export async function listCategories(req, res, next) {
-  try {
-    const categories = await getCategories();
-    res.status(200).json({
-      success: true,
-      data: categories,
-    });
-  } catch (error) {
-    next(error);
-  }
-}
+export * from './category/index.js';
+

@@ -1,16 +1,8 @@
-import { Router } from 'express';
-import {
-  listUserReviews,
-  addReview,
-} from '../controllers/review.controller.js';
-import { authenticateToken } from '../middlewares/auth.middleware.js';
+/**
+ * ITAIM VENDE - REVIEW ROUTES
+ * Re-exporta as rotas de Avaliações:
+ * - review/review.routes.js
+ */
 
-const router = Router();
+export { default } from './review/index.js';
 
-// 1. Listar avaliações de um vendedor (Público)
-router.get('/user/:userId', listUserReviews);
-
-// 2. Enviar avaliação para um vendedor (Requer autenticação)
-router.post('/user/:userId', authenticateToken, addReview);
-
-export default router;

@@ -1,9 +1,8 @@
-import { Router } from 'express';
-import { addReport } from '../controllers/report.controller.js';
+/**
+ * ITAIM VENDE - REPORT ROUTES
+ * Re-exporta as rotas de Denúncias:
+ * - report/report.routes.js
+ */
 
-const router = Router();
+export { default } from './report/index.js';
 
-// Enviar denúncia de anúncio (pode ser anônimo ou autenticado)
-router.post('/:productId', addReport);
-
-export default router;

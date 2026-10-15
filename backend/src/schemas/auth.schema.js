@@ -1,30 +1,8 @@
-import { z } from 'zod';
+/**
+ * ITAIM VENDE - AUTH SCHEMAS
+ * Re-exporta os esquemas de validação Zod de Autenticação:
+ * - auth/auth.schema.js
+ */
 
-export const registerSchema = z.object({
-  name: z.string().min(2, 'O nome deve ter pelo menos 2 caracteres.'),
-  username: z.string().min(3, 'O username deve ter pelo menos 3 caracteres.').optional(),
-  email: z.string().email('E-mail informado é inválido.'),
-  password: z
-    .string()
-    .min(6, 'A senha deve possuir pelo menos 6 caracteres.')
-    .regex(/^(?=.*[A-Za-z])(?=.*\d)/, 'A senha deve conter pelo menos uma letra e um número para sua segurança.'),
-  phone: z.string().optional(),
-  city: z.string().optional(),
-  neighborhood: z.string().optional(),
-  role: z.enum(['buyer', 'seller', 'admin', 'BUYER', 'SELLER', 'ADMIN']).optional(),
-});
+export * from './auth/index.js';
 
-export const loginSchema = z.object({
-  email: z.string().email('E-mail informado é inválido.'),
-  password: z.string().min(1, 'A senha é obrigatória.'),
-});
-
-export const updateProfileSchema = z.object({
-  name: z.string().min(2, 'O nome deve ter pelo menos 2 caracteres.').optional(),
-  username: z.string().min(3).optional(),
-  phone: z.string().optional(),
-  city: z.string().optional(),
-  neighborhood: z.string().optional(),
-  bio: z.string().max(300, 'A biografia não pode exceder 300 caracteres.').optional(),
-  avatar: z.string().optional(),
-});
