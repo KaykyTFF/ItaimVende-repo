@@ -32,7 +32,7 @@ html, body {
     width: 100%;
     min-height: 100%;
     font-family: var(--font-main);
-    background-color: var(--color-bg-light);
+    background-color: #161e24;
     color: var(--color-text-dark);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -44,11 +44,289 @@ html, body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-color: var(--color-bg-light);
+    background-color: #161e24;
 }
 
 /* ==========================================================================
-   1. TOPO COM LOGO E MASCOTE
+   NOVO LAYOUT DE CARTÃO FLUTUANTE CENTRALIZADO (ESTILO MODERNO)
+   ========================================================================== */
+.auth-floating-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    width: 100%;
+    padding: 32px 20px;
+    background-color: #161e24;
+    box-sizing: border-box;
+}
+
+.auth-floating-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center; /* Desnível vertical: bloco esquerdo mais baixo centralizado em relação ao bloco direito mais alto */
+    justify-content: center;
+    width: 100%;
+    max-width: 1120px;
+    background-color: transparent;
+    border-radius: 0;
+    padding: 0;
+    gap: 0;
+    position: relative;
+    overflow: visible;
+}
+
+/* --------------------------------------------------------------------------
+   BLOCO ESQUERDO: IDENTIDADE VISUAL COM FUNDO TECH ESCURO E VERDE (MAIS LARGO)
+   -------------------------------------------------------------------------- */
+.auth-brand-block,
+.auth-brand-side {
+    flex: 1.5;
+    width: 61%;
+    height: 585px;
+    min-height: 585px;
+    border-radius: 0;
+    background-color: #172127;
+    background-image: url('../assets/fundo-tech-verde.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 32px;
+    box-sizing: border-box;
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5), 0 16px 40px rgba(0, 0, 0, 0.55);
+    z-index: 1;
+}
+
+.brand-logo-centered-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 520px;
+    padding: 0;
+    position: relative;
+    z-index: 2;
+}
+
+.brand-logo-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    width: 100%;
+}
+
+.brand-logo-center-img {
+    width: 100%;
+    max-width: 470px;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.7));
+    transition: transform var(--transition-smooth);
+}
+
+.brand-logo-center-img:hover {
+    transform: scale(1.02);
+}
+
+/* --------------------------------------------------------------------------
+   BLOCO DIREITO: FORMULÁRIO (FUNDO BRANCO, MAIS ALTO E MAIS COMPACTO)
+   -------------------------------------------------------------------------- */
+.auth-form-block,
+.auth-form-side {
+    flex: 1;
+    width: 39%;
+    height: 640px;
+    min-height: 640px;
+    background-color: #FFFFFF;
+    border-radius: 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 32px;
+    box-sizing: border-box;
+    box-shadow: 14px 0 40px rgba(0, 0, 0, 0.5), 0 20px 50px rgba(0, 0, 0, 0.55);
+    z-index: 2;
+}
+
+.auth-form-block::-webkit-scrollbar,
+.auth-form-side::-webkit-scrollbar {
+    width: 6px;
+}
+.auth-form-block::-webkit-scrollbar-thumb,
+.auth-form-side::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 0;
+}
+
+.auth-card-inner {
+    width: 100%;
+    max-width: 330px;
+    margin: auto 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}
+
+/* --------------------------------------------------------------------------
+   ESTILOS DO WIZARD DE CADASTRO PROGRESSIVO (4 ETAPAS)
+   -------------------------------------------------------------------------- */
+.cadastro-wizard-header {
+    width: 100%;
+    margin-bottom: 22px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.wizard-progresso-box {
+    width: 100%;
+    margin-top: 8px;
+}
+
+.wizard-info-linha {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.wizard-etapa-badge {
+    font-size: 12px;
+    font-weight: 800;
+    color: #44BD32;
+    background: rgba(68, 189, 50, 0.12);
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.wizard-etapa-nome {
+    font-size: 13px;
+    color: #64748B;
+    font-weight: 600;
+}
+
+.wizard-barra-trilha {
+    width: 100%;
+    height: 6px;
+    background: #E2E8F0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.wizard-barra-progresso {
+    height: 100%;
+    background: #44BD32;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(68, 189, 50, 0.4);
+    transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.wizard-etapa-painel {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.wizard-etapa-painel.etapa-ativa {
+    display: flex;
+    animation: slideFadeIn 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes slideFadeIn {
+    from {
+        opacity: 0;
+        transform: translateX(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.wizard-acoes-etapa {
+    width: 100%;
+    margin-top: 8px;
+}
+
+.btn-avancar-etapa {
+    width: 100%;
+    height: 52px;
+    background-color: var(--color-primary);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 0;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(68, 189, 50, 0.35);
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.btn-avancar-etapa:hover {
+    background-color: var(--color-primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(68, 189, 50, 0.45);
+}
+
+.btn-avancar-etapa:active {
+    transform: translateY(1px);
+}
+
+.wizard-botoes-duplos {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+    margin-top: 8px;
+}
+
+.btn-voltar-etapa {
+    background: #F1F5F9;
+    border: 1.5px solid #CBD5E1;
+    color: #475569;
+    height: 52px;
+    border-radius: 0;
+    font-size: 14.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    padding: 0 22px;
+    min-width: 110px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-voltar-etapa:hover {
+    background: #E2E8F0;
+    border-color: #94A3B8;
+    color: #1E293B;
+}
+
+.wizard-botoes-duplos .btn-avancar-etapa,
+.wizard-botoes-duplos .btn-concluir-cadastro {
+    flex: 1;
+    margin-top: 0;
+}
+
+/* ==========================================================================
+   ESTILOS COMPATIBILIDADE (TOPO ANTIGO & PAINEL CADASTRO STANDALONE)
    ========================================================================== */
 .topo-container {
     width: 100%;
@@ -80,11 +358,6 @@ html, body {
     transition: transform var(--transition-smooth);
 }
 
-.logo-img:hover {
-    transform: scale(1.02);
-}
-
-/* Versão compacta do logo para o cadastro */
 .topo-compacto .logo-img {
     max-height: 130px;
 }
@@ -93,7 +366,6 @@ html, body {
     padding: 16px 20px 14px 20px;
 }
 
-/* Barra de Alternância (Abas Login / Cadastro) */
 .nav-abas {
     display: flex;
     gap: 8px;
@@ -121,9 +393,6 @@ html, body {
     box-shadow: 0 2px 8px rgba(68, 189, 50, 0.3);
 }
 
-/* ==========================================================================
-   2. PAINEL INFERIOR ESCURO
-   ========================================================================== */
 .painel-inferior {
     flex: 1 1 auto;
     background-color: var(--color-bg-dark);
@@ -136,14 +405,12 @@ html, body {
     padding: 40px 24px 60px 24px;
 }
 
-/* Estilo Curvo (Login Original do Desktop) */
 .painel-curvo {
     border-top: 6px solid var(--color-primary);
     border-top-left-radius: 80px;
     border-top-right-radius: 0;
 }
 
-/* Estilo Linha Reta (Cadastro Original do Desktop) */
 .painel-reto {
     border-top: 5px solid var(--color-primary);
     border-top-left-radius: 0;
@@ -171,13 +438,18 @@ html, body {
 }
 
 .titulo-login {
-    font-size: 36px;
+    font-size: 34px;
     font-weight: 800;
-    color: var(--color-text-white);
+    color: #1E293B;
     letter-spacing: 1.5px;
-    margin-bottom: 26px;
+    margin-bottom: 24px;
     text-align: center;
     text-transform: uppercase;
+}
+
+.titulo-cadastro {
+    font-size: 28px;
+    margin-bottom: 12px;
 }
 
 .form-auth {
@@ -196,10 +468,10 @@ html, body {
 }
 
 .label-campo {
-    color: var(--color-primary);
+    color: #2F3640;
     font-size: 14px;
     font-weight: 700;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.2px;
     user-select: none;
 }
 
@@ -213,16 +485,16 @@ html, body {
 
 .campo-texto {
     width: 100%;
-    background-color: var(--color-input-bg);
-    color: #2F3640;
-    border: 2px solid transparent;
-    border-radius: 10px;
+    background-color: #F8FAFC;
+    color: #1E293B;
+    border: 1.5px solid #E2E8F0;
+    border-radius: 0;
     padding: 13px 16px;
     font-size: 15px;
     font-family: inherit;
     font-weight: 500;
     outline: none;
-    height: 48px;
+    height: 50px;
     transition: all var(--transition-fast);
 }
 
@@ -231,13 +503,12 @@ html, body {
 }
 
 .campo-texto::placeholder {
-    color: #9AA0A6;
+    color: #94A3B8;
     font-weight: 400;
-    opacity: 0.85;
 }
 
 .campo-texto:focus {
-    background-color: var(--color-bg-light);
+    background-color: #FFFFFF;
     border-color: var(--color-primary);
     box-shadow: 0 0 0 4px var(--color-primary-glow);
 }
@@ -250,16 +521,16 @@ html, body {
 
 .select-campo {
     width: 100%;
-    background-color: var(--color-input-bg);
-    color: #2F3640;
-    border: 2px solid transparent;
-    border-radius: 10px;
+    background-color: #F8FAFC;
+    color: #1E293B;
+    border: 1.5px solid #E2E8F0;
+    border-radius: 12px;
     padding: 12px 42px 12px 16px;
     font-size: 15px;
     font-family: inherit;
     font-weight: 500;
     outline: none;
-    height: 48px;
+    height: 50px;
     cursor: pointer;
     appearance: none;
     -webkit-appearance: none;
@@ -268,7 +539,7 @@ html, body {
 }
 
 .select-campo:focus {
-    background-color: var(--color-bg-light);
+    background-color: #FFFFFF;
     border-color: var(--color-primary);
     box-shadow: 0 0 0 4px var(--color-primary-glow);
 }
@@ -317,7 +588,7 @@ html, body {
 
 .link-esqueceu {
     color: var(--color-primary);
-    font-size: 13px;
+    font-size: 13.5px;
     text-decoration: underline;
     text-underline-offset: 3px;
     font-weight: 600;
@@ -326,7 +597,7 @@ html, body {
 }
 
 .link-esqueceu:hover {
-    color: #5ed64c;
+    color: var(--color-primary-hover);
 }
 
 /* Botões do Login */
@@ -335,25 +606,25 @@ html, body {
     flex-direction: column;
     align-items: center;
     width: 100%;
-    margin-top: 6px;
+    margin-top: 8px;
 }
 
 .btn-entrar {
-    width: 260px;
+    width: 100%;
     max-width: 100%;
-    height: 48px;
+    height: 52px;
     background-color: var(--color-primary);
-    color: var(--color-text-white);
+    color: #FFFFFF;
     border: none;
-    border-radius: 30px;
+    border-radius: 0;
     font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 4px 14px rgba(68, 189, 50, 0.28);
     transition: all var(--transition-fast);
     position: relative;
     overflow: hidden;
@@ -362,44 +633,70 @@ html, body {
 .btn-entrar:hover {
     background-color: var(--color-primary-hover);
     transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(68, 189, 50, 0.35);
+    box-shadow: 0 6px 20px rgba(68, 189, 50, 0.4);
 }
 
 .btn-entrar:active {
     transform: translateY(1px);
 }
 
-.label-ou {
-    color: var(--color-text-white);
+/* Divisor "ou" com linhas elegantes */
+.divisor-ou {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin: 18px 0;
+}
+
+.divisor-ou .linha-ou {
+    flex: 1;
+    height: 1px;
+    background-color: #E2E8F0;
+}
+
+.divisor-ou .label-ou {
+    padding: 0 16px;
+    color: #64748B;
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 600;
+    user-select: none;
+    margin: 0;
+}
+
+.label-ou {
+    color: #64748B;
+    font-size: 14px;
+    font-weight: 600;
     margin: 12px 0;
     user-select: none;
 }
 
+/* Botão CADASTRE-SE (Branco com borda verde) */
 .btn-cadastrar {
-    width: 260px;
+    width: 100%;
     max-width: 100%;
-    height: 48px;
-    background-color: var(--color-bg-light);
+    height: 52px;
+    background-color: #FFFFFF;
     color: var(--color-primary);
-    border: none;
-    border-radius: 30px;
+    border: 2px solid var(--color-primary);
+    border-radius: 0;
     font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     transition: all var(--transition-fast);
 }
 
 .btn-cadastrar:hover {
-    background-color: #F5F6FA;
+    background-color: #F0FDF4;
+    border-color: var(--color-primary-hover);
+    color: var(--color-primary-hover);
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 6px 18px rgba(68, 189, 50, 0.18);
 }
 
 .btn-cadastrar:active {
@@ -438,7 +735,7 @@ html, body {
     background-color: var(--color-primary);
     color: var(--color-text-white);
     border: none;
-    border-radius: 30px;
+    border-radius: 0;
     font-size: 16px;
     font-weight: 800;
     letter-spacing: 0.8px;
@@ -465,24 +762,43 @@ html, body {
     display: flex;
     justify-content: center;
     width: 100%;
-    margin-top: 16px;
+    margin-top: 14px;
 }
 
+/* Novo Botão "VOLTAR" Global (Retangular, cantos retos, cinza claro, maiúsculas, sem sublinhado) */
+.btn-voltar-login,
 .link-voltar {
-    color: var(--color-text-white);
+    width: 100%;
+    height: 48px;
+    background-color: #F1F5F9;
+    border: 1.5px solid #CBD5E1;
+    border-radius: 0;
+    color: #334155;
     font-size: 14px;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    font-weight: 500;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    text-decoration: none;
     cursor: pointer;
-    background: none;
-    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
     font-family: inherit;
-    transition: color var(--transition-fast);
+    box-sizing: border-box;
 }
 
+.btn-voltar-login:hover,
 .link-voltar:hover {
-    color: var(--color-primary);
+    background-color: #E2E8F0;
+    border-color: #94A3B8;
+    color: #0F172A;
+    text-decoration: none;
+}
+
+.btn-voltar-login:active,
+.link-voltar:active {
+    transform: translateY(1px);
 }
 
 /* ==========================================================================
@@ -530,7 +846,7 @@ html, body {
 }
 
 /* ==========================================================================
-   6. MODAL ESQUECEU A SENHA
+   6. MODAL ESQUECEU A SENHA & MODAL CADASTRO (OVERLAY)
    ========================================================================== */
 .modal-backdrop {
     position: fixed;
@@ -538,15 +854,16 @@ html, body {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(15, 20, 25, 0.75);
-    backdrop-filter: blur(4px);
+    background-color: rgba(15, 23, 42, 0.72);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     display: none;
     align-items: center;
     justify-content: center;
     z-index: 999;
     padding: 20px;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .modal-backdrop.modal-ativo {
@@ -559,17 +876,76 @@ html, body {
     border: 2px solid var(--color-primary);
     border-radius: 20px;
     width: 100%;
-    max-width: 420px;
+    max-width: 440px;
     padding: 32px 28px;
     position: relative;
-    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
     transform: scale(0.92);
-    transition: transform 0.3s ease;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     text-align: center;
 }
 
 .modal-backdrop.modal-ativo .modal-card {
     transform: scale(1);
+}
+
+/* Modal Card Branco (Para Cadastro e Recuperação de Senha) */
+.modal-card-white {
+    background-color: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 24px;
+    color: #1E293B;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25), 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.modal-card-white .modal-close {
+    color: #64748B;
+}
+
+.modal-card-white .modal-close:hover {
+    color: #EF4444;
+}
+
+.modal-card-white .modal-titulo {
+    color: #1E293B;
+}
+
+.modal-card-white .modal-descricao {
+    color: #64748B;
+}
+
+.bottom-sheet-handle-area,
+.bottom-sheet-handle {
+    display: none;
+}
+
+/* Modal de Cadastro específico (Desktop: 100% Reto e Quadrado, combinando com o Login) */
+.modal-card-cadastro {
+    border-radius: 0 !important;
+    max-width: 490px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    text-align: left;
+    padding: 36px 32px 30px 32px;
+}
+
+.modal-card-cadastro::-webkit-scrollbar {
+    width: 6px;
+}
+.modal-card-cadastro::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+}
+
+.titulo-modal-cadastro {
+    font-size: 28px;
+    font-weight: 800;
+    color: #1E293B;
+    letter-spacing: 1.2px;
+    margin-bottom: 6px;
+    text-align: center;
+    text-transform: uppercase;
 }
 
 .modal-close {
@@ -771,83 +1147,240 @@ html, body {
     40%, 80% { transform: translateX(6px); }
 }
 
-@media (max-width: 640px) {
-    .topo-container {
-        padding: 16px 14px 14px 14px;
+/* ==========================================================================
+   LAYOUT RESPONSIVO EXCLUSIVO PARA DISPOSITIVOS MÓVEIS (MAX-WIDTH: 768PX)
+   Estilo card sobreposto: bloco escuro no topo e formulário branco deslizante
+   ========================================================================== */
+@media (max-width: 768px) {
+    .auth-floating-wrapper {
+        padding: 0;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: flex-start;
+        background-color: #161e24;
     }
 
-    .logo-img {
-        max-height: 150px;
-    }
-
-    .topo-compacto .logo-img {
-        max-height: 90px;
-    }
-
-    .nav-abas {
-        margin-top: 10px;
+    .auth-floating-card {
+        display: flex;
+        flex-direction: column;
         width: 100%;
-        max-width: 320px;
+        max-width: 100%;
+        min-height: 100vh;
+        min-height: 100dvh;
+        margin: 0;
+        padding: 0;
+        gap: 0;
+        border-radius: 0;
+        box-shadow: none;
+        background-color: transparent;
     }
 
-    .btn-aba {
+    /* Bloco Superior (Cabeçalho da Logo com Fundo Escuro) */
+    .auth-brand-block,
+    .auth-brand-side {
+        width: 100%;
+        height: 35vh;
+        min-height: 240px;
+        max-height: 310px;
+        flex: none;
+        border-radius: 0;
+        background-color: #172127;
+        background-image: url('../assets/fundo-tech-verde.png');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        padding: 24px 20px 48px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: none;
+        z-index: 1;
+    }
+
+    .brand-logo-centered-box {
+        width: 100%;
+        max-width: 360px;
+        margin: 0 auto;
+        padding: 0 12px;
+    }
+
+    .brand-logo-center-img {
+        width: 100%;
+        max-width: 330px; /* Aumento significativo da logo e mascote no celular */
+        height: auto;
+        filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.85));
+    }
+
+    /* Bloco Inferior (Formulário Branco com Efeito Sobreposto Deslizante) */
+    .auth-form-block,
+    .auth-form-side {
+        width: 100%;
         flex: 1;
-        padding: 8px 14px;
-        font-size: 13.5px;
+        height: auto;
+        min-height: auto;
+        margin-top: -30px; /* Sobrepõe suavemente sobre o cabeçalho escuro */
+        background-color: #FFFFFF;
+        border-radius: 30px 30px 0 0; /* Arredondamento apenas nos cantos superiores */
+        padding: 34px 24px 36px 24px; /* Abraça o conteúdo com padding adequado sem excesso */
+        box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.35);
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
     }
 
-    .painel-inferior {
-        padding: 28px 16px 45px 16px;
-    }
-
-    .painel-curvo {
-        border-top-left-radius: 45px;
+    .auth-card-inner {
+        width: 100%;
+        max-width: 360px;
+        margin: 0 auto;
     }
 
     .titulo-login {
-        font-size: 28px;
-        margin-bottom: 20px;
+        font-size: 26px;
+        margin-bottom: 22px;
     }
 
-    /* 16px nos inputs previne auto-zoom no iOS Safari */
+    /* Preservação dos estilos internos retos (Border-Radius: 0) */
     .campo-texto,
     .select-campo {
-        font-size: 16px;
-        height: 48px;
-    }
-
-    .btn-entrar, .btn-cadastrar, .btn-concluir-cadastro {
         width: 100%;
-        height: 48px;
-        font-size: 15.5px;
+        height: 50px;
+        font-size: 16px; /* Previne auto-zoom no iOS Safari */
+        border-radius: 0;
     }
 
+    /* Proporção Idêntica entre ENTRAR e CADASTRE-SE (Mesma Altura, Peso e Espessura) */
+    .btn-entrar,
+    .btn-cadastrar {
+        width: 100%;
+        height: 54px;
+        font-size: 16px;
+        font-weight: 800;
+        letter-spacing: 0.8px;
+        border-radius: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+    }
+
+    .btn-cadastrar {
+        border: 2.5px solid var(--color-primary);
+        background-color: #FFFFFF;
+        color: var(--color-primary);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    .btn-concluir-cadastro,
+    .btn-avancar-etapa,
+    .btn-voltar-etapa,
+    .btn-voltar-login {
+        border-radius: 0;
+    }
+
+    .divisor-ou {
+        margin: 16px 0;
+    }
+
+    .box-botoes {
+        margin-top: 8px;
+    }
+
+    /* Modais no Mobile */
     .modal-card {
         padding: 24px 18px;
-        border-radius: 18px;
-        width: calc(100% - 24px);
-    }
-}
-
-@media (max-width: 400px) {
-    .topo-container {
-        padding: 14px 12px 10px 12px;
+        border-radius: 0;
+        width: calc(100% - 32px);
     }
 
-    .logo-img {
-        max-height: 125px;
+    /* Modal de Cadastro estilo "Bottom Sheet" no Mobile (Aba que sobe da base da tela) */
+    #modal-cadastro {
+        align-items: flex-end;
+        padding: 0;
     }
 
-    .topo-compacto .logo-img {
-        max-height: 75px;
+    #modal-cadastro .modal-card-cadastro {
+        width: 100%;
+        max-width: 100%;
+        height: auto !important;
+        height: fit-content !important;
+        max-height: 85vh;
+        border-radius: 28px 28px 0 0 !important;
+        margin: 0;
+        padding: 10px 22px 26px 22px;
+        box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.5);
+        transform: translateY(100%);
+        transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        touch-action: pan-y;
+        overflow-y: auto;
     }
 
-    .titulo-login {
-        font-size: 24px;
-        margin-bottom: 16px;
+    #modal-cadastro.modal-ativo .modal-card-cadastro {
+        transform: translateY(0);
     }
 
-    .painel-inferior {
-        padding: 22px 12px 35px 12px;
+    /* Área e puxador interativo (Handle) de arrastar para fechar */
+    .bottom-sheet-handle-area {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 28px;
+        margin-bottom: 6px;
+        cursor: grab;
+        touch-action: none;
+        user-select: none;
+    }
+
+    .bottom-sheet-handle-area:active {
+        cursor: grabbing;
+    }
+
+    .bottom-sheet-handle {
+        display: block;
+        width: 46px;
+        height: 5px;
+        background-color: #CBD5E1;
+        border-radius: 999px;
+        margin: 0 auto;
+        pointer-events: none;
+        transition: background-color var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .bottom-sheet-handle-area:hover .bottom-sheet-handle,
+    .bottom-sheet-handle-area:active .bottom-sheet-handle {
+        background-color: #94A3B8;
+        transform: scaleX(1.08);
+    }
+
+    /* Remove espaçamento vertical de mensagens de status vazias */
+    .modal-card-cadastro .status-msg:empty {
+        min-height: 0;
+        margin-top: 0;
+        display: none;
+    }
+
+    /* Menu Suspenso de Cidades com Rolagem Interna (sem vazar a tela mobile) */
+    .select-wrapper {
+        position: relative;
+        width: 100%;
+        max-height: 40vh;
+        max-height: 250px;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .select-campo {
+        max-height: 40vh;
+        max-height: 250px;
+        overflow-y: auto;
+    }
+
+    .select-campo option {
+        padding: 12px 14px;
+        font-size: 15px;
     }
 }
