@@ -32,7 +32,12 @@ html, body {
     width: 100%;
     min-height: 100%;
     font-family: var(--font-main);
-    background-color: #161e24;
+    background-color: #12181F;
+    background-image: url('../assets/Crepúsculo sobre a cidade ribeirinha_2.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     color: var(--color-text-dark);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -44,11 +49,11 @@ html, body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-color: #161e24;
+    background: transparent;
 }
 
 /* ==========================================================================
-   NOVO LAYOUT DE CARTÃO FLUTUANTE CENTRALIZADO (ESTILO MODERNO)
+   NOVO LAYOUT DE CARTÃO FLUTUANTE EXPANDIDO (ESTILO TELA DIVIDIDA)
    ========================================================================== */
 .auth-floating-wrapper {
     display: flex;
@@ -57,17 +62,17 @@ html, body {
     min-height: 100vh;
     width: 100%;
     padding: 32px 20px;
-    background-color: #161e24;
+    background: transparent;
     box-sizing: border-box;
 }
 
 .auth-floating-card {
     display: flex;
     flex-direction: row;
-    align-items: center; /* Desnível vertical: bloco esquerdo mais baixo centralizado em relação ao bloco direito mais alto */
+    align-items: center; /* Desnível vertical rigorosamente mantido: bloco esquerdo ligeiramente mais baixo que o bloco direito */
     justify-content: center;
     width: 100%;
-    max-width: 1120px;
+    max-width: 1140px;
     background-color: transparent;
     border-radius: 0;
     padding: 0;
@@ -77,17 +82,17 @@ html, body {
 }
 
 /* --------------------------------------------------------------------------
-   BLOCO ESQUERDO: IDENTIDADE VISUAL COM FUNDO TECH ESCURO E VERDE (MAIS LARGO)
+   BLOCO ESQUERDO: IDENTIDADE VISUAL COM PAISAGEM AO PÔR DO SOL
    -------------------------------------------------------------------------- */
 .auth-brand-block,
 .auth-brand-side {
-    flex: 1.5;
-    width: 61%;
-    height: 585px;
-    min-height: 585px;
+    flex: 1.4;
+    width: 58%;
+    height: 550px;
+    min-height: 550px;
     border-radius: 0;
     background-color: #172127;
-    background-image: url('../assets/fundo-tech-verde.png');
+    background-image: url('../assets/Vila Ribeirinha ao Entardecer.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -95,64 +100,112 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 32px 32px;
+    padding: 28px;
     box-sizing: border-box;
-    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5), 0 16px 40px rgba(0, 0, 0, 0.55);
+    box-shadow: -10px 0 35px rgba(0, 0, 0, 0.45), 0 16px 40px rgba(0, 0, 0, 0.5);
     z-index: 1;
 }
 
 .brand-logo-centered-box {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100%;
-    max-width: 520px;
+    max-width: 480px;
     padding: 0;
+    margin: 0 auto;
     position: relative;
     z-index: 2;
+    text-align: center;
 }
 
 .brand-logo-link {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
     text-decoration: none;
     width: 100%;
+    margin: 0 auto;
 }
 
 .brand-logo-center-img {
     width: 100%;
-    max-width: 470px;
+    max-width: 450px;
     height: auto;
     object-fit: contain;
     filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.7));
     transition: transform var(--transition-smooth);
+    display: block;
+    margin: 0 auto;
 }
 
 .brand-logo-center-img:hover {
     transform: scale(1.02);
 }
 
+/* Slogan da Marca (Centralizado estritamente abaixo do texto "ITAIMVENDE", ignorando o tatu) */
+.brand-slogan-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 370px;
+    margin: 14px auto 0 auto;
+    /* Deslocamento preciso para alinhar abaixo do texto ITAIMVENDE (compensando o mascote à esquerda) */
+    transform: translateX(58px);
+    position: relative;
+    text-align: center;
+}
+
+.brand-slogan-text {
+    color: #FFFFFF;
+    font-family: var(--font-main);
+    font-size: 13.5px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    margin-right: -0.22em;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 1.25;
+    display: block;
+    width: 100%;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9), 0 1px 3px rgba(0, 0, 0, 0.9);
+}
+
+.brand-slogan-line {
+    width: 270px;
+    max-width: 90%;
+    height: 2px;
+    background-color: var(--color-primary);
+    margin: 8px auto 0 auto;
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(68, 189, 50, 0.5), 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+
 /* --------------------------------------------------------------------------
-   BLOCO DIREITO: FORMULÁRIO (FUNDO BRANCO, MAIS ALTO E MAIS COMPACTO)
+   BLOCO DIREITO: FORMULÁRIO (MAIS ALTO QUE O BLOCO ESQUERDO, SEM ESPAÇO VAZIO)
    -------------------------------------------------------------------------- */
 .auth-form-block,
 .auth-form-side {
     flex: 1;
-    width: 39%;
-    height: 640px;
-    min-height: 640px;
+    width: 42%;
+    height: 600px;
+    min-height: 600px;
     background-color: #FFFFFF;
+    border: none;
     border-radius: 0;
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 40px 32px;
+    padding: 28px 32px;
     box-sizing: border-box;
-    box-shadow: 14px 0 40px rgba(0, 0, 0, 0.5), 0 20px 50px rgba(0, 0, 0, 0.55);
+    box-shadow: 14px 0 45px rgba(0, 0, 0, 0.4), 0 20px 50px rgba(0, 0, 0, 0.45);
     z-index: 2;
+    overflow-y: auto;
 }
 
 .auth-form-block::-webkit-scrollbar,
@@ -167,11 +220,12 @@ html, body {
 
 .auth-card-inner {
     width: 100%;
-    max-width: 330px;
+    max-width: 340px;
     margin: auto 0;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     position: relative;
     z-index: 2;
 }
@@ -267,7 +321,7 @@ html, body {
     color: #FFFFFF;
     border: none;
     border-radius: 0;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 800;
     letter-spacing: 0.8px;
     cursor: pointer;
@@ -276,7 +330,7 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
+    text-transform: uppercase;
 }
 
 .btn-avancar-etapa:hover {
@@ -293,36 +347,114 @@ html, body {
     display: flex;
     gap: 12px;
     width: 100%;
-    margin-top: 8px;
+    margin-top: 10px;
 }
 
-.btn-voltar-etapa {
-    background: #F1F5F9;
-    border: 1.5px solid #CBD5E1;
-    color: #475569;
-    height: 52px;
+/* Botão VOLTAR (Mesmo estilo de CADASTRE-SE: fundo branco, borda verde, texto verde, cantos retos) */
+.btn-voltar-etapa,
+.btn-voltar-auth,
+.btn-voltar-login {
+    background-color: #FFFFFF;
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
     border-radius: 0;
-    font-size: 14.5px;
-    font-weight: 700;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
     cursor: pointer;
-    transition: all var(--transition-fast);
-    padding: 0 22px;
-    min-width: 110px;
+    height: 52px;
     display: flex;
     align-items: center;
     justify-content: center;
+    text-transform: uppercase;
+    transition: all var(--transition-fast);
+    padding: 0 16px;
 }
 
-.btn-voltar-etapa:hover {
-    background: #E2E8F0;
-    border-color: #94A3B8;
-    color: #1E293B;
+.btn-voltar-etapa:hover,
+.btn-voltar-auth:hover,
+.btn-voltar-login:hover {
+    background-color: #F0FDF4;
+    border-color: var(--color-primary-hover);
+    color: var(--color-primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(68, 189, 50, 0.18);
+}
+
+.btn-voltar-etapa:active,
+.btn-voltar-auth:active,
+.btn-voltar-login:active {
+    transform: translateY(1px);
+}
+
+.btn-concluir-cadastro {
+    width: 100%;
+    height: 52px;
+    background-color: var(--color-primary);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 0;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(68, 189, 50, 0.35);
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+}
+
+.btn-concluir-cadastro:hover {
+    background-color: var(--color-primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(68, 189, 50, 0.45);
 }
 
 .wizard-botoes-duplos .btn-avancar-etapa,
 .wizard-botoes-duplos .btn-concluir-cadastro {
     flex: 1;
     margin-top: 0;
+}
+
+/* Campos em linha dupla (CEP e Estado) */
+.linha-dupla-campos {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+}
+
+.campo-flex-2 {
+    flex: 2;
+}
+
+.campo-flex-1 {
+    flex: 1;
+}
+
+/* Seção de Recuperação de Senha Integrada */
+.subtitulo-recuperar {
+    font-size: 13.5px;
+    color: #64748B;
+    text-align: center;
+    margin-top: 6px;
+    margin-bottom: 8px;
+    line-height: 1.4;
+    font-weight: 500;
+}
+
+.campo-codigo {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 6px;
+    color: #1E293B;
+}
+
+.container-recuperar,
+.container-cadastro {
+    width: 100%;
 }
 
 /* ==========================================================================
@@ -1159,7 +1291,7 @@ html, body {
         flex-direction: column;
         align-items: stretch;
         justify-content: flex-start;
-        background-color: #161e24;
+        background-color: #FFFFFF;
     }
 
     .auth-floating-card {
@@ -1174,7 +1306,7 @@ html, body {
         gap: 0;
         border-radius: 0;
         box-shadow: none;
-        background-color: transparent;
+        background-color: #FFFFFF;
     }
 
     /* Bloco Superior (Cabeçalho da Logo com Fundo Escuro) */
@@ -1183,11 +1315,11 @@ html, body {
         width: 100%;
         height: 35vh;
         min-height: 240px;
-        max-height: 310px;
+        max-height: 290px;
         flex: none;
         border-radius: 0;
         background-color: #172127;
-        background-image: url('../assets/fundo-tech-verde.png');
+        background-image: url('../assets/Vila Ribeirinha ao Entardecer.png');
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
@@ -1208,9 +1340,25 @@ html, body {
 
     .brand-logo-center-img {
         width: 100%;
-        max-width: 330px; /* Aumento significativo da logo e mascote no celular */
+        max-width: 330px;
         height: auto;
         filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.85));
+    }
+
+    .brand-slogan-box {
+        margin-top: 10px;
+        transform: translateX(38px);
+    }
+
+    .brand-slogan-text {
+        font-size: 11px;
+        letter-spacing: 0.18em;
+        margin-right: -0.18em;
+    }
+
+    .brand-slogan-line {
+        height: 1.5px;
+        margin-top: 6px;
     }
 
     /* Bloco Inferior (Formulário Branco com Efeito Sobreposto Deslizante) */
