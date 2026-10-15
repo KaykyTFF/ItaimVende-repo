@@ -110,6 +110,15 @@
                     <span class="pill-value code-font" id="metric-boot-id">--</span>
                 </div>
             </div>
+
+            <!-- Gráfico de Telemetria Dinâmica ao Vivo -->
+            <div class="hero-telemetry-chart-box">
+                <div class="telemetry-chart-header">
+                    <span class="telemetry-chart-title"><i class="fa-solid fa-chart-line"></i> Telemetria em Tempo Real (Latência & Heap)</span>
+                    <span class="telemetry-live-badge"><span class="live-dot"></span> Live Stream</span>
+                </div>
+                <canvas id="canvas-telemetry-chart" width="480" height="65"></canvas>
+            </div>
         </section>
 
         <!-- 2. SEÇÃO DEDICADA: GERENCIADOR DO SITE NA NUVEM (CLOUDFLARE QUICK TUNNEL) -->
@@ -325,7 +334,101 @@
 
         </section>
 
-        <!-- 3. MATRIZ DE TESTES DE INTEGRIDADE (LIVE HEALTH MATRIX) -->
+        <!-- 3. OPERAÇÕES DE MANUTENÇÃO & DADOS (STORAGE CLEANUP & SEED DEMO) -->
+        <section class="painel-section" id="section-operacoes-dados">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title"><i class="fa-solid fa-screwdriver-wrench"></i> Ferramentas Operacionais & Manutenção</h2>
+                    <p class="section-subtitle">Otimização de disco, varredura de integridade de mídias e injeção controlada de massa de testes</p>
+                </div>
+            </div>
+
+            <div class="operacoes-grid">
+                <!-- Card 1: Auditoria e Limpeza de Storage -->
+                <div class="operacao-card">
+                    <div class="operacao-card-header">
+                        <div class="operacao-icon icon-storage">
+                            <i class="fa-solid fa-broom"></i>
+                        </div>
+                        <div>
+                            <h3 class="operacao-card-title">Auditoria & Limpeza de Storage</h3>
+                            <span class="operacao-card-desc">Varre fotos órfãs em /uploads sem referência no banco de dados</span>
+                        </div>
+                    </div>
+
+                    <div class="operacao-stats-box">
+                        <div class="op-stat-item">
+                            <span class="op-stat-label">Arquivos em Disco:</span>
+                            <strong class="op-stat-val" id="op-storage-disk">--</strong>
+                        </div>
+                        <div class="op-stat-item">
+                            <span class="op-stat-label">Imagens Vinculadas:</span>
+                            <strong class="op-stat-val text-green" id="op-storage-linked">--</strong>
+                        </div>
+                        <div class="op-stat-item">
+                            <span class="op-stat-label">Fotos Órfãs (Lixo):</span>
+                            <strong class="op-stat-val text-amber" id="op-storage-orphans">--</strong>
+                        </div>
+                        <div class="op-stat-item">
+                            <span class="op-stat-label">Espaço Recuperável:</span>
+                            <strong class="op-stat-val" id="op-storage-freed">-- MB</strong>
+                        </div>
+                    </div>
+
+                    <div class="operacao-actions">
+                        <button type="button" class="btn-painel btn-op-action" id="btn-auditar-storage">
+                            <i class="fa-solid fa-magnifying-glass"></i> Auditar Storage
+                        </button>
+                        <button type="button" class="btn-painel btn-op-danger" id="btn-limpar-orfaos" disabled>
+                            <i class="fa-solid fa-trash-can"></i> Limpar Fotos Órfãs
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Card 2: Injetor de Massa de Testes (Seed Demo) -->
+                <div class="operacao-card">
+                    <div class="operacao-card-header">
+                        <div class="operacao-icon icon-seed">
+                            <i class="fa-solid fa-flask-vial"></i>
+                        </div>
+                        <div>
+                            <h3 class="operacao-card-title">Massa de Dados & Testes (Demo Seed)</h3>
+                            <span class="operacao-card-desc">Gere anúncios realistas com 1 clique para testar paginação, vitrine e busca</span>
+                        </div>
+                    </div>
+
+                    <div class="operacao-stats-box">
+                        <div class="op-stat-item">
+                            <span class="op-stat-label">Objetivo do Módulo:</span>
+                            <span class="op-stat-val text-blue">Testes Rápidos de UI</span>
+                        </div>
+                        <div class="op-stat-item">
+                            <span class="op-stat-label">Categorias Incluídas:</span>
+                            <span class="op-stat-val">Eletrônicos, Esportes, etc.</span>
+                        </div>
+                        <div class="op-stat-item">
+                            <span class="op-stat-label">Identificação:</span>
+                            <span class="op-stat-val code-font">[DEMO] no título</span>
+                        </div>
+                        <div class="op-stat-item">
+                            <span class="op-stat-label">Segurança:</span>
+                            <span class="op-stat-val text-green">Remoção em Lote Segura</span>
+                        </div>
+                    </div>
+
+                    <div class="operacao-actions">
+                        <button type="button" class="btn-painel btn-op-success" id="btn-seed-demo">
+                            <i class="fa-solid fa-plus"></i> Gerar 3 Anúncios Demo
+                        </button>
+                        <button type="button" class="btn-painel btn-op-secondary" id="btn-clean-demo">
+                            <i class="fa-solid fa-eraser"></i> Remover Anúncios Demo
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. MATRIZ DE TESTES DE INTEGRIDADE (LIVE HEALTH MATRIX) -->
         <section class="painel-section">
             <div class="section-header">
                 <div>
@@ -363,7 +466,46 @@
             </div>
         </section>
 
-        <!-- 4. CONSOLE DE TESTE MANUAL DE ROTAS & PLAYGROUND -->
+        <!-- 5. CENTRAL DE MODERAÇÃO RÁPIDA (ÚLTIMOS ANÚNCIOS & USUÁRIOS) -->
+        <section class="painel-section" id="section-moderacao">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title"><i class="fa-solid fa-users-gear"></i> Central de Moderação Rápida</h2>
+                    <p class="section-subtitle">Supervisione os últimos anúncios publicados e usuários registrados com ações imediatas de status</p>
+                </div>
+                <div class="section-actions">
+                    <button type="button" class="btn-painel btn-refresh-small" id="btn-atualizar-moderacao">
+                        <i class="fa-solid fa-arrows-rotate"></i> Atualizar Dados
+                    </button>
+                </div>
+            </div>
+
+            <div class="moderacao-grid">
+                <!-- Coluna 1: Últimos Anúncios -->
+                <div class="moderacao-col">
+                    <div class="moderacao-col-header">
+                        <h4><i class="fa-solid fa-bullhorn text-blue"></i> Últimos Anúncios Cadastrados</h4>
+                        <span class="badge-count" id="count-moderacao-ads">--</span>
+                    </div>
+                    <div class="moderacao-list" id="lista-moderacao-anuncios">
+                        <div class="moderacao-empty"><i class="fa-solid fa-spinner fa-spin"></i> Carregando anúncios...</div>
+                    </div>
+                </div>
+
+                <!-- Coluna 2: Últimos Usuários -->
+                <div class="moderacao-col">
+                    <div class="moderacao-col-header">
+                        <h4><i class="fa-solid fa-user-shield text-purple"></i> Últimos Usuários Registrados</h4>
+                        <span class="badge-count" id="count-moderacao-users">--</span>
+                    </div>
+                    <div class="moderacao-list" id="lista-moderacao-usuarios">
+                        <div class="moderacao-empty"><i class="fa-solid fa-spinner fa-spin"></i> Carregando usuários...</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. CONSOLE DE TESTE MANUAL DE ROTAS & PLAYGROUND -->
         <section class="painel-section">
             <div class="section-header">
                 <div>

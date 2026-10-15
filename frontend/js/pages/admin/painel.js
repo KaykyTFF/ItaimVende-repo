@@ -111,6 +111,26 @@
         imgQrcode: document.getElementById('img-qrcode'),
         qrcodeUrlText: document.getElementById('qrcode-url-text'),
         btnFecharQrcode: document.getElementById('btn-fechar-qrcode'),
+
+        // Gráfico de Telemetria Dinâmica
+        canvasChart: document.getElementById('canvas-telemetry-chart'),
+
+        // Operações & Manutenção
+        opStorageDisk: document.getElementById('op-storage-disk'),
+        opStorageLinked: document.getElementById('op-storage-linked'),
+        opStorageOrphans: document.getElementById('op-storage-orphans'),
+        opStorageFreed: document.getElementById('op-storage-freed'),
+        btnAuditarStorage: document.getElementById('btn-auditar-storage'),
+        btnLimparOrfaos: document.getElementById('btn-limpar-orfaos'),
+        btnSeedDemo: document.getElementById('btn-seed-demo'),
+        btnCleanDemo: document.getElementById('btn-clean-demo'),
+
+        // Central de Moderação Rápida
+        countModeracaoAds: document.getElementById('count-moderacao-ads'),
+        countModeracaoUsers: document.getElementById('count-moderacao-users'),
+        listaModeracaoAnuncios: document.getElementById('lista-moderacao-anuncios'),
+        listaModeracaoUsuarios: document.getElementById('lista-moderacao-usuarios'),
+        btnAtualizarModeracao: document.getElementById('btn-atualizar-moderacao'),
     };
 
     /**
@@ -241,6 +261,9 @@
         if (el.metricUptime) el.metricUptime.textContent = server.uptimeFormatted || '--';
         if (el.metricMemory) el.metricMemory.textContent = `${server.memory?.heapUsedMb || 0} MB`;
         if (el.metricBootId) el.metricBootId.textContent = server.bootId ? server.bootId.substring(0, 16) : '--';
+
+        // Gráfico de Telemetria Dinâmica
+        adicionarPontoTelemetria(database.latencyMs || 0, server.memory?.heapUsedMb || 0);
 
         // Card Banco de Dados
         const stats = database.stats || {};
@@ -492,6 +515,322 @@
             adicionarLog(`Falha no teste do túnel: ${err.message}`, 'fail');
         }
     }
+
+    // =========================================================================
+    // MOTOR DO GRÁFICO DE TELEMETRIA AO VIVO (CANVAS SPARKLINE)
+    // =========================================================================
+    const MAX_PONTOS_TELEMETRIA = 24;
+    const historicoTelemetria = [];
+
+    function adicionarPontoTelemetria(latenciaMs, heapMb) {
+        historicoTelemetria.push({
+            latencia: Math.max(0, Number(latenciaMs) || 0),
+            heap: Math.max(0, Number(heapMb) || 0),
+            timestamp: Date.now()
+        });
+
+        if (historicoTelemetria.length > MAX_PONTOS_TELEMETRIA) {
+            historicoTelemetria.shift();
+        }
+
+        desenharGraficoTelemetria();
+    }
+
+    function desenharGraficoTelemetria() {
+        const canvas = el.canvasChart;
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
+        const dpr = window.devicePixelRatio || 1;
+        const rect = canvas.getBoundingClientRect();
+        const width = rect.width || canvas.width || 480;
+        const height = rect.height || canvas.height || 65;
+
+        canvas.width = width * dpr;
+        canvas.height = height * dpr;
+        ctx.scale(dpr, dpr);
+
+        // Limpa fundo
+        ctx.clearRect(0, 0, width, height);
+
+        // Linhas de grade sutis
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(0, height * 0.33); ctx.lineTo(width, height * 0.33);
+        ctx.moveTo(0, height * 0.66); ctx.lineTo(width, height * 0.66);
+        ctx.stroke();
+
+        if (historicoTelemetria.length < 2) {
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.font = '11px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('Aguardando leituras de telemetria...', width / 2, height / 2 + 4);
+            return;
+        }
+
+        const maxLat = Math.max(...historicoTelemetria.map(p => p.latencia), 100);
+        const maxHeap = Math.max(...historicoTelemetria.map(p => p.heap), 50);
+
+        const stepX = width / (MAX_PONTOS_TELEMETRIA - 1);
+        const offsetX = (MAX_PONTOS_TELEMETRIA - historicoTelemetria.length) * stepX;
+
+        // 1. Desenha Linha de Latência (Ciano / Azul Céu #38bdf8)
+        ctx.beginPath();
+        historicoTelemetria.forEach((p, i) => {
+            const x = offsetX + i * stepX;
+            const y = height - (p.latencia / maxLat) * (height - 18) - 9;
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        });
+
+        // Preenchimento gradiente latência
+        const gradLat = ctx.createLinearGradient(0, 0, 0, height);
+        gradLat.addColorStop(0, 'rgba(56, 189, 248, 0.22)');
+        gradLat.addColorStop(1, 'rgba(56, 189, 248, 0.0)');
+
+        ctx.save();
+        ctx.lineTo(offsetX + (historicoTelemetria.length - 1) * stepX, height);
+        ctx.lineTo(offsetX, height);
+        ctx.closePath();
+        ctx.fillStyle = gradLat;
+        ctx.fill();
+        ctx.restore();
+
+        // Linha principal da latência
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // 2. Desenha Linha de Memória Heap (Roxo / Lavanda #c084fc)
+        ctx.beginPath();
+        historicoTelemetria.forEach((p, i) => {
+            const x = offsetX + i * stepX;
+            const y = height - (p.heap / maxHeap) * (height - 18) - 9;
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        });
+        ctx.strokeStyle = '#c084fc';
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([4, 3]);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Legenda e Últimos Valores no topo
+        const ult = historicoTelemetria[historicoTelemetria.length - 1];
+        ctx.font = '10px monospace';
+        ctx.textAlign = 'right';
+        ctx.fillStyle = '#38bdf8';
+        ctx.fillText(`• Latência: ${ult.latencia}ms`, width - 120, 14);
+        ctx.fillStyle = '#c084fc';
+        ctx.fillText(`• Heap: ${ult.heap}MB`, width - 10, 14);
+    }
+
+    // =========================================================================
+    // OPERAÇÕES DE MANUTENÇÃO (STORAGE CLEANUP & SEED DEMO)
+    // =========================================================================
+    async function auditarStorageAction() {
+        if (el.btnAuditarStorage) el.btnAuditarStorage.disabled = true;
+        mostrarToast('Auditando integridade das imagens no storage...', 'info');
+
+        try {
+            const res = await ItaimApi.sistema.auditarStorage();
+            const data = res.data || {};
+
+            if (el.opStorageDisk) el.opStorageDisk.textContent = `${data.totalFilesOnDisk || 0} arquivos`;
+            if (el.opStorageLinked) el.opStorageLinked.textContent = `${data.referencedCount || 0} fotos ativas`;
+            if (el.opStorageOrphans) el.opStorageOrphans.textContent = `${data.orphanCount || 0} órfãs`;
+            if (el.opStorageFreed) el.opStorageFreed.textContent = `${data.totalOrphanMb || 0} MB`;
+
+            if (el.btnLimparOrfaos) {
+                el.btnLimparOrfaos.disabled = (data.orphanCount === 0);
+            }
+
+            if (data.orphanCount > 0) {
+                mostrarToast(`Auditoria concluída: ${data.orphanCount} foto(s) órfã(s) encontrada(s) (${data.totalOrphanMb} MB).`, 'warn');
+                adicionarLog(`Auditoria de Storage: ${data.orphanCount} arquivos órfãos (${data.totalOrphanMb} MB)`, 'fail');
+            } else {
+                mostrarToast('Auditoria concluída: O storage está 100% limpo e íntegro!', 'success');
+                adicionarLog('Auditoria de Storage: 0 arquivos órfãos detectados', 'pass');
+            }
+        } catch (err) {
+            mostrarToast(`Erro ao auditar storage: ${err.message}`, 'warn');
+            adicionarLog(`Erro na auditoria de storage: ${err.message}`, 'fail');
+        } finally {
+            if (el.btnAuditarStorage) el.btnAuditarStorage.disabled = false;
+        }
+    }
+
+    async function limparStorageAction() {
+        if (!confirm('Deseja realmente excluir todas as fotos órfãs sem vínculo no banco?')) return;
+
+        if (el.btnLimparOrfaos) el.btnLimparOrfaos.disabled = true;
+        mostrarToast('Excluindo arquivos órfãos com segurança...', 'info');
+
+        try {
+            const res = await ItaimApi.sistema.limparStorageOrfaos();
+            const data = res.data || {};
+
+            mostrarToast(`Sucesso! ${data.deletedCount} arquivo(s) excluído(s), ${data.freedMb} MB liberados.`, 'success');
+            adicionarLog(`Limpeza de Storage executada: ${data.deletedCount} arquivos excluídos (${data.freedMb} MB)`, 'pass');
+
+            // Re-audita
+            auditarStorageAction();
+            carregarStatusSistema();
+        } catch (err) {
+            mostrarToast(`Erro ao limpar storage: ${err.message}`, 'warn');
+            adicionarLog(`Erro na limpeza de storage: ${err.message}`, 'fail');
+            if (el.btnLimparOrfaos) el.btnLimparOrfaos.disabled = false;
+        }
+    }
+
+    async function seedDemoAction() {
+        if (el.btnSeedDemo) el.btnSeedDemo.disabled = true;
+        mostrarToast('Criando 3 anúncios demo com categorias oficiais...', 'info');
+
+        try {
+            const res = await ItaimApi.sistema.gerarProdutosDemo();
+            const data = res.data || {};
+
+            mostrarToast(`${data.count || 3} anúncios criados com sucesso!`, 'success');
+            adicionarLog(`Massa de teste gerada: ${data.count} anúncios [DEMO]`, 'pass');
+
+            carregarStatusSistema();
+            carregarDadosModeracao();
+        } catch (err) {
+            mostrarToast(`Erro ao gerar anúncios demo: ${err.message}`, 'warn');
+            adicionarLog(`Falha no seed demo: ${err.message}`, 'fail');
+        } finally {
+            if (el.btnSeedDemo) el.btnSeedDemo.disabled = false;
+        }
+    }
+
+    async function cleanDemoAction() {
+        if (!confirm('Deseja remover todos os anúncios com a tag [DEMO]?')) return;
+
+        if (el.btnCleanDemo) el.btnCleanDemo.disabled = true;
+        mostrarToast('Removendo anúncios de demonstração...', 'info');
+
+        try {
+            const res = await ItaimApi.sistema.limparProdutosDemo();
+            const data = res.data || {};
+
+            mostrarToast(`${data.deletedCount || 0} anúncio(s) demo removido(s).`, 'info');
+            adicionarLog(`Limpeza de dados de teste: ${data.deletedCount} anúncios [DEMO] removidos`, 'pass');
+
+            carregarStatusSistema();
+            carregarDadosModeracao();
+        } catch (err) {
+            mostrarToast(`Erro ao limpar demo: ${err.message}`, 'warn');
+            adicionarLog(`Falha na limpeza demo: ${err.message}`, 'fail');
+        } finally {
+            if (el.btnCleanDemo) el.btnCleanDemo.disabled = false;
+        }
+    }
+
+    // =========================================================================
+    // CENTRAL DE MODERAÇÃO RÁPIDA (ÚLTIMOS ANÚNCIOS & USUÁRIOS)
+    // =========================================================================
+    async function carregarDadosModeracao() {
+        try {
+            const res = await ItaimApi.sistema.obterVisaoGeralDados();
+            const { products = [], users = [] } = res.data || {};
+
+            if (el.countModeracaoAds) el.countModeracaoAds.textContent = `${products.length} recentes`;
+            if (el.countModeracaoUsers) el.countModeracaoUsers.textContent = `${users.length} recentes`;
+
+            // Renderiza Anúncios
+            if (el.listaModeracaoAnuncios) {
+                if (products.length === 0) {
+                    el.listaModeracaoAnuncios.innerHTML = `<div class="moderacao-empty">Nenhum anúncio cadastrado no momento.</div>`;
+                } else {
+                    el.listaModeracaoAnuncios.innerHTML = products.map((p) => {
+                        const statusClass = (p.status || '').toLowerCase();
+                        const isAtivo = p.status === 'ATIVO';
+                        const precoFmt = Number(p.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                        return `
+                            <div class="moderacao-item" id="mod-ad-${p.id}">
+                                <div class="mod-info">
+                                    <div class="mod-title" title="${p.title}">${p.title}</div>
+                                    <div class="mod-meta">
+                                        <span>${precoFmt}</span>
+                                        <span>• ${p.category?.name || 'Geral'}</span>
+                                        <span>• Por: ${p.seller?.name || 'Vendedor'}</span>
+                                        <span class="mod-pill ${statusClass}">${p.status}</span>
+                                    </div>
+                                </div>
+                                <div class="mod-actions">
+                                    <button type="button" class="btn-mod-toggle" onclick="window.painelAlternarAnuncio('${p.id}')">
+                                        <i class="fa-solid ${isAtivo ? 'fa-pause' : 'fa-play'}"></i> ${isAtivo ? 'Pausar' : 'Ativar'}
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            }
+
+            // Renderiza Usuários
+            if (el.listaModeracaoUsuarios) {
+                if (users.length === 0) {
+                    el.listaModeracaoUsuarios.innerHTML = `<div class="moderacao-empty">Nenhum usuário cadastrado.</div>`;
+                } else {
+                    el.listaModeracaoUsuarios.innerHTML = users.map((u) => {
+                        const statusClass = (u.status || '').toLowerCase();
+                        const isActive = u.status === 'ACTIVE';
+                        return `
+                            <div class="moderacao-item" id="mod-user-${u.id}">
+                                <div class="mod-info">
+                                    <div class="mod-title">${u.name} <small class="text-muted">(${u.email})</small></div>
+                                    <div class="mod-meta">
+                                        <span class="mod-pill">${u.role}</span>
+                                        <span class="mod-pill ${statusClass}">${u.status}</span>
+                                        <span>• ${u._count?.products || 0} anúncio(s)</span>
+                                    </div>
+                                </div>
+                                <div class="mod-actions">
+                                    <button type="button" class="btn-mod-toggle" onclick="window.painelAlternarUsuario('${u.id}')">
+                                        <i class="fa-solid ${isActive ? 'fa-user-slash' : 'fa-user-check'}"></i> ${isActive ? 'Suspender' : 'Reativar'}
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            }
+        } catch (err) {
+            if (el.listaModeracaoAnuncios) el.listaModeracaoAnuncios.innerHTML = `<div class="moderacao-empty text-red">Erro ao carregar anúncios: ${err.message}</div>`;
+            if (el.listaModeracaoUsuarios) el.listaModeracaoUsuarios.innerHTML = `<div class="moderacao-empty text-red">Erro ao carregar usuários: ${err.message}</div>`;
+        }
+    }
+
+    // Handlers globais de clique chamados pelo onclick inline
+    window.painelAlternarAnuncio = async (id) => {
+        mostrarToast('Alterando status do anúncio...', 'info');
+        try {
+            const res = await ItaimApi.sistema.alternarStatusProduto(id);
+            mostrarToast(res.message || 'Status alterado com sucesso!', 'success');
+            adicionarLog(`Moderação: Anúncio #${id} agora está ${res.data?.status}`, 'pass');
+            carregarDadosModeracao();
+            carregarStatusSistema();
+        } catch (err) {
+            mostrarToast(`Erro ao alterar anúncio: ${err.message}`, 'warn');
+        }
+    };
+
+    window.painelAlternarUsuario = async (id) => {
+        mostrarToast('Alterando status do usuário...', 'info');
+        try {
+            const res = await ItaimApi.sistema.alternarStatusUsuario(id);
+            mostrarToast(res.message || 'Status alterado com sucesso!', 'success');
+            adicionarLog(`Moderação: Usuário #${id} agora está ${res.data?.status}`, 'pass');
+            carregarDadosModeracao();
+            carregarStatusSistema();
+        } catch (err) {
+            mostrarToast(`Erro ao alterar usuário: ${err.message}`, 'warn');
+        }
+    };
 
     // =========================================================================
     // MATRIZ COMPLETA DE TESTES DE INTEGRIDADE
@@ -930,6 +1269,25 @@ PASTA VENDAS: ${ultimoRelatorio?.storage?.folders?.vendas?.count || 0} arquivos
             el.btnTestarTunnelLink.addEventListener('click', testarLinkTunnel);
         }
 
+        // Eventos de Operações & Manutenção
+        if (el.btnAuditarStorage) {
+            el.btnAuditarStorage.addEventListener('click', auditarStorageAction);
+        }
+        if (el.btnLimparOrfaos) {
+            el.btnLimparOrfaos.addEventListener('click', limparStorageAction);
+        }
+        if (el.btnSeedDemo) {
+            el.btnSeedDemo.addEventListener('click', seedDemoAction);
+        }
+        if (el.btnCleanDemo) {
+            el.btnCleanDemo.addEventListener('click', cleanDemoAction);
+        }
+
+        // Eventos de Moderação Rápida
+        if (el.btnAtualizarModeracao) {
+            el.btnAtualizarModeracao.addEventListener('click', carregarDadosModeracao);
+        }
+
         // Seletor de Auto-Refresh
         if (el.selectRefresh) {
             el.selectRefresh.addEventListener('change', () => {
@@ -939,6 +1297,7 @@ PASTA VENDAS: ${ultimoRelatorio?.storage?.folders?.vendas?.count || 0} arquivos
                     refreshTimer = setInterval(() => {
                         carregarStatusSistema();
                         carregarStatusTunnel();
+                        carregarDadosModeracao();
                     }, segs * 1000);
                     mostrarToast(`Auto-atualização ativa a cada ${segs}s`, 'info');
                 } else {
@@ -954,9 +1313,11 @@ PASTA VENDAS: ${ultimoRelatorio?.storage?.folders?.vendas?.count || 0} arquivos
         renderizarTabelaTestes();
         configurarEventos();
 
-        // Primeira carga de status e túnel
+        // Primeira carga de status, túnel, storage e moderação
         carregarStatusSistema();
         carregarStatusTunnel();
+        auditarStorageAction();
+        carregarDadosModeracao();
 
         // Dispara auto-teste inicial após 500ms
         setTimeout(() => {
@@ -967,6 +1328,7 @@ PASTA VENDAS: ${ultimoRelatorio?.storage?.folders?.vendas?.count || 0} arquivos
         refreshTimer = setInterval(() => {
             carregarStatusSistema();
             carregarStatusTunnel();
+            carregarDadosModeracao();
         }, 10000);
     });
 

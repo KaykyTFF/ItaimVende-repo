@@ -578,6 +578,27 @@
             },
             async pararTunnel() {
                 return requisicao('/system/tunnel/stop', { method: 'POST' });
+            },
+            async auditarStorage() {
+                return requisicao('/system/storage/audit');
+            },
+            async limparStorageOrfaos() {
+                return requisicao('/system/storage/clean', { method: 'POST' });
+            },
+            async gerarProdutosDemo() {
+                return requisicao('/system/seed/products', { method: 'POST' });
+            },
+            async limparProdutosDemo() {
+                return requisicao('/system/seed/clean', { method: 'POST' });
+            },
+            async obterVisaoGeralDados() {
+                return requisicao('/system/data/overview');
+            },
+            async alternarStatusProduto(id) {
+                return requisicao(`/system/data/products/${id}/toggle`, { method: 'PATCH' });
+            },
+            async alternarStatusUsuario(id) {
+                return requisicao(`/system/data/users/${id}/toggle`, { method: 'PATCH' });
             }
         }
     };
