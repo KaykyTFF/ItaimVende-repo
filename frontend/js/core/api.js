@@ -569,6 +569,15 @@
             },
             async health() {
                 return requisicao('/health');
+            },
+            async obterTunnel() {
+                return requisicao('/system/tunnel');
+            },
+            async iniciarTunnel() {
+                return requisicao('/system/tunnel/start', { method: 'POST' });
+            },
+            async pararTunnel() {
+                return requisicao('/system/tunnel/stop', { method: 'POST' });
             }
         }
     };

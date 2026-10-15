@@ -55,6 +55,10 @@
                     <i class="fa-solid fa-arrows-rotate" id="icon-refresh"></i> Atualizar
                 </button>
 
+                <button type="button" class="btn-painel btn-cloud-tunnel" id="btn-header-tunnel" title="Ligar site e gerar link público">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> <span id="btn-header-tunnel-text">Ligar Site (Cloud)</span>
+                </button>
+
                 <button type="button" class="btn-painel btn-diagnostico" id="btn-executar-diagnostico">
                     <i class="fa-solid fa-bolt-lightning"></i> Testar Tudo Agora
                 </button>
@@ -108,7 +112,59 @@
             </div>
         </section>
 
-        <!-- 2. GRID DE RESUMO POR SUBSISTEMA (4 CARDS PRINCIPAIS) -->
+        <!-- 2. SEÇÃO DEDICADA: GERENCIADOR DO SITE NA NUVEM (CLOUDFLARE QUICK TUNNEL) -->
+        <section class="painel-tunnel-card" id="section-cloud-tunnel">
+            <div class="tunnel-header-row">
+                <div class="tunnel-title-block">
+                    <div class="tunnel-icon-wrapper" id="tunnel-status-icon">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                    </div>
+                    <div>
+                        <div class="tunnel-status-line">
+                            <h2 class="tunnel-title">Publicação do Site na Nuvem (Cloudflare Tunnel)</h2>
+                            <span class="tunnel-pill-badge" id="tunnel-badge-state">Detectando...</span>
+                        </div>
+                        <p class="tunnel-subtitle">Ligue o marketplace na internet instantaneamente, gere o link público HTTPS e compartilhe ou teste pelo celular</p>
+                    </div>
+                </div>
+
+                <div class="tunnel-actions-top">
+                    <button type="button" class="btn-painel btn-iniciar-tunnel" id="btn-iniciar-tunnel">
+                        <i class="fa-solid fa-bolt"></i> <span id="text-iniciar-tunnel">Ligar Site & Gerar Link</span>
+                    </button>
+                    <button type="button" class="btn-painel btn-desligar-tunnel" id="btn-desligar-tunnel" style="display: none;">
+                        <i class="fa-solid fa-power-off"></i> Desligar Túnel
+                    </button>
+                </div>
+            </div>
+
+            <!-- Box do Link Público Ativo -->
+            <div class="tunnel-link-box" id="tunnel-link-box">
+                <div class="tunnel-link-display">
+                    <span class="tunnel-link-label"><i class="fa-solid fa-globe"></i> Link Oficial do Cloud:</span>
+                    <div class="tunnel-url-wrapper">
+                        <input type="text" readonly id="input-tunnel-url" class="tunnel-url-input" value="Nenhum link ativo no momento. Clique no botão ao lado para ligar.">
+                        <button type="button" class="btn-copy-url" id="btn-copiar-tunnel-url" title="Copiar link para a área de transferência">
+                            <i class="fa-regular fa-copy"></i> Copiar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="tunnel-quick-buttons">
+                    <a href="#" target="_blank" class="btn-tunnel-action" id="btn-abrir-tunnel" rel="noopener noreferrer" style="display: none;">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir Site Público
+                    </a>
+                    <button type="button" class="btn-tunnel-action" id="btn-qrcode-tunnel" style="display: none;">
+                        <i class="fa-solid fa-qrcode"></i> QR Code (Celular)
+                    </button>
+                    <button type="button" class="btn-tunnel-action btn-tunnel-test" id="btn-testar-tunnel-link" style="display: none;">
+                        <i class="fa-solid fa-heart-pulse"></i> Testar Conexão
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. GRID DE RESUMO POR SUBSISTEMA (4 CARDS PRINCIPAIS) -->
         <section class="cards-grid">
 
             <!-- Card: Banco de Dados -->
@@ -399,6 +455,21 @@
             </div>
         </div>
     </footer>
+
+    <!-- Modal / Caixa de QR Code (Nível Global) -->
+    <div class="tunnel-qrcode-modal" id="modal-qrcode-tunnel" style="display: none;">
+        <div class="qrcode-content">
+            <div class="qrcode-header">
+                <h4><i class="fa-solid fa-mobile-screen"></i> Acessar no Smartphone</h4>
+                <button type="button" class="btn-close-modal" id="btn-fechar-qrcode">&times;</button>
+            </div>
+            <p>Aponte a câmera do seu celular para testar o site ao vivo pelo link da nuvem:</p>
+            <div class="qrcode-image-wrapper">
+                <img id="img-qrcode" src="" alt="QR Code do Site">
+            </div>
+            <span class="qrcode-url-text" id="qrcode-url-text"></span>
+        </div>
+    </div>
 
     <!-- Toast de Notificação do Painel -->
     <div id="painel-toast" class="painel-toast" role="alert"></div>
