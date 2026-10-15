@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (window.ItaimApi && window.ItaimApi.upload && window.ItaimApi.auth && window.ItaimApi.auth.obterToken()) {
                     try {
-                        const resUpload = await window.ItaimApi.upload.unico(novaFoto);
+                        const resUpload = await window.ItaimApi.upload.perfil(novaFoto);
                         if (resUpload && resUpload.data && resUpload.data.url) {
                             avatarFinal = resUpload.data.url;
                         }

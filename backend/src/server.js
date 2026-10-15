@@ -10,17 +10,17 @@ import { requestLogger } from './middlewares/logger.middleware.js';
 import { globalLimiter } from './middlewares/rateLimiter.middleware.js';
 import { sanitizeInput } from './middlewares/sanitize.middleware.js';
 
-// Rotas
-import authRoutes from './routes/auth.routes.js';
-import productRoutes from './routes/product.routes.js';
-import categoryRoutes from './routes/category.routes.js';
-import orderRoutes from './routes/order.routes.js';
-import chatRoutes from './routes/chat.routes.js';
-import favoriteRoutes from './routes/favorite.routes.js';
-import uploadRoutes from './routes/upload.routes.js';
-import reviewRoutes from './routes/review.routes.js';
-import reportRoutes from './routes/report.routes.js';
-import { UPLOAD_DIR } from './config/upload.js';
+// Rotas por Domínio
+import authRoutes from './routes/auth/index.js';
+import productRoutes from './routes/product/index.js';
+import categoryRoutes from './routes/category/index.js';
+import orderRoutes from './routes/order/index.js';
+import chatRoutes from './routes/chat/index.js';
+import favoriteRoutes from './routes/favorite/index.js';
+import uploadRoutes from './routes/upload/index.js';
+import reviewRoutes from './routes/review/index.js';
+import reportRoutes from './routes/report/index.js';
+import { UPLOAD_DIR, UPLOAD_PERFIL_DIR, UPLOAD_VENDAS_DIR } from './config/upload.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -78,9 +78,24 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Servir pasta de uploads de imagens de forma estática com fallback gracioso para placeholder
+// Servir pasta de uploads de imagens de forma estática com fallback gracioso para subpastas e placeholder
 app.use('/uploads', express.static(UPLOAD_DIR));
 app.use('/uploads', (req, res) => {
+  const requestedFile = req.path.replace(/^\//, '');
+
+  // Se o arquivo foi requisitado direto na raiz de /uploads/ (ex: URLs antigas), tenta localizar nas subpastas
+  if (requestedFile && !requestedFile.includes('/')) {
+    const perfilCandidate = path.join(UPLOAD_PERFIL_DIR, requestedFile);
+    if (fs.existsSync(perfilCandidate)) {
+      return res.sendFile(perfilCandidate);
+    }
+    const vendasCandidate = path.join(UPLOAD_VENDAS_DIR, requestedFile);
+    if (fs.existsSync(vendasCandidate)) {
+      return res.sendFile(vendasCandidate);
+    }
+  }
+
+  // Fallback para placeholder se a imagem solicitada não existir no disco
   const candidate1 = path.resolve(process.cwd(), 'frontend/assets/produto-placeholder.svg');
   const candidate2 = path.resolve(process.cwd(), '../frontend/assets/produto-placeholder.svg');
   const placeholderPath = fs.existsSync(candidate1) ? candidate1 : (fs.existsSync(candidate2) ? candidate2 : null);

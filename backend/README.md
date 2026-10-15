@@ -30,35 +30,32 @@ backend/
 │   ├── config/
 │   │   ├── env.js         # Variáveis de ambiente validadas
 │   │   └── prisma.js      # Conexão singleton com o banco
-│   ├── controllers/
-│   │   ├── auth.controller.js     # Orquestrador HTTP (Login, Registro, Perfil)
-│   │   ├── product.controller.js  # Orquestrador HTTP (Anúncios e Vitrine)
-│   │   ├── chat.controller.js     # Orquestrador HTTP (Conversas e Mensagens)
-│   │   ├── category.controller.js # Orquestrador HTTP (Categorias)
-│   │   └── order.controller.js    # Orquestrador HTTP (Pedidos e Checkout)
-│   ├── services/
-│   │   ├── auth.service.js        # Regras de negócio de usuários e tokens
-│   │   ├── product.service.js     # Regras de vitrine, slugs, filtros e soft-delete
-│   │   ├── chat.service.js        # Negociação, mensagens e controle de leitura
-│   │   ├── category.service.js    # Gestão e contagem de categorias
-│   │   └── order.service.js       # Transações e cálculo de preços seguros
-│   ├── middlewares/
-│   │   ├── auth.middleware.js     # Validação de token JWT e roles
-│   │   ├── error.middleware.js    # Tratamento central de erros operacionais
-│   │   └── validate.middleware.js # Validador automático com esquemas Zod
-│   ├── routes/
-│   │   ├── auth.routes.js
-│   │   ├── product.routes.js
-│   │   ├── chat.routes.js
-│   │   ├── category.routes.js
-│   │   └── order.routes.js
-│   ├── schemas/
-│   │   ├── auth.schema.js
-│   │   ├── product.schema.js
-│   │   └── order.schema.js
-│   └── utils/
-│       └── errors.js              # Classe AppError para erros operacionais
-│   └── server.js          # Ponto de entrada do servidor HTTP
+│   ├── controllers/       # Subpastas modulares por domínio (auth, product, chat, etc.)
+│   │   ├── auth/          # auth.identity.controller.js, auth.profile.controller.js, index.js
+│   │   ├── product/       # product.query.controller.js, product.mutation.controller.js, index.js
+│   │   ├── chat/          # conversation.controller.js, message.controller.js, index.js
+│   │   ├── category/      # category.controller.js, index.js
+│   │   ├── order/         # order.controller.js, index.js
+│   │   ├── favorite/      # favorite.controller.js, index.js
+│   │   ├── review/        # review.controller.js, index.js
+│   │   ├── report/        # report.controller.js, index.js
+│   │   └── upload/        # upload.controller.js, index.js
+│   ├── services/          # Regras de negócio modulares e atômicas por domínio
+│   │   ├── auth/          # auth.identity.service.js, auth.profile.service.js, index.js
+│   │   ├── product/       # product.query.service.js, product.mutation.service.js, product.seller.service.js, index.js
+│   │   ├── chat/          # conversation.service.js, message.service.js, index.js
+│   │   ├── category/      # category.query.service.js, index.js
+│   │   ├── order/         # order.creation.service.js, order.query.service.js, index.js
+│   │   ├── favorite/      # favorite.query.service.js, favorite.mutation.service.js, index.js
+│   │   ├── review/        # review.query.service.js, review.mutation.service.js, index.js
+│   │   └── report/        # report.mutation.service.js, index.js
+│   ├── routes/            # Roteadores modulares organizados por pasta de domínio
+│   │   └── [dominio]/     # [dominio].routes.js e index.js
+│   ├── schemas/           # Validações Zod organizadas por pasta de domínio
+│   │   └── [dominio]/     # [dominio].schema.js e index.js
+│   ├── middlewares/       # Middlewares globais (auth, error, logger, rateLimiter, sanitize, validate)
+│   ├── utils/             # Utilitários (AppError, sanitize)
+│   └── server.js          # Ponto de entrada do servidor HTTP com bootstrap dinâmico
 ├── .env                   # Variáveis locais
 ├── .env.example           # Modelo para produção
 └── package.json

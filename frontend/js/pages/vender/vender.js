@@ -400,7 +400,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (window.ItaimApi && fotosColetadas.length > 0 && window.ItaimApi.auth.obterToken()) {
             try {
                 if (spanTexto) spanTexto.textContent = 'ENVIANDO FOTOS...';
-                const uploadRes = await window.ItaimApi.upload.multiplo(fotosColetadas);
+                const uploadRes = await window.ItaimApi.upload.vendas(fotosColetadas);
                 if (uploadRes && Array.isArray(uploadRes.urls) && uploadRes.urls.length > 0) {
                     fotosUrlsBackend = uploadRes.urls;
                 }

@@ -402,14 +402,63 @@
         },
 
         // ---------------------------------------------------------------------
-        // MÓDULO DE UPLOAD DE ARQUIVOS (MULTIPART)
+        // MÓDULO DE CHAT & MENSAGENS EM TEMPO REAL
+        // ---------------------------------------------------------------------
+        chat: {
+            async listarConversas() {
+                return requisicao('/chat/conversations', {
+                    method: 'GET',
+                    headers: obterHeaders(true)
+                });
+            },
+
+            async obterConversa(id) {
+                return requisicao(`/chat/conversations/${encodeURIComponent(id)}`, {
+                    method: 'GET',
+                    headers: obterHeaders(true)
+                });
+            },
+
+            async iniciarConversa(productId) {
+                return requisicao('/chat/conversations', {
+                    method: 'POST',
+                    headers: obterHeaders(true),
+                    body: JSON.stringify({ productId })
+                });
+            },
+
+            async obterMensagens(conversationId) {
+                return requisicao(`/chat/conversations/${encodeURIComponent(conversationId)}/messages`, {
+                    method: 'GET',
+                    headers: obterHeaders(true)
+                });
+            },
+
+            async enviarMensagem(conversationId, content, messageType = 'TEXT', offerValue = null) {
+                return requisicao(`/chat/conversations/${encodeURIComponent(conversationId)}/messages`, {
+                    method: 'POST',
+                    headers: obterHeaders(true),
+                    body: JSON.stringify({ content, messageType, offerValue })
+                });
+            },
+
+            async contarNaoLidas() {
+                return requisicao('/chat/conversations/unread/total', {
+                    method: 'GET',
+                    headers: obterHeaders(true)
+                });
+            }
+        },
+
+        // ---------------------------------------------------------------------
+        // MÓDULO DE UPLOAD DE ARQUIVOS (MULTIPART COM SEPARAÇÃO DE PASTAS)
         // ---------------------------------------------------------------------
         upload: {
             /**
-             * Envio de foto única (ex: avatar de perfil)
+             * Envio de foto de perfil (salva em /uploads/perfil/)
              * Aceita File, Blob ou String Base64 (dataURL)
              */
-            async unico(foto) {
+            async perfil(foto) {
                 const formData = new FormData();
                 let arquivo = foto;
 
@@ -417,24 +466,24 @@
                     arquivo = dataURLParaBlob(foto);
                 }
 
-                formData.append('image', arquivo, 'foto.jpg');
+                formData.append('image', arquivo, 'foto_perfil.jpg');
 
-                return requisicao('/upload/single', {
+                return requisicao('/upload/perfil', {
                     method: 'POST',
-                    headers: obterHeaders(false), // Sem Content-Type, o browser gera o boundary multipart
+                    headers: obterHeaders(false),
                     body: formData
                 });
             },
 
-            unica(foto) {
-                return this.unico(foto);
+            async avatar(foto) {
+                return this.perfil(foto);
             },
 
             /**
-             * Envio de múltiplas fotos (galeria do anúncio - máx 6)
+             * Envio de múltiplas fotos para anúncios/vendas (salva em /uploads/vendas/ - máx 6)
              * Aceita Array de File, Blob ou Strings Base64
              */
-            async multiplo(fotos = []) {
+            async vendas(fotos = []) {
                 if (!fotos || fotos.length === 0) {
                     return { success: true, urls: [] };
                 }
@@ -445,21 +494,66 @@
                     let arquivo = foto;
                     if (typeof foto === 'string' && foto.startsWith('data:')) {
                         arquivo = dataURLParaBlob(foto);
-                        formData.append('images', arquivo, `foto_${index + 1}.jpg`);
+                        formData.append('images', arquivo, `venda_${index + 1}.jpg`);
                     } else if (foto instanceof File || foto instanceof Blob) {
-                        formData.append('images', arquivo, foto.name || `foto_${index + 1}.jpg`);
+                        formData.append('images', arquivo, foto.name || `venda_${index + 1}.jpg`);
                     }
                 });
 
-                return requisicao('/upload/multiple', {
+                return requisicao('/upload/vendas', {
                     method: 'POST',
                     headers: obterHeaders(false),
                     body: formData
                 });
             },
 
-            multiplos(fotos = []) {
-                return this.multiplo(fotos);
+            async produtos(fotos = []) {
+                return this.vendas(fotos);
+            },
+
+            /**
+             * Envio de foto única para venda/produto
+             */
+            async vendaUnica(foto) {
+                const formData = new FormData();
+                let arquivo = foto;
+
+                if (typeof foto === 'string' && foto.startsWith('data:')) {
+                    arquivo = dataURLParaBlob(foto);
+                }
+
+                formData.append('image', arquivo, 'foto_venda.jpg');
+
+                return requisicao('/upload/venda/single', {
+                    method: 'POST',
+                    headers: obterHeaders(false),
+                    body: formData
+                });
+            },
+
+            /**
+             * Envio de foto única (retrocompatível, padrão: perfil)
+             */
+            async unico(foto, categoria = 'perfil') {
+                if (categoria === 'venda' || categoria === 'vendas' || categoria === 'produto' || categoria === 'produtos') {
+                    return this.vendaUnica(foto);
+                }
+                return this.perfil(foto);
+            },
+
+            unica(foto, categoria = 'perfil') {
+                return this.unico(foto, categoria);
+            },
+
+            /**
+             * Envio de múltiplas fotos (retrocompatível, padrão: vendas)
+             */
+            async multiplo(fotos = [], categoria = 'vendas') {
+                return this.vendas(fotos);
+            },
+
+            multiplos(fotos = [], categoria = 'vendas') {
+                return this.multiplo(fotos, categoria);
             }
         }
     };
