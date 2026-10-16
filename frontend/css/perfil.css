@@ -173,6 +173,13 @@ body.pagina-perfil {
     gap: 8px;
 }
 
+.perfil-nome-linha {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: nowrap;
+}
+
 .perfil-nome-titulo {
     font-size: 26px;
     font-weight: 800;
@@ -180,6 +187,12 @@ body.pagina-perfil {
     margin: 0;
     line-height: 1.2;
     letter-spacing: -0.3px;
+}
+
+#perfil-selo-verificado,
+#vendedor-selo-verificado {
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 
 .badge-verificado {
@@ -509,6 +522,8 @@ body.pagina-perfil {
         position: relative;
         border-radius: 18px;
         margin-bottom: 16px;
+        margin-top: 32px;
+        overflow: visible;
     }
 
     /* Estampa no canto inferior direito discreta sem sobrepor textos */
@@ -528,17 +543,20 @@ body.pagina-perfil {
         z-index: 1;
         overflow: hidden;
         opacity: 0.85;
+        border-bottom-right-radius: 18px;
     }
 
+    /* Botão Sair no Mobile: posicionado acima do card do perfil, mantendo o alinhamento horizontal */
     .btn-banner-sair {
         position: absolute;
-        top: 14px;
+        top: -38px;
         right: 14px;
         z-index: 3;
         font-size: 12px;
         padding: 5px 12px;
         border-radius: 8px;
         gap: 5px;
+        background-color: #ffffff;
     }
 
     .btn-banner-sair svg {
@@ -593,6 +611,14 @@ body.pagina-perfil {
         min-width: 0;
     }
 
+    .perfil-nome-linha {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-wrap: nowrap;
+        max-width: 100%;
+    }
+
     .perfil-nome-titulo {
         font-size: 20px;
         font-weight: 800;
@@ -600,7 +626,15 @@ body.pagina-perfil {
         line-height: 1.2;
         letter-spacing: -0.3px;
         word-break: break-word;
-        padding-right: 60px; /* Espaço para o botão Sair no canto superior direito */
+        padding-right: 0; /* Removido o padding desnecessário já que o botão sair fica acima do card */
+    }
+
+    #perfil-selo-verificado,
+    #vendedor-selo-verificado {
+        font-size: 11.5px;
+        padding: 2px 8px;
+        flex-shrink: 0;
+        white-space: nowrap;
     }
 
     .badge-verificado {
@@ -755,9 +789,19 @@ body.pagina-perfil {
         height: 25px;
     }
 
+    .perfil-nome-linha {
+        gap: 5px;
+    }
+
     .perfil-nome-titulo {
-        font-size: 18px;
-        padding-right: 54px;
+        font-size: 17px;
+        padding-right: 0;
+    }
+
+    #perfil-selo-verificado,
+    #vendedor-selo-verificado {
+        font-size: 11px;
+        padding: 2px 7px;
     }
 
     .perfil-detalhe-item {
