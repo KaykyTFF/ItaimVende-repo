@@ -48,15 +48,15 @@ async function main() {
     where: { email: 'admin@gmail.com' },
     update: {},
     create: {
-      name: 'Raili',
-      username: 'rsstore',
+      name: 'Admin',
+      username: 'adminfreefire',
       email: 'admin@gmail.com',
       password: adminPasswordHash,
       phone: '89999858585',
       city: 'Paulistana',
       state: 'PI',
       neighborhood: 'Centro',
-      avatar: 'assets/icon-user.png',
+      avatar: '/uploads/perfil/itaim-1791903382039-jwd9lvb.jpg',
       bio: 'Perfil oficial e verificado da administração do Itaim Vende.',
       role: 'ADMIN',
       status: 'ACTIVE',
@@ -88,7 +88,7 @@ async function main() {
       salesCount: 5,
     },
   });
-  console.log('✅ Usuários Raili (Admin) e Kayky (Vendedor) configurados.');
+  console.log('✅ Usuários Admin e Kayky (Vendedor) configurados.');
 
   // 3. Produtos Reais Iniciais de Exemplo para Paulistana/PI
   const produtosIniciais = [

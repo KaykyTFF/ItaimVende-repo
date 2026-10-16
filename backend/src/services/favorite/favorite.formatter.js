@@ -28,7 +28,7 @@ export function formatarProdutoParaFrontend(p) {
     vendedorUsername: p.seller?.username || '',
     vendedorEmail: p.seller?.email || '',
     vendedorTelefone: p.seller?.phone || '',
-    vendedorAvatar: p.seller?.avatar || 'assets/icon-user.png',
+    vendedorAvatar: p.seller?.avatar || 'assets/icons/icon-user.png',
     vendedorVerificado: Boolean(p.seller?.isVerified),
   };
 }

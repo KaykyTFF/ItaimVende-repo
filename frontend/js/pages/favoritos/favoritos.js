@@ -119,8 +119,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             card.dataset.id = produto.id;
 
             const placeholderSrc = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
-                ? window.ItaimRotas.obterAsset('assets/produto-placeholder.svg')
-                : '../../assets/produto-placeholder.svg';
+                ? window.ItaimRotas.obterAsset('assets/placeholders/produto-placeholder.svg')
+                : '../../assets/placeholders/produto-placeholder.svg';
 
             const rawFoto = (produto.imagens && produto.imagens.length > 0)
                 ? produto.imagens[0] 

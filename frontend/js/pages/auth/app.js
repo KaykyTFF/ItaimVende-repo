@@ -162,24 +162,129 @@ document.addEventListener('DOMContentLoaded', () => {
         irParaEtapaCadastro(3);
     });
 
-    // Submissão do cadastro (simples e instantânea para testes)
+    // Submissão do cadastro (integrado à API do Backend e Sessão Local)
     const formCadastro = document.getElementById('form-cadastro-completo');
-    formCadastro?.addEventListener('submit', (e) => {
+    const btnConcluirCadastro = document.getElementById('btn-concluir-cadastro');
+
+    formCadastro?.addEventListener('submit', async (e) => {
         e.preventDefault();
-        if (statusMsgCadastro) {
-            statusMsgCadastro.textContent = 'Cadastro concluído com sucesso!';
-            statusMsgCadastro.className = 'status-msg status-sucesso';
+
+        const nome = document.getElementById('cad-nome')?.value.trim() || '';
+        const username = document.getElementById('cad-username')?.value.trim().toLowerCase() || '';
+        const email = document.getElementById('cad-email-completo')?.value.trim().toLowerCase() || '';
+        const senha = document.getElementById('cad-senha-completo')?.value || '';
+        const confirmaSenha = document.getElementById('cad-confirma-senha')?.value || '';
+        const cep = document.getElementById('cad-cep')?.value.trim() || '';
+        const estado = document.getElementById('cad-estado')?.value.trim().toUpperCase() || 'PI';
+        const cidade = document.getElementById('cad-cidade')?.value.trim() || 'Paulistana';
+        const bairro = document.getElementById('cad-bairro')?.value.trim() || 'Centro';
+        const telefone = document.getElementById('cad-telefone')?.value.trim() || '';
+
+        if (!nome || !email || !senha) {
+            if (statusMsgCadastro) {
+                statusMsgCadastro.textContent = 'Por favor, preencha todos os campos obrigatórios (Nome, E-mail e Senha).';
+                statusMsgCadastro.className = 'status-msg status-erro';
+            }
+            return;
         }
 
-        setTimeout(() => {
-            if (statusMsgCadastro) statusMsgCadastro.textContent = '';
-            alternarTela('login');
-            const statusMsgLogin = document.getElementById('status-msg-login');
-            if (statusMsgLogin) {
-                statusMsgLogin.textContent = 'Cadastro realizado com sucesso! Faça login para continuar.';
-                statusMsgLogin.className = 'status-msg status-sucesso';
+        if (senha.length < 6) {
+            if (statusMsgCadastro) {
+                statusMsgCadastro.textContent = 'A senha deve conter no mínimo 6 caracteres.';
+                statusMsgCadastro.className = 'status-msg status-erro';
             }
-        }, 800);
+            return;
+        }
+
+        if (senha !== confirmaSenha) {
+            if (statusMsgCadastro) {
+                statusMsgCadastro.textContent = 'As senhas informadas não coincidem. Digite novamente.';
+                statusMsgCadastro.className = 'status-msg status-erro';
+            }
+            return;
+        }
+
+        if (btnConcluirCadastro) {
+            btnConcluirCadastro.disabled = true;
+            btnConcluirCadastro.classList.add('carregando');
+        }
+        if (statusMsgCadastro) {
+            statusMsgCadastro.textContent = 'Criando e registrando sua conta com segurança...';
+            statusMsgCadastro.className = 'status-msg';
+        }
+
+        try {
+            // Limpa resquícios de sessões passadas para isolamento total
+            if (window.ItaimSessao && typeof window.ItaimSessao.deslogarUsuario === 'function') {
+                window.ItaimSessao.deslogarUsuario();
+            } else {
+                localStorage.removeItem('itaim_token');
+                localStorage.removeItem('itaim_usuario_logado');
+                localStorage.removeItem('itaim_usuario_logado_email');
+            }
+
+            const payload = {
+                name: nome,
+                username: username || email.split('@')[0],
+                email: email,
+                password: senha,
+                phone: telefone,
+                city: cidade,
+                state: estado,
+                neighborhood: bairro,
+                postalCode: cep,
+                role: 'BUYER'
+            };
+
+            let resposta = null;
+            if (window.ItaimApi && window.ItaimApi.auth && typeof window.ItaimApi.auth.registrar === 'function') {
+                resposta = await window.ItaimApi.auth.registrar(payload);
+            }
+
+            const novoUsuario = (resposta && resposta.user) ? resposta.user : {
+                id: 'usr_' + Date.now(),
+                nome: nome,
+                name: nome,
+                username: username || email.split('@')[0],
+                email: email,
+                phone: telefone,
+                telefone: telefone,
+                city: cidade,
+                cidade: cidade,
+                state: estado,
+                estado: estado,
+                neighborhood: bairro,
+                bairro: bairro,
+                role: 'BUYER'
+            };
+
+            // Registra e define sessão exclusiva para este usuário
+            if (window.ItaimSessao) {
+                window.ItaimSessao.cadastrarNovoUsuario(novoUsuario);
+                window.ItaimSessao.definirUsuarioLogado(novoUsuario.email, novoUsuario);
+            }
+
+            if (statusMsgCadastro) {
+                statusMsgCadastro.textContent = 'Conta criada com sucesso! Redirecionando...';
+                statusMsgCadastro.className = 'status-msg status-sucesso';
+            }
+
+            setTimeout(() => {
+                const destino = window.ItaimRotas ? window.ItaimRotas.obterUrl('home') : 'pages/home/home.html';
+                window.location.href = destino;
+            }, 600);
+        } catch (err) {
+            console.error('[Cadastro] Erro ao cadastrar usuário:', err);
+            if (statusMsgCadastro) {
+                statusMsgCadastro.textContent = err?.message || 'Erro ao realizar cadastro. Verifique os dados ou utilize outro e-mail.';
+                statusMsgCadastro.className = 'status-msg status-erro';
+            }
+        } finally {
+            if (btnConcluirCadastro) {
+                btnConcluirCadastro.disabled = false;
+                btnConcluirCadastro.classList.remove('carregando');
+            }
+        }
     });
 
     // ==========================================================================
@@ -249,7 +354,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const inputSenha = document.getElementById('input-senha');
     const statusMsgLogin = document.getElementById('status-msg-login');
 
-    formLogin?.addEventListener('submit', (e) => {
+    const btnEntrar = document.getElementById('btn-entrar');
+
+    formLogin?.addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = inputEmail ? inputEmail.value.trim() : '';
         const senha = inputSenha ? inputSenha.value.trim() : '';
@@ -262,15 +369,70 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        if (btnEntrar) {
+            btnEntrar.disabled = true;
+            btnEntrar.classList.add('carregando');
+        }
         if (statusMsgLogin) {
-            statusMsgLogin.textContent = 'Login realizado com sucesso! Redirecionando...';
-            statusMsgLogin.className = 'status-msg status-sucesso';
+            statusMsgLogin.textContent = 'Autenticando suas credenciais...';
+            statusMsgLogin.className = 'status-msg';
         }
 
-        setTimeout(() => {
-            const destino = window.ItaimRotas ? window.ItaimRotas.obterUrl('home') : 'pages/home/home.html';
-            window.location.href = destino;
-        }, 600);
+        try {
+            // Limpa dados de sessões passadas para não misturar perfis
+            localStorage.removeItem('itaim_token');
+            localStorage.removeItem('itaim_usuario_logado');
+            localStorage.removeItem('itaim_perfil_customizado');
+
+            let resposta = null;
+            if (window.ItaimApi && window.ItaimApi.auth && typeof window.ItaimApi.auth.login === 'function') {
+                resposta = await window.ItaimApi.auth.login(email, senha);
+            }
+
+            const usuarioAutenticado = (resposta && resposta.user) ? resposta.user : null;
+
+            // Sincroniza sessão
+            if (window.ItaimSessao && typeof window.ItaimSessao.definirUsuarioLogado === 'function') {
+                window.ItaimSessao.definirUsuarioLogado(usuarioAutenticado?.email || email, usuarioAutenticado);
+            } else {
+                localStorage.setItem('itaim_usuario_logado_email', usuarioAutenticado?.email || email);
+            }
+
+            if (statusMsgLogin) {
+                statusMsgLogin.textContent = 'Login realizado com sucesso! Redirecionando...';
+                statusMsgLogin.className = 'status-msg status-sucesso';
+            }
+
+            setTimeout(() => {
+                const destino = window.ItaimRotas ? window.ItaimRotas.obterUrl('home') : 'pages/home/home.html';
+                window.location.href = destino;
+            }, 500);
+        } catch (err) {
+            console.error('[Login] Falha na autenticação:', err);
+            // Fallback para admin caso offline/erro
+            const isLocalAdmin = (email.toLowerCase() === 'admin@gmail.com' && (senha === 'admin' || senha === 'admin123'));
+            if (isLocalAdmin && window.ItaimSessao && typeof window.ItaimSessao.definirUsuarioLogado === 'function') {
+                window.ItaimSessao.definirUsuarioLogado('admin@gmail.com');
+                if (statusMsgLogin) {
+                    statusMsgLogin.textContent = 'Login efetuado com sucesso! Redirecionando...';
+                    statusMsgLogin.className = 'status-msg status-sucesso';
+                }
+                setTimeout(() => {
+                    const destino = window.ItaimRotas ? window.ItaimRotas.obterUrl('home') : 'pages/home/home.html';
+                    window.location.href = destino;
+                }, 500);
+                return;
+            }
+
+            if (statusMsgLogin) {
+                statusMsgLogin.textContent = err?.message || 'E-mail ou senha inválidos. Tente novamente.';
+                statusMsgLogin.className = 'status-msg status-erro';
+            }
+            if (btnEntrar) {
+                btnEntrar.disabled = false;
+                btnEntrar.classList.remove('carregando');
+            }
+        }
     });
 
     // ==========================================================================

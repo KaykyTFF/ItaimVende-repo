@@ -50,8 +50,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const subtituloSecaoAnuncios = document.getElementById('subtitulo-secao-anuncios');
 
     const fallbackAvatarPerfil = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
-        ? window.ItaimRotas.obterAsset('assets/icon-user.png')
-        : '../../assets/icon-user.png';
+        ? window.ItaimRotas.obterAsset('assets/icons/icon-user.png')
+        : '../../assets/icons/icon-user.png';
 
     function formatarTelefoneBR(tel) {
         if (!tel) return '';
@@ -126,16 +126,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (!perfilExibido) {
             perfilExibido = {
-                name: 'Raili S.',
-                nome: 'Raili S.',
+                name: 'Admin',
+                nome: 'Admin',
                 email: 'admin@gmail.com',
-                username: 'admin',
+                username: 'adminfreefire',
                 city: 'Paulistana',
                 cidade: 'Paulistana',
                 neighborhood: 'Centro',
                 phone: '(89) 99985-8585',
-                avatar: 'assets/icon-user.png',
-                bio: 'Comprador e vendedor ativo na região de Paulistana - PI.',
+                avatar: '/uploads/perfil/itaim-1791903382039-jwd9lvb.jpg',
+                bio: 'Perfil oficial e verificado da administração do Itaim Vende.',
                 isVerified: true
             };
         }
@@ -173,7 +173,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 username: paramNome ? paramNome.toLowerCase().replace(/\s+/g, '') : 'vendedor',
                 city: 'Paulistana',
                 state: 'PI',
-                avatar: 'assets/icon-user.png'
+                avatar: 'assets/icons/icon-user.png'
             };
         }
 
@@ -223,7 +223,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Resolução da foto de perfil com suporte a /uploads/... do backend
     if (avatarImgView) {
-        const rawAvatar = perfilExibido.avatar || 'assets/icon-user.png';
+        const rawAvatar = perfilExibido.avatar || 'assets/icons/icon-user.png';
         const finalAvatar = (window.ItaimApi && typeof window.ItaimApi.resolverUrlImagem === 'function')
             ? window.ItaimApi.resolverUrlImagem(rawAvatar)
             : ((window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
@@ -320,8 +320,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             `;
         } else {
             const placeholderSrc = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
-                ? window.ItaimRotas.obterAsset('assets/produto-placeholder.svg')
-                : '../../assets/produto-placeholder.svg';
+                ? window.ItaimRotas.obterAsset('assets/placeholders/produto-placeholder.svg')
+                : '../../assets/placeholders/produto-placeholder.svg';
 
             gradeAnuncios.innerHTML = listaAnuncios.map(item => {
                 const fotoSrc = item.imagem || (item.fotos && item.fotos[0]) || (item.images && item.images[0]) || '';

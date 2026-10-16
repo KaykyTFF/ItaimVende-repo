@@ -180,8 +180,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     // 6. Carrossel de Imagens Dinâmico para o Produto Selecionado
     let fotosCarrossel = [];
     const placeholderAsset = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
-        ? window.ItaimRotas.obterAsset('assets/produto-placeholder.svg')
-        : '../../assets/produto-placeholder.svg';
+        ? window.ItaimRotas.obterAsset('assets/placeholders/produto-placeholder.svg')
+        : '../../assets/placeholders/produto-placeholder.svg';
 
     if (Array.isArray(produto.fotos) && produto.fotos.length > 0) {
         fotosCarrossel = [...produto.fotos];
@@ -263,8 +263,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     // 7. Dados do Vendedor no Sidebar
     let dadosVendedor = null;
     const fallbackAvatarVendedor = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
-        ? window.ItaimRotas.obterAsset('assets/icon-user.png')
-        : '../../assets/icon-user.png';
+        ? window.ItaimRotas.obterAsset('assets/icons/icon-user.png')
+        : '../../assets/icons/icon-user.png';
     let avatarVendedor = fallbackAvatarVendedor;
     const boxVendedor = document.querySelector('.box-vendedor-sidebar');
     if (boxVendedor) {
@@ -359,7 +359,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         // Foto de perfil real do vendedor: prioriza foto personalizada do banco/perfil
         const avatarBruto = (dadosVendedor && dadosVendedor.avatar) || produto.vendedorAvatar || fallbackAvatarVendedor;
-        if (avatarBruto && avatarBruto !== 'assets/icon-user.png') {
+        if (avatarBruto && avatarBruto !== 'assets/icons/icon-user.png') {
             avatarVendedor = (window.ItaimApi && typeof window.ItaimApi.resolverUrlImagem === 'function')
                 ? window.ItaimApi.resolverUrlImagem(avatarBruto)
                 : ((window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')

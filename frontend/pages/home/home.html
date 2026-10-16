@@ -12,11 +12,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Segoe+UI&display=swap" rel="stylesheet">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="../../assets/header-logo.png">
+    <link rel="icon" type="image/png" href="../../assets/logos/header-logo.png">
     
     <!-- CSS -->
-    <link rel="stylesheet" href="../../css/home.css?v=5">
-    <link rel="stylesheet" href="../../css/header-global.css?v=10">
+    <link rel="stylesheet" href="../../css/pages/home/home.css?v=5">
+    <link rel="stylesheet" href="../../css/core/header-global.css?v=10">
 </head>
 <body>
 
@@ -35,7 +35,7 @@
                     </svg>
                 </button>
                 <a href="home.html" class="header-logo-link" title="Itaim Vende - Página Inicial">
-                    <img src="../../assets/header1-logo.png" alt="Itaim Vende" class="header-logo-img">
+                    <img src="../../assets/logos/header1-logo.png" alt="Itaim Vende" class="header-logo-img">
                 </a>
             </div>
 
@@ -100,12 +100,12 @@
                 <!-- Perfil do Usuário com Dropdown -->
                 <div class="perfil-wrapper">
                     <button type="button" class="btn-avatar-header" id="btn-avatar-dropdown" aria-label="Abrir menu de perfil">
-                        <img src="../../assets/icon-user.png" alt="Foto de perfil" class="avatar-img" id="img-avatar-user">
+                        <img src="../../assets/icons/icon-user.png" alt="Foto de perfil" class="avatar-img" id="img-avatar-user">
                     </button>
 
                     <div class="dropdown-perfil" id="dropdown-perfil">
                         <a href="../perfil/perfil.html" class="dropdown-header-user" title="Ir para Meu Perfil">
-                            <strong id="dropdown-user-name">Raili</strong>
+                            <strong id="dropdown-user-name">Admin</strong>
                             <span id="dropdown-user-email">admin@gmail.com</span>
                         </a>
                         <a href="../perfil/perfil.html" class="dropdown-item" id="link-menu-perfil">
@@ -147,17 +147,17 @@
     <div class="drawer-backdrop" id="drawer-backdrop">
         <aside class="drawer-menu" aria-label="Menu principal">
             <div class="drawer-header">
-                <img src="../../assets/header1-logo.png" alt="Itaim Vende" class="drawer-logo">
+                <img src="../../assets/logos/header1-logo.png" alt="Itaim Vende" class="drawer-logo">
                 <button type="button" class="drawer-close" id="btn-fechar-drawer" aria-label="Fechar menu">&times;</button>
             </div>
 
             <!-- Perfil do Usuário no Drawer (Acesso rápido ao Perfil) -->
             <a href="../perfil/perfil.html" class="drawer-user-card" id="drawer-user-card" title="Acessar Meu Perfil">
                 <div class="drawer-user-avatar-wrap">
-                    <img src="../../assets/icon-user.png" alt="Foto de perfil" class="drawer-user-avatar" id="drawer-user-avatar">
+                    <img src="../../assets/icons/icon-user.png" alt="Foto de perfil" class="drawer-user-avatar" id="drawer-user-avatar">
                 </div>
                 <div class="drawer-user-info">
-                    <span class="drawer-user-nome" id="drawer-user-name">Raili</span>
+                    <span class="drawer-user-nome" id="drawer-user-name">Admin</span>
                     <span class="drawer-user-sub">Ver meu perfil &rarr;</span>
                 </div>
             </a>
@@ -256,20 +256,20 @@
                 <div class="carrossel-slides" id="carrossel-slides">
                     <div class="slide-item">
                         <picture>
-                            <source media="(max-width: 768px)" srcset="../../assets/Banner1-mobile.png">
-                            <img src="../../assets/Banner1.png" alt="Desapegue e Lucre no Itaim Vende">
+                            <source media="(max-width: 768px)" srcset="../../assets/banners/Banner1-mobile.png">
+                            <img src="../../assets/banners/Banner1.png" alt="Desapegue e Lucre no Itaim Vende">
                         </picture>
                     </div>
                     <div class="slide-item">
                         <picture>
-                            <source media="(max-width: 768px)" srcset="../../assets/Banner2-mobile.png">
-                            <img src="../../assets/Banner2.png" alt="Encontre as melhores ofertas da região">
+                            <source media="(max-width: 768px)" srcset="../../assets/banners/Banner2-mobile.png">
+                            <img src="../../assets/banners/Banner2.png" alt="Encontre as melhores ofertas da região">
                         </picture>
                     </div>
                     <div class="slide-item">
                         <picture>
-                            <source media="(max-width: 768px)" srcset="../../assets/Banner3-mobile.png">
-                            <img src="../../assets/Banner3.png" alt="Compre, venda e troque com facilidade">
+                            <source media="(max-width: 768px)" srcset="../../assets/banners/Banner3-mobile.png">
+                            <img src="../../assets/banners/Banner3.png" alt="Compre, venda e troque com facilidade">
                         </picture>
                     </div>
                 </div>
@@ -292,63 +292,63 @@
             <div class="categorias-lista" id="categorias-lista">
                 <a href="../produtos/categoria.html?cat=todas" class="item-categoria" title="Ver todos os produtos">
                     <div class="circulo-categoria">
-                        <img src="../../assets/header-logo.png" alt="Todas as Categorias">
+                        <img src="../../assets/logos/header-logo.png" alt="Todas as Categorias">
                     </div>
                     <span class="label-categoria">Todas</span>
                 </a>
 
                 <a href="../produtos/categoria.html?cat=Eletrônicos" class="item-categoria" title="Ver Eletrônicos">
                     <div class="circulo-categoria">
-                        <img src="../../assets/cat-eletronicos.png" alt="Eletrônicos">
+                        <img src="../../assets/categorias/cat-eletronicos.png" alt="Eletrônicos">
                     </div>
                     <span class="label-categoria">Eletrônicos</span>
                 </a>
 
                 <a href="../produtos/categoria.html?cat=Decoração" class="item-categoria" title="Ver Decoração">
                     <div class="circulo-categoria">
-                        <img src="../../assets/cat-decoracao.png" alt="Decoração">
+                        <img src="../../assets/categorias/cat-decoracao.png" alt="Decoração">
                     </div>
                     <span class="label-categoria">Decoração</span>
                 </a>
 
                 <a href="../produtos/categoria.html?cat=Móveis" class="item-categoria" title="Ver Móveis">
                     <div class="circulo-categoria">
-                        <img src="../../assets/cat-moveis.png" alt="Móveis">
+                        <img src="../../assets/categorias/cat-moveis.png" alt="Móveis">
                     </div>
                     <span class="label-categoria">Móveis</span>
                 </a>
 
                 <a href="../produtos/categoria.html?cat=Moda" class="item-categoria" title="Ver Moda">
                     <div class="circulo-categoria">
-                        <img src="../../assets/cat-moda.png" alt="Moda">
+                        <img src="../../assets/categorias/cat-moda.png" alt="Moda">
                     </div>
                     <span class="label-categoria">Moda</span>
                 </a>
 
                 <a href="../produtos/categoria.html?cat=Infantil" class="item-categoria" title="Ver Infantil">
                     <div class="circulo-categoria">
-                        <img src="../../assets/cat-infantil.png" alt="Infantil">
+                        <img src="../../assets/categorias/cat-infantil.png" alt="Infantil">
                     </div>
                     <span class="label-categoria">Infantil</span>
                 </a>
 
                 <a href="../produtos/categoria.html?cat=Esportes" class="item-categoria" title="Ver Esportes">
                     <div class="circulo-categoria">
-                        <img src="../../assets/cat-esportes.png" alt="Esportes">
+                        <img src="../../assets/categorias/cat-esportes.png" alt="Esportes">
                     </div>
                     <span class="label-categoria">Esportes</span>
                 </a>
 
                 <a href="../produtos/categoria.html?cat=Hobbies" class="item-categoria" title="Ver Hobbies">
                     <div class="circulo-categoria">
-                        <img src="../../assets/cat-hobbies.png" alt="Hobbies">
+                        <img src="../../assets/categorias/cat-hobbies.png" alt="Hobbies">
                     </div>
                     <span class="label-categoria">Hobbies</span>
                 </a>
 
                 <a href="../produtos/categoria.html?cat=Serviços" class="item-categoria" title="Ver Serviços">
                     <div class="circulo-categoria">
-                        <img src="../../assets/cat-servicos.png" alt="Serviços">
+                        <img src="../../assets/categorias/cat-servicos.png" alt="Serviços">
                     </div>
                     <span class="label-categoria">Serviços</span>
                 </a>
@@ -401,7 +401,7 @@
     <footer class="footer-principal">
         <div class="footer-container">
             <div class="footer-col">
-                <img src="../../assets/header-logo.png" alt="Itaim Vende" class="footer-logo-img">
+                <img src="../../assets/logos/header-logo.png" alt="Itaim Vende" class="footer-logo-img">
                 <p class="footer-sobre">
                     O Itaim Vende é o maior portal de compra, venda e troca da região de Paulistana e cidades vizinhas no Piauí. Conectando pessoas e bons negócios.
                 </p>
@@ -448,11 +448,11 @@
     </footer>
 
     <!-- Dados e Lógica JS -->
-    <script src="../../js/core/produtos-dados.js"></script>
-    <script src="../../js/core/rotas.js"></script>
-    <script src="../../js/core/api.js"></script>
-    <script src="../../js/core/sessao.js"></script>
-    <script src="../../js/core/skeleton.js"></script>
+    <script src="../../js/core/produtos-dados/index.js"></script>
+    <script src="../../js/core/rotas/index.js"></script>
+    <script src="../../js/core/api/index.js"></script>
+    <script src="../../js/core/sessao/index.js"></script>
+    <script src="../../js/core/skeleton/index.js"></script>
     <script src="../../js/pages/home/home.js?v=4"></script>
 </body>
 </html>

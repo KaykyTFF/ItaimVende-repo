@@ -12,11 +12,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="../../assets/header1-logo.png">
+    <link rel="icon" type="image/png" href="../../assets/logos/header1-logo.png">
     
     <!-- CSS Global e do Chat -->
-    <link rel="stylesheet" href="../../css/header-global.css?v=10">
-    <link rel="stylesheet" href="../../css/conversas.css?v=10">
+    <link rel="stylesheet" href="../../css/core/header-global.css?v=10">
+    <link rel="stylesheet" href="../../css/pages/mensagens/conversas.css?v=10">
 </head>
 <body class="pagina-chat">
 
@@ -35,7 +35,7 @@
                     </svg>
                 </button>
                 <a href="../home/home.html" class="header-logo-link" title="Itaim Vende - Página Inicial">
-                    <img src="../../assets/header1-logo.png" alt="Itaim Vende" class="header-logo-img">
+                    <img src="../../assets/logos/header1-logo.png" alt="Itaim Vende" class="header-logo-img">
                 </a>
             </div>
 
@@ -100,12 +100,12 @@
                 <!-- Perfil do Usuário com Dropdown -->
                 <div class="perfil-wrapper">
                     <button type="button" class="btn-avatar-header" id="btn-avatar-dropdown" aria-label="Abrir menu de perfil">
-                        <img src="../../assets/icon-user.png" alt="Foto de perfil" class="avatar-img" id="img-avatar-user">
+                        <img src="../../assets/icons/icon-user.png" alt="Foto de perfil" class="avatar-img" id="img-avatar-user">
                     </button>
 
                     <div class="dropdown-perfil" id="dropdown-perfil">
                         <a href="../perfil/perfil.html" class="dropdown-header-user" title="Ir para Meu Perfil">
-                            <strong id="dropdown-user-name">Raili</strong>
+                            <strong id="dropdown-user-name">Admin</strong>
                             <span id="dropdown-user-email">admin@gmail.com</span>
                         </a>
                         <a href="../perfil/perfil.html" class="dropdown-item" id="link-menu-perfil">
@@ -147,16 +147,16 @@
     <div class="drawer-backdrop" id="drawer-backdrop">
         <aside class="drawer-menu" aria-label="Menu principal">
             <div class="drawer-header">
-                <img src="../../assets/header1-logo.png" alt="Itaim Vende" class="drawer-logo">
+                <img src="../../assets/logos/header1-logo.png" alt="Itaim Vende" class="drawer-logo">
                 <button type="button" class="drawer-close" id="btn-fechar-drawer" aria-label="Fechar menu">&times;</button>
             </div>
 
             <a href="../perfil/perfil.html" class="drawer-user-card" id="drawer-user-card" title="Acessar Meu Perfil">
                 <div class="drawer-user-avatar-wrap">
-                    <img src="../../assets/icon-user.png" alt="Foto de perfil" class="drawer-user-avatar" id="drawer-user-avatar">
+                    <img src="../../assets/icons/icon-user.png" alt="Foto de perfil" class="drawer-user-avatar" id="drawer-user-avatar">
                 </div>
                 <div class="drawer-user-info">
-                    <span class="drawer-user-nome" id="drawer-user-name">Raili</span>
+                    <span class="drawer-user-nome" id="drawer-user-name">Admin</span>
                     <span class="drawer-user-sub">Ver meu perfil &rarr;</span>
                 </div>
             </a>
@@ -322,7 +322,7 @@
 
                     <a href="javascript:void(0)" class="chat-perfil-conversa" id="chat-perfil-conversa" title="Ver perfil deste usuário">
                         <div class="chat-avatar-wrap">
-                            <img src="../../assets/icon-user.png" alt="Avatar" id="chat-header-avatar" class="chat-header-avatar">
+                            <img src="../../assets/icons/icon-user.png" alt="Avatar" id="chat-header-avatar" class="chat-header-avatar">
                         </div>
                         <div class="chat-nome-status">
                             <strong id="chat-header-nome">Nome do Contato</strong>
@@ -333,7 +333,7 @@
 
                 <!-- Mini Resumo do Produto no Mobile (visível apenas em telas menores) -->
                 <div class="mobile-resumo-produto-topo" id="mobile-resumo-produto-topo" style="display: none;">
-                    <img src="../../assets/produto-placeholder.svg" alt="Foto do produto" id="mobile-mini-foto" class="mobile-mini-foto">
+                    <img src="../../assets/placeholders/produto-placeholder.svg" alt="Foto do produto" id="mobile-mini-foto" class="mobile-mini-foto">
                     <div class="mobile-mini-info">
                         <strong id="mobile-mini-titulo" class="mobile-mini-titulo">Produto</strong>
                         <span id="mobile-mini-preco" class="mobile-mini-preco">R$ 0,00</span>
@@ -390,7 +390,7 @@
                     </div>
 
                     <div class="chat-produto-foto-box">
-                        <img src="../../assets/produto-placeholder.svg" alt="Produto" id="painel-produto-foto" class="painel-produto-foto">
+                        <img src="../../assets/placeholders/produto-placeholder.svg" alt="Produto" id="painel-produto-foto" class="painel-produto-foto">
                         <div class="chat-badge-fotos" id="painel-badge-fotos">
                             <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
                             <span>1/1</span>
@@ -449,9 +449,9 @@
     </main>
 
     <!-- Scripts da Plataforma -->
-    <script src="../../js/core/rotas.js"></script>
-    <script src="../../js/core/api.js"></script>
-    <script src="../../js/core/sessao.js"></script>
+    <script src="../../js/core/rotas/index.js"></script>
+    <script src="../../js/core/api/index.js"></script>
+    <script src="../../js/core/sessao/index.js"></script>
     <script src="../../js/pages/mensagens/conversas.js?v=12"></script>
 </body>
 </html>

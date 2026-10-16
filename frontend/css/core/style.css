@@ -33,7 +33,7 @@ html, body {
     min-height: 100%;
     font-family: var(--font-main);
     background-color: #12181F;
-    background-image: url('../assets/Crepúsculo sobre a cidade ribeirinha_2.png');
+    background-image: url('../../assets/backgrounds/Crepúsculo sobre a cidade ribeirinha_2.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -92,7 +92,7 @@ html, body {
     min-height: 550px;
     border-radius: 0;
     background-color: #172127;
-    background-image: url('../assets/Vila Ribeirinha ao Entardecer.png');
+    background-image: url('../../assets/backgrounds/Vila Ribeirinha ao Entardecer.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -1319,7 +1319,7 @@ html, body {
         flex: none;
         border-radius: 0;
         background-color: #172127;
-        background-image: url('../assets/Vila Ribeirinha ao Entardecer.png');
+        background-image: url('../../assets/backgrounds/Vila Ribeirinha ao Entardecer.png');
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;

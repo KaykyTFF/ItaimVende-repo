@@ -12,13 +12,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Segoe+UI&display=swap" rel="stylesheet">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="../../assets/header-logo.png">
+    <link rel="icon" type="image/png" href="../../assets/logos/header-logo.png">
     
     <!-- CSS -->
-    <link rel="stylesheet" href="../../css/home.css">
-    <link rel="stylesheet" href="../../css/header-global.css?v=10">
-    <link rel="stylesheet" href="../../css/perfil.css?v=4">
-    <link rel="stylesheet" href="../../css/skeleton.css">
+    <link rel="stylesheet" href="../../css/pages/home/home.css">
+    <link rel="stylesheet" href="../../css/core/header-global.css?v=10">
+    <link rel="stylesheet" href="../../css/pages/perfil/perfil.css?v=4">
+    <link rel="stylesheet" href="../../css/core/skeleton.css">
 
 </head>
 <body class="pagina-perfil">
@@ -38,7 +38,7 @@
                     </svg>
                 </button>
                 <a href="../home/home.html" class="header-logo-link" title="Itaim Vende - Página Inicial">
-                    <img src="../../assets/header1-logo.png" alt="Itaim Vende" class="header-logo-img">
+                    <img src="../../assets/logos/header1-logo.png" alt="Itaim Vende" class="header-logo-img">
                 </a>
             </div>
 
@@ -103,12 +103,12 @@
                 <!-- Perfil do Usuário com Dropdown -->
                 <div class="perfil-wrapper">
                     <button type="button" class="btn-avatar-header" id="btn-avatar-dropdown" aria-label="Abrir menu de perfil">
-                        <img src="../../assets/icon-user.png" alt="Foto de perfil" class="avatar-img" id="img-avatar-user">
+                        <img src="../../assets/icons/icon-user.png" alt="Foto de perfil" class="avatar-img" id="img-avatar-user">
                     </button>
 
                     <div class="dropdown-perfil" id="dropdown-perfil">
                         <a href="perfil.html" class="dropdown-header-user" title="Ir para Meu Perfil">
-                            <strong id="dropdown-user-name">Raili</strong>
+                            <strong id="dropdown-user-name">Admin</strong>
                             <span id="dropdown-user-email">admin@gmail.com</span>
                         </a>
                         <a href="perfil.html" class="dropdown-item ativo" id="link-menu-perfil">
@@ -150,17 +150,17 @@
     <div class="drawer-backdrop" id="drawer-backdrop">
         <aside class="drawer-menu" aria-label="Menu principal">
             <div class="drawer-header">
-                <img src="../../assets/header1-logo.png" alt="Itaim Vende" class="drawer-logo">
+                <img src="../../assets/logos/header1-logo.png" alt="Itaim Vende" class="drawer-logo">
                 <button type="button" class="drawer-close" id="btn-fechar-drawer" aria-label="Fechar menu">&times;</button>
             </div>
 
             <!-- Perfil do Usuário no Drawer (Acesso rápido ao Perfil) -->
             <a href="perfil.html" class="drawer-user-card" id="drawer-user-card" title="Acessar Meu Perfil">
                 <div class="drawer-user-avatar-wrap">
-                    <img src="../../assets/icon-user.png" alt="Foto de perfil" class="drawer-user-avatar" id="drawer-user-avatar">
+                    <img src="../../assets/icons/icon-user.png" alt="Foto de perfil" class="drawer-user-avatar" id="drawer-user-avatar">
                 </div>
                 <div class="drawer-user-info">
-                    <span class="drawer-user-nome" id="drawer-user-name">Raili</span>
+                    <span class="drawer-user-nome" id="drawer-user-name">Admin</span>
                     <span class="drawer-user-sub">Ver meu perfil &rarr;</span>
                 </div>
             </a>
@@ -299,7 +299,7 @@
             <div class="perfil-banner-content">
                 <!-- Foto de Perfil (Esquerda) com borda circular verde clara e ícone de câmera -->
                 <div class="perfil-avatar-wrapper">
-                    <img src="../../assets/icon-user.png" alt="Foto de perfil de Raili" class="perfil-avatar-img" id="perfil-avatar-view" onerror="this.onerror=null; this.src='../../assets/icon-user.png';">
+                    <img src="../../assets/icons/icon-user.png" alt="Foto de perfil de Admin" class="perfil-avatar-img" id="perfil-avatar-view" onerror="this.onerror=null; this.src='../../assets/icons/icon-user.png';">
                     <label for="input-foto-avatar" class="btn-avatar-camera" title="Alterar foto de perfil" aria-label="Alterar foto de perfil">
                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
@@ -470,9 +470,9 @@
                             <span style="font-size: 12.5px; font-weight: 600; color: #64748B;">Avaliando como:</span>
                             <span class="badge-autor-fixo" id="perfil-label-autor" style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; background: #F1F5F9; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 13px; font-weight: 700; color: #1E293B;">
                                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                                <span id="perfil-nome-autor-logado">Raili</span>
+                                <span id="perfil-nome-autor-logado">Admin</span>
                             </span>
-                            <input type="hidden" id="perfil-input-autor" value="Raili">
+                            <input type="hidden" id="perfil-input-autor" value="Admin">
                         </div>
                     </div>
                     <textarea id="perfil-textarea-comentario" placeholder="Escreva um comentário sobre sua experiência com este vendedor..." rows="3" style="width: 100%; padding: 10px 14px; font-size: 13.5px; border: 1px solid #CBD5E1; border-radius: 10px; outline: none; resize: vertical; font-family: inherit; box-sizing: border-box; background: #FFFFFF;" required></textarea>
@@ -595,7 +595,7 @@
     <footer class="footer-principal">
         <div class="footer-container">
             <div class="footer-col">
-                <img src="../../assets/header-logo.png" alt="Itaim Vende" class="footer-logo-img">
+                <img src="../../assets/logos/header-logo.png" alt="Itaim Vende" class="footer-logo-img">
                 <p class="footer-sobre">
                     O Itaim Vende é o maior portal de compra, venda e troca da região de Paulistana e cidades vizinhas no Piauí. Conectando pessoas e bons negócios.
                 </p>
@@ -642,12 +642,12 @@
     </footer>
 
     <!-- Scripts -->
-    <script src="../../js/core/produtos-dados.js"></script>
-    <script src="../../js/core/rotas.js"></script>
-    <script src="../../js/core/api.js"></script>
-    <script src="../../js/core/sessao.js?v=8"></script>
-    <script src="../../js/core/skeleton.js"></script>
-    <script src="../../js/core/ajustar-foto.js"></script>
+    <script src="../../js/core/produtos-dados/index.js"></script>
+    <script src="../../js/core/rotas/index.js"></script>
+    <script src="../../js/core/api/index.js"></script>
+    <script src="../../js/core/sessao/index.js?v=8"></script>
+    <script src="../../js/core/skeleton/index.js"></script>
+    <script src="../../js/core/ajustar-foto/index.js"></script>
     <script src="../../js/pages/perfil/perfil.js?v=8"></script>
 </body>
 </html>

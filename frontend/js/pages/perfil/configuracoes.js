@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const avatarPreview = $('cfg-avatar-preview');
         if (avatarPreview) {
-            const rawAv = dados.avatar || 'assets/icon-user.png';
+            const rawAv = dados.avatar || 'assets/icons/icon-user.png';
             const finalAv = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
                 ? window.ItaimRotas.obterAsset(rawAv)
                 : rawAv;
@@ -196,9 +196,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (btnRemoverFotoCfg) {
         btnRemoverFotoCfg.addEventListener('click', async () => {
-            const avatarPadrao = 'assets/icon-user.png';
+            const avatarPadrao = 'assets/icons/icon-user.png';
             if (avatarPreviewCfg) {
-                avatarPreviewCfg.src = window.ItaimRotas ? window.ItaimRotas.obterAsset(avatarPadrao) : '../../assets/icon-user.png';
+                avatarPreviewCfg.src = window.ItaimRotas ? window.ItaimRotas.obterAsset(avatarPadrao) : '../../assets/icons/icon-user.png';
             }
 
             if (window.ItaimApi && window.ItaimApi.auth && typeof window.ItaimApi.auth.atualizarPerfil === 'function' && window.ItaimApi.auth.obterToken()) {
@@ -275,11 +275,13 @@ document.addEventListener('DOMContentLoaded', () => {
             telefone && dig !== 10 && dig !== 11 ? 'Informe o DDD e o número completo.' : '');
         if (!(okNome && okUser && okEmail && okTel)) { toast('Corrija os campos destacados.', true); return; }
 
-        const perfilAntigo = ler(CHAVE_PERFIL, {});
-        const avatarAtual = perfilAntigo.avatar || usuarioAtivo.avatar || 'assets/icon-user.png';
+        const userAtual = (window.ItaimSessao && typeof window.ItaimSessao.obterUsuarioLogado === 'function')
+            ? window.ItaimSessao.obterUsuarioLogado()
+            : ler(CHAVE_PERFIL, {});
+        const avatarAtual = userAtual.avatar || 'assets/icons/icon-user.png';
 
         const atualizado = {
-            ...perfilAntigo,
+            ...userAtual,
             nome,
             name: nome,
             username: usuario,
@@ -308,9 +310,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }).catch(() => {});
         }
 
-        if (!gravar(CHAVE_PERFIL, atualizado)) { toast('Não foi possível salvar neste navegador.', true); return; }
         emailOriginal = email;
-        try { localStorage.setItem('itaim_ultimo_email', email); } catch (err) {}
+        try { localStorage.setItem('itaim_usuario_logado', JSON.stringify(atualizado)); } catch (err) {}
         try { localStorage.setItem('itaim_usuario_logado_email', email); } catch (err) {}
 
         atualizarCabecalhoUsuario();

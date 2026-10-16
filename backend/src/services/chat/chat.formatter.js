@@ -14,7 +14,7 @@ export function formatarConversa(c, userId) {
   const ultimaMsg = c.messages && c.messages.length > 0 ? c.messages[0] : null;
 
   const fotos = c.product?.images?.map((img) => img.url) || [];
-  const fotoCapa = fotos[0] || 'assets/produto-placeholder.svg';
+  const fotoCapa = fotos[0] || 'assets/placeholders/produto-placeholder.svg';
 
   return {
     id: c.id,
@@ -44,7 +44,7 @@ export function formatarConversa(c, userId) {
       name: outroParticipante?.name || 'Usuário',
       username: outroParticipante?.username || '',
       email: outroParticipante?.email || '',
-      avatar: outroParticipante?.avatar || 'assets/icon-user.png',
+      avatar: outroParticipante?.avatar || 'assets/icons/icon-user.png',
       telefone: outroParticipante?.phone || '',
       phone: outroParticipante?.phone || '',
       papel: isUserBuyer ? 'Vendedor(a)' : 'Comprador(a)',
@@ -53,14 +53,14 @@ export function formatarConversa(c, userId) {
       id: c.buyer?.id || '',
       nome: c.buyer?.name || 'Comprador',
       email: c.buyer?.email || '',
-      avatar: c.buyer?.avatar || 'assets/icon-user.png',
+      avatar: c.buyer?.avatar || 'assets/icons/icon-user.png',
       phone: c.buyer?.phone || '',
     },
     seller: {
       id: c.seller?.id || '',
       nome: c.seller?.name || 'Vendedor',
       email: c.seller?.email || '',
-      avatar: c.seller?.avatar || 'assets/icon-user.png',
+      avatar: c.seller?.avatar || 'assets/icons/icon-user.png',
       phone: c.seller?.phone || '',
     },
     ultimaMensagem: ultimaMsg ? ultimaMsg.content : 'Conversa iniciada',
@@ -91,7 +91,7 @@ export function formatarMensagem(m, userId) {
       id: m.sender?.id || m.senderId,
       nome: m.sender?.name || 'Usuário',
       username: m.sender?.username || '',
-      avatar: m.sender?.avatar || 'assets/icon-user.png',
+      avatar: m.sender?.avatar || 'assets/icons/icon-user.png',
     },
   };
 }

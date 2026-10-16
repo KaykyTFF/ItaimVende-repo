@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ? window.ItaimSessao.obterUsuarioLogado()
         : null;
 
-    const nomeUsuario = userLogado?.name || userLogado?.nome || 'Raili';
+    const nomeUsuario = userLogado?.name || userLogado?.nome || 'Admin';
     const emailUsuario = userLogado?.email || 'admin@gmail.com';
     const cidadeUsuario = userLogado?.city || userLogado?.cidade || 'Paulistana';
 
@@ -181,8 +181,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const statusClass = item.status || 'ativo';
             const statusLabel = statusClass === 'ativo' ? 'Ativo' : (statusClass === 'pausado' ? 'Pausado' : 'Vendido');
             const placeholderSrc = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
-                ? window.ItaimRotas.obterAsset('assets/produto-placeholder.svg')
-                : '../../assets/produto-placeholder.svg';
+                ? window.ItaimRotas.obterAsset('assets/placeholders/produto-placeholder.svg')
+                : '../../assets/placeholders/produto-placeholder.svg';
             const fotoImg = item.imagem || (item.fotos && item.fotos[0]) || placeholderSrc;
             const linkProduto = (window.ItaimRotas && typeof window.ItaimRotas.obterUrl === 'function')
                 ? window.ItaimRotas.obterUrl('produto', `id=${item.id}`)

@@ -41,7 +41,7 @@ export async function getUserReviews(targetUserId) {
         id: r.author.id,
         nome: r.author.name,
         username: r.author.username,
-        avatar: r.author.avatar || 'assets/images/icon-user.png',
+        avatar: r.author.avatar || 'assets/icons/icon-user.png',
       },
     })),
   };

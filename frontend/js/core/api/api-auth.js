@@ -1,0 +1,161 @@
+/**
+ * ITAIM VENDE - SERVIÇO DE AUTENTICAÇÃO E PERFIL (API AUTH)
+ * Arquivo: frontend/js/core/api/api-auth.js
+ * 
+ * Responsabilidades:
+ * - Login com e-mail/senha ou objeto
+ * - Cadastro de novos usuários
+ * - Consulta de perfil autenticado (/auth/me) e dados de usuários (/auth/user/:id)
+ * - Atualização cadastral de dados e sincronização com sessão
+ * - Encerramento de sessão (logout/expiração)
+ */
+
+(function() {
+    'use strict';
+
+    function getCore() {
+        return window.ItaimApiCore || {
+            requisicao: () => Promise.reject(new Error('ItaimApiCore não carregado')),
+            obterHeaders: () => ({}),
+            obterToken: () => localStorage.getItem('itaim_token') || ''
+        };
+    }
+
+    const auth = {
+        obterToken() {
+            return getCore().obterToken();
+        },
+
+        obterUsuarioLogado() {
+            try {
+                return JSON.parse(localStorage.getItem('itaim_usuario_logado') || 'null');
+            } catch {
+                return null;
+            }
+        },
+
+        /**
+         * Encerra a sessão imediatamente por expiração ou reset do servidor,
+         * notificando o usuário e limpando o armazenamento local.
+         */
+        expirarSessao(motivo = 'Sua sessão expirou.') {
+            localStorage.removeItem('itaim_token');
+            localStorage.removeItem('itaim_usuario_logado');
+            localStorage.removeItem('itaim_ultima_atividade');
+
+            if (window.ItaimSessao && typeof window.ItaimSessao.deslogarUsuario === 'function') {
+                window.ItaimSessao.deslogarUsuario();
+            }
+
+            console.info('[ItaimApi] Sessão limpa:', motivo);
+        },
+
+        /**
+         * Autentica usuário com e-mail e senha
+         */
+        async login(emailOuDados, passwordParam) {
+            const email = typeof emailOuDados === 'object' ? (emailOuDados.email || '') : (emailOuDados || '');
+            const password = typeof emailOuDados === 'object' ? (emailOuDados.password || emailOuDados.senha || '') : (passwordParam || '');
+            
+            const resposta = await getCore().requisicao('/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+
+            if (resposta.token) {
+                localStorage.setItem('itaim_token', resposta.token);
+                localStorage.setItem('itaim_ultima_atividade', Date.now().toString());
+            }
+            if (resposta.user) {
+                localStorage.setItem('itaim_usuario_logado', JSON.stringify(resposta.user));
+                localStorage.setItem('itaim_usuario_logado_email', resposta.user.email);
+                if (window.ItaimSessao && typeof window.ItaimSessao.definirUsuarioLogado === 'function') {
+                    window.ItaimSessao.definirUsuarioLogado(resposta.user.email || email, resposta.user);
+                }
+            }
+            return resposta;
+        },
+
+        /**
+         * Registra nova conta de usuário
+         */
+        async registrar(dados) {
+            const resposta = await getCore().requisicao('/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dados)
+            });
+
+            if (resposta.token) {
+                localStorage.setItem('itaim_token', resposta.token);
+                localStorage.setItem('itaim_ultima_atividade', Date.now().toString());
+            }
+            if (resposta.user) {
+                localStorage.setItem('itaim_usuario_logado', JSON.stringify(resposta.user));
+                if (window.ItaimSessao && typeof window.ItaimSessao.definirUsuarioLogado === 'function') {
+                    window.ItaimSessao.definirUsuarioLogado(resposta.user.email || dados.email, resposta.user);
+                }
+            }
+            return resposta;
+        },
+
+        /**
+         * Consulta dados do perfil logado
+         */
+        async perfil() {
+            return getCore().requisicao('/auth/me', {
+                method: 'GET',
+                headers: getCore().obterHeaders(true)
+            });
+        },
+
+        /**
+         * Consulta dados públicos de um usuário por ID
+         */
+        async obterUsuario(id) {
+            return getCore().requisicao(`/auth/user/${encodeURIComponent(id)}`, {
+                method: 'GET',
+                headers: getCore().obterHeaders(true)
+            });
+        },
+
+        /**
+         * Atualiza informações cadastrais do perfil logado
+         */
+        async atualizarPerfil(dados) {
+            const resposta = await getCore().requisicao('/auth/me', {
+                method: 'PUT',
+                headers: getCore().obterHeaders(true),
+                body: JSON.stringify(dados)
+            });
+            if (resposta && resposta.user) {
+                try {
+                    const atual = JSON.parse(localStorage.getItem('itaim_usuario_logado') || '{}');
+                    const fundido = { ...atual, ...resposta.user };
+                    localStorage.setItem('itaim_usuario_logado', JSON.stringify(fundido));
+                    if (window.ItaimSessao && typeof window.ItaimSessao.atualizarDadosUsuario === 'function') {
+                        window.ItaimSessao.atualizarDadosUsuario(fundido.email, fundido);
+                    }
+                } catch(e) {}
+            }
+            return resposta;
+        },
+
+        /**
+         * Encerra a sessão ativa e remove credenciais
+         */
+        logout() {
+            localStorage.removeItem('itaim_token');
+            localStorage.removeItem('itaim_usuario_logado');
+            localStorage.removeItem('itaim_server_boot');
+            localStorage.removeItem('itaim_ultima_atividade');
+            if (window.ItaimSessao && typeof window.ItaimSessao.deslogarUsuario === 'function') {
+                window.ItaimSessao.deslogarUsuario();
+            }
+        }
+    };
+
+    window.ItaimApiAuth = auth;
+
+})();

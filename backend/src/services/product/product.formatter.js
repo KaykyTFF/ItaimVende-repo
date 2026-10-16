@@ -51,7 +51,7 @@ export function formatarProdutoParaFrontend(p) {
     vendedorEmail: p.seller?.email || '',
     vendedorCidade: p.city || p.seller?.city || 'Paulistana',
     vendedorTelefone: p.seller?.phone || '',
-    vendedorAvatar: p.seller?.avatar || 'assets/icon-user.png',
+    vendedorAvatar: p.seller?.avatar || 'assets/icons/icon-user.png',
     vendedorBio: p.seller?.bio || '',
     vendedorVerificado: Boolean(p.seller?.isVerified),
     vendedorAvaliacao: p.seller?.ratingAverage ? Number(p.seller.ratingAverage) : 5.0,

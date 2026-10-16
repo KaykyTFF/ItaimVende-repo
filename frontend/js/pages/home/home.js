@@ -218,8 +218,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const placeholderSrc = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
-            ? window.ItaimRotas.obterAsset('assets/produto-placeholder.svg')
-            : '../../assets/produto-placeholder.svg';
+            ? window.ItaimRotas.obterAsset('assets/placeholders/produto-placeholder.svg')
+            : '../../assets/placeholders/produto-placeholder.svg';
 
         // Gerar Cards
         gradeProdutos.innerHTML = lista.map(p => {
@@ -408,7 +408,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // O antigo modal de detalhes foi substituído pela navegação direta para a página produto.html
 
-    btnModalChat?.addEventListener('click', () => {
+    document.getElementById('btn-modal-chat')?.addEventListener('click', () => {
         alert('Abrindo chat privado com o anunciante no Itaim Vende...');
     });
 

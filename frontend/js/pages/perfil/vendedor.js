@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     email: prodMatch.vendedorEmail || '',
                     phone: prodMatch.vendedorTelefone || '(89) 99999-9999',
                     city: prodMatch.vendedorCidade || prodMatch.cidade || 'Paulistana',
-                    avatar: prodMatch.vendedorAvatar || 'assets/icon-user.png',
+                    avatar: prodMatch.vendedorAvatar || 'assets/icons/icon-user.png',
                     bio: `Vendedor(a) na região de ${prodMatch.vendedorCidade || prodMatch.cidade || 'Paulistana'} e cidades vizinhas no Itaim Vende.`,
                     createdAt: '2024-01-01',
                     ratingAverage: 5.0,
@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                    (vNome && pNome === vNome);
         });
 
-        if (anunciosVendedor.length === 0 && (vendedor?.email === 'admin@gmail.com' || vendedor?.name === 'Raili' || paramNome.toLowerCase() === 'raili')) {
+        if (anunciosVendedor.length === 0 && (vendedor?.email === 'admin@gmail.com' || vendedor?.name === 'Admin' || paramNome.toLowerCase() === 'admin')) {
             anunciosVendedor = todosProdutosLocais;
         }
     }
@@ -166,7 +166,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             email: paramEmail || '',
             phone: '(89) 99999-9999',
             city: 'Paulistana',
-            avatar: 'assets/icon-user.png',
+            avatar: 'assets/icons/icon-user.png',
             bio: `Perfil de ${nomeFinal} na plataforma Itaim Vende.`,
             createdAt: '2024-01-01',
             ratingAverage: 5.0,
@@ -177,16 +177,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // 4. Resolução da Foto Real do Vendedor (com suporte a /uploads/... do backend e localStorage)
     const fallbackAvatar = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
-        ? window.ItaimRotas.obterAsset('assets/icon-user.png')
-        : '../../assets/icon-user.png';
+        ? window.ItaimRotas.obterAsset('assets/icons/icon-user.png')
+        : '../../assets/icons/icon-user.png';
 
     let rawAvatar = vendedor.avatar;
 
     // Se o avatar for o padrão, checa se há foto salva localmente no perfil
-    if (!rawAvatar || rawAvatar === 'assets/icon-user.png') {
+    if (!rawAvatar || rawAvatar === 'assets/icons/icon-user.png') {
         try {
             const perfilSalvo = JSON.parse(localStorage.getItem('itaim_perfil_usuario') || 'null');
-            if (perfilSalvo && perfilSalvo.avatar && perfilSalvo.avatar !== 'assets/icon-user.png') {
+            if (perfilSalvo && perfilSalvo.avatar && perfilSalvo.avatar !== 'assets/icons/icon-user.png') {
                 const pEmail = (perfilSalvo.email || '').toLowerCase().trim();
                 const vEmail = (vendedor.email || '').toLowerCase().trim();
                 const pId = String(perfilSalvo.id || '');
@@ -340,8 +340,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         const placeholderSrc = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
-            ? window.ItaimRotas.obterAsset('assets/produto-placeholder.svg')
-            : '../../assets/produto-placeholder.svg';
+            ? window.ItaimRotas.obterAsset('assets/placeholders/produto-placeholder.svg')
+            : '../../assets/placeholders/produto-placeholder.svg';
 
         lista.forEach(item => {
             const card = document.createElement('a');

@@ -99,14 +99,46 @@ app.use('/uploads', (req, res) => {
   }
 
   // Fallback para placeholder se a imagem solicitada não existir no disco
-  const candidate1 = path.resolve(process.cwd(), 'frontend/assets/produto-placeholder.svg');
-  const candidate2 = path.resolve(process.cwd(), '../frontend/assets/produto-placeholder.svg');
+  const candidate1 = path.resolve(process.cwd(), 'frontend/assets/placeholders/produto-placeholder.svg');
+  const candidate2 = path.resolve(process.cwd(), '../frontend/assets/placeholders/produto-placeholder.svg');
   const placeholderPath = fs.existsSync(candidate1) ? candidate1 : (fs.existsSync(candidate2) ? candidate2 : null);
   if (placeholderPath) {
     res.setHeader('Content-Type', 'image/svg+xml');
     return res.sendFile(placeholderPath);
   }
   res.status(404).json({ success: false, message: 'Imagem não encontrada.' });
+});
+
+// Suporte e retrocompatibilidade para requisições legadas em /assets/:file
+app.get('/assets/:filename', (req, res, next) => {
+  const filename = req.params.filename;
+  const subpastas = ['logos', 'icons', 'placeholders', 'banners', 'categorias', 'backgrounds', 'usuarios', 'produtos'];
+  for (const sub of subpastas) {
+    const candidate = path.join(FRONTEND_DIR, 'assets', sub, filename);
+    if (fs.existsSync(candidate)) {
+      return res.sendFile(candidate);
+    }
+  }
+  next();
+});
+
+// Suporte e retrocompatibilidade para requisições legadas em /css/:file
+app.get('/css/:filename', (req, res, next) => {
+  const filename = req.params.filename;
+  // Verifica em core/
+  const candidateCore = path.join(FRONTEND_DIR, 'css', 'core', filename);
+  if (fs.existsSync(candidateCore)) {
+    return res.sendFile(candidateCore);
+  }
+  // Verifica em pages/*/
+  const pageDirs = ['admin', 'favoritos', 'home', 'mensagens', 'notificacoes', 'perfil', 'produtos', 'vender'];
+  for (const sub of pageDirs) {
+    const candidate = path.join(FRONTEND_DIR, 'css', 'pages', sub, filename);
+    if (fs.existsSync(candidate)) {
+      return res.sendFile(candidate);
+    }
+  }
+  next();
 });
 
 // Montagem das Rotas da API

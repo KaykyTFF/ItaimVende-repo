@@ -59,12 +59,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     let contadorTicks = 0;
 
     const fallbackAvatar = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
-        ? window.ItaimRotas.obterAsset('assets/icon-user.png')
-        : '../../assets/icon-user.png';
+        ? window.ItaimRotas.obterAsset('assets/icons/icon-user.png')
+        : '../../assets/icons/icon-user.png';
 
     const fallbackProdutoImg = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
-        ? window.ItaimRotas.obterAsset('assets/produto-placeholder.svg')
-        : '../../assets/produto-placeholder.svg';
+        ? window.ItaimRotas.obterAsset('assets/placeholders/produto-placeholder.svg')
+        : '../../assets/placeholders/produto-placeholder.svg';
 
     // Obtém usuário logado do cliente
     const token = window.ItaimApi?.auth?.obterToken();

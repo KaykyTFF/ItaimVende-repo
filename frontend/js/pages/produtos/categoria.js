@@ -145,8 +145,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const placeholderSrc = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
-            ? window.ItaimRotas.obterAsset('assets/produto-placeholder.svg')
-            : '../../assets/produto-placeholder.svg';
+            ? window.ItaimRotas.obterAsset('assets/placeholders/produto-placeholder.svg')
+            : '../../assets/placeholders/produto-placeholder.svg';
 
         gradeProdutos.innerHTML = lista.map(p => {
             const isFav = favoritosSet.has(p.id);
