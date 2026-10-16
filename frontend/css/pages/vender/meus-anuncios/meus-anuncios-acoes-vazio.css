@@ -1,0 +1,86 @@
+/* Ações */
+.anuncio-acoes-coluna {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 140px;
+}
+
+.btn-acao-anuncio {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 9px 14px;
+    border-radius: var(--radius-md);
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all var(--transition);
+    border: 1px solid transparent;
+    font-family: inherit;
+}
+
+.btn-acao-ver {
+    background: #F1F5F9;
+    color: var(--text-primary);
+    border-color: #E2E8F0;
+}
+
+.btn-acao-ver:hover {
+    background: #E2E8F0;
+}
+
+.btn-acao-status {
+    background: #FFFFFF;
+    color: #475569;
+    border-color: #CBD5E1;
+}
+
+.btn-acao-status:hover {
+    background: #F8FAFC;
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-acao-excluir {
+    background: #FFFFFF;
+    color: #EF4444;
+    border-color: #FEE2E2;
+}
+
+.btn-acao-excluir:hover {
+    background: #FEF2F2;
+    border-color: #EF4444;
+}
+
+/* Estado Vazio */
+.anuncios-vazio {
+    text-align: center;
+    padding: 60px 20px;
+    background: #FFFFFF;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+}
+
+.anuncios-vazio-icon {
+    font-size: 46px;
+    margin-bottom: 12px;
+    opacity: 0.6;
+}
+
+.anuncios-vazio h2 {
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.anuncios-vazio p {
+    color: var(--text-secondary);
+    font-size: 14.5px;
+    max-width: 440px;
+    margin: 0 auto 20px;
+}
+

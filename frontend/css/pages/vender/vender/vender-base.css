@@ -1,0 +1,126 @@
+/* ==========================================================================
+   ITAIM VENDE - ESTILOS DA PÁGINA "CRIAR ANÚNCIO / VENDER"
+   Design moderno, elegante, com cards elevados e efeitos suaves.
+   ========================================================================== */
+
+/* --- VARIÁVEIS EXCLUSIVAS DA TELA DE VENDER --- */
+:root {
+    --vender-bg: #DCE1E6;
+    --vender-card-bg: #EDEDED;
+    --vender-card-surface: #F5F6F7;
+    --vender-input-bg: #D9DDE0;
+    --vender-input-hover: #D0D5D9;
+    --vender-green: #59AA59;
+    --vender-green-hover: #4C9B4C;
+    --vender-green-dark: #3F833F;
+    --vender-green-glow: rgba(89, 170, 89, 0.4);
+    --vender-text-dark: #1F2937;
+    --vender-text-sub: #4B5563;
+    --vender-text-placeholder: #88929D;
+    --vender-border-dashed: #B2BCC5;
+    --vender-shadow-card: 0 14px 36px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.06);
+    --vender-shadow-btn: 0 8px 24px var(--vender-green-glow);
+}
+
+/* Fundo geral da página vender */
+body.pagina-vender {
+    background-color: var(--vender-bg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* ==========================================================================
+   CONTEÚDO PRINCIPAL (MAIN VENDER)
+   ========================================================================== */
+.vender-main {
+    flex: 1;
+    width: 100%;
+    max-width: 1020px;
+    margin: 0 auto;
+    padding: 20px 20px 40px;
+    position: relative;
+}
+
+/* Topo do formulário: Botão voltar e Título */
+.vender-header-bar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 22px;
+}
+
+.btn-voltar-vender {
+    position: absolute;
+    left: 0;
+    margin-bottom: 0 !important;
+}
+
+.btn-voltar-redondo {
+    position: absolute;
+    left: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: var(--vender-green);
+    color: #FFFFFF;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(89, 170, 89, 0.35);
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s, box-shadow 0.25s;
+}
+
+.btn-voltar-redondo:hover {
+    background-color: var(--vender-green-hover);
+    transform: scale(1.08) translateX(-2px);
+    box-shadow: 0 6px 18px rgba(89, 170, 89, 0.5);
+}
+
+.btn-voltar-redondo:active {
+    transform: scale(0.96);
+}
+
+.btn-voltar-redondo svg {
+    width: 22px;
+    height: 22px;
+    stroke-width: 2.6;
+}
+
+.vender-titulo-pagina {
+    font-size: 32px;
+    font-weight: 800;
+    color: #111827;
+    letter-spacing: -0.5px;
+    text-align: center;
+    margin: 0;
+}
+
+/* Container do Grid de Cards */
+.vender-cards-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 36px;
+    align-items: start;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+/* Estilo Base dos Cards (Neumorphic Soft Card) */
+.card-vender {
+    background-color: var(--vender-card-bg);
+    border-radius: 24px;
+    padding: 22px;
+    box-shadow: var(--vender-shadow-card);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.card-vender:hover {
+    box-shadow: 0 20px 42px rgba(0, 0, 0, 0.15), 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+

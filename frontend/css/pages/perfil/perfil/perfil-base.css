@@ -1,0 +1,79 @@
+/* ==========================================================================
+   ITAIM VENDE - ESTILOS DA PÁGINA DE PERFIL (css/perfil.css)
+   Redesenho moderno conforme imagem de referência
+   ========================================================================== */
+
+/* Fundo Geral da Página */
+body.pagina-perfil {
+    background-color: #f0f4f1;
+    color: #1e272e;
+    min-height: 100vh;
+}
+
+.perfil-container {
+    max-width: 980px;
+    margin: 28px auto 70px;
+    padding: 0 20px;
+}
+
+/* Breadcrumb customizado para a página de perfil */
+.perfil-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13.5px;
+    color: #64748b;
+    margin-bottom: 20px;
+}
+
+.perfil-breadcrumb a {
+    color: #475569;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.perfil-breadcrumb a:hover {
+    color: #166534;
+}
+
+.perfil-breadcrumb-sep {
+    color: #94a3b8;
+}
+
+.perfil-breadcrumb-current {
+    color: #166534;
+    font-weight: 600;
+}
+
+/* Toast de Notificação de Sucesso */
+.toast-sucesso {
+    display: none;
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    color: #065f46;
+    padding: 14px 20px;
+    border-radius: 14px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.1);
+    animation: slideDownFade 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.toast-sucesso.visivel {
+    display: flex;
+}
+
+@keyframes slideDownFade {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+

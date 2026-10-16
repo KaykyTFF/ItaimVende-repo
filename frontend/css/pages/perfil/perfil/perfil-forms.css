@@ -1,0 +1,157 @@
+/* ==========================================================================
+   3 & 4. CARTÕES DE SEÇÃO (DADOS PESSOAIS & SEGURANÇA)
+   ========================================================================== */
+.perfil-secao-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 34px 38px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.02);
+    border: 1px solid #edf2ee;
+    border-bottom: 2.5px solid #44BD32;
+    margin-bottom: 22px;
+}
+
+.perfil-secao-cabecalho {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 28px;
+}
+
+.perfil-cabecalho-icone {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background-color: rgba(68, 189, 50, 0.12);
+    color: #44BD32;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.perfil-cabecalho-texto h2 {
+    font-size: 20px;
+    font-weight: 800;
+    color: #1E272E;
+    margin: 0 0 4px 0;
+    letter-spacing: -0.2px;
+}
+
+.perfil-cabecalho-texto p {
+    font-size: 13.5px;
+    color: #64748b;
+    margin: 0;
+    font-weight: 400;
+    line-height: 1.4;
+}
+
+/* Grid de Formulário */
+.form-grid-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 24px;
+    margin-bottom: 28px;
+}
+
+.campo-grupo-perfil {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.campo-label-perfil {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #1E272E;
+}
+
+.campo-label-perfil svg {
+    color: #44BD32;
+    flex-shrink: 0;
+}
+
+.campo-input-perfil {
+    height: 48px;
+    border-radius: 12px;
+    background-color: #f8faf8;
+    border: 1px solid #e1ece4;
+    padding: 0 16px;
+    font-size: 14.5px;
+    font-family: inherit;
+    color: #2d3748;
+    font-weight: 500;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.campo-input-perfil:focus {
+    background-color: #ffffff;
+    border-color: #44BD32;
+    box-shadow: 0 0 0 3px rgba(68, 189, 50, 0.18);
+}
+
+.campo-input-perfil::placeholder {
+    color: #9ba8a0;
+    font-weight: 400;
+}
+
+/* Botões de Ação */
+.btn-salvar-dados {
+    background-color: #44BD32;
+    color: #ffffff;
+    font-size: 14.5px;
+    font-weight: 700;
+    padding: 13px 26px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 14px rgba(68, 189, 50, 0.28);
+    font-family: inherit;
+}
+
+.btn-salvar-dados:hover {
+    background-color: #3ca82b;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(68, 189, 50, 0.35);
+}
+
+.btn-salvar-dados:active {
+    transform: translateY(0);
+}
+
+.btn-atualizar-senha {
+    background-color: #1E272E;
+    color: #ffffff;
+    font-size: 14.5px;
+    font-weight: 700;
+    padding: 13px 26px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 14px rgba(30, 39, 46, 0.25);
+    font-family: inherit;
+}
+
+.btn-atualizar-senha:hover {
+    background-color: #151c22;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(30, 39, 46, 0.32);
+}
+
+.btn-atualizar-senha:active {
+    transform: translateY(0);
+}
+

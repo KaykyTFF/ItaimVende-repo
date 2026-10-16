@@ -1,0 +1,113 @@
+/* ==========================================================================
+   DROPDOWNS EM PÍLULA VERDE (CATEGORIA E CONDIÇÃO)
+   ========================================================================== */
+.grupo-dropdowns-vender {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 4px;
+}
+
+.dropdown-pill-container {
+    position: relative;
+    width: 100%;
+}
+
+.btn-dropdown-pill {
+    width: 100%;
+    height: 44px;
+    background-color: var(--vender-green);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 25px;
+    padding: 0 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(89, 170, 89, 0.28);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-dropdown-pill:hover {
+    background-color: var(--vender-green-hover);
+    box-shadow: 0 6px 18px rgba(89, 170, 89, 0.45);
+    transform: translateY(-1px);
+}
+
+.btn-dropdown-pill:active {
+    transform: translateY(1px);
+}
+
+.btn-dropdown-pill .chevron-icon {
+    width: 20px;
+    height: 20px;
+    stroke-width: 2.8;
+    transition: transform 0.28s ease;
+}
+
+.dropdown-pill-container.aberto .btn-dropdown-pill .chevron-icon {
+    transform: rotate(180deg);
+}
+
+.dropdown-pill-container.aberto .btn-dropdown-pill {
+    background-color: var(--vender-green-dark);
+}
+
+/* Menu Flutuante de Opções */
+.menu-dropdown-opcoes {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    width: 100%;
+    background-color: #FFFFFF;
+    border-radius: 16px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18), 0 2px 8px rgba(0, 0, 0, 0.08);
+    padding: 8px;
+    z-index: 50;
+    max-height: 250px;
+    overflow-y: auto;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px) scale(0.98);
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dropdown-pill-container.aberto .menu-dropdown-opcoes {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+.item-opcao-dropdown {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #374151;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.item-opcao-dropdown:hover {
+    background-color: #F1F5F9;
+    color: var(--vender-green);
+}
+
+.item-opcao-dropdown.selecionado {
+    background-color: rgba(89, 170, 89, 0.12);
+    color: var(--vender-green-dark);
+}
+
+.item-opcao-dropdown.selecionado::after {
+    content: "✓";
+    font-weight: bold;
+    color: var(--vender-green);
+}
+

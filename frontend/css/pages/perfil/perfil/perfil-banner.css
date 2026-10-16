@@ -1,0 +1,192 @@
+/* ==========================================================================
+   1. BANNER SUPERIOR (CABEÇALHO DO PERFIL)
+   ========================================================================== */
+.perfil-banner-card {
+    position: relative;
+    overflow: hidden;
+    background-color: #ffffff;
+    border: 1px solid #e5e9eb;
+    border-bottom: 2.5px solid #44BD32;
+    border-radius: 22px;
+    padding: 34px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    margin-bottom: 22px;
+    min-height: 195px;
+}
+
+/* Nova estampa geométrica com listras diagonais verdes e cinza escuro no lado direito */
+.perfil-banner-stripes {
+    position: absolute;
+    right: -40px;
+    top: 0;
+    bottom: 0;
+    width: 380px;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.perfil-banner-stripes-desktop {
+    display: block;
+}
+
+.perfil-banner-stripes-mobile {
+    display: none;
+}
+
+.perfil-banner-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+/* Foto de Perfil com borda circular verde clara oficial */
+.perfil-avatar-wrapper {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.perfil-avatar-img {
+    width: 122px;
+    height: 122px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    border: 3.5px solid #44BD32;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+    background-color: #1E293B;
+}
+
+.btn-avatar-camera {
+    position: absolute;
+    bottom: 3px;
+    right: 3px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background-color: #44BD32;
+    color: #ffffff;
+    border: 2.5px solid #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    padding: 0;
+}
+
+.btn-avatar-camera:hover {
+    transform: scale(1.1);
+    background-color: #3ca82b;
+}
+
+/* Informações do Usuário no Banner */
+.perfil-banner-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.perfil-nome-linha {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: nowrap;
+}
+
+.perfil-nome-titulo {
+    font-size: 26px;
+    font-weight: 800;
+    color: #1E272E;
+    margin: 0;
+    line-height: 1.2;
+    letter-spacing: -0.3px;
+}
+
+#perfil-selo-verificado,
+#vendedor-selo-verificado {
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.badge-verificado {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: rgba(68, 189, 50, 0.12);
+    color: #237817;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 9999px;
+}
+
+.badge-check-icon {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: #44BD32;
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.perfil-banner-detalhes {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 2px;
+}
+
+.perfil-detalhe-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13.5px;
+    color: #1E272E;
+    font-weight: 500;
+}
+
+.perfil-detalhe-item svg {
+    color: #1E272E;
+    flex-shrink: 0;
+}
+
+/* Botão Sair no Banner (Fundo branco vazado, borda e texto/ícone verdes vibrantes) */
+.btn-banner-sair {
+    position: absolute;
+    top: 28px;
+    right: 28px;
+    z-index: 3;
+    background-color: #ffffff;
+    border: 1.5px solid #44BD32;
+    color: #44BD32;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 8px 18px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.btn-banner-sair:hover {
+    background-color: #f0fdf4;
+    border-color: #3ca82b;
+    color: #3ca82b;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(68, 189, 50, 0.18);
+}
+

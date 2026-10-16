@@ -1,0 +1,101 @@
+
+/* ==========================================================================
+   ITAIM VENDE - ESTILOS DA PÁGINA DE PERFIL PÚBLICO DO VENDEDOR (css/vendedor.css)
+   ========================================================================== */
+
+body.pagina-vendedor {
+    background-color: #F8FAFC;
+    color: #1E293B;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+}
+
+.vendedor-page-wrapper {
+    max-width: 1200px;
+    margin: 24px auto 80px;
+    padding: 0 20px;
+}
+
+.vendedor-banner-acoes {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.estrelas-seletor .estrela-item {
+    cursor: pointer;
+    font-size: 22px;
+    color: #CBD5E1;
+    transition: color 0.15s, transform 0.15s;
+    user-select: none;
+}
+
+.estrelas-seletor .estrela-item.ativa,
+.estrelas-seletor .estrela-item:hover {
+    color: #F59E0B;
+}
+
+.estrelas-seletor .estrela-item:hover {
+    transform: scale(1.2);
+}
+
+/* Breadcrumb */
+.vendedor-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13.5px;
+    color: #64748B;
+    margin-bottom: 24px;
+}
+
+.vendedor-breadcrumb a {
+    color: #475569;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.vendedor-breadcrumb a:hover {
+    color: #44BD32;
+}
+
+.vendedor-breadcrumb-sep {
+    color: #CBD5E1;
+}
+
+.vendedor-breadcrumb-current {
+    color: #0F172A;
+    font-weight: 700;
+}
+
+/* Toast de Notificação */
+.vendedor-toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 9999;
+    background: #0F172A;
+    color: #FFFFFF;
+    padding: 14px 22px;
+    border-radius: 14px;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(15px);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.vendedor-toast.visivel {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
