@@ -341,11 +341,16 @@
                         <!-- ETAPA 2: Código de Verificação -->
                         <form id="form-recuperar-etapa2" class="form-auth" style="display: none;" novalidate>
                             <div class="grupo-campo">
-                                <label for="recuperar-codigo" class="label-campo">Código de Verificação:</label>
-                                <div class="input-wrapper">
-                                    <input type="text" id="recuperar-codigo" class="campo-texto campo-codigo"
-                                        placeholder="Digite o código recebido" maxlength="6" inputmode="numeric" autocomplete="one-time-code" required>
+                                <label class="label-campo" id="label-recuperar-codigo">Código de Verificação:</label>
+                                <div class="otp-container" id="otp-container" role="group" aria-labelledby="label-recuperar-codigo">
+                                    <input type="text" class="otp-quadrinho" maxlength="1" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" data-index="0" aria-label="Dígito 1">
+                                    <input type="text" class="otp-quadrinho" maxlength="1" inputmode="numeric" pattern="[0-9]*" autocomplete="off" data-index="1" aria-label="Dígito 2">
+                                    <input type="text" class="otp-quadrinho" maxlength="1" inputmode="numeric" pattern="[0-9]*" autocomplete="off" data-index="2" aria-label="Dígito 3">
+                                    <input type="text" class="otp-quadrinho" maxlength="1" inputmode="numeric" pattern="[0-9]*" autocomplete="off" data-index="3" aria-label="Dígito 4">
+                                    <input type="text" class="otp-quadrinho" maxlength="1" inputmode="numeric" pattern="[0-9]*" autocomplete="off" data-index="4" aria-label="Dígito 5">
+                                    <input type="text" class="otp-quadrinho" maxlength="1" inputmode="numeric" pattern="[0-9]*" autocomplete="off" data-index="5" aria-label="Dígito 6">
                                 </div>
+                                <input type="hidden" id="recuperar-codigo" name="recuperar-codigo" value="">
                             </div>
 
                             <div class="wizard-botoes-duplos">

@@ -288,7 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ==========================================================================
-    // FLUXO DE RECUPERAÇÃO DE SENHA (2 ETAPAS - JAVASCRIPT LOCAL SIMPLES)
+    // FLUXO DE RECUPERAÇÃO DE SENHA COM QUADRINHOS NUMÉRICOS (OTP 6 DÍGITOS)
     // ==========================================================================
     const formRecEtapa1 = document.getElementById('form-recuperar-etapa1');
     const formRecEtapa2 = document.getElementById('form-recuperar-etapa2');
@@ -298,6 +298,147 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnVoltarRecEtapa1 = document.getElementById('btn-recuperar-voltar-etapa1');
     const statusRecEtapa1 = document.getElementById('status-modal-recuperar');
     const statusRecEtapa2 = document.getElementById('status-recuperar-etapa2');
+    const otpQuadrinhos = document.querySelectorAll('.otp-quadrinho');
+
+    function obterCodigoOtp() {
+        return Array.from(otpQuadrinhos).map(q => q.value.trim()).join('');
+    }
+
+    function atualizarCodigoOtp() {
+        const codigo = obterCodigoOtp();
+        if (inputRecCodigo) {
+            inputRecCodigo.value = codigo;
+        }
+        otpQuadrinhos.forEach(quadrinho => {
+            if (quadrinho.value) {
+                quadrinho.classList.add('preenchido');
+                quadrinho.classList.remove('com-erro');
+            } else {
+                quadrinho.classList.remove('preenchido');
+            }
+        });
+        return codigo;
+    }
+
+    function limparOtpQuadrinhos() {
+        otpQuadrinhos.forEach(q => {
+            q.value = '';
+            q.classList.remove('preenchido', 'com-erro');
+        });
+        if (inputRecCodigo) inputRecCodigo.value = '';
+    }
+
+    function focarPrimeiroQuadrinhoOtp() {
+        const primeiroVazio = Array.from(otpQuadrinhos).find(q => !q.value) || otpQuadrinhos[0];
+        if (primeiroVazio) {
+            primeiroVazio.focus();
+            primeiroVazio.select();
+        }
+    }
+
+    function destacarErroOtp() {
+        otpQuadrinhos.forEach(q => {
+            if (!q.value) {
+                q.classList.add('com-erro');
+            }
+        });
+        focarPrimeiroQuadrinhoOtp();
+    }
+
+    // Inicialização dos eventos dos quadrinhos numéricos
+    otpQuadrinhos.forEach((quadrinho, index) => {
+        // Bloqueia qualquer caractere que não seja número no keydown
+        quadrinho.addEventListener('keydown', (e) => {
+            // Teclas de controle permitidas
+            const permitidas = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab', 'Enter'];
+            if (permitidas.includes(e.key) || e.ctrlKey || e.metaKey) {
+                if (e.key === 'Backspace') {
+                    if (!e.target.value && index > 0) {
+                        e.preventDefault();
+                        otpQuadrinhos[index - 1].value = '';
+                        otpQuadrinhos[index - 1].focus();
+                        atualizarCodigoOtp();
+                    }
+                } else if (e.key === 'ArrowLeft' && index > 0) {
+                    e.preventDefault();
+                    otpQuadrinhos[index - 1].focus();
+                    otpQuadrinhos[index - 1].select();
+                } else if (e.key === 'ArrowRight' && index < otpQuadrinhos.length - 1) {
+                    e.preventDefault();
+                    otpQuadrinhos[index + 1].focus();
+                    otpQuadrinhos[index + 1].select();
+                }
+                return;
+            }
+
+            // Apenas dígitos de 0 a 9 são aceitos
+            if (!/^[0-9]$/.test(e.key)) {
+                e.preventDefault();
+            }
+        });
+
+        // Evento de input para avanço automático de quadrinho
+        quadrinho.addEventListener('input', (e) => {
+            const val = e.target.value.replace(/\D/g, '');
+
+            if (val.length > 0) {
+                // Se colou ou inseriu múltiplos dígitos de uma só vez
+                if (val.length > 1) {
+                    const digitos = val.split('');
+                    let currIdx = index;
+                    digitos.forEach(digito => {
+                        if (currIdx < otpQuadrinhos.length) {
+                            otpQuadrinhos[currIdx].value = digito;
+                            currIdx++;
+                        }
+                    });
+                    const proximoFoco = currIdx < otpQuadrinhos.length ? otpQuadrinhos[currIdx] : otpQuadrinhos[otpQuadrinhos.length - 1];
+                    if (proximoFoco) {
+                        proximoFoco.focus();
+                        proximoFoco.select();
+                    }
+                } else {
+                    e.target.value = val;
+                    // Avança para o próximo quadrinho
+                    if (index < otpQuadrinhos.length - 1) {
+                        otpQuadrinhos[index + 1].focus();
+                        otpQuadrinhos[index + 1].select();
+                    }
+                }
+            } else {
+                e.target.value = '';
+            }
+            atualizarCodigoOtp();
+        });
+
+        // Suporte completo a colar (paste) de código de verificação
+        quadrinho.addEventListener('paste', (e) => {
+            e.preventDefault();
+            const dadosColados = (e.clipboardData || window.clipboardData).getData('text');
+            const apenasNumeros = dadosColados.replace(/\D/g, '').slice(0, otpQuadrinhos.length);
+
+            if (apenasNumeros.length > 0) {
+                const digitos = apenasNumeros.split('');
+                digitos.forEach((num, i) => {
+                    if (otpQuadrinhos[i]) {
+                        otpQuadrinhos[i].value = num;
+                    }
+                });
+                atualizarCodigoOtp();
+
+                const proxIndex = Math.min(digitos.length, otpQuadrinhos.length - 1);
+                if (otpQuadrinhos[proxIndex]) {
+                    otpQuadrinhos[proxIndex].focus();
+                    otpQuadrinhos[proxIndex].select();
+                }
+            }
+        });
+
+        // Selecionar conteúdo ao focar para fácil alteração
+        quadrinho.addEventListener('focus', function () {
+            this.select();
+        });
+    });
 
     function irParaEtapaRecuperar(etapa) {
         if (etapa === 1) {
@@ -312,10 +453,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const emailDigitado = inputRecEmail ? inputRecEmail.value.trim() : 'seu e-mail';
             if (subtituloRecuperar) subtituloRecuperar.textContent = `Código enviado para ${emailDigitado}. Insira os números:`;
             if (statusRecEtapa2) { statusRecEtapa2.textContent = ''; statusRecEtapa2.className = 'status-msg'; }
-            if (inputRecCodigo) {
-                inputRecCodigo.value = '';
-                setTimeout(() => inputRecCodigo.focus(), 80);
-            }
+            limparOtpQuadrinhos();
+            setTimeout(() => focarPrimeiroQuadrinhoOtp(), 80);
         }
     }
 
@@ -331,6 +470,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     formRecEtapa2?.addEventListener('submit', (e) => {
         e.preventDefault();
+        const codigo = obterCodigoOtp();
+
+        if (codigo.length < 6) {
+            if (statusRecEtapa2) {
+                statusRecEtapa2.textContent = 'Por favor, insira todos os 6 números do código.';
+                statusRecEtapa2.className = 'status-msg status-erro';
+            }
+            destacarErroOtp();
+            return;
+        }
+
         if (statusRecEtapa2) {
             statusRecEtapa2.textContent = 'Código validado com sucesso! Redirecionando...';
             statusRecEtapa2.className = 'status-msg status-sucesso';

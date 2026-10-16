@@ -519,6 +519,79 @@ html, body {
     color: #1E293B;
 }
 
+/* ==========================================================================
+   QUADRINHOS DO CÓDIGO DE VERIFICAÇÃO (OTP / 6 DÍGITOS NUMÉRICOS)
+   ========================================================================== */
+.otp-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    margin: 8px 0 18px 0;
+    box-sizing: border-box;
+}
+
+.otp-quadrinho {
+    width: 48px;
+    height: 56px;
+    background-color: #F8FAFC;
+    border: 2px solid #E2E8F0;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 700;
+    font-family: inherit;
+    color: #1E293B;
+    outline: none;
+    box-sizing: border-box;
+    transition: all var(--transition-fast);
+    padding: 0;
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.otp-quadrinho:hover {
+    border-color: #CBD5E1;
+}
+
+.otp-quadrinho:focus {
+    background-color: #FFFFFF;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-glow);
+    transform: translateY(-2px);
+}
+
+.otp-quadrinho.preenchido {
+    border-color: var(--color-primary);
+    background-color: #FFFFFF;
+    font-weight: 800;
+}
+
+.otp-quadrinho.com-erro {
+    border-color: var(--color-error) !important;
+    background-color: #FFF5F5 !important;
+    animation: otpShake 0.35s ease-in-out;
+}
+
+@keyframes otpShake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-4px); }
+    40%, 80% { transform: translateX(4px); }
+}
+
+@media (max-width: 420px) {
+    .otp-container {
+        gap: 6px;
+    }
+    .otp-quadrinho {
+        width: 40px;
+        height: 50px;
+        font-size: 20px;
+        border-radius: 6px;
+    }
+}
+
 .container-recuperar,
 .container-cadastro {
     width: 100%;
