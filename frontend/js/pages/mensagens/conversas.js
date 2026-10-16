@@ -487,6 +487,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (painelEspecCategoria) painelEspecCategoria.textContent = prod.categoria || 'Geral';
         if (painelProdutoDesc) painelProdutoDesc.textContent = prod.descricao || 'Sem descrição detalhada.';
         if (btnPainelVerAnuncio) btnPainelVerAnuncio.href = urlAnuncio;
+        const btnPainelDenunciar = document.getElementById('btn-painel-denunciar-anuncio');
+        if (btnPainelDenunciar) {
+            const sep = urlAnuncio.includes('?') ? '&' : '?';
+            btnPainelDenunciar.href = `${urlAnuncio}${sep}denunciar=1`;
+        }
 
         // 5. Atualizar Mini Resumo no Topo (Mobile)
         if (mobileResumoBox) {
