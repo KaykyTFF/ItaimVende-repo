@@ -4,9 +4,9 @@
    ========================================================================== */
 
 :root {
-    --color-primary: #44BD32;
-    --color-primary-hover: #3ca82b;
-    --color-primary-glow: rgba(68, 189, 50, 0.25);
+    --color-primary: #489636;
+    --color-primary-hover: #3E822E;
+    --color-primary-glow: rgba(72, 150, 54, 0.25);
     --color-bg-dark: #2F3640;
     --color-bg-dark-deep: #242B33;
     --color-bg-light: #FFFFFF;
@@ -15,7 +15,7 @@
     --color-text-white: #FFFFFF;
     --color-text-muted: #A4B0BE;
     --color-error: #FF6B6B;
-    --color-success: #44BD32;
+    --color-success: #489636;
     --font-main: 'Plus Jakarta Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
     --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -53,7 +53,7 @@ html, body {
 }
 
 /* ==========================================================================
-   NOVO LAYOUT DE CARTÃO FLUTUANTE EXPANDIDO (ESTILO TELA DIVIDIDA)
+   NOVO LAYOUT DE CARTÃO FLUTUANTE EXPANDIDO (ESTILO TELA CHEIA / FULLSCREEN)
    ========================================================================== */
 .auth-floating-wrapper {
     display: flex;
@@ -61,7 +61,7 @@ html, body {
     justify-content: center;
     min-height: 100vh;
     width: 100%;
-    padding: 32px 20px;
+    padding: 16px;
     background: transparent;
     box-sizing: border-box;
 }
@@ -69,10 +69,13 @@ html, body {
 .auth-floating-card {
     display: flex;
     flex-direction: row;
-    align-items: center; /* Desnível vertical rigorosamente mantido: bloco esquerdo ligeiramente mais baixo que o bloco direito */
+    align-items: center; /* Desnível vertical: bloco esquerdo centralizado ao lado do bloco branco mais alto */
     justify-content: center;
     width: 100%;
-    max-width: 1140px;
+    max-width: 1360px;
+    height: calc(100vh - 32px);
+    min-height: 620px;
+    max-height: 940px;
     background-color: transparent;
     border-radius: 0;
     padding: 0;
@@ -83,13 +86,15 @@ html, body {
 
 /* --------------------------------------------------------------------------
    BLOCO ESQUERDO: IDENTIDADE VISUAL COM PAISAGEM AO PÔR DO SOL
+   (Visivelmente menor na vertical que o bloco branco, criando o degrau em cima e embaixo)
    -------------------------------------------------------------------------- */
 .auth-brand-block,
 .auth-brand-side {
-    flex: 1.4;
-    width: 58%;
-    height: 550px;
-    min-height: 550px;
+    flex: 1.35;
+    width: 56%;
+    height: calc(100% - 90px); /* Menor na vertical que o bloco branco */
+    min-height: 520px;
+    max-height: 820px;
     border-radius: 0;
     background-color: #172127;
     background-image: url('../../assets/backgrounds/Vila Ribeirinha ao Entardecer.png');
@@ -100,7 +105,7 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 28px;
+    padding: 32px;
     box-sizing: border-box;
     box-shadow: -10px 0 35px rgba(0, 0, 0, 0.45), 0 16px 40px rgba(0, 0, 0, 0.5);
     z-index: 1;
@@ -112,7 +117,7 @@ html, body {
     align-items: center;
     justify-content: center;
     width: 100%;
-    max-width: 480px;
+    max-width: 520px;
     padding: 0;
     margin: 0 auto;
     position: relative;
@@ -131,7 +136,7 @@ html, body {
 
 .brand-logo-center-img {
     width: 100%;
-    max-width: 450px;
+    max-width: 480px;
     height: auto;
     object-fit: contain;
     filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.7));
@@ -144,17 +149,17 @@ html, body {
     transform: scale(1.02);
 }
 
-/* Slogan da Marca (Centralizado estritamente abaixo do texto "ITAIMVENDE", ignorando o tatu) */
+/* Slogan da Marca (Colado imediatamente abaixo da palavra "ITAIMVENDE") */
 .brand-slogan-box {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100%;
-    max-width: 370px;
-    margin: 14px auto 0 auto;
-    /* Deslocamento preciso para alinhar abaixo do texto ITAIMVENDE (compensando o mascote à esquerda) */
-    transform: translateX(58px);
+    max-width: 400px;
+    margin: -34px auto 0 auto;
+    /* Alinhamento refinado abaixo do texto ITAIMVENDE */
+    transform: translateX(56px);
     position: relative;
     text-align: center;
 }
@@ -177,22 +182,23 @@ html, body {
 .brand-slogan-line {
     width: 270px;
     max-width: 90%;
-    height: 2px;
+    height: 2.5px;
     background-color: var(--color-primary);
-    margin: 8px auto 0 auto;
+    margin: 4px auto 0 auto;
     border-radius: 2px;
-    box-shadow: 0 0 10px rgba(68, 189, 50, 0.5), 0 1px 3px rgba(0, 0, 0, 0.7);
+    box-shadow: 0 0 10px rgba(72, 150, 54, 0.6), 0 1px 3px rgba(0, 0, 0, 0.7);
 }
 
 /* --------------------------------------------------------------------------
-   BLOCO DIREITO: FORMULÁRIO (MAIS ALTO QUE O BLOCO ESQUERDO, SEM ESPAÇO VAZIO)
+   BLOCO DIREITO: FORMULÁRIO (MAIOR PRESENÇA, RESPIRO LATERAL IDEAL)
    -------------------------------------------------------------------------- */
 .auth-form-block,
 .auth-form-side {
-    flex: 1;
-    width: 42%;
-    height: 600px;
-    min-height: 600px;
+    flex: 1.05;
+    width: 43%;
+    max-width: 510px;
+    height: 100%;
+    min-height: 100%;
     background-color: #FFFFFF;
     border: none;
     border-radius: 0;
@@ -201,9 +207,9 @@ html, body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 28px 32px;
+    padding: 34px 44px;
     box-sizing: border-box;
-    box-shadow: 14px 0 45px rgba(0, 0, 0, 0.4), 0 20px 50px rgba(0, 0, 0, 0.45);
+    box-shadow: 14px 0 45px rgba(0, 0, 0, 0.4);
     z-index: 2;
     overflow-y: auto;
 }
@@ -220,7 +226,7 @@ html, body {
 
 .auth-card-inner {
     width: 100%;
-    max-width: 340px;
+    max-width: 410px;
     margin: auto 0;
     display: flex;
     flex-direction: column;
@@ -235,29 +241,37 @@ html, body {
    -------------------------------------------------------------------------- */
 .cadastro-wizard-header {
     width: 100%;
-    margin-bottom: 22px;
+    margin-top: -6px;
+    margin-bottom: 8px; /* Reduz a distância para aproximar da label Nome: */
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
+.cadastro-wizard-header .titulo-login {
+    margin-bottom: 0;
+    font-size: 32px;
+}
+
+/* Indicador de etapas com respiro abaixo do título CADASTRO e colado aos campos */
 .wizard-progresso-box {
     width: 100%;
-    margin-top: 8px;
+    margin-top: 18px;
+    margin-bottom: 0;
 }
 
 .wizard-info-linha {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 
 .wizard-etapa-badge {
-    font-size: 12px;
+    font-size: 11.5px;
     font-weight: 800;
-    color: #44BD32;
-    background: rgba(68, 189, 50, 0.12);
+    color: var(--color-primary);
+    background: rgba(72, 150, 54, 0.12);
     padding: 3px 10px;
     border-radius: 20px;
     letter-spacing: 0.5px;
@@ -272,7 +286,7 @@ html, body {
 
 .wizard-barra-trilha {
     width: 100%;
-    height: 6px;
+    height: 5px;
     background: #E2E8F0;
     border-radius: 10px;
     overflow: hidden;
@@ -311,111 +325,164 @@ html, body {
 
 .wizard-acoes-etapa {
     width: 100%;
-    margin-top: 8px;
+    margin-top: 14px;
 }
 
 .btn-avancar-etapa {
     width: 100%;
-    height: 52px;
+    height: 50px;
     background-color: var(--color-primary);
     color: #FFFFFF;
-    border: none;
-    border-radius: 0;
+    border: 2px solid var(--color-primary);
+    border-radius: 3px !important;
     font-size: 15px;
     font-weight: 800;
     letter-spacing: 0.8px;
     cursor: pointer;
-    box-shadow: 0 4px 14px rgba(68, 189, 50, 0.35);
+    box-shadow: 0 4px 14px rgba(72, 150, 54, 0.35);
     transition: all var(--transition-fast);
     display: flex;
     align-items: center;
     justify-content: center;
     text-transform: uppercase;
+    box-sizing: border-box;
 }
 
 .btn-avancar-etapa:hover {
     background-color: var(--color-primary-hover);
+    border-color: var(--color-primary-hover);
     transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(68, 189, 50, 0.45);
+    box-shadow: 0 6px 18px rgba(72, 150, 54, 0.45);
 }
 
 .btn-avancar-etapa:active {
     transform: translateY(1px);
 }
 
+/* Container de Botões Lado a Lado (VOLTAR e AVANÇAR exatamente lado a lado) */
 .wizard-botoes-duplos {
-    display: flex;
-    gap: 12px;
-    width: 100%;
-    margin-top: 10px;
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 12px !important;
+    width: 100% !important;
+    margin-top: 18px !important;
+    align-items: stretch !important;
+    box-sizing: border-box !important;
 }
 
-/* Botão VOLTAR (Mesmo estilo de CADASTRE-SE: fundo branco, borda verde, texto verde, cantos retos) */
+/* Equalização horizontal e proporcional dos botões lado a lado */
+.wizard-botoes-duplos > button,
+.wizard-botoes-duplos .btn-voltar-etapa,
+.wizard-botoes-duplos .btn-voltar-auth,
+.wizard-botoes-duplos .btn-cadastrar,
+.wizard-botoes-duplos .btn-avancar-etapa,
+.wizard-botoes-duplos .btn-concluir-cadastro {
+    flex: 1 1 0 !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: 50px !important;
+    padding: 0 10px !important;
+    font-size: 15px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.8px !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-transform: uppercase !important;
+    border-radius: 3px !important;
+}
+
+/* Botão VOLTAR (Vazado: fundo branco, borda verde de 2px, texto verde da marca) */
 .btn-voltar-etapa,
 .btn-voltar-auth,
-.btn-voltar-login {
-    background-color: #FFFFFF;
-    color: var(--color-primary);
-    border: 2px solid var(--color-primary);
-    border-radius: 0;
-    font-size: 15px;
-    font-weight: 800;
-    letter-spacing: 0.8px;
-    cursor: pointer;
-    height: 52px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-transform: uppercase;
-    transition: all var(--transition-fast);
-    padding: 0 16px;
+.btn-voltar-login,
+.wizard-botoes-duplos .btn-voltar-etapa,
+.wizard-botoes-duplos .btn-voltar-auth,
+.wizard-botoes-duplos .btn-cadastrar {
+    background-color: #FFFFFF !important;
+    color: var(--color-primary) !important;
+    border: 2px solid var(--color-primary) !important;
+    border-radius: 3px !important;
+    font-size: 15px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.8px !important;
+    cursor: pointer !important;
+    height: 50px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-transform: uppercase !important;
+    transition: all var(--transition-fast) !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04) !important;
 }
 
 .btn-voltar-etapa:hover,
 .btn-voltar-auth:hover,
-.btn-voltar-login:hover {
-    background-color: #F0FDF4;
-    border-color: var(--color-primary-hover);
-    color: var(--color-primary-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 14px rgba(68, 189, 50, 0.18);
+.btn-voltar-login:hover,
+.wizard-botoes-duplos .btn-voltar-etapa:hover,
+.wizard-botoes-duplos .btn-voltar-auth:hover,
+.wizard-botoes-duplos .btn-cadastrar:hover {
+    background-color: rgba(72, 150, 54, 0.08) !important;
+    border-color: var(--color-primary-hover) !important;
+    color: var(--color-primary-hover) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(72, 150, 54, 0.18) !important;
 }
 
 .btn-voltar-etapa:active,
 .btn-voltar-auth:active,
-.btn-voltar-login:active {
-    transform: translateY(1px);
+.btn-voltar-login:active,
+.wizard-botoes-duplos .btn-voltar-etapa:active,
+.wizard-botoes-duplos .btn-voltar-auth:active,
+.wizard-botoes-duplos .btn-cadastrar:active {
+    transform: translateY(1px) !important;
+}
+
+/* Botão AVANÇAR e CONCLUIR/FINALIZAR (Preenchido: fundo verde oficial #489636, texto branco) */
+.wizard-botoes-duplos .btn-avancar-etapa,
+.wizard-botoes-duplos .btn-concluir-cadastro,
+.btn-concluir-cadastro {
+    background-color: var(--color-primary) !important;
+    color: #FFFFFF !important;
+    border: 2px solid var(--color-primary) !important;
+    border-radius: 3px !important;
+    box-shadow: 0 4px 14px rgba(72, 150, 54, 0.35) !important;
+}
+
+.wizard-botoes-duplos .btn-avancar-etapa:hover,
+.wizard-botoes-duplos .btn-concluir-cadastro:hover,
+.btn-concluir-cadastro:hover {
+    background-color: var(--color-primary-hover) !important;
+    border-color: var(--color-primary-hover) !important;
+    color: #FFFFFF !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 18px rgba(72, 150, 54, 0.45) !important;
 }
 
 .btn-concluir-cadastro {
     width: 100%;
-    height: 52px;
-    background-color: var(--color-primary);
-    color: #FFFFFF;
-    border: none;
-    border-radius: 0;
+    height: 50px;
+    border-radius: 3px;
     font-size: 15px;
     font-weight: 800;
     letter-spacing: 0.8px;
     cursor: pointer;
-    box-shadow: 0 4px 14px rgba(68, 189, 50, 0.35);
     transition: all var(--transition-fast);
     display: flex;
     align-items: center;
     justify-content: center;
     text-transform: uppercase;
+    box-sizing: border-box;
 }
 
 .btn-concluir-cadastro:hover {
     background-color: var(--color-primary-hover);
+    border-color: var(--color-primary-hover);
     transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(68, 189, 50, 0.45);
-}
-
-.wizard-botoes-duplos .btn-avancar-etapa,
-.wizard-botoes-duplos .btn-concluir-cadastro {
-    flex: 1;
-    margin-top: 0;
+    box-shadow: 0 6px 18px rgba(72, 150, 54, 0.45);
 }
 
 /* Campos em linha dupla (CEP e Estado) */
@@ -565,15 +632,15 @@ html, body {
 }
 
 .container-login {
-    max-width: 380px;
+    max-width: 410px;
     width: 100%;
 }
 
 .titulo-login {
-    font-size: 34px;
+    font-size: 38px;
     font-weight: 800;
     color: #1E293B;
-    letter-spacing: 1.5px;
+    letter-spacing: 1.8px;
     margin-bottom: 24px;
     text-align: center;
     text-transform: uppercase;
@@ -656,7 +723,7 @@ html, body {
     background-color: #F8FAFC;
     color: #1E293B;
     border: 1.5px solid #E2E8F0;
-    border-radius: 12px;
+    border-radius: 0;
     padding: 12px 42px 12px 16px;
     font-size: 15px;
     font-family: inherit;
@@ -744,11 +811,11 @@ html, body {
 .btn-entrar {
     width: 100%;
     max-width: 100%;
-    height: 52px;
+    height: 50px;
     background-color: var(--color-primary);
     color: #FFFFFF;
-    border: none;
-    border-radius: 0;
+    border: 2px solid var(--color-primary);
+    border-radius: 3px;
     font-size: 16px;
     font-weight: 800;
     letter-spacing: 0.8px;
@@ -756,7 +823,7 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 14px rgba(68, 189, 50, 0.28);
+    box-shadow: 0 4px 14px rgba(72, 150, 54, 0.32);
     transition: all var(--transition-fast);
     position: relative;
     overflow: hidden;
@@ -764,8 +831,9 @@ html, body {
 
 .btn-entrar:hover {
     background-color: var(--color-primary-hover);
+    border-color: var(--color-primary-hover);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(68, 189, 50, 0.4);
+    box-shadow: 0 6px 20px rgba(72, 150, 54, 0.45);
 }
 
 .btn-entrar:active {
@@ -807,11 +875,11 @@ html, body {
 .btn-cadastrar {
     width: 100%;
     max-width: 100%;
-    height: 52px;
+    height: 50px;
     background-color: #FFFFFF;
     color: var(--color-primary);
     border: 2px solid var(--color-primary);
-    border-radius: 0;
+    border-radius: 3px;
     font-size: 16px;
     font-weight: 800;
     letter-spacing: 0.8px;
@@ -824,11 +892,11 @@ html, body {
 }
 
 .btn-cadastrar:hover {
-    background-color: #F0FDF4;
+    background-color: rgba(72, 150, 54, 0.08);
     border-color: var(--color-primary-hover);
     color: var(--color-primary-hover);
     transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(68, 189, 50, 0.18);
+    box-shadow: 0 4px 14px rgba(72, 150, 54, 0.18);
 }
 
 .btn-cadastrar:active {
@@ -1346,7 +1414,7 @@ html, body {
     }
 
     .brand-slogan-box {
-        margin-top: 10px;
+        margin-top: -20px;
         transform: translateX(38px);
     }
 
@@ -1358,7 +1426,7 @@ html, body {
 
     .brand-slogan-line {
         height: 1.5px;
-        margin-top: 6px;
+        margin-top: 3px;
     }
 
     /* Bloco Inferior (Formulário Branco com Efeito Sobreposto Deslizante) */
@@ -1391,7 +1459,6 @@ html, body {
         margin-bottom: 22px;
     }
 
-    /* Preservação dos estilos internos retos (Border-Radius: 0) */
     .campo-texto,
     .select-campo {
         width: 100%;
@@ -1400,15 +1467,15 @@ html, body {
         border-radius: 0;
     }
 
-    /* Proporção Idêntica entre ENTRAR e CADASTRE-SE (Mesma Altura, Peso e Espessura) */
+    /* Proporção Idêntica entre ENTRAR e CADASTRE-SE no Mobile */
     .btn-entrar,
     .btn-cadastrar {
         width: 100%;
-        height: 54px;
+        height: 50px;
         font-size: 16px;
         font-weight: 800;
         letter-spacing: 0.8px;
-        border-radius: 0;
+        border-radius: 3px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -1416,7 +1483,7 @@ html, body {
     }
 
     .btn-cadastrar {
-        border: 2.5px solid var(--color-primary);
+        border: 2px solid var(--color-primary);
         background-color: #FFFFFF;
         color: var(--color-primary);
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
@@ -1426,7 +1493,32 @@ html, body {
     .btn-avancar-etapa,
     .btn-voltar-etapa,
     .btn-voltar-login {
-        border-radius: 0;
+        border-radius: 3px;
+    }
+
+    /* Botões do Wizard Lado a Lado no Mobile */
+    .wizard-botoes-duplos {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 10px !important;
+        width: 100% !important;
+        margin-top: 16px !important;
+    }
+
+    .wizard-botoes-duplos > button,
+    .wizard-botoes-duplos .btn-voltar-etapa,
+    .wizard-botoes-duplos .btn-voltar-auth,
+    .wizard-botoes-duplos .btn-cadastrar,
+    .wizard-botoes-duplos .btn-avancar-etapa,
+    .wizard-botoes-duplos .btn-concluir-cadastro {
+        flex: 1 1 0 !important;
+        width: 0 !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        height: 50px !important;
+        padding: 0 8px !important;
+        font-size: 14px !important;
+        border-radius: 3px !important;
     }
 
     .divisor-ou {
