@@ -1,0 +1,112 @@
+
+/* ==========================================================
+   ETAPA 3: HISTÓRICO DE TICKETS DO USUÁRIO
+   ========================================================== */
+.tickets-historico-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ticket-item-card {
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 14px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: all 0.2s ease;
+}
+
+.ticket-item-card:hover {
+    border-color: #CBD5E1;
+    background: #FFFFFF;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.ticket-item-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ticket-item-protocolo {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13.5px;
+    font-weight: 800;
+    color: #1E293B;
+}
+
+.ticket-item-produto {
+    font-size: 14px;
+    font-weight: 700;
+    color: #0F172A;
+    line-height: 1.3;
+}
+
+.ticket-item-detalhes {
+    font-size: 12px;
+    color: #64748B;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.tickets-vazio-box {
+    text-align: center;
+    padding: 40px 20px;
+    color: #64748B;
+}
+
+.tickets-vazio-icone {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.tickets-vazio-titulo {
+    font-size: 16px;
+    font-weight: 800;
+    color: #1E293B;
+    margin: 0 0 4px;
+}
+
+.tickets-vazio-desc {
+    font-size: 13px;
+    margin: 0;
+}
+
+/* Responsividade Mobile para o Modal */
+@media (max-width: 640px) {
+    .modal-denuncia-card {
+        max-height: 94vh;
+        border-radius: 16px;
+    }
+
+    .modal-denuncia-header {
+        padding: 16px 18px;
+    }
+
+    .modal-denuncia-body {
+        padding: 16px 18px;
+        gap: 14px;
+    }
+
+    .denuncia-motivos-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .ticket-dados-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ticket-card-visual {
+        margin: 12px 16px;
+        padding: 14px;
+    }
+
+    .modal-denuncia-footer {
+        padding: 14px 18px;
+    }
+}

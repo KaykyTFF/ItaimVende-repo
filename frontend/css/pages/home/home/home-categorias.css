@@ -1,0 +1,97 @@
+/* ==========================================================================
+   4. BARRA DE CATEGORIAS
+   ========================================================================== */
+.secao-categorias {
+    margin-bottom: 36px;
+    width: 100%;
+}
+
+.categorias-lista {
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+    padding: 10px 4px 20px 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.categorias-lista::-webkit-scrollbar {
+    display: none;
+}
+
+.item-categoria {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    flex-shrink: 0;
+    transition: transform var(--transition);
+}
+
+.circulo-categoria,
+.circulo-icon-categoria {
+    width: 74px;
+    height: 74px;
+    min-width: 70px;
+    min-height: 70px;
+    border-radius: 50%;
+    background-color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+    border: 2px solid transparent;
+    transition: all var(--transition);
+    padding: 12px;
+}
+
+.circulo-categoria img,
+.circulo-icon-categoria img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.item-categoria:first-child .circulo-categoria img,
+.item-categoria:first-child .circulo-icon-categoria img {
+    border-radius: 50%;
+}
+
+.label-categoria {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--text-primary);
+    transition: color var(--transition);
+}
+
+.item-categoria:hover {
+    transform: translateY(-3px);
+}
+
+.item-categoria:hover .circulo-categoria,
+.item-categoria:hover .circulo-icon-categoria {
+    border-color: var(--primary);
+    box-shadow: 0 5px 15px rgba(89, 170, 89, 0.4);
+    background-color: #ffffff;
+}
+
+.item-categoria:hover .label-categoria {
+    color: #59AA59;
+}
+
+.item-categoria.categoria-selecionada .circulo-categoria,
+.item-categoria.categoria-selecionada .circulo-icon-categoria {
+    background-color: var(--primary-light);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px var(--primary-glow);
+}
+
+.item-categoria.categoria-selecionada .label-categoria {
+    color: var(--primary);
+    font-weight: 800;
+}
+

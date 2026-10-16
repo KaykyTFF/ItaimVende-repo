@@ -1,0 +1,231 @@
+/* Telas médias (laptops compactos e tablets em landscape: 961px a 1180px) */
+@media (min-width: 961px) and (max-width: 1180px) {
+    .header-container {
+        padding: 8px 16px;
+        gap: 12px;
+    }
+
+    .header-center {
+        max-width: 440px;
+    }
+
+    .header-right {
+        gap: 10px;
+    }
+
+    .btn-nav-texto span {
+        display: none;
+    }
+
+    .btn-nav-texto {
+        padding: 8px;
+    }
+}
+
+/* ==========================================================================
+   3. RESPONSIVIDADE E VERSÃO MOBILE/TABLET (<= 960px)
+   Quebra fluida da barra de busca para a 2ª linha, garantindo cabeçalho 100% limpo
+   ========================================================================== */
+@media (max-width: 960px) {
+    /* =====================================================================
+       MOBILE: CABEÇALHO EM UMA ÚNICA LINHA
+       Layout: [☰] [🦔] [── busca ──────────────] [👤]
+       ===================================================================== */
+
+    .header-principal {
+        padding: 0;
+    }
+
+    .header-container {
+        padding: 6px 10px;
+        display: flex;
+        flex-wrap: nowrap;
+        /* UMA LINHA — sem quebra */
+        align-items: center;
+        gap: 8px;
+        box-sizing: border-box;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    /* --- Lado esquerdo: hambúrguer + animal --- */
+    .header-left {
+        order: 1;
+        flex: 0 0 auto;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .btn-menu-hamburguer {
+        font-size: 20px;
+        padding: 4px;
+        line-height: 1;
+    }
+
+    .btn-menu-hamburguer svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    /* Janela que recorta somente o animal (esquerda da imagem) */
+    .header-logo-link {
+        width: 36px;
+        height: 36px;
+        overflow: hidden;
+        display: block;
+        flex-shrink: 0;
+        border-radius: 4px;
+    }
+
+    /* Imagem flui em altura total; a largura automática empurra o texto para fora da janela */
+    .header-logo-img {
+        height: 100%;
+        width: auto;
+        max-width: none;
+        /* anula qualquer max-width herdado */
+        object-fit: initial;
+        /* reset — deixamos o recorte para o overflow do link */
+        display: block;
+        flex-shrink: 0;
+        transform: none;
+    }
+
+    /* --- Centro: barra de busca ocupa o espaço restante --- */
+    .header-center {
+        order: 2;
+        flex: 1 1 0;
+        /* cresce para preencher o espaço */
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    .campo-busca {
+        height: 36px;
+        font-size: 13px;
+        padding: 0 40px 0 12px;
+    }
+
+    .btn-busca-submit {
+        width: 34px;
+        height: 34px;
+    }
+
+    .btn-busca-submit svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    /* --- Lado direito: somente avatar --- */
+    .header-right {
+        order: 3;
+        flex: 0 0 auto;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    /* Ocultar tudo no header-right exceto o avatar */
+    .btn-nav-texto,
+    .btn-vender-destaque,
+    .btn-meus-anuncios-mobile,
+    #btn-chat,
+    #btn-notificacoes {
+        display: none !important;
+    }
+
+    .avatar-img {
+        box-sizing: border-box;
+        width: 32px;
+        height: 32px;
+        flex-shrink: 0;
+        display: block;
+        /* elimina espaço fantasma abaixo da imagem */
+    }
+
+    .btn-avatar-header {
+        padding: 0;
+        /* sem padding extra no mobile */
+        border-width: 0;
+        /* sem borda visível no mobile para não inflar */
+        line-height: 0;
+        /* evita espaço de linha abaixo da imagem */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .perfil-wrapper {
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+    }
+}
+
+@media (max-width: 540px) {
+    .header-container {
+        padding: 5px 8px;
+        gap: 6px;
+    }
+
+    .header-left {
+        gap: 5px;
+    }
+
+    /* Animal: ajuste fino para telas menores */
+    .header-logo-link {
+        width: 32px;
+        height: 32px;
+    }
+
+    .campo-busca {
+        height: 34px;
+        font-size: 12.5px;
+        padding: 0 36px 0 10px;
+    }
+
+    .avatar-img {
+        box-sizing: border-box;
+        width: 29px;
+        height: 29px;
+    }
+}
+
+@media (max-width: 380px) {
+    .header-container {
+        padding: 5px 6px;
+        gap: 5px;
+    }
+
+    .header-left {
+        gap: 4px;
+    }
+
+    .btn-menu-hamburguer {
+        padding: 3px;
+    }
+
+    .btn-menu-hamburguer svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    /* Animal: versão para telas muito pequenas */
+    .header-logo-link {
+        width: 28px;
+        height: 28px;
+    }
+
+    .campo-busca {
+        height: 32px;
+        font-size: 12px;
+        padding: 0 34px 0 10px;
+    }
+
+    .avatar-img {
+        box-sizing: border-box;
+        width: 26px;
+        height: 26px;
+    }
+}

@@ -1,0 +1,224 @@
+/* ==========================================================
+   PRODUTOS RELACIONADOS
+   ========================================================== */
+.secao-relacionados {
+    margin-top: 40px;
+}
+
+.secao-relacionados-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.secao-relacionados-topo h2 {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.link-ver-mais-categoria {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.link-ver-mais-categoria:hover {
+    text-decoration: underline;
+}
+
+/* Toast de Compartilhamento */
+.toast-notificacao {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: #2D3236;
+    color: #FFFFFF;
+    padding: 12px 24px;
+    border-radius: var(--radius-full);
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.toast-notificacao.toast-visivel {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+/* ==========================================================
+   RESPONSIVIDADE MOBILE DA PÁGINA DO PRODUTO (<= 768px, <= 480px)
+   ========================================================== */
+@media (max-width: 768px) {
+    .breadcrumb-section {
+        padding: 10px 14px;
+    }
+
+    .breadcrumb-container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .breadcrumb-links {
+        font-size: 12.5px;
+        flex-wrap: wrap;
+    }
+
+    .breadcrumb-links .ativo {
+        max-width: 220px;
+    }
+
+    .btn-voltar-home {
+        padding: 6px 12px;
+        font-size: 12.5px;
+    }
+
+    .detalhe-produto-main {
+        margin: 14px auto 36px;
+        padding: 0 12px;
+    }
+
+    .produto-grid-topo {
+        padding: 18px 14px;
+        gap: 20px;
+        border-radius: 14px;
+        margin-bottom: 24px;
+    }
+
+    .foto-principal-wrapper {
+        aspect-ratio: 4 / 3;
+        max-height: 320px;
+    }
+
+    .thumb-item {
+        width: 60px;
+        height: 60px;
+    }
+
+    .produto-titulo-principal {
+        font-size: 20px;
+        line-height: 1.3;
+        margin-bottom: 12px;
+    }
+
+    .box-preco-produto {
+        padding: 12px 14px;
+        margin-bottom: 16px;
+    }
+
+    .preco-valor-grande {
+        font-size: 28px;
+    }
+
+    .grid-chips-detalhes {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+
+    .chip-detalhe {
+        padding: 8px 10px;
+        gap: 8px;
+    }
+
+    .chip-label {
+        font-size: 10px;
+    }
+
+    .chip-valor {
+        font-size: 12px;
+    }
+
+    .btn-acao-wpp {
+        height: 48px;
+        font-size: 15px;
+    }
+
+    .btn-acao-chat-interno {
+        height: 44px;
+        font-size: 14px;
+    }
+
+    .linha-acoes-secundarias {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .btn-secundario-acao {
+        padding: 10px 8px;
+        font-size: 12.5px;
+        justify-content: center;
+    }
+
+    .card-vendedor-destaque {
+        padding: 14px;
+        gap: 12px;
+    }
+
+    .vendedor-avatar-img {
+        width: 44px;
+        height: 44px;
+    }
+
+    .secao-descricao-detalhada {
+        padding: 20px 14px;
+        border-radius: 14px;
+        margin-bottom: 24px;
+    }
+
+    .secao-titulo-bloco {
+        font-size: 17px;
+        margin-bottom: 12px;
+    }
+
+    .descricao-texto-conteudo {
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    /* Relacionados com 2 Colunas */
+    .secao-relacionados {
+        margin-top: 28px;
+    }
+
+    .secao-relacionados-topo h2 {
+        font-size: 18px;
+    }
+
+    .secao-relacionados .grade-produtos {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .foto-principal-wrapper {
+        max-height: 260px;
+    }
+
+    .thumb-item {
+        width: 52px;
+        height: 52px;
+    }
+
+    .preco-valor-grande {
+        font-size: 25px;
+    }
+
+    .breadcrumb-links .ativo {
+        max-width: 160px;
+    }
+}
+

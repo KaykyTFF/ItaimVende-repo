@@ -1,0 +1,280 @@
+/* ==========================================================================
+   ITAIM VENDE - PÁGINA DE DETALHES DO PRODUTO (PRODUTO.HTML)
+   Design Premium, Amplo e Responsivo para Visualização do Item à Venda
+   ========================================================================== */
+
+/* Barra de Navegação / Breadcrumb */
+.breadcrumb-section {
+    background-color: #FFFFFF;
+    border-bottom: 1px solid var(--border-color);
+    padding: 14px 20px;
+}
+
+.breadcrumb-container {
+    max-width: 1240px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.breadcrumb-links {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    list-style: none;
+}
+
+.breadcrumb-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color var(--transition);
+}
+
+.breadcrumb-links a:hover {
+    color: var(--primary);
+}
+
+.breadcrumb-links .separador {
+    color: #BDC3C7;
+    font-size: 12px;
+}
+
+.breadcrumb-links .ativo {
+    color: var(--text-primary);
+    font-weight: 600;
+    max-width: 320px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.btn-voltar-home {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--primary);
+    background: var(--primary-light);
+    padding: 8px 14px;
+    border-radius: var(--radius-full);
+    text-decoration: none;
+    transition: all var(--transition);
+}
+
+.btn-voltar-home:hover {
+    background: var(--primary);
+    color: #FFFFFF;
+    transform: translateX(-3px);
+}
+
+/* ==========================================================================
+   LAYOUT PRINCIPAL DO PRODUTO
+   ========================================================================== */
+.detalhe-produto-main {
+    max-width: 1240px;
+    margin: 30px auto 60px;
+    padding: 0 20px;
+}
+
+.produto-grid-topo {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 36px;
+    background: #FFFFFF;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+    padding: 36px;
+    margin-bottom: 36px;
+}
+
+@media (max-width: 960px) {
+    .produto-grid-topo {
+        grid-template-columns: 1fr;
+        padding: 24px 20px;
+        gap: 28px;
+    }
+}
+
+/* ==========================================================================
+   COLUNA ESQUERDA: SHOWCASE DE IMAGENS
+   ========================================================================== */
+.coluna-galeria {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.foto-principal-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    max-height: 480px;
+    background: #1e252b;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.foto-principal-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: transform 0.4s ease;
+}
+
+.foto-principal-wrapper:hover .foto-principal-img {
+    transform: scale(1.03);
+}
+
+.badges-sobre-foto {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    display: flex;
+    gap: 8px;
+    z-index: 2;
+}
+
+.badge-tag {
+    padding: 5px 12px;
+    border-radius: var(--radius-full);
+    font-size: 11.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.badge-categoria {
+    background: var(--primary);
+    color: #FFFFFF;
+}
+
+.badge-status {
+    background: #2D3236;
+    color: #FFFFFF;
+}
+
+.btn-favoritar-detalhe {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(4px);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all var(--transition);
+    z-index: 3;
+}
+
+.btn-favoritar-detalhe svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: #57606F;
+    stroke-width: 2;
+    transition: all var(--transition);
+}
+
+.btn-favoritar-detalhe:hover {
+    transform: scale(1.1);
+}
+
+.btn-favoritar-detalhe.ativo svg {
+    fill: #FF4757;
+    stroke: #FF4757;
+}
+
+/* Miniaturas / Galeria */
+.galeria-thumbs {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+}
+
+.thumb-item {
+    width: 76px;
+    height: 76px;
+    border-radius: var(--radius-sm);
+    border: 2px solid transparent;
+    background: #1e252b;
+    cursor: pointer;
+    overflow: hidden;
+    flex-shrink: 0;
+    transition: all var(--transition);
+}
+
+.thumb-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.thumb-item.thumb-ativo {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-glow);
+}
+
+/* Box de Dicas de Segurança */
+.box-seguranca {
+    background: #FAFBFC;
+    border: 1px solid #E4E7EB;
+    border-radius: var(--radius-md);
+    padding: 18px 20px;
+    margin-top: 10px;
+}
+
+.box-seguranca-titulo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.box-seguranca-titulo span {
+    font-size: 18px;
+}
+
+.box-seguranca ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.box-seguranca li {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    line-height: 1.4;
+}
+
+.box-seguranca li::before {
+    content: "✓";
+    color: var(--primary);
+    font-weight: bold;
+}
+

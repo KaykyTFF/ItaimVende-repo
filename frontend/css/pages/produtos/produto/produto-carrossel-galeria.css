@@ -1,0 +1,239 @@
+
+/* Container principal da página */
+.layout-anuncio-wrapper {
+    max-width: 1380px;
+    margin: 12px auto 60px;
+    padding: 0 24px;
+}
+
+.grid-anuncio-conteudo {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 24px;
+    align-items: start;
+}
+
+/* Coluna Esquerda/Centro (Card Principal + Card Sobre) */
+.coluna-conteudo-anuncio {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Card Principal do Produto */
+.card-anuncio-topo {
+    background: #FFFFFF;
+    border-radius: 20px;
+    border: 1px solid #E2E8F0;
+    padding: 28px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+.grid-carrossel-detalhes {
+    display: grid;
+    grid-template-columns: 370px 1fr;
+    gap: 32px;
+}
+
+/* Carrossel de Fotos */
+.carrossel-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.carrossel-foto-box {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #0f172a;
+    border: 1px solid #E2E8F0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Fundo inteligente com desfoque atmosférico da imagem para eliminar espaços cinzas */
+.foto-bg-blur {
+    position: absolute;
+    inset: -30px;
+    background-size: cover;
+    background-position: center;
+    filter: blur(28px) brightness(0.7);
+    transform: scale(1.2);
+    z-index: 1;
+    opacity: 0.9;
+    pointer-events: none;
+    transition: background-image 0.3s ease;
+}
+
+.foto-principal-display {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.badge-disponivel {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    z-index: 4;
+    background: #44BD32;
+    color: #FFFFFF;
+    font-size: 12.5px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 2px 8px rgba(68, 189, 50, 0.3);
+}
+
+.btn-favorito-circulo,
+.carrossel-foto-box .btn-favorito {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 4;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(2px);
+    border: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition, 0.25s cubic-bezier(0.4, 0, 0.2, 1));
+}
+
+.btn-favorito-circulo:hover,
+.carrossel-foto-box .btn-favorito:hover {
+    transform: scale(1.15);
+    background-color: #FFFFFF;
+}
+
+.btn-favorito-circulo svg,
+.carrossel-foto-box .btn-favorito .icone-coracao {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: #747D8C;
+    stroke-width: 2;
+    transition: all var(--transition, 0.25s cubic-bezier(0.4, 0, 0.2, 1));
+}
+
+.btn-favorito-circulo.ativo svg,
+.carrossel-foto-box .btn-favorito.ativo .icone-coracao {
+    fill: #FF4757;
+    stroke: #FF4757;
+    animation: pulsoHeart 0.3s ease;
+}
+
+/* Setas do Carrossel */
+.carrossel-seta {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 4;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(2px);
+    border: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #2D3236;
+    transition: all var(--transition, 0.25s cubic-bezier(0.4, 0, 0.2, 1));
+    user-select: none;
+}
+
+.carrossel-seta:hover {
+    background-color: #FFFFFF;
+    color: #44BD32;
+    transform: translateY(-50%) scale(1.15);
+}
+
+.carrossel-seta svg {
+    width: 18px;
+    height: 18px;
+    display: block;
+}
+
+.carrossel-seta-esq {
+    left: 12px;
+}
+
+.carrossel-seta-dir {
+    right: 12px;
+}
+
+/* Badge Contador de Fotos 1/2 (sem emoji) */
+.badge-contador-fotos {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    z-index: 4;
+    background: rgba(15, 23, 42, 0.78);
+    color: #FFFFFF;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    letter-spacing: 0.5px;
+}
+
+/* Miniaturas alinhadas */
+.miniaturas-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.thumb-box {
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    border: 1.5px solid #E2E8F0;
+    background: #F8FAFC;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+}
+
+.thumb-box img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transition: transform 0.2s ease;
+}
+
+.thumb-box:hover {
+    border-color: #94A3B8;
+}
+
+.thumb-box.ativa {
+    border-color: #44BD32;
+    border-width: 2.5px;
+    box-shadow: 0 0 0 2px rgba(68, 189, 50, 0.25);
+}

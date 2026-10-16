@@ -1,0 +1,67 @@
+/* ==========================================================================
+   GRÁFICO DE TELEMETRIA AO VIVO (HERO SECTION)
+   ========================================================================== */
+.hero-telemetry-chart-box {
+    width: 100%;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.telemetry-chart-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.telemetry-chart-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.telemetry-chart-title i {
+    color: #38bdf8;
+}
+
+.telemetry-live-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #34d399;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.live-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #34d399;
+    box-shadow: 0 0 10px #34d399;
+    animation: pulseDot 1.5s infinite;
+}
+
+@keyframes pulseDot {
+    0% { transform: scale(0.9); opacity: 0.6; }
+    50% { transform: scale(1.3); opacity: 1; }
+    100% { transform: scale(0.9); opacity: 0.6; }
+}
+
+#canvas-telemetry-chart {
+    width: 100%;
+    height: 65px;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-sm);
+    display: block;
+}
+

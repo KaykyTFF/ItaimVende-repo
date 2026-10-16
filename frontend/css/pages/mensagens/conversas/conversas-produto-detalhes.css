@@ -1,0 +1,317 @@
+/* ==========================================================================
+   COLUNA 3: DIREITA NO COMPUTADOR - RESUMO DO PRODUTO
+   ========================================================================== */
+.chat-col-produto {
+    background-color: var(--chat-sidebar-bg);
+    border-left: 1px solid var(--chat-border-dark);
+    overflow-y: auto;
+    padding: 18px 20px 24px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+
+.chat-col-produto::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-col-produto::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+}
+
+/* Estado Vazio da Coluna de Produto (Direita) */
+.chat-produto-vazio-estado {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100%;
+    min-height: 420px;
+    padding: 32px 16px;
+    box-sizing: border-box;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px dashed rgba(255, 255, 255, 0.12);
+}
+
+.chat-produto-vazio-icone {
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    background: rgba(68, 189, 50, 0.12);
+    color: var(--chat-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.chat-produto-vazio-titulo {
+    font-size: 16px;
+    font-weight: 800;
+    color: #FFFFFF;
+    margin: 0 0 10px;
+    letter-spacing: -0.2px;
+}
+
+.chat-produto-vazio-desc {
+    font-size: 13.5px;
+    color: #94A3B8;
+    line-height: 1.55;
+    margin: 0 0 20px;
+    max-width: 250px;
+}
+
+.chat-produto-vazio-desc strong {
+    color: #E2E8F0;
+    font-weight: 700;
+}
+
+.btn-chat-explorar-anuncios {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 9px 18px;
+    background-color: var(--chat-primary);
+    color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 14px rgba(68, 189, 50, 0.35);
+}
+
+.btn-chat-explorar-anuncios:hover {
+    background-color: var(--chat-primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(68, 189, 50, 0.45);
+}
+
+/* Estado Vazio do Feed Central (quando nenhuma conversa está ativa) */
+.chat-feed-vazio-central {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100%;
+    min-height: 300px;
+    padding: 30px 20px;
+    box-sizing: border-box;
+    margin: auto;
+}
+
+.chat-feed-vazio-icone {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgba(30, 41, 59, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 14px;
+}
+
+.chat-feed-vazio-central h3 {
+    font-size: 17px;
+    font-weight: 800;
+    color: #1E293B;
+    margin: 0 0 8px;
+}
+
+.chat-feed-vazio-central p {
+    font-size: 13.5px;
+    color: #64748B;
+    line-height: 1.5;
+    margin: 0;
+    max-width: 320px;
+}
+
+.chat-produto-card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.chat-produto-card-header h3 {
+    font-size: 16px;
+    font-weight: 800;
+    color: #FFFFFF;
+    margin: 0;
+    letter-spacing: -0.2px;
+}
+
+.chat-produto-foto-box {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #0F172A;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.painel-produto-foto {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.painel-produto-foto:hover {
+    transform: scale(1.02);
+}
+
+.chat-badge-fotos {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background-color: rgba(0, 0, 0, 0.75);
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    backdrop-filter: blur(4px);
+}
+
+.chat-produto-dados-corpo {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.chat-produto-nome {
+    font-size: 17px;
+    font-weight: 800;
+    color: #FFFFFF;
+    margin: 0;
+    line-height: 1.35;
+}
+
+.chat-produto-preco-destaque {
+    font-size: 24px;
+    font-weight: 900;
+    color: var(--chat-primary);
+    letter-spacing: -0.5px;
+}
+
+.chat-produto-cidade-linha {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #94A3B8;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.chat-produto-especs-bloco {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 10px 0;
+    border-top: 1px solid var(--chat-border-dark);
+    border-bottom: 1px solid var(--chat-border-dark);
+}
+
+.chat-espec-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.espec-tag-label {
+    font-size: 11px;
+    color: #8E9AA7;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.espec-tag-val {
+    font-size: 13px;
+    color: #FFFFFF;
+    font-weight: 700;
+}
+
+.chat-produto-desc-bloco {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.desc-bloco-titulo {
+    font-size: 12px;
+    font-weight: 700;
+    color: #CBD5E1;
+}
+
+.desc-bloco-paragrafo {
+    font-size: 13px;
+    color: #94A3B8;
+    line-height: 1.5;
+    margin: 0;
+    max-height: 120px;
+    overflow-y: auto;
+}
+
+.chat-produto-card-rodape {
+    margin-top: 8px;
+}
+
+.btn-painel-ver-anuncio {
+    width: 100%;
+    padding: 12px 18px;
+    background-color: var(--chat-primary);
+    color: #FFFFFF;
+    font-size: 14.5px;
+    font-weight: 800;
+    border-radius: 10px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 14px rgba(68, 189, 50, 0.35);
+    box-sizing: border-box;
+}
+
+.btn-painel-ver-anuncio:hover {
+    background-color: var(--chat-primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(68, 189, 50, 0.45);
+}
+
+.btn-chat-denunciar-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    margin-top: 8px;
+    padding: 8px 14px;
+    color: #94A3B8;
+    background: transparent;
+    border: 1px dashed #CBD5E1;
+    border-radius: 8px;
+    font-size: 12.5px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.btn-chat-denunciar-link:hover {
+    color: #DC2626;
+    border-color: rgba(220, 38, 38, 0.45);
+    background: rgba(220, 38, 38, 0.04);
+}
+

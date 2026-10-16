@@ -1,0 +1,82 @@
+/* ==========================================================================
+   5. BARRA DE FILTROS E CONTROLE DA VITRINE
+   ========================================================================== */
+.barra-filtros-vitrine {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.titulo-vitrine-grupo {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+}
+
+.titulo-vitrine {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.5px;
+}
+
+.contador-produtos {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.controles-filtros {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.select-filtro {
+    height: 40px;
+    padding: 0 32px 0 14px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border-color);
+    background-color: #FFFFFF;
+    font-size: 13.5px;
+    font-family: inherit;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    outline: none;
+    transition: all var(--transition);
+}
+
+.select-filtro:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-glow);
+}
+
+.btn-limpar-filtros {
+    height: 40px;
+    padding: 0 18px;
+    border-radius: var(--radius-full);
+    background: transparent;
+    border: 1px dashed var(--border-color);
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    gap: 6px;
+    transition: all var(--transition);
+}
+
+.btn-limpar-filtros:hover {
+    border-color: #FF4757;
+    color: #FF4757;
+    background-color: #FFF5F5;
+}
+
