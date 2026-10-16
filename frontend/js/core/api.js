@@ -402,6 +402,58 @@
         },
 
         // ---------------------------------------------------------------------
+        // MÓDULO DE DENÚNCIAS & TICKETS DE SUPORTE/MODERAÇÃO
+        // ---------------------------------------------------------------------
+        reports: {
+            /**
+             * Envia uma denúncia de anúncio e abre um ticket na moderação
+             */
+            async criar(productId, dados = {}) {
+                return requisicao(`/reports/${encodeURIComponent(productId)}`, {
+                    method: 'POST',
+                    headers: obterHeaders(true),
+                    body: JSON.stringify(dados)
+                });
+            },
+
+            /**
+             * Consulta um ticket pelo código de protocolo (ex: TK-ABC123) ou ID
+             */
+            async obter(protocolOrId) {
+                return requisicao(`/reports/ticket/${encodeURIComponent(protocolOrId)}`, {
+                    method: 'GET',
+                    headers: obterHeaders(true)
+                });
+            },
+
+            /**
+             * Lista todos os tickets (visão de moderação / painel)
+             */
+            async listar(filtros = {}) {
+                const params = new URLSearchParams();
+                if (filtros.status) params.set('status', filtros.status);
+                if (filtros.page) params.set('page', filtros.page);
+                if (filtros.limit) params.set('limit', filtros.limit);
+                const qs = params.toString() ? `?${params.toString()}` : '';
+                return requisicao(`/reports${qs}`, {
+                    method: 'GET',
+                    headers: obterHeaders(true)
+                });
+            },
+
+            /**
+             * Atualiza status de um ticket
+             */
+            async atualizarStatus(id, status) {
+                return requisicao(`/reports/${encodeURIComponent(id)}/status`, {
+                    method: 'PATCH',
+                    headers: obterHeaders(true),
+                    body: JSON.stringify({ status })
+                });
+            }
+        },
+
+        // ---------------------------------------------------------------------
         // MÓDULO DE CHAT & MENSAGENS EM TEMPO REAL
         // ---------------------------------------------------------------------
         chat: {

@@ -1718,3 +1718,756 @@ body {
         gap: 8px;
     }
 }
+
+/* ==========================================================
+   SISTEMA DE DENÚNCIA & TICKETS DE MODERAÇÃO
+   ========================================================== */
+.box-denuncia-sidebar {
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px dashed #E2E8F0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.btn-denunciar-anuncio {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: transparent;
+    color: #94A3B8;
+    border: 1px solid #E2E8F0;
+    padding: 10px 16px;
+    border-radius: 12px;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-denunciar-anuncio:hover {
+    color: #DC2626;
+    border-color: rgba(220, 38, 38, 0.35);
+    background: rgba(220, 38, 38, 0.04);
+    transform: translateY(-1px);
+}
+
+.btn-denunciar-anuncio svg {
+    transition: transform 0.25s ease;
+}
+
+.btn-denunciar-anuncio:hover svg {
+    transform: rotate(-8deg);
+}
+
+.btn-meus-tickets-link {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    color: #64748B;
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 6px 0;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.btn-meus-tickets-link:hover {
+    color: #44BD32;
+    text-decoration: underline;
+}
+
+.btn-meus-tickets-link strong {
+    color: #44BD32;
+    font-weight: 700;
+}
+
+/* Modal Backdrop */
+.modal-denuncia-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(15, 23, 42, 0.68);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 100000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    opacity: 0;
+    transition: opacity 0.28s ease;
+}
+
+.modal-denuncia-backdrop.ativo {
+    display: flex;
+    opacity: 1;
+}
+
+.modal-denuncia-card {
+    background: #FFFFFF;
+    width: 100%;
+    max-width: 580px;
+    max-height: 90vh;
+    border-radius: 20px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.28), 0 0 0 1px rgba(226, 232, 240, 0.8);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transform: scale(0.95) translateY(10px);
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-denuncia-backdrop.ativo .modal-denuncia-card {
+    transform: scale(1) translateY(0);
+}
+
+/* Modal Header */
+.modal-denuncia-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 22px 24px 18px;
+    border-bottom: 1px solid #F1F5F9;
+    background: #FFFFFF;
+}
+
+.modal-denuncia-titulo-bloco {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.modal-denuncia-icone-topo {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: rgba(220, 38, 38, 0.1);
+    color: #DC2626;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.modal-denuncia-titulo {
+    font-size: 19px;
+    font-weight: 800;
+    color: #0F172A;
+    margin: 0;
+    line-height: 1.25;
+}
+
+.modal-denuncia-subtitulo {
+    font-size: 13px;
+    color: #64748B;
+    margin: 3px 0 0;
+    line-height: 1.4;
+}
+
+.btn-fechar-modal-denuncia {
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    color: #94A3B8;
+    cursor: pointer;
+    line-height: 1;
+    padding: 4px 8px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.btn-fechar-modal-denuncia:hover {
+    color: #0F172A;
+    background: #F1F5F9;
+}
+
+/* Modal Body */
+.modal-denuncia-body {
+    padding: 20px 24px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* Resumo do Anúncio */
+.denuncia-produto-resumo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 14px;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+}
+
+.denuncia-resumo-img {
+    width: 54px;
+    height: 54px;
+    object-fit: cover;
+    border-radius: 8px;
+    background: #E2E8F0;
+    flex-shrink: 0;
+}
+
+.denuncia-resumo-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.denuncia-resumo-tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #DC2626;
+    letter-spacing: 0.5px;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.denuncia-resumo-titulo {
+    font-size: 14px;
+    color: #1E293B;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.3;
+}
+
+.denuncia-resumo-meta {
+    font-size: 12.5px;
+    color: #64748B;
+    margin-top: 2px;
+}
+
+#denuncia-resumo-preco {
+    font-weight: 700;
+    color: #44BD32;
+}
+
+/* Campos do Form */
+.denuncia-campo-bloco {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.denuncia-label {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #1E293B;
+}
+
+.denuncia-label .required {
+    color: #DC2626;
+}
+
+.denuncia-label .opcional {
+    font-weight: 500;
+    color: #94A3B8;
+    font-size: 12px;
+}
+
+/* Grid de Motivos */
+.denuncia-motivos-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.motivo-card-item {
+    position: relative;
+    border: 1.5px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 10px 12px;
+    cursor: pointer;
+    background: #FFFFFF;
+    transition: all 0.2s ease;
+}
+
+.motivo-card-item:hover {
+    border-color: #CBD5E1;
+    background: #F8FAFC;
+}
+
+.motivo-card-item input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.motivo-card-item.ativo {
+    border-color: #DC2626;
+    background: rgba(220, 38, 38, 0.03);
+    box-shadow: 0 0 0 1px #DC2626;
+}
+
+.motivo-card-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.motivo-icone {
+    font-size: 18px;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.motivo-textos {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.motivo-textos strong {
+    font-size: 13px;
+    color: #0F172A;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+.motivo-textos span {
+    font-size: 11px;
+    color: #64748B;
+    line-height: 1.3;
+}
+
+/* Inputs e Textarea */
+.denuncia-textarea {
+    width: 100%;
+    border: 1.5px solid #CBD5E1;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 13.5px;
+    font-family: inherit;
+    color: #1E293B;
+    resize: vertical;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.denuncia-textarea:focus,
+.denuncia-input-text:focus {
+    outline: none;
+    border-color: #DC2626;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12);
+}
+
+.denuncia-chars-count {
+    font-size: 11px;
+    color: #94A3B8;
+    text-align: right;
+    margin-top: 2px;
+}
+
+.denuncia-input-text {
+    width: 100%;
+    border: 1.5px solid #CBD5E1;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 13.5px;
+    font-family: inherit;
+    color: #1E293B;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.denuncia-dica-privacidade {
+    font-size: 12px;
+    color: #64748B;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 4px 0 0;
+}
+
+/* Modal Footer */
+.modal-denuncia-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 16px 24px;
+    background: #F8FAFC;
+    border-top: 1px solid #E2E8F0;
+}
+
+.btn-denuncia-cancelar {
+    background: #FFFFFF;
+    border: 1.5px solid #CBD5E1;
+    color: #475569;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-denuncia-cancelar:hover {
+    background: #F1F5F9;
+    color: #1E293B;
+}
+
+.btn-denuncia-enviar {
+    background: #DC2626;
+    border: none;
+    color: #FFFFFF;
+    padding: 10px 22px;
+    border-radius: 10px;
+    font-size: 13.5px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
+    transition: all 0.2s ease;
+}
+
+.btn-denuncia-enviar:hover {
+    background: #B91C1C;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(220, 38, 38, 0.35);
+}
+
+.btn-denuncia-enviar:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-denuncia-fechar {
+    background: #44BD32;
+    border: none;
+    color: #FFFFFF;
+    padding: 10px 28px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-denuncia-fechar:hover {
+    background: #3BA32B;
+}
+
+/* ==========================================================
+   ETAPA 2: APRESENTAÇÃO VISUAL DO TICKET GERADO
+   ========================================================== */
+.ticket-sucesso-header {
+    text-align: center;
+    padding: 24px 24px 12px;
+}
+
+.ticket-icone-sucesso {
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    background: rgba(34, 197, 94, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 14px;
+    animation: pulseIcon 1.6s infinite ease-in-out;
+}
+
+@keyframes pulseIcon {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.06); }
+}
+
+.ticket-sucesso-titulo {
+    font-size: 22px;
+    font-weight: 800;
+    color: #0F172A;
+    margin: 0 0 6px;
+}
+
+.ticket-sucesso-subtitulo {
+    font-size: 13.5px;
+    color: #64748B;
+    margin: 0;
+    max-width: 420px;
+    margin: 0 auto;
+}
+
+/* Card do Ticket com estilo cupom/recibo oficial */
+.ticket-card-visual {
+    margin: 16px 24px;
+    background: #F8FAFC;
+    border: 1.5px dashed #CBD5E1;
+    border-radius: 16px;
+    padding: 20px;
+    position: relative;
+}
+
+.ticket-card-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.ticket-tipo-badge {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.6px;
+    color: #475569;
+}
+
+.ticket-status-pill {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.ticket-status-pill.status-pendente {
+    background: rgba(234, 179, 8, 0.14);
+    color: #B45309;
+    border: 1px solid rgba(234, 179, 8, 0.3);
+}
+
+.ticket-status-pill.status-investigacao {
+    background: rgba(59, 130, 246, 0.14);
+    color: #1D4ED8;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.ticket-status-pill.status-resolvido {
+    background: rgba(34, 197, 94, 0.14);
+    color: #15803D;
+    border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.ticket-status-pill.status-descartado {
+    background: #E2E8F0;
+    color: #475569;
+}
+
+.ticket-protocolo-box {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.ticket-protocolo-label {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #64748B;
+    letter-spacing: 0.5px;
+}
+
+.ticket-protocolo-valor-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ticket-protocolo-codigo {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 20px;
+    font-weight: 800;
+    color: #DC2626;
+    letter-spacing: 1px;
+}
+
+.btn-copiar-protocolo {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #F1F5F9;
+    border: 1px solid #CBD5E1;
+    color: #1E293B;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-copiar-protocolo:hover {
+    background: #E2E8F0;
+    color: #0F172A;
+}
+
+.ticket-dados-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.ticket-dado-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.ticket-dado-label {
+    font-size: 11.5px;
+    color: #64748B;
+}
+
+.ticket-dado-val {
+    font-size: 13px;
+    color: #0F172A;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ticket-dado-val.text-green {
+    color: #16A34A;
+}
+
+.ticket-rodape-aviso {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 12px;
+    color: #64748B;
+    line-height: 1.4;
+    border-top: 1px solid #E2E8F0;
+    padding-top: 12px;
+}
+
+.ticket-rodape-aviso svg {
+    flex-shrink: 0;
+    color: #0284C7;
+    margin-top: 2px;
+}
+
+/* ==========================================================
+   ETAPA 3: HISTÓRICO DE TICKETS DO USUÁRIO
+   ========================================================== */
+.tickets-historico-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ticket-item-card {
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 14px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: all 0.2s ease;
+}
+
+.ticket-item-card:hover {
+    border-color: #CBD5E1;
+    background: #FFFFFF;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.ticket-item-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ticket-item-protocolo {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13.5px;
+    font-weight: 800;
+    color: #1E293B;
+}
+
+.ticket-item-produto {
+    font-size: 14px;
+    font-weight: 700;
+    color: #0F172A;
+    line-height: 1.3;
+}
+
+.ticket-item-detalhes {
+    font-size: 12px;
+    color: #64748B;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.tickets-vazio-box {
+    text-align: center;
+    padding: 40px 20px;
+    color: #64748B;
+}
+
+.tickets-vazio-icone {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.tickets-vazio-titulo {
+    font-size: 16px;
+    font-weight: 800;
+    color: #1E293B;
+    margin: 0 0 4px;
+}
+
+.tickets-vazio-desc {
+    font-size: 13px;
+    margin: 0;
+}
+
+/* Responsividade Mobile para o Modal */
+@media (max-width: 640px) {
+    .modal-denuncia-card {
+        max-height: 94vh;
+        border-radius: 16px;
+    }
+
+    .modal-denuncia-header {
+        padding: 16px 18px;
+    }
+
+    .modal-denuncia-body {
+        padding: 16px 18px;
+        gap: 14px;
+    }
+
+    .denuncia-motivos-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .ticket-dados-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ticket-card-visual {
+        margin: 12px 16px;
+        padding: 14px;
+    }
+
+    .modal-denuncia-footer {
+        padding: 14px 18px;
+    }
+}
