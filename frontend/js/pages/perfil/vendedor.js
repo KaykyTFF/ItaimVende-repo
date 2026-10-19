@@ -330,9 +330,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (lista.length === 0) {
             containerGrade.innerHTML = `
-                <div class="vendedor-anuncios-vazio" style="grid-column: 1 / -1; text-align: center; padding: 48px 20px; background: #F8FAFC; border-radius: 14px; border: 1px dashed #CBD5E1;">
-                    <div class="vendedor-anuncios-vazio-icon" style="font-size: 40px; margin-bottom: 8px;">📦</div>
-                    <h3 style="font-size: 17px; font-weight: 800; color: #1E293B; margin-bottom: 6px;">Nenhum anúncio ativo no momento</h3>
+                <div class="vendedor-anuncios-vazio" style="grid-column: 1 / -1; text-align: center; padding: 48px 20px; border-radius: 14px; border: 1px dashed #CBD5E1;">
+                    <div class="anuncios-vazio-icone" style="width: 60px; height: 60px; margin: 0 auto 14px; border-radius: 50%; background: rgba(68, 189, 50, 0.12); display: inline-flex; align-items: center; justify-content: center; color: #44BD32;">
+                        <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                        </svg>
+                    </div>
+                    <h3 style="font-size: 17px; font-weight: 800; margin-bottom: 6px;">Nenhum anúncio ativo no momento</h3>
                     <p style="color: #64748B; font-size: 14px; margin: 0 auto; max-width: 420px;">Este anunciante ainda não possui outros produtos cadastrados ou os itens já foram vendidos.</p>
                 </div>
             `;
@@ -427,12 +433,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (containerAvaliacoes) {
             if (lista.length === 0) {
                 containerAvaliacoes.innerHTML = `
-                    <div class="avaliacoes-vazio" style="text-align: center; padding: 32px 18px; background: #F8FAFC; border-radius: 12px; border: 1px dashed #CBD5E1; margin-top: 10px;">
+                    <div class="avaliacoes-vazio" style="text-align: center; padding: 32px 18px; border-radius: 12px; border: 1px dashed #CBD5E1; margin-top: 10px;">
                         <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#94A3B8" stroke-width="1.8" style="margin-bottom: 8px;">
                             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                         </svg>
-                        <h4 style="font-size: 15px; font-weight: 700; color: #1E293B; margin: 0 0 6px;">Nenhuma avaliação ainda</h4>
-                        <p style="font-size: 13.5px; color: #64748B; margin: 0;">Seja o primeiro a deixar uma avaliação e comentário sobre este vendedor!</p>
+                        <h4>Nenhuma avaliação ainda</h4>
+                        <p style="font-size: 13.5px; margin: 0;">Seja o primeiro a deixar uma avaliação e comentário sobre este vendedor!</p>
                     </div>
                 `;
             } else {
@@ -442,14 +448,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                     const inicial = (item.autor || 'C').charAt(0).toUpperCase();
 
                     return `
-                        <div class="item-avaliacao-card" style="padding: 14px 0; border-bottom: 1px solid #F1F5F9;">
+                        <div class="item-avaliacao-card" style="padding: 14px 0;">
                             <div class="avaliacao-topo-row" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; flex-wrap: wrap; gap: 8px;">
                                 <div class="avaliacao-autor-box" style="display: flex; align-items: center; gap: 10px;">
-                                    <div class="avaliacao-avatar-mini" style="width: 34px; height: 34px; border-radius: 50%; background: #DCFCE7; color: #166534; font-weight: 800; display: flex; align-items: center; justify-content: center; font-size: 14px; border: 1px solid #BBF7D0;">
+                                    <div class="avaliacao-avatar-mini" style="width: 34px; height: 34px; border-radius: 50%; font-weight: 800; display: flex; align-items: center; justify-content: center; font-size: 14px;">
                                         ${inicial}
                                     </div>
                                     <div>
-                                        <div class="avaliacao-autor-nome" style="font-weight: 700; font-size: 13.5px; color: #1E293B;">
+                                        <div class="avaliacao-autor-nome" style="font-weight: 700; font-size: 13.5px;">
                                             ${item.autor}
                                         </div>
                                         <div style="font-size: 11.5px; color: #94A3B8;">
@@ -459,7 +465,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                                 </div>
                                 <div style="display: flex; align-items: center; gap: 12px;">
                                     <div class="avaliacao-estrelas" style="color: #F59E0B; font-size: 14px; letter-spacing: 2px;">
-                                        ${estrelasTxt} <span style="font-size: 12px; font-weight: 700; color: #64748B;">(${Number(item.nota).toFixed(1)})</span>
+                                        ${estrelasTxt} <span style="font-size: 12px; font-weight: 700;">(${Number(item.nota).toFixed(1)})</span>
                                     </div>
                                     <button type="button" class="btn-excluir-avaliacao" data-id="${item.id}" title="Excluir este comentário">
                                         <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
@@ -467,7 +473,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                                     </button>
                                 </div>
                             </div>
-                            <p class="avaliacao-comentario-txt" style="font-size: 13.5px; color: #475569; line-height: 1.5; margin: 4px 0 0 44px;">
+                            <p class="avaliacao-comentario-txt" style="font-size: 13.5px; line-height: 1.5; margin: 4px 0 0 44px;">
                                 ${item.comentario}
                             </p>
                         </div>

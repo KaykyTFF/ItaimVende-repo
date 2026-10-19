@@ -55,24 +55,49 @@
     border-color: #EF4444;
 }
 
+.btn-acao-marcar-vendido {
+    background: #E8F5E9;
+    color: #2E7D32;
+    border-color: #A5D6A7;
+}
+
+.btn-acao-marcar-vendido:hover {
+    background: #C8E6C9;
+    color: #1B5E20;
+    border-color: #81C784;
+}
+
 /* Estado Vazio */
 .anuncios-vazio {
     text-align: center;
-    padding: 60px 20px;
+    padding: 56px 24px;
     background: #FFFFFF;
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-lg);
+    border: 1px dashed #CBD5E1;
+    border-radius: 18px;
+    margin-top: 10px;
+    transition: all var(--transition, 0.2s ease);
 }
 
-.anuncios-vazio-icon {
-    font-size: 46px;
-    margin-bottom: 12px;
-    opacity: 0.6;
+.anuncios-vazio-icone {
+    width: 76px;
+    height: 76px;
+    margin: 0 auto 18px;
+    border-radius: 50%;
+    background: rgba(68, 189, 50, 0.12);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #44BD32;
+    transition: transform var(--transition, 0.2s ease);
+}
+
+.anuncios-vazio:hover .anuncios-vazio-icone {
+    transform: scale(1.06);
 }
 
 .anuncios-vazio h2 {
-    font-size: 19px;
-    font-weight: 700;
+    font-size: 20px;
+    font-weight: 800;
     color: var(--text-primary);
     margin-bottom: 8px;
 }
@@ -80,7 +105,13 @@
 .anuncios-vazio p {
     color: var(--text-secondary);
     font-size: 14.5px;
-    max-width: 440px;
-    margin: 0 auto 20px;
+    max-width: 480px;
+    margin: 0 auto 24px;
+    line-height: 1.6;
+}
+
+.anuncios-vazio p strong {
+    color: var(--text-primary);
+    font-weight: 700;
 }
 

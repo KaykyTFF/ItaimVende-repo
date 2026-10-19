@@ -68,7 +68,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (filtradas.length === 0) {
             lista.innerHTML = `
                 <div class="notificacoes-vazio">
-                    <div class="notificacoes-vazio-icon">🔔</div>
+                    <div class="notificacoes-vazio-icone" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                        </svg>
+                    </div>
                     <h2>Nenhuma notificação por enquanto</h2>
                     <p>Você será avisado aqui assim que houver novas mensagens, compras finalizadas ou novidades.</p>
                 </div>

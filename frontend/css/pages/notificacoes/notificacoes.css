@@ -231,20 +231,32 @@
 /* Vazio */
 .notificacoes-vazio {
     text-align: center;
-    padding: 70px 20px;
+    padding: 60px 24px;
     background: #FFFFFF;
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-lg);
+    border: 1px dashed #CBD5E1;
+    border-radius: var(--radius-xl, 18px);
+    transition: all var(--transition, 0.2s ease);
 }
 
-.notificacoes-vazio-icon {
-    font-size: 50px;
-    margin-bottom: 12px;
-    opacity: 0.5;
+.notificacoes-vazio-icone {
+    width: 76px;
+    height: 76px;
+    margin: 0 auto 16px;
+    border-radius: 50%;
+    background: rgba(68, 189, 50, 0.12);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #44BD32;
+    transition: transform var(--transition, 0.2s ease);
+}
+
+.notificacoes-vazio:hover .notificacoes-vazio-icone {
+    transform: scale(1.06);
 }
 
 .notificacoes-vazio h2 {
-    font-size: 19px;
+    font-size: 20px;
     font-weight: 800;
     color: var(--text-primary);
     margin-bottom: 8px;
@@ -253,8 +265,9 @@
 .notificacoes-vazio p {
     color: var(--text-secondary);
     font-size: 14.5px;
-    max-width: 400px;
+    max-width: 440px;
     margin: 0 auto;
+    line-height: 1.6;
 }
 
 @media (max-width: 600px) {

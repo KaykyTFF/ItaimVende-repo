@@ -200,6 +200,62 @@
                 background: #38a528;
                 transform: translateY(-1px);
             }
+            /* Suporte ao Modo Escuro */
+            [data-theme="dark"] .modal-ajuste-card {
+                background: #1F2831;
+                border: 1px solid #2C3946;
+                color: #F1F5F9;
+                box-shadow: 0 20px 48px rgba(0, 0, 0, 0.55);
+            }
+            [data-theme="dark"] .modal-ajuste-topo {
+                border-bottom: 1px solid #2C3946;
+            }
+            [data-theme="dark"] .modal-ajuste-titulo {
+                color: #F1F5F9;
+            }
+            [data-theme="dark"] .modal-ajuste-fechar {
+                color: #94A3B8;
+            }
+            [data-theme="dark"] .modal-ajuste-fechar:hover {
+                color: #F1F5F9;
+                background: #242E38;
+            }
+            [data-theme="dark"] .modal-ajuste-corpo {
+                background: #161C22;
+            }
+            [data-theme="dark"] .modal-ajuste-dica {
+                color: #94A3B8;
+            }
+            [data-theme="dark"] .modal-ajuste-controles {
+                background: #1F2831;
+                border: 1px solid #2C3946;
+            }
+            [data-theme="dark"] .modal-ajuste-controles svg {
+                color: #94A3B8;
+            }
+            [data-theme="dark"] .modal-ajuste-btn-girar {
+                background: #242E38;
+                border-color: #2C3946;
+                color: #F1F5F9;
+            }
+            [data-theme="dark"] .modal-ajuste-btn-girar:hover {
+                background: #2D3945;
+                color: #4ADE80;
+                border-color: #4ADE80;
+            }
+            [data-theme="dark"] .modal-ajuste-rodape {
+                background: #1F2831;
+                border-top: 1px solid #2C3946;
+            }
+            [data-theme="dark"] .modal-ajuste-btn-cancelar {
+                background: #242E38;
+                border-color: #2C3946;
+                color: #F1F5F9;
+            }
+            [data-theme="dark"] .modal-ajuste-btn-cancelar:hover {
+                background: #2D3945;
+                color: #FFFFFF;
+            }
         `;
         document.head.appendChild(style);
     }

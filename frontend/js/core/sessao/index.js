@@ -18,6 +18,7 @@
     const base = scriptAtual ? scriptAtual.src.substring(0, scriptAtual.src.lastIndexOf('/') + 1) : '';
 
     const arquivos = [
+        'sessao-tema.js',
         'sessao-auth.js',
         'sessao-produtos.js',
         'sessao-notificacoes.js',

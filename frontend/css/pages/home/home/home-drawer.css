@@ -51,16 +51,9 @@
     justify-content: space-between;
 }
 
-/* Card de Usuário no Topo do Drawer (Acesso rápido ao Perfil) */
+/* Card de Usuário no Topo do Drawer (Desativado / Oculto) */
 .drawer-user-card {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 14px 20px;
-    background-color: rgba(255, 255, 255, 0.04);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    text-decoration: none;
-    transition: background-color var(--transition);
+    display: none !important;
 }
 
 .drawer-user-card:hover {

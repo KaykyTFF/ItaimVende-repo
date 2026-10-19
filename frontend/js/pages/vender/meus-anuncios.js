@@ -157,15 +157,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (filtrados.length === 0) {
             container.innerHTML = `
-                <div class="anuncios-vazio" style="text-align: center; padding: 48px 20px; background: #FFFFFF; border-radius: 18px; border: 1px dashed #CBD5E1; margin-top: 10px;">
-                    <div style="font-size: 48px; margin-bottom: 12px;">📦</div>
-                    <h2 style="font-size: 20px; color: #1E293B; font-weight: 800; margin-bottom: 8px;">Nenhum anúncio encontrado</h2>
-                    <p style="color: #64748B; font-size: 14.5px; max-width: 480px; margin: 0 auto 24px; line-height: 1.6;">
+                <div class="anuncios-vazio">
+                    <div class="anuncios-vazio-icone" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                        </svg>
+                    </div>
+                    <h2>Nenhum anúncio encontrado</h2>
+                    <p>
                         ${meusAnuncios.length === 0 
                             ? `Você ainda não publicou anúncios no perfil de <strong>${nomeUsuario}</strong>. Desapegue de itens que você não usa mais no Itaim Vende!`
                             : `Não há anúncios com status "<strong>${statusFiltro}</strong>" no momento.`}
                     </p>
-                    <a href="${window.ItaimRotas ? window.ItaimRotas.obterUrl('vender') : 'vender.html'}" class="btn-novo-anuncio" style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none;">
+                    <a href="${window.ItaimRotas ? window.ItaimRotas.obterUrl('vender') : 'vender.html'}" class="btn-novo-anuncio">
                         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                         <span>Anunciar Novo Produto</span>
                     </a>
@@ -221,7 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     ` : ''}
 
                     ${statusClass === 'ativo' ? `
-                        <button type="button" class="btn-acao-anuncio" data-action="marcar-vendido" data-id="${item.id}" style="color: #2E7D32; border-color: #A5D6A7; background: #E8F5E9;">
+                        <button type="button" class="btn-acao-anuncio btn-acao-marcar-vendido" data-action="marcar-vendido" data-id="${item.id}">
                             Marcar Vendido
                         </button>
                     ` : ''}

@@ -16,3 +16,6 @@
 
 /* 4. Elementos compartilhados */
 @import url('./header/header-ui-elements.css');
+
+/* 5. Sistema Global de Temas (Claro / Escuro) */
+@import url('theme.css');

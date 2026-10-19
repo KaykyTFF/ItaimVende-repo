@@ -25,6 +25,7 @@
         protegerPagina: UI.protegerPagina || (() => true),
         atualizarHeaderUsuario: UI.atualizarHeaderUsuario || (() => {}),
         ajustarFoto: (window.ItaimFoto && window.ItaimFoto.ajustar) || UI.ajustarFotoSimples || (() => {}),
+        tema: window.ItaimTema || {},
 
         // --- Autenticação e Usuários ---
         deslogarUsuario: Auth.deslogarUsuario || (() => {}),

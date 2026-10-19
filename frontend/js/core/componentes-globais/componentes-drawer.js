@@ -35,17 +35,6 @@
                 <button type="button" class="drawer-close" id="btn-fechar-drawer" aria-label="Fechar menu">&times;</button>
             </div>
 
-            <!-- Card do Usuário Logado -->
-            <a href="${urlPara('perfil')}" class="drawer-user-card" id="drawer-user-card" title="Acessar Meu Perfil">
-                <div class="drawer-user-avatar-wrap">
-                    <img src="${assetPara('assets/icons/icon-user.png')}" alt="Foto de perfil" class="drawer-user-avatar" id="drawer-user-avatar">
-                </div>
-                <div class="drawer-user-info">
-                    <span class="drawer-user-nome" id="drawer-user-name">Usuário</span>
-                    <span class="drawer-user-sub">Ver meu perfil &rarr;</span>
-                </div>
-            </a>
-
             <!-- Navegação Principal -->
             <nav class="drawer-nav">
                 <a href="${urlPara('home')}" class="drawer-link ${pagina === 'home' ? 'ativo' : ''}" id="drawer-link-home">
@@ -115,6 +104,28 @@
                     </svg>
                     Painel de Controle
                 </a>
+                <button type="button" class="drawer-link btn-alternar-tema" id="btn-tema-drawer" aria-label="Alternar tema do site">
+                    <svg class="icone-tema-lua" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg class="icone-tema-sol" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <span class="drawer-tema-texto">Modo Escuro</span>
+                    <span class="drawer-tema-switch" aria-hidden="true">
+                        <span class="drawer-tema-trilho">
+                            <span class="drawer-tema-bolinha"></span>
+                        </span>
+                    </span>
+                </button>
                 <a href="${urlPara('configuracoes')}" class="drawer-link ${pagina === 'configuracoes' ? 'ativo' : ''}" id="drawer-link-configuracoes">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="3"></circle>

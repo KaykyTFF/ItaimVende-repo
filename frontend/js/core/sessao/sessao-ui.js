@@ -165,6 +165,10 @@
             currentBackdrop.classList.toggle('aberto', estado);
             currentBackdrop.classList.toggle('ativo', estado);
             document.body.style.overflow = estado ? 'hidden' : '';
+
+            if (estado && window.ItaimTema && typeof window.ItaimTema.garantirBotaoNoDrawer === 'function') {
+                window.ItaimTema.garantirBotaoNoDrawer();
+            }
         }
 
         window.alternarDrawer = alternarDrawer;

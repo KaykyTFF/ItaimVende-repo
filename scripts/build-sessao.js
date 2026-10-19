@@ -19,12 +19,13 @@ const SESSAO_DIR = path.join(ROOT_DIR, 'frontend', 'js', 'core', 'sessao');
 const OUTPUT_FILE = path.join(ROOT_DIR, 'frontend', 'js', 'core', 'sessao.js');
 
 const MODULES = [
+    { name: 'SISTEMA DE TEMAS', file: 'sessao-tema.js' },
     { name: 'AUTENTICAÇÃO & USUÁRIOS', file: 'sessao-auth.js' },
     { name: 'PRODUTOS & ANÚNCIOS', file: 'sessao-produtos.js' },
     { name: 'NOTIFICAÇÕES & TOASTS', file: 'sessao-notificacoes.js' },
     { name: 'AVALIAÇÕES & REPUTAÇÃO', file: 'sessao-avaliacoes.js' },
     { name: 'INTERFACE & CABEÇALHO', file: 'sessao-ui.js' },
-    { name: 'ORQUESTRADOR GLOBAL (INDEX)', file: 'index.js' }
+    { name: 'ORQUESTRADOR GLOBAL (INDEX)', file: 'sessao-orquestrador.js' }
 ];
 
 function build() {

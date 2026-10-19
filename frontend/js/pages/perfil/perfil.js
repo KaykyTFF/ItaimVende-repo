@@ -21,14 +21,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     const btnCameraAvatar = document.querySelector('.btn-avatar-camera');
     const inputFotoAvatar = document.getElementById('input-foto-avatar');
     const breadcrumbCurrent = document.querySelector('.perfil-breadcrumb-current');
-    const btnSairBanner = document.getElementById('btn-sair-banner');
     const boxContatoExterno = document.getElementById('box-contato-vendedor-externo');
     const btnWppExterno = document.getElementById('btn-whatsapp-perfil');
     const boxFormAvaliacao = document.getElementById('perfil-box-form-avaliacao');
     const alertaNaoLogado = document.getElementById('perfil-alerta-nao-logado');
     const userDisplayEl = document.getElementById('perfil-username-display');
     const bioDisplayEl = document.getElementById('perfil-bio-display');
-    const seloVerifEl = document.getElementById('perfil-selo-verificado');
 
     // Elementos de Estatísticas
     const statAtivos = document.getElementById('stat-anuncios-ativos');
@@ -90,7 +88,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (isPerfilProprio) {
         if (alertaNaoLogado) alertaNaoLogado.style.display = 'none';
-        if (btnSairBanner) btnSairBanner.style.display = 'inline-flex';
         if (btnCameraAvatar) btnCameraAvatar.style.display = 'flex';
         if (boxContatoExterno) boxContatoExterno.style.display = 'none';
         if (boxFormAvaliacao) boxFormAvaliacao.style.display = 'none';
@@ -143,7 +140,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Visualização do perfil de outro vendedor
         if (alertaNaoLogado) alertaNaoLogado.style.display = 'none';
         if (btnCameraAvatar) btnCameraAvatar.style.display = 'none';
-        if (btnSairBanner) btnSairBanner.style.display = 'none';
 
         if (paramId) {
             try {
@@ -216,10 +212,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const anoMembro = perfilExibido.createdAt ? new Date(perfilExibido.createdAt).getFullYear() : '2024';
     if (dataDisplay) dataDisplay.textContent = `Membro desde ${anoMembro}`;
-
-    if (seloVerifEl) {
-        seloVerifEl.style.display = (perfilExibido.isVerified || perfilExibido.role === 'ADMIN') ? 'inline-flex' : 'none';
-    }
 
     // Resolução da foto de perfil com suporte a /uploads/... do backend
     if (avatarImgView) {
@@ -306,9 +298,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (gradeAnuncios) {
         if (!listaAnuncios || listaAnuncios.length === 0) {
             gradeAnuncios.innerHTML = `
-                <div style="grid-column: 1 / -1; text-align: center; padding: 44px 20px; background: #F8FAFC; border-radius: 14px; border: 1px dashed #CBD5E1;">
-                    <div style="font-size: 40px; margin-bottom: 8px;">📦</div>
-                    <h3 style="font-size: 17px; font-weight: 800; color: #1E293B; margin-bottom: 6px;">Nenhum anúncio ativo no momento</h3>
+                <div class="estado-vazio" style="grid-column: 1 / -1; text-align: center; padding: 44px 20px; border-radius: 14px; border: 1px dashed #CBD5E1;">
+                    <div class="anuncios-vazio-icone" style="width: 60px; height: 60px; margin: 0 auto 14px; border-radius: 50%; background: rgba(68, 189, 50, 0.12); display: inline-flex; align-items: center; justify-content: center; color: #44BD32;">
+                        <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                        </svg>
+                    </div>
+                    <h3 style="font-size: 17px; font-weight: 800; margin-bottom: 6px;">Nenhum anúncio ativo no momento</h3>
                     <p style="color: #64748B; font-size: 13.5px; margin-bottom: 16px;">
                         ${isPerfilProprio ? 'Você ainda não possui anúncios publicados.' : 'Este vendedor ainda não possui anúncios ativos.'}
                     </p>
@@ -445,12 +443,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (avaliacoes.length === 0) {
             container.innerHTML = `
-                <div style="text-align: center; padding: 32px 18px; background: #F8FAFC; border-radius: 12px; border: 1px dashed #CBD5E1;">
+                <div class="avaliacoes-vazio" style="text-align: center; padding: 32px 18px; border-radius: 12px; border: 1px dashed #CBD5E1;">
                     <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#94A3B8" stroke-width="1.8" style="margin-bottom: 8px;">
                         <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                     </svg>
-                    <h4 style="font-size: 15px; font-weight: 700; color: #1E293B; margin: 0 0 6px;">Nenhuma avaliação ainda</h4>
-                    <p style="font-size: 13.5px; color: #64748B; margin: 0;">As avaliações e comentários deixados por compradores aparecerão aqui.</p>
+                    <h4>Nenhuma avaliação ainda</h4>
+                    <p style="font-size: 13.5px; margin: 0;">As avaliações e comentários deixados por compradores aparecerão aqui.</p>
                 </div>
             `;
         } else {

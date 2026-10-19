@@ -145,17 +145,6 @@
                 <button type="button" class="drawer-close" id="btn-fechar-drawer" aria-label="Fechar menu">&times;</button>
             </div>
 
-            <!-- Perfil do Usuário no Drawer (Acesso rápido ao Perfil) -->
-            <a href="perfil.html" class="drawer-user-card" id="drawer-user-card" title="Acessar Meu Perfil">
-                <div class="drawer-user-avatar-wrap">
-                    <img src="../../assets/icons/icon-user.png" alt="Foto de perfil" class="drawer-user-avatar" id="drawer-user-avatar">
-                </div>
-                <div class="drawer-user-info">
-                    <span class="drawer-user-nome" id="drawer-user-name">Admin</span>
-                    <span class="drawer-user-sub">Ver meu perfil &rarr;</span>
-                </div>
-            </a>
-
             <nav class="drawer-nav">
                 <a href="../home/home.html" class="drawer-link" id="drawer-link-home">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
@@ -216,6 +205,28 @@
                 </div>
 
                 <div class="drawer-secao-divisor"></div>
+                <button type="button" class="drawer-link btn-alternar-tema" id="btn-tema-drawer" aria-label="Alternar tema do site">
+                    <svg class="icone-tema-lua" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg class="icone-tema-sol" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <span class="drawer-tema-texto">Modo Escuro</span>
+                    <span class="drawer-tema-switch" aria-hidden="true">
+                        <span class="drawer-tema-trilho">
+                            <span class="drawer-tema-bolinha"></span>
+                        </span>
+                    </span>
+                </button>
                 <a href="configuracoes.html" class="drawer-link ativo" id="drawer-link-configuracoes">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="3"></circle>
@@ -255,6 +266,7 @@
                 <button type="button" class="cfg-nav-item" data-alvo="enderecos" role="tab" aria-selected="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>Endereços</button>
                 <button type="button" class="cfg-nav-item" data-alvo="notificacoes" role="tab" aria-selected="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>Notificações</button>
                 <button type="button" class="cfg-nav-item" data-alvo="privacidade" role="tab" aria-selected="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>Privacidade</button>
+                <button type="button" class="cfg-nav-item" data-alvo="aparencia" role="tab" aria-selected="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>Aparência</button>
             </nav>
 
             <div class="cfg-paineis">
@@ -485,14 +497,92 @@
                         <h2>Zona de risco</h2>
                         <p class="cfg-desc">Gerencie a suspensão temporária da conta ou sua exclusão definitiva.</p>
                         <div class="cfg-acoes" style="margin-top:0; display: flex; gap: 12px; flex-wrap: wrap;">
-                            <button type="button" class="cfg-btn cfg-btn-suspender" id="btn-suspender-conta" style="background: #FEF3C7; color: #92400E; border: 1px solid #FCD34D; font-weight: 700; display: inline-flex; align-items: center; gap: 8px;">
+                            <button type="button" class="cfg-btn cfg-btn-suspender" id="btn-suspender-conta">
                                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><line x1="10" y1="15" x2="10" y2="9"></line><line x1="14" y1="15" x2="14" y2="9"></line></svg>
                                 <span>Suspender conta</span>
                             </button>
-                            <button type="button" class="cfg-btn cfg-btn-perigo" id="btn-excluir-conta" style="display: inline-flex; align-items: center; gap: 8px;">
+                            <button type="button" class="cfg-btn cfg-btn-perigo" id="btn-excluir-conta">
                                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
                                 <span>Excluir conta permanentemente</span>
                             </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- APARÊNCIA E TEMA -->
+                <section class="cfg-painel" id="painel-aparencia" role="tabpanel">
+                    <div class="cfg-card">
+                        <h2>Aparência e Tema</h2>
+                        <p class="cfg-desc">Escolha como o Itaim Vende é exibido para você neste dispositivo.</p>
+
+                        <div class="cfg-tema-cards-grid">
+                            <!-- Opção Modo Claro -->
+                            <div class="cfg-tema-card ativo" id="card-tema-claro" role="button" tabindex="0" data-tema="light" aria-pressed="true">
+                                <div class="cfg-tema-mockup mockup-claro">
+                                    <div class="mockup-header">
+                                        <span class="mockup-dot"></span>
+                                        <span class="mockup-bar"></span>
+                                    </div>
+                                    <div class="mockup-body">
+                                        <div class="mockup-side"></div>
+                                        <div class="mockup-main">
+                                            <div class="mockup-card-item"></div>
+                                            <div class="mockup-card-item"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="cfg-tema-card-header">
+                                    <div class="cfg-tema-card-titulo">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                                        <span>Modo Claro</span>
+                                    </div>
+                                    <span class="cfg-tema-badge-check">
+                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    </span>
+                                </div>
+                                <p class="cfg-tema-card-desc">Visual claro clássico com alto contraste e legibilidade ideal para o dia.</p>
+                                <button type="button" class="btn-ativar-tema cfg-btn cfg-btn-neutro" data-tema="light">Ativar Modo Claro</button>
+                            </div>
+
+                            <!-- Opção Modo Escuro -->
+                            <div class="cfg-tema-card" id="card-tema-escuro" role="button" tabindex="0" data-tema="dark" aria-pressed="false">
+                                <div class="cfg-tema-mockup mockup-escuro">
+                                    <div class="mockup-header">
+                                        <span class="mockup-dot"></span>
+                                        <span class="mockup-bar"></span>
+                                    </div>
+                                    <div class="mockup-body">
+                                        <div class="mockup-side"></div>
+                                        <div class="mockup-main">
+                                            <div class="mockup-card-item"></div>
+                                            <div class="mockup-card-item"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="cfg-tema-card-header">
+                                    <div class="cfg-tema-card-titulo">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                                        <span>Modo Escuro</span>
+                                    </div>
+                                    <span class="cfg-tema-badge-check">
+                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    </span>
+                                </div>
+                                <p class="cfg-tema-card-desc">Tons escuros elegantes, conforto aos olhos em ambientes com pouca luz e economia de bateria.</p>
+                                <button type="button" class="btn-ativar-tema cfg-btn cfg-btn-primario" data-tema="dark">Ativar Modo Escuro</button>
+                            </div>
+                        </div>
+
+                        <!-- Alternador Rápido Switch -->
+                        <div class="cfg-linha" style="margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 20px;">
+                            <div class="cfg-linha-texto">
+                                <strong>Alternar Modo Escuro</strong>
+                                <span id="cfg-tema-legenda">Atualmente no Modo Claro</span>
+                            </div>
+                            <label class="cfg-switch" aria-label="Alternar Modo Escuro">
+                                <input type="checkbox" id="switch-tema-escuro">
+                                <span class="cfg-switch-trilho"></span>
+                            </label>
                         </div>
                     </div>
                 </section>
@@ -518,7 +608,7 @@
             <div class="footer-col">
                 <img src="../../assets/logos/header-logo.png" alt="Itaim Vende" class="footer-logo-img">
                 <p class="footer-sobre">
-                    O Itaim Vende é o maior portal de compra, venda e troca da região de Paulistana e cidades vizinhas no Piauí. Conectando pessoas e bons negócios.
+                    Portal de vendas, compras e doações da região de Paulistana.
                 </p>
             </div>
 
