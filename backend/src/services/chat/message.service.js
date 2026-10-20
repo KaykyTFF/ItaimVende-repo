@@ -105,6 +105,18 @@ export async function sendConversationMessage(senderId, userRole, conversationId
     }),
   ]);
 
+  // Cria notificação persistente para o destinatário no banco
+  const recipientId = conversation.buyerId === senderId ? conversation.sellerId : conversation.buyerId;
+  import('../notification/index.js').then(({ createNotification }) => {
+    createNotification({
+      userId: recipientId,
+      title: `Nova mensagem de ${message.sender?.name || 'Usuário'}`,
+      message: content.trim().length > 60 ? `${content.trim().substring(0, 57)}...` : content.trim(),
+      type: 'mensagem',
+      link: `/pages/mensagens/conversas.html?id=${conversationId}`,
+    }).catch(() => {});
+  }).catch(() => {});
+
   return formatarMensagem(message, senderId);
 }
 

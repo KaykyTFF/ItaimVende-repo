@@ -68,6 +68,7 @@ model User {
   conversationsAsSeller Conversation[] @relation("SellerConversations")
   auditLogs       AuditLog[]
   addresses       Address[]
+  notifications   Notification[]
 
   @@index([email])
   @@index([city, state])
@@ -91,6 +92,21 @@ model Address {
   updatedAt    DateTime @updatedAt
 
   @@index([userId])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  message   String   @db.Text
+  type      String   @default("aviso")
+  isRead    Boolean  @default(false)
+  link      String?
+  createdAt DateTime @default(now())
+
+  @@index([userId, isRead])
+  @@index([userId, createdAt])
 }
 
 // =============================================================================

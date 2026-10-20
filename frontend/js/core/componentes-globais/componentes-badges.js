@@ -58,30 +58,50 @@
         } catch(e) {}
 
         // 2. Notificações Não Lidas
-        try {
-            const rawNotifs = localStorage.getItem('itaim_notificacoes');
-            if (rawNotifs) {
-                const notifs = JSON.parse(rawNotifs);
-                let naoLidas = 0;
-                if (Array.isArray(notifs)) {
-                    naoLidas = notifs.filter(n => {
-                        const dest = (n.destinatario || n.destinatarioEmail || '').toLowerCase().trim();
-                        const ehParaMim = (!dest || dest === userEmail || dest === 'todos');
-                        return ehParaMim && !n.lida;
-                    }).length;
-                }
-
-                const badgeNotifs = document.getElementById('badge-notificacoes-header');
-                if (badgeNotifs) {
-                    if (naoLidas > 0) {
-                        badgeNotifs.textContent = naoLidas > 99 ? '99+' : naoLidas;
-                        badgeNotifs.style.display = 'inline-block';
-                    } else {
-                        badgeNotifs.style.display = 'none';
-                    }
+        function aplicarBadgeNotifs(naoLidas) {
+            const badgeNotifs = document.getElementById('badge-notificacoes-header');
+            if (badgeNotifs) {
+                if (naoLidas > 0) {
+                    badgeNotifs.textContent = naoLidas > 99 ? '99+' : naoLidas;
+                    badgeNotifs.style.display = 'inline-block';
+                } else {
+                    badgeNotifs.style.display = 'none';
                 }
             }
-        } catch(e) {}
+            const drawerBadge = document.querySelector('.drawer-badge-notif, .badge-contador-notif');
+            if (drawerBadge) {
+                if (naoLidas > 0) {
+                    drawerBadge.textContent = naoLidas > 99 ? '99+' : naoLidas;
+                    drawerBadge.style.display = 'inline-block';
+                } else {
+                    drawerBadge.style.display = 'none';
+                }
+            }
+        }
+
+        if (window.ItaimApi && window.ItaimApi.auth && window.ItaimApi.auth.obterToken() && window.ItaimApi.notificacoes) {
+            window.ItaimApi.notificacoes.obterContadorNaoLidas().then(res => {
+                if (res && res.success && typeof res.unreadCount === 'number') {
+                    aplicarBadgeNotifs(res.unreadCount);
+                }
+            }).catch(() => {});
+        } else {
+            try {
+                const rawNotifs = localStorage.getItem('itaim_notificacoes');
+                if (rawNotifs) {
+                    const notifs = JSON.parse(rawNotifs);
+                    let naoLidas = 0;
+                    if (Array.isArray(notifs)) {
+                        naoLidas = notifs.filter(n => {
+                            const dest = (n.destinatario || n.destinatarioEmail || '').toLowerCase().trim();
+                            const ehParaMim = (!dest || dest === userEmail || dest === 'todos');
+                            return ehParaMim && !n.lida;
+                        }).length;
+                    }
+                    aplicarBadgeNotifs(naoLidas);
+                }
+            } catch(e) {}
+        }
     }
 
     window.ItaimComponentesBadges = {

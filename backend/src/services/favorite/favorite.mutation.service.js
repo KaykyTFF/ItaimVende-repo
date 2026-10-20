@@ -45,6 +45,18 @@ export async function toggleFavorite(userId, productId) {
       }),
     ]);
 
+    if (product.sellerId && product.sellerId !== userId) {
+      import('../notification/index.js').then(({ createNotification }) => {
+        createNotification({
+          userId: product.sellerId,
+          title: 'Anúncio salvo por outro usuário',
+          message: `Um usuário salvou seu anúncio "${product.title}" nos favoritos.`,
+          type: 'favorito',
+          link: `/pages/produtos/produto.html?id=${productId}`,
+        }).catch(() => {});
+      }).catch(() => {});
+    }
+
     return { favorited: true, message: 'Anúncio salvo nos favoritos!' };
   }
 }

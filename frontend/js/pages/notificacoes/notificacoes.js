@@ -1,15 +1,43 @@
 /**
  * Itaim Vende - Central de Notificações (js/notificacoes.js)
- * Totalmente integrada com o sistema global de preferências, mensagens, compras e avisos.
+ * Totalmente integrada com a API (/api/v1/notifications) e sincronizada com o banco de dados.
  */
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const lista = document.getElementById('lista-notificacoes');
     const btnMarcarTodas = document.getElementById('btn-marcar-todas-lidas');
     const btnLimparTodas = document.getElementById('btn-limpar-todas');
     const abas = document.querySelectorAll('.tab-notif-btn');
 
     let filtroAtivo = 'todas';
+    let todasNotifs = [];
+
+    function estaAutenticado() {
+        return !!(window.ItaimApi && window.ItaimApi.auth && window.ItaimApi.auth.obterToken());
+    }
+
+    async function carregarNotificacoes() {
+        if (estaAutenticado() && window.ItaimApi.notificacoes) {
+            try {
+                const res = await window.ItaimApi.notificacoes.listar();
+                if (res && res.success && Array.isArray(res.notifications)) {
+                    todasNotifs = res.notifications;
+                    if (window.ItaimNotificacoes && typeof window.ItaimNotificacoes.salvarNotificacoes === 'function') {
+                        window.ItaimNotificacoes.salvarNotificacoes(todasNotifs);
+                    }
+                    renderizar();
+                    return;
+                }
+            } catch (err) {
+                console.warn('[Notificações] Falha ao carregar da API, usando cache local:', err);
+            }
+        }
+
+        todasNotifs = (window.ItaimNotificacoes && typeof window.ItaimNotificacoes.obterNotificacoes === 'function')
+            ? window.ItaimNotificacoes.obterNotificacoes()
+            : JSON.parse(localStorage.getItem('itaim_notificacoes') || '[]');
+        renderizar();
+    }
 
     function obterIconeSVG(tipo) {
         switch (tipo) {
@@ -44,23 +72,22 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderizar() {
         if (!lista) return;
 
-        const todasNotifs = (window.ItaimNotificacoes && typeof window.ItaimNotificacoes.obterNotificacoes === 'function')
-            ? window.ItaimNotificacoes.obterNotificacoes()
-            : JSON.parse(localStorage.getItem('itaim_notificacoes') || '[]');
-
         let filtradas = todasNotifs;
         if (filtroAtivo === 'nao-lidas') {
-            filtradas = todasNotifs.filter(n => !n.lida);
+            filtradas = todasNotifs.filter(n => !(n.lida || n.isRead));
         } else if (filtroAtivo === 'mensagem') {
-            filtradas = todasNotifs.filter(n => n.tipo === 'mensagem');
+            filtradas = todasNotifs.filter(n => (n.tipo || n.type) === 'mensagem');
         } else if (filtroAtivo === 'avaliacao') {
-            filtradas = todasNotifs.filter(n => n.tipo === 'avaliacao');
+            filtradas = todasNotifs.filter(n => (n.tipo || n.type) === 'avaliacao');
         } else if (filtroAtivo === 'compra') {
-            filtradas = todasNotifs.filter(n => n.tipo === 'compra');
+            filtradas = todasNotifs.filter(n => (n.tipo || n.type) === 'compra');
         } else if (filtroAtivo === 'favorito') {
-            filtradas = todasNotifs.filter(n => n.tipo === 'favorito');
+            filtradas = todasNotifs.filter(n => (n.tipo || n.type) === 'favorito');
         } else if (filtroAtivo === 'aviso') {
-            filtradas = todasNotifs.filter(n => n.tipo === 'aviso' || n.tipo === 'preco');
+            filtradas = todasNotifs.filter(n => {
+                const t = n.tipo || n.type;
+                return t === 'aviso' || t === 'preco' || t === 'sistema';
+            });
         }
 
         lista.innerHTML = '';
@@ -83,34 +110,48 @@ document.addEventListener('DOMContentLoaded', () => {
 
         filtradas.forEach(item => {
             const card = document.createElement('div');
-            card.className = `notificacao-card ${item.lida ? '' : 'nao-lida'}`;
+            const estaLida = !!(item.lida || item.isRead);
+            card.className = `notificacao-card ${estaLida ? '' : 'nao-lida'}`;
             card.dataset.id = item.id;
 
-            const iconeSVG = obterIconeSVG(item.tipo);
-            const classeIcone = item.classeIcone || obterClasseIcone(item.tipo);
+            const tipo = item.tipo || item.type || 'aviso';
+            const iconeSVG = obterIconeSVG(tipo);
+            const classeIcone = item.classeIcone || obterClasseIcone(tipo);
+            const titulo = item.titulo || item.title || 'Notificação';
+            const texto = item.texto || item.message || '';
+            const dataTexto = item.tempo || item.data || 'Hoje';
 
             card.innerHTML = `
                 <div class="notificacao-icone-circulo ${classeIcone}">
                     ${iconeSVG}
                 </div>
                 <div class="notificacao-info">
-                    <h3 class="notificacao-titulo">${item.titulo}</h3>
-                    <p class="notificacao-texto">${item.texto}</p>
-                    <span class="notificacao-data">${item.tempo || item.data || 'Hoje'}</span>
+                    <h3 class="notificacao-titulo">${titulo}</h3>
+                    <p class="notificacao-texto">${texto}</p>
+                    <span class="notificacao-data">${dataTexto}</span>
                 </div>
                 <div class="notificacao-acoes">
-                    ${!item.lida ? `<button type="button" class="btn-acao-notif btn-marcar-lida" data-id="${item.id}" title="Marcar como lida">✓</button>` : ''}
+                    ${!estaLida ? `<button type="button" class="btn-acao-notif btn-marcar-lida" data-id="${item.id}" title="Marcar como lida">✓</button>` : ''}
                     <button type="button" class="btn-acao-notif btn-excluir-notif" data-id="${item.id}" title="Excluir notificação">&times;</button>
                 </div>
             `;
 
             // Clique no corpo do card para marcar como lida e redirecionar
-            card.addEventListener('click', (e) => {
+            card.addEventListener('click', async (e) => {
                 if (e.target.closest('.btn-acao-notif')) return;
                 item.lida = true;
+                item.isRead = true;
+
+                if (estaAutenticado() && window.ItaimApi.notificacoes) {
+                    try {
+                        await window.ItaimApi.notificacoes.marcarComoLida(item.id);
+                    } catch (err) {}
+                }
+
                 if (window.ItaimNotificacoes) {
                     window.ItaimNotificacoes.salvarNotificacoes(todasNotifs);
                 }
+
                 if (item.link && item.link !== 'notificacoes.html') {
                     window.location.href = item.link;
                 } else {
@@ -123,12 +164,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Eventos dos botões de ação nos cards
         lista.querySelectorAll('.btn-marcar-lida').forEach(btn => {
-            btn.addEventListener('click', (e) => {
+            btn.addEventListener('click', async (e) => {
                 e.stopPropagation();
-                const id = parseInt(e.currentTarget.dataset.id, 10);
-                const notif = todasNotifs.find(n => n.id === id);
+                const id = e.currentTarget.dataset.id;
+                const notif = todasNotifs.find(n => String(n.id) === String(id));
                 if (notif) {
                     notif.lida = true;
+                    notif.isRead = true;
+
+                    if (estaAutenticado() && window.ItaimApi.notificacoes) {
+                        try {
+                            await window.ItaimApi.notificacoes.marcarComoLida(id);
+                        } catch (err) {}
+                    }
+
                     if (window.ItaimNotificacoes) {
                         window.ItaimNotificacoes.salvarNotificacoes(todasNotifs);
                     }
@@ -138,14 +187,21 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         lista.querySelectorAll('.btn-excluir-notif').forEach(btn => {
-            btn.addEventListener('click', (e) => {
+            btn.addEventListener('click', async (e) => {
                 e.stopPropagation();
-                const id = parseInt(e.currentTarget.dataset.id, 10);
-                const novas = todasNotifs.filter(n => n.id !== id);
+                const id = e.currentTarget.dataset.id;
+                todasNotifs = todasNotifs.filter(n => String(n.id) !== String(id));
+
+                if (estaAutenticado() && window.ItaimApi.notificacoes) {
+                    try {
+                        await window.ItaimApi.notificacoes.remover(id);
+                    } catch (err) {}
+                }
+
                 if (window.ItaimNotificacoes) {
-                    window.ItaimNotificacoes.salvarNotificacoes(novas);
+                    window.ItaimNotificacoes.salvarNotificacoes(todasNotifs);
                 } else {
-                    localStorage.setItem('itaim_notificacoes', JSON.stringify(novas));
+                    localStorage.setItem('itaim_notificacoes', JSON.stringify(todasNotifs));
                 }
                 renderizar();
             });
@@ -164,13 +220,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Marcar todas como lidas
     if (btnMarcarTodas) {
-        btnMarcarTodas.addEventListener('click', () => {
-            const todas = (window.ItaimNotificacoes && typeof window.ItaimNotificacoes.obterNotificacoes === 'function')
-                ? window.ItaimNotificacoes.obterNotificacoes()
-                : JSON.parse(localStorage.getItem('itaim_notificacoes') || '[]');
-            todas.forEach(n => n.lida = true);
+        btnMarcarTodas.addEventListener('click', async () => {
+            todasNotifs.forEach(n => {
+                n.lida = true;
+                n.isRead = true;
+            });
+
+            if (estaAutenticado() && window.ItaimApi.notificacoes) {
+                try {
+                    await window.ItaimApi.notificacoes.marcarTodasComoLidas();
+                } catch (err) {}
+            }
+
             if (window.ItaimNotificacoes) {
-                window.ItaimNotificacoes.salvarNotificacoes(todas);
+                window.ItaimNotificacoes.salvarNotificacoes(todasNotifs);
             }
             renderizar();
         });
@@ -178,8 +241,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Limpar todas as notificações
     if (btnLimparTodas) {
-        btnLimparTodas.addEventListener('click', () => {
+        btnLimparTodas.addEventListener('click', async () => {
             if (confirm('Deseja limpar todas as notificações?')) {
+                todasNotifs = [];
+
+                if (estaAutenticado() && window.ItaimApi.notificacoes) {
+                    try {
+                        await window.ItaimApi.notificacoes.limparTodas();
+                    } catch (err) {}
+                }
+
                 if (window.ItaimNotificacoes) {
                     window.ItaimNotificacoes.salvarNotificacoes([]);
                 } else {
@@ -190,5 +261,5 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    renderizar();
+    await carregarNotificacoes();
 });

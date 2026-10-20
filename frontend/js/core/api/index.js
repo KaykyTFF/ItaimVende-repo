@@ -27,6 +27,7 @@
         'api-upload.js',
         'api-social.js',
         'api-enderecos.js',
+        'api-notificacoes.js',
         'api-sistema.js',
         'api-orquestrador.js'
     ];

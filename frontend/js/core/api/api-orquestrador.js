@@ -22,6 +22,7 @@
     const Upload = window.ItaimApiUpload || {};
     const Social = window.ItaimApiSocial || {};
     const Enderecos = window.ItaimApiEnderecos || {};
+    const Notificacoes = window.ItaimApiNotificacoes || {};
     const Sistema = window.ItaimApiSistema || {};
 
     const ItaimApi = {
@@ -32,6 +33,7 @@
         auth: Auth,
         produtos: Produtos,
         enderecos: Enderecos,
+        notificacoes: Notificacoes,
         categorias: Social.categorias || {},
         favoritos: Social.favoritos || {},
         reports: Social.reports || {},

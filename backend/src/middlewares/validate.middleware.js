@@ -20,7 +20,18 @@ export function validate(schema, source = 'body') {
       });
     }
 
-    req[source] = result.data;
+    if (source === 'query') {
+      try {
+        req.query = result.data;
+      } catch {
+        for (const key of Object.keys(req.query || {})) {
+          delete req.query[key];
+        }
+        Object.assign(req.query, result.data);
+      }
+    } else {
+      req[source] = result.data;
+    }
     next();
   };
 }
