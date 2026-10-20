@@ -1,0 +1,157 @@
+/**
+ * ITAIM VENDE - PÁGINA VENDER NO MODO ESCURO
+ * Arquivo: frontend/css/core/theme/theme-vender.css
+ */
+
+/* ==========================================================================
+   PÁGINA VENDER / CRIAR ANÚNCIO (VENDER.HTML) - MODO ESCURO
+   ========================================================================== */
+[data-theme="dark"].pagina-vender,
+[data-theme="dark"] .pagina-vender,
+body[data-theme="dark"].pagina-vender {
+    background-color: #141A20 !important;
+}
+
+[data-theme="dark"] .vender-titulo-pagina {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .card-vender {
+    background-color: #1F2831 !important;
+    border: 1px solid #2C3946 !important;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="dark"] .card-vender:hover {
+    box-shadow: 0 20px 42px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Slots de Fotos no Vender */
+[data-theme="dark"] .slot-foto-principal {
+    background-color: #161C22 !important;
+    border: 2px dashed #2C3946 !important;
+}
+
+[data-theme="dark"] .slot-foto-principal .rotulo-slot {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .slot-foto-principal .subrotulo-slot {
+    color: #64748B !important;
+}
+
+[data-theme="dark"] .slot-foto-principal .icone-slot {
+    color: #64748B !important;
+}
+
+[data-theme="dark"] .slot-foto-principal:hover .icone-slot {
+    color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .slot-foto-secundario {
+    background-color: #161C22 !important;
+    border: 2px dashed #2C3946 !important;
+}
+
+[data-theme="dark"] .slot-foto-secundario .icone-slot-plus {
+    color: #64748B !important;
+}
+
+[data-theme="dark"] .slot-foto-secundario:hover .icone-slot-plus {
+    color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .slot-foto-upload:hover {
+    border-color: #4ADE80 !important;
+    background-color: rgba(74, 222, 128, 0.08) !important;
+}
+
+[data-theme="dark"] .slot-foto-upload.drag-over {
+    border-color: #4ADE80 !important;
+    background-color: rgba(74, 222, 128, 0.16) !important;
+}
+
+/* Localização no Card de Vender */
+[data-theme="dark"] .bloco-localizacao-vender {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .rotulo-localizacao-vender {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .texto-cidade-vender {
+    color: #94A3B8 !important;
+}
+
+/* Inputs do Formulário de Vender */
+[data-theme="dark"] .input-vender-padrao,
+[data-theme="dark"] .textarea-vender-padrao {
+    background-color: #161C22 !important;
+    color: #F1F5F9 !important;
+    border: 2px solid #2C3946 !important;
+}
+
+[data-theme="dark"] .input-vender-padrao::placeholder,
+[data-theme="dark"] .textarea-vender-padrao::placeholder {
+    color: #64748B !important;
+}
+
+[data-theme="dark"] .input-vender-padrao:hover,
+[data-theme="dark"] .textarea-vender-padrao:hover {
+    background-color: #1A222A !important;
+    border-color: #384756 !important;
+}
+
+[data-theme="dark"] .input-vender-padrao:focus,
+[data-theme="dark"] .textarea-vender-padrao:focus {
+    background-color: #161C22 !important;
+    border-color: #4ADE80 !important;
+    box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.2) !important;
+}
+
+[data-theme="dark"] .contador-caracteres {
+    color: #64748B !important;
+}
+
+/* Menus de Dropdown do Vender (Categoria / Condição) */
+[data-theme="dark"] .menu-dropdown-opcoes {
+    background-color: #1F2831 !important;
+    border: 1px solid #2C3946 !important;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45) !important;
+}
+
+[data-theme="dark"] .item-dropdown-opcao {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .item-dropdown-opcao:hover {
+    background-color: #242E38 !important;
+    color: #4ADE80 !important;
+}
+
+/* Modal de Localização */
+[data-theme="dark"] .modal-loc-card {
+    background-color: #1F2831 !important;
+    border: 1px solid #2C3946 !important;
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .modal-loc-topo {
+    border-bottom: 1px solid #2C3946 !important;
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .modal-loc-fechar {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .modal-loc-item {
+    color: #F1F5F9 !important;
+    border-bottom-color: #2C3946 !important;
+}
+
+[data-theme="dark"] .modal-loc-item:hover {
+    background-color: #242E38 !important;
+    color: #4ADE80 !important;
+}

@@ -1,7 +1,36 @@
 /**
  * ITAIM VENDE - SISTEMA UNIFICADO DE SKELETON SCREENS
- * Efeito de Shimmer e placeholders responsivos para todas as páginas.
+ * Efeito de Shimmer e placeholders responsivos para todas as páginas (Claro & Escuro).
  */
+
+/* ==========================================================================
+   0. VARIÁVEIS DE TEMA PARA SKELETON
+   ========================================================================== */
+:root {
+    --skeleton-card-bg: #FFFFFF;
+    --skeleton-card-border: #E2E8F0;
+    --skeleton-card-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    --skeleton-rodape-border: #F1F5F9;
+    --skeleton-subbox-bg: #F8FAFC;
+    --skeleton-shimmer-1: #f1f5f9;
+    --skeleton-shimmer-2: #e2e8f0;
+    --skeleton-shimmer-3: #f8fafc;
+}
+
+:root[data-theme="dark"],
+html[data-theme="dark"],
+body[data-theme="dark"],
+body.dark-theme,
+.dark-theme {
+    --skeleton-card-bg: #1F2831;
+    --skeleton-card-border: #2C3946;
+    --skeleton-card-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+    --skeleton-rodape-border: #283440;
+    --skeleton-subbox-bg: #161C22;
+    --skeleton-shimmer-1: #242E38;
+    --skeleton-shimmer-2: #334150;
+    --skeleton-shimmer-3: #2A3644;
+}
 
 /* ==========================================================================
    1. BASE DE ANIMAÇÃO E SHIMMER
@@ -22,13 +51,32 @@
 .skeleton-thumb,
 .skeleton-tag,
 .skeleton-pill,
-.skeleton-btn {
+.skeleton-btn,
+.skeleton-titulo-linha1,
+.skeleton-titulo-linha2,
+.skeleton-preco-box,
+.skeleton-local,
+.skeleton-tempo,
+.skeleton-foto-destaque,
+.skeleton-miniatura-item,
+.skeleton-selo-topo,
+.skeleton-titulo-grande-1,
+.skeleton-titulo-grande-2,
+.skeleton-localizacao-bar,
+.skeleton-preco-destaque,
+.skeleton-especificacao-pill,
+.skeleton-botao-whatsapp,
+.skeleton-botao-chat,
+.skeleton-avatar-vendedor,
+.skeleton-stat-box,
+.skeleton-meu-anuncio-thumb,
+.skeleton-acao-btn {
     background: linear-gradient(
         90deg,
-        #f1f5f9 0%,
-        #e2e8f0 40%,
-        #f8fafc 60%,
-        #f1f5f9 100%
+        var(--skeleton-shimmer-1, #f1f5f9) 0%,
+        var(--skeleton-shimmer-2, #e2e8f0) 40%,
+        var(--skeleton-shimmer-3, #f8fafc) 60%,
+        var(--skeleton-shimmer-1, #f1f5f9) 100%
     );
     background-size: 250% 100%;
     animation: itaimShimmer 1.6s ease-in-out infinite;
@@ -56,13 +104,13 @@
    2. SKELETON: CARDS DA VITRINE (HOME, CATEGORIA, FAVORITOS, PERFIL)
    ========================================================================== */
 .skeleton-card-produto {
-    background: #FFFFFF;
+    background: var(--skeleton-card-bg, #FFFFFF);
     border-radius: 16px;
-    border: 1px solid #E2E8F0;
+    border: 1px solid var(--skeleton-card-border, #E2E8F0);
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    box-shadow: var(--skeleton-card-shadow, 0 2px 8px rgba(0, 0, 0, 0.04));
     pointer-events: none;
     user-select: none;
     height: 100%;
@@ -117,7 +165,7 @@
     align-items: center;
     margin-top: auto;
     padding-top: 10px;
-    border-top: 1px solid #F1F5F9;
+    border-top: 1px solid var(--skeleton-rodape-border, #F1F5F9);
 }
 
 .skeleton-card-produto .skeleton-local {
@@ -156,11 +204,11 @@
 }
 
 .skeleton-produto-card-topo {
-    background: #FFFFFF;
+    background: var(--skeleton-card-bg, #FFFFFF);
     border-radius: 20px;
-    border: 1px solid #E2E8F0;
+    border: 1px solid var(--skeleton-card-border, #E2E8F0);
     padding: 24px;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+    box-shadow: var(--skeleton-card-shadow, 0 4px 14px rgba(0, 0, 0, 0.04));
 }
 
 .skeleton-grid-carrossel {
@@ -274,11 +322,11 @@
 
 /* Coluna Lateral: Card do Vendedor */
 .skeleton-card-vendedor {
-    background: #FFFFFF;
+    background: var(--skeleton-card-bg, #FFFFFF);
     border-radius: 20px;
-    border: 1px solid #E2E8F0;
+    border: 1px solid var(--skeleton-card-border, #E2E8F0);
     padding: 24px;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+    box-shadow: var(--skeleton-card-shadow, 0 4px 14px rgba(0, 0, 0, 0.04));
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -310,7 +358,7 @@
     grid-template-columns: 1fr 1fr;
     gap: 10px;
     padding: 14px;
-    background: #F8FAFC;
+    background: var(--skeleton-subbox-bg, #F8FAFC);
     border-radius: 12px;
 }
 
@@ -330,14 +378,14 @@
 }
 
 .skeleton-meu-anuncio-card {
-    background: #FFFFFF;
+    background: var(--skeleton-card-bg, #FFFFFF);
     border-radius: 16px;
-    border: 1px solid #E2E8F0;
+    border: 1px solid var(--skeleton-card-border, #E2E8F0);
     padding: 16px;
     display: flex;
     align-items: center;
     gap: 16px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+    box-shadow: var(--skeleton-card-shadow, 0 2px 6px rgba(0, 0, 0, 0.03));
 }
 
 @media (max-width: 640px) {
@@ -373,3 +421,95 @@
     height: 38px;
     border-radius: 10px;
 }
+
+/* ==========================================================================
+   5. SKELETON SCREENS NO MODO ESCURO (DARK THEME)
+   ========================================================================== */
+[data-theme="dark"] .skeleton-card-produto,
+[data-theme="dark"] .skeleton-produto-card-topo,
+[data-theme="dark"] .skeleton-card-vendedor,
+[data-theme="dark"] .skeleton-meu-anuncio-card,
+.dark-theme .skeleton-card-produto,
+.dark-theme .skeleton-produto-card-topo,
+.dark-theme .skeleton-card-vendedor,
+.dark-theme .skeleton-meu-anuncio-card {
+    background-color: #1F2831 !important;
+    border-color: #2C3946 !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35) !important;
+}
+
+[data-theme="dark"] .skeleton-card-produto .skeleton-rodape,
+.dark-theme .skeleton-card-produto .skeleton-rodape {
+    border-top-color: #283440 !important;
+}
+
+[data-theme="dark"] .skeleton-vendedor-stats,
+.dark-theme .skeleton-vendedor-stats {
+    background-color: #161C22 !important;
+}
+
+/* Shimmer dos elementos internos no modo escuro */
+[data-theme="dark"] .itaim-skeleton-shimmer,
+[data-theme="dark"] .skeleton-line,
+[data-theme="dark"] .skeleton-box,
+[data-theme="dark"] .skeleton-circle,
+[data-theme="dark"] .skeleton-thumb,
+[data-theme="dark"] .skeleton-tag,
+[data-theme="dark"] .skeleton-pill,
+[data-theme="dark"] .skeleton-btn,
+[data-theme="dark"] .skeleton-titulo-linha1,
+[data-theme="dark"] .skeleton-titulo-linha2,
+[data-theme="dark"] .skeleton-preco-box,
+[data-theme="dark"] .skeleton-local,
+[data-theme="dark"] .skeleton-tempo,
+[data-theme="dark"] .skeleton-foto-destaque,
+[data-theme="dark"] .skeleton-miniatura-item,
+[data-theme="dark"] .skeleton-selo-topo,
+[data-theme="dark"] .skeleton-titulo-grande-1,
+[data-theme="dark"] .skeleton-titulo-grande-2,
+[data-theme="dark"] .skeleton-localizacao-bar,
+[data-theme="dark"] .skeleton-preco-destaque,
+[data-theme="dark"] .skeleton-especificacao-pill,
+[data-theme="dark"] .skeleton-botao-whatsapp,
+[data-theme="dark"] .skeleton-botao-chat,
+[data-theme="dark"] .skeleton-avatar-vendedor,
+[data-theme="dark"] .skeleton-stat-box,
+[data-theme="dark"] .skeleton-meu-anuncio-thumb,
+[data-theme="dark"] .skeleton-acao-btn,
+.dark-theme .itaim-skeleton-shimmer,
+.dark-theme .skeleton-line,
+.dark-theme .skeleton-box,
+.dark-theme .skeleton-circle,
+.dark-theme .skeleton-thumb,
+.dark-theme .skeleton-tag,
+.dark-theme .skeleton-pill,
+.dark-theme .skeleton-btn,
+.dark-theme .skeleton-titulo-linha1,
+.dark-theme .skeleton-titulo-linha2,
+.dark-theme .skeleton-preco-box,
+.dark-theme .skeleton-local,
+.dark-theme .skeleton-tempo,
+.dark-theme .skeleton-foto-destaque,
+.dark-theme .skeleton-miniatura-item,
+.dark-theme .skeleton-selo-topo,
+.dark-theme .skeleton-titulo-grande-1,
+.dark-theme .skeleton-titulo-grande-2,
+.dark-theme .skeleton-localizacao-bar,
+.dark-theme .skeleton-preco-destaque,
+.dark-theme .skeleton-especificacao-pill,
+.dark-theme .skeleton-botao-whatsapp,
+.dark-theme .skeleton-botao-chat,
+.dark-theme .skeleton-avatar-vendedor,
+.dark-theme .skeleton-stat-box,
+.dark-theme .skeleton-meu-anuncio-thumb,
+.dark-theme .skeleton-acao-btn {
+    background: linear-gradient(
+        90deg,
+        #242E38 0%,
+        #334150 40%,
+        #2A3644 60%,
+        #242E38 100%
+    ) !important;
+    background-size: 250% 100% !important;
+}
+

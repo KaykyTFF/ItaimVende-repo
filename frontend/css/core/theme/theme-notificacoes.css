@@ -1,0 +1,123 @@
+/**
+ * ITAIM VENDE - NOTIFICAÇÕES NO MODO ESCURO
+ * Arquivo: frontend/css/core/theme/theme-notificacoes.css
+ */
+
+/* ==========================================================================
+   PÁGINA DE NOTIFICAÇÕES (NOTIFICACOES.HTML) - MODO ESCURO
+   ========================================================================== */
+[data-theme="dark"] .notificacoes-container {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .notificacoes-titulos h1 {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .notificacoes-titulos p {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .btn-marcar-lidas {
+    background-color: #1F2831 !important;
+    color: #F1F5F9 !important;
+    border-color: #2C3946 !important;
+}
+
+[data-theme="dark"] .btn-marcar-lidas:hover {
+    background-color: #242E38 !important;
+    color: #4ADE80 !important;
+    border-color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .btn-limpar-notificacoes {
+    background-color: #1F2831 !important;
+    color: #F87171 !important;
+    border-color: rgba(239, 68, 68, 0.3) !important;
+}
+
+[data-theme="dark"] .btn-limpar-notificacoes:hover {
+    background-color: rgba(239, 68, 68, 0.16) !important;
+    color: #EF4444 !important;
+    border-color: #EF4444 !important;
+}
+
+[data-theme="dark"] .tab-notif-btn {
+    background-color: #1F2831 !important;
+    color: #94A3B8 !important;
+    border-color: #2C3946 !important;
+}
+
+[data-theme="dark"] .tab-notif-btn:hover {
+    background-color: #242E38 !important;
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .tab-notif-btn.ativo {
+    background-color: #44BD32 !important;
+    color: #FFFFFF !important;
+    border-color: #44BD32 !important;
+}
+
+[data-theme="dark"] .notificacoes-vazio {
+    background-color: #1F2831 !important;
+    border: 1px dashed #2C3946 !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25) !important;
+}
+
+[data-theme="dark"] .notificacoes-vazio-icone {
+    background-color: rgba(74, 222, 128, 0.14) !important;
+    color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .notificacoes-vazio h2 {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .notificacoes-vazio p {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .notificacao-card {
+    background-color: #1F2831 !important;
+    border-color: #2C3946 !important;
+}
+
+[data-theme="dark"] .notificacao-card:hover {
+    border-color: #3D4D5E !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme="dark"] .notificacao-card.nao-lida {
+    background-color: rgba(68, 189, 50, 0.08) !important;
+    border-color: rgba(68, 189, 50, 0.35) !important;
+}
+
+[data-theme="dark"] .notificacao-titulo {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .notificacao-texto {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .notificacao-data {
+    color: #64748B !important;
+}
+
+[data-theme="dark"] .btn-acao-notif {
+    border-color: #2C3946 !important;
+    color: #94A3B8 !important;
+    background-color: #242E38 !important;
+}
+
+[data-theme="dark"] .btn-acao-notif:hover {
+    border-color: #4ADE80 !important;
+    color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .btn-acao-notif.btn-excluir-notif:hover {
+    border-color: #EF4444 !important;
+    color: #EF4444 !important;
+    background-color: rgba(239, 68, 68, 0.18) !important;
+}

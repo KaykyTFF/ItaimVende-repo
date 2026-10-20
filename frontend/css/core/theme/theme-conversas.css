@@ -1,0 +1,72 @@
+/**
+ * ITAIM VENDE - CHAT E MENSAGENS NO MODO ESCURO
+ * Arquivo: frontend/css/core/theme/theme-conversas.css
+ */
+
+/* ==========================================================================
+   PÁGINA DE MENSAGENS / CHAT (CONVERSAS.HTML) - MODO ESCURO
+   ========================================================================== */
+[data-theme="dark"] .chat-col-mensagens,
+[data-theme="dark"] .chat-feed-mensagens,
+[data-theme="dark"] .chat-centro-vazio {
+    background-color: #141A20 !important;
+}
+
+[data-theme="dark"] .chat-centro-vazio h3,
+[data-theme="dark"] #chat-centro-vazio-titulo,
+[data-theme="dark"] .chat-feed-vazio-central h3 {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .chat-centro-vazio p,
+[data-theme="dark"] #chat-centro-vazio-desc,
+[data-theme="dark"] .chat-feed-vazio-central p {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .chat-centro-vazio-icone,
+[data-theme="dark"] .chat-feed-vazio-icone {
+    background-color: rgba(74, 222, 128, 0.14) !important;
+    color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .chat-barra-input {
+    background-color: #1A222A !important;
+    border-top: 1px solid #24303C !important;
+}
+
+[data-theme="dark"] .chat-input-texto {
+    background-color: #141A20 !important;
+    color: #F1F5F9 !important;
+    border-color: #24303C !important;
+}
+
+[data-theme="dark"] .chat-input-texto::placeholder {
+    color: #64748B !important;
+}
+
+[data-theme="dark"] .chat-input-texto:focus {
+    border-color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .chat-msg-item.recebida .chat-msg-bolha {
+    background-color: #1F2831 !important;
+    color: #F1F5F9 !important;
+    border: 1px solid #2C3946 !important;
+}
+
+[data-theme="dark"] .chat-msg-item.recebida .chat-msg-hora {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .chat-msg-item.enviada .chat-msg-bolha {
+    background-color: rgba(68, 189, 50, 0.22) !important;
+    color: #F1F5F9 !important;
+    border: 1px solid rgba(68, 189, 50, 0.4) !important;
+}
+
+[data-theme="dark"] .chat-data-divisor {
+    background-color: #1F2831 !important;
+    color: #94A3B8 !important;
+    border: 1px solid #2C3946 !important;
+}

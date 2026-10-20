@@ -1,0 +1,102 @@
+/**
+ * ITAIM VENDE - BOTÃO DE TEMA NO MENU LATERAL (DRAWER)
+ * Arquivo: frontend/css/core/theme/theme-drawer.css
+ */
+
+/* ==========================================================================
+   3. BOTÃO DE TEMA NO MENU LATERAL (DRAWER)
+   ========================================================================== */
+
+.drawer-link.btn-alternar-tema {
+    width: 100%;
+    background: none;
+    border: none;
+    border-left: 3px solid transparent;
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 11px 22px;
+    color: #ECEFF1;
+    font-size: 14.5px;
+    font-weight: 600;
+    transition: all var(--transition);
+    position: relative;
+    user-select: none;
+}
+
+.drawer-link.btn-alternar-tema:hover {
+    background: rgba(68, 189, 50, 0.14);
+    color: var(--primary);
+    border-left-color: var(--primary);
+}
+
+.drawer-link.btn-alternar-tema:active {
+    transform: scale(0.99);
+}
+
+.drawer-link.btn-alternar-tema svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s ease;
+}
+
+.drawer-link.btn-alternar-tema:hover svg {
+    transform: rotate(18deg) scale(1.08);
+    color: var(--primary);
+}
+
+.drawer-tema-texto {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Micro Switch no Drawer */
+.drawer-tema-switch {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 38px;
+    height: 20px;
+    background-color: rgba(255, 255, 255, 0.16);
+    border-radius: 999px;
+    padding: 2px;
+    transition: background-color 0.25s ease;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+.drawer-tema-trilho {
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.drawer-tema-bolinha {
+    display: block;
+    width: 16px;
+    height: 16px;
+    background-color: #FFFFFF;
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.25s ease;
+    transform: translateX(0);
+}
+
+/* Estado Ativo / Escuro no Drawer */
+[data-theme="dark"] .drawer-tema-switch,
+.drawer-link.btn-alternar-tema.tema-escuro-ativo .drawer-tema-switch {
+    background-color: var(--primary);
+}
+
+[data-theme="dark"] .drawer-tema-bolinha,
+.drawer-link.btn-alternar-tema.tema-escuro-ativo .drawer-tema-bolinha {
+    transform: translateX(18px);
+    background-color: #FFFFFF;
+}

@@ -1,0 +1,355 @@
+/**
+ * ITAIM VENDE - PERFIL E VENDEDOR NO MODO ESCURO
+ * Arquivo: frontend/css/core/theme/theme-perfil.css
+ */
+
+/* ==========================================================================
+   PÁGINA DE PERFIL (PERFIL.HTML & VENDEDOR.HTML) - MODO ESCURO
+   ========================================================================== */
+[data-theme="dark"].pagina-perfil,
+[data-theme="dark"] .pagina-perfil,
+body[data-theme="dark"].pagina-perfil,
+[data-theme="dark"].pagina-vendedor,
+[data-theme="dark"] .pagina-vendedor,
+body[data-theme="dark"].pagina-vendedor {
+    background-color: #141A20 !important;
+    color: #F1F5F9 !important;
+}
+
+/* Breadcrumbs do Perfil */
+[data-theme="dark"] .perfil-breadcrumb,
+[data-theme="dark"] .perfil-breadcrumb-sep {
+    color: #64748B !important;
+}
+
+[data-theme="dark"] .perfil-breadcrumb a {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .perfil-breadcrumb a:hover,
+[data-theme="dark"] .perfil-breadcrumb-current {
+    color: #4ADE80 !important;
+}
+
+/* Banner Superior do Perfil */
+[data-theme="dark"] .perfil-banner-card {
+    background-color: #1F2831 !important;
+    border: 1px solid #2C3946 !important;
+    border-bottom: 2.5px solid #44BD32 !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
+}
+
+[data-theme="dark"] .perfil-nome-titulo,
+[data-theme="dark"] #perfil-nome-display,
+[data-theme="dark"] #vendedor-nome-display {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] #perfil-username-display,
+[data-theme="dark"] #vendedor-username-display {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] #perfil-bio-display,
+[data-theme="dark"] #vendedor-bio-display {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .perfil-detalhe-item,
+[data-theme="dark"] .perfil-detalhe-item svg {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .badge-verificado,
+[data-theme="dark"] #perfil-selo-verificado,
+[data-theme="dark"] #vendedor-selo-verificado {
+    background-color: rgba(74, 222, 128, 0.16) !important;
+    color: #4ADE80 !important;
+}
+
+[data-theme="dark"] #perfil-selo-verificado svg,
+[data-theme="dark"] #vendedor-selo-verificado svg {
+    fill: #4ADE80 !important;
+}
+
+[data-theme="dark"] .btn-banner-sair {
+    background-color: #242E38 !important;
+    border: 1.5px solid #4ADE80 !important;
+    color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .btn-banner-sair:hover {
+    background-color: #2D3945 !important;
+    color: #FFFFFF !important;
+    border-color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .btn-avatar-camera {
+    border-color: #1F2831 !important;
+}
+
+/* Cards de Estatísticas (Métricas do Meio no Perfil e Vendedor) */
+[data-theme="dark"] .perfil-stat-card,
+[data-theme="dark"] .stat-vendedor-card {
+    background-color: #1F2831 !important;
+    border: 1px solid #2C3946 !important;
+    border-bottom: 2.5px solid #44BD32 !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25) !important;
+}
+
+[data-theme="dark"] .stat-circulo-icone,
+[data-theme="dark"] .stat-icone-wrapper,
+[data-theme="dark"] .stat-icone-verde {
+    background-color: rgba(74, 222, 128, 0.14) !important;
+    color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .stat-numero-destaque,
+[data-theme="dark"] .stat-valor-num {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .stat-legenda,
+[data-theme="dark"] .stat-rotulo-txt {
+    color: #94A3B8 !important;
+}
+
+/* Botão Compartilhar do Banner do Vendedor */
+[data-theme="dark"] .btn-banner-compartilhar,
+[data-theme="dark"] #btn-vendedor-compartilhar {
+    background-color: #242E38 !important;
+    color: #F1F5F9 !important;
+    border: 1px solid #2C3946 !important;
+}
+
+[data-theme="dark"] .btn-banner-compartilhar:hover,
+[data-theme="dark"] #btn-vendedor-compartilhar:hover {
+    background-color: #2D3945 !important;
+    color: #4ADE80 !important;
+    border-color: #4ADE80 !important;
+}
+
+/* Breadcrumb do Vendedor */
+[data-theme="dark"] .vendedor-breadcrumb a,
+[data-theme="dark"] .vendedor-breadcrumb span {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .vendedor-breadcrumb a:hover,
+[data-theme="dark"] .vendedor-breadcrumb-current {
+    color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .vendedor-breadcrumb-sep {
+    color: #64748B !important;
+}
+
+/* Seção de Anúncios do Vendedor */
+[data-theme="dark"] .vendedor-anuncios-titulos h2 {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .vendedor-anuncios-titulos p {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .vendedor-badge-qtd,
+[data-theme="dark"] #vendedor-badge-qtd {
+    background-color: #242E38 !important;
+    color: #94A3B8 !important;
+    border: 1px solid #2C3946 !important;
+}
+
+[data-theme="dark"] .vendedor-filtro-label {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .vendedor-select-ordem,
+[data-theme="dark"] #select-ordem-vendedor {
+    background-color: #1F2831 !important;
+    color: #F1F5F9 !important;
+    border: 1px solid #2C3946 !important;
+}
+
+/* Seções Principais (Anúncios, Avaliações, Dados Pessoais e Dicas de Segurança) */
+[data-theme="dark"] .perfil-secao-card,
+[data-theme="dark"] .card-secao-vendedor {
+    background-color: #1F2831 !important;
+    border: 1px solid #2C3946 !important;
+    border-bottom: 2.5px solid #44BD32 !important;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25) !important;
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .perfil-cabecalho-icone {
+    background-color: rgba(74, 222, 128, 0.14) !important;
+    color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .perfil-cabecalho-texto h2,
+[data-theme="dark"] .card-secao-vendedor h3 {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .perfil-cabecalho-texto p {
+    color: #94A3B8 !important;
+}
+
+/* Badges e Avaliações */
+[data-theme="dark"] #perfil-badge-avaliacoes,
+[data-theme="dark"] #vendedor-badge-avaliacoes,
+[data-theme="dark"] #badge-contador-avaliacoes {
+    background-color: rgba(74, 222, 128, 0.16) !important;
+    color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .avaliacoes-vazio {
+    background-color: #161C22 !important;
+    border: 1px dashed #2C3946 !important;
+}
+
+[data-theme="dark"] .avaliacoes-vazio h4,
+[data-theme="dark"] .avaliacoes-vazio-titulo {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .avaliacoes-vazio p,
+[data-theme="dark"] .avaliacoes-vazio-desc {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .item-avaliacao-card {
+    border-bottom: 1px solid #2C3946 !important;
+}
+
+[data-theme="dark"] .avaliacao-autor-nome {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .avaliacao-avatar-mini {
+    background-color: rgba(74, 222, 128, 0.16) !important;
+    color: #4ADE80 !important;
+    border-color: rgba(74, 222, 128, 0.3) !important;
+}
+
+[data-theme="dark"] .avaliacao-comentario-txt {
+    color: #CBD5E1 !important;
+}
+
+[data-theme="dark"] .btn-excluir-avaliacao {
+    background-color: rgba(239, 68, 68, 0.12) !important;
+    border: 1px solid rgba(239, 68, 68, 0.3) !important;
+    color: #EF4444 !important;
+}
+
+[data-theme="dark"] .btn-excluir-avaliacao:hover {
+    background-color: #EF4444 !important;
+    color: #FFFFFF !important;
+}
+
+/* Caixa de Formulário de Avaliação */
+[data-theme="dark"] #perfil-box-form-avaliacao,
+[data-theme="dark"] #box-form-avaliacao,
+[data-theme="dark"] .box-form-avaliacao {
+    background-color: #161C22 !important;
+    border: 1px solid #2C3946 !important;
+}
+
+[data-theme="dark"] #perfil-box-form-avaliacao h4,
+[data-theme="dark"] #box-form-avaliacao h4,
+[data-theme="dark"] .box-form-avaliacao h4 {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] #perfil-textarea-comentario,
+[data-theme="dark"] #textarea-comentario {
+    background-color: #1F2831 !important;
+    border: 1px solid #2C3946 !important;
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] #perfil-textarea-comentario::placeholder,
+[data-theme="dark"] #textarea-comentario::placeholder {
+    color: #64748B !important;
+}
+
+[data-theme="dark"] .badge-autor-fixo,
+[data-theme="dark"] #vendedor-label-autor {
+    background-color: #242E38 !important;
+    border: 1px solid #2C3946 !important;
+    color: #F1F5F9 !important;
+}
+
+/* Box Dicas de Segurança */
+[data-theme="dark"] .box-dicas-seguranca {
+    background-color: #161C22 !important;
+    border: 1px solid #2C3946 !important;
+}
+
+[data-theme="dark"] .dica-linha-icone {
+    background-color: rgba(74, 222, 128, 0.14) !important;
+    color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .dica-linha-texto strong {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .dica-linha-texto span {
+    color: #94A3B8 !important;
+}
+
+/* Seção de Dados Pessoais (Inputs e Botões) */
+[data-theme="dark"] .btn-editar-config {
+    background-color: #242E38 !important;
+    color: #F1F5F9 !important;
+    border-color: #2C3946 !important;
+}
+
+[data-theme="dark"] .btn-editar-config:hover {
+    background-color: #2D3945 !important;
+    color: #4ADE80 !important;
+    border-color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .campo-label-perfil {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .campo-label-perfil svg {
+    color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .campo-input-perfil {
+    background-color: #161C22 !important;
+    border: 1px solid #2C3946 !important;
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .campo-input-perfil[readonly] {
+    background-color: #161C22 !important;
+    color: #F1F5F9 !important;
+    border-color: #2C3946 !important;
+}
+
+/* Box Contato Vendedor Externo */
+[data-theme="dark"] #box-contato-vendedor-externo {
+    background-color: #1F2831 !important;
+    border: 1px solid #2C3946 !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25) !important;
+}
+
+[data-theme="dark"] #box-contato-vendedor-externo h3 {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] #box-contato-vendedor-externo p {
+    color: #94A3B8 !important;
+}
+
+/* Toast de Sucesso no Perfil */
+[data-theme="dark"] .toast-sucesso {
+    background-color: rgba(74, 222, 128, 0.16) !important;
+    border-color: rgba(74, 222, 128, 0.3) !important;
+    color: #4ADE80 !important;
+}

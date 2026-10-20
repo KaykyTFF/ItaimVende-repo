@@ -1,0 +1,413 @@
+/**
+ * ITAIM VENDE - DETALHES DO PRODUTO NO MODO ESCURO
+ * Arquivo: frontend/css/core/theme/theme-produto.css
+ */
+
+/* ==========================================================================
+   PÁGINA DE DETALHES DO PRODUTO / ANÚNCIO (PRODUTO.HTML) - MODO ESCURO
+   ========================================================================== */
+[data-theme="dark"].pagina-produto,
+[data-theme="dark"] .pagina-produto,
+body[data-theme="dark"].pagina-produto,
+[data-theme="dark"] .layout-anuncio-wrapper {
+    background-color: #141A20 !important;
+    color: #F1F5F9 !important;
+}
+
+/* Breadcrumbs e Botão Voltar */
+[data-theme="dark"] .breadcrumb-ref-wrapper {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .breadcrumb-ref-lista a {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .breadcrumb-ref-lista a:hover {
+    color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .breadcrumb-ref-lista .sep {
+    color: #64748B !important;
+}
+
+[data-theme="dark"] .breadcrumb-ref-lista .atual {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .btn-voltar-cat {
+    background-color: #1F2831 !important;
+    border: 1px solid #2C3946 !important;
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .btn-voltar-cat:hover {
+    background-color: #2D3945 !important;
+    color: #4ADE80 !important;
+    border-color: #4ADE80 !important;
+}
+
+/* Card Principal do Anúncio (Carrossel + Informações) */
+[data-theme="dark"] .card-anuncio-topo {
+    background-color: #1F2831 !important;
+    border: 1px solid #2C3946 !important;
+    border-bottom: 2.5px solid #44BD32 !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
+}
+
+/* Carrossel e Foto Principal */
+[data-theme="dark"] .carrossel-foto-box {
+    background-color: #161C22 !important;
+    border: 1px solid #2C3946 !important;
+}
+
+[data-theme="dark"] .carrossel-seta {
+    background-color: rgba(31, 40, 49, 0.9) !important;
+    color: #F1F5F9 !important;
+    border: 1px solid #2C3946 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="dark"] .carrossel-seta:hover {
+    background-color: #2D3945 !important;
+    color: #4ADE80 !important;
+    border-color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .carrossel-foto-box .btn-favorito,
+[data-theme="dark"] .btn-favorito-circulo {
+    background-color: rgba(31, 40, 49, 0.9) !important;
+    border: 1px solid #2C3946 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="dark"] .carrossel-foto-box .btn-favorito .icone-coracao,
+[data-theme="dark"] .btn-favorito-circulo svg {
+    stroke: #94A3B8 !important;
+}
+
+/* Miniaturas de Fotos */
+[data-theme="dark"] .thumb-box {
+    background-color: #161C22 !important;
+    border: 1.5px solid #2C3946 !important;
+}
+
+[data-theme="dark"] .thumb-box:hover {
+    border-color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .thumb-box.ativa {
+    border-color: #4ADE80 !important;
+    box-shadow: 0 0 0 2px rgba(74, 222, 128, 0.25) !important;
+}
+
+/* Informações do Anúncio (Centro) */
+[data-theme="dark"] .selo-anuncio-verificado {
+    color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .produto-titulo-destaque,
+[data-theme="dark"] #produto-titulo {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .produto-localizacao-linha,
+[data-theme="dark"] #produto-localizacao {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .divisor-suave {
+    border-top: 1px solid #2C3946 !important;
+}
+
+[data-theme="dark"] .subtitulo-secao {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .texto-descricao-paragrafo,
+[data-theme="dark"] #descricao-curta-texto {
+    color: #CBD5E1 !important;
+}
+
+[data-theme="dark"] .espec-chave {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .espec-valor,
+[data-theme="dark"] #espec-condicao,
+[data-theme="dark"] #espec-categoria {
+    color: #F1F5F9 !important;
+}
+
+/* Card Sobre Este Anúncio */
+[data-theme="dark"] .card-sobre-anuncio {
+    background-color: #1F2831 !important;
+    border: 1px solid #2C3946 !important;
+    border-bottom: 2.5px solid #44BD32 !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
+}
+
+[data-theme="dark"] .sobre-anuncio-header {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .sobre-anuncio-desc {
+    color: #CBD5E1 !important;
+}
+
+[data-theme="dark"] .destaque-titulo {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .destaque-sub {
+    color: #94A3B8 !important;
+}
+
+/* Sidebar Direita (Ações, Preço e Vendedor) */
+[data-theme="dark"] .card-sidebar-acoes {
+    background-color: #1F2831 !important;
+    border: 1px solid #2C3946 !important;
+    border-bottom: 2.5px solid #44BD32 !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
+}
+
+[data-theme="dark"] .valor-preco-grande,
+[data-theme="dark"] #preco-valor {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .legenda-negociavel {
+    color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .btn-whatsapp-vendedor,
+[data-theme="dark"] #btn-comprar-wpp {
+    background-color: #1F2831 !important;
+    color: #4ADE80 !important;
+    border: 2px solid #4ADE80 !important;
+}
+
+[data-theme="dark"] .btn-whatsapp-vendedor:hover,
+[data-theme="dark"] #btn-comprar-wpp:hover {
+    background-color: rgba(74, 222, 128, 0.14) !important;
+    color: #FFFFFF !important;
+}
+
+[data-theme="dark"] .box-vendedor-sidebar {
+    background-color: #161C22 !important;
+    border: 1px solid #2C3946 !important;
+}
+
+[data-theme="dark"] .vendedor-avatar-circulo {
+    background-color: #1F2831 !important;
+    border-color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .vendedor-nome-selo strong,
+[data-theme="dark"] #vendedor-nome-txt {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .vendedor-cidade-txt,
+[data-theme="dark"] #vendedor-cidade-txt {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .link-perfil-vendedor,
+[data-theme="dark"] #link-perfil-vendedor {
+    color: #F1F5F9 !important;
+    border-top: 1px solid #2C3946 !important;
+}
+
+[data-theme="dark"] .link-perfil-vendedor:hover,
+[data-theme="dark"] #link-perfil-vendedor:hover {
+    color: #4ADE80 !important;
+}
+
+/* Compra Segura / Escudo */
+[data-theme="dark"] .box-compra-segura {
+    border-top: 1px solid #2C3946 !important;
+}
+
+[data-theme="dark"] .icone-escudo-verde {
+    background: rgba(74, 222, 128, 0.14) !important;
+    color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .textos-compra-segura strong {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .textos-compra-segura span {
+    color: #94A3B8 !important;
+}
+
+/* Área de Denúncia no Sidebar */
+[data-theme="dark"] .box-denuncia-sidebar {
+    border-top: 1px dashed #2C3946 !important;
+}
+
+[data-theme="dark"] .btn-denunciar-anuncio,
+[data-theme="dark"] #btn-abrir-denuncia {
+    background-color: #242E38 !important;
+    color: #94A3B8 !important;
+    border: 1px solid #2C3946 !important;
+}
+
+[data-theme="dark"] .btn-denunciar-anuncio:hover,
+[data-theme="dark"] #btn-abrir-denuncia:hover {
+    color: #EF4444 !important;
+    border-color: rgba(239, 68, 68, 0.4) !important;
+    background-color: rgba(239, 68, 68, 0.12) !important;
+}
+
+[data-theme="dark"] .btn-meus-tickets-link,
+[data-theme="dark"] #btn-ver-meus-tickets {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .btn-meus-tickets-link:hover,
+[data-theme="dark"] #btn-ver-meus-tickets:hover {
+    color: #4ADE80 !important;
+}
+
+/* Seção de Relacionados no Fim da Página */
+[data-theme="dark"] .secao-relacionados-topo h2 {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .secao-relacionados-topo p {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .link-ver-mais-categoria {
+    color: #4ADE80 !important;
+}
+
+/* Modal de Denúncia */
+[data-theme="dark"] .modal-denuncia-card {
+    background-color: #1F2831 !important;
+    border: 1px solid #2C3946 !important;
+    color: #F1F5F9 !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6) !important;
+}
+
+[data-theme="dark"] .modal-denuncia-header {
+    background-color: #1F2831 !important;
+    border-bottom: 1px solid #2C3946 !important;
+}
+
+[data-theme="dark"] .modal-denuncia-titulo {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .modal-denuncia-subtitulo {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .btn-fechar-modal-denuncia {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .btn-fechar-modal-denuncia:hover {
+    color: #F1F5F9 !important;
+    background-color: #2C3946 !important;
+}
+
+[data-theme="dark"] .denuncia-produto-resumo {
+    background-color: #161C22 !important;
+    border: 1px solid #2C3946 !important;
+}
+
+[data-theme="dark"] .denuncia-resumo-titulo {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .denuncia-resumo-meta {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .denuncia-label {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .motivo-card-item {
+    background-color: #161C22 !important;
+    border: 1.5px solid #2C3946 !important;
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .motivo-card-item:hover {
+    border-color: #3D4D5E !important;
+}
+
+[data-theme="dark"] .motivo-card-item.ativo {
+    border-color: #EF4444 !important;
+    background-color: rgba(239, 68, 68, 0.1) !important;
+}
+
+[data-theme="dark"] .motivo-textos strong {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .motivo-textos span {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .denuncia-textarea {
+    background-color: #161C22 !important;
+    border: 1px solid #2C3946 !important;
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .denuncia-textarea:focus {
+    border-color: #4ADE80 !important;
+    box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.2) !important;
+}
+
+[data-theme="dark"] .denuncia-textarea::placeholder {
+    color: #64748B !important;
+}
+
+[data-theme="dark"] .modal-denuncia-footer {
+    background-color: #1F2831 !important;
+    border-top: 1px solid #2C3946 !important;
+}
+
+[data-theme="dark"] .btn-cancelar-denuncia {
+    background-color: #242E38 !important;
+    border: 1px solid #2C3946 !important;
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .btn-cancelar-denuncia:hover {
+    background-color: #2D3945 !important;
+    color: #FFFFFF !important;
+}
+
+/* Histórico de Tickets */
+[data-theme="dark"] .ticket-item-card {
+    background-color: #161C22 !important;
+    border: 1px solid #2C3946 !important;
+}
+
+[data-theme="dark"] .ticket-item-card:hover {
+    border-color: #3D4D5E !important;
+    background-color: #1C242D !important;
+}
+
+[data-theme="dark"] .ticket-item-protocolo {
+    color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .ticket-item-produto {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .ticket-item-detalhes {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .tickets-vazio-box {
+    color: #94A3B8 !important;
+}

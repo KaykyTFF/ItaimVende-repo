@@ -1,0 +1,195 @@
+/**
+ * ITAIM VENDE - MEUS ANÚNCIOS NO MODO ESCURO
+ * Arquivo: frontend/css/core/theme/theme-meus-anuncios.css
+ */
+
+/* ==========================================================================
+   MEUS ANÚNCIOS (MEUS-ANUNCIOS.HTML) - MODO ESCURO
+   ========================================================================== */
+[data-theme="dark"] .anuncios-container {
+    color: #F1F5F9;
+}
+
+[data-theme="dark"] .anuncios-titulos h1 {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .anuncios-titulos p {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .anuncios-titulos p strong {
+    color: #F1F5F9 !important;
+}
+
+/* Abas de Status */
+[data-theme="dark"] .anuncios-tabs-bar {
+    border-bottom: 2px solid #2C3946 !important;
+}
+
+[data-theme="dark"] .tab-btn {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .tab-btn:hover {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .tab-btn.ativo {
+    color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .tab-btn.ativo::after {
+    background: #4ADE80 !important;
+}
+
+[data-theme="dark"] .tab-badge {
+    background-color: #242E38 !important;
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .tab-btn.ativo .tab-badge {
+    background-color: rgba(74, 222, 128, 0.2) !important;
+    color: #4ADE80 !important;
+}
+
+/* Estado Vazio de Anúncios */
+[data-theme="dark"] .anuncios-vazio {
+    background-color: #1F2831 !important;
+    border: 1px dashed #2C3946 !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25) !important;
+}
+
+[data-theme="dark"] .anuncios-vazio-icone {
+    background-color: rgba(74, 222, 128, 0.14) !important;
+    color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .anuncios-vazio h2 {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .anuncios-vazio p {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .anuncios-vazio p strong {
+    color: #F1F5F9 !important;
+}
+
+/* Cards de Anúncios da Lista */
+[data-theme="dark"] .anuncio-item-card {
+    background-color: #1F2831 !important;
+    border: 1px solid #2C3946 !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
+}
+
+[data-theme="dark"] .anuncio-item-card:hover {
+    border-color: #3D4D5E !important;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="dark"] .anuncio-card-foto {
+    background-color: #161C22 !important;
+}
+
+[data-theme="dark"] .anuncio-titulo {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .anuncio-titulo:hover {
+    color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .anuncio-preco {
+    color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .anuncio-metricas {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .anuncio-metrica-wpp {
+    color: #F1F5F9 !important;
+}
+
+/* Botões de Ação do Card */
+[data-theme="dark"] .btn-acao-status {
+    background-color: #242E38 !important;
+    color: #F1F5F9 !important;
+    border-color: #2C3946 !important;
+}
+
+[data-theme="dark"] .btn-acao-status:hover {
+    background-color: #2D3945 !important;
+    color: #4ADE80 !important;
+    border-color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .btn-acao-ver {
+    background-color: #242E38 !important;
+    color: #F1F5F9 !important;
+    border-color: #2C3946 !important;
+}
+
+[data-theme="dark"] .btn-acao-ver:hover {
+    background-color: #2D3945 !important;
+    color: #FFFFFF !important;
+}
+
+[data-theme="dark"] .btn-acao-marcar-vendido {
+    background-color: rgba(74, 222, 128, 0.15) !important;
+    color: #4ADE80 !important;
+    border-color: rgba(74, 222, 128, 0.3) !important;
+}
+
+[data-theme="dark"] .btn-acao-marcar-vendido:hover {
+    background-color: rgba(74, 222, 128, 0.25) !important;
+    border-color: #4ADE80 !important;
+    color: #FFFFFF !important;
+}
+
+[data-theme="dark"] .btn-acao-excluir {
+    background-color: rgba(239, 68, 68, 0.12) !important;
+    color: #F87171 !important;
+    border-color: rgba(239, 68, 68, 0.25) !important;
+}
+
+[data-theme="dark"] .btn-acao-excluir:hover {
+    background-color: rgba(239, 68, 68, 0.22) !important;
+    border-color: #EF4444 !important;
+}
+
+/* Badges de Status */
+[data-theme="dark"] .badge-status.ativo {
+    background-color: rgba(74, 222, 128, 0.16) !important;
+    color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .badge-status.pausado {
+    background-color: rgba(245, 158, 11, 0.16) !important;
+    color: #FBBF24 !important;
+}
+
+[data-theme="dark"] .badge-status.vendido {
+    background-color: #242E38 !important;
+    color: #94A3B8 !important;
+}
+
+/* Estados vazios universais em modo escuro */
+[data-theme="dark"] .estado-vazio,
+[data-theme="dark"] .vendedor-anuncios-vazio {
+    background-color: #1F2831 !important;
+    border-color: #2C3946 !important;
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .estado-vazio h3,
+[data-theme="dark"] .vendedor-anuncios-vazio h3 {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .estado-vazio p,
+[data-theme="dark"] .vendedor-anuncios-vazio p {
+    color: #94A3B8 !important;
+}
