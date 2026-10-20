@@ -67,10 +67,48 @@ document.addEventListener('DOMContentLoaded', async () => {
         ? window.ItaimRotas.obterAsset('assets/placeholders/produto-placeholder.svg')
         : '../../assets/placeholders/produto-placeholder.svg';
 
-    // Obtém usuário logado do cliente
-    const token = window.ItaimApi?.auth?.obterToken();
-    const usuarioLogado = window.ItaimSessao ? window.ItaimSessao.obterUsuarioLogado() : null;
+    // Obtém usuário logado do cliente com fallback síncrono no localStorage
+    const token = (window.ItaimApi?.auth?.obterToken && window.ItaimApi.auth.obterToken()) ||
+                  localStorage.getItem('itaim_token') ||
+                  '';
+
+    let usuarioLogado = (window.ItaimSessao && typeof window.ItaimSessao.obterUsuarioLogado === 'function')
+        ? window.ItaimSessao.obterUsuarioLogado()
+        : null;
+
+    if (!usuarioLogado) {
+        try {
+            usuarioLogado = JSON.parse(localStorage.getItem('itaim_usuario_logado') || 'null');
+        } catch (e) {
+            usuarioLogado = null;
+        }
+    }
     const meuUserId = usuarioLogado?.id || null;
+
+    // Chaves de armazenamento persistente (Cache instantâneo por usuário)
+    const STORAGE_KEY_LISTA = `itaim_chat_conversas_${meuUserId || 'anon'}`;
+    const STORAGE_KEY_ATIVA = `itaim_chat_ativa_${meuUserId || 'anon'}`;
+    const STORAGE_KEY_MSGS_PREFIX = `itaim_chat_msgs_${meuUserId || 'anon'}_`;
+
+    function carregarMensagensCacheLocal(convId) {
+        if (!convId) return null;
+        try {
+            const raw = localStorage.getItem(STORAGE_KEY_MSGS_PREFIX + convId);
+            if (raw) {
+                const parsed = JSON.parse(raw);
+                if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+            }
+        } catch (e) {}
+        return null;
+    }
+
+    function salvarMensagensCacheLocal(convId, msgs) {
+        if (!convId || !Array.isArray(msgs)) return;
+        try {
+            // Guarda até as 60 mensagens mais recentes no cache persistente
+            localStorage.setItem(STORAGE_KEY_MSGS_PREFIX + convId, JSON.stringify(msgs.slice(-60)));
+        } catch (e) {}
+    }
 
     // -------------------------------------------------------------------------
     // 3. HELPERS DE FORMATAÇÃO E RESOLUÇÃO
@@ -207,6 +245,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             const resp = await window.ItaimApi.chat.listarConversas();
             if (resp && resp.success && Array.isArray(resp.data)) {
                 conversas = resp.data;
+                try {
+                    localStorage.setItem(STORAGE_KEY_LISTA, JSON.stringify(conversas));
+                } catch (e) {}
                 renderizarListaConversas(buscaInput?.value || '');
 
                 if (selecionarIdAposCarga) {
@@ -378,6 +419,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     // -------------------------------------------------------------------------
     function exibirEstadoSemConversa() {
         conversaAtivaId = null;
+        try {
+            localStorage.removeItem(STORAGE_KEY_ATIVA);
+        } catch (e) {}
+        document.documentElement.classList.remove('chat-conversa-ativa-esperada');
 
         if (chatTopoAtivo) chatTopoAtivo.style.display = 'none';
         if (feedMensagens) feedMensagens.style.display = 'none';
@@ -403,6 +448,24 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         conversaAtivaId = id;
+        try {
+            localStorage.setItem(STORAGE_KEY_ATIVA, id);
+        } catch (e) {}
+
+        // Atualiza URL sem recarregar a página para permitir compartilhamento ou refresh
+        try {
+            const url = new URL(window.location.href);
+            url.searchParams.set('id', id);
+            window.history.replaceState({}, '', url.toString());
+        } catch (e) {}
+
+        // 1. Exibir componentes centrais imediatamente e ocultar estado vazio (0ms de latência visual)
+        if (chatCentroVazio) chatCentroVazio.style.display = 'none';
+        if (chatTopoAtivo) chatTopoAtivo.style.display = 'flex';
+        if (feedMensagens) feedMensagens.style.display = 'flex';
+        if (formEnvio) formEnvio.style.display = 'flex';
+
+        destacarCardAtivo(id);
 
         // Dispara a busca de mensagens imediatamente em paralelo com a resolução dos metadados
         const promiseMensagens = carregarMensagens(id);
@@ -417,6 +480,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                     conv = resp.data;
                     if (!conversas.some(c => c.id === conv.id)) {
                         conversas.unshift(conv);
+                        try {
+                            localStorage.setItem(STORAGE_KEY_LISTA, JSON.stringify(conversas));
+                        } catch (e) {}
                         renderizarListaConversas(buscaInput?.value || '');
                     }
                 }
@@ -436,18 +502,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Zera o contador de não lidas localmente
         conv.naoLidas = 0;
         destacarCardAtivo(conv.id);
-
-        // Atualiza URL sem recarregar a página para permitir compartilhamento ou refresh
-        try {
-            const url = new URL(window.location.href);
-            url.searchParams.set('id', conv.id);
-            window.history.replaceState({}, '', url.toString());
-        } catch (e) {}
-
-        // 1. Exibir componentes centrais
-        if (chatCentroVazio) chatCentroVazio.style.display = 'none';
-        if (chatTopoAtivo) chatTopoAtivo.style.display = 'flex';
-        if (feedMensagens) feedMensagens.style.display = 'flex';
 
         // 1.1 Gerencia visual de Bloqueio de Conversa
         const ehBloqueado = conv.status === 'BLOCKED' || conv.isBlocked;
@@ -585,9 +639,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     async function carregarMensagens(convId, manterPosicaoScroll = false) {
         if (!feedMensagens || !convId) return;
 
-        // Se já temos as mensagens no cache da sessão, exibe instantaneamente (0ms de latência percebida)
-        if (mensagensCache.has(convId) && !manterPosicaoScroll) {
-            mensagensAtivas = mensagensCache.get(convId);
+        // Se já temos as mensagens no cache da sessão ou cache local, exibe instantaneamente (0ms de latência)
+        let msgsEmCache = mensagensCache.get(convId) || carregarMensagensCacheLocal(convId);
+        if (msgsEmCache && !manterPosicaoScroll) {
+            mensagensAtivas = msgsEmCache;
+            mensagensCache.set(convId, msgsEmCache);
             renderizarFeedMensagens(mensagensAtivas, false);
         } else if (!manterPosicaoScroll && mensagensAtivas.length === 0) {
             exibirSkeletonMensagens();
@@ -601,6 +657,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 mensagensAtivas = resp.data;
                 mensagensCache.set(convId, resp.data);
+                salvarMensagensCacheLocal(convId, resp.data);
                 renderizarFeedMensagens(mensagensAtivas, manterPosicaoScroll);
             }
         } catch (err) {
@@ -833,6 +890,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     if (idx !== -1) {
                         mensagensAtivas[idx] = resp.data;
                     }
+                    salvarMensagensCacheLocal(conversaAtivaId, mensagensAtivas);
                     renderizarFeedMensagens(mensagensAtivas, true);
                 } else {
                     throw new Error(resp?.message || 'Falha ao enviar mensagem');
@@ -954,6 +1012,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 if (respMsg && respMsg.success && respMsg.data) {
                     mensagensAtivas.push(respMsg.data);
+                    salvarMensagensCacheLocal(conversaAtivaId, mensagensAtivas);
                     renderizarFeedMensagens(mensagensAtivas, false);
                 } else {
                     throw new Error(respMsg?.message || 'Falha ao enviar a foto');
@@ -1054,6 +1113,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 if (resp && resp.success && resp.data) {
                     mensagensAtivas.push(resp.data);
+                    salvarMensagensCacheLocal(conversaAtivaId, mensagensAtivas);
                     renderizarFeedMensagens(mensagensAtivas, false);
                     fecharModalProposta();
                 } else {
@@ -1122,6 +1182,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                             JSON.stringify(novas.map(m => ({ id: m.id, r: m.isRead, os: m.offerStatus }))) !== 
                             JSON.stringify(mensagensAtivas.map(m => ({ id: m.id, r: m.isRead, os: m.offerStatus })))) {
                             mensagensAtivas = novas;
+                            salvarMensagensCacheLocal(conversaAtivaId, mensagensAtivas);
                             renderizarFeedMensagens(mensagensAtivas, true);
                         }
                     }
@@ -1140,6 +1201,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                                       JSON.stringify(conversas.map(c => ({ id: c.id, msg: c.ultimaMensagem, nl: c.naoLidas, st: c.status })));
                         if (mudou) {
                             conversas = listaNova;
+                            try {
+                                localStorage.setItem(STORAGE_KEY_LISTA, JSON.stringify(conversas));
+                            } catch (e) {}
                             renderizarListaConversas(buscaInput?.value || '');
                         }
                     }
@@ -1167,15 +1231,39 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // -------------------------------------------------------------------------
-    // 13. INICIALIZAÇÃO VIA PARÂMETROS DE URL
+    // 13. INICIALIZAÇÃO INSTANTÂNEA E CARGA INTELIGENTE
     // -------------------------------------------------------------------------
     const urlParams = new URLSearchParams(window.location.search);
     const paramId = urlParams.get('id') || urlParams.get('conversaId');
     const paramProdutoId = urlParams.get('produtoId');
+    const cachedAtivaId = localStorage.getItem(STORAGE_KEY_ATIVA);
 
-    // Carregamento inicial em paralelo: não bloqueia a abertura da conversa ativa
-    if (paramId) {
-        selecionarConversa(paramId);
+    // Carrega cache imediato de conversas se existir para 0ms de espera no F5
+    try {
+        const rawCachedLista = localStorage.getItem(STORAGE_KEY_LISTA);
+        if (rawCachedLista) {
+            const parsed = JSON.parse(rawCachedLista);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+                conversas = parsed;
+                renderizarListaConversas();
+            }
+        }
+    } catch (e) {}
+
+    // Identifica qual conversa deve estar aberta imediatamente
+    let idParaAbrir = paramId;
+    if (!idParaAbrir && !paramProdutoId) {
+        if (cachedAtivaId && conversas.some(c => c.id === cachedAtivaId)) {
+            idParaAbrir = cachedAtivaId;
+        } else if (conversas.length > 0 && window.innerWidth >= 992) {
+            idParaAbrir = conversas[0].id;
+        }
+    }
+
+    if (idParaAbrir) {
+        // Abre imediatamente a conversa ativa (com dados do cache se disponíveis)
+        selecionarConversa(idParaAbrir);
+        // Em paralelo, revalida a lista do backend
         await carregarListaConversas();
     } else if (paramProdutoId) {
         try {
@@ -1195,7 +1283,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     } else {
         await carregarListaConversas();
         if (conversas.length > 0 && window.innerWidth >= 992) {
-            // No Desktop grande, se nenhuma conversa foi especificada, seleciona a primeira por conveniência
             selecionarConversa(conversas[0].id);
         } else {
             exibirEstadoSemConversa();
@@ -1205,3 +1292,4 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Inicia escuta em tempo real
     iniciarPolling();
 });
+

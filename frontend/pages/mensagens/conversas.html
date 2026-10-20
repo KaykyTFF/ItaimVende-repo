@@ -305,8 +305,8 @@
                  ================================================== -->
             <section class="chat-col-mensagens" id="chat-col-mensagens">
                 
-                <!-- Estado Vazio Central: exibido quando nenhuma conversa foi selecionada -->
-                <div class="chat-centro-vazio" id="chat-centro-vazio">
+                <!-- Estado Vazio Central: oculto inicialmente para evitar flash ao atualizar (F5) -->
+                <div class="chat-centro-vazio" id="chat-centro-vazio" style="display: none;">
                     <div class="chat-centro-vazio-icone">
                         <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
@@ -375,8 +375,13 @@
                 </div>
 
                 <!-- Área de Mensagens (Scroll) -->
-                <div class="chat-feed-mensagens" id="chat-feed-mensagens" style="display: none;">
-                    <!-- Balões gerados dinamicamente via conversas.js -->
+                <div class="chat-feed-mensagens" id="chat-feed-mensagens">
+                    <div class="chat-skeleton-feed" id="chat-skeleton-feed-inicial">
+                        <div class="chat-skeleton-balao recebida" style="width: 48%;"></div>
+                        <div class="chat-skeleton-balao enviada" style="width: 62%;"></div>
+                        <div class="chat-skeleton-balao recebida" style="width: 40%;"></div>
+                        <div class="chat-skeleton-balao enviada" style="width: 54%;"></div>
+                    </div>
                 </div>
 
                 <!-- Banner Informativo quando a Conversa está Bloqueada -->
@@ -547,6 +552,6 @@
     <script src="../../js/core/rotas/index.js"></script>
     <script src="../../js/core/api/index.js"></script>
     <script src="../../js/core/sessao/index.js"></script>
-    <script src="../../js/pages/mensagens/conversas.js?v=12"></script>
+    <script src="../../js/pages/mensagens/conversas.js?v=15"></script>
 </body>
 </html>
