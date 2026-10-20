@@ -268,170 +268,460 @@
         </div>
 
         <!-- ======================================================
-             ESTADO 1: FORMULÁRIO COM OS 2 CARDS LADO A LADO
+             PROCESSO INTERATIVO POR ETAPAS (WIZARD DE CRIAÇÃO)
              ====================================================== -->
-        <div class="vender-cards-wrapper" id="vender-cards-wrapper">
+        <div class="vender-wizard-wrapper" id="vender-cards-wrapper">
             
-            <!-- CARD DA ESQUERDA: FOTOS E LOCALIZAÇÃO -->
-            <div class="card-vender card-fotos-container">
-                
-                <!-- Grid de Fotos com 6 slots no total (1 principal 2x2 + 5 secundários) -->
-                <div class="grid-fotos-upload" id="grid-fotos">
-                    
-                    <!-- Slot 1: Foto Principal com Ícone de Câmera -->
-                    <div class="slot-foto-upload slot-foto-principal" title="Adicionar foto principal">
-                        <svg class="icone-slot" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-                            <circle cx="12" cy="13" r="4"></circle>
-                        </svg>
-                        <span class="rotulo-slot">Foto principal</span>
-                        <span class="subrotulo-slot">Clique ou arraste</span>
-                        <input type="file" accept="image/*">
-                        <div class="slot-overlay-remover" title="Remover imagem">&times;</div>
+            <!-- Barra de Progresso e Indicadores de Etapas -->
+            <div class="wizard-passos-container" role="region" aria-label="Progresso do cadastro do anúncio">
+                <div class="wizard-passos-nav">
+                    <!-- Trilha de Conexão -->
+                    <div class="wizard-trilha-bg" aria-hidden="true">
+                        <div class="wizard-trilha-fill" id="wizard-trilha-progresso" style="width: 0%;"></div>
                     </div>
 
-                    <!-- Slot 2: Secundário Superior Direito -->
-                    <div class="slot-foto-upload slot-foto-secundario" title="Adicionar foto">
-                        <span class="icone-slot-plus">+</span>
-                        <input type="file" accept="image/*">
-                        <div class="slot-overlay-remover" title="Remover imagem">&times;</div>
-                    </div>
+                    <!-- Etapa 1: Fotos -->
+                    <button type="button" class="passo-item ativo" id="passo-indicador-1" data-etapa="1" aria-label="Etapa 1: Fotos do produto">
+                        <div class="passo-circulo">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                                <circle cx="12" cy="13" r="4"></circle>
+                            </svg>
+                        </div>
+                        <div class="passo-info">
+                            <span class="passo-titulo">1. Fotos</span>
+                            <span class="passo-subtitulo">Imagens do produto</span>
+                        </div>
+                    </button>
 
-                    <!-- Slot 3: Secundário Meio Direito -->
-                    <div class="slot-foto-upload slot-foto-secundario" title="Adicionar foto">
-                        <span class="icone-slot-plus">+</span>
-                        <input type="file" accept="image/*">
-                        <div class="slot-overlay-remover" title="Remover imagem">&times;</div>
-                    </div>
+                    <!-- Etapa 2: Detalhes -->
+                    <button type="button" class="passo-item" id="passo-indicador-2" data-etapa="2" aria-label="Etapa 2: Detalhes e informações">
+                        <div class="passo-circulo">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                        </div>
+                        <div class="passo-info">
+                            <span class="passo-titulo">2. Detalhes</span>
+                            <span class="passo-subtitulo">Título e descrição</span>
+                        </div>
+                    </button>
 
-                    <!-- Slot 4: Secundário Inferior Esquerda -->
-                    <div class="slot-foto-upload slot-foto-secundario" title="Adicionar foto">
-                        <span class="icone-slot-plus">+</span>
-                        <input type="file" accept="image/*">
-                        <div class="slot-overlay-remover" title="Remover imagem">&times;</div>
-                    </div>
+                    <!-- Etapa 3: Preço e Local -->
+                    <button type="button" class="passo-item" id="passo-indicador-3" data-etapa="3" aria-label="Etapa 3: Preço e localização">
+                        <div class="passo-circulo">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <line x1="12" y1="1" x2="12" y2="23"></line>
+                                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                            </svg>
+                        </div>
+                        <div class="passo-info">
+                            <span class="passo-titulo">3. Preço & Local</span>
+                            <span class="passo-subtitulo">Valor e retirada</span>
+                        </div>
+                    </button>
 
-                    <!-- Slot 5: Secundário Inferior Centro -->
-                    <div class="slot-foto-upload slot-foto-secundario" title="Adicionar foto">
-                        <span class="icone-slot-plus">+</span>
-                        <input type="file" accept="image/*">
-                        <div class="slot-overlay-remover" title="Remover imagem">&times;</div>
-                    </div>
-
-                    <!-- Slot 6: Secundário Inferior Direito -->
-                    <div class="slot-foto-upload slot-foto-secundario" title="Adicionar foto">
-                        <span class="icone-slot-plus">+</span>
-                        <input type="file" accept="image/*">
-                        <div class="slot-overlay-remover" title="Remover imagem">&times;</div>
-                    </div>
-                </div>
-
-                <!-- Seção de Localização -->
-                <div class="secao-localizacao-card">
-                    <div class="localizacao-titulo">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                            <circle cx="12" cy="10" r="3"></circle>
-                        </svg>
-                        Localização
-                    </div>
-                    <div class="localizacao-endereco" id="texto-localizacao">
-                        Paulistana - 64750-000
-                    </div>
-                    <button type="button" class="btn-editar-localizacao" id="btn-editar-localizacao">
-                        EDITAR
+                    <!-- Etapa 4: Revisão -->
+                    <button type="button" class="passo-item" id="passo-indicador-4" data-etapa="4" aria-label="Etapa 4: Revisão e publicação">
+                        <div class="passo-circulo">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                            </svg>
+                        </div>
+                        <div class="passo-info">
+                            <span class="passo-titulo">4. Revisão</span>
+                            <span class="passo-subtitulo">Publicar anúncio</span>
+                        </div>
                     </button>
                 </div>
             </div>
 
-            <!-- CARD DA DIREITA: CAMPOS E DROPDOWNS -->
-            <div class="card-vender card-form-container">
+            <!-- Paineis do Wizard -->
+            <div class="wizard-paineis-wrapper">
                 
-                <!-- Campo: Título do Anúncio -->
-                <div class="campo-vender-wrapper">
-                    <input 
-                        type="text" 
-                        class="input-vender-padrao" 
-                        id="input-titulo" 
-                        placeholder="Título do Anúncio" 
-                        autocomplete="off"
-                    >
-                </div>
+                <!-- ==============================================================
+                     ETAPA 1: FOTOS DO PRODUTO
+                     ============================================================== -->
+                <div class="etapa-painel etapa-ativa" id="painel-etapa-1">
+                    <div class="card-etapa-wizard">
+                        <div class="etapa-cabecalho">
+                            <div class="etapa-cabecalho-texto">
+                                <h2>
+                                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2">
+                                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                                        <circle cx="12" cy="13" r="4"></circle>
+                                    </svg>
+                                    Fotos do Produto
+                                </h2>
+                                <p>Adicione fotos nítidas. A primeira foto será a capa principal do seu anúncio.</p>
+                            </div>
+                            <span class="badge-contador-etapa" id="badge-contador-fotos">0 de 6 fotos</span>
+                        </div>
 
-                <!-- Campo: Descrição Detalhada -->
-                <div class="campo-vender-wrapper">
-                    <textarea 
-                        class="textarea-vender-padrao" 
-                        id="textarea-descricao" 
-                        placeholder="Descrição detalhada..."
-                        maxlength="1000"
-                    ></textarea>
-                    <div class="contador-caracteres" id="contador-desc">0 / 1000</div>
-                </div>
+                        <!-- Grid de Fotos com 6 slots (1 principal + 5 secundários) -->
+                        <div class="grid-fotos-upload" id="grid-fotos">
+                            <!-- Slot 1: Foto Principal -->
+                            <div class="slot-foto-upload slot-foto-principal" title="Adicionar foto principal">
+                                <svg class="icone-slot" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                                    <circle cx="12" cy="13" r="4"></circle>
+                                </svg>
+                                <span class="rotulo-slot">Foto principal (Capa)</span>
+                                <span class="subrotulo-slot">Clique ou arraste a imagem aqui</span>
+                                <input type="file" accept="image/*" aria-label="Enviar foto principal">
+                                <div class="slot-overlay-remover" title="Remover imagem">&times;</div>
+                            </div>
 
-                <!-- Campo: Preço (R$) -->
-                <div class="campo-vender-wrapper">
-                    <input 
-                        type="text" 
-                        class="input-vender-padrao" 
-                        id="input-preco" 
-                        placeholder="Preço (R$)" 
-                        autocomplete="off"
-                    >
-                </div>
+                            <!-- Slot 2 -->
+                            <div class="slot-foto-upload slot-foto-secundario" title="Adicionar foto 2">
+                                <span class="icone-slot-plus">+</span>
+                                <input type="file" accept="image/*" aria-label="Enviar foto 2">
+                                <div class="slot-overlay-remover" title="Remover imagem">&times;</div>
+                            </div>
 
-                <!-- Dropdowns em formato de pílula verde -->
-                <div class="grupo-dropdowns-vender">
-                    
-                    <!-- Dropdown: Categoria -->
-                    <div class="dropdown-pill-container" id="dropdown-categoria">
-                        <button type="button" class="btn-dropdown-pill" id="btn-dropdown-categoria">
-                            <span id="label-categoria-texto">CATEGORIA</span>
-                            <svg class="chevron-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                        </button>
-                        <div class="menu-dropdown-opcoes" id="menu-categoria-opcoes">
-                            <div class="item-opcao-dropdown" data-valor="Celulares e Smartphones">Celulares e Smartphones</div>
-                            <div class="item-opcao-dropdown" data-valor="Eletrônicos e Áudio">Eletrônicos e Áudio</div>
-                            <div class="item-opcao-dropdown" data-valor="Computadores e Informática">Informática & PC</div>
-                            <div class="item-opcao-dropdown" data-valor="Móveis e Decoração">Móveis e Decoração</div>
-                            <div class="item-opcao-dropdown" data-valor="Moda e Acessórios">Moda e Calçados</div>
-                            <div class="item-opcao-dropdown" data-valor="Carros e Motos">Carros e Motos</div>
-                            <div class="item-opcao-dropdown" data-valor="Games e Brinquedos">Games e Brinquedos</div>
-                            <div class="item-opcao-dropdown" data-valor="Serviços e Trabalhos">Serviços e Negócios</div>
-                            <div class="item-opcao-dropdown" data-valor="Outros Produtos">Outros</div>
+                            <!-- Slot 3 -->
+                            <div class="slot-foto-upload slot-foto-secundario" title="Adicionar foto 3">
+                                <span class="icone-slot-plus">+</span>
+                                <input type="file" accept="image/*" aria-label="Enviar foto 3">
+                                <div class="slot-overlay-remover" title="Remover imagem">&times;</div>
+                            </div>
+
+                            <!-- Slot 4 -->
+                            <div class="slot-foto-upload slot-foto-secundario" title="Adicionar foto 4">
+                                <span class="icone-slot-plus">+</span>
+                                <input type="file" accept="image/*" aria-label="Enviar foto 4">
+                                <div class="slot-overlay-remover" title="Remover imagem">&times;</div>
+                            </div>
+
+                            <!-- Slot 5 -->
+                            <div class="slot-foto-upload slot-foto-secundario" title="Adicionar foto 5">
+                                <span class="icone-slot-plus">+</span>
+                                <input type="file" accept="image/*" aria-label="Enviar foto 5">
+                                <div class="slot-overlay-remover" title="Remover imagem">&times;</div>
+                            </div>
+
+                            <!-- Slot 6 -->
+                            <div class="slot-foto-upload slot-foto-secundario" title="Adicionar foto 6">
+                                <span class="icone-slot-plus">+</span>
+                                <input type="file" accept="image/*" aria-label="Enviar foto 6">
+                                <div class="slot-overlay-remover" title="Remover imagem">&times;</div>
+                            </div>
+                        </div>
+
+                        <!-- Caixa de Dicas para o Vendedor -->
+                        <div class="dica-vendedor-box">
+                            <span class="dica-vendedor-icone">💡</span>
+                            <div>
+                                <strong>Dica para vender mais rápido:</strong>
+                                Fotos tiradas na luz do dia, sem filtros pesados e mostrando detalhes do item geram até 3x mais contatos no chat!
+                            </div>
+                        </div>
+
+                        <!-- Barra de Navegação da Etapa 1 -->
+                        <div class="wizard-botoes-navegacao">
+                            <button type="button" class="btn-wizard-nav btn-wizard-proximo" id="btn-passo1-proximo">
+                                <span>Avançar para Detalhes</span>
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </button>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Dropdown: Condição -->
-                    <div class="dropdown-pill-container" id="dropdown-condicao">
-                        <button type="button" class="btn-dropdown-pill" id="btn-dropdown-condicao">
-                            <span id="label-condicao-texto">CONDIÇÃO</span>
-                            <svg class="chevron-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                        </button>
-                        <div class="menu-dropdown-opcoes" id="menu-condicao-opcoes">
-                            <div class="item-opcao-dropdown" data-valor="Novo">Novo (Lacrado)</div>
-                            <div class="item-opcao-dropdown" data-valor="Usado - Excelente">Usado – Excelente estado</div>
-                            <div class="item-opcao-dropdown" data-valor="Usado - Bom">Usado – Bom estado</div>
-                            <div class="item-opcao-dropdown" data-valor="Usado - Sinais de uso">Usado – Sinais de uso</div>
-                            <div class="item-opcao-dropdown" data-valor="Para Peças / Defeito">Para retirada de peças</div>
+                <!-- ==============================================================
+                     ETAPA 2: DETALHES DO PRODUTO (TÍTULO, CATEGORIA, CONDIÇÃO, DESCRIÇÃO)
+                     ============================================================== -->
+                <div class="etapa-painel" id="painel-etapa-2">
+                    <div class="card-etapa-wizard">
+                        <div class="etapa-cabecalho">
+                            <div class="etapa-cabecalho-texto">
+                                <h2>
+                                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                        <polyline points="14 2 14 8 20 8"></polyline>
+                                    </svg>
+                                    O que você está anunciando?
+                                </h2>
+                                <p>Escolha um título claro, categoria e descreva as características do produto.</p>
+                            </div>
+                        </div>
+
+                        <div class="card-form-container">
+                            <!-- Título do Anúncio -->
+                            <div class="campo-vender-wrapper">
+                                <label for="input-titulo" class="rotulo-secao-campo">Título do Anúncio *</label>
+                                <input 
+                                    type="text" 
+                                    class="input-vender-padrao" 
+                                    id="input-titulo" 
+                                    placeholder="Ex: iPhone 13 128GB Azul - Impecável na Caixa" 
+                                    autocomplete="off"
+                                    maxlength="80"
+                                >
+                            </div>
+
+                            <!-- Categoria com Seleção Rápida por Chips -->
+                            <div class="campo-vender-wrapper">
+                                <label class="rotulo-secao-campo">Categoria do Produto *</label>
+                                <div class="chips-selecao-rapida" id="chips-categorias-container">
+                                    <span class="chip-opcao" data-valor="Celulares e Smartphones">📱 Celulares</span>
+                                    <span class="chip-opcao" data-valor="Eletrônicos e Áudio">🎧 Eletrônicos</span>
+                                    <span class="chip-opcao" data-valor="Computadores e Informática">💻 Informática</span>
+                                    <span class="chip-opcao" data-valor="Móveis e Decoração">🛋️ Móveis</span>
+                                    <span class="chip-opcao" data-valor="Carros e Motos">🚗 Veículos</span>
+                                    <span class="chip-opcao" data-valor="Moda e Acessórios">👕 Moda</span>
+                                    <span class="chip-opcao" data-valor="Games e Brinquedos">🎮 Games</span>
+                                    <span class="chip-opcao" data-valor="Serviços e Trabalhos">💼 Serviços</span>
+                                    <span class="chip-opcao" data-valor="Outros Produtos">📦 Outros</span>
+                                </div>
+
+                                <!-- Dropdown de Categoria (Retrocompatível) -->
+                                <div class="dropdown-pill-container" id="dropdown-categoria">
+                                    <button type="button" class="btn-dropdown-pill" id="btn-dropdown-categoria" aria-haspopup="listbox">
+                                        <span id="label-categoria-texto">SELECIONAR CATEGORIA</span>
+                                        <svg class="chevron-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="6 9 12 15 18 9"></polyline>
+                                        </svg>
+                                    </button>
+                                    <div class="menu-dropdown-opcoes" id="menu-categoria-opcoes" role="listbox">
+                                        <div class="item-opcao-dropdown" data-valor="Celulares e Smartphones">Celulares e Smartphones</div>
+                                        <div class="item-opcao-dropdown" data-valor="Eletrônicos e Áudio">Eletrônicos e Áudio</div>
+                                        <div class="item-opcao-dropdown" data-valor="Computadores e Informática">Informática & PC</div>
+                                        <div class="item-opcao-dropdown" data-valor="Móveis e Decoração">Móveis e Decoração</div>
+                                        <div class="item-opcao-dropdown" data-valor="Moda e Acessórios">Moda e Calçados</div>
+                                        <div class="item-opcao-dropdown" data-valor="Carros e Motos">Carros e Motos</div>
+                                        <div class="item-opcao-dropdown" data-valor="Games e Brinquedos">Games e Brinquedos</div>
+                                        <div class="item-opcao-dropdown" data-valor="Serviços e Trabalhos">Serviços e Negócios</div>
+                                        <div class="item-opcao-dropdown" data-valor="Outros Produtos">Outros</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Condição com Seleção Rápida por Chips -->
+                            <div class="campo-vender-wrapper">
+                                <label class="rotulo-secao-campo">Condição do Produto *</label>
+                                <div class="chips-selecao-rapida" id="chips-condicao-container">
+                                    <span class="chip-opcao" data-valor="Novo">✨ Novo (Lacrado)</span>
+                                    <span class="chip-opcao" data-valor="Usado - Excelente">⭐ Usado - Excelente</span>
+                                    <span class="chip-opcao" data-valor="Usado - Bom">👍 Usado - Bom</span>
+                                    <span class="chip-opcao" data-valor="Usado - Sinais de uso">🔍 Sinais de uso</span>
+                                    <span class="chip-opcao" data-valor="Para Peças / Defeito">⚙️ Para peças</span>
+                                </div>
+
+                                <!-- Dropdown de Condição (Retrocompatível) -->
+                                <div class="dropdown-pill-container" id="dropdown-condicao">
+                                    <button type="button" class="btn-dropdown-pill" id="btn-dropdown-condicao" aria-haspopup="listbox">
+                                        <span id="label-condicao-texto">SELECIONAR CONDIÇÃO</span>
+                                        <svg class="chevron-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="6 9 12 15 18 9"></polyline>
+                                        </svg>
+                                    </button>
+                                    <div class="menu-dropdown-opcoes" id="menu-condicao-opcoes" role="listbox">
+                                        <div class="item-opcao-dropdown" data-valor="Novo">Novo (Lacrado)</div>
+                                        <div class="item-opcao-dropdown" data-valor="Usado - Excelente">Usado – Excelente estado</div>
+                                        <div class="item-opcao-dropdown" data-valor="Usado - Bom">Usado – Bom estado</div>
+                                        <div class="item-opcao-dropdown" data-valor="Usado - Sinais de uso">Usado – Sinais de uso</div>
+                                        <div class="item-opcao-dropdown" data-valor="Para Peças / Defeito">Para retirada de peças</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Descrição Detalhada -->
+                            <div class="campo-vender-wrapper">
+                                <label for="textarea-descricao" class="rotulo-secao-campo">Descrição Detalhada</label>
+                                <textarea 
+                                    class="textarea-vender-padrao" 
+                                    id="textarea-descricao" 
+                                    placeholder="Diga mais sobre o produto: tempo de uso, motivo da venda, o que acompanha na caixa, detalhes e condições..."
+                                    maxlength="1000"
+                                ></textarea>
+                                <div class="contador-caracteres" id="contador-desc">0 / 1000</div>
+                            </div>
+                        </div>
+
+                        <!-- Barra de Navegação da Etapa 2 -->
+                        <div class="wizard-botoes-navegacao">
+                            <button type="button" class="btn-wizard-nav btn-wizard-anterior" id="btn-passo2-anterior">
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                                    <polyline points="12 19 5 12 12 5"></polyline>
+                                </svg>
+                                <span>Voltar para Fotos</span>
+                            </button>
+                            <button type="button" class="btn-wizard-nav btn-wizard-proximo" id="btn-passo2-proximo">
+                                <span>Avançar para Preço & Local</span>
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </button>
                         </div>
                     </div>
-
                 </div>
+
+                <!-- ==============================================================
+                     ETAPA 3: PREÇO E LOCALIZAÇÃO
+                     ============================================================== -->
+                <div class="etapa-painel" id="painel-etapa-3">
+                    <div class="card-etapa-wizard">
+                        <div class="etapa-cabecalho">
+                            <div class="etapa-cabecalho-texto">
+                                <h2>
+                                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2">
+                                        <line x1="12" y1="1" x2="12" y2="23"></line>
+                                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                    </svg>
+                                    Preço e Onde retirar
+                                </h2>
+                                <p>Defina o valor da venda e a região para retirada ou entrega.</p>
+                            </div>
+                        </div>
+
+                        <!-- Bloco de Preço Destacado -->
+                        <div class="bloco-preco-destacado">
+                            <label for="input-preco" class="rotulo-secao-campo">Preço de Venda *</label>
+                            <div class="campo-preco-grande">
+                                <span class="cifrao-destaque">R$</span>
+                                <input 
+                                    type="text" 
+                                    class="input-vender-padrao input-preco-destacado" 
+                                    id="input-preco" 
+                                    placeholder="0,00" 
+                                    autocomplete="off"
+                                >
+                            </div>
+                            <small style="color: #64748B; font-size: 12.5px; display: block; margin-top: 8px;">
+                                Digite apenas os números para formatação automática em Reais.
+                            </small>
+                        </div>
+
+                        <!-- Card de Localização Interativo -->
+                        <div class="card-localizacao-etapa">
+                            <div class="localizacao-info-box">
+                                <div class="icone-pin-grande" aria-hidden="true">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                        <circle cx="12" cy="10" r="3"></circle>
+                                    </svg>
+                                </div>
+                                <div class="localizacao-texto-detalhe">
+                                    <strong>Localização de Retirada</strong>
+                                    <span id="texto-localizacao">Paulistana - 64750-000</span>
+                                </div>
+                            </div>
+                            <button type="button" class="btn-editar-localizacao" id="btn-editar-localizacao">
+                                Alterar Localização
+                            </button>
+                        </div>
+
+                        <!-- Barra de Navegação da Etapa 3 -->
+                        <div class="wizard-botoes-navegacao">
+                            <button type="button" class="btn-wizard-nav btn-wizard-anterior" id="btn-passo3-anterior">
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                                    <polyline points="12 19 5 12 12 5"></polyline>
+                                </svg>
+                                <span>Voltar para Detalhes</span>
+                            </button>
+                            <button type="button" class="btn-wizard-nav btn-wizard-proximo" id="btn-passo3-proximo">
+                                <span>Revisar Anúncio</span>
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==============================================================
+                     ETAPA 4: REVISÃO INTERATIVA E CONFIRMAÇÃO FINAL
+                     ============================================================== -->
+                <div class="etapa-painel" id="painel-etapa-4">
+                    <div class="card-etapa-wizard">
+                        <div class="etapa-cabecalho">
+                            <div class="etapa-cabecalho-texto">
+                                <h2>
+                                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2">
+                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                    </svg>
+                                    Revisão do seu Anúncio
+                                </h2>
+                                <p>Veja exatamente como seu produto aparecerá para os compradores na plataforma antes de publicar.</p>
+                            </div>
+                        </div>
+
+                        <!-- Live Preview do Anúncio -->
+                        <div class="preview-anuncio-card">
+                            <!-- Coluna Esquerda: Fotos -->
+                            <div class="preview-col-foto">
+                                <div class="preview-foto-principal-wrapper">
+                                    <img src="../../assets/placeholders/produto-placeholder.svg" alt="Foto de capa do anúncio" id="preview-foto-capa">
+                                </div>
+                                <div class="preview-fotos-miniaturas" id="preview-fotos-miniaturas">
+                                    <!-- Miniaturas injetadas dinamicamente via JS -->
+                                </div>
+                            </div>
+
+                            <!-- Coluna Direita: Informações -->
+                            <div class="preview-col-dados">
+                                <div class="preview-dados-topo">
+                                    <div class="preview-tags-row">
+                                        <span class="preview-tag-badge" id="preview-tag-cat">GERAL</span>
+                                        <span class="preview-tag-badge preview-tag-condicao" id="preview-tag-cond">USADO</span>
+                                    </div>
+                                    <h3 class="preview-titulo-anuncio" id="preview-titulo">Título do Anúncio</h3>
+                                    <div class="preview-preco-anuncio" id="preview-preco">R$ 0,00</div>
+                                    <div class="preview-local-linha">
+                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                            <circle cx="12" cy="10" r="3"></circle>
+                                        </svg>
+                                        <span id="preview-local">Paulistana - 64750-000</span>
+                                    </div>
+                                    <div class="preview-descricao-box">
+                                        <strong>Descrição</strong>
+                                        <p class="preview-descricao-texto" id="preview-descricao">Nenhuma descrição adicionada.</p>
+                                    </div>
+                                </div>
+
+                                <!-- Atalhos rápidos para editar campos específicos -->
+                                <div class="preview-editar-atalho">
+                                    <button type="button" class="btn-editar-etapa-link" data-ir-etapa="1">✏️ Editar fotos</button>
+                                    <button type="button" class="btn-editar-etapa-link" data-ir-etapa="2">✏️ Editar detalhes</button>
+                                    <button type="button" class="btn-editar-etapa-link" data-ir-etapa="3">✏️ Editar valor</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Botão Principal de Publicação e Feedback -->
+                        <div class="secao-acao-anunciar" id="secao-acao-anunciar">
+                            <div style="display: flex; gap: 16px; align-items: center; width: 100%; justify-content: space-between;">
+                                <button type="button" class="btn-wizard-nav btn-wizard-anterior" id="btn-passo4-anterior">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                                        <polyline points="12 19 5 12 12 5"></polyline>
+                                    </svg>
+                                    <span>Voltar para Ajustes</span>
+                                </button>
+                                
+                                <button type="button" class="btn-anunciar-destaque" id="btn-anunciar">
+                                    <span class="spinner-vender"></span>
+                                    <span class="texto-btn-anunciar">PUBLICAR ANÚNCIO AGORA 🚀</span>
+                                </button>
+                            </div>
+                            <div class="feedback-msg-validacao" id="feedback-validacao" role="alert"></div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-        </div>
-
-        <!-- Botão Principal: ANUNCIAR -->
-        <div class="secao-acao-anunciar" id="secao-acao-anunciar">
-            <button type="button" class="btn-anunciar-destaque" id="btn-anunciar">
-                <span class="spinner-vender"></span>
-                <span class="texto-btn-anunciar">ANUNCIAR</span>
-            </button>
-            <div class="feedback-msg-validacao" id="feedback-validacao"></div>
         </div>
 
         <!-- ======================================================

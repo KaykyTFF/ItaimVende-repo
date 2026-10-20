@@ -3,6 +3,8 @@
    Fidelidade 100% à versão Desktop + Design Moderno e Responsivo
    ========================================================================== */
 
+@import url('transicoes.css');
+
 :root {
     --color-primary: #489636;
     --color-primary-hover: #3E822E;

@@ -84,10 +84,41 @@
         },
 
         /**
-         * Navega diretamente para uma página
+         * Executa transição visual e navega para o destino com animação suave
+         */
+        executarTransicao(urlDestino) {
+            if (!urlDestino) return;
+
+            // Se for a mesma URL completa (mesmo caminho e mesma busca e hash), não precisa transicionar
+            if (urlDestino === window.location.href) return;
+
+            // Barra de progresso superior
+            let bar = document.getElementById('itaim-transition-bar');
+            if (!bar) {
+                bar = document.createElement('div');
+                bar.id = 'itaim-transition-bar';
+                document.body.appendChild(bar);
+            }
+            bar.classList.remove('concluido');
+            bar.classList.add('ativo');
+            bar.style.width = '70%';
+
+            // Classe de transição de saída no corpo
+            document.body.classList.add('pagina-saindo');
+
+            // Timeout para transição suave antes da navegação do navegador
+            setTimeout(() => {
+                bar.style.width = '95%';
+                window.location.href = urlDestino;
+            }, 190);
+        },
+
+        /**
+         * Navega diretamente para uma página com transição suave
          */
         navegarPara(destino, params = '') {
-            window.location.href = this.obterUrl(destino, params);
+            const urlFinal = this.obterUrl(destino, params);
+            this.executarTransicao(urlFinal);
         },
 
         /**
@@ -185,5 +216,89 @@
     };
 
     window.ItaimRotas = ItaimRotas;
+
+    // =========================================================================
+    // INICIALIZADOR DE TRANSIÇÃO GLOBAL DE PÁGINAS (ENTRADA, SAÍDA E BFCACHE)
+    // =========================================================================
+    function inicializarTransicoes() {
+        // 1. Animação de entrada suave da página
+        if (document.body) {
+            document.body.classList.add('pagina-entrando');
+            setTimeout(() => {
+                document.body.classList.remove('pagina-entrando');
+            }, 350);
+        }
+
+        // 2. Intercepta cliques em links internos para transição suave de saída
+        document.addEventListener('click', (e) => {
+            // Se já foi prevenido por outro script (ex: modais, acordeões), ignora
+            if (e.defaultPrevented) return;
+
+            // Ignora cliques com botão direito ou teclas modificadoras (abrir em nova aba)
+            if (e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
+
+            const link = e.target.closest('a[href]');
+            if (!link) return;
+
+            const href = link.getAttribute('href');
+            if (!href) return;
+
+            // Ignora âncoras locais, javascript:, mailto:, tel:
+            if (href.startsWith('#') || href.startsWith('javascript:') || href.startsWith('mailto:') || href.startsWith('tel:')) {
+                return;
+            }
+
+            // Ignora links que abrem em nova aba ou downloads
+            if (link.target === '_blank' || link.hasAttribute('download')) {
+                return;
+            }
+
+            try {
+                // Analisa o destino da URL
+                const destinoUrl = new URL(link.href, window.location.href);
+                if (destinoUrl.origin !== window.location.origin) {
+                    return;
+                }
+
+                // Ignora se for apenas âncora na mesma página atual
+                const urlSemHashAtual = window.location.href.split('#')[0];
+                const destinoSemHash = destinoUrl.href.split('#')[0];
+                if (urlSemHashAtual === destinoSemHash && destinoUrl.hash) {
+                    return;
+                }
+
+                // Executa a transição suave de saída
+                e.preventDefault();
+                ItaimRotas.executarTransicao(destinoUrl.href);
+            } catch (err) {
+                // Fallback normal
+            }
+        });
+
+        // 3. Suporte a bfcache (ao voltar / avançar pelo histórico do navegador)
+        window.addEventListener('pageshow', (e) => {
+            if (document.body) {
+                document.body.classList.remove('pagina-saindo');
+                document.body.classList.add('pagina-entrando');
+                setTimeout(() => {
+                    document.body.classList.remove('pagina-entrando');
+                }, 350);
+            }
+            const bar = document.getElementById('itaim-transition-bar');
+            if (bar) {
+                bar.classList.add('concluido');
+                setTimeout(() => {
+                    bar.classList.remove('ativo', 'concluido');
+                    bar.style.width = '0%';
+                }, 300);
+            }
+        });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', inicializarTransicoes);
+    } else {
+        inicializarTransicoes();
+    }
 
 })();

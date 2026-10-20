@@ -24,5 +24,8 @@
 /* 7. Modal de Seleção de Localização */
 @import url('./vender/vender-modal-localizacao.css');
 
-/* 8. Responsividade (Mobile e Tablet) */
+/* 8. Processo Interativo por Etapas (Wizard) */
+@import url('./vender/vender-wizard.css');
+
+/* 9. Responsividade (Mobile e Tablet) */
 @import url('./vender/vender-responsive.css');

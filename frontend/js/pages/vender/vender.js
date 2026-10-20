@@ -1,7 +1,7 @@
 /**
  * ==========================================================================
  * ITAIM VENDE - LÓGICA DA PÁGINA "CRIAR ANÚNCIO / VENDER"
- * Uploads de fotos, máscaras, dropdowns customizados e transição de sucesso.
+ * Processo interativo por 4 etapas (Wizard), Uploads 1:1, Máscaras e Preview.
  * ==========================================================================
  */
 
@@ -32,6 +32,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const labelCondicao = document.getElementById('label-condicao-texto');
     const menuCondicaoOpcoes = document.getElementById('menu-condicao-opcoes');
 
+    // Chips de seleção rápida
+    const chipsCategoria = document.querySelectorAll('#chips-categorias-container .chip-opcao');
+    const chipsCondicao = document.querySelectorAll('#chips-condicao-container .chip-opcao');
+
     // Localização
     const textoLocalizacao = document.getElementById('texto-localizacao');
     const btnEditarLoc = document.getElementById('btn-editar-localizacao');
@@ -43,15 +47,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Slots de fotos
     const slotsFoto = document.querySelectorAll('.slot-foto-upload');
+    const badgeContadorFotos = document.getElementById('badge-contador-fotos');
 
-    // Botões da Toolbar de Teste Rápido
-    const btnTabForm = document.getElementById('btn-tab-form');
-    const btnTabSucesso = document.getElementById('btn-tab-sucesso');
+    // Botões de Navegação do Wizard
+    const btnPasso1Proximo = document.getElementById('btn-passo1-proximo');
+    const btnPasso2Anterior = document.getElementById('btn-passo2-anterior');
+    const btnPasso2Proximo = document.getElementById('btn-passo2-proximo');
+    const btnPasso3Anterior = document.getElementById('btn-passo3-anterior');
+    const btnPasso3Proximo = document.getElementById('btn-passo3-proximo');
+    const btnPasso4Anterior = document.getElementById('btn-passo4-anterior');
+    const passoIndicadores = document.querySelectorAll('.passo-item');
+    const btnsEditarEtapaLink = document.querySelectorAll('.btn-editar-etapa-link');
 
     // ==========================================================================
-    // 1. SISTEMA SIMPLES DE UPLOAD E AJUSTE DE FOTOS (1:1 SEM ESPAÇOS CINZAS)
+    // 1. SISTEMA DE UPLOAD E AJUSTE DE FOTOS (1:1 SEM ESPAÇOS CINZAS)
     // ==========================================================================
-    slotsFoto.forEach((slot, index) => {
+    function atualizarContadorFotos() {
+        let qtd = 0;
+        slotsFoto.forEach(slot => {
+            if (slot.classList.contains('com-foto')) qtd++;
+        });
+        if (badgeContadorFotos) {
+            badgeContadorFotos.textContent = `${qtd} de 6 fotos`;
+        }
+    }
+
+    slotsFoto.forEach((slot) => {
         const fileInput = slot.querySelector('input[type="file"]');
         const overlayRemover = slot.querySelector('.slot-overlay-remover');
 
@@ -59,11 +80,11 @@ document.addEventListener('DOMContentLoaded', () => {
         slot.addEventListener('click', (e) => {
             if (e.target === fileInput) return;
             if (e.target.closest('.slot-overlay-remover')) return;
-            fileInput.click();
+            fileInput?.click();
         });
 
         // Quando o usuário escolhe um arquivo
-        fileInput.addEventListener('change', (e) => {
+        fileInput?.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (file) {
                 processarArquivoFoto(slot, file);
@@ -93,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (files && files.length > 0) {
                 const file = files[0];
                 if (file.type.startsWith('image/')) {
-                    fileInput.files = files;
+                    if (fileInput) fileInput.files = files;
                     processarArquivoFoto(slot, file);
                 }
             }
@@ -106,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Processa a foto com a API simples de ajuste (permite ao usuário enquadrar e cortar 1:1)
+    // Processa a foto com a API de ajuste 1:1
     function processarArquivoFoto(slot, file) {
         if (window.ItaimFoto && typeof window.ItaimFoto.ajustarProduto === 'function') {
             window.ItaimFoto.ajustarProduto(file, (dataUrlAjustada) => {
@@ -125,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Aplica a imagem ajustada no slot com acabamento estético perfeito
+    // Aplica a imagem ajustada no slot
     function renderizarFotoNoSlot(slot, dataUrl) {
         let img = slot.querySelector('.slot-preview-img');
         if (!img) {
@@ -147,6 +168,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Exibe botão de remover
         const overlay = slot.querySelector('.slot-overlay-remover');
         if (overlay) overlay.style.display = 'flex';
+
+        atualizarContadorFotos();
     }
 
     function removerFotoDoSlot(slot, fileInput) {
@@ -164,10 +187,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const overlay = slot.querySelector('.slot-overlay-remover');
         if (overlay) overlay.style.display = 'none';
+
+        atualizarContadorFotos();
     }
 
+    atualizarContadorFotos();
+
     // ==========================================================================
-    // 2. MÁSCARA DINÂMICA DE PREÇO (R$ 0,00)
+    // 2. MÁSCARA DINÂMICA DE PREÇO (R$ 0,00) E CONTADOR DE CARACTERES
     // ==========================================================================
     if (inputPreco) {
         inputPreco.addEventListener('input', (e) => {
@@ -184,7 +211,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Contador de caracteres na descrição
     if (textareaDesc && contadorChar) {
         textareaDesc.addEventListener('input', () => {
             const tam = textareaDesc.value.length;
@@ -193,14 +219,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================================================
-    // 3. DROPDOWNS EM PÍLULA (CATEGORIA E CONDIÇÃO)
+    // 3. SELETORES DE CATEGORIA E CONDIÇÃO (CHIPS E DROPDOWNS SINCRONIZADOS)
     // ==========================================================================
-    function configurarDropdownPill(container, btn, label, menu) {
+    function configurarDropdownPill(container, btn, label, menu, onSelect) {
         if (!container || !btn || !menu) return;
 
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
-            // Fecha outros abertos
             document.querySelectorAll('.dropdown-pill-container').forEach(d => {
                 if (d !== container) d.classList.remove('aberto');
             });
@@ -216,14 +241,63 @@ document.addEventListener('DOMContentLoaded', () => {
                 menu.querySelectorAll('.item-opcao-dropdown').forEach(i => i.classList.remove('selecionado'));
                 item.classList.add('selecionado');
                 container.classList.remove('aberto');
+
+                if (typeof onSelect === 'function') onSelect(valor);
             });
         });
     }
 
-    configurarDropdownPill(dropdownCategoria, btnDropdownCategoria, labelCategoria, menuCategoriaOpcoes);
-    configurarDropdownPill(dropdownCondicao, btnDropdownCondicao, labelCondicao, menuCondicaoOpcoes);
+    configurarDropdownPill(dropdownCategoria, btnDropdownCategoria, labelCategoria, menuCategoriaOpcoes, (valor) => {
+        chipsCategoria.forEach(chip => {
+            if (chip.getAttribute('data-valor') === valor) {
+                chip.classList.add('ativo');
+            } else {
+                chip.classList.remove('ativo');
+            }
+        });
+    });
 
-    // Fecha dropdown ao clicar fora
+    configurarDropdownPill(dropdownCondicao, btnDropdownCondicao, labelCondicao, menuCondicaoOpcoes, (valor) => {
+        chipsCondicao.forEach(chip => {
+            if (chip.getAttribute('data-valor') === valor) {
+                chip.classList.add('ativo');
+            } else {
+                chip.classList.remove('ativo');
+            }
+        });
+    });
+
+    // Chips de Categoria
+    chipsCategoria.forEach(chip => {
+        chip.addEventListener('click', () => {
+            chipsCategoria.forEach(c => c.classList.remove('ativo'));
+            chip.classList.add('ativo');
+            const valor = chip.getAttribute('data-valor');
+            if (labelCategoria) labelCategoria.textContent = valor.toUpperCase();
+            if (menuCategoriaOpcoes) {
+                menuCategoriaOpcoes.querySelectorAll('.item-opcao-dropdown').forEach(item => {
+                    item.classList.toggle('selecionado', item.getAttribute('data-valor') === valor);
+                });
+            }
+        });
+    });
+
+    // Chips de Condição
+    chipsCondicao.forEach(chip => {
+        chip.addEventListener('click', () => {
+            chipsCondicao.forEach(c => c.classList.remove('ativo'));
+            chip.classList.add('ativo');
+            const valor = chip.getAttribute('data-valor');
+            if (labelCondicao) labelCondicao.textContent = valor.toUpperCase();
+            if (menuCondicaoOpcoes) {
+                menuCondicaoOpcoes.querySelectorAll('.item-opcao-dropdown').forEach(item => {
+                    item.classList.toggle('selecionado', item.getAttribute('data-valor') === valor);
+                });
+            }
+        });
+    });
+
+    // Fecha dropdowns ao clicar fora
     document.addEventListener('click', () => {
         document.querySelectorAll('.dropdown-pill-container').forEach(d => d.classList.remove('aberto'));
     });
@@ -253,45 +327,209 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ==========================================================================
-    // 5. TRANSIÇÃO PARA TELA DE SUCESSO AO CLICAR EM "ANUNCIAR"
+    // 5. NAVEGAÇÃO INTERATIVA DO WIZARD POR ETAPAS
+    // ==========================================================================
+    let etapaAtual = 1;
+
+    function atualizarPreviewRevisao() {
+        const previewFotoCapa = document.getElementById('preview-foto-capa');
+        const previewFotosMiniaturas = document.getElementById('preview-fotos-miniaturas');
+        const previewTitulo = document.getElementById('preview-titulo');
+        const previewPreco = document.getElementById('preview-preco');
+        const previewTagCat = document.getElementById('preview-tag-cat');
+        const previewTagCond = document.getElementById('preview-tag-cond');
+        const previewLocal = document.getElementById('preview-local');
+        const previewDescricao = document.getElementById('preview-descricao');
+
+        // Coleta fotos atuais dos slots
+        const fotos = [];
+        slotsFoto.forEach(slot => {
+            const img = slot.querySelector('.slot-preview-img');
+            if (img && img.src) fotos.push(img.src);
+        });
+
+        const placeholder = '../../assets/placeholders/produto-placeholder.svg';
+        if (previewFotoCapa) {
+            previewFotoCapa.src = fotos.length > 0 ? fotos[0] : placeholder;
+        }
+
+        if (previewFotosMiniaturas) {
+            previewFotosMiniaturas.innerHTML = '';
+            if (fotos.length > 1) {
+                fotos.forEach((fotoSrc, idx) => {
+                    const thumb = document.createElement('img');
+                    thumb.className = 'preview-thumb-item' + (idx === 0 ? ' ativo' : '');
+                    thumb.src = fotoSrc;
+                    thumb.alt = `Foto ${idx + 1}`;
+                    thumb.addEventListener('click', () => {
+                        if (previewFotoCapa) previewFotoCapa.src = fotoSrc;
+                        previewFotosMiniaturas.querySelectorAll('.preview-thumb-item').forEach(t => t.classList.remove('ativo'));
+                        thumb.classList.add('ativo');
+                    });
+                    previewFotosMiniaturas.appendChild(thumb);
+                });
+            }
+        }
+
+        // Título
+        if (previewTitulo) {
+            previewTitulo.textContent = inputTitulo?.value.trim() || 'Título não informado';
+        }
+
+        // Preço
+        if (previewPreco) {
+            previewPreco.textContent = inputPreco?.value.trim() || 'R$ 0,00';
+        }
+
+        // Categorias e Condição
+        const catTexto = labelCategoria?.textContent.trim() || 'GERAL';
+        if (previewTagCat) {
+            previewTagCat.textContent = (catTexto === 'SELECIONAR CATEGORIA' || catTexto === 'CATEGORIA') ? 'GERAL' : catTexto;
+        }
+
+        const condTexto = labelCondicao?.textContent.trim() || 'USADO';
+        if (previewTagCond) {
+            previewTagCond.textContent = (condTexto === 'SELECIONAR CONDIÇÃO' || condTexto === 'CONDIÇÃO') ? 'USADO' : condTexto;
+        }
+
+        // Localização
+        if (previewLocal && textoLocalizacao) {
+            previewLocal.textContent = textoLocalizacao.textContent.trim() || 'Paulistana - 64750-000';
+        }
+
+        // Descrição
+        if (previewDescricao) {
+            const desc = textareaDesc?.value.trim();
+            previewDescricao.textContent = desc || 'Nenhuma descrição detalhada informada.';
+        }
+    }
+
+    function irParaEtapa(novaEtapa) {
+        if (novaEtapa < 1 || novaEtapa > 4) return false;
+
+        // Se estiver avançando, valida as informações da etapa anterior
+        if (novaEtapa > etapaAtual) {
+            // Validação ao sair da Etapa 2 (Detalhes)
+            if (etapaAtual === 2 || (etapaAtual < 2 && novaEtapa > 2)) {
+                const tit = inputTitulo?.value.trim() || '';
+                if (tit.length < 3) {
+                    exibirFeedback('O título do anúncio deve ter no mínimo 3 caracteres.');
+                    if (etapaAtual !== 2) irParaEtapa(2);
+                    inputTitulo?.focus();
+                    return false;
+                }
+            }
+
+            // Validação ao sair da Etapa 3 (Preço)
+            if (etapaAtual === 3 || (etapaAtual < 3 && novaEtapa === 4)) {
+                const precoRaw = inputPreco?.value.replace(/\D/g, '') || '0';
+                const precoVal = parseFloat(precoRaw) / 100;
+                if (precoVal <= 0) {
+                    exibirFeedback('Por favor, informe um preço de venda válido.');
+                    if (etapaAtual !== 3) irParaEtapa(3);
+                    inputPreco?.focus();
+                    return false;
+                }
+            }
+        }
+
+        etapaAtual = novaEtapa;
+
+        // Atualiza painéis visíveis
+        for (let i = 1; i <= 4; i++) {
+            const painel = document.getElementById(`painel-etapa-${i}`);
+            if (painel) {
+                if (i === etapaAtual) {
+                    painel.classList.add('etapa-ativa');
+                } else {
+                    painel.classList.remove('etapa-ativa');
+                }
+            }
+        }
+
+        // Atualiza indicadores visuais no cabeçalho
+        passoIndicadores.forEach((passoBtn) => {
+            const num = parseInt(passoBtn.getAttribute('data-etapa'), 10);
+            passoBtn.classList.remove('ativo', 'concluido');
+            if (num === etapaAtual) {
+                passoBtn.classList.add('ativo');
+            } else if (num < etapaAtual) {
+                passoBtn.classList.add('concluido');
+            }
+        });
+
+        // Atualiza trilha de progresso
+        const trilha = document.getElementById('wizard-trilha-progresso');
+        if (trilha) {
+            const larguras = { 1: '0%', 2: '33.3%', 3: '66.6%', 4: '100%' };
+            trilha.style.width = larguras[etapaAtual] || '0%';
+        }
+
+        // Se chegou na etapa de revisão, atualiza os dados em tempo real
+        if (etapaAtual === 4) {
+            atualizarPreviewRevisao();
+        }
+
+        // Scroll suave até o topo do formulário
+        window.scrollTo({ top: 100, behavior: 'smooth' });
+        return true;
+    }
+
+    // Botões de Avançar e Voltar
+    btnPasso1Proximo?.addEventListener('click', () => irParaEtapa(2));
+    btnPasso2Anterior?.addEventListener('click', () => irParaEtapa(1));
+    btnPasso2Proximo?.addEventListener('click', () => irParaEtapa(3));
+    btnPasso3Anterior?.addEventListener('click', () => irParaEtapa(2));
+    btnPasso3Proximo?.addEventListener('click', () => irParaEtapa(4));
+    btnPasso4Anterior?.addEventListener('click', () => irParaEtapa(3));
+
+    // Clique direto nos indicadores de etapa
+    passoIndicadores.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const destino = parseInt(btn.getAttribute('data-etapa'), 10);
+            irParaEtapa(destino);
+        });
+    });
+
+    // Links de atalho "Editar" na etapa de revisão
+    btnsEditarEtapaLink.forEach(link => {
+        link.addEventListener('click', () => {
+            const etapa = parseInt(link.getAttribute('data-ir-etapa'), 10);
+            if (etapa) irParaEtapa(etapa);
+        });
+    });
+
+    // ==========================================================================
+    // 6. TRANSIÇÃO PARA TELA DE SUCESSO
     // ==========================================================================
     function alternarParaSucesso() {
-        formCardsWrapper.style.opacity = '0';
-        formCardsWrapper.style.transform = 'translateY(-15px)';
-        secaoAcao.style.opacity = '0';
+        if (formCardsWrapper) {
+            formCardsWrapper.style.opacity = '0';
+            formCardsWrapper.style.transform = 'translateY(-15px)';
+        }
 
         setTimeout(() => {
-            formCardsWrapper.style.display = 'none';
-            secaoAcao.style.display = 'none';
-            telaSucesso.classList.add('ativo');
-
-            // Scroll suave até o topo da tela
+            if (formCardsWrapper) formCardsWrapper.style.display = 'none';
+            telaSucesso?.classList.add('ativo');
             window.scrollTo({ top: 120, behavior: 'smooth' });
-
-            // Atualiza toolbar se existir
-            btnTabForm?.classList.remove('ativo');
-            btnTabSucesso?.classList.add('ativo');
         }, 300);
     }
 
     function alternarParaFormulario() {
-        telaSucesso.classList.remove('ativo');
-        formCardsWrapper.style.display = 'grid';
-        secaoAcao.style.display = 'flex';
-
-        setTimeout(() => {
-            formCardsWrapper.style.opacity = '1';
-            formCardsWrapper.style.transform = 'translateY(0)';
-            secaoAcao.style.opacity = '1';
-
-            btnTabForm?.classList.add('ativo');
-            btnTabSucesso?.classList.remove('ativo');
-        }, 50);
+        telaSucesso?.classList.remove('ativo');
+        if (formCardsWrapper) {
+            formCardsWrapper.style.display = 'block';
+            setTimeout(() => {
+                formCardsWrapper.style.opacity = '1';
+                formCardsWrapper.style.transform = 'translateY(0)';
+            }, 50);
+        }
+        irParaEtapa(1);
     }
 
     let ultimoAnuncioCriadoId = null;
 
-    // Mapeamento auxiliar de categorias do formulário para IDs do banco de dados
+    // Mapeamento auxiliar de categorias
     const CATEGORIA_MAPA = {
         'veiculos': 1,
         'carros e motos': 1,
@@ -341,38 +579,44 @@ document.addEventListener('DOMContentLoaded', () => {
         return 'USADO';
     }
 
+    // ==========================================================================
+    // 7. PUBLICAÇÃO FINAL DO ANÚNCIO (AO CLICAR NO BOTÃO DA ETAPA 4)
+    // ==========================================================================
     btnAnunciar?.addEventListener('click', async () => {
-        // Validação simples dos campos
         const titulo = inputTitulo?.value.trim();
         const precoRaw = inputPreco?.value.replace(/\D/g, '') || '0';
         const preco = parseFloat(precoRaw) / 100;
-        let categoria = labelCategoria?.textContent.trim() || 'Eletrônicos';
+        let categoria = labelCategoria?.textContent.trim() || 'Geral';
         let condicao = labelCondicao?.textContent.trim() || 'Usado';
         const descricao = textareaDesc?.value.trim() || '';
 
-        // Se categoria ainda for o texto do botão inicial
-        if (!categoria || categoria.toUpperCase() === 'CATEGORIA') {
+        if (!categoria || categoria.toUpperCase() === 'CATEGORIA' || categoria.toUpperCase() === 'SELECIONAR CATEGORIA') {
             categoria = 'Geral';
         }
 
-        // Se condição ainda for o texto do botão inicial
-        if (!condicao || condicao.toUpperCase() === 'CONDIÇÃO') {
+        if (!condicao || condicao.toUpperCase() === 'CONDIÇÃO' || condicao.toUpperCase() === 'SELECIONAR CONDIÇÃO') {
             condicao = 'Usado';
         }
 
         if (!titulo || titulo.length < 3) {
             exibirFeedback('O título do anúncio deve ter no mínimo 3 caracteres.');
+            irParaEtapa(2);
             inputTitulo?.focus();
-            inputTitulo?.scrollIntoView({ behavior: 'smooth', block: 'center' });
             return;
         }
 
-        // Descrição mínima de segurança para o Zod / Banco
+        if (preco <= 0) {
+            exibirFeedback('Por favor, defina um preço de venda válido.');
+            irParaEtapa(3);
+            inputPreco?.focus();
+            return;
+        }
+
         const descricaoFinal = (descricao && descricao.length >= 5) 
             ? descricao 
             : `${titulo} anunciado para venda no Itaim Vende.`;
 
-        // Coleta fotos carregadas nos slots
+        // Coleta fotos dos slots
         const fotosColetadas = [];
         slotsFoto.forEach(slot => {
             const img = slot.querySelector('.slot-preview-img');
@@ -396,8 +640,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let fotosUrlsBackend = [];
 
-        // 1. Tenta upload de fotos reais no Backend se houver conexão e token
-        if (window.ItaimApi && fotosColetadas.length > 0 && window.ItaimApi.auth.obterToken()) {
+        // 1. Upload de fotos multipart para o Backend caso autenticado
+        if (window.ItaimApi && fotosColetadas.length > 0 && window.ItaimApi.auth?.obterToken()) {
             try {
                 if (spanTexto) spanTexto.textContent = 'ENVIANDO FOTOS...';
                 const uploadRes = await window.ItaimApi.upload.vendas(fotosColetadas);
@@ -405,14 +649,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     fotosUrlsBackend = uploadRes.urls;
                 }
             } catch (upErr) {
-                console.warn('[Vender] Falha no upload multipart para o backend, mantendo fotos locais:', upErr.message);
+                console.warn('[Vender] Falha no upload multipart, usando armazenamento local:', upErr.message);
             }
         }
 
         let idCriado = null;
 
         // 2. Publica o anúncio na API central do Backend se autenticado
-        if (window.ItaimApi && window.ItaimApi.auth.obterToken()) {
+        if (window.ItaimApi && window.ItaimApi.auth?.obterToken()) {
             try {
                 if (spanTexto) spanTexto.textContent = 'SALVANDO NO BANCO...';
                 const dadosPayload = {
@@ -423,7 +667,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     condition: normalizarCondicao(condicao),
                     city: cidadeAnuncio,
                     neighborhood: cepAnuncio,
-                    images: fotosUrlsBackend.length > 0 ? fotosUrlsBackend : ['assets/images/produtos/anuncio_11.jpg']
+                    images: fotosUrlsBackend.length > 0 ? fotosUrlsBackend : ['assets/placeholders/produto-placeholder.svg']
                 };
 
                 const resProduto = await window.ItaimApi.produtos.criar(dadosPayload);
@@ -431,11 +675,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     idCriado = resProduto.data.id;
                 }
             } catch (apiErr) {
-                console.warn('[Vender] Falha ao salvar produto na API do backend:', apiErr.message);
+                console.warn('[Vender] Falha na API do backend:', apiErr.message);
             }
         }
 
-        // 3. Sincroniza também localmente como cache offline e fallback garantido
+        // 3. Sincroniza localmente para fallback garantido e cache offline
         try {
             if (window.ItaimSessao && typeof window.ItaimSessao.adicionarNovoAnuncio === 'function') {
                 const novoAnuncio = window.ItaimSessao.adicionarNovoAnuncio({
@@ -449,7 +693,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     bairro: cepAnuncio,
                     imagens: fotosUrlsBackend.length > 0 
                         ? fotosUrlsBackend 
-                        : (fotosColetadas.length > 0 ? fotosColetadas : ['assets/produtos/anuncio_11.jpg'])
+                        : (fotosColetadas.length > 0 ? fotosColetadas : ['assets/placeholders/produto-placeholder.svg'])
                 });
                 ultimoAnuncioCriadoId = idCriado || novoAnuncio.id;
             } else {
@@ -457,12 +701,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             btnAnunciar.classList.remove('carregando');
-            if (spanTexto) spanTexto.textContent = 'ANUNCIAR';
+            if (spanTexto) spanTexto.textContent = 'PUBLICAR ANÚNCIO AGORA 🚀';
             alternarParaSucesso();
         } catch (err) {
             console.error('Erro ao anunciar:', err);
             btnAnunciar.classList.remove('carregando');
-            if (spanTexto) spanTexto.textContent = 'ANUNCIAR';
+            if (spanTexto) spanTexto.textContent = 'PUBLICAR ANÚNCIO AGORA 🚀';
             exibirFeedback('Ocorreu um erro ao salvar o anúncio. Tente novamente.');
         }
     });
@@ -488,17 +732,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Botão criar outro anúncio
     btnCriarOutro?.addEventListener('click', () => {
-        // Limpa inputs
         if (inputTitulo) inputTitulo.value = '';
         if (textareaDesc) textareaDesc.value = '';
         if (inputPreco) inputPreco.value = '';
         if (contadorChar) contadorChar.textContent = '0 / 1000';
+        
+        // Limpa fotos dos slots
+        slotsFoto.forEach(slot => {
+            const fileInput = slot.querySelector('input[type="file"]');
+            removerFotoDoSlot(slot, fileInput);
+        });
+
+        // Reseta chips
+        chipsCategoria.forEach(c => c.classList.remove('ativo'));
+        chipsCondicao.forEach(c => c.classList.remove('ativo'));
+        if (labelCategoria) labelCategoria.textContent = 'SELECIONAR CATEGORIA';
+        if (labelCondicao) labelCondicao.textContent = 'SELECIONAR CONDIÇÃO';
+
         alternarParaFormulario();
     });
-
-    // Toolbar de visualização rápida (para demonstração)
-    btnTabForm?.addEventListener('click', alternarParaFormulario);
-    btnTabSucesso?.addEventListener('click', alternarParaSucesso);
-
-    // Header e Menu Lateral (Drawer) são gerenciados de forma centralizada e global por sessao.js
 });
