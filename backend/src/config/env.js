@@ -27,7 +27,7 @@ if (fs.existsSync(envBackend)) {
 
 // Fallback oficial do banco de dados (Supabase PostgreSQL do Itaim Vende)
 const DEFAULT_DATABASE_URL =
-  'postgresql://postgres:Itaim111251125@db.pgrznndtajjzpwqgtkkz.supabase.co:5432/postgres';
+  'postgresql://postgres.pgrznndtajjzpwqgtkkz:Itaim111251125@aws-1-ca-central-1.pooler.supabase.com:5432/postgres';
 
 if (!process.env.DATABASE_URL || process.env.DATABASE_URL.trim() === '') {
   process.env.DATABASE_URL = DEFAULT_DATABASE_URL;

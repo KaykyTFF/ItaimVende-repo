@@ -27,7 +27,7 @@ const envExamplePath = path.join(BACKEND_DIR, '.env.example');
 
 const defaultEnvContent = `PORT=3000
 NODE_ENV=development
-DATABASE_URL="postgresql://postgres:Itaim111251125@db.pgrznndtajjzpwqgtkkz.supabase.co:5432/postgres"
+DATABASE_URL="postgresql://postgres.pgrznndtajjzpwqgtkkz:Itaim111251125@aws-1-ca-central-1.pooler.supabase.com:5432/postgres"
 JWT_SECRET="itaim_vende_super_segredo_jwt_auth_chave_2026"
 JWT_EXPIRES_IN="2h"
 CORS_ORIGIN="*"

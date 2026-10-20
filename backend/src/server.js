@@ -4,8 +4,8 @@ import helmet from 'helmet';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
-import prisma from './config/prisma.js';
 import { ENV } from './config/env.js';
+import prisma from './config/prisma.js';
 import { errorHandler } from './middlewares/error.middleware.js';
 import { requestLogger } from './middlewares/logger.middleware.js';
 import { globalLimiter } from './middlewares/rateLimiter.middleware.js';
@@ -227,6 +227,20 @@ const server = app.listen(PORT, () => {
   console.log(`📦 Produtos:    http://localhost:${PORT}/api/v1/products`);
   console.log(`🔒 Modo:        ${ENV.NODE_ENV}`);
   console.log(`=========================================`);
+
+  // Teste de integridade do Banco de Dados no boot
+  prisma.$queryRaw`SELECT 1`
+    .then(() => {
+      console.log(`✅ Banco de Dados (Supabase PostgreSQL): CONECTADO E RESPONDENDO`);
+      console.log(`=========================================\n`);
+    })
+    .catch((err) => {
+      console.error(`❌ ATENÇÃO: O Banco de Dados NÃO pôde ser alcançado nesta rede!`);
+      console.error(`   Detalhe do erro: ${err.message}`);
+      console.error(`   💡 Motivo provável: A sua rede atual (ex: Wi-Fi do IFPI ou firewall) bloqueia portas de banco de dados.`);
+      console.error(`   💡 Solução rápida: Conecte o PC no roteador 4G/5G do celular ou altere a porta para 6543 no .env.`);
+      console.log(`=========================================\n`);
+    });
 });
 
 // Encerramento Gracioso (Graceful Shutdown) - Libera conexões do Supabase PostgreSQL
