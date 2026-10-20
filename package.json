@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Itaim Vende - Plataforma de Compra, Venda e Trocas",
   "private": true,
+  "type": "module",
   "scripts": {
+    "setup": "node scripts/setup-db.js",
     "start": "npm --prefix backend run start",
     "dev": "npm --prefix backend run dev",
     "tunnel": "cloudflared tunnel --url http://localhost:3000",
