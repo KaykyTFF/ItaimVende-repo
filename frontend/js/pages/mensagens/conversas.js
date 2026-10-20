@@ -381,6 +381,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (chatTopoAtivo) chatTopoAtivo.style.display = 'none';
         if (feedMensagens) feedMensagens.style.display = 'none';
         if (formEnvio) formEnvio.style.display = 'none';
+        const avisoBloqueio = document.getElementById('chat-aviso-bloqueio');
+        if (avisoBloqueio) avisoBloqueio.style.display = 'none';
         if (mobileResumoBox) mobileResumoBox.style.display = 'none';
         if (chatCentroVazio) chatCentroVazio.style.display = 'flex';
 
@@ -436,7 +438,42 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (chatCentroVazio) chatCentroVazio.style.display = 'none';
         if (chatTopoAtivo) chatTopoAtivo.style.display = 'flex';
         if (feedMensagens) feedMensagens.style.display = 'flex';
-        if (formEnvio) formEnvio.style.display = 'flex';
+
+        // 1.1 Gerencia visual de Bloqueio de Conversa
+        const ehBloqueado = conv.status === 'BLOCKED' || conv.isBlocked;
+        const bloqueadoPorMim = conv.blockedById === meuUserId || conv.blockedByMe;
+        const avisoBloqueio = document.getElementById('chat-aviso-bloqueio');
+        const avisoBloqueioTxt = document.getElementById('chat-aviso-bloqueio-texto');
+        const btnDesbloquearBanner = document.getElementById('btn-desbloquear-banner');
+        const txtBtnBloquear = document.getElementById('txt-btn-bloquear');
+        const btnToggleBloqueio = document.getElementById('btn-toggle-bloqueio-chat');
+
+        if (ehBloqueado) {
+            if (formEnvio) formEnvio.style.display = 'none';
+            if (avisoBloqueio) {
+                avisoBloqueio.style.display = 'flex';
+                if (bloqueadoPorMim) {
+                    if (avisoBloqueioTxt) avisoBloqueioTxt.textContent = 'Você bloqueou esta conversa.';
+                    if (btnDesbloquearBanner) btnDesbloquearBanner.style.display = 'inline-block';
+                } else {
+                    if (avisoBloqueioTxt) avisoBloqueioTxt.textContent = 'Esta conversa foi bloqueada pelo outro usuário.';
+                    if (btnDesbloquearBanner) btnDesbloquearBanner.style.display = 'none';
+                }
+            }
+            if (txtBtnBloquear) txtBtnBloquear.textContent = bloqueadoPorMim ? 'Desbloquear' : 'Bloqueado';
+            if (btnToggleBloqueio) {
+                btnToggleBloqueio.classList.add('bloqueado');
+                btnToggleBloqueio.disabled = !bloqueadoPorMim;
+            }
+        } else {
+            if (formEnvio) formEnvio.style.display = 'flex';
+            if (avisoBloqueio) avisoBloqueio.style.display = 'none';
+            if (txtBtnBloquear) txtBtnBloquear.textContent = 'Bloquear';
+            if (btnToggleBloqueio) {
+                btnToggleBloqueio.classList.remove('bloqueado');
+                btnToggleBloqueio.disabled = false;
+            }
+        }
 
         // 2. Exibir painel da direita (Desktop)
         if (painelVazio) painelVazio.style.display = 'none';
@@ -576,13 +613,122 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         msgs.forEach(m => {
             const souEu = (m.eMeu === true || m.senderId === meuUserId);
+
+            // 1. Mensagem de Sistema centralizada
+            if (m.messageType === 'SYSTEM') {
+                const balaoSistema = document.createElement('div');
+                balaoSistema.className = 'msg-balao sistema';
+                balaoSistema.textContent = m.content || '';
+                feedMensagens.appendChild(balaoSistema);
+                return;
+            }
+
             const balao = document.createElement('div');
             balao.className = `msg-balao ${souEu ? 'enviada' : 'recebida'}`;
             if (m.tempId) balao.setAttribute('data-temp-id', m.tempId);
 
-            const textoP = document.createElement('p');
-            textoP.className = 'msg-texto';
-            textoP.textContent = m.content || ''; // Previne XSS com textContent
+            // 2. Renderiza Imagem se for do tipo IMAGE
+            if (m.messageType === 'IMAGE') {
+                const fotoWrap = document.createElement('div');
+                fotoWrap.className = 'msg-foto-wrap';
+                const fotoImg = document.createElement('img');
+                const imgUrl = resolverFoto(m.content, 'produto');
+                fotoImg.src = imgUrl;
+                fotoImg.alt = 'Foto compartilhada';
+                fotoImg.className = 'msg-foto-img';
+                fotoImg.loading = 'lazy';
+                fotoImg.addEventListener('click', () => abrirLightbox(imgUrl));
+                fotoWrap.appendChild(fotoImg);
+                balao.appendChild(fotoWrap);
+            } 
+            // 3. Renderiza Card de Proposta se for OFFER_PROPOSAL
+            else if (m.messageType === 'OFFER_PROPOSAL') {
+                const propostaCard = document.createElement('div');
+                propostaCard.className = 'msg-proposta-card';
+
+                const propHeader = document.createElement('div');
+                propHeader.className = 'msg-proposta-header';
+                propHeader.innerHTML = `
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                        <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                    </svg>
+                    <span>Proposta de Preço</span>
+                `;
+                propostaCard.appendChild(propHeader);
+
+                const propValor = document.createElement('div');
+                propValor.className = 'msg-proposta-valor';
+                propValor.innerHTML = formatarPreco(m.offerValue);
+                propostaCard.appendChild(propValor);
+
+                if (m.content && m.content.trim() && !m.content.startsWith('Proposta de R$')) {
+                    const propNota = document.createElement('p');
+                    propNota.className = 'msg-texto';
+                    propNota.style.fontSize = '13px';
+                    propNota.style.opacity = '0.9';
+                    propNota.textContent = m.content;
+                    propostaCard.appendChild(propNota);
+                }
+
+                const statusBadge = document.createElement('div');
+                const st = (m.offerStatus || 'PENDING').toUpperCase();
+
+                if (st === 'ACCEPTED') {
+                    statusBadge.className = 'msg-proposta-status-badge aceita';
+                    statusBadge.innerHTML = '✅ Proposta Aceita';
+                    propostaCard.appendChild(statusBadge);
+                } else if (st === 'REJECTED') {
+                    statusBadge.className = 'msg-proposta-status-badge recusada';
+                    statusBadge.innerHTML = '❌ Proposta Recusada';
+                    propostaCard.appendChild(statusBadge);
+                } else {
+                    if (souEu) {
+                        statusBadge.className = 'msg-proposta-status-badge pendente';
+                        statusBadge.innerHTML = '⏳ Proposta Enviada (Aguardando resposta)';
+                        propostaCard.appendChild(statusBadge);
+                    } else {
+                        statusBadge.className = 'msg-proposta-status-badge pendente';
+                        statusBadge.innerHTML = '🔔 Proposta Recebida';
+                        propostaCard.appendChild(statusBadge);
+
+                        const acoesBox = document.createElement('div');
+                        acoesBox.className = 'msg-proposta-acoes';
+
+                        const btnAceitar = document.createElement('button');
+                        btnAceitar.type = 'button';
+                        btnAceitar.className = 'btn-proposta-acao btn-proposta-aceitar';
+                        btnAceitar.innerHTML = '✓ Aceitar';
+                        btnAceitar.addEventListener('click', async (e) => {
+                            e.stopPropagation();
+                            btnAceitar.disabled = true;
+                            await responderProposta(m.id, true);
+                        });
+
+                        const btnRecusar = document.createElement('button');
+                        btnRecusar.type = 'button';
+                        btnRecusar.className = 'btn-proposta-acao btn-proposta-recusar';
+                        btnRecusar.innerHTML = '✕ Recusar';
+                        btnRecusar.addEventListener('click', async (e) => {
+                            e.stopPropagation();
+                            btnRecusar.disabled = true;
+                            await responderProposta(m.id, false);
+                        });
+
+                        acoesBox.appendChild(btnAceitar);
+                        acoesBox.appendChild(btnRecusar);
+                        propostaCard.appendChild(acoesBox);
+                    }
+                }
+                balao.appendChild(propostaCard);
+            } 
+            // 4. Mensagem de Texto Normal
+            else {
+                const textoP = document.createElement('p');
+                textoP.className = 'msg-texto';
+                textoP.textContent = m.content || '';
+                balao.appendChild(textoP);
+            }
 
             const metadadosBox = document.createElement('div');
             metadadosBox.className = 'msg-metadados';
@@ -598,7 +744,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 metadadosBox.appendChild(checkWrap);
             }
 
-            balao.appendChild(textoP);
             balao.appendChild(metadadosBox);
             feedMensagens.appendChild(balao);
         });
@@ -677,6 +822,253 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // -------------------------------------------------------------------------
+    // 10.1 RESPOSTA A PROPOSTAS (ACEITAR / RECUSAR)
+    // -------------------------------------------------------------------------
+    async function responderProposta(messageId, aceitar) {
+        try {
+            const resp = aceitar
+                ? await window.ItaimApi.chat.aceitarProposta(messageId)
+                : await window.ItaimApi.chat.recusarProposta(messageId);
+
+            if (resp && resp.success) {
+                // Atualiza o status local da proposta
+                const idx = mensagensAtivas.findIndex(m => m.id === messageId);
+                if (idx !== -1) {
+                    mensagensAtivas[idx].offerStatus = aceitar ? 'ACCEPTED' : 'REJECTED';
+                }
+                // Recarrega mensagens para incluir o aviso de sistema gerado
+                await carregarMensagens(conversaAtivaId, true);
+            } else {
+                alert(resp?.message || 'Não foi possível responder à proposta.');
+            }
+        } catch (err) {
+            console.error('Erro ao responder proposta:', err);
+            alert(err.message || 'Erro ao responder à proposta.');
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // 10.2 BLOQUEIO E DESBLOQUEIO DE CONVERSA
+    // -------------------------------------------------------------------------
+    async function alternarBloqueioConversa() {
+        if (!conversaAtivaId) return;
+        const conv = conversas.find(c => c.id === conversaAtivaId);
+        if (!conv) return;
+
+        const isBlocked = conv.status === 'BLOCKED' || conv.isBlocked;
+        const confirmMsg = isBlocked
+            ? 'Deseja desbloquear esta conversa para voltar a receber e enviar mensagens?'
+            : 'Tem certeza que deseja bloquear esta conversa? Mensagens não poderão ser trocadas enquanto ela estiver bloqueada.';
+
+        if (!confirm(confirmMsg)) return;
+
+        try {
+            const resp = await window.ItaimApi.chat.bloquearConversa(conversaAtivaId);
+            if (resp && resp.success && resp.data) {
+                conv.status = resp.data.status;
+                conv.isBlocked = resp.data.isBlocked;
+                conv.blockedById = resp.data.blockedById;
+                conv.blockedByMe = resp.data.blockedById === meuUserId;
+
+                // Re-aplica estado visual na conversa ativa
+                await selecionarConversa(conversaAtivaId);
+                // Atualiza a lista lateral
+                renderizarListaConversas(buscaInput?.value || '');
+            } else {
+                alert(resp?.message || 'Falha ao alterar o status da conversa.');
+            }
+        } catch (err) {
+            console.error('Erro ao bloquear/desbloquear conversa:', err);
+            alert(err.message || 'Erro ao alterar o status da conversa.');
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // 10.3 ENVIO DE FOTO / ANEXO
+    // -------------------------------------------------------------------------
+    const btnAnexo = document.getElementById('btn-anexo-chat');
+    const inputAnexo = document.getElementById('input-anexo-chat');
+
+    if (btnAnexo && inputAnexo) {
+        btnAnexo.addEventListener('click', () => {
+            if (!conversaAtivaId || enviandoMensagem) return;
+            inputAnexo.click();
+        });
+
+        inputAnexo.addEventListener('change', async (e) => {
+            const file = e.target.files?.[0];
+            if (!file || !conversaAtivaId) return;
+
+            if (file.size > 5 * 1024 * 1024) {
+                alert('A foto selecionada excede o limite máximo permitido de 5MB.');
+                inputAnexo.value = '';
+                return;
+            }
+
+            enviandoMensagem = true;
+            btnAnexo.disabled = true;
+
+            try {
+                const respUpload = await window.ItaimApi.upload.chat(file);
+                const fotoUrl = respUpload?.data?.url || respUpload?.url;
+                if (!fotoUrl) {
+                    throw new Error('Falha ao processar o upload da imagem.');
+                }
+
+                const respMsg = await window.ItaimApi.chat.enviarMensagem(
+                    conversaAtivaId,
+                    fotoUrl,
+                    'IMAGE'
+                );
+
+                if (respMsg && respMsg.success && respMsg.data) {
+                    mensagensAtivas.push(respMsg.data);
+                    renderizarFeedMensagens(mensagensAtivas, false);
+                } else {
+                    throw new Error(respMsg?.message || 'Falha ao enviar a foto');
+                }
+            } catch (err) {
+                console.error('Erro ao enviar imagem:', err);
+                alert(err.message || 'Erro ao enviar a imagem. Tente novamente.');
+            } finally {
+                enviandoMensagem = false;
+                btnAnexo.disabled = false;
+                inputAnexo.value = '';
+            }
+        });
+    }
+
+    // -------------------------------------------------------------------------
+    // 10.4 MODAL DE PROPOSTA DE PREÇO
+    // -------------------------------------------------------------------------
+    const modalProposta = document.getElementById('modal-proposta-preco');
+    const formProposta = document.getElementById('form-enviar-proposta');
+    const btnAbrirProposta = document.getElementById('btn-abrir-modal-proposta');
+    const btnFecharProposta = document.getElementById('btn-fechar-modal-proposta');
+    const btnCancelarProposta = document.getElementById('btn-cancelar-proposta');
+
+    function abrirModalProposta() {
+        const conv = conversas.find(c => c.id === conversaAtivaId);
+        if (!conv) return;
+        const prod = conv.product || {};
+        const precoOriginal = Number(prod.preco ?? prod.price ?? 0);
+
+        const foto = document.getElementById('modal-proposta-foto');
+        const nome = document.getElementById('modal-proposta-produto-nome');
+        const precoEl = document.getElementById('modal-proposta-produto-preco');
+        const inputValor = document.getElementById('input-proposta-valor');
+        const inputMsg = document.getElementById('input-proposta-msg');
+        const sugestoesBox = document.getElementById('chat-sugestoes-proposta');
+
+        if (foto) foto.src = resolverFoto(prod.imagem || prod.image, 'produto');
+        if (nome) nome.textContent = prod.titulo || prod.title || 'Produto';
+        if (precoEl) precoEl.textContent = `Valor original: ${formatarPreco(precoOriginal)}`;
+
+        if (inputValor) {
+            const sugestaoPadrao = precoOriginal > 0 ? (precoOriginal * 0.9).toFixed(2) : '';
+            inputValor.value = sugestaoPadrao;
+        }
+        if (inputMsg) inputMsg.value = '';
+
+        if (sugestoesBox && precoOriginal > 0) {
+            sugestoesBox.innerHTML = '';
+            const percentuais = [5, 10, 15, 20];
+            percentuais.forEach(pct => {
+                const valDesconto = Math.max(1, (precoOriginal * (1 - pct / 100)).toFixed(2));
+                const btnSugestao = document.createElement('button');
+                btnSugestao.type = 'button';
+                btnSugestao.className = 'btn-sugestao-valor';
+                btnSugestao.textContent = `-${pct}% (R$ ${Number(valDesconto).toLocaleString('pt-BR', { minimumFractionDigits: 2 })})`;
+                btnSugestao.addEventListener('click', () => {
+                    if (inputValor) inputValor.value = valDesconto;
+                });
+                sugestoesBox.appendChild(btnSugestao);
+            });
+        }
+
+        if (modalProposta) modalProposta.classList.add('aberto');
+    }
+
+    function fecharModalProposta() {
+        if (modalProposta) modalProposta.classList.remove('aberto');
+    }
+
+    if (btnAbrirProposta) btnAbrirProposta.addEventListener('click', abrirModalProposta);
+    if (btnFecharProposta) btnFecharProposta.addEventListener('click', fecharModalProposta);
+    if (btnCancelarProposta) btnCancelarProposta.addEventListener('click', fecharModalProposta);
+
+    if (formProposta) {
+        formProposta.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!conversaAtivaId || enviandoMensagem) return;
+
+            const inputValor = document.getElementById('input-proposta-valor');
+            const inputMsg = document.getElementById('input-proposta-msg');
+            const valor = parseFloat(inputValor?.value);
+            const msgTexto = inputMsg?.value.trim() || 'Fiz uma proposta de valor.';
+
+            if (isNaN(valor) || valor <= 0) {
+                alert('Informe um valor de proposta válido maior que zero.');
+                return;
+            }
+
+            enviandoMensagem = true;
+            try {
+                const resp = await window.ItaimApi.chat.enviarMensagem(
+                    conversaAtivaId,
+                    msgTexto,
+                    'OFFER_PROPOSAL',
+                    valor
+                );
+
+                if (resp && resp.success && resp.data) {
+                    mensagensAtivas.push(resp.data);
+                    renderizarFeedMensagens(mensagensAtivas, false);
+                    fecharModalProposta();
+                } else {
+                    throw new Error(resp?.message || 'Falha ao enviar proposta');
+                }
+            } catch (err) {
+                console.error('Erro ao enviar proposta:', err);
+                alert(err.message || 'Erro ao enviar a proposta. Tente novamente.');
+            } finally {
+                enviandoMensagem = false;
+            }
+        });
+    }
+
+    // -------------------------------------------------------------------------
+    // 10.5 LIGHTBOX DE FOTO
+    // -------------------------------------------------------------------------
+    const modalLightbox = document.getElementById('modal-lightbox-chat');
+    const imgLightbox = document.getElementById('img-lightbox-zoom');
+    const btnFecharLightbox = document.getElementById('btn-fechar-lightbox');
+
+    function abrirLightbox(url) {
+        if (modalLightbox && imgLightbox) {
+            imgLightbox.src = url;
+            modalLightbox.classList.add('aberto');
+        }
+    }
+
+    function fecharLightbox() {
+        if (modalLightbox) modalLightbox.classList.remove('aberto');
+    }
+
+    if (btnFecharLightbox) btnFecharLightbox.addEventListener('click', fecharLightbox);
+    if (modalLightbox) {
+        modalLightbox.addEventListener('click', (e) => {
+            if (e.target === modalLightbox) fecharLightbox();
+        });
+    }
+
+    // Botões de Bloqueio no Topo e no Banner
+    const btnToggleBloqueio = document.getElementById('btn-toggle-bloqueio-chat');
+    const btnDesbloquearBanner = document.getElementById('btn-desbloquear-banner');
+    if (btnToggleBloqueio) btnToggleBloqueio.addEventListener('click', alternarBloqueioConversa);
+    if (btnDesbloquearBanner) btnDesbloquearBanner.addEventListener('click', alternarBloqueioConversa);
+
+    // -------------------------------------------------------------------------
     // 11. POLLING EM TEMPO REAL (MENSAGENS & STATUS)
     // -------------------------------------------------------------------------
     function iniciarPolling() {
@@ -694,9 +1086,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                     const resp = await window.ItaimApi.chat.obterMensagens(conversaAtivaId);
                     if (resp && resp.success && Array.isArray(resp.data)) {
                         const novas = resp.data;
-                        // Compara se houve nova mensagem ou alteração de status de leitura
+                        // Compara se houve nova mensagem ou alteração de status de leitura/proposta
                         if (novas.length !== mensagensAtivas.length || 
-                            JSON.stringify(novas.map(m => m.isRead)) !== JSON.stringify(mensagensAtivas.map(m => m.isRead))) {
+                            JSON.stringify(novas.map(m => ({ id: m.id, r: m.isRead, os: m.offerStatus }))) !== 
+                            JSON.stringify(mensagensAtivas.map(m => ({ id: m.id, r: m.isRead, os: m.offerStatus })))) {
                             mensagensAtivas = novas;
                             renderizarFeedMensagens(mensagensAtivas, true);
                         }
@@ -712,8 +1105,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                     const resp = await window.ItaimApi.chat.listarConversas();
                     if (resp && resp.success && Array.isArray(resp.data)) {
                         const listaNova = resp.data;
-                        const mudou = JSON.stringify(listaNova.map(c => ({ id: c.id, msg: c.ultimaMensagem, nl: c.naoLidas }))) !==
-                                      JSON.stringify(conversas.map(c => ({ id: c.id, msg: c.ultimaMensagem, nl: c.naoLidas })));
+                        const mudou = JSON.stringify(listaNova.map(c => ({ id: c.id, msg: c.ultimaMensagem, nl: c.naoLidas, st: c.status }))) !==
+                                      JSON.stringify(conversas.map(c => ({ id: c.id, msg: c.ultimaMensagem, nl: c.naoLidas, st: c.status })));
                         if (mudou) {
                             conversas = listaNova;
                             renderizarListaConversas(buscaInput?.value || '');

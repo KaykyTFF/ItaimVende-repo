@@ -53,23 +53,54 @@
         },
 
         /**
-         * Obtém o histórico de mensagens de uma conversa
+         * Obtém o histórico de mensagens de uma conversa (com suporte a polling incremental)
          */
-        async obterMensagens(conversationId) {
-            return getCore().requisicao(`/chat/conversations/${encodeURIComponent(conversationId)}/messages`, {
+        async obterMensagens(conversationId, after = null) {
+            const query = after ? `?after=${encodeURIComponent(after)}` : '';
+            return getCore().requisicao(`/chat/conversations/${encodeURIComponent(conversationId)}/messages${query}`, {
                 method: 'GET',
                 headers: getCore().obterHeaders(true)
             });
         },
 
         /**
-         * Envia mensagem de texto ou proposta de oferta
+         * Envia mensagem de texto, foto ou proposta de oferta
          */
         async enviarMensagem(conversationId, content, messageType = 'TEXT', offerValue = null) {
             return getCore().requisicao(`/chat/conversations/${encodeURIComponent(conversationId)}/messages`, {
                 method: 'POST',
                 headers: getCore().obterHeaders(true),
                 body: JSON.stringify({ content, messageType, offerValue })
+            });
+        },
+
+        /**
+         * Alterna o status de bloqueio da conversa (Bloquear/Desbloquear)
+         */
+        async bloquearConversa(conversationId) {
+            return getCore().requisicao(`/chat/conversations/${encodeURIComponent(conversationId)}/block`, {
+                method: 'PATCH',
+                headers: getCore().obterHeaders(true)
+            });
+        },
+
+        /**
+         * Aceita uma proposta de preço recebida
+         */
+        async aceitarProposta(messageId) {
+            return getCore().requisicao(`/chat/messages/${encodeURIComponent(messageId)}/accept`, {
+                method: 'PATCH',
+                headers: getCore().obterHeaders(true)
+            });
+        },
+
+        /**
+         * Recusa uma proposta de preço recebida
+         */
+        async recusarProposta(messageId) {
+            return getCore().requisicao(`/chat/messages/${encodeURIComponent(messageId)}/reject`, {
+                method: 'PATCH',
+                headers: getCore().obterHeaders(true)
             });
         },
 

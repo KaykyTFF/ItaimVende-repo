@@ -6,6 +6,9 @@ import {
   getMessages,
   sendMessage,
   getUnreadCount,
+  toggleBlock,
+  acceptProposal,
+  rejectProposal,
 } from '../../controllers/chat/index.js';
 import { authenticateToken } from '../../middlewares/auth.middleware.js';
 import { validate } from '../../middlewares/validate.middleware.js';
@@ -13,6 +16,7 @@ import {
   createConversationSchema,
   sendMessageSchema,
   conversationParamsSchema,
+  messageParamsSchema,
 } from '../../schemas/chat/index.js';
 
 const router = Router();
@@ -32,7 +36,7 @@ router.get('/conversations/unread/total', getUnreadCount);
 // 4. Detalhes de uma conversa por ID
 router.get('/conversations/:id', validate(conversationParamsSchema, 'params'), getConversation);
 
-// 5. Histórico de mensagens de uma conversa
+// 5. Histórico de mensagens de uma conversa (suporta ?after=ISO_DATE)
 router.get('/conversations/:id/messages', validate(conversationParamsSchema, 'params'), getMessages);
 
 // 6. Enviar mensagem em uma conversa (com validação Zod)
@@ -43,4 +47,26 @@ router.post(
   sendMessage
 );
 
+// 7. Bloquear ou desbloquear conversa
+router.patch(
+  '/conversations/:id/block',
+  validate(conversationParamsSchema, 'params'),
+  toggleBlock
+);
+
+// 8. Aceitar proposta de preço
+router.patch(
+  '/messages/:id/accept',
+  validate(messageParamsSchema, 'params'),
+  acceptProposal
+);
+
+// 9. Recusar proposta de preço
+router.patch(
+  '/messages/:id/reject',
+  validate(messageParamsSchema, 'params'),
+  rejectProposal
+);
+
 export default router;
+

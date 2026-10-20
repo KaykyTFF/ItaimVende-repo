@@ -66,6 +66,7 @@ model User {
   sentMessages    Message[]     @relation("SentMessages")
   conversationsAsBuyer  Conversation[] @relation("BuyerConversations")
   conversationsAsSeller Conversation[] @relation("SellerConversations")
+  blockedConversations  Conversation[] @relation("BlockedConversations")
   auditLogs       AuditLog[]
   addresses       Address[]
   notifications   Notification[]
@@ -227,6 +228,13 @@ enum ConversationStatus {
   BLOCKED
 }
 
+enum OfferStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  CANCELLED
+}
+
 model Conversation {
   id            String             @id @default(cuid())
   productId     String
@@ -236,6 +244,8 @@ model Conversation {
   sellerId      String
   seller        User               @relation("SellerConversations", fields: [sellerId], references: [id])
   status        ConversationStatus @default(ACTIVE)
+  blockedById   String?
+  blockedBy     User?              @relation("BlockedConversations", fields: [blockedById], references: [id])
 
   messages      Message[]
   lastMessageAt DateTime           @default(now())
@@ -262,6 +272,7 @@ model Message {
   content        String       @db.Text
   messageType    MessageType  @default(TEXT)
   offerValue     Decimal?     @db.Decimal(10, 2)
+  offerStatus    OfferStatus?
   isRead         Boolean      @default(false)
   readAt         DateTime?
   createdAt      DateTime     @default(now())

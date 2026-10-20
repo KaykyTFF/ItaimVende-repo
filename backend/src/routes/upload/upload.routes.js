@@ -49,6 +49,9 @@ router.post('/venda', setCategory('vendas'), handleMulterError(upload.array('ima
 router.post('/venda/single', setCategory('vendas'), handleMulterError(upload.single('image')), uploadSingle);
 router.post('/produtos', setCategory('vendas'), handleMulterError(upload.array('images', 6)), uploadMultiple);
 
+// 3. Rota dedicada para anexos do Chat
+router.post('/chat', setCategory('chat'), handleMulterError(upload.single('image')), uploadSingle);
+
 // 3. Rotas retrocompatíveis (detectam categoria via query string ?tipo=perfil|venda ou padrão)
 router.post('/single', handleMulterError(upload.single('image')), uploadSingle);
 router.post('/multiple', handleMulterError(upload.array('images', 6)), uploadMultiple);

@@ -3,6 +3,7 @@ import {
   getConversationById,
   findOrCreateConversation,
   getGlobalUnreadMessagesCount,
+  toggleBlockConversation,
 } from '../../services/chat/index.js';
 
 /**
@@ -56,3 +57,17 @@ export async function getUnreadCount(req, res, next) {
     next(error);
   }
 }
+
+/**
+ * Alterna bloqueio de conversa
+ * PATCH /api/chat/conversations/:id/block
+ */
+export async function toggleBlock(req, res, next) {
+  try {
+    const data = await toggleBlockConversation(req.user.id, req.user.role, req.params.id);
+    res.status(200).json({ success: true, data });
+  } catch (error) {
+    next(error);
+  }
+}
+

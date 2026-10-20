@@ -67,6 +67,9 @@ export function formatarConversa(c, userId) {
     dataUltimaMensagem: c.lastMessageAt || c.createdAt,
     naoLidas: c._count?.messages || 0,
     status: c.status,
+    isBlocked: c.status === 'BLOCKED',
+    blockedById: c.blockedById || null,
+    blockedByMe: c.blockedById === userId,
   };
 }
 
@@ -84,6 +87,7 @@ export function formatarMensagem(m, userId) {
     content: m.content,
     messageType: m.messageType,
     offerValue: m.offerValue ? Number(m.offerValue) : null,
+    offerStatus: m.offerStatus || (m.messageType === 'OFFER_PROPOSAL' ? 'PENDING' : null),
     isRead: m.isRead,
     readAt: m.readAt,
     createdAt: m.createdAt,

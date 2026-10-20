@@ -38,7 +38,6 @@ export async function getUserConversations(userId) {
   const conversations = await prisma.conversation.findMany({
     where: {
       OR: [{ buyerId: userId }, { sellerId: userId }],
-      status: { not: 'BLOCKED' },
     },
     orderBy: { lastMessageAt: 'desc' },
     include: {
@@ -175,4 +174,82 @@ export async function findOrCreateConversation(buyerId, productId) {
   }
 
   return formatarConversa(conversation, buyerId);
+}
+
+/**
+ * Alterna o status de bloqueio de uma conversa (Bloquear / Desbloquear)
+ * @param {string} userId
+ * @param {string} userRole
+ * @param {string} conversationId
+ */
+export async function toggleBlockConversation(userId, userRole, conversationId) {
+  const conversation = await prisma.conversation.findUnique({
+    where: { id: conversationId },
+  });
+
+  if (!conversation) {
+    throw new AppError('Conversa não encontrada.', 404);
+  }
+
+  if (conversation.buyerId !== userId && conversation.sellerId !== userId && userRole !== 'ADMIN') {
+    throw new AppError('Acesso não autorizado a esta conversa.', 403);
+  }
+
+  const isBlocked = conversation.status === 'BLOCKED';
+
+  if (isBlocked) {
+    if (conversation.blockedById && conversation.blockedById !== userId && userRole !== 'ADMIN') {
+      throw new AppError('Esta conversa foi bloqueada pelo outro usuário e só pode ser desbloqueada por ele.', 403);
+    }
+
+    await prisma.$transaction([
+      prisma.conversation.update({
+        where: { id: conversationId },
+        data: {
+          status: 'ACTIVE',
+          blockedById: null,
+        },
+      }),
+      prisma.message.create({
+        data: {
+          conversationId,
+          senderId: userId,
+          content: 'Conversa desbloqueada.',
+          messageType: 'SYSTEM',
+        },
+      }),
+    ]);
+
+    return {
+      status: 'ACTIVE',
+      isBlocked: false,
+      blockedById: null,
+      message: 'Conversa desbloqueada com sucesso.',
+    };
+  } else {
+    await prisma.$transaction([
+      prisma.conversation.update({
+        where: { id: conversationId },
+        data: {
+          status: 'BLOCKED',
+          blockedById: userId,
+        },
+      }),
+      prisma.message.create({
+        data: {
+          conversationId,
+          senderId: userId,
+          content: 'Conversa bloqueada.',
+          messageType: 'SYSTEM',
+        },
+      }),
+    ]);
+
+    return {
+      status: 'BLOCKED',
+      isBlocked: true,
+      blockedById: userId,
+      message: 'Conversa bloqueada com sucesso.',
+    };
+  }
 }

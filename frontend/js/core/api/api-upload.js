@@ -47,6 +47,26 @@
         },
 
         /**
+         * Envio de foto / anexo do chat
+         */
+        async chat(foto) {
+            const formData = new FormData();
+            let arquivo = foto;
+
+            if (typeof foto === 'string' && foto.startsWith('data:')) {
+                arquivo = getCore().dataURLParaBlob(foto);
+            }
+
+            formData.append('image', arquivo, 'foto_chat.jpg');
+
+            return getCore().requisicao('/upload/chat', {
+                method: 'POST',
+                headers: getCore().obterHeaders(false),
+                body: formData
+            });
+        },
+
+        /**
          * Envio de múltiplas fotos para anúncios/vendas (salva em /uploads/vendas/ - máx 6)
          * Aceita Array de File, Blob ou Strings Base64
          */
