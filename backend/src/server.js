@@ -69,17 +69,6 @@ app.use(express.urlencoded({ extended: true, limit: '5mb' }));
 // Higienização contra Stored/Reflected XSS em todas as requisições
 app.use(sanitizeInput);
 
-// Rota de Diagnóstico / Healthcheck
-app.get('/api/health', (req, res) => {
-  res.status(200).json({
-    status: 'online',
-    platform: 'Itaim Vende API',
-    bootId: SERVER_BOOT_ID,
-    timestamp: new Date().toISOString(),
-    uptime: Math.floor(process.uptime()),
-    environment: ENV.NODE_ENV,
-  });
-});
 
 // Servir pasta de uploads de imagens de forma estática com fallback gracioso para subpastas e placeholder
 app.use('/uploads', express.static(UPLOAD_DIR));
@@ -141,17 +130,39 @@ app.get('/css/:filename', (req, res, next) => {
   next();
 });
 
-// Montagem das Rotas da API
-app.use('/api/auth', authRoutes);
-app.use('/api/products', productRoutes);
-app.use('/api/categories', categoryRoutes);
-app.use('/api/orders', orderRoutes);
-app.use('/api/chat', chatRoutes);
-app.use('/api/favorites', favoriteRoutes);
-app.use('/api/upload', uploadRoutes);
-app.use('/api/reviews', reviewRoutes);
-app.use('/api/reports', reportRoutes);
-app.use('/api/system', systemRoutes);
+// =============================================================================
+// MONTAGEM DAS ROTAS DA API VERSIONADA (/api/v1)
+// =============================================================================
+const v1Router = express.Router();
+
+// Rota de Diagnóstico / Healthcheck v1
+v1Router.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'online',
+    version: 'v1',
+    platform: 'Itaim Vende API',
+    bootId: SERVER_BOOT_ID,
+    timestamp: new Date().toISOString(),
+    uptime: Math.floor(process.uptime()),
+    environment: ENV.NODE_ENV,
+  });
+});
+
+v1Router.use('/auth', authRoutes);
+v1Router.use('/products', productRoutes);
+v1Router.use('/categories', categoryRoutes);
+v1Router.use('/orders', orderRoutes);
+v1Router.use('/chat', chatRoutes);
+v1Router.use('/favorites', favoriteRoutes);
+v1Router.use('/upload', uploadRoutes);
+v1Router.use('/reviews', reviewRoutes);
+v1Router.use('/reports', reportRoutes);
+v1Router.use('/system', systemRoutes);
+
+// Registra versão oficial /api/v1 e mantém /api para retrocompatibilidade
+app.use('/api/v1', v1Router);
+app.use('/api', v1Router);
+
 
 // Servir arquivos estáticos da pasta frontend (CSS, JS, Assets, Pages)
 app.use(express.static(FRONTEND_DIR));
@@ -207,10 +218,11 @@ const PORT = ENV.PORT;
 app.listen(PORT, () => {
   console.log(`=========================================`);
   console.log(`🚀 Servidor Itaim Vende Ativo na Porta: ${PORT}`);
-  console.log(`🌐 Healthcheck: http://localhost:${PORT}/api/health`);
-  console.log(`📦 Produtos:    http://localhost:${PORT}/api/products`);
+  console.log(`🌐 Healthcheck: http://localhost:${PORT}/api/v1/health`);
+  console.log(`📦 Produtos:    http://localhost:${PORT}/api/v1/products`);
   console.log(`🔒 Modo:        ${ENV.NODE_ENV}`);
   console.log(`=========================================`);
+
 });
 
 export default app;

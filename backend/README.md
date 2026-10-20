@@ -94,31 +94,39 @@ O servidor estará ouvindo em: `http://localhost:3000`
 
 ---
 
-## 🌐 Endpoints da API
+## 🌐 Endpoints da API (Versão 1 - /api/v1)
 
 ### 1. Diagnóstico
-- `GET /api/health` -> Status da API e tempo de atividade.
+- `GET /api/v1/health` -> Status da API, versão (`v1`), bootId e tempo de atividade.
 
 ### 2. Autenticação & Usuários
-- `POST /api/auth/register` -> Cria nova conta (validação Zod + Bcrypt).
-- `POST /api/auth/login` -> Autentica e retorna token JWT (com proteção de taxa).
-- `GET /api/auth/me` -> Retorna dados do usuário autenticado (requer Bearer token).
-- `PUT /api/auth/me` -> Atualiza dados do perfil (requer Bearer token).
+- `POST /api/v1/auth/register` -> Cria nova conta (validação Zod + Bcrypt).
+- `POST /api/v1/auth/login` -> Autentica e retorna token JWT (com proteção de taxa).
+- `GET /api/v1/auth/me` -> Retorna dados do usuário autenticado (requer Bearer token).
+- `PUT /api/v1/auth/me` -> Atualiza dados cadastrais do perfil (requer Bearer token).
+- `PUT /api/v1/auth/password` -> Altera a senha do usuário com validação da senha atual.
 
 ### 3. Anúncios & Produtos
-- `GET /api/products` -> Lista produtos com filtros (`search`, `category`, `minPrice`, `maxPrice`, `sort`, `page`).
-- `GET /api/products/:id` -> Detalhes do anúncio com informações do vendedor.
-- `POST /api/products` -> Cria novo anúncio (requer Bearer token).
-- `PUT /api/products/:id` -> Atualiza anúncio (apenas dono ou admin).
-- `DELETE /api/products/:id` -> Exclui anúncio (apenas dono ou admin).
+- `GET /api/v1/products` -> Lista produtos com filtros (`search`, `category`, `minPrice`, `maxPrice`, `sort`, `page`).
+- `GET /api/v1/products/:id` -> Detalhes do anúncio com informações do vendedor.
+- `POST /api/v1/products` -> Cria novo anúncio (requer Bearer token).
+- `PUT /api/v1/products/:id` -> Atualiza anúncio (apenas dono ou admin).
+- `DELETE /api/v1/products/:id` -> Exclui anúncio (apenas dono ou admin).
 
 ### 4. Categorias
-- `GET /api/categories` -> Lista todas as categorias e contagem de anúncios.
+- `GET /api/v1/categories` -> Lista todas as categorias e contagem de anúncios.
 
-### 5. Pedidos & Checkout
-- `POST /api/orders` -> Cria novo pedido (preços validados diretamente no banco de dados).
-- `GET /api/orders` -> Lista pedidos do comprador logado.
-- `GET /api/orders/:id` -> Consulta detalhes de um pedido específico.
+### 5. Chat & Mensagens
+- `GET /api/v1/chat/conversations` -> Lista conversas do usuário.
+- `POST /api/v1/chat/conversations` -> Inicia nova negociação para um produto.
+- `GET /api/v1/chat/conversations/:id/messages` -> Histórico de mensagens.
+- `POST /api/v1/chat/conversations/:id/messages` -> Envia mensagem de texto ou proposta de oferta.
+
+### 6. Pedidos & Checkout
+- `POST /api/v1/orders` -> Cria novo pedido (preços validados diretamente no banco de dados).
+- `GET /api/v1/orders` -> Lista pedidos do comprador logado.
+- `GET /api/v1/orders/:id` -> Consulta detalhes de um pedido específico.
+
 
 ---
 

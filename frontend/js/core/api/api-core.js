@@ -21,7 +21,7 @@
         ? 'http://localhost:3000'
         : '';
 
-    const API_BASE_URL = window.ITAI_API_URL || `${BACKEND_HOST}/api`;
+    const API_BASE_URL = window.ITAI_API_URL || `${BACKEND_HOST}/api/v1`;
 
     /**
      * Recupera o token JWT salvo no localStorage
