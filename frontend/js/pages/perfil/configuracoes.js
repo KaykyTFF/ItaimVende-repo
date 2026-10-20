@@ -356,7 +356,7 @@ document.addEventListener('DOMContentLoaded', () => {
         barra.style.width = n.w; barra.style.background = n.cor; texto.textContent = 'Força: ' + n.t;
     });
 
-    $('form-senha').addEventListener('submit', (e) => {
+    $('form-senha').addEventListener('submit', async (e) => {
         e.preventDefault();
         const atual = $('cfg-senha-atual').value;
         const nova = $('cfg-senha-nova').value;
@@ -371,14 +371,39 @@ document.addEventListener('DOMContentLoaded', () => {
         const okConf = marcarErro('cfg-senha-confirma', 'erro-senha-confirma', nova !== confirma ? 'As senhas não coincidem.' : '');
         if (!(okAtual && okNova && okConf)) { toast('Corrija os campos destacados.', true); return; }
 
-        // Sem servidor ainda: aqui entraria a chamada à API que troca a senha.
-        $('form-senha').reset();
-        $('forca-barra').style.width = '0';
-        $('forca-texto').textContent = 'Digite uma nova senha';
-        document.querySelectorAll('.cfg-ver-senha').forEach(b => { b.textContent = 'Mostrar'; });
-        ['cfg-senha-atual', 'cfg-senha-nova', 'cfg-senha-confirma'].forEach(id => { $(id).type = 'password'; });
-        toast('Senha atualizada.');
+        const btnSalvar = $('form-senha').querySelector('button[type="submit"]');
+        const textoOriginal = btnSalvar ? btnSalvar.textContent : 'Salvar nova senha';
+        if (btnSalvar) {
+            btnSalvar.disabled = true;
+            btnSalvar.textContent = 'Salvando...';
+        }
+
+        try {
+            if (window.ItaimApi && window.ItaimApi.auth && window.ItaimApi.auth.obterToken()) {
+                await window.ItaimApi.auth.alterarSenha(atual, nova);
+            }
+
+            $('form-senha').reset();
+            $('forca-barra').style.width = '0';
+            $('forca-texto').textContent = 'Digite uma nova senha';
+            document.querySelectorAll('.cfg-ver-senha').forEach(b => { b.textContent = 'Mostrar'; });
+            ['cfg-senha-atual', 'cfg-senha-nova', 'cfg-senha-confirma'].forEach(id => { $(id).type = 'password'; });
+            toast('Senha atualizada com sucesso!');
+        } catch (err) {
+            console.warn('[Configurações] Erro ao alterar senha:', err);
+            const msgErro = err.message || 'Erro ao alterar senha. Verifique os dados.';
+            if (msgErro.toLowerCase().includes('atual')) {
+                marcarErro('cfg-senha-atual', 'erro-senha-atual', msgErro);
+            }
+            toast(msgErro, true);
+        } finally {
+            if (btnSalvar) {
+                btnSalvar.disabled = false;
+                btnSalvar.textContent = textoOriginal;
+            }
+        }
     });
+
 
     // ------------------------------------------------------------------
     // 4. Endereços

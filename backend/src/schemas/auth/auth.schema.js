@@ -28,3 +28,12 @@ export const updateProfileSchema = z.object({
   bio: z.string().max(300, 'A biografia não pode exceder 300 caracteres.').optional(),
   avatar: z.string().optional(),
 });
+
+export const changePasswordSchema = z.object({
+  currentPassword: z.string().min(1, 'A senha atual é obrigatória.'),
+  newPassword: z
+    .string()
+    .min(6, 'A nova senha deve possuir pelo menos 6 caracteres.')
+    .regex(/^(?=.*[A-Za-z])(?=.*\d)/, 'A nova senha deve conter pelo menos uma letra e um número para sua segurança.'),
+});
+

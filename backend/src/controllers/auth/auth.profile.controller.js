@@ -1,4 +1,4 @@
-import { getUserProfile, updateUserProfile } from '../../services/auth/index.js';
+import { getUserProfile, updateUserProfile, changeUserPassword } from '../../services/auth/index.js';
 
 export async function getProfile(req, res, next) {
   try {
@@ -48,6 +48,15 @@ export async function getPublicProfile(req, res, next) {
       success: true,
       user: publicUser,
     });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function changePassword(req, res, next) {
+  try {
+    const result = await changeUserPassword(req.user.id, req.body);
+    res.status(200).json(result);
   } catch (error) {
     next(error);
   }

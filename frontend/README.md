@@ -36,14 +36,17 @@ frontend/
 │       └── cadastro.html         # Tela independente de registro
 │
 ├── js/                           # 🧠 Camada Lógica (JavaScript)
-│   ├── core/                     # Módulos Centrais e Estado Global
-│   │   ├── rotas.js              # Resolvedor canônico de rotas e assets
-│   │   ├── sessao.js             # Gestão de contas, login e persistência
-│   │   ├── componentes-globais.js# Navbar, drawer e cards padronizados
-│   │   ├── produtos-dados.js     # Base inicial de produtos
-│   │   ├── categorias-dados.js   # Lista oficial de categorias
-│   │   └── ajustar-foto.js       # Utilitário de recorte de avatar
+│   ├── core/                     # Módulos Centrais e Estado Global (Estrutura 100% Modular)
+│   │   ├── rotas/                # Resolvedor canônico de rotas e assets (index.js)
+│   │   ├── sessao/               # Gestão de contas, login, drawer e persistência (index.js)
+│   │   ├── componentes-globais/  # Navbar, drawer e cards padronizados (index.js)
+│   │   ├── produtos-dados/       # Base inicial de produtos (index.js)
+│   │   ├── categorias/           # Lista oficial de categorias (index.js)
+│   │   ├── skeleton/             # Sistema unificado de skeletons e shimmer (index.js)
+│   │   ├── api/                  # Cliente REST modular (auth, produtos, chat, upload, social)
+│   │   └── ajustar-foto/         # Utilitário de recorte de avatar e fotos 1:1 (index.js)
 │   │
+
 │   └── pages/                    # 🎯 Controladores Específicos (Espelhados com pages/)
 │       ├── home/
 │       │   └── home.js           # Vitrine, carrosséis e ordenação

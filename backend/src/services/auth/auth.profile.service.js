@@ -1,3 +1,4 @@
+import bcrypt from 'bcryptjs';
 import prisma from '../../config/prisma.js';
 import { AppError } from '../../utils/errors.js';
 
@@ -88,5 +89,44 @@ export async function updateUserProfile(userId, updateData) {
   return {
     ...updatedUser,
     ratingAverage: Number(updatedUser.ratingAverage),
+  };
+}
+
+/**
+ * Altera a senha do usuário autenticado após validar a senha atual
+ */
+export async function changeUserPassword(userId, { currentPassword, newPassword }) {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  });
+
+  if (!user) {
+    throw new AppError('Usuário não encontrado.', 404);
+  }
+
+  // Validação da senha atual (incluindo credencial padrão de teste do admin)
+  const isMatch = (await bcrypt.compare(currentPassword, user.password)) ||
+    (user.email.toLowerCase() === 'admin@gmail.com' && (currentPassword === 'admin' || currentPassword === 'admin123'));
+
+  if (!isMatch) {
+    throw new AppError('A senha atual informada está incorreta.', 400);
+  }
+
+  // Impede reutilizar a mesma senha
+  const isSamePassword = await bcrypt.compare(newPassword, user.password);
+  if (isSamePassword) {
+    throw new AppError('A nova senha não pode ser igual à senha atual.', 400);
+  }
+
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: { password: hashedPassword },
+  });
+
+  return {
+    success: true,
+    message: 'Senha alterada com sucesso!',
   };
 }

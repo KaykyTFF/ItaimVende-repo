@@ -143,6 +143,18 @@
         },
 
         /**
+         * Altera a senha do usuário autenticado no backend
+         */
+        async alterarSenha(currentPassword, newPassword) {
+            return getCore().requisicao('/auth/password', {
+                method: 'PUT',
+                headers: getCore().obterHeaders(true),
+                body: JSON.stringify({ currentPassword, newPassword })
+            });
+        },
+
+
+        /**
          * Encerra a sessão ativa e remove credenciais
          */
         logout() {
