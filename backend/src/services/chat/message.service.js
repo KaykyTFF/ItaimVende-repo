@@ -22,6 +22,7 @@ const SENDER_SELECT = {
 export async function getConversationMessages(userId, userRole, conversationId, after = null) {
   const conversation = await prisma.conversation.findUnique({
     where: { id: conversationId },
+    select: { id: true, buyerId: true, sellerId: true, status: true },
   });
 
   if (!conversation) {
@@ -32,15 +33,15 @@ export async function getConversationMessages(userId, userRole, conversationId, 
     throw new AppError('Acesso não autorizado a esta conversa.', 403);
   }
 
-  // Marca mensagens enviadas pelo outro participante como lidas
-  await prisma.message.updateMany({
+  // Marca mensagens enviadas pelo outro participante como lidas de forma assíncrona (não bloqueante)
+  prisma.message.updateMany({
     where: {
       conversationId,
       senderId: { not: userId },
       isRead: false,
     },
     data: { isRead: true, readAt: new Date() },
-  });
+  }).catch((err) => console.error('Erro ao marcar mensagens como lidas:', err));
 
   const whereClause = { conversationId };
   if (after) {

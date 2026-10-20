@@ -252,6 +252,8 @@ model Conversation {
   createdAt     DateTime           @default(now())
 
   @@unique([productId, buyerId, sellerId])
+  @@index([buyerId, lastMessageAt(sort: Desc)])
+  @@index([sellerId, lastMessageAt(sort: Desc)])
   @@index([buyerId])
   @@index([sellerId])
 }
@@ -278,6 +280,7 @@ model Message {
   createdAt      DateTime     @default(now())
 
   @@index([conversationId, createdAt])
+  @@index([conversationId, isRead, senderId])
 }
 
 // =============================================================================

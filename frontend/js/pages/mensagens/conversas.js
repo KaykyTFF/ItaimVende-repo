@@ -57,6 +57,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let enviandoMensagem = false;
     let intervaloPolling = null;
     let contadorTicks = 0;
+    const mensagensCache = new Map();
 
     const fallbackAvatar = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
         ? window.ItaimRotas.obterAsset('assets/icons/icon-user.png')
@@ -402,16 +403,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         conversaAtivaId = id;
+
+        // Dispara a busca de mensagens imediatamente em paralelo com a resolução dos metadados
+        const promiseMensagens = carregarMensagens(id);
+
         let conv = conversas.find(c => c.id === id);
 
-        // Se a conversa não estava na lista (ex: recém-criada via produto), busca na API
+        // Se a conversa não estava na lista (ex: recém-criada via produto ou carga inicial paralela), busca na API
         if (!conv) {
             try {
                 const resp = await window.ItaimApi.chat.obterConversa(id);
                 if (resp && resp.success && resp.data) {
                     conv = resp.data;
-                    conversas.unshift(conv);
-                    renderizarListaConversas(buscaInput?.value || '');
+                    if (!conversas.some(c => c.id === conv.id)) {
+                        conversas.unshift(conv);
+                        renderizarListaConversas(buscaInput?.value || '');
+                    }
                 }
             } catch (err) {
                 console.error('Erro ao buscar conversa por ID:', err);
@@ -419,7 +426,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         if (!conv) {
-            exibirEstadoSemConversa();
+            await promiseMensagens;
+            if (!mensagensAtivas || mensagensAtivas.length === 0) {
+                exibirEstadoSemConversa();
+            }
             return;
         }
 
@@ -553,15 +563,35 @@ document.addEventListener('DOMContentLoaded', async () => {
             inputTexto.focus();
         }
 
-        // 8. Carregar mensagens da conversa
-        await carregarMensagens(conv.id);
+        // 8. Aguarda a resolução das mensagens que já foram disparadas em paralelo
+        await promiseMensagens;
     }
 
     // -------------------------------------------------------------------------
     // 9. CARREGAR E RENDERIZAR MENSAGENS (COLUNA 2)
     // -------------------------------------------------------------------------
+    function exibirSkeletonMensagens() {
+        if (!feedMensagens) return;
+        feedMensagens.innerHTML = `
+            <div class="chat-skeleton-feed">
+                <div class="chat-skeleton-balao recebida" style="width: 48%;"></div>
+                <div class="chat-skeleton-balao enviada" style="width: 62%;"></div>
+                <div class="chat-skeleton-balao recebida" style="width: 40%;"></div>
+                <div class="chat-skeleton-balao enviada" style="width: 54%;"></div>
+            </div>
+        `;
+    }
+
     async function carregarMensagens(convId, manterPosicaoScroll = false) {
         if (!feedMensagens || !convId) return;
+
+        // Se já temos as mensagens no cache da sessão, exibe instantaneamente (0ms de latência percebida)
+        if (mensagensCache.has(convId) && !manterPosicaoScroll) {
+            mensagensAtivas = mensagensCache.get(convId);
+            renderizarFeedMensagens(mensagensAtivas, false);
+        } else if (!manterPosicaoScroll && mensagensAtivas.length === 0) {
+            exibirSkeletonMensagens();
+        }
 
         try {
             const resp = await window.ItaimApi.chat.obterMensagens(convId);
@@ -570,6 +600,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (conversaAtivaId !== convId) return;
 
                 mensagensAtivas = resp.data;
+                mensagensCache.set(convId, resp.data);
                 renderizarFeedMensagens(mensagensAtivas, manterPosicaoScroll);
             }
         } catch (err) {
@@ -1142,27 +1173,33 @@ document.addEventListener('DOMContentLoaded', async () => {
     const paramId = urlParams.get('id') || urlParams.get('conversaId');
     const paramProdutoId = urlParams.get('produtoId');
 
-    await carregarListaConversas();
-
+    // Carregamento inicial em paralelo: não bloqueia a abertura da conversa ativa
     if (paramId) {
         selecionarConversa(paramId);
+        await carregarListaConversas();
     } else if (paramProdutoId) {
         try {
             const resp = await window.ItaimApi.chat.iniciarConversa(paramProdutoId);
             if (resp && resp.success && resp.data) {
                 selecionarConversa(resp.data.id);
+                carregarListaConversas();
             } else {
+                await carregarListaConversas();
                 exibirEstadoSemConversa();
             }
         } catch (err) {
             console.warn('Não foi possível abrir chat pelo produtoId:', err);
+            await carregarListaConversas();
             exibirEstadoSemConversa();
         }
-    } else if (conversas.length > 0 && window.innerWidth >= 992) {
-        // No Desktop grande, se nenhuma conversa foi especificada, seleciona a primeira por conveniência
-        selecionarConversa(conversas[0].id);
     } else {
-        exibirEstadoSemConversa();
+        await carregarListaConversas();
+        if (conversas.length > 0 && window.innerWidth >= 992) {
+            // No Desktop grande, se nenhuma conversa foi especificada, seleciona a primeira por conveniência
+            selecionarConversa(conversas[0].id);
+        } else {
+            exibirEstadoSemConversa();
+        }
     }
 
     // Inicia escuta em tempo real

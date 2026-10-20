@@ -15,7 +15,7 @@ const PRODUCT_SELECT = {
   condition: true,
   city: true,
   category: { select: { id: true, name: true, slug: true } },
-  images: { orderBy: { orderIndex: 'asc' } },
+  images: { orderBy: { orderIndex: 'asc' }, take: 1 },
 };
 
 /**
