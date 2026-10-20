@@ -92,10 +92,10 @@ document.addEventListener('DOMContentLoaded', () => {
         })();
 
         meusAnuncios = listaBruta
-            .filter(item => !mapaExcluidos.has(String(item.id)))
+            .filter(item => !item.deletedAt && !mapaExcluidos.has(String(item.id)))
             .map(item => {
-                const statusLocal = mapaStatusModificados[String(item.id)];
-                const st = String(statusLocal || item.status || 'ATIVO').toLowerCase();
+                // Prioridade absoluta para o status real vindo do banco de dados (API)
+                const st = String(item.status || mapaStatusModificados[String(item.id)] || 'ATIVO').toLowerCase();
                 const fotoSrc = item.imagem || (item.images && item.images[0]) || (item.fotos && item.fotos[0]) || '';
                 return {
                     ...item,

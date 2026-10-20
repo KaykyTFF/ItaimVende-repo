@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+import prisma from './config/prisma.js';
 import { ENV } from './config/env.js';
 import { errorHandler } from './middlewares/error.middleware.js';
 import { requestLogger } from './middlewares/logger.middleware.js';
@@ -215,14 +216,47 @@ app.use(errorHandler);
 
 // Inicialização do Servidor
 const PORT = ENV.PORT;
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`=========================================`);
   console.log(`🚀 Servidor Itaim Vende Ativo na Porta: ${PORT}`);
   console.log(`🌐 Healthcheck: http://localhost:${PORT}/api/v1/health`);
   console.log(`📦 Produtos:    http://localhost:${PORT}/api/v1/products`);
   console.log(`🔒 Modo:        ${ENV.NODE_ENV}`);
   console.log(`=========================================`);
+});
 
+// Encerramento Gracioso (Graceful Shutdown) - Libera conexões do Supabase PostgreSQL
+async function gracefulShutdown(signal) {
+  console.log(`\n[${signal}] Recebido sinal de parada. Fechando servidor HTTP e desconectando banco...`);
+  server.close(async () => {
+    try {
+      await prisma.$disconnect();
+      console.log('✅ Conexões do banco liberadas com sucesso.');
+      process.exit(0);
+    } catch (err) {
+      console.error('❌ Erro ao desconectar do banco:', err);
+      process.exit(1);
+    }
+  });
+
+  // Força encerramento se travar por mais de 5s
+  setTimeout(() => {
+    console.error('⚠️ Encerramento forçado após timeout de 5 segundos.');
+    process.exit(1);
+  }, 5000);
+}
+
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+
+// Blindagem contra crash do processo por erros assíncronos não capturados
+process.on('unhandledRejection', (reason) => {
+  console.error('[Proteção contra Queda - Unhandled Rejection]:', reason);
+});
+
+process.on('uncaughtException', (err) => {
+  console.error('[Proteção contra Queda - Uncaught Exception]:', err);
 });
 
 export default app;
+
