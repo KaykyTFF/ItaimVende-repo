@@ -506,6 +506,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const btnEntrar = document.getElementById('btn-entrar');
 
+    // Feedback de mensagem vinda de redirecionamento (ex: tentativa de interação como visitante)
+    try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const msgParam = urlParams.get('mensagem') || urlParams.get('aviso');
+        if (msgParam && statusMsgLogin) {
+            statusMsgLogin.textContent = decodeURIComponent(msgParam);
+            statusMsgLogin.className = 'status-msg status-info';
+        }
+    } catch(e) {}
+
     formLogin?.addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = inputEmail ? inputEmail.value.trim() : '';
@@ -554,7 +564,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             setTimeout(() => {
-                const destino = window.ItaimRotas ? window.ItaimRotas.obterUrl('home') : 'pages/home/home.html';
+                const urlParams = new URLSearchParams(window.location.search);
+                const returnTo = urlParams.get('returnTo');
+                let destino = window.ItaimRotas ? window.ItaimRotas.obterUrl('home') : 'pages/home/home.html';
+                if (returnTo && !returnTo.includes('index.html')) {
+                    destino = returnTo;
+                }
                 window.location.href = destino;
             }, 500);
         } catch (err) {
@@ -568,7 +583,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     statusMsgLogin.className = 'status-msg status-sucesso';
                 }
                 setTimeout(() => {
-                    const destino = window.ItaimRotas ? window.ItaimRotas.obterUrl('home') : 'pages/home/home.html';
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const returnTo = urlParams.get('returnTo');
+                    let destino = window.ItaimRotas ? window.ItaimRotas.obterUrl('home') : 'pages/home/home.html';
+                    if (returnTo && !returnTo.includes('index.html')) {
+                        destino = returnTo;
+                    }
                     window.location.href = destino;
                 }, 500);
                 return;

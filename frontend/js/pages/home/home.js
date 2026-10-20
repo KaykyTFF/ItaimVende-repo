@@ -275,6 +275,23 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.btn-favorito').forEach(btn => {
             btn.addEventListener('click', async (e) => {
                 e.stopPropagation();
+                e.preventDefault();
+
+                // Se visitante não autenticado, redireciona imediatamente para o login
+                const estaAutenticado = (window.ItaimSessao && typeof window.ItaimSessao.usuarioEstaAutenticado === 'function')
+                    ? window.ItaimSessao.usuarioEstaAutenticado()
+                    : !!(localStorage.getItem('itaim_token') && localStorage.getItem('itaim_usuario_logado'));
+
+                if (!estaAutenticado) {
+                    if (window.ItaimSessao && typeof window.ItaimSessao.redirecionarParaLogin === 'function') {
+                        window.ItaimSessao.redirecionarParaLogin('Faça login para salvar anúncios nos seus favoritos.');
+                    } else {
+                        const urlLogin = window.ItaimRotas ? window.ItaimRotas.obterUrl('login', 'mensagem=' + encodeURIComponent('Faça login para salvar anúncios nos seus favoritos.')) : '../../index.html';
+                        window.location.href = urlLogin;
+                    }
+                    return;
+                }
+
                 const id = String(btn.getAttribute('data-id'));
                 if (favoritosSet.has(id)) {
                     favoritosSet.delete(id);

@@ -23,11 +23,13 @@
     const ItaimSessao = {
         // --- UI & Navegação ---
         protegerPagina: UI.protegerPagina || (() => true),
+        redirecionarParaLogin: UI.redirecionarParaLogin || (() => {}),
         atualizarHeaderUsuario: UI.atualizarHeaderUsuario || (() => {}),
         ajustarFoto: (window.ItaimFoto && window.ItaimFoto.ajustar) || UI.ajustarFotoSimples || (() => {}),
         tema: window.ItaimTema || {},
 
         // --- Autenticação e Usuários ---
+        usuarioEstaAutenticado: Auth.usuarioEstaAutenticado || (() => !!(localStorage.getItem('itaim_token') && localStorage.getItem('itaim_usuario_logado'))),
         deslogarUsuario: Auth.deslogarUsuario || (() => {}),
         obterUsuarioLogado: Auth.obterUsuarioLogado || (() => null),
         definirUsuarioLogado: Auth.definirUsuarioLogado || (() => null),

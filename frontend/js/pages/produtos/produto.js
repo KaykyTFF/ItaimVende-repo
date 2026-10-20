@@ -475,13 +475,22 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
 
             // 2. Verificar se o usuário está autenticado
-            const token = window.ItaimApi?.auth?.obterToken();
-            if (!token) {
+            const estaLogado = (window.ItaimSessao && typeof window.ItaimSessao.usuarioEstaAutenticado === 'function')
+                ? window.ItaimSessao.usuarioEstaAutenticado()
+                : !!(window.ItaimApi?.auth?.obterToken() && localStorage.getItem('itaim_usuario_logado'));
+
+            if (!estaLogado) {
                 mostrarToast('Faça login para conversar com o vendedor.');
-                const urlLogin = window.ItaimRotas ? window.ItaimRotas.obterUrl('login') : '../../index.html';
-                setTimeout(() => {
-                    window.location.href = urlLogin;
-                }, 900);
+                if (window.ItaimSessao && typeof window.ItaimSessao.redirecionarParaLogin === 'function') {
+                    setTimeout(() => {
+                        window.ItaimSessao.redirecionarParaLogin('Faça login para conversar com o vendedor.');
+                    }, 400);
+                } else {
+                    const urlLogin = window.ItaimRotas ? window.ItaimRotas.obterUrl('login', 'returnTo=' + encodeURIComponent(window.location.href)) : '../../index.html';
+                    setTimeout(() => {
+                        window.location.href = urlLogin;
+                    }, 400);
+                }
                 return;
             }
 

@@ -122,47 +122,50 @@
     }
 
     // Retorna o usuário logado na sessão atual
+    // Verifica se há um usuário autenticado com credenciais válidas
+    function usuarioEstaAutenticado() {
+        const token = localStorage.getItem('itaim_token');
+        const bUserRaw = localStorage.getItem('itaim_usuario_logado');
+        return !!(token && bUserRaw);
+    }
+
+    // Retorna o usuário logado na sessão atual (ou null se for visitante / não logado)
     function obterUsuarioLogado() {
-        let emailAtivo = localStorage.getItem('itaim_usuario_logado_email');
-        if (!emailAtivo) {
-            try {
-                const bUser = JSON.parse(localStorage.getItem('itaim_usuario_logado') || 'null');
-                if (bUser && bUser.email) {
-                    emailAtivo = bUser.email;
-                    localStorage.setItem('itaim_usuario_logado_email', emailAtivo);
-                }
-            } catch(e) {}
-        }
-
-        // Se não houver nenhum e-mail ativo na sessão, retorna USUARIO_ADMIN como leitura padrão
-        // NUNCA grava 'admin@gmail.com' no localStorage para não sequestrar o navegador
-        if (!emailAtivo) {
-            return { ...USUARIO_ADMIN };
-        }
-
-        let user = obterUsuarioPorEmail(emailAtivo);
-        if (!user) {
-            const lista = carregarUsuarios();
-            user = lista.find(u => (u.email || '').toLowerCase() === emailAtivo.toLowerCase()) || { ...USUARIO_ADMIN };
-        }
-
-        // Incorpora dados reais e atualizados do backend salvos na sessão (APENAS se pertencer à mesma conta!)
+        const token = localStorage.getItem('itaim_token');
+        const bUserRaw = localStorage.getItem('itaim_usuario_logado');
+        let backendUser = null;
         try {
-            const backendUser = JSON.parse(localStorage.getItem('itaim_usuario_logado') || 'null');
-            if (backendUser && (backendUser.email || '').toLowerCase() === (user.email || '').toLowerCase()) {
-                user = {
-                    ...user,
-                    id: backendUser.id || user.id,
-                    nome: backendUser.name || backendUser.nome || user.nome,
-                    name: backendUser.name || backendUser.nome || user.name,
-                    username: backendUser.username || user.username,
-                    usuario: backendUser.username || user.usuario,
-                    telefone: backendUser.phone ? formatarTelefoneBR(backendUser.phone) : (user.telefone || '(89) 99998-5858'),
-                    phone: backendUser.phone || user.phone || '89999858585',
-                    cidade: backendUser.city || user.cidade || 'Paulistana',
-                    city: backendUser.city || user.city || 'Paulistana',
-                    bairro: backendUser.neighborhood || user.bairro || 'Centro',
-                    neighborhood: backendUser.neighborhood || user.neighborhood || 'Centro',
+            backendUser = JSON.parse(bUserRaw || 'null');
+        } catch(e) {}
+
+        // Se não houver token ou usuário logado no storage, o visitante é anônimo (não autenticado)
+        if (!token || !backendUser) {
+            return null;
+        }
+
+        let emailAtivo = localStorage.getItem('itaim_usuario_logado_email') || backendUser.email;
+        if (!emailAtivo) {
+            emailAtivo = backendUser.email;
+            localStorage.setItem('itaim_usuario_logado_email', emailAtivo);
+        }
+
+        let user = obterUsuarioPorEmail(emailAtivo) || backendUser;
+
+        return {
+            ...user,
+            ...backendUser,
+            id: backendUser.id || user.id,
+            nome: backendUser.name || backendUser.nome || user.nome,
+            name: backendUser.name || backendUser.nome || user.name,
+            username: backendUser.username || user.username,
+            usuario: backendUser.username || user.usuario,
+            email: backendUser.email || user.email,
+            telefone: backendUser.phone ? formatarTelefoneBR(backendUser.phone) : (user.telefone || '(89) 99998-5858'),
+            phone: backendUser.phone || user.phone || '89999858585',
+            cidade: backendUser.city || user.cidade || 'Paulistana',
+            city: backendUser.city || user.city || 'Paulistana',
+            bairro: backendUser.neighborhood || user.bairro || 'Centro',
+            neighborhood: backendUser.neighborhood || user.neighborhood || 'Centro',
                     bio: backendUser.bio !== undefined ? backendUser.bio : user.bio,
                     avatar: backendUser.avatar || user.avatar || 'assets/icons/icon-user.png',
                     role: backendUser.role || user.role || 'ADMIN',
@@ -174,10 +177,6 @@
                     salesCount: backendUser.salesCount !== undefined ? backendUser.salesCount : (user.vendasConcluidas || 12),
                     vendasConcluidas: backendUser.salesCount !== undefined ? backendUser.salesCount : (user.vendasConcluidas || 12)
                 };
-            }
-        } catch(e) {}
-
-        return user;
     }
 
     // Define o usuário logado e atualiza a interface com isolamento estrito
@@ -463,6 +462,7 @@
         obterTodosUsuarios,
         obterUsuarioPorEmail,
         obterUsuarioPorUsername,
+        usuarioEstaAutenticado,
         obterUsuarioLogado,
         definirUsuarioLogado,
         cadastrarNovoUsuario,
