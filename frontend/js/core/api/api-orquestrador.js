@@ -21,6 +21,7 @@
     const Chat = window.ItaimApiChat || {};
     const Upload = window.ItaimApiUpload || {};
     const Social = window.ItaimApiSocial || {};
+    const Enderecos = window.ItaimApiEnderecos || {};
     const Sistema = window.ItaimApiSistema || {};
 
     const ItaimApi = {
@@ -30,6 +31,7 @@
 
         auth: Auth,
         produtos: Produtos,
+        enderecos: Enderecos,
         categorias: Social.categorias || {},
         favoritos: Social.favoritos || {},
         reports: Social.reports || {},

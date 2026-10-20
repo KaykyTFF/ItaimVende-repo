@@ -406,7 +406,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ------------------------------------------------------------------
-    // 4. Endereços
+    // 4. Endereços (Gestão de Múltiplos Endereços sincronizada com a API)
     // ------------------------------------------------------------------
     let enderecos = ler(CHAVE_ENDERECOS, []);
     if (!Array.isArray(enderecos)) enderecos = [];
@@ -423,19 +423,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderizarEnderecos() {
         const lista = $('lista-enderecos');
+        if (!lista) return;
         lista.replaceChildren();
         if (enderecos.length === 0) {
             lista.appendChild(criar('div', 'cfg-vazio', 'Você ainda não cadastrou nenhum endereço.'));
             return;
         }
         enderecos.forEach(end => {
-            const item = criar('div', 'cfg-endereco' + (end.principal ? ' principal' : ''));
+            const isPrincipal = !!(end.principal || end.isDefault);
+            const apelido = end.apelido || end.nickname || 'Endereço';
+            const rua = end.rua || (end.number ? `${end.street}, ${end.number}` : end.street);
+            const bairro = end.bairro || end.neighborhood;
+            const cidade = end.cidade || end.city || 'Paulistana';
+            const estado = end.estado || end.state || 'PI';
+            const cep = end.cep || end.postalCode;
+
+            const item = criar('div', 'cfg-endereco' + (isPrincipal ? ' principal' : ''));
             const info = criar('div');
-            const titulo = criar('strong', '', end.apelido);
-            if (end.principal) titulo.appendChild(criar('span', 'cfg-selo', 'PRINCIPAL'));
+            const titulo = criar('strong', '', apelido);
+            if (isPrincipal) titulo.appendChild(criar('span', 'cfg-selo', 'PRINCIPAL'));
             info.appendChild(titulo);
-            const partes = [end.rua, end.bairro, end.cidade + ' - PI'].filter(Boolean).join(', ');
-            info.appendChild(criar('p', '', partes + (end.cep ? ' | CEP ' + end.cep : '')));
+            const partes = [rua, bairro, cidade + ' - ' + estado].filter(Boolean).join(', ');
+            info.appendChild(criar('p', '', partes + (cep ? ' | CEP ' + cep : '')));
 
             const acoes = criar('div', 'cfg-endereco-acoes');
             const botao = (rotulo, classe, fn) => {
@@ -444,7 +453,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 b.addEventListener('click', fn);
                 acoes.appendChild(b);
             };
-            if (!end.principal) botao('Tornar principal', '', () => tornarPrincipal(end.id));
+            if (!isPrincipal) botao('Tornar principal', '', () => tornarPrincipal(end.id));
             botao('Editar', '', () => iniciarEdicao(end.id));
             botao('Remover', 'perigo', () => pedirRemocao(end.id));
 
@@ -453,9 +462,53 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function tornarPrincipal(id) {
-        enderecos.forEach(e => { e.principal = e.id === id; });
-        salvarEnderecos(); renderizarEnderecos();
+    async function carregarEnderecosServidor() {
+        if (window.ItaimApi && window.ItaimApi.enderecos && window.ItaimApi.auth && window.ItaimApi.auth.obterToken()) {
+            try {
+                const res = await window.ItaimApi.enderecos.listar();
+                if (res && res.success && Array.isArray(res.data)) {
+                    enderecos = res.data;
+                    salvarEnderecos();
+                    renderizarEnderecos();
+                    return;
+                }
+            } catch (err) {
+                console.warn('[Configurações] Falha ao sincronizar endereços da API:', err);
+            }
+        }
+        renderizarEnderecos();
+    }
+
+    async function tornarPrincipal(id) {
+        if (window.ItaimApi && window.ItaimApi.enderecos && window.ItaimApi.auth && window.ItaimApi.auth.obterToken()) {
+            try {
+                await window.ItaimApi.enderecos.tornarPrincipal(id);
+                const res = await window.ItaimApi.enderecos.listar();
+                if (res && res.success && Array.isArray(res.data)) {
+                    enderecos = res.data;
+                } else {
+                    enderecos.forEach(e => {
+                        e.principal = (e.id === id);
+                        e.isDefault = (e.id === id);
+                    });
+                }
+                salvarEnderecos();
+                renderizarEnderecos();
+                toast('Endereço principal atualizado.');
+                return;
+            } catch (err) {
+                console.warn('[Configurações] Erro ao definir principal via API:', err);
+                toast(err.message || 'Erro ao definir endereço principal.', true);
+                return;
+            }
+        }
+
+        enderecos.forEach(e => {
+            e.principal = (e.id === id);
+            e.isDefault = (e.id === id);
+        });
+        salvarEnderecos();
+        renderizarEnderecos();
         toast('Endereço principal atualizado.');
     }
 
@@ -472,11 +525,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const end = enderecos.find(e => e.id === id);
         if (!end) return;
         editandoId = id;
-        $('end-apelido').value = end.apelido;
-        $('end-cep').value = end.cep || '';
-        $('end-rua').value = end.rua;
-        $('end-bairro').value = end.bairro || '';
-        $('end-cidade').value = end.cidade;
+        $('end-apelido').value = end.apelido || end.nickname || '';
+        $('end-cep').value = end.cep || end.postalCode || '';
+        $('end-rua').value = end.rua || end.street || '';
+        $('end-bairro').value = end.bairro || end.neighborhood || '';
+        $('end-cidade').value = end.cidade || end.city || 'Paulistana';
         $('titulo-form-endereco').textContent = 'Editar endereço';
         $('btn-salvar-endereco').textContent = 'Salvar endereço';
         $('btn-cancelar-endereco').hidden = false;
@@ -487,12 +540,37 @@ document.addEventListener('DOMContentLoaded', () => {
     function pedirRemocao(id) {
         const end = enderecos.find(e => e.id === id);
         if (!end) return;
-        confirmar('Remover endereço', `Deseja remover o endereço "${end.apelido}"?`, () => {
-            const eraPrincipal = end.principal;
+        confirmar('Remover endereço', `Deseja remover o endereço "${end.apelido || end.nickname}"?`, async () => {
+            if (window.ItaimApi && window.ItaimApi.enderecos && window.ItaimApi.auth && window.ItaimApi.auth.obterToken()) {
+                try {
+                    await window.ItaimApi.enderecos.remover(id);
+                    const res = await window.ItaimApi.enderecos.listar();
+                    if (res && res.success && Array.isArray(res.data)) {
+                        enderecos = res.data;
+                    } else {
+                        enderecos = enderecos.filter(e => e.id !== id);
+                    }
+                    if (editandoId === id) limparFormEndereco();
+                    salvarEnderecos();
+                    renderizarEnderecos();
+                    toast('Endereço removido.');
+                    return;
+                } catch (err) {
+                    console.warn('[Configurações] Erro ao remover endereço via API:', err);
+                    toast(err.message || 'Erro ao remover endereço.', true);
+                    return;
+                }
+            }
+
+            const eraPrincipal = end.principal || end.isDefault;
             enderecos = enderecos.filter(e => e.id !== id);
-            if (eraPrincipal && enderecos.length) enderecos[0].principal = true;
+            if (eraPrincipal && enderecos.length) {
+                enderecos[0].principal = true;
+                enderecos[0].isDefault = true;
+            }
             if (editandoId === id) limparFormEndereco();
-            salvarEnderecos(); renderizarEnderecos();
+            salvarEnderecos();
+            renderizarEnderecos();
             toast('Endereço removido.');
         });
     }
@@ -500,7 +578,7 @@ document.addEventListener('DOMContentLoaded', () => {
     $('end-cep').addEventListener('input', (e) => { e.target.value = maskCep(e.target.value); });
     $('btn-cancelar-endereco').addEventListener('click', limparFormEndereco);
 
-    $('form-endereco').addEventListener('submit', (e) => {
+    $('form-endereco').addEventListener('submit', async (e) => {
         e.preventDefault();
         const apelido = $('end-apelido').value.trim();
         const cep = $('end-cep').value.trim();
@@ -511,22 +589,64 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!(okApelido && okCep && okRua)) { toast('Corrija os campos destacados.', true); return; }
 
         const dados = {
-            apelido, cep, rua,
+            nickname: apelido,
+            street: rua,
+            neighborhood: $('end-bairro').value.trim() || 'Centro',
+            city: $('end-cidade').value || 'Paulistana',
+            state: 'PI',
+            postalCode: cep || null,
+            apelido,
+            cep,
+            rua,
             bairro: $('end-bairro').value.trim(),
             cidade: $('end-cidade').value
         };
-        if (editandoId !== null) {
-            const alvo = enderecos.find(x => x.id === editandoId);
-            if (alvo) Object.assign(alvo, dados);
-            toast('Endereço atualizado.');
-        } else {
-            enderecos.push({ id: Date.now(), principal: enderecos.length === 0, ...dados });
-            toast('Endereço adicionado.');
+
+        const btnSalvar = $('btn-salvar-endereco');
+        const textoOriginal = btnSalvar ? btnSalvar.textContent : 'Salvar endereço';
+        if (btnSalvar) {
+            btnSalvar.disabled = true;
+            btnSalvar.textContent = 'Salvando...';
         }
-        salvarEnderecos(); renderizarEnderecos(); limparFormEndereco();
+
+        try {
+            if (window.ItaimApi && window.ItaimApi.enderecos && window.ItaimApi.auth && window.ItaimApi.auth.obterToken()) {
+                if (editandoId !== null) {
+                    await window.ItaimApi.enderecos.atualizar(editandoId, dados);
+                    toast('Endereço atualizado com sucesso.');
+                } else {
+                    await window.ItaimApi.enderecos.criar(dados);
+                    toast('Endereço adicionado com sucesso.');
+                }
+                const res = await window.ItaimApi.enderecos.listar();
+                if (res && res.success && Array.isArray(res.data)) {
+                    enderecos = res.data;
+                }
+            } else {
+                if (editandoId !== null) {
+                    const alvo = enderecos.find(x => x.id === editandoId);
+                    if (alvo) Object.assign(alvo, dados);
+                    toast('Endereço atualizado.');
+                } else {
+                    enderecos.push({ id: Date.now(), principal: enderecos.length === 0, ...dados });
+                    toast('Endereço adicionado.');
+                }
+            }
+            salvarEnderecos();
+            renderizarEnderecos();
+            limparFormEndereco();
+        } catch (err) {
+            console.error('[Configurações] Erro ao salvar endereço:', err);
+            toast(err.message || 'Erro ao salvar endereço.', true);
+        } finally {
+            if (btnSalvar) {
+                btnSalvar.disabled = false;
+                btnSalvar.textContent = editandoId !== null ? 'Salvar endereço' : 'Adicionar endereço';
+            }
+        }
     });
 
-    renderizarEnderecos();
+    carregarEnderecosServidor();
 
     // ------------------------------------------------------------------
     // 5. Interruptores (notificações, privacidade, segurança)

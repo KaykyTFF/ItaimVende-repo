@@ -67,10 +67,30 @@ model User {
   conversationsAsBuyer  Conversation[] @relation("BuyerConversations")
   conversationsAsSeller Conversation[] @relation("SellerConversations")
   auditLogs       AuditLog[]
+  addresses       Address[]
 
   @@index([email])
   @@index([city, state])
   @@index([status])
+}
+
+model Address {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  nickname     String   @default("Casa")
+  street       String
+  number       String?
+  complement   String?
+  neighborhood String?  @default("Centro")
+  city         String   @default("Paulistana")
+  state        String   @default("PI")
+  postalCode   String?
+  isDefault    Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([userId])
 }
 
 // =============================================================================

@@ -26,6 +26,7 @@
         'api-chat.js',
         'api-upload.js',
         'api-social.js',
+        'api-enderecos.js',
         'api-sistema.js',
         'api-orquestrador.js'
     ];

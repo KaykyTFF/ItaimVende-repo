@@ -22,6 +22,7 @@ import uploadRoutes from './routes/upload/index.js';
 import reviewRoutes from './routes/review/index.js';
 import reportRoutes from './routes/report/index.js';
 import systemRoutes from './routes/system/index.js';
+import addressRoutes from './routes/address/index.js';
 import { UPLOAD_DIR, UPLOAD_PERFIL_DIR, UPLOAD_VENDAS_DIR } from './config/upload.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -159,6 +160,7 @@ v1Router.use('/upload', uploadRoutes);
 v1Router.use('/reviews', reviewRoutes);
 v1Router.use('/reports', reportRoutes);
 v1Router.use('/system', systemRoutes);
+v1Router.use('/addresses', addressRoutes);
 
 // Registra versão oficial /api/v1 e mantém /api para retrocompatibilidade
 app.use('/api/v1', v1Router);
