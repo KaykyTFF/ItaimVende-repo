@@ -189,6 +189,40 @@
     box-shadow: 0 4px 14px rgba(68, 189, 50, 0.4);
 }
 
+/* ==========================================================
+   ESTADO DESLOGADO: Ocultar botões do usuário e exibir Entrar
+   ========================================================== */
+#btn-header-entrar {
+    display: none;
+}
+
+html.usuario-deslogado #link-meus-anuncios,
+html.usuario-deslogado #btn-meus-anuncios,
+html.usuario-deslogado #btn-meus-anuncios-mobile,
+html.usuario-deslogado .btn-meus-anuncios-mobile,
+html.usuario-deslogado #btn-abrir-modal-vender,
+html.usuario-deslogado .btn-vender-destaque:not(#btn-header-entrar),
+html.usuario-deslogado #btn-chat,
+html.usuario-deslogado #btn-notificacoes,
+html.usuario-deslogado .perfil-wrapper,
+body.usuario-deslogado #link-meus-anuncios,
+body.usuario-deslogado #btn-meus-anuncios,
+body.usuario-deslogado #btn-meus-anuncios-mobile,
+body.usuario-deslogado .btn-meus-anuncios-mobile,
+body.usuario-deslogado #btn-abrir-modal-vender,
+body.usuario-deslogado .btn-vender-destaque:not(#btn-header-entrar),
+body.usuario-deslogado #btn-chat,
+body.usuario-deslogado #btn-notificacoes,
+body.usuario-deslogado .perfil-wrapper {
+    display: none !important;
+}
+
+html.usuario-deslogado #btn-header-entrar,
+body.usuario-deslogado #btn-header-entrar {
+    display: inline-flex !important;
+}
+
+
 /* Ícones Gerais no Header */
 .btn-icone-header {
     position: relative;

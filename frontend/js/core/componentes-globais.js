@@ -128,6 +128,11 @@
 
             <!-- Direita: Ações Rápidas + Botão Vender + Perfil -->
             <div class="header-right">
+                <!-- Botão Entrar para usuários não logados -->
+                <a href="${urlPara('login')}" class="btn-vender-destaque btn-header-entrar" id="btn-header-entrar" style="display: none;">
+                    <span>Entrar</span>
+                </a>
+
                 <!-- Meus Anúncios (Desktop) -->
                 <a href="${urlPara('meus-anuncios')}" class="btn-texto-header ${pagina === 'meus-anuncios' ? 'ativo' : ''}" id="btn-meus-anuncios" title="Meus Anúncios">
                     <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

@@ -80,8 +80,52 @@
         
         const avatarImgs = document.querySelectorAll('#img-avatar-user, #drawer-user-avatar, .btn-avatar-header img, .drawer-user-avatar');
 
+        const headerRight = document.querySelector('.header-right');
+
         // Se NÃO estiver autenticado (Visitante anônimo explorando o site)
         if (!autenticado || !user) {
+            document.documentElement.classList.add('usuario-deslogado');
+            document.documentElement.classList.remove('usuario-logado');
+            if (document.body) {
+                document.body.classList.add('usuario-deslogado');
+                document.body.classList.remove('usuario-logado');
+            }
+
+            // Oculta todos os botões do usuário: Meus Anúncios, Vender, Conversas, Perfil e Notificações
+            const seletoresOcultar = [
+                '#link-meus-anuncios',
+                '#btn-meus-anuncios',
+                '#btn-meus-anuncios-mobile',
+                '.btn-meus-anuncios-mobile',
+                '.btn-nav-texto',
+                '#btn-abrir-modal-vender',
+                '.btn-vender-destaque:not(#btn-header-entrar)',
+                '#btn-chat',
+                '#btn-notificacoes',
+                '.perfil-wrapper'
+            ];
+            seletoresOcultar.forEach(sel => {
+                document.querySelectorAll(sel).forEach(el => {
+                    el.style.display = 'none';
+                });
+            });
+
+            // Insere ou exibe o botão Entrar (no estilo do de vender) na direita
+            if (headerRight) {
+                let btnEntrar = document.getElementById('btn-header-entrar');
+                if (!btnEntrar) {
+                    btnEntrar = document.createElement('a');
+                    btnEntrar.id = 'btn-header-entrar';
+                    btnEntrar.className = 'btn-vender-destaque btn-header-entrar';
+                    btnEntrar.innerHTML = '<span>Entrar</span>';
+                    btnEntrar.title = 'Entrar na sua conta';
+                    headerRight.appendChild(btnEntrar);
+                }
+                const urlLogin = window.ItaimRotas ? window.ItaimRotas.obterUrl('login') : (window.location.pathname.toLowerCase().includes('/pages/') ? '../../index.html' : './index.html');
+                btnEntrar.setAttribute('href', urlLogin);
+                btnEntrar.style.display = 'inline-flex';
+            }
+
             avatarImgs.forEach(img => {
                 img.src = avatarPadrao;
             });
@@ -117,6 +161,37 @@
             if (badgeNotif) badgeNotif.style.display = 'none';
             return;
         }
+
+        // Se estiver autenticado: remove classe deslogado e restaura botões
+        document.documentElement.classList.remove('usuario-deslogado');
+        document.documentElement.classList.add('usuario-logado');
+        if (document.body) {
+            document.body.classList.remove('usuario-deslogado');
+            document.body.classList.add('usuario-logado');
+        }
+
+        const btnEntrar = document.getElementById('btn-header-entrar');
+        if (btnEntrar) {
+            btnEntrar.style.display = 'none';
+        }
+
+        const seletoresRestaurar = [
+            '#link-meus-anuncios',
+            '#btn-meus-anuncios',
+            '#btn-meus-anuncios-mobile',
+            '.btn-meus-anuncios-mobile',
+            '.btn-nav-texto',
+            '#btn-abrir-modal-vender',
+            '.btn-vender-destaque:not(#btn-header-entrar)',
+            '#btn-chat',
+            '#btn-notificacoes',
+            '.perfil-wrapper'
+        ];
+        seletoresRestaurar.forEach(sel => {
+            document.querySelectorAll(sel).forEach(el => {
+                el.style.display = '';
+            });
+        });
 
         // Se estiver autenticado: dados reais do perfil
         const rawAvatar = user.avatar || 'assets/icons/icon-user.png';

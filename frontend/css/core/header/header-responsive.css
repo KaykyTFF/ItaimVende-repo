@@ -125,14 +125,25 @@
         gap: 4px;
     }
 
-    /* Ocultar tudo no header-right exceto o avatar */
+    /* Ocultar botões no header-right exceto o avatar (ou Entrar se deslogado) */
     .btn-nav-texto,
-    .btn-vender-destaque,
+    .btn-vender-destaque:not(#btn-header-entrar),
     .btn-meus-anuncios-mobile,
     #btn-chat,
     #btn-notificacoes {
         display: none !important;
     }
+
+    html.usuario-deslogado #btn-header-entrar,
+    body.usuario-deslogado #btn-header-entrar {
+        display: inline-flex !important;
+        height: 32px;
+        min-height: 32px;
+        padding: 0 16px;
+        font-size: 13.5px;
+        font-weight: 700;
+    }
+
 
     .avatar-img {
         box-sizing: border-box;
