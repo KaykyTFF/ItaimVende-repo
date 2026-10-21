@@ -570,7 +570,9 @@ html, body {
     font-weight: 800;
 }
 
-.otp-quadrinho.com-erro {
+.otp-quadrinho.com-erro,
+.campo-texto.com-erro,
+.select-campo.com-erro {
     border-color: var(--color-error) !important;
     background-color: #FFF5F5 !important;
     animation: otpShake 0.35s ease-in-out;

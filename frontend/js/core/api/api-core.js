@@ -77,7 +77,11 @@
             }
 
             if (!resposta.ok) {
-                const erro = new Error(dados.message || `Erro HTTP ${resposta.status}`);
+                let msg = dados.message || `Erro HTTP ${resposta.status}`;
+                if (dados.errors && Array.isArray(dados.errors) && dados.errors.length > 0) {
+                    msg = dados.errors.map(e => e.message).join(' ');
+                }
+                const erro = new Error(msg);
                 erro.status = resposta.status;
                 erro.data = dados;
                 throw erro;

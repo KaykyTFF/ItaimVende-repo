@@ -7,21 +7,37 @@ import { AppError } from '../../utils/errors.js';
 /**
  * Registra novo usuário no sistema com hashing seguro de senha
  */
-export async function registerUser({ name, username, email, password, phone, city, neighborhood, role }) {
+export async function registerUser({ name, username, email, password, phone, city, state, neighborhood, postalCode, role }) {
   const emailNormalized = email.toLowerCase().trim();
-  const usernameCandidate = username ? username.trim().toLowerCase() : emailNormalized.split('@')[0];
+  const userExplicitUsername = Boolean(username && username.trim());
+  let usernameCandidate = userExplicitUsername
+    ? username.trim().toLowerCase().replace(/[^a-z0-9_]/g, '')
+    : emailNormalized.split('@')[0].replace(/[^a-z0-9_]/g, '');
 
-  const existingUser = await prisma.user.findFirst({
-    where: {
-      OR: [
-        { email: emailNormalized },
-        { username: usernameCandidate },
-      ],
-    },
+  if (!usernameCandidate || usernameCandidate.length < 3) {
+    usernameCandidate = `user_${Date.now().toString(36)}`;
+  }
+
+  // Verifica duplicação de e-mail primeiro
+  const existingEmail = await prisma.user.findUnique({
+    where: { email: emailNormalized },
   });
 
-  if (existingUser) {
-    throw new AppError('Já existe um cadastro com este e-mail ou nome de usuário.', 409);
+  if (existingEmail) {
+    throw new AppError('Já existe um cadastro com este e-mail.', 409);
+  }
+
+  // Verifica duplicação de username
+  let existingUsername = await prisma.user.findUnique({
+    where: { username: usernameCandidate },
+  });
+
+  if (existingUsername) {
+    if (userExplicitUsername) {
+      throw new AppError('Este nome de usuário já está em uso. Por favor, escolha outro.', 409);
+    } else {
+      usernameCandidate = `${usernameCandidate}_${Math.floor(100 + Math.random() * 900)}`;
+    }
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -37,8 +53,9 @@ export async function registerUser({ name, username, email, password, phone, cit
       password: hashedPassword,
       phone: phone ? phone.trim() : null,
       city: city || 'Paulistana',
-      state: 'PI',
+      state: state || 'PI',
       neighborhood: neighborhood ? neighborhood.trim() : 'Centro',
+      postalCode: postalCode ? postalCode.trim() : null,
       role: normalizedRole,
       status: 'ACTIVE',
     },

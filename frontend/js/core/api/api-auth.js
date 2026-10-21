@@ -93,6 +93,7 @@
             }
             if (resposta.user) {
                 localStorage.setItem('itaim_usuario_logado', JSON.stringify(resposta.user));
+                localStorage.setItem('itaim_usuario_logado_email', resposta.user.email || dados.email);
                 if (window.ItaimSessao && typeof window.ItaimSessao.definirUsuarioLogado === 'function') {
                     window.ItaimSessao.definirUsuarioLogado(resposta.user.email || dados.email, resposta.user);
                 }
