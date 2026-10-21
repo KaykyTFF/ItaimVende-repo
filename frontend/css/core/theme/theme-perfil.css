@@ -129,6 +129,16 @@ body[data-theme="dark"].pagina-vendedor {
     border-color: #4ADE80 !important;
 }
 
+/* Botão Denunciar Vendedor Dark Mode */
+[data-theme="dark"] .btn-denunciar-perfil {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .btn-denunciar-perfil:hover {
+    color: #EF4444 !important;
+    background: rgba(239, 68, 68, 0.12) !important;
+}
+
 /* Breadcrumb do Vendedor */
 [data-theme="dark"] .vendedor-breadcrumb a,
 [data-theme="dark"] .vendedor-breadcrumb span {

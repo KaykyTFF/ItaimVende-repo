@@ -268,6 +268,14 @@
             });
         }
 
+        // Botão Denunciar Perfil
+        const btnDenunciarPerfil = document.getElementById('btn-denunciar-perfil');
+        if (btnDenunciarPerfil) {
+            btnDenunciarPerfil.addEventListener('click', () => {
+                exibirToast('Denúncia recebida. Nossa equipe irá analisar este perfil.');
+            });
+        }
+
         window.ItaimVendedorDados.vendedor = vendedor;
         window.ItaimVendedorDados.anunciosVendedor = anunciosVendedor;
         return { vendedor, anunciosVendedor };
