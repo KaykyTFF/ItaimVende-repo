@@ -20,7 +20,7 @@ const __dirname = path.dirname(__filename);
 
 const ROOT_DIR = path.resolve(__dirname, '..');
 const MENSAGENS_DIR = path.join(ROOT_DIR, 'frontend', 'js', 'pages', 'mensagens');
-const OUTPUT_FILE = path.join(MENSAGENS_DIR, 'conversas.js');
+const OUTPUT_FILE = path.join(MENSAGENS_DIR, 'conversas.bundle.js');
 
 const MODULES = [
     { name: 'UTILITÁRIOS & FORMATAÇÃO', file: 'conversas-utils.js' },
@@ -92,7 +92,7 @@ function build() {
 
     fs.writeFileSync(OUTPUT_FILE, bundleContent, 'utf-8');
     const stats = fs.statSync(OUTPUT_FILE);
-    console.log(`[SUCESSO] frontend/js/pages/mensagens/conversas.js gerado com sucesso! Tamanho: ${(stats.size / 1024).toFixed(2)} KB`);
+    console.log(`[SUCESSO] frontend/js/pages/mensagens/conversas.bundle.js gerado com sucesso! Tamanho: ${(stats.size / 1024).toFixed(2)} KB`);
 }
 
 build();

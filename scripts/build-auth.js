@@ -20,7 +20,7 @@ const __dirname = path.dirname(__filename);
 
 const ROOT_DIR = path.resolve(__dirname, '..');
 const AUTH_DIR = path.join(ROOT_DIR, 'frontend', 'js', 'pages', 'auth');
-const OUTPUT_FILE = path.join(AUTH_DIR, 'app.js');
+const OUTPUT_FILE = path.join(AUTH_DIR, 'app.bundle.js');
 
 const MODULES = [
     { name: 'NAVEGAÇÃO ENTRE TELAS', file: 'auth-navegacao.js' },
@@ -90,7 +90,7 @@ function build() {
 
     fs.writeFileSync(OUTPUT_FILE, bundleContent, 'utf-8');
     const stats = fs.statSync(OUTPUT_FILE);
-    console.log(`[SUCESSO] frontend/js/pages/auth/app.js gerado com sucesso! Tamanho: ${(stats.size / 1024).toFixed(2)} KB`);
+    console.log(`[SUCESSO] frontend/js/pages/auth/app.bundle.js gerado com sucesso! Tamanho: ${(stats.size / 1024).toFixed(2)} KB`);
 }
 
 build();
