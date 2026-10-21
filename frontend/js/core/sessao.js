@@ -1923,6 +1923,33 @@
         return !!(token && bUserRaw);
     }
 
+    // Helpers para resolução resiliente de URLs de login e cadastro
+    function resolverUrlLogin(params = '') {
+        if (window.ItaimRotas && typeof window.ItaimRotas.obterUrl === 'function') {
+            return window.ItaimRotas.obterUrl('login', params);
+        }
+        const isEmPages = window.location.pathname.replace(/\\/g, '/').toLowerCase().includes('/pages/');
+        const raiz = isEmPages ? '../../' : './';
+        let url = raiz + 'index.html';
+        if (params) {
+            url += (url.includes('?') ? '&' : '?') + params.replace(/^[\?&]/, '');
+        }
+        return url;
+    }
+
+    function resolverUrlCadastro(params = '') {
+        if (window.ItaimRotas && typeof window.ItaimRotas.obterUrl === 'function') {
+            return window.ItaimRotas.obterUrl('cadastro', params);
+        }
+        const isEmPages = window.location.pathname.replace(/\\/g, '/').toLowerCase().includes('/pages/');
+        const raiz = isEmPages ? '../../' : './';
+        let url = raiz + 'pages/auth/cadastro.html';
+        if (params) {
+            url += (url.includes('?') ? '&' : '?') + params.replace(/^[\?&]/, '');
+        }
+        return url;
+    }
+
     // Modal Global de Login / Cadastro para Visitantes
     function abrirModalAuth(motivo = '') {
         let modal = document.getElementById('modal-auth-visitante');
@@ -1947,14 +1974,26 @@
 
             const fechar = () => {
                 modal.classList.remove('ativo');
+                modal.style.display = 'none';
+                modal.style.pointerEvents = 'none';
                 document.body.style.overflow = '';
             };
 
             const btnFechar = modal.querySelector('#modal-auth-btn-fechar');
-            if (btnFechar) btnFechar.onclick = fechar;
+            if (btnFechar) {
+                btnFechar.onclick = (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    fechar();
+                };
+            }
 
             modal.onclick = (e) => {
-                if (e.target === modal) fechar();
+                if (e.target === modal) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    fechar();
+                }
             };
 
             document.addEventListener('keydown', (e) => {
@@ -1969,18 +2008,44 @@
         const linkEntrar = modal.querySelector('#modal-auth-btn-entrar');
         const linkCad = modal.querySelector('#modal-auth-link-cadastro');
 
-        let query = 'returnTo=' + encodeURIComponent(urlAtual);
+        let query = '';
+        if (!urlAtual.includes('index.html')) {
+            query = 'returnTo=' + encodeURIComponent(urlAtual);
+        }
         if (motivo) {
-            query += '&mensagem=' + encodeURIComponent(motivo);
+            query += (query ? '&' : '') + 'mensagem=' + encodeURIComponent(motivo);
         }
 
-        const urlLogin = window.ItaimRotas ? window.ItaimRotas.obterUrl('login', query) : ('../../index.html?' + query);
-        const urlCadastro = window.ItaimRotas ? window.ItaimRotas.obterUrl('cadastro', query) : ('../../pages/auth/cadastro.html?' + query);
+        const urlLogin = resolverUrlLogin(query);
+        const urlCadastro = resolverUrlCadastro(query);
 
-        if (linkEntrar) linkEntrar.href = urlLogin;
-        if (linkCad) linkCad.href = urlCadastro;
+        if (linkEntrar) {
+            linkEntrar.href = urlLogin;
+            linkEntrar.onclick = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (window.ItaimRotas && typeof window.ItaimRotas.executarTransicao === 'function') {
+                    window.ItaimRotas.executarTransicao(urlLogin);
+                } else {
+                    window.location.href = urlLogin;
+                }
+            };
+        }
+        if (linkCad) {
+            linkCad.href = urlCadastro;
+            linkCad.onclick = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (window.ItaimRotas && typeof window.ItaimRotas.executarTransicao === 'function') {
+                    window.ItaimRotas.executarTransicao(urlCadastro);
+                } else {
+                    window.location.href = urlCadastro;
+                }
+            };
+        }
 
         modal.style.display = 'flex';
+        modal.style.pointerEvents = 'auto';
         void modal.offsetWidth;
         modal.classList.add('ativo');
         document.body.style.overflow = 'hidden';
@@ -1993,12 +2058,19 @@
             return;
         }
         const urlAtual = window.location.href;
-        let query = 'returnTo=' + encodeURIComponent(urlAtual);
-        if (motivo) {
-            query += '&mensagem=' + encodeURIComponent(motivo);
+        let query = '';
+        if (!urlAtual.includes('index.html')) {
+            query = 'returnTo=' + encodeURIComponent(urlAtual);
         }
-        const urlLogin = window.ItaimRotas ? window.ItaimRotas.obterUrl('login', query) : ('../../index.html?' + query);
-        window.location.href = urlLogin;
+        if (motivo) {
+            query += (query ? '&' : '') + 'mensagem=' + encodeURIComponent(motivo);
+        }
+        const urlLogin = resolverUrlLogin(query);
+        if (window.ItaimRotas && typeof window.ItaimRotas.executarTransicao === 'function') {
+            window.ItaimRotas.executarTransicao(urlLogin);
+        } else {
+            window.location.href = urlLogin;
+        }
     }
 
     // Helper interno para obter usuário logado de forma resiliente
@@ -2451,6 +2523,11 @@
     // Interceptor global de cliques para visitantes não autenticados
     document.addEventListener('click', (e) => {
         if (usuarioEstaAutenticado()) return;
+
+        // Se o clique foi disparado dentro do modal de auth, não intercepta
+        if (e.target && e.target.closest && e.target.closest('#modal-auth-visitante')) {
+            return;
+        }
 
         // Seletor abrangente de ações e botões interativos protegidos
         const elementoInteracao = e.target.closest(`
