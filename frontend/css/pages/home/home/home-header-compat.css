@@ -103,13 +103,18 @@
 .btn-cta-vender {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 6px;
+    height: 38px;
+    min-height: 38px;
+    padding: 0 24px;
+    box-sizing: border-box;
     background-color: #E2E8F0;
     color: #1E272E;
     text-decoration: none;
     font-size: 14.5px;
     font-weight: 800;
-    padding: 8px 24px;
+    line-height: 1;
     border-radius: var(--radius-full);
     border: none;
     cursor: pointer;

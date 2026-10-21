@@ -30,6 +30,11 @@
     box-sizing: border-box;
 }
 
+html {
+    overflow-y: auto;
+    overflow-y: overlay;
+}
+
 html, body {
     width: 100%;
     min-height: 100%;
