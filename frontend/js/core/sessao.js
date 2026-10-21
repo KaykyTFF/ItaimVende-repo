@@ -2298,7 +2298,12 @@
                     redirecionarParaLogin('Faça login para acessar seu perfil.');
                     return;
                 }
-                window.location.href = window.ItaimRotas ? window.ItaimRotas.obterUrl('perfil') : 'perfil.html';
+                const urlPerfil = window.ItaimRotas ? window.ItaimRotas.obterUrl('perfil') : 'perfil.html';
+                if (window.ItaimRotas && typeof window.ItaimRotas.executarTransicao === 'function') {
+                    window.ItaimRotas.executarTransicao(urlPerfil);
+                } else {
+                    window.location.href = urlPerfil;
+                }
             };
         }
 

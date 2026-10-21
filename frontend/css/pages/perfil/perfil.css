@@ -3,7 +3,8 @@
  * Arquivo orquestrador / modular
  */
 
-/* 1. Base e Notificações */
+/* 1. Base, Transições e Notificações */
+@import url('../../core/transicoes.css');
 @import url('./perfil/perfil-base.css');
 
 /* 2. Banner Superior e Foto de Perfil */
