@@ -406,10 +406,56 @@ document.addEventListener('DOMContentLoaded', () => {
         window.scrollTo({ top: 400, behavior: 'smooth' });
     };
 
+    // Mapeamento dinâmico de bairros por cidade do Vale do Itaim e região
+    const BAIRROS_POR_CIDADE = {
+        'Paulistana': ['Centro', 'Correnteza', 'Triângulo', 'Alto da Guia', 'Guarita', 'São Francisco', 'Choró', 'Lagoa dos Bois'],
+        'Acauã': ['Centro', 'Bairro Novo', 'Posto Fiscal', 'Baraúnas'],
+        'Betânia do Piauí': ['Centro', 'Vila Nova', 'Barra do Juá'],
+        'Jacobina do Piauí': ['Centro', 'Alto São Pedro'],
+        'Queimada Nova': ['Centro', 'Jacu', 'Cantinho'],
+        'Curral Novo': ['Centro', 'Serrote'],
+        'Picos': ['Centro', 'Junco', 'Canto da Várzea', 'Ipueiras', 'Bomba'],
+        'Afrânio': ['Centro', 'Ramos', 'Extrema'],
+        'Petrolina': ['Centro', 'Areia Branca', 'Atrás da Banca', 'Cohab Massangano']
+    };
+
+    function atualizarSelectBairros(cidade) {
+        const selectBairro = document.getElementById('filtro-bairro');
+        if (!selectBairro) return;
+
+        bairroFiltro = 'todos';
+        selectBairro.innerHTML = '<option value="todos">Todos os Bairros</option>';
+
+        if (!cidade || cidade === 'todas') {
+            selectBairro.disabled = true;
+            selectBairro.style.opacity = '0.6';
+            selectBairro.style.cursor = 'not-allowed';
+            return;
+        }
+
+        selectBairro.disabled = false;
+        selectBairro.style.opacity = '1';
+        selectBairro.style.cursor = 'pointer';
+
+        // Busca pela chave exata ou normalizada
+        const chaveEncontrada = Object.keys(BAIRROS_POR_CIDADE).find(
+            k => k.toLowerCase() === cidade.toLowerCase() || cidade.toLowerCase().includes(k.toLowerCase())
+        );
+
+        const bairros = chaveEncontrada ? BAIRROS_POR_CIDADE[chaveEncontrada] : ['Centro'];
+        bairros.forEach(b => {
+            const opt = document.createElement('option');
+            opt.value = b;
+            opt.textContent = b;
+            selectBairro.appendChild(opt);
+        });
+    }
+
     // Filtro por Cidade
     const filtroCidade = document.getElementById('filtro-cidade');
     filtroCidade?.addEventListener('change', (e) => {
         cidadeFiltro = e.target.value;
+        atualizarSelectBairros(cidadeFiltro);
         renderizarVitrine();
         carregarProdutosApi();
     });
@@ -439,13 +485,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         cidadeFiltro = 'todas';
         if (filtroCidade) filtroCidade.value = 'todas';
+        atualizarSelectBairros('todas');
         bairroFiltro = 'todos';
-        if (filtroBairro) filtroBairro.value = 'todos';
         ordemFiltro = 'recentes';
         if (filtroOrdem) filtroOrdem.value = 'recentes';
         renderizarVitrine();
         carregarProdutosApi();
     });
+
+    // Inicializa os bairros no carregamento da vitrine
+    atualizarSelectBairros(cidadeFiltro);
 
     // Header e Menu Lateral (Drawer) são gerenciados de forma centralizada e global por sessao.js
 
