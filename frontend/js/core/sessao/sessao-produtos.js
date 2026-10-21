@@ -48,8 +48,116 @@
             });
         } catch (e) {}
 
+        // Fallback de dados para desenvolvimento no front-end quando a base estiver vazia
+        if (todos.length === 0) {
+            const isDev = (window.ItaimSessaoAuth && typeof window.ItaimSessaoAuth.isModoDevFrontend === 'function' && window.ItaimSessaoAuth.isModoDevFrontend())
+                || (window.ItaimSessao && typeof window.ItaimSessao.isModoDevFrontend === 'function' && window.ItaimSessao.isModoDevFrontend());
+            if (isDev) {
+                return [...PRODUTOS_MOCK_DEV];
+            }
+        }
+
         return todos;
     }
+
+    const PRODUTOS_MOCK_DEV = [
+        {
+            id: 'mock_1',
+            titulo: 'iPhone 13 Pro 128GB Grafite - Impecável com Caixa',
+            preco: 3450,
+            categoria: 'Eletrônicos',
+            condicao: 'Usado - Excelente',
+            cidade: 'Paulistana',
+            bairro: 'Centro',
+            imagem: 'assets/produtos/anuncio_11.jpg',
+            fotos: ['assets/produtos/anuncio_11.jpg'],
+            descricao: 'Aparelho 100% original, bateria com 89% de saúde, sem marcas ou arranhões. Acompanha cabo e capinha.',
+            status: 'ativo',
+            data: '20/10/2026',
+            visualizacoes: 42,
+            conversas: 5,
+            favorito: false,
+            vendedorId: 'usr_dev_frontend',
+            vendedorNome: 'Dev Front-End',
+            vendedorEmail: 'dev@itaimvende.com',
+            vendedorUsername: 'dev_front',
+            vendedorTelefone: '89994000000',
+            vendedorCidade: 'Paulistana',
+            vendedorAvatar: 'assets/icons/icon-user.png'
+        },
+        {
+            id: 'mock_2',
+            titulo: 'Bicicleta Aro 29 Mountain Bike Shimano 24V Freio a Disco',
+            preco: 1290,
+            categoria: 'Esportes',
+            condicao: 'Semi-nova',
+            cidade: 'Paulistana',
+            bairro: 'Correnteza',
+            imagem: 'assets/produtos/anuncio_13.jpg',
+            fotos: ['assets/produtos/anuncio_13.jpg'],
+            descricao: 'Pouco usada, revisada recentemente. Câmbio Shimano original, pneus com cravos novos.',
+            status: 'ativo',
+            data: '19/10/2026',
+            visualizacoes: 28,
+            conversas: 3,
+            favorito: true,
+            vendedorId: 'cmv5iacmv0000ttiwu9wtemar',
+            vendedorNome: 'Admin',
+            vendedorEmail: 'admin@gmail.com',
+            vendedorUsername: 'adminfreefire',
+            vendedorTelefone: '89999985858',
+            vendedorCidade: 'Paulistana',
+            vendedorAvatar: 'assets/icons/icon-user.png'
+        },
+        {
+            id: 'mock_3',
+            titulo: 'Sofá Retrátil e Reclinável 3 Lugares Suede Bege',
+            preco: 1100,
+            categoria: 'Móveis',
+            condicao: 'Usado',
+            cidade: 'Paulistana',
+            bairro: 'Guarani',
+            imagem: 'assets/produtos/anuncio_15.jpg',
+            fotos: ['assets/produtos/anuncio_15.jpg'],
+            descricao: 'Muito confortável, espuma D28, tecido impermeabilizado. Medidas: 2.10m de largura.',
+            status: 'ativo',
+            data: '18/10/2026',
+            visualizacoes: 19,
+            conversas: 2,
+            favorito: false,
+            vendedorId: 'usr_dev_frontend',
+            vendedorNome: 'Dev Front-End',
+            vendedorEmail: 'dev@itaimvende.com',
+            vendedorUsername: 'dev_front',
+            vendedorTelefone: '89994000000',
+            vendedorCidade: 'Paulistana',
+            vendedorAvatar: 'assets/icons/icon-user.png'
+        },
+        {
+            id: 'mock_4',
+            titulo: 'Smart TV 50 Polegadas 4K UHD Wi-Fi Bluetooth HDR',
+            preco: 1850,
+            categoria: 'Eletrônicos',
+            condicao: 'Semi-nova',
+            cidade: 'Paulistana',
+            bairro: 'Centro',
+            imagem: 'assets/produtos/anuncio_12.jpg',
+            fotos: ['assets/produtos/anuncio_12.jpg'],
+            descricao: 'Perfeito estado, com controle smart magic original e nota fiscal. Apenas 8 meses de uso.',
+            status: 'ativo',
+            data: '17/10/2026',
+            visualizacoes: 56,
+            conversas: 7,
+            favorito: false,
+            vendedorId: 'cmv5iacmv0000ttiwu9wtemar',
+            vendedorNome: 'Admin',
+            vendedorEmail: 'admin@gmail.com',
+            vendedorUsername: 'adminfreefire',
+            vendedorTelefone: '89999985858',
+            vendedorCidade: 'Paulistana',
+            vendedorAvatar: 'assets/icons/icon-user.png'
+        }
+    ];
 
     // Retorna todos os anúncios pertencentes ao usuário solicitado
     function obterAnunciosDoUsuario(emailOuUsername) {

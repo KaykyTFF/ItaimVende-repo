@@ -121,9 +121,80 @@
         return lista.find(u => (u.username || '').toLowerCase() === limpo) || null;
     }
 
+    // 1.1 USUÁRIO DEV FRONT-END (PARA TESTES RÁPIDOS NO LIVE SERVER SEM PRECISAR DE BACKEND)
+    const USUARIO_DEV = Object.freeze({
+        id: "usr_dev_frontend_001",
+        nome: "Dev Front-End",
+        name: "Dev Front-End",
+        username: "dev_front",
+        usuario: "dev_front",
+        email: "dev@itaimvende.com",
+        telefone: "(89) 99400-0000",
+        phone: "89994000000",
+        cidade: "Paulistana",
+        city: "Paulistana",
+        bairro: "Centro",
+        neighborhood: "Centro",
+        estado: "PI",
+        state: "PI",
+        avatar: "assets/icons/icon-user.png",
+        bio: "Ambiente de Desenvolvimento Front-End ativo (Live Server).",
+        role: "ADMIN",
+        isVerified: true,
+        dataCadastro: "Membro Dev",
+        avaliacao: "5.0",
+        ratingAverage: 5.0,
+        totalAvaliacoes: 14,
+        ratingCount: 14,
+        vendasConcluidas: 9,
+        salesCount: 9
+    });
+
+    // Detecta se a página está rodando em ambiente de Live Server / dev de front
+    function isModoDevFrontend() {
+        if (localStorage.getItem('itaim_modo_dev') === 'true') return true;
+        try {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('dev') === 'true' || params.get('mock') === 'true') {
+                localStorage.setItem('itaim_modo_dev', 'true');
+                return true;
+            }
+        } catch(e) {}
+        const port = String(window.location.port || '');
+        const proto = String(window.location.protocol || '');
+        if (proto === 'file:') return true;
+        if (['5500', '5501', '5502', '5173', '8080', '3001'].includes(port)) return true;
+        return false;
+    }
+
+    // Garante que a sessão mock exista caso estejamos em Modo Dev
+    function garantirSessaoDevFrontend() {
+        const token = localStorage.getItem('itaim_token');
+        const bUserRaw = localStorage.getItem('itaim_usuario_logado');
+        if (!token || !bUserRaw) {
+            localStorage.setItem('itaim_token', 'token_mock_dev_frontend');
+            localStorage.setItem('itaim_usuario_logado', JSON.stringify(USUARIO_DEV));
+            localStorage.setItem('itaim_usuario_logado_email', USUARIO_DEV.email);
+            console.info('⚡ [Itaim Vende] Modo Dev Front-End ativado! Sessão simulada criada automaticamente para testes livres no Live Server.');
+        }
+    }
+
+    function ativarModoDevFrontend() {
+        localStorage.setItem('itaim_modo_dev', 'true');
+        garantirSessaoDevFrontend();
+    }
+
+    function desativarModoDevFrontend() {
+        localStorage.removeItem('itaim_modo_dev');
+    }
+
     // Retorna o usuário logado na sessão atual
     // Verifica se há um usuário autenticado com credenciais válidas
     function usuarioEstaAutenticado() {
+        if (isModoDevFrontend()) {
+            garantirSessaoDevFrontend();
+            return true;
+        }
         const token = localStorage.getItem('itaim_token');
         const bUserRaw = localStorage.getItem('itaim_usuario_logado');
         return !!(token && bUserRaw);
@@ -131,6 +202,9 @@
 
     // Retorna o usuário logado na sessão atual (ou null se for visitante / não logado)
     function obterUsuarioLogado() {
+        if (isModoDevFrontend()) {
+            garantirSessaoDevFrontend();
+        }
         const token = localStorage.getItem('itaim_token');
         const bUserRaw = localStorage.getItem('itaim_usuario_logado');
         let backendUser = null;
@@ -140,6 +214,7 @@
 
         // Se não houver token ou usuário logado no storage, o visitante é anônimo (não autenticado)
         if (!token || !backendUser) {
+            if (isModoDevFrontend()) return USUARIO_DEV;
             return null;
         }
 
@@ -457,6 +532,11 @@
     // Exporta API no namespace de Autenticação
     window.ItaimSessaoAuth = {
         USUARIO_ADMIN,
+        USUARIO_DEV,
+        isModoDevFrontend,
+        garantirSessaoDevFrontend,
+        ativarModoDevFrontend,
+        desativarModoDevFrontend,
         formatarTelefoneBR,
         carregarUsuarios,
         obterTodosUsuarios,

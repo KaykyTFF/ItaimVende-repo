@@ -142,6 +142,40 @@
             if (formLogin) {
                 formLogin.addEventListener('submit', (e) => this.executarLogin(e));
             }
+
+            const btnModoDev = document.getElementById('btn-modo-dev');
+            if (btnModoDev) {
+                btnModoDev.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (window.ItaimSessao && typeof window.ItaimSessao.ativarModoDevFrontend === 'function') {
+                        window.ItaimSessao.ativarModoDevFrontend();
+                    } else if (window.ItaimSessaoAuth && typeof window.ItaimSessaoAuth.ativarModoDevFrontend === 'function') {
+                        window.ItaimSessaoAuth.ativarModoDevFrontend();
+                    } else {
+                        localStorage.setItem('itaim_modo_dev', 'true');
+                        localStorage.setItem('itaim_token', 'token_mock_dev_frontend');
+                        localStorage.setItem('itaim_usuario_logado', JSON.stringify({
+                            id: "usr_dev_frontend_001",
+                            nome: "Dev Front-End",
+                            name: "Dev Front-End",
+                            username: "dev_front",
+                            email: "dev@itaimvende.com",
+                            role: "ADMIN"
+                        }));
+                        localStorage.setItem('itaim_usuario_logado_email', 'dev@itaimvende.com');
+                    }
+                    this.exibirMensagem('Modo Dev Front-End ativado! Entrando na plataforma...', 'sucesso');
+                    setTimeout(() => {
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const returnTo = urlParams.get('returnTo');
+                        let destino = window.ItaimRotas ? window.ItaimRotas.obterUrl('home') : 'pages/home/home.html';
+                        if (returnTo && !returnTo.includes('index.html')) {
+                            destino = returnTo;
+                        }
+                        window.location.href = destino;
+                    }, 400);
+                });
+            }
         }
     };
 

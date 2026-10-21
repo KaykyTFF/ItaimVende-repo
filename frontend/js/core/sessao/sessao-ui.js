@@ -233,9 +233,21 @@
         ];
 
         const precisaProtecao = paginasProtegidas.some(p => path.endsWith('/' + p) || path.includes('/' + p));
-        if (precisaProtecao && !usuarioEstaAutenticado()) {
-            redirecionarParaLogin('Faça login para acessar esta página.');
-            return false;
+        if (precisaProtecao) {
+            // Se estiver em Modo Dev (Live Server / sem backend), nunca expulsa o desenvolvedor
+            const isDev = (window.ItaimSessaoAuth && typeof window.ItaimSessaoAuth.isModoDevFrontend === 'function' && window.ItaimSessaoAuth.isModoDevFrontend())
+                || (window.ItaimSessao && typeof window.ItaimSessao.isModoDevFrontend === 'function' && window.ItaimSessao.isModoDevFrontend());
+            if (isDev) {
+                if (window.ItaimSessaoAuth && typeof window.ItaimSessaoAuth.garantirSessaoDevFrontend === 'function') {
+                    window.ItaimSessaoAuth.garantirSessaoDevFrontend();
+                }
+                return true;
+            }
+
+            if (!usuarioEstaAutenticado()) {
+                redirecionarParaLogin('Faça login para acessar esta página.');
+                return false;
+            }
         }
         return true;
     }

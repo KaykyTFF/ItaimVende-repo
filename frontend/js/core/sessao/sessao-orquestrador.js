@@ -29,6 +29,10 @@
         tema: window.ItaimTema || {},
 
         // --- Autenticação e Usuários ---
+        isModoDevFrontend: Auth.isModoDevFrontend || (() => false),
+        garantirSessaoDevFrontend: Auth.garantirSessaoDevFrontend || (() => {}),
+        ativarModoDevFrontend: Auth.ativarModoDevFrontend || (() => {}),
+        desativarModoDevFrontend: Auth.desativarModoDevFrontend || (() => {}),
         usuarioEstaAutenticado: Auth.usuarioEstaAutenticado || (() => !!(localStorage.getItem('itaim_token') && localStorage.getItem('itaim_usuario_logado'))),
         deslogarUsuario: Auth.deslogarUsuario || (() => {}),
         obterUsuarioLogado: Auth.obterUsuarioLogado || (() => null),

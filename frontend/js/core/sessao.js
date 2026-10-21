@@ -413,9 +413,80 @@
         return lista.find(u => (u.username || '').toLowerCase() === limpo) || null;
     }
 
+    // 1.1 USUÁRIO DEV FRONT-END (PARA TESTES RÁPIDOS NO LIVE SERVER SEM PRECISAR DE BACKEND)
+    const USUARIO_DEV = Object.freeze({
+        id: "usr_dev_frontend_001",
+        nome: "Dev Front-End",
+        name: "Dev Front-End",
+        username: "dev_front",
+        usuario: "dev_front",
+        email: "dev@itaimvende.com",
+        telefone: "(89) 99400-0000",
+        phone: "89994000000",
+        cidade: "Paulistana",
+        city: "Paulistana",
+        bairro: "Centro",
+        neighborhood: "Centro",
+        estado: "PI",
+        state: "PI",
+        avatar: "assets/icons/icon-user.png",
+        bio: "Ambiente de Desenvolvimento Front-End ativo (Live Server).",
+        role: "ADMIN",
+        isVerified: true,
+        dataCadastro: "Membro Dev",
+        avaliacao: "5.0",
+        ratingAverage: 5.0,
+        totalAvaliacoes: 14,
+        ratingCount: 14,
+        vendasConcluidas: 9,
+        salesCount: 9
+    });
+
+    // Detecta se a página está rodando em ambiente de Live Server / dev de front
+    function isModoDevFrontend() {
+        if (localStorage.getItem('itaim_modo_dev') === 'true') return true;
+        try {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('dev') === 'true' || params.get('mock') === 'true') {
+                localStorage.setItem('itaim_modo_dev', 'true');
+                return true;
+            }
+        } catch(e) {}
+        const port = String(window.location.port || '');
+        const proto = String(window.location.protocol || '');
+        if (proto === 'file:') return true;
+        if (['5500', '5501', '5502', '5173', '8080', '3001'].includes(port)) return true;
+        return false;
+    }
+
+    // Garante que a sessão mock exista caso estejamos em Modo Dev
+    function garantirSessaoDevFrontend() {
+        const token = localStorage.getItem('itaim_token');
+        const bUserRaw = localStorage.getItem('itaim_usuario_logado');
+        if (!token || !bUserRaw) {
+            localStorage.setItem('itaim_token', 'token_mock_dev_frontend');
+            localStorage.setItem('itaim_usuario_logado', JSON.stringify(USUARIO_DEV));
+            localStorage.setItem('itaim_usuario_logado_email', USUARIO_DEV.email);
+            console.info('⚡ [Itaim Vende] Modo Dev Front-End ativado! Sessão simulada criada automaticamente para testes livres no Live Server.');
+        }
+    }
+
+    function ativarModoDevFrontend() {
+        localStorage.setItem('itaim_modo_dev', 'true');
+        garantirSessaoDevFrontend();
+    }
+
+    function desativarModoDevFrontend() {
+        localStorage.removeItem('itaim_modo_dev');
+    }
+
     // Retorna o usuário logado na sessão atual
     // Verifica se há um usuário autenticado com credenciais válidas
     function usuarioEstaAutenticado() {
+        if (isModoDevFrontend()) {
+            garantirSessaoDevFrontend();
+            return true;
+        }
         const token = localStorage.getItem('itaim_token');
         const bUserRaw = localStorage.getItem('itaim_usuario_logado');
         return !!(token && bUserRaw);
@@ -423,6 +494,9 @@
 
     // Retorna o usuário logado na sessão atual (ou null se for visitante / não logado)
     function obterUsuarioLogado() {
+        if (isModoDevFrontend()) {
+            garantirSessaoDevFrontend();
+        }
         const token = localStorage.getItem('itaim_token');
         const bUserRaw = localStorage.getItem('itaim_usuario_logado');
         let backendUser = null;
@@ -432,6 +506,7 @@
 
         // Se não houver token ou usuário logado no storage, o visitante é anônimo (não autenticado)
         if (!token || !backendUser) {
+            if (isModoDevFrontend()) return USUARIO_DEV;
             return null;
         }
 
@@ -749,6 +824,11 @@
     // Exporta API no namespace de Autenticação
     window.ItaimSessaoAuth = {
         USUARIO_ADMIN,
+        USUARIO_DEV,
+        isModoDevFrontend,
+        garantirSessaoDevFrontend,
+        ativarModoDevFrontend,
+        desativarModoDevFrontend,
         formatarTelefoneBR,
         carregarUsuarios,
         obterTodosUsuarios,
@@ -822,8 +902,116 @@
             });
         } catch (e) {}
 
+        // Fallback de dados para desenvolvimento no front-end quando a base estiver vazia
+        if (todos.length === 0) {
+            const isDev = (window.ItaimSessaoAuth && typeof window.ItaimSessaoAuth.isModoDevFrontend === 'function' && window.ItaimSessaoAuth.isModoDevFrontend())
+                || (window.ItaimSessao && typeof window.ItaimSessao.isModoDevFrontend === 'function' && window.ItaimSessao.isModoDevFrontend());
+            if (isDev) {
+                return [...PRODUTOS_MOCK_DEV];
+            }
+        }
+
         return todos;
     }
+
+    const PRODUTOS_MOCK_DEV = [
+        {
+            id: 'mock_1',
+            titulo: 'iPhone 13 Pro 128GB Grafite - Impecável com Caixa',
+            preco: 3450,
+            categoria: 'Eletrônicos',
+            condicao: 'Usado - Excelente',
+            cidade: 'Paulistana',
+            bairro: 'Centro',
+            imagem: 'assets/produtos/anuncio_11.jpg',
+            fotos: ['assets/produtos/anuncio_11.jpg'],
+            descricao: 'Aparelho 100% original, bateria com 89% de saúde, sem marcas ou arranhões. Acompanha cabo e capinha.',
+            status: 'ativo',
+            data: '20/10/2026',
+            visualizacoes: 42,
+            conversas: 5,
+            favorito: false,
+            vendedorId: 'usr_dev_frontend',
+            vendedorNome: 'Dev Front-End',
+            vendedorEmail: 'dev@itaimvende.com',
+            vendedorUsername: 'dev_front',
+            vendedorTelefone: '89994000000',
+            vendedorCidade: 'Paulistana',
+            vendedorAvatar: 'assets/icons/icon-user.png'
+        },
+        {
+            id: 'mock_2',
+            titulo: 'Bicicleta Aro 29 Mountain Bike Shimano 24V Freio a Disco',
+            preco: 1290,
+            categoria: 'Esportes',
+            condicao: 'Semi-nova',
+            cidade: 'Paulistana',
+            bairro: 'Correnteza',
+            imagem: 'assets/produtos/anuncio_13.jpg',
+            fotos: ['assets/produtos/anuncio_13.jpg'],
+            descricao: 'Pouco usada, revisada recentemente. Câmbio Shimano original, pneus com cravos novos.',
+            status: 'ativo',
+            data: '19/10/2026',
+            visualizacoes: 28,
+            conversas: 3,
+            favorito: true,
+            vendedorId: 'cmv5iacmv0000ttiwu9wtemar',
+            vendedorNome: 'Admin',
+            vendedorEmail: 'admin@gmail.com',
+            vendedorUsername: 'adminfreefire',
+            vendedorTelefone: '89999985858',
+            vendedorCidade: 'Paulistana',
+            vendedorAvatar: 'assets/icons/icon-user.png'
+        },
+        {
+            id: 'mock_3',
+            titulo: 'Sofá Retrátil e Reclinável 3 Lugares Suede Bege',
+            preco: 1100,
+            categoria: 'Móveis',
+            condicao: 'Usado',
+            cidade: 'Paulistana',
+            bairro: 'Guarani',
+            imagem: 'assets/produtos/anuncio_15.jpg',
+            fotos: ['assets/produtos/anuncio_15.jpg'],
+            descricao: 'Muito confortável, espuma D28, tecido impermeabilizado. Medidas: 2.10m de largura.',
+            status: 'ativo',
+            data: '18/10/2026',
+            visualizacoes: 19,
+            conversas: 2,
+            favorito: false,
+            vendedorId: 'usr_dev_frontend',
+            vendedorNome: 'Dev Front-End',
+            vendedorEmail: 'dev@itaimvende.com',
+            vendedorUsername: 'dev_front',
+            vendedorTelefone: '89994000000',
+            vendedorCidade: 'Paulistana',
+            vendedorAvatar: 'assets/icons/icon-user.png'
+        },
+        {
+            id: 'mock_4',
+            titulo: 'Smart TV 50 Polegadas 4K UHD Wi-Fi Bluetooth HDR',
+            preco: 1850,
+            categoria: 'Eletrônicos',
+            condicao: 'Semi-nova',
+            cidade: 'Paulistana',
+            bairro: 'Centro',
+            imagem: 'assets/produtos/anuncio_12.jpg',
+            fotos: ['assets/produtos/anuncio_12.jpg'],
+            descricao: 'Perfeito estado, com controle smart magic original e nota fiscal. Apenas 8 meses de uso.',
+            status: 'ativo',
+            data: '17/10/2026',
+            visualizacoes: 56,
+            conversas: 7,
+            favorito: false,
+            vendedorId: 'cmv5iacmv0000ttiwu9wtemar',
+            vendedorNome: 'Admin',
+            vendedorEmail: 'admin@gmail.com',
+            vendedorUsername: 'adminfreefire',
+            vendedorTelefone: '89999985858',
+            vendedorCidade: 'Paulistana',
+            vendedorAvatar: 'assets/icons/icon-user.png'
+        }
+    ];
 
     // Retorna todos os anúncios pertencentes ao usuário solicitado
     function obterAnunciosDoUsuario(emailOuUsername) {
@@ -1941,9 +2129,21 @@
         ];
 
         const precisaProtecao = paginasProtegidas.some(p => path.endsWith('/' + p) || path.includes('/' + p));
-        if (precisaProtecao && !usuarioEstaAutenticado()) {
-            redirecionarParaLogin('Faça login para acessar esta página.');
-            return false;
+        if (precisaProtecao) {
+            // Se estiver em Modo Dev (Live Server / sem backend), nunca expulsa o desenvolvedor
+            const isDev = (window.ItaimSessaoAuth && typeof window.ItaimSessaoAuth.isModoDevFrontend === 'function' && window.ItaimSessaoAuth.isModoDevFrontend())
+                || (window.ItaimSessao && typeof window.ItaimSessao.isModoDevFrontend === 'function' && window.ItaimSessao.isModoDevFrontend());
+            if (isDev) {
+                if (window.ItaimSessaoAuth && typeof window.ItaimSessaoAuth.garantirSessaoDevFrontend === 'function') {
+                    window.ItaimSessaoAuth.garantirSessaoDevFrontend();
+                }
+                return true;
+            }
+
+            if (!usuarioEstaAutenticado()) {
+                redirecionarParaLogin('Faça login para acessar esta página.');
+                return false;
+            }
         }
         return true;
     }
@@ -2228,6 +2428,10 @@
         tema: window.ItaimTema || {},
 
         // --- Autenticação e Usuários ---
+        isModoDevFrontend: Auth.isModoDevFrontend || (() => false),
+        garantirSessaoDevFrontend: Auth.garantirSessaoDevFrontend || (() => {}),
+        ativarModoDevFrontend: Auth.ativarModoDevFrontend || (() => {}),
+        desativarModoDevFrontend: Auth.desativarModoDevFrontend || (() => {}),
         usuarioEstaAutenticado: Auth.usuarioEstaAutenticado || (() => !!(localStorage.getItem('itaim_token') && localStorage.getItem('itaim_usuario_logado'))),
         deslogarUsuario: Auth.deslogarUsuario || (() => {}),
         obterUsuarioLogado: Auth.obterUsuarioLogado || (() => null),
