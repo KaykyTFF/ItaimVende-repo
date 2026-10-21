@@ -48,7 +48,15 @@ document.addEventListener('DOMContentLoaded', () => {
     async function carregarProdutosCategoria() {
         if (window.ItaimApi && typeof window.ItaimApi.produtos.listar === 'function') {
             try {
-                const res = await window.ItaimApi.produtos.listar();
+                const apiParams = {};
+                if (categoriaParam && categoriaParam.toLowerCase() !== 'todas') {
+                    apiParams.category = categoriaParam;
+                }
+                if (cidadeFiltro && cidadeFiltro !== 'todas') {
+                    apiParams.city = cidadeFiltro;
+                }
+
+                const res = await window.ItaimApi.produtos.listar(apiParams);
                 if (res && res.success && Array.isArray(res.data)) {
                     todosProdutos = res.data.map(p => ({
                         ...p,
@@ -57,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         preco: Number(p.preco !== undefined ? p.preco : p.price),
                         categoria: p.categoria || (p.category ? p.category.name : 'Geral'),
                         cidade: p.cidade || p.city || 'Paulistana',
+                        bairro: p.bairro || p.neighborhood || 'Centro',
                         imagem: window.ItaimApi.resolverUrlImagem(p.imagem || (p.images && p.images[0]) || '')
                     }));
                     renderizar();
@@ -89,7 +98,13 @@ document.addEventListener('DOMContentLoaded', () => {
         favoritosSet = new Set(JSON.parse(localStorage.getItem('itaim_favoritos') || '[]').map(String));
     } catch (e) {}
 
-    let cidadeFiltro = 'todas';
+    // Parâmetro de Cidade vindo pela URL (ex: ?cid=Acauã ou clicado no rodapé)
+    const cidadeUrlParam = params.get('cid') || params.get('cidade') || params.get('city') || 'todas';
+    let cidadeFiltro = cidadeUrlParam;
+    if (filtroCidade && cidadeFiltro !== 'todas') {
+        filtroCidade.value = cidadeFiltro;
+    }
+
     let ordemFiltro = 'recentes';
 
     function formatarPreco(val) {
@@ -173,8 +188,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             ${formatarPreco(p.preco)}
                         </div>
                         <div class="card-rodape">
-                            <span class="card-local">
-                                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -1px; margin-right: 2px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>${p.cidade || 'Paulistana'}
+                            <span class="card-local" title="${p.bairro ? p.bairro + ', ' : ''}${p.cidade || 'Paulistana'}">
+                                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -1px; margin-right: 2px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>${p.bairro && p.bairro !== 'Centro' ? p.bairro + ' - ' : ''}${p.cidade || 'Paulistana'}
                             </span>
                             <span>Hoje</span>
                         </div>
@@ -236,6 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
     filtroCidade?.addEventListener('change', (e) => {
         cidadeFiltro = e.target.value;
         renderizar();
+        carregarProdutosCategoria();
     });
 
     filtroOrdem?.addEventListener('change', (e) => {

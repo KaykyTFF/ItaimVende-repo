@@ -23,8 +23,76 @@ const SELLER_SELECT = {
 };
 
 /**
- * Busca paginada de produtos com múltiplos filtros (termo, categoria, cidade, preço, condição e ordenação)
- * @param {object} query - Parâmetros da requisição HTTP
+ * Normaliza e expande variantes de nomes de cidades do Vale do Itaim e cidades vizinhas
+ * para busca tolerante e estrita no Prisma.
+ * @param {string} cidadeTermo - Nome ou termo da cidade pesquisada
+ * @returns {string[]} Lista de variantes para pesquisa
+ */
+function expandirVariantesCidade(cidadeTermo) {
+  if (!cidadeTermo || typeof cidadeTermo !== 'string') return [];
+  const limpo = cidadeTermo.trim();
+  if (!limpo) return [];
+
+  const variantes = new Set([limpo]);
+
+  // Mapa de aliases e cidades vizinhas do Vale do Itaim / Microrregião de Paulistana
+  const mapaRegional = {
+    'paulistana': ['Paulistana'],
+    'acaua': ['Acauã', 'Acaua'],
+    'betania': ['Betânia', 'Betânia do Piauí', 'Betania do Piaui', 'Betania'],
+    'betania do piaui': ['Betânia', 'Betânia do Piauí', 'Betania do Piaui', 'Betania'],
+    'jacobina': ['Jacobina', 'Jacobina do Piauí', 'Jacobina do Piaui', 'Jacobina'],
+    'jacobina do piaui': ['Jacobina', 'Jacobina do Piauí', 'Jacobina do Piaui', 'Jacobina'],
+    'queimada nova': ['Queimada Nova'],
+    'curral novo': ['Curral Novo', 'Curral Novo do Piauí', 'Curral Novo do Piaui'],
+    'curral novo do piaui': ['Curral Novo', 'Curral Novo do Piauí', 'Curral Novo do Piaui'],
+    'patos': ['Patos', 'Patos do Piauí', 'Patos do Piaui'],
+    'patos do piaui': ['Patos', 'Patos do Piauí', 'Patos do Piaui'],
+    'simoes': ['Simões', 'Simoes'],
+    'caridade': ['Caridade', 'Caridade do Piauí', 'Caridade do Piaui'],
+    'caridade do piaui': ['Caridade', 'Caridade do Piauí', 'Caridade do Piaui'],
+    'afranio': ['Afrânio', 'Afranio'],
+    'picos': ['Picos'],
+    'petrolina': ['Petrolina'],
+  };
+
+  const normalizado = limpo
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+
+  if (mapaRegional[normalizado]) {
+    mapaRegional[normalizado].forEach((item) => variantes.add(item));
+  } else {
+    variantes.add(normalizado);
+  }
+
+  return Array.from(variantes);
+}
+
+/**
+ * Normaliza variantes do bairro para busca flexível
+ * @param {string} bairroTermo
+ * @returns {string[]}
+ */
+function expandirVariantesBairro(bairroTermo) {
+  if (!bairroTermo || typeof bairroTermo !== 'string') return [];
+  const limpo = bairroTermo.trim();
+  if (!limpo) return [];
+
+  const variantes = new Set([limpo]);
+  const semAcento = limpo
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+  if (semAcento !== limpo) {
+    variantes.add(semAcento);
+  }
+  return Array.from(variantes);
+}
+
+/**
+ * Busca paginada de produtos com múltiplos filtros (termo, categoria, cidade, bairro, preço, condição e ordenação)
+ * @param {object} query - Parâmetros da requisição HTTP (ex: city, neighborhood, search, etc.)
  */
 export async function getProducts(query = {}) {
   const {
@@ -35,6 +103,7 @@ export async function getProducts(query = {}) {
     maxPrice,
     condition,
     city,
+    neighborhood,
     sort = 'newest',
     page = 1,
     limit = 24,
@@ -49,13 +118,20 @@ export async function getProducts(query = {}) {
     deletedAt: null,
   };
 
+  const andConditions = [];
+
+  // 1. Filtro textual no título ou descrição
   if (search && search.trim()) {
-    where.OR = [
-      { title: { contains: search.trim(), mode: 'insensitive' } },
-      { description: { contains: search.trim(), mode: 'insensitive' } },
-    ];
+    const termo = search.trim();
+    andConditions.push({
+      OR: [
+        { title: { contains: termo, mode: 'insensitive' } },
+        { description: { contains: termo, mode: 'insensitive' } },
+      ],
+    });
   }
 
+  // 2. Filtro estrito de Categoria
   if (categoryId) {
     where.categoryId = parseInt(categoryId, 10);
   } else if (category && category !== 'todas' && category !== 'todos') {
@@ -70,16 +146,45 @@ export async function getProducts(query = {}) {
     if (cat) where.categoryId = cat.id;
   }
 
-  if (city && city !== 'todas') {
-    where.city = { contains: city.trim(), mode: 'insensitive' };
+  // 3. Filtro avançado por Cidade do Vale do Itaim e cidades vizinhas (suporta city e cidade)
+  const cidadeParam = (city || query.cidade || '').trim();
+  if (cidadeParam && !['todas', 'todos', 'all'].includes(cidadeParam.toLowerCase())) {
+    const variantes = expandirVariantesCidade(cidadeParam);
+    if (variantes.length === 1) {
+      andConditions.push({ city: { contains: variantes[0], mode: 'insensitive' } });
+    } else {
+      andConditions.push({
+        OR: variantes.map((v) => ({ city: { contains: v, mode: 'insensitive' } })),
+      });
+    }
   }
 
+  // 4. Filtro avançado por Bairro (suporta neighborhood e bairro)
+  const bairroParam = (neighborhood || query.neighborhood || query.bairro || '').trim();
+  if (bairroParam && !['todos', 'todas', 'all'].includes(bairroParam.toLowerCase())) {
+    const variantes = expandirVariantesBairro(bairroParam);
+    if (variantes.length === 1) {
+      andConditions.push({ neighborhood: { contains: variantes[0], mode: 'insensitive' } });
+    } else {
+      andConditions.push({
+        OR: variantes.map((v) => ({ neighborhood: { contains: v, mode: 'insensitive' } })),
+      });
+    }
+  }
+
+  // Agrupa condições no AND para garantir interseção estrita e independente
+  if (andConditions.length > 0) {
+    where.AND = andConditions;
+  }
+
+  // 5. Filtros de Preço
   if (minPrice || maxPrice) {
     where.price = {};
     if (minPrice) where.price.gte = parseFloat(minPrice);
     if (maxPrice) where.price.lte = parseFloat(maxPrice);
   }
 
+  // 6. Filtro de Condição do Produto
   if (condition && ['NOVO', 'SEMINOVO', 'USADO', 'DEFEITO'].includes(condition.toUpperCase())) {
     where.condition = condition.toUpperCase();
   }
