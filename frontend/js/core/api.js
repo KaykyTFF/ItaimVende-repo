@@ -900,6 +900,262 @@
 
 
 // ==========================================================================
+// MÓDULO: ENDEREÇOS DO USUÁRIO (api-enderecos.js)
+// ==========================================================================
+
+/**
+ * ITAIM VENDE - SERVIÇO DE ENDEREÇOS (API ENDEREÇOS)
+ * Arquivo: frontend/js/core/api/api-enderecos.js
+ * 
+ * Responsabilidades:
+ * - Listar múltiplos endereços cadastrados pelo usuário autenticado
+ * - Cadastrar novo endereço (com definição automática ou manual de principal)
+ * - Obter detalhes de um endereço
+ * - Atualizar dados de um endereço
+ * - Excluir endereço com promoção automática do principal remanescente
+ * - Definir endereço principal
+ */
+
+(function() {
+    'use strict';
+
+    function getCore() {
+        return window.ItaimApiCore || {
+            requisicao: () => Promise.reject(new Error('ItaimApiCore não carregado')),
+            obterToken: () => localStorage.getItem('itaim_token') || ''
+        };
+    }
+
+    const enderecos = {
+        /**
+         * Lista todos os endereços do usuário
+         */
+        async listar() {
+            return getCore().requisicao('/addresses');
+        },
+
+        /**
+         * Obtém detalhes de um endereço pelo ID
+         */
+        async obter(id) {
+            return getCore().requisicao(`/addresses/${encodeURIComponent(id)}`);
+        },
+
+        /**
+         * Cadastra um novo endereço
+         */
+        async criar(dados) {
+            return getCore().requisicao('/addresses', {
+                method: 'POST',
+                body: JSON.stringify(dados)
+            });
+        },
+
+        /**
+         * Atualiza os dados de um endereço existente
+         */
+        async atualizar(id, dados) {
+            return getCore().requisicao(`/addresses/${encodeURIComponent(id)}`, {
+                method: 'PUT',
+                body: JSON.stringify(dados)
+            });
+        },
+
+        /**
+         * Remove um endereço pelo ID
+         */
+        async remover(id) {
+            return getCore().requisicao(`/addresses/${encodeURIComponent(id)}`, {
+                method: 'DELETE'
+            });
+        },
+
+        /**
+         * Marca um endereço como o endereço principal
+         */
+        async tornarPrincipal(id) {
+            return getCore().requisicao(`/addresses/${encodeURIComponent(id)}/primary`, {
+                method: 'PATCH'
+            });
+        }
+    };
+
+    window.ItaimApiEnderecos = enderecos;
+
+})();
+
+
+// ==========================================================================
+// MÓDULO: NOTIFICAÇÕES DO SISTEMA (api-notificacoes.js)
+// ==========================================================================
+
+/**
+ * ITAIM VENDE - SERVIÇO DE NOTIFICAÇÕES (API NOTIFICAÇÕES)
+ * Arquivo: frontend/js/core/api/api-notificacoes.js
+ * 
+ * Responsabilidades:
+ * - Consultar notificações persistidas no banco (/notifications)
+ * - Obter contagem de não lidas para o badge do sino no cabeçalho (/notifications/unread-count)
+ * - Marcar notificação individual ou todas como lidas (/notifications/:id/read, /notifications/read-all)
+ * - Excluir notificação ou limpar histórico (/notifications/:id, /notifications)
+ */
+
+(function() {
+    'use strict';
+
+    function getCore() {
+        return window.ItaimApiCore || {
+            requisicao: () => Promise.reject(new Error('ItaimApiCore não carregado')),
+            obterToken: () => localStorage.getItem('itaim_token') || ''
+        };
+    }
+
+    const notificacoes = {
+        /**
+         * Lista notificações com filtros e paginação
+         * @param {Object} [filtros]
+         * @param {string} [filtros.type]
+         * @param {boolean|string} [filtros.isRead]
+         * @param {number} [filtros.page]
+         * @param {number} [filtros.limit]
+         */
+        async listar(filtros = {}) {
+            const params = new URLSearchParams();
+            if (filtros.type && filtros.type !== 'todas') params.append('type', filtros.type);
+            if (filtros.isRead !== undefined && filtros.isRead !== null) params.append('isRead', String(filtros.isRead));
+            if (filtros.page) params.append('page', String(filtros.page));
+            if (filtros.limit) params.append('limit', String(filtros.limit));
+
+            const query = params.toString() ? `?${params.toString()}` : '';
+            return getCore().requisicao(`/notifications${query}`);
+        },
+
+        /**
+         * Retorna a contagem de notificações não lidas para o badge do sino
+         */
+        async obterContadorNaoLidas() {
+            return getCore().requisicao('/notifications/unread-count');
+        },
+
+        /**
+         * Marca uma notificação específica como lida
+         * @param {string} id
+         */
+        async marcarComoLida(id) {
+            return getCore().requisicao(`/notifications/${encodeURIComponent(id)}/read`, {
+                method: 'PATCH'
+            });
+        },
+
+        /**
+         * Marca todas as notificações do usuário como lidas
+         */
+        async marcarTodasComoLidas() {
+            return getCore().requisicao('/notifications/read-all', {
+                method: 'PATCH'
+            });
+        },
+
+        /**
+         * Remove uma notificação específica
+         * @param {string} id
+         */
+        async remover(id) {
+            return getCore().requisicao(`/notifications/${encodeURIComponent(id)}`, {
+                method: 'DELETE'
+            });
+        },
+
+        /**
+         * Exclui todas as notificações do histórico do usuário
+         */
+        async limparTodas() {
+            return getCore().requisicao('/notifications', {
+                method: 'DELETE'
+            });
+        }
+    };
+
+    window.ItaimApiNotificacoes = notificacoes;
+
+})();
+
+
+// ==========================================================================
+// MÓDULO: AVALIAÇÕES DE VENDEDORES (api-reviews.js)
+// ==========================================================================
+
+/**
+ * ITAIM VENDE - SERVIÇO DE AVALIAÇÕES DE VENDEDORES (API REVIEWS)
+ * Arquivo: frontend/js/core/api/api-reviews.js
+ *
+ * Responsabilidades:
+ * - Buscar avaliações reais de um vendedor no backend
+ * - Enviar nova avaliação (nota + comentário) para um vendedor
+ * - Vendedor responder a uma avaliação recebida
+ */
+
+(function () {
+    'use strict';
+
+    function getCore() {
+        return window.ItaimApiCore || {
+            requisicao: () => Promise.reject(new Error('ItaimApiCore não carregado')),
+            obterHeaders: () => ({})
+        };
+    }
+
+    const reviews = {
+        /**
+         * Busca todas as avaliações recebidas por um vendedor.
+         * Rota: GET /api/v1/reviews/user/:userId
+         * @param {string} userId - ID do vendedor
+         * @returns {{ vendedor, avaliacoes }}
+         */
+        async listar(userId) {
+            return getCore().requisicao(`/reviews/user/${encodeURIComponent(userId)}`, {
+                method: 'GET',
+                headers: getCore().obterHeaders(false)
+            });
+        },
+
+        /**
+         * Envia uma nova avaliação para um vendedor.
+         * Rota: POST /api/v1/reviews/user/:userId
+         * Requer autenticação (token JWT).
+         * @param {string} userId - ID do vendedor alvo
+         * @param {{ rating: number, comment: string }} dados
+         */
+        async enviar(userId, dados) {
+            return getCore().requisicao(`/reviews/user/${encodeURIComponent(userId)}`, {
+                method: 'POST',
+                headers: getCore().obterHeaders(true),
+                body: JSON.stringify(dados)
+            });
+        },
+
+        /**
+         * Vendedor responde a uma avaliação recebida.
+         * Rota: PATCH /api/v1/reviews/:id/reply
+         * Requer autenticação (token JWT do próprio vendedor).
+         * @param {string} reviewId - ID da avaliação
+         * @param {string} reply - Texto da resposta
+         */
+        async responder(reviewId, reply) {
+            return getCore().requisicao(`/reviews/${encodeURIComponent(reviewId)}/reply`, {
+                method: 'PATCH',
+                headers: getCore().obterHeaders(true),
+                body: JSON.stringify({ reply })
+            });
+        }
+    };
+
+    window.ItaimApiReviews = reviews;
+
+})();
+
+
+// ==========================================================================
 // MÓDULO: SISTEMA & DIAGNÓSTICO (api-sistema.js)
 // ==========================================================================
 
@@ -973,46 +1229,99 @@
 
 
 // ==========================================================================
-// MÓDULO: ORQUESTRADOR GLOBAL (INDEX) (index.js)
+// MÓDULO: ORQUESTRADOR GLOBAL (api-orquestrador.js)
 // ==========================================================================
 
 /**
- * ITAIM VENDE - PONTO DE ENTRADA DO CLIENTE DE API
+ * ITAIM VENDE - CLIENTE DE API CENTRAL (ORQUESTRADOR UNIFICADO)
  * Arquivo: frontend/js/core/api/index.js
  * 
- * Carrega automaticamente e de forma síncrona todos os submódulos da API:
- * - api-core.js
- * - api-auth.js
- * - api-produtos.js
- * - api-chat.js
- * - api-upload.js
- * - api-social.js
- * - api-sistema.js
- * - api-orquestrador.js
+ * Unifica todos os serviços da pasta api/ sob a interface global window.ItaimApi:
+ * - api-core.js: Cliente HTTP, tokens, headers e tratamento de imagens
+ * - api-auth.js: Autenticação, login, registro, perfil e sessão
+ * - api-produtos.js: Catálogo, anúncios e vitrine
+ * - api-chat.js: Mensagens, conversas e negociações
+ * - api-upload.js: Upload multipart (perfil, vendas, múltiplos)
+ * - api-social.js: Categorias, favoritos e moderação/tickets
+ * - api-sistema.js: Diagnósticos, painel de controle e status
  */
 
 (function() {
     'use strict';
 
-    const scriptAtual = document.currentScript;
-    const base = scriptAtual ? scriptAtual.src.substring(0, scriptAtual.src.lastIndexOf('/') + 1) : '';
+    const Core = window.ItaimApiCore || {};
+    const Auth = window.ItaimApiAuth || {};
+    const Produtos = window.ItaimApiProdutos || {};
+    const Chat = window.ItaimApiChat || {};
+    const Upload = window.ItaimApiUpload || {};
+    const Social = window.ItaimApiSocial || {};
+    const Enderecos = window.ItaimApiEnderecos || {};
+    const Notificacoes = window.ItaimApiNotificacoes || {};
+    const Sistema = window.ItaimApiSistema || {};
+    const Reviews = window.ItaimApiReviews || {};
 
-    const arquivos = [
-        'api-core.js',
-        'api-auth.js',
-        'api-produtos.js',
-        'api-chat.js',
-        'api-upload.js',
-        'api-social.js',
-        'api-enderecos.js',
-        'api-notificacoes.js',
-        'api-sistema.js',
-        'api-orquestrador.js'
-    ];
+    const ItaimApi = {
+        baseUrl: Core.API_BASE_URL || '',
+        backendHost: Core.BACKEND_HOST || '',
+        resolverUrlImagem: Core.resolverUrlImagem || (url => url),
 
-    arquivos.forEach(function(arquivo) {
-        document.write('<script src="' + base + arquivo + '"><\/script>');
-    });
+        auth: Auth,
+        produtos: Produtos,
+        enderecos: Enderecos,
+        notificacoes: Notificacoes,
+        categorias: Social.categorias || {},
+        favoritos: Social.favoritos || {},
+        reports: Social.reports || {},
+        reviews: Reviews,
+        chat: Chat,
+        upload: Upload,
+        sistema: Sistema
+    };
+
+    window.ItaimApi = ItaimApi;
+
+    // =========================================================================
+    // MONITOR PROFISSIONAL DE SESSÃO & REINICIALIZAÇÃO DO BACKEND
+    // =========================================================================
+    function obterTokenAtual() {
+        if (typeof Core.obterToken === 'function') {
+            return Core.obterToken();
+        }
+        return localStorage.getItem('itaim_token') || '';
+    }
+
+    function registrarAtividade() {
+        if (obterTokenAtual()) {
+            localStorage.setItem('itaim_ultima_atividade', Date.now().toString());
+        }
+    }
+
+    if (typeof window !== 'undefined') {
+        ['mousedown', 'keydown', 'touchstart', 'scroll'].forEach(evt => {
+            window.addEventListener(evt, registrarAtividade, { passive: true });
+        });
+
+        // Sincronização passiva de boot do servidor
+        setInterval(async () => {
+            const token = obterTokenAtual();
+            if (!token) return;
+
+            try {
+                const url = Core.API_BASE_URL ? `${Core.API_BASE_URL}/health` : '/api/health';
+                const res = await fetch(url, {
+                    method: 'GET',
+                    cache: 'no-store',
+                    headers: { 'Cache-Control': 'no-cache' }
+                });
+                const bootId = res.headers.get('X-Server-Boot');
+                if (bootId) {
+                    localStorage.setItem('itaim_server_boot', bootId);
+                }
+            } catch (err) {
+                // Servidor offline ou reiniciando
+            }
+        }, 30000);
+    }
 
 })();
 

@@ -14,8 +14,9 @@
             window.ItaimVendedorVitrine.inicializar();
         }
         if (window.ItaimVendedorAvaliacoes?.inicializar) {
-            window.ItaimVendedorAvaliacoes.inicializar();
+            await window.ItaimVendedorAvaliacoes.inicializar();
         }
+
 
         // Sincronização do Header Global
         if (window.ItaimSessao && typeof window.ItaimSessao.atualizarHeaderUsuario === 'function') {

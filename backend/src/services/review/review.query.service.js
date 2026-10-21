@@ -5,8 +5,14 @@ import { AppError } from '../../utils/errors.js';
  * Busca avaliações recebidas por um usuário/vendedor
  */
 export async function getUserReviews(targetUserId) {
-  const user = await prisma.user.findUnique({
-    where: { id: targetUserId },
+  const user = await prisma.user.findFirst({
+    where: {
+      OR: [
+        { id: targetUserId },
+        { username: targetUserId },
+        { email: targetUserId },
+      ],
+    },
     select: { id: true, name: true, ratingAverage: true, ratingCount: true },
   });
 
@@ -15,7 +21,7 @@ export async function getUserReviews(targetUserId) {
   }
 
   const reviews = await prisma.review.findMany({
-    where: { targetId: targetUserId },
+    where: { targetId: user.id },
     orderBy: { createdAt: 'desc' },
     include: {
       author: {

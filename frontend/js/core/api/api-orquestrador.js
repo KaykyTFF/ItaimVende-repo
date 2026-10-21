@@ -24,6 +24,7 @@
     const Enderecos = window.ItaimApiEnderecos || {};
     const Notificacoes = window.ItaimApiNotificacoes || {};
     const Sistema = window.ItaimApiSistema || {};
+    const Reviews = window.ItaimApiReviews || {};
 
     const ItaimApi = {
         baseUrl: Core.API_BASE_URL || '',
@@ -37,6 +38,7 @@
         categorias: Social.categorias || {},
         favoritos: Social.favoritos || {},
         reports: Social.reports || {},
+        reviews: Reviews,
         chat: Chat,
         upload: Upload,
         sistema: Sistema

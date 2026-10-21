@@ -29,8 +29,11 @@ const MODULES = [
     { name: 'CHAT & MENSAGENS', file: 'api-chat.js' },
     { name: 'UPLOAD MULTIPART', file: 'api-upload.js' },
     { name: 'SOCIAL (CATEGORIAS, FAVORITOS, DENÚNCIAS)', file: 'api-social.js' },
+    { name: 'ENDEREÇOS DO USUÁRIO', file: 'api-enderecos.js' },
+    { name: 'NOTIFICAÇÕES DO SISTEMA', file: 'api-notificacoes.js' },
+    { name: 'AVALIAÇÕES DE VENDEDORES', file: 'api-reviews.js' },
     { name: 'SISTEMA & DIAGNÓSTICO', file: 'api-sistema.js' },
-    { name: 'ORQUESTRADOR GLOBAL (INDEX)', file: 'index.js' }
+    { name: 'ORQUESTRADOR GLOBAL', file: 'api-orquestrador.js' }
 ];
 
 function build() {
