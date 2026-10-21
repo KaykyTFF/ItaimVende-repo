@@ -59,6 +59,33 @@
                         >
                     </div>
 
+                    <!-- Campo CEP e Estado -->
+                    <div class="linha-dupla-campos">
+                        <div class="grupo-campo campo-flex-2">
+                            <label for="cad-cep" class="label-campo">CEP:</label>
+                            <input 
+                                type="text" 
+                                id="cad-cep" 
+                                name="cep" 
+                                class="campo-texto" 
+                                placeholder="00000-000"
+                                maxlength="9"
+                            >
+                        </div>
+                        <div class="grupo-campo campo-flex-1">
+                            <label for="cad-estado" class="label-campo">Estado:</label>
+                            <input 
+                                type="text" 
+                                id="cad-estado" 
+                                name="estado" 
+                                class="campo-texto" 
+                                placeholder="ex: PI" 
+                                maxlength="2"
+                                value="PI"
+                            >
+                        </div>
+                    </div>
+
                     <!-- Campo Cidade -->
                     <div class="grupo-campo">
                         <label for="cad-cidade" class="label-campo">Cidade:</label>
@@ -193,6 +220,6 @@
     <script src="../../js/core/rotas/index.js"></script>
     <script src="../../js/core/api/index.js"></script>
     <script src="../../js/core/sessao/index.js"></script>
-    <script src="../../js/pages/auth/app.js"></script>
+    <script src="../../js/pages/auth/app.js?v=2.0"></script>
 </body>
 </html>

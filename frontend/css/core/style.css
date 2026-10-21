@@ -584,6 +584,25 @@ html, body {
     40%, 80% { transform: translateX(4px); }
 }
 
+/* Indicadores de Autopreenchimento de CEP */
+.campo-texto.campo-autocompletado,
+.select-campo.campo-autocompletado {
+    border-color: #25D366 !important;
+    background-color: #F0FDF4 !important;
+    box-shadow: 0 0 0 2px rgba(37, 211, 102, 0.15) !important;
+    transition: background-color 0.4s ease, border-color 0.4s ease;
+}
+
+.campo-texto.campo-sucesso {
+    border-color: #25D366 !important;
+    box-shadow: 0 0 0 2px rgba(37, 211, 102, 0.2) !important;
+}
+
+.campo-texto.buscando-cep {
+    border-color: #25D366 !important;
+    opacity: 0.85;
+}
+
 @media (max-width: 420px) {
     .otp-container {
         gap: 6px;
