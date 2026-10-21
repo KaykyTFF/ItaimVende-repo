@@ -142,6 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let categoriaFiltro = 'todas';
     let cidadeFiltro = 'todas';
+    let bairroFiltro = 'todos';
     let ordemFiltro = 'recentes';
     let termoBusca = '';
 
@@ -161,14 +162,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 (p.categoria && p.categoria.toLowerCase().includes(categoriaFiltro.toLowerCase()));
             
             const matchesCidade = (cidadeFiltro === 'todas') || 
-                (p.cidade && p.cidade.toLowerCase() === cidadeFiltro.toLowerCase());
+                (p.cidade && p.cidade.toLowerCase() === cidadeFiltro.toLowerCase()) ||
+                (p.cidade && cidadeFiltro && (p.cidade.toLowerCase().includes(cidadeFiltro.toLowerCase()) || cidadeFiltro.toLowerCase().includes(p.cidade.toLowerCase())));
             
+            const matchesBairro = (bairroFiltro === 'todos') ||
+                (p.bairro && p.bairro.toLowerCase().includes(bairroFiltro.toLowerCase())) ||
+                (bairroFiltro && p.bairro && bairroFiltro.toLowerCase().includes(p.bairro.toLowerCase()));
+
             const matchesBusca = !termoBusca || 
                 (p.titulo && p.titulo.toLowerCase().includes(termoBusca.toLowerCase())) ||
                 (p.cidade && p.cidade.toLowerCase().includes(termoBusca.toLowerCase())) ||
+                (p.bairro && p.bairro.toLowerCase().includes(termoBusca.toLowerCase())) ||
                 (p.categoria && p.categoria.toLowerCase().includes(termoBusca.toLowerCase()));
 
-            return matchesCategoria && matchesCidade && matchesBusca;
+            return matchesCategoria && matchesCidade && matchesBairro && matchesBusca;
         });
 
         // Ordenação
@@ -192,7 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Mostrar / ocultar botão de limpar filtros
         if (btnLimparFiltros) {
-            const filtrosAtivos = (categoriaFiltro !== 'todas') || (cidadeFiltro !== 'todas') || (termoBusca !== '');
+            const filtrosAtivos = (categoriaFiltro !== 'todas') || (cidadeFiltro !== 'todas') || (bairroFiltro !== 'todos') || (termoBusca !== '');
             btnLimparFiltros.style.display = filtrosAtivos ? 'inline-flex' : 'none';
         }
 
@@ -252,8 +259,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             ${formatarPreco(p.preco)}
                         </div>
                         <div class="card-rodape">
-                            <span class="card-local">
-                                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -1px; margin-right: 2px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>${p.cidade || 'Paulistana'}
+                            <span class="card-local" title="${p.bairro ? p.bairro + ', ' : ''}${p.cidade || 'Paulistana'}">
+                                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -1px; margin-right: 2px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>${p.bairro && p.bairro !== 'Centro' ? p.bairro + ' - ' : ''}${p.cidade || 'Paulistana'}
                             </span>
                             <span>Hoje</span>
                         </div>
@@ -325,11 +332,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Carrega dados da API do Backend com fallback automático
+    // Carrega dados da API do Backend com filtros e fallback automático
     async function carregarProdutosApi() {
         if (window.ItaimApi && typeof window.ItaimApi.produtos.listar === 'function') {
             try {
-                const res = await window.ItaimApi.produtos.listar();
+                const apiFiltros = {};
+                if (cidadeFiltro && cidadeFiltro !== 'todas') apiFiltros.city = cidadeFiltro;
+                if (bairroFiltro && bairroFiltro !== 'todos') apiFiltros.neighborhood = bairroFiltro;
+                if (categoriaFiltro && categoriaFiltro !== 'todas') apiFiltros.category = categoriaFiltro;
+                if (termoBusca) apiFiltros.search = termoBusca;
+
+                const res = await window.ItaimApi.produtos.listar(apiFiltros);
                 if (res && res.success && Array.isArray(res.data)) {
                     const apiProdutos = res.data.map(p => ({
                         ...p,
@@ -344,7 +357,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             : (window.ItaimRotas ? window.ItaimRotas.obterAsset('assets/produtos/anuncio_13.jpg') : '../../assets/produtos/anuncio_13.jpg')
                     }));
 
-                    // Se a API retornou anúncios (ou vitrine vazia do banco), atualiza
+                    // Se a API retornou anúncios (ou vitrine filtrada), atualiza
                     produtos = apiProdutos;
                     renderizarVitrine();
                     return;
@@ -393,11 +406,66 @@ document.addEventListener('DOMContentLoaded', () => {
         window.scrollTo({ top: 400, behavior: 'smooth' });
     };
 
+    // Mapeamento dinâmico de bairros por cidade do Vale do Itaim e região
+    const BAIRROS_POR_CIDADE = {
+        'Paulistana': ['Centro', 'Correnteza', 'Triângulo', 'Alto da Guia', 'Guarita', 'São Francisco', 'Choró', 'Lagoa dos Bois'],
+        'Acauã': ['Centro', 'Bairro Novo', 'Posto Fiscal', 'Baraúnas'],
+        'Betânia do Piauí': ['Centro', 'Vila Nova', 'Barra do Juá'],
+        'Jacobina do Piauí': ['Centro', 'Alto São Pedro'],
+        'Queimada Nova': ['Centro', 'Jacu', 'Cantinho'],
+        'Curral Novo': ['Centro', 'Serrote'],
+        'Picos': ['Centro', 'Junco', 'Canto da Várzea', 'Ipueiras', 'Bomba'],
+        'Afrânio': ['Centro', 'Ramos', 'Extrema'],
+        'Petrolina': ['Centro', 'Areia Branca', 'Atrás da Banca', 'Cohab Massangano']
+    };
+
+    function atualizarSelectBairros(cidade) {
+        const selectBairro = document.getElementById('filtro-bairro');
+        if (!selectBairro) return;
+
+        bairroFiltro = 'todos';
+        selectBairro.innerHTML = '<option value="todos">Todos os Bairros</option>';
+
+        if (!cidade || cidade === 'todas') {
+            selectBairro.disabled = true;
+            selectBairro.style.opacity = '0.6';
+            selectBairro.style.cursor = 'not-allowed';
+            return;
+        }
+
+        selectBairro.disabled = false;
+        selectBairro.style.opacity = '1';
+        selectBairro.style.cursor = 'pointer';
+
+        // Busca pela chave exata ou normalizada
+        const chaveEncontrada = Object.keys(BAIRROS_POR_CIDADE).find(
+            k => k.toLowerCase() === cidade.toLowerCase() || cidade.toLowerCase().includes(k.toLowerCase())
+        );
+
+        const bairros = chaveEncontrada ? BAIRROS_POR_CIDADE[chaveEncontrada] : ['Centro'];
+        bairros.forEach(b => {
+            const opt = document.createElement('option');
+            opt.value = b;
+            opt.textContent = b;
+            selectBairro.appendChild(opt);
+        });
+    }
+
     // Filtro por Cidade
     const filtroCidade = document.getElementById('filtro-cidade');
     filtroCidade?.addEventListener('change', (e) => {
         cidadeFiltro = e.target.value;
+        atualizarSelectBairros(cidadeFiltro);
         renderizarVitrine();
+        carregarProdutosApi();
+    });
+
+    // Filtro por Bairro
+    const filtroBairro = document.getElementById('filtro-bairro');
+    filtroBairro?.addEventListener('change', (e) => {
+        bairroFiltro = e.target.value;
+        renderizarVitrine();
+        carregarProdutosApi();
     });
 
     // Ordenação
@@ -417,10 +485,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         cidadeFiltro = 'todas';
         if (filtroCidade) filtroCidade.value = 'todas';
+        atualizarSelectBairros('todas');
+        bairroFiltro = 'todos';
         ordemFiltro = 'recentes';
         if (filtroOrdem) filtroOrdem.value = 'recentes';
         renderizarVitrine();
+        carregarProdutosApi();
     });
+
+    // Inicializa os bairros no carregamento da vitrine
+    atualizarSelectBairros(cidadeFiltro);
 
     // Header e Menu Lateral (Drawer) são gerenciados de forma centralizada e global por sessao.js
 
