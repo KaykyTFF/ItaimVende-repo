@@ -17,7 +17,7 @@
             await window.ItaimPerfilAnuncios.inicializar();
         }
         if (window.ItaimPerfilAvaliacoes?.inicializar) {
-            window.ItaimPerfilAvaliacoes.inicializar();
+            await window.ItaimPerfilAvaliacoes.inicializar();
         }
     }
 

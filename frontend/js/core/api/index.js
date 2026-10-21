@@ -28,8 +28,10 @@
         'api-social.js',
         'api-enderecos.js',
         'api-notificacoes.js',
+        'api-reviews.js',
         'api-sistema.js',
         'api-orquestrador.js'
+
     ];
 
     arquivos.forEach(function(arquivo) {

@@ -12,16 +12,22 @@ export async function createReview(authorId, targetUserId, reviewData) {
     throw new AppError('A nota deve ser um número inteiro entre 1 e 5 estrelas.', 400);
   }
 
-  if (authorId === targetUserId) {
-    throw new AppError('Você não pode avaliar o seu próprio perfil.', 400);
-  }
-
-  const targetUser = await prisma.user.findUnique({
-    where: { id: targetUserId },
+  const targetUser = await prisma.user.findFirst({
+    where: {
+      OR: [
+        { id: targetUserId },
+        { username: targetUserId },
+        { email: targetUserId },
+      ],
+    },
   });
 
   if (!targetUser) {
     throw new AppError('Vendedor não encontrado.', 404);
+  }
+
+  if (authorId === targetUser.id) {
+    throw new AppError('Você não pode avaliar o seu próprio perfil.', 400);
   }
 
   const result = await prisma.$transaction(async (tx) => {
@@ -29,7 +35,7 @@ export async function createReview(authorId, targetUserId, reviewData) {
     const newReview = await tx.review.create({
       data: {
         authorId,
-        targetId: targetUserId,
+        targetId: targetUser.id,
         rating: notaNum,
         comment: comment ? comment.trim() : null,
       },
@@ -42,7 +48,7 @@ export async function createReview(authorId, targetUserId, reviewData) {
 
     // 2. Busca todas as notas para recalcular média precisa
     const todasNotas = await tx.review.findMany({
-      where: { targetId: targetUserId },
+      where: { targetId: targetUser.id },
       select: { rating: true },
     });
 
@@ -51,7 +57,7 @@ export async function createReview(authorId, targetUserId, reviewData) {
 
     // 3. Atualiza o perfil do vendedor com a nova média e contagem
     await tx.user.update({
-      where: { id: targetUserId },
+      where: { id: targetUser.id },
       data: {
         ratingAverage: novaMedia,
         ratingCount: todasNotas.length,

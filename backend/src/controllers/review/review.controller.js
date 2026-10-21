@@ -1,6 +1,7 @@
 import {
   getUserReviews,
   createReview,
+  replyToReview,
 } from '../../services/review/index.js';
 
 export async function listUserReviews(req, res, next) {
@@ -21,6 +22,20 @@ export async function addReview(req, res, next) {
     res.status(201).json({
       success: true,
       message: 'Avaliação enviada com sucesso!',
+      ...data,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function replyReview(req, res, next) {
+  try {
+    const { reply } = req.body;
+    const data = await replyToReview(req.params.id, req.user.id, reply);
+    res.status(200).json({
+      success: true,
+      message: 'Resposta publicada com sucesso!',
       ...data,
     });
   } catch (error) {
