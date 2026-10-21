@@ -4,6 +4,7 @@
    ========================================================================== */
 
 @import url('transicoes.css');
+@import url('modal-auth.css');
 
 :root {
     --color-primary: #489636;

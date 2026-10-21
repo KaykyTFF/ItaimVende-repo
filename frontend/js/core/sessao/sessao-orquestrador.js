@@ -22,6 +22,7 @@
     // API Global Unificada ItaimSessao (100% retrocompatível com todo o frontend)
     const ItaimSessao = {
         // --- UI & Navegação ---
+        abrirModalAuth: UI.abrirModalAuth || (() => {}),
         protegerPagina: UI.protegerPagina || (() => true),
         redirecionarParaLogin: UI.redirecionarParaLogin || (() => {}),
         atualizarHeaderUsuario: UI.atualizarHeaderUsuario || (() => {}),

@@ -60,16 +60,13 @@
                     : !!(window.ItaimApi?.auth?.obterToken() && localStorage.getItem('itaim_usuario_logado'));
 
                 if (!estaLogado) {
-                    mostrarToast('Faça login para conversar com o vendedor.');
-                    if (window.ItaimSessao && typeof window.ItaimSessao.redirecionarParaLogin === 'function') {
-                        setTimeout(() => {
-                            window.ItaimSessao.redirecionarParaLogin('Faça login para conversar com o vendedor.');
-                        }, 400);
+                    if (window.ItaimSessao && typeof window.ItaimSessao.abrirModalAuth === 'function') {
+                        window.ItaimSessao.abrirModalAuth('Faça login para conversar com o vendedor.');
+                    } else if (window.ItaimSessao && typeof window.ItaimSessao.redirecionarParaLogin === 'function') {
+                        window.ItaimSessao.redirecionarParaLogin('Faça login para conversar com o vendedor.');
                     } else {
                         const urlLogin = window.ItaimRotas ? window.ItaimRotas.obterUrl('login', 'returnTo=' + encodeURIComponent(window.location.href)) : '../../index.html';
-                        setTimeout(() => {
-                            window.location.href = urlLogin;
-                        }, 400);
+                        window.location.href = urlLogin;
                     }
                     return;
                 }

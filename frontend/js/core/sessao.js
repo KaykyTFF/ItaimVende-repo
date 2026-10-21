@@ -1923,8 +1923,75 @@
         return !!(token && bUserRaw);
     }
 
+    // Modal Global de Login / Cadastro para Visitantes
+    function abrirModalAuth(motivo = '') {
+        let modal = document.getElementById('modal-auth-visitante');
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = 'modal-auth-visitante';
+            modal.className = 'modal-auth-backdrop';
+            modal.innerHTML = `
+                <div class="modal-auth-card" role="dialog" aria-modal="true" aria-labelledby="modal-auth-titulo">
+                    <button type="button" class="modal-auth-fechar" id="modal-auth-btn-fechar" aria-label="Fechar modal">&times;</button>
+                    <h3 class="modal-auth-titulo" id="modal-auth-titulo">Faça login para continuar</h3>
+                    <a href="#" class="modal-auth-btn-entrar" id="modal-auth-btn-entrar">
+                        <span>Entrar</span>
+                    </a>
+                    <div class="modal-auth-rodape">
+                        <span>Não tem conta?</span>
+                        <a href="#" class="modal-auth-link-cadastro" id="modal-auth-link-cadastro">Cadastre-se</a>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            const fechar = () => {
+                modal.classList.remove('ativo');
+                document.body.style.overflow = '';
+            };
+
+            const btnFechar = modal.querySelector('#modal-auth-btn-fechar');
+            if (btnFechar) btnFechar.onclick = fechar;
+
+            modal.onclick = (e) => {
+                if (e.target === modal) fechar();
+            };
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.classList.contains('ativo')) {
+                    fechar();
+                }
+            });
+        }
+
+        // Atualiza URLs de redirecionamento preservando returnTo
+        const urlAtual = window.location.href;
+        const linkEntrar = modal.querySelector('#modal-auth-btn-entrar');
+        const linkCad = modal.querySelector('#modal-auth-link-cadastro');
+
+        let query = 'returnTo=' + encodeURIComponent(urlAtual);
+        if (motivo) {
+            query += '&mensagem=' + encodeURIComponent(motivo);
+        }
+
+        const urlLogin = window.ItaimRotas ? window.ItaimRotas.obterUrl('login', query) : ('../../index.html?' + query);
+        const urlCadastro = window.ItaimRotas ? window.ItaimRotas.obterUrl('cadastro', query) : ('../../pages/auth/cadastro.html?' + query);
+
+        if (linkEntrar) linkEntrar.href = urlLogin;
+        if (linkCad) linkCad.href = urlCadastro;
+
+        modal.style.display = 'flex';
+        void modal.offsetWidth;
+        modal.classList.add('ativo');
+        document.body.style.overflow = 'hidden';
+    }
+
     // Helper para redirecionar visitante para a tela de login preservando a intenção (returnTo)
-    function redirecionarParaLogin(motivo = '') {
+    function redirecionarParaLogin(motivo = '', forcar = false) {
+        if (!forcar) {
+            abrirModalAuth(motivo);
+            return;
+        }
         const urlAtual = window.location.href;
         let query = 'returnTo=' + encodeURIComponent(urlAtual);
         if (motivo) {
@@ -2216,7 +2283,7 @@
             }
 
             if (!usuarioEstaAutenticado()) {
-                redirecionarParaLogin('Faça login para acessar esta página.');
+                redirecionarParaLogin('Faça login para acessar esta página.', true);
                 return false;
             }
         }
@@ -2385,7 +2452,7 @@
     document.addEventListener('click', (e) => {
         if (usuarioEstaAutenticado()) return;
 
-        // Seletor abrangente de ações e botões interativos
+        // Seletor abrangente de ações e botões interativos protegidos
         const elementoInteracao = e.target.closest(`
             #btn-abrir-modal-vender,
             .btn-vender-destaque,
@@ -2393,6 +2460,7 @@
             a[href*="vender.html"],
             #link-meus-anuncios,
             #btn-meus-anuncios-mobile,
+            .btn-meus-anuncios-mobile,
             #drawer-link-anuncios,
             #link-menu-anuncios,
             #footer-link-anuncios,
@@ -2409,6 +2477,11 @@
             #footer-link-favoritos,
             a[href*="favoritos.html"],
             .btn-favorito,
+            .btn-favoritar,
+            .produto-card-favorito,
+            .card-btn-favorito,
+            .btn-chat-vendedor,
+            #btn-chat-vendedor,
             #btn-avatar-dropdown,
             .btn-avatar-header,
             #drawer-link-perfil,
@@ -2418,19 +2491,25 @@
             #link-menu-configuracoes,
             a[href*="configuracoes.html"],
             #btn-abrir-denuncia,
-            #btn-ver-meus-tickets
+            #btn-ver-meus-tickets,
+            #btn-denunciar-perfil
         `);
 
         if (elementoInteracao) {
-            // Ignora se for o link de login / cadastro / sair
-            if (elementoInteracao.classList.contains('item-sair') || elementoInteracao.closest('.item-sair')) {
+            // Ignora se for o link de login / cadastro / sair, o botão de entrar do cabeçalho ou o próprio modal de autenticação
+            if (
+                elementoInteracao.classList.contains('item-sair') || 
+                elementoInteracao.closest('.item-sair') || 
+                elementoInteracao.id === 'btn-header-entrar' ||
+                elementoInteracao.closest('#modal-auth-visitante')
+            ) {
                 return;
             }
 
             e.preventDefault();
             e.stopPropagation();
 
-            let motivo = 'Faça login para interagir na plataforma.';
+            let motivo = 'Faça login para continuar.';
             const id = elementoInteracao.id || '';
             const href = elementoInteracao.getAttribute('href') || '';
             const classes = elementoInteracao.className || '';
@@ -2443,7 +2522,7 @@
                 motivo = 'Faça login para conversar com os vendedores.';
             } else if (id.includes('notificacoes') || href.includes('notificacoes.html')) {
                 motivo = 'Faça login para visualizar suas notificações.';
-            } else if (id.includes('favorito') || href.includes('favoritos.html') || classes.includes('btn-favorito')) {
+            } else if (id.includes('favorito') || href.includes('favoritos.html') || classes.includes('btn-favorito') || classes.includes('favorit')) {
                 motivo = 'Faça login para salvar anúncios nos seus favoritos.';
             } else if (id.includes('perfil') || href.includes('perfil.html')) {
                 motivo = 'Faça login para acessar seu perfil.';
@@ -2453,12 +2532,13 @@
                 motivo = 'Faça login para abrir denúncias ou acompanhar tickets.';
             }
 
-            redirecionarParaLogin(motivo);
+            abrirModalAuth(motivo);
         }
     }, true);
 
     // Exporta API de UI no namespace dedicado
     window.ItaimSessaoUI = {
+        abrirModalAuth,
         atualizarHeaderUsuario,
         ajustarFotoSimples,
         protegerPagina,
@@ -2501,6 +2581,7 @@
     // API Global Unificada ItaimSessao (100% retrocompatível com todo o frontend)
     const ItaimSessao = {
         // --- UI & Navegação ---
+        abrirModalAuth: UI.abrirModalAuth || (() => {}),
         protegerPagina: UI.protegerPagina || (() => true),
         redirecionarParaLogin: UI.redirecionarParaLogin || (() => {}),
         atualizarHeaderUsuario: UI.atualizarHeaderUsuario || (() => {}),
