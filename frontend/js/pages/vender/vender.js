@@ -45,9 +45,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const selectCidade = document.getElementById('select-cidade-modal');
     const inputCep = document.getElementById('input-cep-modal');
 
-    // Slots de fotos
-    const slotsFoto = document.querySelectorAll('.slot-foto-upload');
+    // Elementos da galeria de fotos dinâmica
+    const galeriaFotos = document.getElementById('galeria-fotos-vender');
+    const btnAddFoto = document.getElementById('btn-add-foto');
+    const inputFotosUpload = document.getElementById('input-fotos-upload');
     const badgeContadorFotos = document.getElementById('badge-contador-fotos');
+    let fotosLista = [];
+
+    // Barra de Progresso Limpa
+    const wizardEtapaBadge = document.getElementById('wizard-etapa-badge');
+    const wizardEtapaNome = document.getElementById('wizard-etapa-nome');
+    const wizardBarraProgresso = document.getElementById('wizard-barra-progresso');
 
     // Botões de Navegação do Wizard
     const btnPasso1Proximo = document.getElementById('btn-passo1-proximo');
@@ -56,142 +64,172 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnPasso3Anterior = document.getElementById('btn-passo3-anterior');
     const btnPasso3Proximo = document.getElementById('btn-passo3-proximo');
     const btnPasso4Anterior = document.getElementById('btn-passo4-anterior');
-    const passoIndicadores = document.querySelectorAll('.passo-item');
     const btnsEditarEtapaLink = document.querySelectorAll('.btn-editar-etapa-link');
 
     // ==========================================================================
-    // 1. SISTEMA DE UPLOAD E AJUSTE DE FOTOS (1:1 SEM ESPAÇOS CINZAS)
+    // 1. SISTEMA DINÂMICO DE UPLOAD E GALERIA DE FOTOS (1ª É A CAPA)
     // ==========================================================================
     function atualizarContadorFotos() {
-        let qtd = 0;
-        slotsFoto.forEach(slot => {
-            if (slot.classList.contains('com-foto')) qtd++;
-        });
         if (badgeContadorFotos) {
-            badgeContadorFotos.textContent = `${qtd} de 6 fotos`;
+            badgeContadorFotos.textContent = `${fotosLista.length} de 6 fotos`;
         }
     }
 
-    slotsFoto.forEach((slot) => {
-        const fileInput = slot.querySelector('input[type="file"]');
-        const overlayRemover = slot.querySelector('.slot-overlay-remover');
+    function renderizarGaleriaFotos() {
+        if (!galeriaFotos) return;
 
-        // Clique no slot aciona o input file se não clicou no botão de remover
-        slot.addEventListener('click', (e) => {
-            if (e.target === fileInput) return;
-            if (e.target.closest('.slot-overlay-remover')) return;
-            fileInput?.click();
+        // Remove previews anteriores, mantendo o botão de adicionar
+        const itensExistentes = galeriaFotos.querySelectorAll('.item-foto-preview');
+        itensExistentes.forEach(el => el.remove());
+
+        // Renderiza cada foto da lista
+        fotosLista.forEach((fotoSrc, idx) => {
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'item-foto-preview' + (idx === 0 ? ' item-foto-capa' : '');
+            itemDiv.setAttribute('data-index', idx);
+
+            const img = document.createElement('img');
+            img.src = fotoSrc;
+            img.alt = idx === 0 ? 'Foto de Capa do anúncio' : `Foto ${idx + 1}`;
+            itemDiv.appendChild(img);
+
+            // A primeira foto sempre recebe o badge de Capa
+            if (idx === 0) {
+                const tagCapa = document.createElement('span');
+                tagCapa.className = 'tag-foto-capa';
+                tagCapa.textContent = 'Capa';
+                itemDiv.appendChild(tagCapa);
+            }
+
+            // Botão de remover foto individual
+            const btnRemover = document.createElement('button');
+            btnRemover.type = 'button';
+            btnRemover.className = 'btn-remover-foto';
+            btnRemover.title = 'Remover foto';
+            btnRemover.setAttribute('aria-label', 'Remover foto');
+            btnRemover.innerHTML = '&times;';
+            btnRemover.addEventListener('click', (e) => {
+                e.stopPropagation();
+                removerFotoPorIndice(idx);
+            });
+            itemDiv.appendChild(btnRemover);
+
+            // Insere antes do quadrado com o + (as fotos vão aparecendo nos lados)
+            if (btnAddFoto) {
+                galeriaFotos.insertBefore(itemDiv, btnAddFoto);
+            } else {
+                galeriaFotos.appendChild(itemDiv);
+            }
         });
 
-        // Quando o usuário escolhe um arquivo
-        fileInput?.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                processarArquivoFoto(slot, file);
+        // Se atingiu o limite de 6 fotos, esconde o quadrado +
+        if (btnAddFoto) {
+            btnAddFoto.style.display = fotosLista.length >= 6 ? 'none' : 'flex';
+        }
+
+        atualizarContadorFotos();
+    }
+
+    function removerFotoPorIndice(index) {
+        if (index >= 0 && index < fotosLista.length) {
+            fotosLista.splice(index, 1);
+            renderizarGaleriaFotos();
+            if (typeof etapaAtual !== 'undefined' && etapaAtual === 4) {
+                atualizarPreviewRevisao();
             }
+        }
+    }
+
+    function processarArquivoImagem(file) {
+        return new Promise((resolve) => {
+            if (window.ItaimFoto && typeof window.ItaimFoto.ajustarProduto === 'function') {
+                window.ItaimFoto.ajustarProduto(file, (dataUrl) => resolve(dataUrl));
+            } else if (window.ItaimFoto && typeof window.ItaimFoto.ajustar === 'function') {
+                window.ItaimFoto.ajustar(file, 800, (dataUrl) => resolve(dataUrl));
+            } else {
+                const reader = new FileReader();
+                reader.onload = (e) => resolve(e.target.result);
+                reader.onerror = () => resolve(null);
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    async function adicionarArquivosFotos(files) {
+        if (!files || files.length === 0) return;
+        const vagas = 6 - fotosLista.length;
+        if (vagas <= 0) {
+            exibirFeedback('Você já atingiu o limite máximo de 6 fotos.');
+            return;
+        }
+
+        const arquivosValidos = Array.from(files)
+            .filter(f => f.type.startsWith('image/'))
+            .slice(0, vagas);
+
+        if (arquivosValidos.length === 0) return;
+
+        for (const file of arquivosValidos) {
+            const dataUrl = await processarArquivoImagem(file);
+            if (dataUrl && fotosLista.length < 6) {
+                fotosLista.push(dataUrl);
+            }
+        }
+
+        renderizarGaleriaFotos();
+    }
+
+    if (btnAddFoto && inputFotosUpload) {
+        btnAddFoto.addEventListener('click', () => {
+            inputFotosUpload.click();
+        });
+
+        btnAddFoto.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                inputFotosUpload.click();
+            }
+        });
+
+        inputFotosUpload.addEventListener('change', (e) => {
+            adicionarArquivosFotos(e.target.files);
+            inputFotosUpload.value = '';
         });
 
         // Eventos de Drag and Drop
         ['dragenter', 'dragover'].forEach(eventName => {
-            slot.addEventListener(eventName, (e) => {
+            btnAddFoto.addEventListener(eventName, (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                slot.classList.add('drag-over');
+                btnAddFoto.classList.add('drag-over');
             });
-        });
-
-        ['dragleave', 'drop'].forEach(eventName => {
-            slot.addEventListener(eventName, (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                slot.classList.remove('drag-over');
-            });
-        });
-
-        slot.addEventListener('drop', (e) => {
-            const dt = e.dataTransfer;
-            const files = dt.files;
-            if (files && files.length > 0) {
-                const file = files[0];
-                if (file.type.startsWith('image/')) {
-                    if (fileInput) fileInput.files = files;
-                    processarArquivoFoto(slot, file);
-                }
+            if (galeriaFotos) {
+                galeriaFotos.addEventListener(eventName, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                });
             }
         });
 
-        // Botão para remover foto do slot
-        overlayRemover?.addEventListener('click', (e) => {
-            e.stopPropagation();
-            removerFotoDoSlot(slot, fileInput);
+        ['dragleave', 'drop'].forEach(eventName => {
+            btnAddFoto.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                btnAddFoto.classList.remove('drag-over');
+            });
         });
-    });
 
-    // Processa a foto com a API de ajuste 1:1
-    function processarArquivoFoto(slot, file) {
-        if (window.ItaimFoto && typeof window.ItaimFoto.ajustarProduto === 'function') {
-            window.ItaimFoto.ajustarProduto(file, (dataUrlAjustada) => {
-                renderizarFotoNoSlot(slot, dataUrlAjustada);
-            });
-        } else if (window.ItaimFoto && typeof window.ItaimFoto.ajustar === 'function') {
-            window.ItaimFoto.ajustar(file, 800, (dataUrlAjustada) => {
-                renderizarFotoNoSlot(slot, dataUrlAjustada);
-            });
-        } else {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                renderizarFotoNoSlot(slot, e.target.result);
-            };
-            reader.readAsDataURL(file);
-        }
+        btnAddFoto.addEventListener('drop', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            btnAddFoto.classList.remove('drag-over');
+            if (e.dataTransfer && e.dataTransfer.files) {
+                adicionarArquivosFotos(e.dataTransfer.files);
+            }
+        });
     }
 
-    // Aplica a imagem ajustada no slot
-    function renderizarFotoNoSlot(slot, dataUrl) {
-        let img = slot.querySelector('.slot-preview-img');
-        if (!img) {
-            img = document.createElement('img');
-            img.className = 'slot-preview-img';
-            slot.prepend(img);
-        }
-        img.src = dataUrl;
-        img.style.display = 'block';
-
-        slot.classList.add('com-foto');
-
-        // Oculta ícones e textos
-        const icone = slot.querySelector('.icone-slot') || slot.querySelector('.icone-slot-plus');
-        const rotulos = slot.querySelectorAll('.rotulo-slot, .subrotulo-slot');
-        if (icone) icone.style.display = 'none';
-        rotulos.forEach(r => r.style.display = 'none');
-
-        // Exibe botão de remover
-        const overlay = slot.querySelector('.slot-overlay-remover');
-        if (overlay) overlay.style.display = 'flex';
-
-        atualizarContadorFotos();
-    }
-
-    function removerFotoDoSlot(slot, fileInput) {
-        if (fileInput) fileInput.value = '';
-
-        const img = slot.querySelector('.slot-preview-img');
-        if (img) img.remove();
-
-        slot.classList.remove('com-foto');
-
-        const icone = slot.querySelector('.icone-slot') || slot.querySelector('.icone-slot-plus');
-        const rotulos = slot.querySelectorAll('.rotulo-slot, .subrotulo-slot');
-        if (icone) icone.style.display = '';
-        rotulos.forEach(r => r.style.display = '');
-
-        const overlay = slot.querySelector('.slot-overlay-remover');
-        if (overlay) overlay.style.display = 'none';
-
-        atualizarContadorFotos();
-    }
-
-    atualizarContadorFotos();
+    renderizarGaleriaFotos();
 
     // ==========================================================================
     // 2. MÁSCARA DINÂMICA DE PREÇO (R$ 0,00) E CONTADOR DE CARACTERES
@@ -331,6 +369,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================================================
     let etapaAtual = 1;
 
+    const NOMES_ETAPAS = {
+        1: 'Fotos',
+        2: 'Detalhes',
+        3: 'Preço e Localização',
+        4: 'Revisão'
+    };
+
+    const PORCENTAGEM_ETAPAS = {
+        1: '25%',
+        2: '50%',
+        3: '75%',
+        4: '100%'
+    };
+
     function atualizarPreviewRevisao() {
         const previewFotoCapa = document.getElementById('preview-foto-capa');
         const previewFotosMiniaturas = document.getElementById('preview-fotos-miniaturas');
@@ -341,14 +393,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const previewLocal = document.getElementById('preview-local');
         const previewDescricao = document.getElementById('preview-descricao');
 
-        // Coleta fotos atuais dos slots
-        const fotos = [];
-        slotsFoto.forEach(slot => {
-            const img = slot.querySelector('.slot-preview-img');
-            if (img && img.src) fotos.push(img.src);
-        });
-
+        // Coleta fotos atuais da lista dinâmica
+        const fotos = fotosLista;
         const placeholder = '../../assets/placeholders/produto-placeholder.svg';
+
         if (previewFotoCapa) {
             previewFotoCapa.src = fotos.length > 0 ? fotos[0] : placeholder;
         }
@@ -381,15 +429,28 @@ document.addEventListener('DOMContentLoaded', () => {
             previewPreco.textContent = inputPreco?.value.trim() || 'R$ 0,00';
         }
 
-        // Categorias e Condição
-        const catTexto = labelCategoria?.textContent.trim() || 'GERAL';
+        // Categoria (prioriza chip ativo ou dropdown)
+        let catTexto = 'GERAL';
+        const chipCatAtivo = document.querySelector('#chips-categorias-container .chip-opcao.ativo');
+        if (chipCatAtivo) {
+            catTexto = chipCatAtivo.getAttribute('data-valor') || chipCatAtivo.textContent.trim();
+        } else if (labelCategoria && labelCategoria.textContent.trim() !== 'SELECIONAR CATEGORIA') {
+            catTexto = labelCategoria.textContent.trim();
+        }
         if (previewTagCat) {
-            previewTagCat.textContent = (catTexto === 'SELECIONAR CATEGORIA' || catTexto === 'CATEGORIA') ? 'GERAL' : catTexto;
+            previewTagCat.textContent = catTexto.toUpperCase();
         }
 
-        const condTexto = labelCondicao?.textContent.trim() || 'USADO';
+        // Condição (prioriza chip ativo ou dropdown)
+        let condTexto = 'USADO';
+        const chipCondAtivo = document.querySelector('#chips-condicao-container .chip-opcao.ativo');
+        if (chipCondAtivo) {
+            condTexto = chipCondAtivo.getAttribute('data-valor') || chipCondAtivo.textContent.trim();
+        } else if (labelCondicao && labelCondicao.textContent.trim() !== 'SELECIONAR CONDIÇÃO') {
+            condTexto = labelCondicao.textContent.trim();
+        }
         if (previewTagCond) {
-            previewTagCond.textContent = (condTexto === 'SELECIONAR CONDIÇÃO' || condTexto === 'CONDIÇÃO') ? 'USADO' : condTexto;
+            previewTagCond.textContent = condTexto.toUpperCase();
         }
 
         // Localização
@@ -400,7 +461,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Descrição
         if (previewDescricao) {
             const desc = textareaDesc?.value.trim();
-            previewDescricao.textContent = desc || 'Nenhuma descrição detalhada informada.';
+            previewDescricao.textContent = desc || 'Nenhuma descrição adicionada.';
         }
     }
 
@@ -447,22 +508,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Atualiza indicadores visuais no cabeçalho
-        passoIndicadores.forEach((passoBtn) => {
-            const num = parseInt(passoBtn.getAttribute('data-etapa'), 10);
-            passoBtn.classList.remove('ativo', 'concluido');
-            if (num === etapaAtual) {
-                passoBtn.classList.add('ativo');
-            } else if (num < etapaAtual) {
-                passoBtn.classList.add('concluido');
-            }
-        });
-
-        // Atualiza trilha de progresso
-        const trilha = document.getElementById('wizard-trilha-progresso');
-        if (trilha) {
-            const larguras = { 1: '0%', 2: '33.3%', 3: '66.6%', 4: '100%' };
-            trilha.style.width = larguras[etapaAtual] || '0%';
+        // Atualiza a barra de progresso limpa no cabeçalho
+        if (wizardEtapaBadge) {
+            wizardEtapaBadge.textContent = `Etapa ${etapaAtual} de 4`;
+        }
+        if (wizardEtapaNome) {
+            wizardEtapaNome.textContent = NOMES_ETAPAS[etapaAtual] || '';
+        }
+        if (wizardBarraProgresso) {
+            wizardBarraProgresso.style.width = PORCENTAGEM_ETAPAS[etapaAtual] || '25%';
         }
 
         // Se chegou na etapa de revisão, atualiza os dados em tempo real
@@ -482,14 +536,6 @@ document.addEventListener('DOMContentLoaded', () => {
     btnPasso3Anterior?.addEventListener('click', () => irParaEtapa(2));
     btnPasso3Proximo?.addEventListener('click', () => irParaEtapa(4));
     btnPasso4Anterior?.addEventListener('click', () => irParaEtapa(3));
-
-    // Clique direto nos indicadores de etapa
-    passoIndicadores.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const destino = parseInt(btn.getAttribute('data-etapa'), 10);
-            irParaEtapa(destino);
-        });
-    });
 
     // Links de atalho "Editar" na etapa de revisão
     btnsEditarEtapaLink.forEach(link => {
@@ -616,19 +662,13 @@ document.addEventListener('DOMContentLoaded', () => {
             ? descricao 
             : `${titulo} anunciado para venda no Itaim Vende.`;
 
-        // Coleta fotos dos slots
-        const fotosColetadas = [];
-        slotsFoto.forEach(slot => {
-            const img = slot.querySelector('.slot-preview-img');
-            if (img && img.src) {
-                fotosColetadas.push(img.src);
-            }
-        });
+        // Coleta fotos da lista dinâmica
+        const fotosColetadas = [...fotosLista];
 
         // Estado de carregamento na interface
         btnAnunciar.classList.add('carregando');
         const spanTexto = btnAnunciar.querySelector('.texto-btn-anunciar');
-        if (spanTexto) spanTexto.textContent = 'PUBLICANDO...';
+        if (spanTexto) spanTexto.textContent = 'Publicando...';
 
         let cidadeAnuncio = 'Paulistana';
         let cepAnuncio = '64750-000';
@@ -643,7 +683,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // 1. Upload de fotos multipart para o Backend caso autenticado
         if (window.ItaimApi && fotosColetadas.length > 0 && window.ItaimApi.auth?.obterToken()) {
             try {
-                if (spanTexto) spanTexto.textContent = 'ENVIANDO FOTOS...';
+                if (spanTexto) spanTexto.textContent = 'Enviando fotos...';
                 const uploadRes = await window.ItaimApi.upload.vendas(fotosColetadas);
                 if (uploadRes && Array.isArray(uploadRes.urls) && uploadRes.urls.length > 0) {
                     fotosUrlsBackend = uploadRes.urls;
@@ -658,7 +698,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // 2. Publica o anúncio na API central do Backend se autenticado
         if (window.ItaimApi && window.ItaimApi.auth?.obterToken()) {
             try {
-                if (spanTexto) spanTexto.textContent = 'SALVANDO NO BANCO...';
+                if (spanTexto) spanTexto.textContent = 'Salvando no banco...';
                 const dadosPayload = {
                     title: titulo,
                     description: descricaoFinal,
@@ -701,12 +741,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             btnAnunciar.classList.remove('carregando');
-            if (spanTexto) spanTexto.textContent = 'PUBLICAR ANÚNCIO AGORA 🚀';
+            if (spanTexto) spanTexto.textContent = 'Publicar Anúncio';
             alternarParaSucesso();
         } catch (err) {
             console.error('Erro ao anunciar:', err);
             btnAnunciar.classList.remove('carregando');
-            if (spanTexto) spanTexto.textContent = 'PUBLICAR ANÚNCIO AGORA 🚀';
+            if (spanTexto) spanTexto.textContent = 'Publicar Anúncio';
             exibirFeedback('Ocorreu um erro ao salvar o anúncio. Tente novamente.');
         }
     });
@@ -737,11 +777,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (inputPreco) inputPreco.value = '';
         if (contadorChar) contadorChar.textContent = '0 / 1000';
         
-        // Limpa fotos dos slots
-        slotsFoto.forEach(slot => {
-            const fileInput = slot.querySelector('input[type="file"]');
-            removerFotoDoSlot(slot, fileInput);
-        });
+        // Limpa fotos da lista dinâmica
+        fotosLista = [];
+        renderizarGaleriaFotos();
 
         // Reseta chips
         chipsCategoria.forEach(c => c.classList.remove('ativo'));

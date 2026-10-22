@@ -26,49 +26,57 @@ body[data-theme="dark"].pagina-vender {
     box-shadow: 0 20px 42px rgba(0, 0, 0, 0.5) !important;
 }
 
-/* Slots de Fotos no Vender */
-[data-theme="dark"] .slot-foto-principal {
-    background-color: #161C22 !important;
-    border: 2px dashed #2C3946 !important;
+/* Barra de Progresso Limpa do Vender */
+[data-theme="dark"] .vender-progresso-box {
+    background-color: #1F2831 !important;
+    border-color: #2C3946 !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3) !important;
 }
 
-[data-theme="dark"] .slot-foto-principal .rotulo-slot {
+[data-theme="dark"] .wizard-etapa-badge {
+    background: rgba(74, 222, 128, 0.15) !important;
+    color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .wizard-etapa-nome {
     color: #94A3B8 !important;
 }
 
-[data-theme="dark"] .slot-foto-principal .subrotulo-slot {
-    color: #64748B !important;
+[data-theme="dark"] .wizard-barra-trilha {
+    background: #2C3946 !important;
 }
 
-[data-theme="dark"] .slot-foto-principal .icone-slot {
-    color: #64748B !important;
-}
-
-[data-theme="dark"] .slot-foto-principal:hover .icone-slot {
-    color: #4ADE80 !important;
-}
-
-[data-theme="dark"] .slot-foto-secundario {
+/* Galeria de Fotos no Vender */
+[data-theme="dark"] .quadrado-add-foto {
     background-color: #161C22 !important;
-    border: 2px dashed #2C3946 !important;
-}
-
-[data-theme="dark"] .slot-foto-secundario .icone-slot-plus {
+    border-color: #2C3946 !important;
     color: #64748B !important;
 }
 
-[data-theme="dark"] .slot-foto-secundario:hover .icone-slot-plus {
-    color: #4ADE80 !important;
-}
-
-[data-theme="dark"] .slot-foto-upload:hover {
+[data-theme="dark"] .quadrado-add-foto:hover,
+[data-theme="dark"] .quadrado-add-foto:focus-visible {
     border-color: #4ADE80 !important;
+    color: #4ADE80 !important;
     background-color: rgba(74, 222, 128, 0.08) !important;
 }
 
-[data-theme="dark"] .slot-foto-upload.drag-over {
+[data-theme="dark"] .quadrado-add-foto.drag-over {
     border-color: #4ADE80 !important;
     background-color: rgba(74, 222, 128, 0.16) !important;
+}
+
+[data-theme="dark"] .item-foto-preview {
+    border-color: #2C3946 !important;
+    background-color: #161C22 !important;
+}
+
+[data-theme="dark"] .item-foto-preview.item-foto-capa {
+    border-color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .tag-foto-capa {
+    background-color: #22C55E !important;
+    color: #FFFFFF !important;
 }
 
 /* Localização no Card de Vender */
