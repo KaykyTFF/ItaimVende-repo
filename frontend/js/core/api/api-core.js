@@ -68,11 +68,17 @@
 
             const dados = await resposta.json().catch(() => ({}));
 
-            // 2. Se 401 Unauthorized, limpa token inválido sem forçar redirecionamento de tela
+            // 2. Se 401 Unauthorized, limpa sessão inválida completamente sem forçar redirecionamento de tela
             if (resposta.status === 401) {
                 if (obterToken() && !endpoint.includes('/auth/login') && !endpoint.includes('/auth/register')) {
                     console.info('[ItaimApi] Token expirado ou inválido.');
                     localStorage.removeItem('itaim_token');
+                    localStorage.removeItem('itaim_usuario_logado');
+                    localStorage.removeItem('itaim_usuario_logado_email');
+                    localStorage.removeItem('itaim_modo_dev');
+                    if (window.ItaimSessao && typeof window.ItaimSessao.atualizarHeaderUsuario === 'function') {
+                        window.ItaimSessao.atualizarHeaderUsuario();
+                    }
                 }
             }
 

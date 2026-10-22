@@ -77,6 +77,17 @@
 
     // Inicialização da Sessão e Interface (Bootstrap)
     function bootstrap() {
+        // Se houver resquício de mock dev antigo, limpa para não transformar visitantes em dev front-end
+        const tokenAtual = localStorage.getItem('itaim_token');
+        if (tokenAtual === 'token_mock_dev_frontend') {
+            try {
+                localStorage.removeItem('itaim_token');
+                localStorage.removeItem('itaim_usuario_logado');
+                localStorage.removeItem('itaim_usuario_logado_email');
+                localStorage.removeItem('itaim_modo_dev');
+            } catch (e) {}
+        }
+
         if (typeof Produtos.limparDadosZerados === 'function') {
             Produtos.limparDadosZerados();
         }
@@ -104,7 +115,13 @@
                     }
                     window.dispatchEvent(new CustomEvent('itaim:usuario-atualizado', { detail: res.user }));
                 }
-            }).catch(() => {});
+            }).catch(err => {
+                if (err && err.status === 401) {
+                    if (typeof Auth.deslogarUsuario === 'function') {
+                        Auth.deslogarUsuario();
+                    }
+                }
+            });
         }
     }
 

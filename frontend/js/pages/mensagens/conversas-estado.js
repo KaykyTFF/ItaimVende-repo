@@ -80,11 +80,6 @@
                 btnToggleBloqueio: document.getElementById('btn-toggle-bloqueio-chat')
             };
 
-            // Suporte automático ao Modo Dev Front-End (Live Server)
-            if (window.ItaimSessao && typeof window.ItaimSessao.isModoDevFrontend === 'function' && window.ItaimSessao.isModoDevFrontend()) {
-                window.ItaimSessao.garantirSessaoDevFrontend();
-            }
-
             this.token = (window.ItaimApi?.auth?.obterToken && window.ItaimApi.auth.obterToken()) ||
                          localStorage.getItem('itaim_token') ||
                          '';

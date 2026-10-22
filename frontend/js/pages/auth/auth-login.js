@@ -140,17 +140,24 @@
             // Se o usuário já estiver autenticado e não veio com aviso/motivo explícito de logout, redireciona para a Home
             try {
                 const token = localStorage.getItem('itaim_token');
-                const userRaw = localStorage.getItem('itaim_usuario_logado');
-                const urlParams = new URLSearchParams(window.location.search);
-                const motivo = urlParams.get('mensagem') || urlParams.get('aviso');
-                if (token && userRaw && !motivo) {
-                    const returnTo = urlParams.get('returnTo');
-                    let destino = window.ItaimRotas ? window.ItaimRotas.obterUrl('home') : 'pages/home/home.html';
-                    if (returnTo && !returnTo.includes('index.html')) {
-                        destino = returnTo;
+                if (token === 'token_mock_dev_frontend') {
+                    localStorage.removeItem('itaim_token');
+                    localStorage.removeItem('itaim_usuario_logado');
+                    localStorage.removeItem('itaim_usuario_logado_email');
+                    localStorage.removeItem('itaim_modo_dev');
+                } else {
+                    const userRaw = localStorage.getItem('itaim_usuario_logado');
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const motivo = urlParams.get('mensagem') || urlParams.get('aviso');
+                    if (token && userRaw && !motivo) {
+                        const returnTo = urlParams.get('returnTo');
+                        let destino = window.ItaimRotas ? window.ItaimRotas.obterUrl('home') : 'pages/home/home.html';
+                        if (returnTo && !returnTo.includes('index.html')) {
+                            destino = returnTo;
+                        }
+                        window.location.replace(destino);
+                        return;
                     }
-                    window.location.replace(destino);
-                    return;
                 }
             } catch (e) {}
 
@@ -158,6 +165,18 @@
             this.processarAvisoUrl();
             if (formLogin) {
                 formLogin.addEventListener('submit', (e) => this.executarLogin(e));
+            }
+
+            const linkVisitante = document.getElementById('link-continuar-visitante');
+            if (linkVisitante) {
+                linkVisitante.addEventListener('click', () => {
+                    try {
+                        localStorage.removeItem('itaim_token');
+                        localStorage.removeItem('itaim_usuario_logado');
+                        localStorage.removeItem('itaim_usuario_logado_email');
+                        localStorage.removeItem('itaim_modo_dev');
+                    } catch (e) {}
+                });
             }
 
             const btnModoDev = document.getElementById('btn-modo-dev');

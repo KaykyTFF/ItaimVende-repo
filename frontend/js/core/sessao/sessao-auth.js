@@ -107,7 +107,7 @@
 
     // Busca usuário por email
     function obterUsuarioPorEmail(email) {
-        if (!email) return USUARIO_ADMIN;
+        if (!email) return null;
         const lista = carregarUsuarios();
         const busca = email.toLowerCase().trim();
         return lista.find(u => (u.email || '').toLowerCase() === busca) || null;
@@ -150,71 +150,52 @@
         salesCount: 9
     });
 
-    // Detecta se a página está rodando em ambiente de Live Server / dev de front
+    // Detecta se a página está explicitamente configurada em Modo Dev Front-End
     function isModoDevFrontend() {
-        if (localStorage.getItem('itaim_modo_dev') === 'true') return true;
-        try {
-            const params = new URLSearchParams(window.location.search);
-            if (params.get('dev') === 'true' || params.get('mock') === 'true') {
-                localStorage.setItem('itaim_modo_dev', 'true');
-                return true;
-            }
-        } catch(e) {}
-        const port = String(window.location.port || '');
-        const proto = String(window.location.protocol || '');
-        if (proto === 'file:') return true;
-        if (['5500', '5501', '5502', '5173', '8080', '3001'].includes(port)) return true;
-        return false;
+        return localStorage.getItem('itaim_modo_dev') === 'true';
     }
 
-    // Garante que a sessão mock exista caso estejamos em Modo Dev
+    // Garante que visitantes nunca sejam autenticados como Dev Front-End automaticamente
     function garantirSessaoDevFrontend() {
-        const token = localStorage.getItem('itaim_token');
-        const bUserRaw = localStorage.getItem('itaim_usuario_logado');
-        if (!token || !bUserRaw) {
-            localStorage.setItem('itaim_token', 'token_mock_dev_frontend');
-            localStorage.setItem('itaim_usuario_logado', JSON.stringify(USUARIO_DEV));
-            localStorage.setItem('itaim_usuario_logado_email', USUARIO_DEV.email);
-            console.info('⚡ [Itaim Vende] Modo Dev Front-End ativado! Sessão simulada criada automaticamente para testes livres no Live Server.');
-        }
+        // Desativado por completo
     }
 
     function ativarModoDevFrontend() {
         localStorage.setItem('itaim_modo_dev', 'true');
-        garantirSessaoDevFrontend();
+        localStorage.setItem('itaim_token', 'token_mock_dev_frontend');
+        localStorage.setItem('itaim_usuario_logado', JSON.stringify(USUARIO_DEV));
+        localStorage.setItem('itaim_usuario_logado_email', USUARIO_DEV.email);
     }
 
     function desativarModoDevFrontend() {
         localStorage.removeItem('itaim_modo_dev');
     }
 
-    // Retorna o usuário logado na sessão atual
-    // Verifica se há um usuário autenticado com credenciais válidas
+    // Retorna se há um usuário autenticado com credenciais válidas (ou false para visitantes)
     function usuarioEstaAutenticado() {
-        if (isModoDevFrontend()) {
-            garantirSessaoDevFrontend();
-            return true;
-        }
         const token = localStorage.getItem('itaim_token');
         const bUserRaw = localStorage.getItem('itaim_usuario_logado');
-        return !!(token && bUserRaw);
+        if (!token || !bUserRaw) return false;
+        if (token === 'token_mock_dev_frontend') return false;
+        return true;
     }
 
     // Retorna o usuário logado na sessão atual (ou null se for visitante / não logado)
     function obterUsuarioLogado() {
-        if (isModoDevFrontend()) {
-            garantirSessaoDevFrontend();
-        }
         const token = localStorage.getItem('itaim_token');
         const bUserRaw = localStorage.getItem('itaim_usuario_logado');
+        if (!token || !bUserRaw) {
+            return null;
+        }
+
         let backendUser = null;
         try {
-            backendUser = JSON.parse(bUserRaw || 'null');
-        } catch(e) {}
+            backendUser = JSON.parse(bUserRaw);
+        } catch(e) {
+            return null;
+        }
 
-        // Se não houver token ou usuário logado no storage, o visitante é anônimo (não autenticado)
-        if (!token || !backendUser) {
-            if (isModoDevFrontend()) return USUARIO_DEV;
+        if (!backendUser) {
             return null;
         }
 
@@ -256,7 +237,7 @@
 
     // Define o usuário logado e atualiza a interface com isolamento estrito
     function definirUsuarioLogado(emailOuUser, dadosCompletos = null) {
-        if (!emailOuUser && !dadosCompletos) return USUARIO_ADMIN;
+        if (!emailOuUser && !dadosCompletos) return null;
         const chaveBusca = dadosCompletos?.email || emailOuUser || '';
         const chaveLower = chaveBusca.toLowerCase().trim();
 
@@ -522,6 +503,7 @@
             localStorage.removeItem('itaim_perfil_customizado');
             localStorage.removeItem('itaim_ultima_atividade');
             localStorage.removeItem('itaim_ultimo_email');
+            localStorage.removeItem('itaim_modo_dev');
         } catch(e) {}
         if (window.ItaimSessao && typeof window.ItaimSessao.atualizarHeaderUsuario === 'function') {
             window.ItaimSessao.atualizarHeaderUsuario();
