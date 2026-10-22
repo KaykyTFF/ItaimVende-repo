@@ -30,12 +30,15 @@ export async function getUserReviews(targetUserId) {
     },
   });
 
+  const totalAvaliacoes = reviews.length;
+  const mediaGeral = totalAvaliacoes > 0 ? Number(user.ratingAverage) : 0;
+
   return {
     vendedor: {
       id: user.id,
       nome: user.name,
-      mediaGeral: Number(user.ratingAverage),
-      totalAvaliacoes: user.ratingCount,
+      mediaGeral,
+      totalAvaliacoes,
     },
     avaliacoes: reviews.map((r) => ({
       id: r.id,

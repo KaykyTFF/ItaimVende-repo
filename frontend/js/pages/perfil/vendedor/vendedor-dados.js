@@ -159,7 +159,7 @@
                 avatar: 'assets/icons/icon-user.png',
                 bio: `Perfil de ${nomeFinal} na plataforma Itaim Vende.`,
                 createdAt: '2024-01-01',
-                ratingAverage: 5.0,
+                ratingAverage: 0.0,
                 ratingCount: 0,
                 salesCount: 0
             };
