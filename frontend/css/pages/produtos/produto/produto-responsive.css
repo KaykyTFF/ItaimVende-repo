@@ -183,7 +183,8 @@
     }
 
     .especificacoes-grid {
-        grid-template-columns: 1fr;
-        gap: 8px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px 28px;
     }
 }

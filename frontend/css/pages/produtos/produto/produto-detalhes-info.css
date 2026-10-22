@@ -59,29 +59,35 @@
 }
 
 .especificacoes-grid {
-    display: grid;
-    grid-template-columns: 140px 1fr;
-    gap: 20px;
-    margin-top: auto;
-    padding-top: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 36px;
+    margin-top: 0;
+    margin-bottom: 22px;
+    padding-top: 0;
+    flex-wrap: nowrap;
 }
 
 .espec-item {
     display: flex;
     flex-direction: column;
     gap: 4px;
+    min-width: max-content;
+    white-space: nowrap;
 }
 
 .espec-chave {
     font-size: 12.5px;
     color: #64748B;
     font-weight: 500;
+    white-space: nowrap;
 }
 
 .espec-valor {
     font-size: 15px;
     font-weight: 800;
     color: #1E293B;
+    white-space: nowrap;
 }
 
 /* Card Sobre Este Anúncio */
