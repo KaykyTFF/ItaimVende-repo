@@ -137,6 +137,23 @@
         },
 
         inicializar: function () {
+            // Se o usuário já estiver autenticado e não veio com aviso/motivo explícito de logout, redireciona para a Home
+            try {
+                const token = localStorage.getItem('itaim_token');
+                const userRaw = localStorage.getItem('itaim_usuario_logado');
+                const urlParams = new URLSearchParams(window.location.search);
+                const motivo = urlParams.get('mensagem') || urlParams.get('aviso');
+                if (token && userRaw && !motivo) {
+                    const returnTo = urlParams.get('returnTo');
+                    let destino = window.ItaimRotas ? window.ItaimRotas.obterUrl('home') : 'pages/home/home.html';
+                    if (returnTo && !returnTo.includes('index.html')) {
+                        destino = returnTo;
+                    }
+                    window.location.replace(destino);
+                    return;
+                }
+            } catch (e) {}
+
             const formLogin = document.getElementById('form-login');
             this.processarAvisoUrl();
             if (formLogin) {

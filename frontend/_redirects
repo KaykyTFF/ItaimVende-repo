@@ -1,6 +1,7 @@
 # Regras de redirecionamento quando o Netlify publica a pasta frontend
 /frontend/*              /:splat                                  301!
 
+/                        /pages/home/home.html                    200
 /home                    /pages/home/home.html                    200
 /login                   /index.html                              200
 /cadastro                /pages/auth/cadastro.html                200

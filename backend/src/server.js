@@ -169,15 +169,22 @@ app.use('/api/v1', v1Router);
 app.use('/api', v1Router);
 
 
+// Rota Raiz Principal do Marketplace (Home como tela inicial para visitantes e usuários)
+app.get('/', (req, res) => {
+  res.sendFile(path.join(FRONTEND_DIR, 'pages/home/home.html'));
+});
+
 // Servir arquivos estáticos da pasta frontend (CSS, JS, Assets, Pages)
-app.use(express.static(FRONTEND_DIR));
-app.use('/frontend', express.static(FRONTEND_DIR));
+// index: false garante que '/' e diretórios nunca sirvam o formulário de login por engano
+app.use(express.static(FRONTEND_DIR, { index: false }));
+app.use('/frontend', express.static(FRONTEND_DIR, { index: false }));
 
 // Rotas amigáveis (Clean URLs) para as páginas do Marketplace
 const PAGE_ROUTES = [
-  { route: '/', file: 'index.html' },
-  { route: '/login', file: 'index.html' },
+  { route: '/', file: 'pages/home/home.html' },
   { route: '/home', file: 'pages/home/home.html' },
+  { route: '/login', file: 'index.html' },
+  { route: '/login.html', file: 'index.html' },
   { route: '/cadastro', file: 'pages/auth/cadastro.html' },
   { route: '/categoria', file: 'pages/produtos/categoria.html' },
   { route: '/produto', file: 'pages/produtos/produto.html' },

@@ -18,7 +18,7 @@ echo.
 echo [2/3] Iniciando o servidor Backend e Frontend na porta 3000...
 echo.
 echo =============================================================
-echo  ACESSO LOCAL:  http://localhost:3000/pages/home/home.html
+echo  ACESSO LOCAL:  http://localhost:3000/
 echo  PAINEL STATUS: http://localhost:3000/painel
 echo =============================================================
 echo.

@@ -79,25 +79,19 @@
             const fechar = () => {
                 modal.classList.remove('ativo');
                 modal.style.display = 'none';
-                modal.style.pointerEvents = 'none';
                 document.body.style.overflow = '';
             };
 
             const btnFechar = modal.querySelector('#modal-auth-btn-fechar');
             if (btnFechar) {
                 btnFechar.onclick = (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
+                    if (e) e.preventDefault();
                     fechar();
                 };
             }
 
             modal.onclick = (e) => {
-                if (e.target === modal) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    fechar();
-                }
+                if (e.target === modal) fechar();
             };
 
             document.addEventListener('keydown', (e) => {
@@ -112,44 +106,18 @@
         const linkEntrar = modal.querySelector('#modal-auth-btn-entrar');
         const linkCad = modal.querySelector('#modal-auth-link-cadastro');
 
-        let query = '';
-        if (!urlAtual.includes('index.html')) {
-            query = 'returnTo=' + encodeURIComponent(urlAtual);
-        }
+        let query = 'returnTo=' + encodeURIComponent(urlAtual);
         if (motivo) {
-            query += (query ? '&' : '') + 'mensagem=' + encodeURIComponent(motivo);
+            query += '&mensagem=' + encodeURIComponent(motivo);
         }
 
-        const urlLogin = resolverUrlLogin(query);
-        const urlCadastro = resolverUrlCadastro(query);
+        const urlLogin = window.ItaimRotas ? window.ItaimRotas.obterUrl('login', query) : ('../../index.html?' + query);
+        const urlCadastro = window.ItaimRotas ? window.ItaimRotas.obterUrl('cadastro', query) : ('../../pages/auth/cadastro.html?' + query);
 
-        if (linkEntrar) {
-            linkEntrar.href = urlLogin;
-            linkEntrar.onclick = (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                if (window.ItaimRotas && typeof window.ItaimRotas.executarTransicao === 'function') {
-                    window.ItaimRotas.executarTransicao(urlLogin);
-                } else {
-                    window.location.href = urlLogin;
-                }
-            };
-        }
-        if (linkCad) {
-            linkCad.href = urlCadastro;
-            linkCad.onclick = (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                if (window.ItaimRotas && typeof window.ItaimRotas.executarTransicao === 'function') {
-                    window.ItaimRotas.executarTransicao(urlCadastro);
-                } else {
-                    window.location.href = urlCadastro;
-                }
-            };
-        }
+        if (linkEntrar) linkEntrar.href = urlLogin;
+        if (linkCad) linkCad.href = urlCadastro;
 
         modal.style.display = 'flex';
-        modal.style.pointerEvents = 'auto';
         void modal.offsetWidth;
         modal.classList.add('ativo');
         document.body.style.overflow = 'hidden';
@@ -162,14 +130,11 @@
             return;
         }
         const urlAtual = window.location.href;
-        let query = '';
-        if (!urlAtual.includes('index.html')) {
-            query = 'returnTo=' + encodeURIComponent(urlAtual);
-        }
+        let query = 'returnTo=' + encodeURIComponent(urlAtual);
         if (motivo) {
-            query += (query ? '&' : '') + 'mensagem=' + encodeURIComponent(motivo);
+            query += '&mensagem=' + encodeURIComponent(motivo);
         }
-        const urlLogin = resolverUrlLogin(query);
+        const urlLogin = window.ItaimRotas ? window.ItaimRotas.obterUrl('login', query) : ('../../index.html?' + query);
         if (window.ItaimRotas && typeof window.ItaimRotas.executarTransicao === 'function') {
             window.ItaimRotas.executarTransicao(urlLogin);
         } else {
@@ -230,7 +195,9 @@
                 document.body.classList.remove('usuario-logado');
             }
 
-            // Oculta todos os botões do usuário: Meus Anúncios, Vender, Conversas, Perfil e Notificações (header e drawer)
+            // Oculta botões restritos do cabeçalho e da barra lateral
+            // No cabeçalho, visitante vê exclusivamente o botão Entrar na direita.
+            // Na barra lateral (drawer), visitante vê exclusivamente: Home, Modo Escuro e o botão de sair virado para Entrar.
             const seletoresOcultar = [
                 '#link-meus-anuncios',
                 '#btn-meus-anuncios',
@@ -248,7 +215,11 @@
                 '#drawer-link-chat',
                 '#drawer-link-vender',
                 '#drawer-link-notificacoes',
-                '#drawer-link-configuracoes'
+                '#drawer-link-painel',
+                '#drawer-link-configuracoes',
+                '#btn-toggle-categorias',
+                '#drawer-categorias-conteudo',
+                '.drawer-secao-divisor'
             ];
             seletoresOcultar.forEach(sel => {
                 document.querySelectorAll(sel).forEach(el => {
@@ -267,7 +238,7 @@
                     btnEntrar.title = 'Entrar na sua conta';
                     headerRight.appendChild(btnEntrar);
                 }
-                const urlLogin = resolverUrlLogin();
+                const urlLogin = window.ItaimRotas ? window.ItaimRotas.obterUrl('login') : (window.location.pathname.toLowerCase().includes('/pages/') ? '../../index.html' : './index.html');
                 btnEntrar.setAttribute('href', urlLogin);
                 btnEntrar.style.display = 'inline-flex';
             }
@@ -287,7 +258,7 @@
             if (drawerEmailEl) drawerEmailEl.textContent = 'Entre para anunciar e comprar';
 
             // Altera botão de sair para Entrar
-            const urlLogin = resolverUrlLogin();
+            const urlLogin = window.ItaimRotas ? window.ItaimRotas.obterUrl('login') : (window.location.pathname.toLowerCase().includes('/pages/') ? '../../index.html' : './index.html');
             document.querySelectorAll('.item-sair').forEach(el => {
                 el.classList.add('item-entrar');
                 el.innerHTML = `
@@ -340,7 +311,10 @@
             '#drawer-link-chat',
             '#drawer-link-vender',
             '#drawer-link-notificacoes',
-            '#drawer-link-configuracoes'
+            '#drawer-link-painel',
+            '#drawer-link-configuracoes',
+            '#btn-toggle-categorias',
+            '.drawer-secao-divisor'
         ];
         seletoresRestaurar.forEach(sel => {
             document.querySelectorAll(sel).forEach(el => {

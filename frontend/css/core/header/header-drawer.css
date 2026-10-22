@@ -284,7 +284,7 @@
 
 /* ==========================================================
    DRAWER - MODO VISITANTE (NÃO AUTENTICADO)
-   Exibe somente Início, Categorias, Modo Escuro e Entrar
+   Exibe exclusivamente: Início (Home), Modo Escuro e Entrar
    ========================================================== */
 html.usuario-deslogado #drawer-link-perfil,
 html.usuario-deslogado #drawer-link-anuncios,
@@ -292,14 +292,22 @@ html.usuario-deslogado #drawer-link-favoritos,
 html.usuario-deslogado #drawer-link-chat,
 html.usuario-deslogado #drawer-link-vender,
 html.usuario-deslogado #drawer-link-notificacoes,
+html.usuario-deslogado #drawer-link-painel,
 html.usuario-deslogado #drawer-link-configuracoes,
+html.usuario-deslogado #btn-toggle-categorias,
+html.usuario-deslogado #drawer-categorias-conteudo,
+html.usuario-deslogado .drawer-secao-divisor,
 body.usuario-deslogado #drawer-link-perfil,
 body.usuario-deslogado #drawer-link-anuncios,
 body.usuario-deslogado #drawer-link-favoritos,
 body.usuario-deslogado #drawer-link-chat,
 body.usuario-deslogado #drawer-link-vender,
 body.usuario-deslogado #drawer-link-notificacoes,
-body.usuario-deslogado #drawer-link-configuracoes {
+body.usuario-deslogado #drawer-link-painel,
+body.usuario-deslogado #drawer-link-configuracoes,
+body.usuario-deslogado #btn-toggle-categorias,
+body.usuario-deslogado #drawer-categorias-conteudo,
+body.usuario-deslogado .drawer-secao-divisor {
     display: none !important;
 }
 
