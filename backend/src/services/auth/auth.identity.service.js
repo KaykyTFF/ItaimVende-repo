@@ -132,7 +132,7 @@ export async function loginUser({ email, password }) {
     avatar: user.avatar,
     bio: user.bio,
     isVerified: user.isVerified,
-    ratingAverage: Number(user.ratingAverage),
+    ratingAverage: Number(user.ratingCount) > 0 ? Number(user.ratingAverage) : 0,
     ratingCount: user.ratingCount,
     salesCount: user.salesCount || 0,
     createdAt: user.createdAt,

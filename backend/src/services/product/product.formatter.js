@@ -54,9 +54,9 @@ export function formatarProdutoParaFrontend(p) {
     vendedorAvatar: p.seller?.avatar || 'assets/icons/icon-user.png',
     vendedorBio: p.seller?.bio || '',
     vendedorVerificado: Boolean(p.seller?.isVerified),
-    vendedorAvaliacao: p.seller?.ratingAverage ? Number(p.seller.ratingAverage) : 5.0,
-    vendedorTotalAvaliacoes: p.seller?.ratingCount !== undefined ? p.seller.ratingCount : 18,
-    vendedorVendas: p.seller?.salesCount !== undefined ? p.seller.salesCount : 12,
+    vendedorAvaliacao: (p.seller?.ratingCount > 0 && p.seller?.ratingAverage) ? Number(p.seller.ratingAverage) : 0.0,
+    vendedorTotalAvaliacoes: p.seller?.ratingCount !== undefined ? p.seller.ratingCount : 0,
+    vendedorVendas: p.seller?.salesCount !== undefined ? p.seller.salesCount : 0,
     vendedorMembroDesde: p.seller?.createdAt ? 'Membro desde ' + new Date(p.seller.createdAt).getFullYear() : 'Membro desde 2024',
   };
 }

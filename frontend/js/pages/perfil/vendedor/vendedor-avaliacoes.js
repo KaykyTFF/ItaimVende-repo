@@ -31,18 +31,24 @@
      * Verifica se a avaliação foi feita pelo usuário logado
      */
     function ehMinhaAvaliacao(item, usuarioLogado) {
-        if (!usuarioLogado) return false;
+        if (!usuarioLogado || !item) return false;
         const meuId = String(usuarioLogado.id || '');
-        const autorId = item.autor?.id ? String(item.autor.id) : (item.authorId ? String(item.authorId) : null);
+        const autorId = item.autor?.id ? String(item.autor.id) : (item.authorId ? String(item.authorId) : (item.autorId ? String(item.autorId) : null));
         if (autorId && meuId && autorId === meuId) return true;
 
-        const meuUser = (usuarioLogado.username || '').toLowerCase().trim();
-        const autorUser = (item.autor?.username || '').toLowerCase().trim();
+        const meuUser = (usuarioLogado.username || usuarioLogado.usuario || '').toLowerCase().trim();
+        const autorUser = (item.autor?.username || item.username || '').toLowerCase().trim();
         if (meuUser && autorUser && meuUser === autorUser) return true;
 
         const meuNome = (usuarioLogado.name || usuarioLogado.nome || '').toLowerCase().trim();
-        const autorNome = (item.autor?.nome || item.autor || '').toLowerCase().trim();
+        const autorNome = (typeof item.autor === 'string' ? item.autor : (item.autor?.nome || item.autor?.name || '')).toLowerCase().trim();
         if (meuNome && autorNome && meuNome === autorNome) return true;
+        if (meuUser && autorNome && meuUser === autorNome) return true;
+        if (meuNome && autorUser && meuNome === autorUser) return true;
+
+        const meuEmail = (usuarioLogado.email || '').toLowerCase().trim();
+        const autorEmail = (item.autor?.email || item.email || '').toLowerCase().trim();
+        if (meuEmail && autorEmail && meuEmail === autorEmail) return true;
 
         return false;
     }
@@ -53,7 +59,7 @@
     function renderizarCard(item, isVendedorLogado, usuarioLogado) {
         const notaNum = Math.min(5, Math.max(1, Math.round(item.nota || 5)));
         const estrelasTxt = '★'.repeat(notaNum) + '☆'.repeat(5 - notaNum);
-        const nomeAutor = item.autor?.nome || item.autor || 'Comprador';
+        const nomeAutor = item.autor?.nome || (typeof item.autor === 'string' ? item.autor : null) || 'Comprador';
         const inicial = nomeAutor.charAt(0).toUpperCase();
         const avatarAutor = item.autor?.avatar
             ? (window.ItaimApi?.resolverUrlImagem?.(item.autor.avatar) || item.autor.avatar)
@@ -124,7 +130,7 @@
                         <div class="avaliacao-autor-box" style="display:flex;align-items:center;gap:10px;">
                             <div style="display:flex;align-items:center;">${avatarHtml}</div>
                             <div>
-                                <div class="avaliacao-autor-nome" style="font-weight:700;font-size:13.5px;color:#1E293B;display:flex;align-items:center;gap:6px;">
+                                <div class="avaliacao-autor-nome" style="font-weight:700;font-size:13.5px;display:flex;align-items:center;gap:6px;">
                                     ${nomeAutor}
                                     ${isMinha ? '<span style="font-size:10.5px;background:#E2E8F0;color:#475569;padding:2px 6px;border-radius:4px;font-weight:700;">Você</span>' : ''}
                                 </div>
@@ -138,7 +144,7 @@
                             ${menuDropdownHtml}
                         </div>
                     </div>
-                    ${item.comentario ? `<p class="avaliacao-comentario-txt" style="font-size:13.5px;color:#475569;line-height:1.5;margin:4px 0 0 44px;">${item.comentario}</p>` : ''}
+                    ${item.comentario ? `<p class="avaliacao-comentario-txt" style="font-size:13.5px;line-height:1.5;margin:4px 0 0 44px;">${item.comentario}</p>` : ''}
                     ${respostaHtml}
                 </div>
                 <div class="avaliacao-container-edicao" style="display:none;"></div>
@@ -162,18 +168,50 @@
         const estrelasContainer = document.getElementById('estrelas-seletor');
         const boxForm = document.getElementById('box-form-avaliacao');
 
-        // Usuário logado
-        const usuarioLogado = (window.ItaimSessao && typeof window.ItaimSessao.obterUsuarioLogado === 'function')
-            ? window.ItaimSessao.obterUsuarioLogado()
-            : null;
-        const isLogado = !!(usuarioLogado?.id || window.ItaimApi?.auth?.obterToken?.());
+        // Busca usuário logado de forma ultra resiliente
+        function obterUsuarioAtual() {
+            let u = (window.ItaimSessao && typeof window.ItaimSessao.obterUsuarioLogado === 'function')
+                ? window.ItaimSessao.obterUsuarioLogado()
+                : null;
+            if (!u) {
+                try { u = JSON.parse(localStorage.getItem('itaim_usuario_logado') || 'null'); } catch (_) {}
+            }
+            if (!u) {
+                try { u = JSON.parse(localStorage.getItem('itaim_perfil_usuario') || 'null'); } catch (_) {}
+            }
+            return u;
+        }
+
+        const usuarioLogado = obterUsuarioAtual();
+        const isLogado = !!(usuarioLogado?.id || localStorage.getItem('itaim_token'));
 
         // Verifica se o usuário logado é o próprio vendedor
-        const isVendedorLogado = isLogado && (
-            (usuarioLogado?.id && vendedorId && String(usuarioLogado.id) === String(vendedorId)) ||
-            (usuarioLogado?.email && vendedor?.email && usuarioLogado.email.toLowerCase() === vendedor.email.toLowerCase()) ||
-            (usuarioLogado?.username && vendedor?.username && usuarioLogado.username.toLowerCase() === vendedor.username.toLowerCase())
-        );
+        function verificarProprioPerfil() {
+            if (!usuarioLogado) return false;
+            const meuId = String(usuarioLogado.id || '');
+            const vId = String(vendedorId || vendedor?.id || '');
+            if (meuId && vId && meuId === vId) return true;
+
+            const meuEmail = (usuarioLogado.email || '').toLowerCase().trim();
+            const vEmail = (vendedor?.email || '').toLowerCase().trim();
+            if (meuEmail && vEmail && meuEmail === vEmail) return true;
+
+            const meuUser = (usuarioLogado.username || usuarioLogado.usuario || '').toLowerCase().trim();
+            const vUser = (vendedor?.username || vendedor?.usuario || '').toLowerCase().trim();
+            if (meuUser && vUser && meuUser === vUser) return true;
+
+            const meuNome = (usuarioLogado.name || usuarioLogado.nome || '').toLowerCase().trim();
+            const vNome = (vendedor?.name || vendedor?.nome || '').toLowerCase().trim();
+            if (meuNome && vNome && (meuNome === vNome || meuNome.includes(vNome) || vNome.includes(meuNome))) return true;
+
+            const params = new URLSearchParams(window.location.search);
+            const temParam = params.get('id') || params.get('sellerId') || params.get('userId') || params.get('email') || params.get('vendedor') || params.get('nome') || params.get('username');
+            if (!temParam) return true;
+
+            return false;
+        }
+
+        const isVendedorLogado = isLogado && verificarProprioPerfil();
 
         // Preenche nome do autor logado no formulário
         const nomeLogado = usuarioLogado?.name || usuarioLogado?.nome || usuarioLogado?.username || '';
@@ -213,10 +251,15 @@
                 comentario: item.comentario,
                 resposta: item.resposta || null,
                 data: item.data || null,
-                autor: { nome: item.autor, avatar: null }
+                autor: typeof item.autor === 'object' ? item.autor : { nome: item.autor, avatar: null }
             }));
             totalAvaliacoes = stats.total;
-            mediaGeral = totalAvaliacoes > 0 ? stats.media : 0.0;
+            mediaGeral = totalAvaliacoes > 0 ? Number(stats.media || 0) : 0.0;
+        }
+
+        // Garante que com 0 avaliações a média seja exatamente 0.0
+        if (totalAvaliacoes === 0) {
+            mediaGeral = 0.0;
         }
 
         // =====================================================================
@@ -225,9 +268,9 @@
         function atualizarReputacao(media, total) {
             const totalNum = Number(total || 0);
             const mediaNum = totalNum > 0 ? Number(media || 0) : 0.0;
-            const mediaText = `${mediaNum.toFixed(1)} ★`;
+            const mediaText = totalNum > 0 ? `${mediaNum.toFixed(1)} ★` : '0.0 ★';
             const legendaText = `Avaliações (${totalNum})`;
-            const badgeText = `${mediaNum.toFixed(1)} ★ (${totalNum})`;
+            const badgeText = totalNum > 0 ? `${mediaNum.toFixed(1)} ★ (${totalNum})` : `0.0 ★ (${totalNum})`;
 
             if (elReputacaoMedia) elReputacaoMedia.textContent = mediaText;
             if (elReputacaoLegenda) elReputacaoLegenda.textContent = legendaText;
@@ -242,14 +285,14 @@
         function atualizarVisibilidadeFormulario(lista) {
             if (!boxForm) return;
 
-            // Se for o próprio vendedor, nunca exibe o formulário de avaliação
+            // Se for o perfil do próprio usuário vendedor, nunca exibe o formulário de avaliação
             if (isVendedorLogado) {
                 boxForm.style.display = 'none';
                 return;
             }
 
-            // Se o usuário logado já tiver feito uma avaliação sobre este vendedor, esconde a caixa
-            const jaAvaliou = isLogado && lista.some(item => ehMinhaAvaliacao(item, usuarioLogado));
+            // Limite de 1 avaliação por usuário: se o usuário logado já tiver feito avaliação, esconde o formulário
+            const jaAvaliou = isLogado && Array.isArray(lista) && lista.some(item => ehMinhaAvaliacao(item, usuarioLogado));
             if (jaAvaliou) {
                 boxForm.style.display = 'none';
             } else {
@@ -265,8 +308,8 @@
         function renderizarLista(lista) {
             if (!containerAvaliacoes) return;
 
-            if (lista.length === 0) {
-                // Se for o próprio usuário, retira a frase de incentivo
+            if (!lista || lista.length === 0) {
+                // Se for o próprio vendedor, retira a frase de incentivo
                 const subMensagemHtml = isVendedorLogado
                     ? '<p style="font-size:13.5px;margin:4px 0 0;color:#64748B;">Você ainda não possui avaliações de compradores.</p>'
                     : '<p style="font-size:13.5px;margin:4px 0 0;color:#64748B;">Seja o primeiro a deixar uma avaliação sobre este vendedor!</p>';
@@ -276,7 +319,7 @@
                         <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#94A3B8" stroke-width="1.8" style="margin-bottom:8px;">
                             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                         </svg>
-                        <h4 style="margin:0;font-size:15px;color:#1E293B;font-weight:700;">Nenhuma avaliação ainda</h4>
+                        <h4 style="margin:0;font-size:15px;font-weight:700;">Nenhuma avaliação ainda</h4>
                         ${subMensagemHtml}
                     </div>`;
                 return;
@@ -338,11 +381,17 @@
                             lista.splice(idx, 1);
                         }
 
-                        // Se API não retornou nova média, calcula localmente
-                        if (novaMediaCalc === null || novoTotalCalc === null) {
-                            novoTotalCalc = lista.length;
+                        // Sincroniza também no localStorage caso ItaimAvaliacoes esteja ativo
+                        if (window.ItaimAvaliacoes?.excluir) {
+                            try { window.ItaimAvaliacoes.excluir(vendedor, id); } catch (_) {}
+                        }
+
+                        novoTotalCalc = lista.length;
+                        if (novoTotalCalc === 0) {
+                            novaMediaCalc = 0.0;
+                        } else if (novaMediaCalc === null) {
                             const soma = lista.reduce((acc, c) => acc + (Number(c.nota) || 0), 0);
-                            novaMediaCalc = novoTotalCalc > 0 ? (soma / novoTotalCalc) : 0.0;
+                            novaMediaCalc = parseFloat((soma / novoTotalCalc).toFixed(1));
                         }
 
                         mediaGeral = novaMediaCalc;
@@ -484,10 +533,23 @@
                     item.nota = notaEdicao;
                     item.comentario = novoTexto;
 
+                    if (window.ItaimAvaliacoes?.obterChave) {
+                        try {
+                            const chave = 'itaim_avaliacoes_' + window.ItaimAvaliacoes.obterChave(vendedor);
+                            const salvas = JSON.parse(localStorage.getItem(chave) || '[]');
+                            const sIdx = salvas.findIndex(s => String(s.id) === String(item.id));
+                            if (sIdx !== -1) {
+                                salvas[sIdx].nota = notaEdicao;
+                                salvas[sIdx].comentario = novoTexto;
+                                localStorage.setItem(chave, JSON.stringify(salvas));
+                            }
+                        } catch (_) {}
+                    }
+
                     if (novaMediaCalc === null || novoTotalCalc === null) {
                         novoTotalCalc = lista.length;
                         const soma = lista.reduce((acc, c) => acc + (Number(c.nota) || 0), 0);
-                        novaMediaCalc = novoTotalCalc > 0 ? (soma / novoTotalCalc) : 0.0;
+                        novaMediaCalc = novoTotalCalc > 0 ? parseFloat((soma / novoTotalCalc).toFixed(1)) : 0.0;
                     }
 
                     mediaGeral = novaMediaCalc;

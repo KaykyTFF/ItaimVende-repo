@@ -95,7 +95,7 @@ export async function getSellerProducts(sellerId, includeAllStatuses = false) {
   return {
     seller: {
       ...seller,
-      ratingAverage: Number(seller.ratingAverage),
+      ratingAverage: Number(seller.ratingCount) > 0 ? Number(seller.ratingAverage) : 0,
     },
     products: products.map((p) => formatarProdutoParaFrontend({ ...p, seller })),
   };

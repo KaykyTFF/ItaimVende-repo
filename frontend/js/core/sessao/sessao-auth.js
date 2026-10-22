@@ -245,10 +245,10 @@
                     avatar: backendUser.avatar || user.avatar || 'assets/icons/icon-user.png',
                     role: backendUser.role || user.role || 'ADMIN',
                     isVerified: backendUser.isVerified !== undefined ? backendUser.isVerified : true,
-                    ratingAverage: backendUser.ratingAverage !== undefined ? Number(backendUser.ratingAverage) : 5.0,
-                    avaliacao: (Number(backendUser.ratingAverage || user.ratingAverage || 5)).toFixed(1),
-                    ratingCount: backendUser.ratingCount !== undefined ? backendUser.ratingCount : (user.totalAvaliacoes || 18),
-                    totalAvaliacoes: backendUser.ratingCount !== undefined ? backendUser.ratingCount : (user.totalAvaliacoes || 18),
+                    ratingAverage: (Number(backendUser.ratingCount || 0) > 0 && backendUser.ratingAverage !== undefined) ? Number(backendUser.ratingAverage) : 0.0,
+                    avaliacao: ((Number(backendUser.ratingCount || 0) > 0 && backendUser.ratingAverage !== undefined) ? Number(backendUser.ratingAverage) : 0.0).toFixed(1),
+                    ratingCount: backendUser.ratingCount !== undefined ? Number(backendUser.ratingCount) : 0,
+                    totalAvaliacoes: backendUser.ratingCount !== undefined ? Number(backendUser.ratingCount) : 0,
                     salesCount: backendUser.salesCount !== undefined ? backendUser.salesCount : (user.vendasConcluidas || 12),
                     vendasConcluidas: backendUser.salesCount !== undefined ? backendUser.salesCount : (user.vendasConcluidas || 12)
                 };

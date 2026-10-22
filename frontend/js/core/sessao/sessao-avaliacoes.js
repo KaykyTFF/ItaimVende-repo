@@ -205,9 +205,9 @@
          */
         calcularMedia: function(lista, perfil = null) {
             if (!lista || !Array.isArray(lista) || lista.length === 0) {
-                if (perfil && (perfil.totalAvaliacoes || perfil.ratingCount || (perfil.email && perfil.email.toLowerCase() === 'admin@gmail.com'))) {
-                    const totalRatings = perfil.ratingCount || perfil.totalAvaliacoes || 18;
-                    const mediaVal = Number(perfil.ratingAverage || perfil.avaliacao || 5.0).toFixed(1);
+                if (perfil && Number(perfil.ratingCount || perfil.totalAvaliacoes || 0) > 0) {
+                    const totalRatings = Number(perfil.ratingCount || perfil.totalAvaliacoes);
+                    const mediaVal = Number(perfil.ratingAverage || perfil.avaliacao || 0).toFixed(1);
                     return {
                         media: mediaVal,
                         mediaNum: parseFloat(mediaVal),

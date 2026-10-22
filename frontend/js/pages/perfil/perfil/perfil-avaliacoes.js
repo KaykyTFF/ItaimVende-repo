@@ -21,18 +21,24 @@
     }
 
     function ehMinhaAvaliacao(item, usuarioLogado) {
-        if (!usuarioLogado) return false;
+        if (!usuarioLogado || !item) return false;
         const meuId = String(usuarioLogado.id || '');
-        const autorId = item.autor?.id ? String(item.autor.id) : (item.authorId ? String(item.authorId) : null);
+        const autorId = item.autor?.id ? String(item.autor.id) : (item.authorId ? String(item.authorId) : (item.autorId ? String(item.autorId) : null));
         if (autorId && meuId && autorId === meuId) return true;
 
-        const meuUser = (usuarioLogado.username || '').toLowerCase().trim();
-        const autorUser = (item.autor?.username || '').toLowerCase().trim();
+        const meuUser = (usuarioLogado.username || usuarioLogado.usuario || '').toLowerCase().trim();
+        const autorUser = (item.autor?.username || item.username || '').toLowerCase().trim();
         if (meuUser && autorUser && meuUser === autorUser) return true;
 
         const meuNome = (usuarioLogado.name || usuarioLogado.nome || '').toLowerCase().trim();
-        const autorNome = (item.autor?.nome || item.autor || '').toLowerCase().trim();
+        const autorNome = (typeof item.autor === 'string' ? item.autor : (item.autor?.nome || item.autor?.name || '')).toLowerCase().trim();
         if (meuNome && autorNome && meuNome === autorNome) return true;
+        if (meuUser && autorNome && meuUser === autorNome) return true;
+        if (meuNome && autorUser && meuNome === autorUser) return true;
+
+        const meuEmail = (usuarioLogado.email || '').toLowerCase().trim();
+        const autorEmail = (item.autor?.email || item.email || '').toLowerCase().trim();
+        if (meuEmail && autorEmail && meuEmail === autorEmail) return true;
 
         return false;
     }

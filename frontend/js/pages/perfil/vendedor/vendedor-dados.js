@@ -106,6 +106,7 @@
                 });
 
                 if (prodMatch) {
+                    const prodCount = Number(prodMatch.vendedorTotalAvaliacoes || prodMatch.seller?.ratingCount || 0);
                     vendedor = {
                         id: prodMatch.vendedorId || prodMatch.sellerId || Date.now(),
                         name: prodMatch.vendedorNome || prodMatch.vendedor || 'Vendedor do Itaim Vende',
@@ -117,9 +118,9 @@
                         avatar: prodMatch.vendedorAvatar || 'assets/icons/icon-user.png',
                         bio: `Vendedor(a) na região de ${prodMatch.vendedorCidade || prodMatch.cidade || 'Paulistana'} e cidades vizinhas no Itaim Vende.`,
                         createdAt: '2024-01-01',
-                        ratingAverage: 5.0,
-                        ratingCount: 18,
-                        salesCount: 12
+                        ratingAverage: prodCount > 0 ? Number(prodMatch.vendedorAvaliacao || prodMatch.seller?.ratingAverage || 0) : 0.0,
+                        ratingCount: prodCount,
+                        salesCount: Number(prodMatch.vendedorVendas || 0)
                     };
                 }
             }
@@ -147,22 +148,48 @@
         }
 
         if (!vendedor) {
-            const nomeFinal = paramNome || (paramEmail ? paramEmail.split('@')[0] : 'Vendedor');
-            vendedor = {
-                id: paramId || Date.now(),
-                name: nomeFinal,
-                nome: nomeFinal,
-                username: paramNome ? paramNome.toLowerCase().replace(/\s+/g, '') : (paramEmail ? paramEmail.split('@')[0] : 'vendedor'),
-                email: paramEmail || '',
-                phone: '(89) 99999-9999',
-                city: 'Paulistana',
-                avatar: 'assets/icons/icon-user.png',
-                bio: `Perfil de ${nomeFinal} na plataforma Itaim Vende.`,
-                createdAt: '2024-01-01',
-                ratingAverage: 0.0,
-                ratingCount: 0,
-                salesCount: 0
-            };
+            // Se não especificou parâmetro na URL, verifica se há usuário logado para exibir o próprio perfil
+            let usuarioLogado = (window.ItaimSessao && typeof window.ItaimSessao.obterUsuarioLogado === 'function')
+                ? window.ItaimSessao.obterUsuarioLogado()
+                : null;
+            if (!usuarioLogado) {
+                try { usuarioLogado = JSON.parse(localStorage.getItem('itaim_usuario_logado') || 'null'); } catch (_) {}
+            }
+            if (!usuarioLogado) {
+                try { usuarioLogado = JSON.parse(localStorage.getItem('itaim_perfil_usuario') || 'null'); } catch (_) {}
+            }
+
+            if (!identificador && usuarioLogado && (usuarioLogado.id || usuarioLogado.email)) {
+                vendedor = { ...usuarioLogado };
+            } else {
+                const nomeFinal = paramNome || (paramEmail ? paramEmail.split('@')[0] : 'Vendedor');
+                vendedor = {
+                    id: paramId || Date.now(),
+                    name: nomeFinal,
+                    nome: nomeFinal,
+                    username: paramNome ? paramNome.toLowerCase().replace(/\s+/g, '') : (paramEmail ? paramEmail.split('@')[0] : 'vendedor'),
+                    email: paramEmail || '',
+                    phone: '(89) 99999-9999',
+                    city: 'Paulistana',
+                    avatar: 'assets/icons/icon-user.png',
+                    bio: `Perfil de ${nomeFinal} na plataforma Itaim Vende.`,
+                    createdAt: '2024-01-01',
+                    ratingAverage: 0.0,
+                    ratingCount: 0,
+                    salesCount: 0
+                };
+            }
+        }
+
+        // Garante que se ratingCount for 0, ratingAverage é 0.0
+        if (vendedor) {
+            const rCount = Number(vendedor.ratingCount || 0);
+            if (rCount === 0) {
+                vendedor.ratingAverage = 0.0;
+                vendedor.ratingCount = 0;
+            } else {
+                vendedor.ratingAverage = Number(vendedor.ratingAverage || 0);
+            }
         }
 
         // Resolução da foto do vendedor

@@ -46,7 +46,7 @@ export async function getUserProfile(userId) {
 
   return {
     ...user,
-    ratingAverage: Number(user.ratingAverage),
+    ratingAverage: Number(user.ratingCount) > 0 ? Number(user.ratingAverage) : 0,
   };
 }
 
@@ -88,7 +88,7 @@ export async function updateUserProfile(userId, updateData) {
 
   return {
     ...updatedUser,
-    ratingAverage: Number(updatedUser.ratingAverage),
+    ratingAverage: Number(updatedUser.ratingCount) > 0 ? Number(updatedUser.ratingAverage) : 0,
   };
 }
 
