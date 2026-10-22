@@ -1,36 +1,61 @@
 /**
- * ITAIM VENDE - LÓGICA DA PÁGINA DE CATEGORIA (CATEGORIA.HTML)
+ * ITAIM VENDE - LÓGICA DA PÁGINA DE CATEGORIA E RESULTADOS DE BUSCA (CATEGORIA.HTML)
+ * Suporte a busca por termo (Enter na barra de pesquisa), barra lateral de filtros e alternador grid/lista
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Obter Categoria via URL
+    // 1. Obter Parâmetros via URL
     const params = new URLSearchParams(window.location.search);
     let categoriaParam = params.get('cat') || 'todas';
+    let termoBusca = (params.get('q') || params.get('busca') || params.get('search') || '').trim();
+    const cidadeUrlParam = params.get('cid') || params.get('cidade') || params.get('city') || 'todas';
 
-    // Buscar categoria correspondente na lista única (js/categorias-dados.js)
-    const catObj = (typeof buscarCategoria === 'function') ? buscarCategoria(categoriaParam) : null;
-
-    // Normalizar categoria
+    // Elementos do DOM
     const tituloEl = document.getElementById('categoria-titulo');
     const subtituloEl = document.getElementById('categoria-subtitulo');
     const breadcrumbNome = document.getElementById('breadcrumb-categoria-nome');
     const contadorBadge = document.getElementById('categoria-contador-badge');
     const gradeProdutos = document.getElementById('grade-produtos');
-    const filtroCidade = document.getElementById('filtro-cidade');
-    const filtroOrdem = document.getElementById('filtro-ordem');
     const btnVoltar = document.getElementById('btn-voltar-categoria');
+    const formBusca = document.getElementById('form-busca');
+    const campoBusca = document.getElementById('campo-busca');
 
+    // Elementos da Barra Lateral e Header de Resultados
+    const sidebarFiltros = document.getElementById('sidebar-filtros-pesquisa');
+    const sidebarBackdrop = document.getElementById('sidebar-filtros-backdrop');
+    const btnLimparSidebar = document.getElementById('btn-limpar-filtros-sidebar');
+    const btnAbrirFiltrosMobile = document.getElementById('btn-abrir-filtros-mobile');
+    const pesquisaTituloPrincipal = document.getElementById('pesquisa-titulo-principal');
+    const pesquisaSubtituloContador = document.getElementById('pesquisa-subtitulo-contador');
+    const selectOrdemPesquisa = document.getElementById('select-ordem-pesquisa');
+    const btnViewGrid = document.getElementById('btn-view-grid');
+    const btnViewLista = document.getElementById('btn-view-lista');
+
+    // Preenche campo de busca com o termo pesquisado
+    if (campoBusca && termoBusca) {
+        campoBusca.value = termoBusca;
+    }
+
+    // Normalizar categoria
+    const catObj = (typeof buscarCategoria === 'function') ? buscarCategoria(categoriaParam) : null;
     const categoriaNomeExibicao = catObj 
         ? catObj.nome 
         : ((categoriaParam.toLowerCase() === 'todas') ? 'Todas as Categorias' : categoriaParam);
 
-    document.title = `${categoriaNomeExibicao} - Itaim Vende`;
-    if (tituloEl) tituloEl.textContent = categoriaNomeExibicao;
-    if (breadcrumbNome) breadcrumbNome.textContent = categoriaNomeExibicao;
-    if (subtituloEl) {
-        subtituloEl.textContent = (categoriaParam.toLowerCase() === 'todas')
-            ? 'Todos os anúncios à venda na região de Paulistana e cidades vizinhas'
-            : `Anúncios e ofertas na categoria ${categoriaNomeExibicao}`;
+    if (termoBusca) {
+        document.title = `Busca por "${termoBusca}" - Itaim Vende`;
+        if (tituloEl) tituloEl.textContent = `Resultados para "${termoBusca}"`;
+        if (breadcrumbNome) breadcrumbNome.textContent = `Busca: ${termoBusca}`;
+        if (subtituloEl) subtituloEl.textContent = `Mostrando anúncios encontrados para "${termoBusca}"`;
+    } else {
+        document.title = `${categoriaNomeExibicao} - Itaim Vende`;
+        if (tituloEl) tituloEl.textContent = categoriaNomeExibicao;
+        if (breadcrumbNome) breadcrumbNome.textContent = categoriaNomeExibicao;
+        if (subtituloEl) {
+            subtituloEl.textContent = (categoriaParam.toLowerCase() === 'todas')
+                ? 'Todos os anúncios à venda na região de Paulistana e cidades vizinhas'
+                : `Anúncios e ofertas na categoria ${categoriaNomeExibicao}`;
+        }
     }
 
     // Botão Voltar
@@ -42,54 +67,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 2. Carregar produtos (API com fallback local)
+    // 2. Estados de Filtragem
     let todosProdutos = [];
+    let cidadeFiltro = cidadeUrlParam;
+    let ordemFiltro = 'relevantes';
+    let modoVisualizacao = 'grid';
 
-    async function carregarProdutosCategoria() {
-        if (window.ItaimApi && typeof window.ItaimApi.produtos.listar === 'function') {
-            try {
-                const apiParams = {};
-                if (categoriaParam && categoriaParam.toLowerCase() !== 'todas') {
-                    apiParams.category = categoriaParam;
-                }
-                if (cidadeFiltro && cidadeFiltro !== 'todas') {
-                    apiParams.city = cidadeFiltro;
-                }
+    const categoriasSelecionadas = new Set();
+    const condicoesSelecionadas = new Set();
+    const cidadesSelecionadas = new Set();
+    let faixaPrecoSelecionada = 'todos';
 
-                const res = await window.ItaimApi.produtos.listar(apiParams);
-                if (res && res.success && Array.isArray(res.data)) {
-                    todosProdutos = res.data.map(p => ({
-                        ...p,
-                        id: p.id,
-                        titulo: p.titulo || p.title,
-                        preco: Number(p.preco !== undefined ? p.preco : p.price),
-                        categoria: p.categoria || (p.category ? p.category.name : 'Geral'),
-                        cidade: p.cidade || p.city || 'Paulistana',
-                        bairro: p.bairro || p.neighborhood || 'Centro',
-                        imagem: window.ItaimApi.resolverUrlImagem(p.imagem || (p.images && p.images[0]) || '')
-                    }));
-                    renderizar();
-                    return;
-                }
-            } catch (err) {
-                console.info('[Categoria] API offline ou sem resposta, utilizando base local de fallback.');
-            }
-        }
-
-        if (window.ItaimSessao && typeof window.ItaimSessao.obterTodosProdutos === 'function') {
-            todosProdutos = window.ItaimSessao.obterTodosProdutos();
-        } else {
-            if (typeof PRODUTOS_INICIAIS !== 'undefined' && Array.isArray(PRODUTOS_INICIAIS)) {
-                todosProdutos = [...PRODUTOS_INICIAIS];
-            }
-            try {
-                const produtosLocais = JSON.parse(localStorage.getItem('itaim_produtos_cadastrados') || '[]');
-                if (Array.isArray(produtosLocais)) {
-                    todosProdutos = [...produtosLocais, ...todosProdutos];
-                }
-            } catch (e) {}
-        }
-        renderizar();
+    // Se veio com categoria específica na URL, adiciona ao filtro da barra
+    if (categoriaParam && categoriaParam.toLowerCase() !== 'todas') {
+        categoriasSelecionadas.add(categoriaNomeExibicao);
+    }
+    if (cidadeUrlParam && cidadeUrlParam.toLowerCase() !== 'todas') {
+        cidadesSelecionadas.add(cidadeUrlParam);
     }
 
     // Sincronizar favoritos com localStorage
@@ -98,14 +92,11 @@ document.addEventListener('DOMContentLoaded', () => {
         favoritosSet = new Set(JSON.parse(localStorage.getItem('itaim_favoritos') || '[]').map(String));
     } catch (e) {}
 
-    // Parâmetro de Cidade vindo pela URL (ex: ?cid=Acauã ou clicado no rodapé)
-    const cidadeUrlParam = params.get('cid') || params.get('cidade') || params.get('city') || 'todas';
-    let cidadeFiltro = cidadeUrlParam;
-    if (filtroCidade && cidadeFiltro !== 'todas') {
-        filtroCidade.value = cidadeFiltro;
+    function atualizarContadorFavoritos() {
+        const badge = document.getElementById('favoritos-contador-badge');
+        if (badge) badge.textContent = favoritosSet.size;
     }
-
-    let ordemFiltro = 'recentes';
+    atualizarContadorFavoritos();
 
     function formatarPreco(val) {
         if (!val || val <= 0) {
@@ -114,11 +105,141 @@ document.addEventListener('DOMContentLoaded', () => {
         return Number(val).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     }
 
+    // Atualiza opções dinâmicas da barra lateral de filtros ("filtrar por")
+    function atualizarSidebarFiltros() {
+        const opcoesCategoriasEl = document.getElementById('sidebar-opcoes-categorias');
+        const opcoesCidadesEl = document.getElementById('sidebar-opcoes-cidades');
+
+        const contagemCat = {};
+        const contagemCid = {};
+        let countNovo = 0;
+        let countUsado = 0;
+        let countPreco50 = 0;
+        let countPreco200 = 0;
+        let countPreco500 = 0;
+        let countPreco500mais = 0;
+
+        // Base de cálculo para contadores (considera o termo de busca se ativo)
+        const baseCalculo = termoBusca 
+            ? todosProdutos.filter(p => {
+                const q = termoBusca.toLowerCase();
+                return (p.titulo && p.titulo.toLowerCase().includes(q)) ||
+                       (p.categoria && p.categoria.toLowerCase().includes(q)) ||
+                       (p.cidade && p.cidade.toLowerCase().includes(q)) ||
+                       (p.bairro && p.bairro.toLowerCase().includes(q)) ||
+                       (p.descricao && p.descricao.toLowerCase().includes(q));
+            })
+            : todosProdutos;
+
+        baseCalculo.forEach(p => {
+            const cat = p.categoria || 'Geral';
+            contagemCat[cat] = (contagemCat[cat] || 0) + 1;
+
+            const cid = p.cidade || 'Paulistana';
+            contagemCid[cid] = (contagemCid[cid] || 0) + 1;
+
+            const cond = (p.condicao || '').toLowerCase();
+            if (cond.includes('novo')) countNovo++;
+            else countUsado++;
+
+            const pr = Number(p.preco || 0);
+            if (pr > 0 && pr <= 50) countPreco50++;
+            else if (pr > 50 && pr <= 200) countPreco200++;
+            else if (pr > 200 && pr <= 500) countPreco500++;
+            else if (pr > 500) countPreco500mais++;
+        });
+
+        // Atualizar Contadores de Condição
+        const elNovo = document.getElementById('count-condicao-novo');
+        const elUsado = document.getElementById('count-condicao-usado');
+        if (elNovo) elNovo.textContent = `(${countNovo})`;
+        if (elUsado) elUsado.textContent = `(${countUsado})`;
+
+        // Atualizar Contadores de Preço
+        const elP50 = document.getElementById('count-preco-50');
+        const elP200 = document.getElementById('count-preco-200');
+        const elP500 = document.getElementById('count-preco-500');
+        const elP500m = document.getElementById('count-preco-500mais');
+        if (elP50) elP50.textContent = `(${countPreco50})`;
+        if (elP200) elP200.textContent = `(${countPreco200})`;
+        if (elP500) elP500.textContent = `(${countPreco500})`;
+        if (elP500m) elP500m.textContent = `(${countPreco500mais})`;
+
+        // Renderizar Categorias na Barra Lateral
+        if (opcoesCategoriasEl) {
+            const catsOrdenadas = Object.keys(contagemCat).sort((a, b) => contagemCat[b] - contagemCat[a]);
+            opcoesCategoriasEl.innerHTML = catsOrdenadas.map(cat => {
+                const checked = categoriasSelecionadas.has(cat) ? 'checked' : '';
+                return `
+                    <label class="filtro-checkbox-item">
+                        <div class="filtro-check-conteudo">
+                            <input type="checkbox" class="filtro-sidebar-check" name="filtro_categoria" value="${cat}" ${checked}>
+                            <span class="custom-checkbox"></span>
+                            <span class="filtro-label-texto" title="${cat}">${cat.toLowerCase()}</span>
+                        </div>
+                        <span class="filtro-contador">(${contagemCat[cat]})</span>
+                    </label>
+                `;
+            }).join('');
+
+            opcoesCategoriasEl.querySelectorAll('input[type="checkbox"]').forEach(chk => {
+                chk.addEventListener('change', (e) => {
+                    const val = e.target.value;
+                    if (e.target.checked) categoriasSelecionadas.add(val);
+                    else categoriasSelecionadas.delete(val);
+                    renderizar();
+                });
+            });
+        }
+
+        // Renderizar Cidades na Barra Lateral
+        if (opcoesCidadesEl) {
+            const cidsOrdenadas = Object.keys(contagemCid).sort((a, b) => contagemCid[b] - contagemCid[a]);
+            opcoesCidadesEl.innerHTML = cidsOrdenadas.map(cid => {
+                const checked = cidadesSelecionadas.has(cid) ? 'checked' : '';
+                return `
+                    <label class="filtro-checkbox-item">
+                        <div class="filtro-check-conteudo">
+                            <input type="checkbox" class="filtro-sidebar-check" name="filtro_cidade_sidebar" value="${cid}" ${checked}>
+                            <span class="custom-checkbox"></span>
+                            <span class="filtro-label-texto" title="${cid}">${cid.toLowerCase()}</span>
+                        </div>
+                        <span class="filtro-contador">(${contagemCid[cid]})</span>
+                    </label>
+                `;
+            }).join('');
+
+            opcoesCidadesEl.querySelectorAll('input[type="checkbox"]').forEach(chk => {
+                chk.addEventListener('change', (e) => {
+                    const val = e.target.value;
+                    if (e.target.checked) cidadesSelecionadas.add(val);
+                    else cidadesSelecionadas.delete(val);
+                    renderizar();
+                });
+            });
+        }
+    }
+
+    // 3. Renderização dos Produtos e Aplicação de Filtros
     function renderizar() {
         let lista = [...todosProdutos];
 
-        // Filtrar por categoria (se não for "todas")
-        if (categoriaParam.toLowerCase() !== 'todas') {
+        // Filtro por termo de busca (se houver)
+        if (termoBusca) {
+            const q = termoBusca.toLowerCase();
+            lista = lista.filter(p => {
+                return (p.titulo && p.titulo.toLowerCase().includes(q)) ||
+                       (p.categoria && p.categoria.toLowerCase().includes(q)) ||
+                       (p.cidade && p.cidade.toLowerCase().includes(q)) ||
+                       (p.bairro && p.bairro.toLowerCase().includes(q)) ||
+                       (p.descricao && p.descricao.toLowerCase().includes(q));
+            });
+        }
+
+        // Filtro por categorias da barra lateral
+        if (categoriasSelecionadas.size > 0) {
+            lista = lista.filter(p => p.categoria && categoriasSelecionadas.has(p.categoria));
+        } else if (categoriaParam.toLowerCase() !== 'todas' && !termoBusca) {
             if (catObj && typeof produtoPertenceCategoria === 'function') {
                 lista = lista.filter(p => produtoPertenceCategoria(p, catObj));
             } else {
@@ -126,28 +247,65 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Filtrar por cidade
-        if (cidadeFiltro !== 'todas') {
-            lista = lista.filter(p => (p.cidade || '').toLowerCase() === cidadeFiltro.toLowerCase());
+        // Filtro por cidades da barra lateral
+        if (cidadesSelecionadas.size > 0) {
+            lista = lista.filter(p => p.cidade && cidadesSelecionadas.has(p.cidade));
         }
 
-        // Ordenar
+        // Filtro por condição
+        if (condicoesSelecionadas.size > 0) {
+            lista = lista.filter(p => {
+                const cond = (p.condicao || 'usado').toLowerCase();
+                return Array.from(condicoesSelecionadas).some(c => cond.includes(c.toLowerCase()));
+            });
+        }
+
+        // Filtro por faixa de preço
+        if (faixaPrecoSelecionada !== 'todos') {
+            lista = lista.filter(p => {
+                const pr = Number(p.preco || 0);
+                if (faixaPrecoSelecionada === '0-50') return pr <= 50;
+                if (faixaPrecoSelecionada === '50-200') return pr > 50 && pr <= 200;
+                if (faixaPrecoSelecionada === '200-500') return pr > 200 && pr <= 500;
+                if (faixaPrecoSelecionada === '500+') return pr > 500;
+                return true;
+            });
+        }
+
+        // Ordenação
         if (ordemFiltro === 'menor-preco') {
             lista.sort((a, b) => (a.preco || 0) - (b.preco || 0));
         } else if (ordemFiltro === 'maior-preco') {
             lista.sort((a, b) => (b.preco || 0) - (a.preco || 0));
+        } else if (ordemFiltro === 'relevantes' && termoBusca) {
+            const q = termoBusca.toLowerCase();
+            lista.sort((a, b) => {
+                const aMatch = (a.titulo || '').toLowerCase().startsWith(q) ? 2 : ((a.titulo || '').toLowerCase().includes(q) ? 1 : 0);
+                const bMatch = (b.titulo || '').toLowerCase().startsWith(q) ? 2 : ((b.titulo || '').toLowerCase().includes(q) ? 1 : 0);
+                return bMatch - aMatch;
+            });
         } else {
-            lista.sort((a, b) => b.id - a.id);
+            lista.sort((a, b) => {
+                if (a.createdAt && b.createdAt) {
+                    return new Date(b.createdAt) - new Date(a.createdAt);
+                }
+                return (b.id || 0) > (a.id || 0) ? 1 : -1;
+            });
         }
 
-        // Atualizar badge
-        if (contadorBadge) {
-            contadorBadge.textContent = `${lista.length} ${lista.length === 1 ? 'anúncio encontrado' : 'anúncios encontrados'}`;
+        // Atualizar contadores
+        const textoContador = `${lista.length} ${lista.length === 1 ? 'produto encontrado' : 'produtos encontrados'}`;
+        if (contadorBadge) contadorBadge.textContent = textoContador;
+        if (pesquisaSubtituloContador) pesquisaSubtituloContador.textContent = textoContador;
+        if (pesquisaTituloPrincipal) {
+            pesquisaTituloPrincipal.textContent = termoBusca 
+                ? `listagem de produtos` 
+                : (categoriaNomeExibicao ? categoriaNomeExibicao.toLowerCase() : 'listagem de produtos');
         }
 
         if (lista.length === 0) {
             gradeProdutos.innerHTML = `
-                <div class="estado-vazio" style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; border-radius: 16px;">
+                <div class="estado-vazio" style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; border-radius: 16px; background: #FFFFFF; border: 1px dashed #CBD5E1; margin: 10px auto; width: 100%; max-width: 580px;">
                     <div class="anuncios-vazio-icone" style="width: 64px; height: 64px; margin: 0 auto 16px; border-radius: 50%; background: rgba(68, 189, 50, 0.12); display: inline-flex; align-items: center; justify-content: center; color: #44BD32;">
                         <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
@@ -155,10 +313,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             <line x1="12" y1="22.08" x2="12" y2="12"></line>
                         </svg>
                     </div>
-                    <h3>Nenhum anúncio encontrado</h3>
-                    <p style="color: #777; margin-top: 6px;">Não há anúncios cadastrados nesta categoria com os filtros atuais.</p>
-                    <a href="${window.ItaimRotas ? window.ItaimRotas.obterUrl('vender') : '../vender/vender.html'}" style="display: inline-block; margin-top: 18px; background: #44BD32; color: #fff; padding: 10px 22px; border-radius: 25px; text-decoration: none; font-weight: 700;">
-                        Seja o primeiro a anunciar nesta categoria!
+                    <h3 style="font-size: 20px; font-weight: 800; color: #1E293B; margin-bottom: 8px;">Nenhum produto encontrado</h3>
+                    <p style="color: #64748B; font-size: 14.5px; margin-bottom: 22px; line-height: 1.5;">Não há anúncios correspondentes com os filtros atuais. Tente buscar por outro termo ou limpe os filtros da barra lateral.</p>
+                    <a href="${window.ItaimRotas ? window.ItaimRotas.obterUrl('vender') : '../vender/vender.html'}" style="background: #44BD32; color: #FFFFFF; font-weight: 700; padding: 12px 24px; border-radius: 30px; text-decoration: none; font-size: 15px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(68,189,50,0.25);">
+                        + Anunciar Produto Agora
                     </a>
                 </div>
             `;
@@ -169,13 +327,15 @@ document.addEventListener('DOMContentLoaded', () => {
             ? window.ItaimRotas.obterAsset('assets/placeholders/produto-placeholder.svg')
             : '../../assets/placeholders/produto-placeholder.svg';
 
+        // Renderizar cards limpos (sem o botão "+")
         gradeProdutos.innerHTML = lista.map(p => {
-            const isFav = favoritosSet.has(p.id);
+            const pId = String(p.id);
+            const isFav = favoritosSet.has(pId);
             return `
-                <article class="card-produto fade-in-content" data-id="${p.id}">
+                <article class="card-produto fade-in-content" data-id="${pId}">
                     <div class="card-img-box">
                         <img src="${p.imagem}" alt="${p.titulo}" class="card-img" onerror="this.onerror=null; this.src='${placeholderSrc}'">
-                        <button type="button" class="btn-favorito ${isFav ? 'ativo' : ''}" data-id="${p.id}" aria-label="Favoritar anúncio">
+                        <button type="button" class="btn-favorito ${isFav ? 'ativo' : ''}" data-id="${pId}" aria-label="Favoritar anúncio">
                             <svg class="icone-coracao" viewBox="0 0 24 24">
                                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                             </svg>
@@ -242,28 +402,184 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function atualizarContadorFavoritos() {
-        const badge = document.getElementById('favoritos-contador-badge');
-        if (badge) badge.textContent = favoritosSet.size;
-    }
-    atualizarContadorFavoritos();
+    // 4. Carregar Produtos (API com Fallback Local)
+    async function carregarProdutosCategoria() {
+        if (window.ItaimApi && typeof window.ItaimApi.produtos.listar === 'function') {
+            try {
+                const apiParams = {};
+                if (categoriaParam && categoriaParam.toLowerCase() !== 'todas') {
+                    apiParams.category = categoriaParam;
+                }
+                if (termoBusca) {
+                    apiParams.search = termoBusca;
+                }
 
-    filtroCidade?.addEventListener('change', (e) => {
-        cidadeFiltro = e.target.value;
+                const res = await window.ItaimApi.produtos.listar(apiParams);
+                if (res && res.success && Array.isArray(res.data)) {
+                    todosProdutos = res.data.map(p => ({
+                        ...p,
+                        id: p.id,
+                        titulo: p.titulo || p.title,
+                        preco: Number(p.preco !== undefined ? p.preco : p.price),
+                        categoria: p.categoria || (p.category ? p.category.name : 'Geral'),
+                        cidade: p.cidade || p.city || 'Paulistana',
+                        bairro: p.bairro || p.neighborhood || 'Centro',
+                        imagem: window.ItaimApi.resolverUrlImagem(p.imagem || (p.images && p.images[0]) || '')
+                    }));
+                    atualizarSidebarFiltros();
+                    renderizar();
+                    return;
+                }
+            } catch (err) {
+                console.info('[Categoria] API offline ou sem resposta, utilizando base local de fallback.');
+            }
+        }
+
+        if (window.ItaimSessao && typeof window.ItaimSessao.obterTodosProdutos === 'function') {
+            todosProdutos = window.ItaimSessao.obterTodosProdutos();
+        } else {
+            if (typeof PRODUTOS_INICIAIS !== 'undefined' && Array.isArray(PRODUTOS_INICIAIS)) {
+                todosProdutos = [...PRODUTOS_INICIAIS];
+            }
+            try {
+                const produtosLocais = JSON.parse(localStorage.getItem('itaim_produtos_cadastrados') || '[]');
+                if (Array.isArray(produtosLocais)) {
+                    todosProdutos = [...produtosLocais, ...todosProdutos];
+                }
+            } catch (e) {}
+        }
+        atualizarSidebarFiltros();
         renderizar();
-        carregarProdutosCategoria();
+    }
+
+    // 5. Eventos da Barra Lateral e Header de Busca
+    // Digitação no campo de busca: NÃO filtra enquanto digita (apenas no Enter)
+    campoBusca?.addEventListener('input', (e) => {
+        if (e.target.value.trim() === '' && termoBusca) {
+            termoBusca = '';
+            try {
+                const url = new URL(window.location.href);
+                url.searchParams.delete('q');
+                window.history.pushState({}, '', url.toString());
+            } catch (err) {}
+            atualizarSidebarFiltros();
+            renderizar();
+        }
     });
 
-    filtroOrdem?.addEventListener('change', (e) => {
+    // Submissão da Busca no Enter ou clique na lupa
+    formBusca?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const query = campoBusca ? campoBusca.value.trim() : '';
+        termoBusca = query;
+
+        try {
+            const url = new URL(window.location.href);
+            if (termoBusca) {
+                url.searchParams.set('q', termoBusca);
+            } else {
+                url.searchParams.delete('q');
+            }
+            window.history.pushState({ search: termoBusca }, '', url.toString());
+        } catch (err) {}
+
+        if (termoBusca) {
+            document.title = `Busca por "${termoBusca}" - Itaim Vende`;
+            if (tituloEl) tituloEl.textContent = `Resultados para "${termoBusca}"`;
+            if (breadcrumbNome) breadcrumbNome.textContent = `Busca: ${termoBusca}`;
+            if (subtituloEl) subtituloEl.textContent = `Mostrando anúncios encontrados para "${termoBusca}"`;
+        }
+
+        atualizarSidebarFiltros();
+        renderizar();
+    });
+
+    // Alternador de Visualização: Grid vs Lista
+    btnViewGrid?.addEventListener('click', () => {
+        modoVisualizacao = 'grid';
+        gradeProdutos?.classList.remove('modo-lista');
+        btnViewGrid?.classList.add('ativo');
+        btnViewLista?.classList.remove('ativo');
+        btnViewGrid?.setAttribute('aria-pressed', 'true');
+        btnViewLista?.setAttribute('aria-pressed', 'false');
+    });
+
+    btnViewLista?.addEventListener('click', () => {
+        modoVisualizacao = 'lista';
+        gradeProdutos?.classList.add('modo-lista');
+        btnViewLista?.classList.add('ativo');
+        btnViewGrid?.classList.remove('ativo');
+        btnViewLista?.setAttribute('aria-pressed', 'true');
+        btnViewGrid?.setAttribute('aria-pressed', 'false');
+    });
+
+    // Ordenação
+    selectOrdemPesquisa?.addEventListener('change', (e) => {
         ordemFiltro = e.target.value;
         renderizar();
     });
 
-    // Exibe skeletons na grade imediatamente durante o carregamento
+    // Filtros de Condição na Sidebar
+    document.querySelectorAll('input[name="filtro_condicao"]').forEach(chk => {
+        chk.addEventListener('change', (e) => {
+            const val = e.target.value;
+            if (e.target.checked) condicoesSelecionadas.add(val);
+            else condicoesSelecionadas.delete(val);
+            renderizar();
+        });
+    });
+
+    // Filtros de Faixa de Preço na Sidebar
+    document.querySelectorAll('input[name="faixa_preco"]').forEach(rad => {
+        rad.addEventListener('change', (e) => {
+            if (e.target.checked) {
+                faixaPrecoSelecionada = e.target.value;
+                renderizar();
+            }
+        });
+    });
+
+    // Botão Limpar Filtros da Barra Lateral
+    btnLimparSidebar?.addEventListener('click', () => {
+        categoriasSelecionadas.clear();
+        condicoesSelecionadas.clear();
+        cidadesSelecionadas.clear();
+        faixaPrecoSelecionada = 'todos';
+        termoBusca = '';
+        if (campoBusca) campoBusca.value = '';
+
+        document.querySelectorAll('input[name="filtro_condicao"]').forEach(c => c.checked = false);
+        const radTodos = document.querySelector('input[name="faixa_preco"][value="todos"]');
+        if (radTodos) radTodos.checked = true;
+
+        try {
+            const url = new URL(window.location.href);
+            url.searchParams.delete('q');
+            window.history.pushState({}, '', url.toString());
+        } catch (err) {}
+
+        atualizarSidebarFiltros();
+        renderizar();
+    });
+
+    // Mobile Filtros Drawer
+    btnAbrirFiltrosMobile?.addEventListener('click', () => {
+        sidebarFiltros?.classList.add('aberto');
+        sidebarBackdrop?.classList.add('aberto');
+        document.body.style.overflow = 'hidden';
+    });
+
+    function fecharFiltrosMobile() {
+        sidebarFiltros?.classList.remove('aberto');
+        sidebarBackdrop?.classList.remove('aberto');
+        document.body.style.overflow = '';
+    }
+
+    sidebarBackdrop?.addEventListener('click', fecharFiltrosMobile);
+
+    // Inicialização da Grade com Skeleton
     if (window.ItaimSkeleton && typeof window.ItaimSkeleton.renderizarCards === 'function') {
         window.ItaimSkeleton.renderizarCards(gradeProdutos, 8);
     }
     carregarProdutosCategoria();
-
-    // Header e Menu Lateral (Drawer) são gerenciados de forma centralizada e global por sessao.js
 });

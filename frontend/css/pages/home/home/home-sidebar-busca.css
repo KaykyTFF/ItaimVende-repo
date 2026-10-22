@@ -1,0 +1,497 @@
+/* ==========================================================================
+   BARRA LATERAL DE FILTROS DE PESQUISA (ESTILO E-COMMERCE MODERNO)
+   Ativada dinamicamente quando uma busca é realizada na Home
+   ========================================================================== */
+
+/* Container de Layout com Sidebar */
+.layout-vitrine-com-sidebar {
+    display: flex;
+    align-items: flex-start;
+    gap: 32px;
+    width: 100%;
+    margin-top: 8px;
+    margin-bottom: 32px;
+}
+
+/* Área de Conteúdo à Direita */
+.area-produtos-conteudo {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+}
+
+/* Sidebar Oculta por padrão quando não há pesquisa ativa */
+.sidebar-filtros-pesquisa {
+    display: none;
+    width: 250px;
+    min-width: 230px;
+    flex-shrink: 0;
+    background: transparent;
+    padding-right: 12px;
+}
+
+/* ==========================================================================
+   MODO PESQUISA ATIVO (.modo-pesquisa-ativo)
+   ========================================================================== */
+.modo-pesquisa-ativo .secao-carrossel-wrapper,
+.modo-pesquisa-ativo .secao-categorias,
+.modo-pesquisa-ativo #barra-filtros-padrao {
+    display: none !important;
+}
+
+.modo-pesquisa-ativo .sidebar-filtros-pesquisa,
+.pagina-categoria .sidebar-filtros-pesquisa {
+    display: block;
+    animation: fadeInSidebar 0.3s ease-out;
+}
+
+.modo-pesquisa-ativo #header-pesquisa-resultados,
+.pagina-categoria #header-pesquisa-resultados {
+    display: flex !important;
+    animation: fadeInHeader 0.25s ease-out;
+}
+
+@keyframes fadeInSidebar {
+    from {
+        opacity: 0;
+        transform: translateX(-12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInHeader {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Header da Sidebar */
+.sidebar-filtros-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.sidebar-filtros-titulo {
+    font-size: 16px;
+    font-weight: 700;
+    color: #475569;
+    letter-spacing: -0.2px;
+    text-transform: lowercase;
+}
+
+.btn-limpar-filtros-sidebar {
+    background: none;
+    border: none;
+    color: #44BD32;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: background 0.2s, color 0.2s;
+}
+
+.btn-limpar-filtros-sidebar:hover {
+    background: rgba(68, 189, 50, 0.1);
+    color: #389e28;
+}
+
+/* Grupos de Filtros */
+.sidebar-filtro-grupo {
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #E2E8F0;
+}
+
+.sidebar-filtro-grupo:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.sidebar-grupo-titulo {
+    font-size: 14px;
+    font-weight: 700;
+    color: #334155;
+    margin-bottom: 14px;
+    text-transform: capitalize;
+}
+
+/* Lista de Opções / Checkboxes */
+.sidebar-grupo-opcoes {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 280px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+/* Custom Scrollbar suave para a sidebar */
+.sidebar-grupo-opcoes::-webkit-scrollbar {
+    width: 4px;
+}
+.sidebar-grupo-opcoes::-webkit-scrollbar-track {
+    background: transparent;
+}
+.sidebar-grupo-opcoes::-webkit-scrollbar-thumb {
+    background: #CBD5E1;
+    border-radius: 4px;
+}
+
+/* Item de Checkbox / Radio */
+.filtro-checkbox-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+    font-size: 13.5px;
+    color: #475569;
+    padding: 2px 0;
+    transition: color 0.15s;
+}
+
+.filtro-checkbox-item:hover {
+    color: #0F172A;
+}
+
+.filtro-check-conteudo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
+}
+
+.filtro-label-texto {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-transform: lowercase;
+}
+
+.filtro-contador {
+    font-size: 12px;
+    color: #94A3B8;
+    font-weight: 500;
+    margin-left: 8px;
+    flex-shrink: 0;
+}
+
+/* Input nativo oculto */
+.filtro-sidebar-check,
+.filtro-sidebar-radio {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+}
+
+/* Custom Box (Estilo screenshot: cantos arredondados suaves e contorno fino) */
+.custom-checkbox {
+    width: 17px;
+    height: 17px;
+    min-width: 17px;
+    border: 1.6px solid #94A3B8;
+    border-radius: 4px;
+    background-color: #FFFFFF;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.filtro-checkbox-item:hover .custom-checkbox {
+    border-color: #64748B;
+}
+
+.filtro-sidebar-check:checked + .custom-checkbox {
+    background-color: var(--primary, #44BD32);
+    border-color: var(--primary, #44BD32);
+}
+
+.filtro-sidebar-check:checked + .custom-checkbox::after {
+    content: '';
+    width: 5px;
+    height: 9px;
+    border: solid #FFFFFF;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    position: absolute;
+    top: 1px;
+}
+
+/* Custom Radio */
+.custom-radio {
+    width: 17px;
+    height: 17px;
+    min-width: 17px;
+    border: 1.6px solid #94A3B8;
+    border-radius: 50%;
+    background-color: #FFFFFF;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.filtro-sidebar-radio:checked + .custom-radio {
+    border-color: var(--primary, #44BD32);
+}
+
+.filtro-sidebar-radio:checked + .custom-radio::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background-color: var(--primary, #44BD32);
+    border-radius: 50%;
+}
+
+/* ==========================================================================
+   HEADER DE RESULTADOS DA PESQUISA (PARTE SUPERIOR)
+   ========================================================================== */
+.header-pesquisa-resultados {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.header-pesquisa-titulos {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.pesquisa-titulo-principal {
+    font-size: 16px;
+    font-weight: 700;
+    color: #334155;
+    letter-spacing: -0.2px;
+    text-transform: lowercase;
+}
+
+.pesquisa-subtitulo-contador {
+    font-size: 13.5px;
+    color: #64748B;
+    font-weight: 500;
+}
+
+/* Toolbar de Controles da Pesquisa */
+.toolbar-pesquisa-controles {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.ordenar-grupo-pesquisa {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.label-ordenar-por {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #334155;
+    text-transform: lowercase;
+    white-space: nowrap;
+}
+
+.select-ordem-pesquisa {
+    height: 36px;
+    padding: 0 32px 0 12px;
+    border-radius: 6px;
+    border: 1px solid #CBD5E1;
+    background-color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 600;
+    color: #334155;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 13px 13px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.select-ordem-pesquisa:focus {
+    border-color: var(--primary, #44BD32);
+    box-shadow: 0 0 0 2px rgba(68, 189, 50, 0.18);
+}
+
+/* Alternador de Visualização (Grid vs Lista - Verde no tom do site) */
+.visualizacao-toggle-grupo {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-toggle-view {
+    height: 34px;
+    padding: 0 14px;
+    border-radius: 20px;
+    font-size: 12.5px;
+    font-weight: 700;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    border: 1px solid #CBD5E1;
+    background-color: #FFFFFF;
+    color: #475569;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+}
+
+.btn-toggle-view:hover {
+    border-color: var(--primary, #44BD32);
+    color: var(--primary, #44BD32);
+}
+
+.btn-toggle-view.ativo {
+    background-color: var(--primary, #44BD32);
+    border-color: var(--primary, #44BD32);
+    color: #FFFFFF;
+    box-shadow: 0 2px 8px rgba(68, 189, 50, 0.28);
+}
+
+.btn-toggle-view.ativo svg {
+    fill: currentColor;
+    stroke: currentColor;
+}
+
+/* Botão Mobile para Abrir Filtros (quando a tela for pequena) */
+.btn-abrir-filtros-mobile {
+    display: none;
+    height: 36px;
+    padding: 0 14px;
+    border-radius: 20px;
+    border: 1px solid #CBD5E1;
+    background-color: #FFFFFF;
+    color: #334155;
+    font-size: 13px;
+    font-weight: 700;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+}
+
+/* ==========================================================================
+   VISUALIZAÇÃO EM MODO LISTA (.modo-lista)
+   ========================================================================== */
+.grade-produtos.modo-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.grade-produtos.modo-lista .card-produto {
+    flex-direction: row;
+    height: 150px;
+    align-items: stretch;
+}
+
+.grade-produtos.modo-lista .card-img-box {
+    width: 160px;
+    min-width: 160px;
+    height: 100%;
+    aspect-ratio: unset;
+}
+
+.grade-produtos.modo-lista .card-corpo {
+    flex: 1;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.grade-produtos.modo-lista .card-titulo {
+    font-size: 16px;
+    -webkit-line-clamp: 2;
+}
+
+.grade-produtos.modo-lista .card-rodape {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+}
+
+/* ==========================================================================
+   RESPONSIVIDADE DA SIDEBAR E DA PESQUISA
+   ========================================================================== */
+@media (max-width: 900px) {
+    .btn-abrir-filtros-mobile {
+        display: inline-flex;
+    }
+
+    .sidebar-filtros-pesquisa {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 290px;
+        height: 100vh;
+        background-color: #FFFFFF;
+        z-index: 1000;
+        padding: 24px 20px;
+        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
+        overflow-y: auto;
+        transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .sidebar-filtros-pesquisa.aberto {
+        left: 0;
+    }
+
+    .sidebar-filtros-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.45);
+        backdrop-filter: blur(2px);
+        z-index: 999;
+        display: none;
+    }
+
+    .sidebar-filtros-backdrop.aberto {
+        display: block;
+    }
+
+    .header-pesquisa-resultados {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .toolbar-pesquisa-controles {
+        justify-content: space-between;
+    }
+}

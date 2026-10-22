@@ -134,17 +134,46 @@ document.addEventListener('DOMContentLoaded', () => {
     atualizarContadorFavoritos();
 
     // ==========================================================================
-    // 3. RENDERIZAÇÃO DOS CARDS DE PRODUTOS
+    // 3. RENDERIZAÇÃO DOS CARDS DE PRODUTOS E MODO DE PESQUISA COM SIDEBAR
     // ==========================================================================
     const gradeProdutos = document.getElementById('grade-produtos');
     const contadorProdutos = document.getElementById('contador-produtos');
     const btnLimparFiltros = document.getElementById('btn-limpar-filtros');
+    const layoutVitrine = document.getElementById('layout-vitrine-com-sidebar');
+    const headerPesquisaResultados = document.getElementById('header-pesquisa-resultados');
+    const pesquisaTituloPrincipal = document.getElementById('pesquisa-titulo-principal');
+    const pesquisaSubtituloContador = document.getElementById('pesquisa-subtitulo-contador');
+    const selectOrdemPesquisa = document.getElementById('select-ordem-pesquisa');
+    const btnViewGrid = document.getElementById('btn-view-grid');
+    const btnViewLista = document.getElementById('btn-view-lista');
+    const btnLimparSidebar = document.getElementById('btn-limpar-filtros-sidebar');
+    const btnAbrirFiltrosMobile = document.getElementById('btn-abrir-filtros-mobile');
+    const sidebarFiltros = document.getElementById('sidebar-filtros-pesquisa');
+    const sidebarBackdrop = document.getElementById('sidebar-filtros-backdrop');
 
+    // Estados de filtragem
+    let modoPesquisaAtivo = false;
+    let modoVisualizacao = 'grid'; // 'grid' ou 'lista'
     let categoriaFiltro = 'todas';
     let cidadeFiltro = 'todas';
     let bairroFiltro = 'todos';
     let ordemFiltro = 'recentes';
     let termoBusca = '';
+
+    // Estados da barra lateral de filtros ("filtrar por")
+    const categoriasSelecionadas = new Set();
+    const condicoesSelecionadas = new Set();
+    const cidadesSelecionadas = new Set();
+    let faixaPrecoSelecionada = 'todos';
+    let ordemPesquisa = 'relevantes';
+
+    function ativarModoPesquisa(ativo) {
+        modoPesquisaAtivo = !!ativo;
+        document.body.classList.toggle('modo-pesquisa-ativo', modoPesquisaAtivo);
+        if (layoutVitrine) {
+            layoutVitrine.classList.toggle('modo-pesquisa-ativo', modoPesquisaAtivo);
+        }
+    }
 
     function formatarPreco(valor) {
         if (!valor || valor <= 0) {
@@ -153,37 +182,193 @@ document.addEventListener('DOMContentLoaded', () => {
         return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     }
 
+    // Atualiza opções dinâmicas da barra lateral ("filtrar por") com contagem real
+    function atualizarSidebarFiltros() {
+        const opcoesCategoriasEl = document.getElementById('sidebar-opcoes-categorias');
+        const opcoesCidadesEl = document.getElementById('sidebar-opcoes-cidades');
+
+        const contagemCat = {};
+        const contagemCid = {};
+        let countNovo = 0;
+        let countUsado = 0;
+        let countPreco50 = 0;
+        let countPreco200 = 0;
+        let countPreco500 = 0;
+        let countPreco500mais = 0;
+
+        // Base de cálculo para os contadores (considera o termo buscado se houver)
+        const baseCalculo = termoBusca
+            ? produtos.filter(p => {
+                const q = termoBusca.toLowerCase();
+                return (p.titulo && p.titulo.toLowerCase().includes(q)) ||
+                       (p.categoria && p.categoria.toLowerCase().includes(q)) ||
+                       (p.cidade && p.cidade.toLowerCase().includes(q)) ||
+                       (p.bairro && p.bairro.toLowerCase().includes(q));
+            })
+            : produtos;
+
+        baseCalculo.forEach(p => {
+            const cat = p.categoria || 'Geral';
+            contagemCat[cat] = (contagemCat[cat] || 0) + 1;
+
+            const cid = p.cidade || 'Paulistana';
+            contagemCid[cid] = (contagemCid[cid] || 0) + 1;
+
+            const cond = (p.condicao || '').toLowerCase();
+            if (cond.includes('novo')) countNovo++;
+            else countUsado++;
+
+            const pr = Number(p.preco || 0);
+            if (pr > 0 && pr <= 50) countPreco50++;
+            else if (pr > 50 && pr <= 200) countPreco200++;
+            else if (pr > 200 && pr <= 500) countPreco500++;
+            else if (pr > 500) countPreco500mais++;
+        });
+
+        // Atualizar Contadores de Condição
+        const elNovo = document.getElementById('count-condicao-novo');
+        const elUsado = document.getElementById('count-condicao-usado');
+        if (elNovo) elNovo.textContent = `(${countNovo})`;
+        if (elUsado) elUsado.textContent = `(${countUsado})`;
+
+        // Atualizar Contadores de Preço
+        const elP50 = document.getElementById('count-preco-50');
+        const elP200 = document.getElementById('count-preco-200');
+        const elP500 = document.getElementById('count-preco-500');
+        const elP500m = document.getElementById('count-preco-500mais');
+        if (elP50) elP50.textContent = `(${countPreco50})`;
+        if (elP200) elP200.textContent = `(${countPreco200})`;
+        if (elP500) elP500.textContent = `(${countPreco500})`;
+        if (elP500m) elP500m.textContent = `(${countPreco500mais})`;
+
+        // Renderizar Categorias na Barra Lateral
+        if (opcoesCategoriasEl) {
+            const catsOrdenadas = Object.keys(contagemCat).sort((a, b) => contagemCat[b] - contagemCat[a]);
+            opcoesCategoriasEl.innerHTML = catsOrdenadas.map(cat => {
+                const checked = categoriasSelecionadas.has(cat) ? 'checked' : '';
+                return `
+                    <label class="filtro-checkbox-item">
+                        <div class="filtro-check-conteudo">
+                            <input type="checkbox" class="filtro-sidebar-check" name="filtro_categoria" value="${cat}" ${checked}>
+                            <span class="custom-checkbox"></span>
+                            <span class="filtro-label-texto" title="${cat}">${cat.toLowerCase()}</span>
+                        </div>
+                        <span class="filtro-contador">(${contagemCat[cat]})</span>
+                    </label>
+                `;
+            }).join('');
+
+            opcoesCategoriasEl.querySelectorAll('input[type="checkbox"]').forEach(chk => {
+                chk.addEventListener('change', (e) => {
+                    const val = e.target.value;
+                    if (e.target.checked) categoriasSelecionadas.add(val);
+                    else categoriasSelecionadas.delete(val);
+                    renderizarVitrine();
+                });
+            });
+        }
+
+        // Renderizar Cidades na Barra Lateral
+        if (opcoesCidadesEl) {
+            const cidsOrdenadas = Object.keys(contagemCid).sort((a, b) => contagemCid[b] - contagemCid[a]);
+            opcoesCidadesEl.innerHTML = cidsOrdenadas.map(cid => {
+                const checked = cidadesSelecionadas.has(cid) ? 'checked' : '';
+                return `
+                    <label class="filtro-checkbox-item">
+                        <div class="filtro-check-conteudo">
+                            <input type="checkbox" class="filtro-sidebar-check" name="filtro_cidade_sidebar" value="${cid}" ${checked}>
+                            <span class="custom-checkbox"></span>
+                            <span class="filtro-label-texto" title="${cid}">${cid.toLowerCase()}</span>
+                        </div>
+                        <span class="filtro-contador">(${contagemCid[cid]})</span>
+                    </label>
+                `;
+            }).join('');
+
+            opcoesCidadesEl.querySelectorAll('input[type="checkbox"]').forEach(chk => {
+                chk.addEventListener('change', (e) => {
+                    const val = e.target.value;
+                    if (e.target.checked) cidadesSelecionadas.add(val);
+                    else cidadesSelecionadas.delete(val);
+                    renderizarVitrine();
+                });
+            });
+        }
+    }
+
     function renderizarVitrine() {
         if (!gradeProdutos) return;
 
-        // Filtragem
+        // Filtragem combinada
         let lista = produtos.filter(p => {
-            const matchesCategoria = (categoriaFiltro === 'todas') || 
-                (p.categoria && p.categoria.toLowerCase().includes(categoriaFiltro.toLowerCase()));
-            
-            const matchesCidade = (cidadeFiltro === 'todas') || 
-                (p.cidade && p.cidade.toLowerCase() === cidadeFiltro.toLowerCase()) ||
-                (p.cidade && cidadeFiltro && (p.cidade.toLowerCase().includes(cidadeFiltro.toLowerCase()) || cidadeFiltro.toLowerCase().includes(p.cidade.toLowerCase())));
-            
-            const matchesBairro = (bairroFiltro === 'todos') ||
-                (p.bairro && p.bairro.toLowerCase().includes(bairroFiltro.toLowerCase())) ||
-                (bairroFiltro && p.bairro && bairroFiltro.toLowerCase().includes(p.bairro.toLowerCase()));
+            // Se modo pesquisa ativo com categorias selecionadas na sidebar
+            if (modoPesquisaAtivo && categoriasSelecionadas.size > 0) {
+                if (!p.categoria || !categoriasSelecionadas.has(p.categoria)) return false;
+            } else if (!modoPesquisaAtivo && categoriaFiltro !== 'todas') {
+                if (!p.categoria || !p.categoria.toLowerCase().includes(categoriaFiltro.toLowerCase())) return false;
+            }
 
-            const matchesBusca = !termoBusca || 
-                (p.titulo && p.titulo.toLowerCase().includes(termoBusca.toLowerCase())) ||
-                (p.cidade && p.cidade.toLowerCase().includes(termoBusca.toLowerCase())) ||
-                (p.bairro && p.bairro.toLowerCase().includes(termoBusca.toLowerCase())) ||
-                (p.categoria && p.categoria.toLowerCase().includes(termoBusca.toLowerCase()));
+            // Cidades
+            if (modoPesquisaAtivo && cidadesSelecionadas.size > 0) {
+                if (!p.cidade || !cidadesSelecionadas.has(p.cidade)) return false;
+            } else if (!modoPesquisaAtivo && cidadeFiltro !== 'todas') {
+                const matchesCidade = (p.cidade && p.cidade.toLowerCase() === cidadeFiltro.toLowerCase()) ||
+                    (p.cidade && cidadeFiltro && (p.cidade.toLowerCase().includes(cidadeFiltro.toLowerCase()) || cidadeFiltro.toLowerCase().includes(p.cidade.toLowerCase())));
+                if (!matchesCidade) return false;
+            }
 
-            return matchesCategoria && matchesCidade && matchesBairro && matchesBusca;
+            // Bairro (no modo padrão Home)
+            if (!modoPesquisaAtivo && bairroFiltro !== 'todos') {
+                const matchesBairro = (p.bairro && p.bairro.toLowerCase().includes(bairroFiltro.toLowerCase())) ||
+                    (bairroFiltro && p.bairro && bairroFiltro.toLowerCase().includes(p.bairro.toLowerCase()));
+                if (!matchesBairro) return false;
+            }
+
+            // Condição (Novo vs Usado na sidebar)
+            if (modoPesquisaAtivo && condicoesSelecionadas.size > 0) {
+                const cond = (p.condicao || 'usado').toLowerCase();
+                const matchesCond = Array.from(condicoesSelecionadas).some(c => cond.includes(c.toLowerCase()));
+                if (!matchesCond) return false;
+            }
+
+            // Faixa de Preço
+            if (modoPesquisaAtivo && faixaPrecoSelecionada !== 'todos') {
+                const pr = Number(p.preco || 0);
+                if (faixaPrecoSelecionada === '0-50' && (pr <= 0 || pr > 50)) return false;
+                if (faixaPrecoSelecionada === '50-200' && (pr <= 50 || pr > 200)) return false;
+                if (faixaPrecoSelecionada === '200-500' && (pr <= 200 || pr > 500)) return false;
+                if (faixaPrecoSelecionada === '500+' && pr <= 500) return false;
+            }
+
+            // Termo de Busca
+            if (termoBusca) {
+                const q = termoBusca.toLowerCase();
+                const matchesBusca = (p.titulo && p.titulo.toLowerCase().includes(q)) ||
+                    (p.cidade && p.cidade.toLowerCase().includes(q)) ||
+                    (p.bairro && p.bairro.toLowerCase().includes(q)) ||
+                    (p.categoria && p.categoria.toLowerCase().includes(q)) ||
+                    (p.descricao && p.descricao.toLowerCase().includes(q));
+                if (!matchesBusca) return false;
+            }
+
+            return true;
         });
 
         // Ordenação
-        if (ordemFiltro === 'menor-preco') {
+        const ordemAtiva = modoPesquisaAtivo ? ordemPesquisa : ordemFiltro;
+        if (ordemAtiva === 'menor-preco') {
             lista.sort((a, b) => (a.preco || 0) - (b.preco || 0));
-        } else if (ordemFiltro === 'maior-preco') {
+        } else if (ordemAtiva === 'maior-preco') {
             lista.sort((a, b) => (b.preco || 0) - (a.preco || 0));
+        } else if (ordemAtiva === 'relevantes' && termoBusca) {
+            const q = termoBusca.toLowerCase();
+            lista.sort((a, b) => {
+                const aTitle = (a.titulo || '').toLowerCase().startsWith(q) ? 2 : ((a.titulo || '').toLowerCase().includes(q) ? 1 : 0);
+                const bTitle = (b.titulo || '').toLowerCase().startsWith(q) ? 2 : ((b.titulo || '').toLowerCase().includes(q) ? 1 : 0);
+                return bTitle - aTitle;
+            });
         } else {
+            // 'recentes'
             lista.sort((a, b) => {
                 if (a.createdAt && b.createdAt) {
                     return new Date(b.createdAt) - new Date(a.createdAt);
@@ -192,12 +377,18 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Atualizar contador
+        // Atualizar contadores
         if (contadorProdutos) {
             contadorProdutos.textContent = `(${lista.length} produto${lista.length !== 1 ? 's' : ''})`;
         }
+        if (pesquisaSubtituloContador) {
+            pesquisaSubtituloContador.textContent = `${lista.length} produto${lista.length !== 1 ? 's' : ''} encontrado${lista.length !== 1 ? 's' : ''}`;
+        }
+        if (pesquisaTituloPrincipal) {
+            pesquisaTituloPrincipal.textContent = 'listagem de produtos';
+        }
 
-        // Mostrar / ocultar botão de limpar filtros
+        // Mostrar / ocultar botão de limpar filtros no modo padrão
         if (btnLimparFiltros) {
             const filtrosAtivos = (categoriaFiltro !== 'todas') || (cidadeFiltro !== 'todas') || (bairroFiltro !== 'todos') || (termoBusca !== '');
             btnLimparFiltros.style.display = filtrosAtivos ? 'inline-flex' : 'none';
@@ -220,7 +411,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p style="color: #64748B; font-size: 14.5px; margin-bottom: 22px; line-height: 1.5;">
                         ${produtos.length === 0 
                             ? 'Ainda não há produtos à venda. Desapegue do que você não usa mais ou seja o primeiro a anunciar!' 
-                            : 'Tente buscar por outro termo ou remova os filtros selecionados.'}
+                            : 'Tente buscar por outro termo ou remova os filtros selecionados na barra lateral.'}
                     </p>
                     <a href="${window.ItaimRotas ? window.ItaimRotas.obterUrl('vender') : '../vender/vender.html'}" style="background: #44BD32; color: #FFFFFF; font-weight: 700; padding: 12px 24px; border-radius: 30px; text-decoration: none; font-size: 15px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(68,189,50,0.25);">
                         + Anunciar Produto Agora
@@ -234,7 +425,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ? window.ItaimRotas.obterAsset('assets/placeholders/produto-placeholder.svg')
             : '../../assets/placeholders/produto-placeholder.svg';
 
-        // Gerar Cards
+        // Gerar Cards com botão de favorito e botão de ação rápida vermelho "+"
         gradeProdutos.innerHTML = lista.map(p => {
             const pId = String(p.id);
             const isFav = favoritosSet.has(pId);
@@ -376,16 +567,121 @@ document.addEventListener('DOMContentLoaded', () => {
     carregarProdutosApi();
 
     // ==========================================================================
-    // 4. FILTROS E BUSCA INTERATIVA
+    // 4. FILTROS E BUSCA INTERATIVA (COM SUPORTE À SIDEBAR DE PESQUISA)
     // ==========================================================================
-    // Busca em tempo real
+    const formBusca = document.getElementById('form-busca');
     const campoBusca = document.getElementById('campo-busca');
+
+    // Campo de busca: NÃO ativa a barra de filtros enquanto o usuário estiver apenas digitando
     campoBusca?.addEventListener('input', (e) => {
-        termoBusca = e.target.value.trim();
+        // Se o usuário apagar todo o texto e não houver outros filtros ativos, restaura a vitrine padrão
+        if (e.target.value.trim() === '' && modoPesquisaAtivo && categoriasSelecionadas.size === 0 && condicoesSelecionadas.size === 0 && cidadesSelecionadas.size === 0 && faixaPrecoSelecionada === 'todos') {
+            termoBusca = '';
+            ativarModoPesquisa(false);
+            try {
+                const url = new URL(window.location.href);
+                url.searchParams.delete('q');
+                url.searchParams.delete('busca');
+                window.history.pushState({}, '', url.toString());
+            } catch (err) {}
+            atualizarSidebarFiltros();
+            renderizarVitrine();
+        }
+    });
+
+    // Submissão do formulário de busca: vai para a página de busca com os filtros apenas ao dar Enter ou clicar na lupa
+    formBusca?.addEventListener('submit', (e) => {
+        const valorDigitado = campoBusca ? campoBusca.value.trim() : '';
+        if (valorDigitado.length > 0) {
+            e.preventDefault();
+            const urlDestino = window.ItaimRotas 
+                ? window.ItaimRotas.obterUrl('categoria', `q=${encodeURIComponent(valorDigitado)}`)
+                : `../produtos/categoria.html?q=${encodeURIComponent(valorDigitado)}`;
+            window.location.href = urlDestino;
+        }
+    });
+
+    // Alternador de Visualização da Pesquisa: Grid vs Lista
+    btnViewGrid?.addEventListener('click', () => {
+        modoVisualizacao = 'grid';
+        gradeProdutos?.classList.remove('modo-lista');
+        btnViewGrid?.classList.add('ativo');
+        btnViewLista?.classList.remove('ativo');
+        btnViewGrid?.setAttribute('aria-pressed', 'true');
+        btnViewLista?.setAttribute('aria-pressed', 'false');
+    });
+
+    btnViewLista?.addEventListener('click', () => {
+        modoVisualizacao = 'lista';
+        gradeProdutos?.classList.add('modo-lista');
+        btnViewLista?.classList.add('ativo');
+        btnViewGrid?.classList.remove('ativo');
+        btnViewLista?.setAttribute('aria-pressed', 'true');
+        btnViewGrid?.setAttribute('aria-pressed', 'false');
+    });
+
+    // Ordenação da Pesquisa
+    selectOrdemPesquisa?.addEventListener('change', (e) => {
+        ordemPesquisa = e.target.value;
         renderizarVitrine();
     });
 
-    // Filtro por Categorias
+    // Filtros de Condição na Sidebar
+    document.querySelectorAll('input[name="filtro_condicao"]').forEach(chk => {
+        chk.addEventListener('change', (e) => {
+            const val = e.target.value;
+            if (e.target.checked) condicoesSelecionadas.add(val);
+            else condicoesSelecionadas.delete(val);
+            renderizarVitrine();
+        });
+    });
+
+    // Filtros de Faixa de Preço na Sidebar
+    document.querySelectorAll('input[name="faixa_preco"]').forEach(rad => {
+        rad.addEventListener('change', (e) => {
+            if (e.target.checked) {
+                faixaPrecoSelecionada = e.target.value;
+                renderizarVitrine();
+            }
+        });
+    });
+
+    // Botão Limpar Filtros da Barra Lateral
+    function limparFiltrosSidebar() {
+        categoriasSelecionadas.clear();
+        condicoesSelecionadas.clear();
+        cidadesSelecionadas.clear();
+        faixaPrecoSelecionada = 'todos';
+        termoBusca = '';
+        if (campoBusca) campoBusca.value = '';
+
+        document.querySelectorAll('input[name="filtro_condicao"]').forEach(c => c.checked = false);
+        const radTodos = document.querySelector('input[name="faixa_preco"][value="todos"]');
+        if (radTodos) radTodos.checked = true;
+
+        ativarModoPesquisa(false);
+        atualizarSidebarFiltros();
+        renderizarVitrine();
+    }
+
+    btnLimparSidebar?.addEventListener('click', limparFiltrosSidebar);
+
+    // Controles Mobile da Sidebar de Filtros
+    btnAbrirFiltrosMobile?.addEventListener('click', () => {
+        sidebarFiltros?.classList.add('aberto');
+        sidebarBackdrop?.classList.add('aberto');
+        document.body.style.overflow = 'hidden';
+    });
+
+    function fecharFiltrosMobile() {
+        sidebarFiltros?.classList.remove('aberto');
+        sidebarBackdrop?.classList.remove('aberto');
+        document.body.style.overflow = '';
+    }
+
+    sidebarBackdrop?.addEventListener('click', fecharFiltrosMobile);
+
+    // Filtro por Categorias (Círculos da Home)
     const botoesCategorias = document.querySelectorAll('.item-categoria');
     botoesCategorias.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -489,12 +785,14 @@ document.addEventListener('DOMContentLoaded', () => {
         bairroFiltro = 'todos';
         ordemFiltro = 'recentes';
         if (filtroOrdem) filtroOrdem.value = 'recentes';
+        ativarModoPesquisa(false);
         renderizarVitrine();
         carregarProdutosApi();
     });
 
     // Inicializa os bairros no carregamento da vitrine
     atualizarSelectBairros(cidadeFiltro);
+    atualizarSidebarFiltros();
 
     // Header e Menu Lateral (Drawer) são gerenciados de forma centralizada e global por sessao.js
 
@@ -517,11 +815,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Leitura automática de parâmetros da URL (ex: ?categoria=Eletrônicos)
+    // Leitura automática de parâmetros da URL (ex: ?categoria=Eletrônicos ou ?q=celular)
     try {
         const urlParams = new URLSearchParams(window.location.search);
         const catParam = urlParams.get('categoria');
-        if (catParam && typeof window.filtrarPorCategoria === 'function') {
+        const buscaParam = urlParams.get('q') || urlParams.get('busca') || urlParams.get('search');
+
+        if (buscaParam) {
+            termoBusca = buscaParam.trim();
+            if (campoBusca) campoBusca.value = termoBusca;
+            ativarModoPesquisa(true);
+            atualizarSidebarFiltros();
+            renderizarVitrine();
+        } else if (catParam && typeof window.filtrarPorCategoria === 'function') {
             setTimeout(() => {
                 window.filtrarPorCategoria(catParam);
             }, 100);

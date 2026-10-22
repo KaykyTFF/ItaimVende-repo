@@ -18,6 +18,7 @@
 @import url('./home/home-categorias.css');
 @import url('./home/home-filtros.css');
 @import url('./home/home-produtos-grid.css');
+@import url('./home/home-sidebar-busca.css');
 
 /* 5. Modais, Rodapé e Responsividade */
 @import url('./home/home-modais.css');

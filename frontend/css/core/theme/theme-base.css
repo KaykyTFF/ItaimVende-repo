@@ -519,3 +519,56 @@
 [data-theme="dark"] .produto-preco {
     color: #4ADE80 !important;
 }
+
+/* Sidebar de Filtros e Toolbar de Pesquisa */
+[data-theme="dark"] .sidebar-filtros-titulo,
+[data-theme="dark"] .sidebar-grupo-titulo,
+[data-theme="dark"] .pesquisa-titulo-principal,
+[data-theme="dark"] .label-ordenar-por {
+    color: #E2E8F0 !important;
+}
+
+[data-theme="dark"] .filtro-checkbox-item {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .filtro-checkbox-item:hover {
+    color: #F8FAFC !important;
+}
+
+[data-theme="dark"] .custom-checkbox,
+[data-theme="dark"] .custom-radio {
+    background-color: #0F1724 !important;
+    border-color: #475569 !important;
+}
+
+[data-theme="dark"] .select-ordem-pesquisa {
+    background-color: #0F1724 !important;
+    border-color: var(--border-color) !important;
+    color: #F1F5F9 !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") !important;
+}
+
+[data-theme="dark"] .btn-toggle-view,
+[data-theme="dark"] .btn-abrir-filtros-mobile {
+    background-color: #0F1724 !important;
+    border-color: var(--border-color) !important;
+    color: #CBD5E1 !important;
+}
+
+[data-theme="dark"] .btn-toggle-view.ativo {
+    background-color: #44BD32 !important;
+    border-color: #44BD32 !important;
+    color: #FFFFFF !important;
+}
+
+[data-theme="dark"] .sidebar-filtro-grupo {
+    border-bottom-color: #1E293B !important;
+}
+
+@media (max-width: 900px) {
+    [data-theme="dark"] .sidebar-filtros-pesquisa {
+        background-color: #141B26 !important;
+    }
+}
+

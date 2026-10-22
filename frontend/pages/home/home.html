@@ -41,7 +41,7 @@
 
             <!-- Centro: Barra de Pesquisa Estilo Pílula -->
             <div class="header-center">
-                <form class="busca-form" id="form-busca" role="search" action="categoria.html" method="GET">
+                <form class="busca-form" id="form-busca" role="search" action="../produtos/categoria.html" method="GET">
                     <input 
                         type="search" 
                         class="campo-busca" 
@@ -371,50 +371,210 @@
             </div>
         </section>
 
-        <!-- BARRA DE CONTROLE E FILTROS DA VITRINE -->
-        <section class="barra-filtros-vitrine">
-            <div class="titulo-vitrine-grupo">
-                <h2 class="titulo-vitrine" id="titulo-secao-produtos">Anúncios Recentes</h2>
-                <span class="contador-produtos" id="contador-produtos">(9 produtos)</span>
+        <!-- BACKDROP PARA FILTROS MOBILE -->
+        <div class="sidebar-filtros-backdrop" id="sidebar-filtros-backdrop"></div>
+
+        <!-- CONTAINER PRINCIPAL DA VITRINE COM SIDEBAR DINÂMICA DE FILTROS -->
+        <div class="layout-vitrine-com-sidebar" id="layout-vitrine-com-sidebar">
+            
+            <!-- BARRA LATERAL DE FILTROS (ESTILO E-COMMERCE MODERNO: "FILTRAR POR") -->
+            <aside class="sidebar-filtros-pesquisa" id="sidebar-filtros-pesquisa" aria-label="Filtrar por">
+                <div class="sidebar-filtros-header">
+                    <h3 class="sidebar-filtros-titulo">filtrar por</h3>
+                    <button type="button" class="btn-limpar-filtros-sidebar" id="btn-limpar-filtros-sidebar" title="Limpar todos os filtros">
+                        limpar
+                    </button>
+                </div>
+
+                <div class="sidebar-filtros-conteudo" id="sidebar-filtros-conteudo">
+                    <!-- Grupo 1: Departamento (Categorias Principais) -->
+                    <div class="sidebar-filtro-grupo" data-grupo="categoria">
+                        <h4 class="sidebar-grupo-titulo">Departamento</h4>
+                        <div class="sidebar-grupo-opcoes" id="sidebar-opcoes-categorias">
+                            <!-- Injetado dinamicamente via JS com contagem real -->
+                        </div>
+                    </div>
+
+                    <!-- Grupo 2: Condição -->
+                    <div class="sidebar-filtro-grupo" data-grupo="condicao">
+                        <h4 class="sidebar-grupo-titulo">Condição</h4>
+                        <div class="sidebar-grupo-opcoes" id="sidebar-opcoes-condicao">
+                            <label class="filtro-checkbox-item">
+                                <div class="filtro-check-conteudo">
+                                    <input type="checkbox" class="filtro-sidebar-check" name="filtro_condicao" value="Novo">
+                                    <span class="custom-checkbox"></span>
+                                    <span class="filtro-label-texto">novo</span>
+                                </div>
+                                <span class="filtro-contador" id="count-condicao-novo">(0)</span>
+                            </label>
+                            <label class="filtro-checkbox-item">
+                                <div class="filtro-check-conteudo">
+                                    <input type="checkbox" class="filtro-sidebar-check" name="filtro_condicao" value="Usado">
+                                    <span class="custom-checkbox"></span>
+                                    <span class="filtro-label-texto">usado</span>
+                                </div>
+                                <span class="filtro-contador" id="count-condicao-usado">(0)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Grupo 3: Cidades / Região -->
+                    <div class="sidebar-filtro-grupo" data-grupo="cidade">
+                        <h4 class="sidebar-grupo-titulo">Cidade</h4>
+                        <div class="sidebar-grupo-opcoes" id="sidebar-opcoes-cidades">
+                            <!-- Injetado dinamicamente via JS com contagem real -->
+                        </div>
+                    </div>
+
+                    <!-- Grupo 4: Faixa de Preço -->
+                    <div class="sidebar-filtro-grupo" data-grupo="preco">
+                        <h4 class="sidebar-grupo-titulo">Faixa de Preço</h4>
+                        <div class="sidebar-grupo-opcoes" id="sidebar-opcoes-preco">
+                            <label class="filtro-checkbox-item">
+                                <div class="filtro-check-conteudo">
+                                    <input type="radio" class="filtro-sidebar-radio" name="faixa_preco" value="todos" checked>
+                                    <span class="custom-radio"></span>
+                                    <span class="filtro-label-texto">todos os preços</span>
+                                </div>
+                            </label>
+                            <label class="filtro-checkbox-item">
+                                <div class="filtro-check-conteudo">
+                                    <input type="radio" class="filtro-sidebar-radio" name="faixa_preco" value="0-50">
+                                    <span class="custom-radio"></span>
+                                    <span class="filtro-label-texto">até R$ 50</span>
+                                </div>
+                                <span class="filtro-contador" id="count-preco-50">(0)</span>
+                            </label>
+                            <label class="filtro-checkbox-item">
+                                <div class="filtro-check-conteudo">
+                                    <input type="radio" class="filtro-sidebar-radio" name="faixa_preco" value="50-200">
+                                    <span class="custom-radio"></span>
+                                    <span class="filtro-label-texto">R$ 50 a R$ 200</span>
+                                </div>
+                                <span class="filtro-contador" id="count-preco-200">(0)</span>
+                            </label>
+                            <label class="filtro-checkbox-item">
+                                <div class="filtro-check-conteudo">
+                                    <input type="radio" class="filtro-sidebar-radio" name="faixa_preco" value="200-500">
+                                    <span class="custom-radio"></span>
+                                    <span class="filtro-label-texto">R$ 200 a R$ 500</span>
+                                </div>
+                                <span class="filtro-contador" id="count-preco-500">(0)</span>
+                            </label>
+                            <label class="filtro-checkbox-item">
+                                <div class="filtro-check-conteudo">
+                                    <input type="radio" class="filtro-sidebar-radio" name="faixa_preco" value="500+">
+                                    <span class="custom-radio"></span>
+                                    <span class="filtro-label-texto">acima de R$ 500</span>
+                                </div>
+                                <span class="filtro-contador" id="count-preco-500mais">(0)</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- ÁREA DE PRODUTOS E RESULTADOS (COLUNA PRINCIPAL) -->
+            <div class="area-produtos-conteudo" id="area-produtos-conteudo">
+
+                <!-- HEADER EXCLUSIVO QUANDO UMA PESQUISA É FEITA (ESTILO SCREENSHOT) -->
+                <div class="header-pesquisa-resultados" id="header-pesquisa-resultados" style="display: none;">
+                    <div class="header-pesquisa-titulos">
+                        <h2 class="pesquisa-titulo-principal" id="pesquisa-titulo-principal">listagem de produtos</h2>
+                        <span class="pesquisa-subtitulo-contador" id="pesquisa-subtitulo-contador">0 produtos encontrados</span>
+                    </div>
+
+                    <div class="toolbar-pesquisa-controles">
+                        <!-- Botão mobile para exibir filtros na tela pequena -->
+                        <button type="button" class="btn-abrir-filtros-mobile" id="btn-abrir-filtros-mobile">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg>
+                            Filtrar por
+                        </button>
+
+                        <!-- Ordenação da Pesquisa -->
+                        <div class="ordenar-grupo-pesquisa">
+                            <label for="select-ordem-pesquisa" class="label-ordenar-por">ordenar por:</label>
+                            <select class="select-filtro select-ordem-pesquisa" id="select-ordem-pesquisa" aria-label="Ordenar produtos da busca">
+                                <option value="relevantes">mais relevantes</option>
+                                <option value="recentes">mais recentes</option>
+                                <option value="menor-preco">menor preço</option>
+                                <option value="maior-preco">maior preço</option>
+                            </select>
+                        </div>
+
+                        <!-- Alternador de Visualização: Grid vs Lista -->
+                        <div class="visualizacao-toggle-grupo" role="group" aria-label="Visualização">
+                            <button type="button" class="btn-toggle-view ativo" id="btn-view-grid" title="Visualização em grade" aria-pressed="true">
+                                <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
+                                    <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
+                                    <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
+                                    <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
+                                    <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
+                                </svg>
+                                <span>grid</span>
+                            </button>
+                            <button type="button" class="btn-toggle-view" id="btn-view-lista" title="Visualização em lista" aria-pressed="false">
+                                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                                    <line x1="8" y1="6" x2="21" y2="6"></line>
+                                    <line x1="8" y1="12" x2="21" y2="12"></line>
+                                    <line x1="8" y1="18" x2="21" y2="18"></line>
+                                    <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                                    <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                                    <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                                </svg>
+                                <span>lista</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BARRA DE CONTROLE E FILTROS DA VITRINE (MODO PADRÃO HOME) -->
+                <section class="barra-filtros-vitrine" id="barra-filtros-padrao">
+                    <div class="titulo-vitrine-grupo">
+                        <h2 class="titulo-vitrine" id="titulo-secao-produtos">Anúncios Recentes</h2>
+                        <span class="contador-produtos" id="contador-produtos">(9 produtos)</span>
+                    </div>
+
+                    <div class="controles-filtros">
+                        <!-- Filtro por Cidade -->
+                        <select class="select-filtro" id="filtro-cidade" aria-label="Filtrar por cidade">
+                            <option value="todas">Todas as Cidades</option>
+                            <option value="Paulistana">Paulistana</option>
+                            <option value="Acauã">Acauã</option>
+                            <option value="Betânia do Piauí">Betânia do Piauí</option>
+                            <option value="Curral Novo">Curral Novo</option>
+                            <option value="Jacobina do Piauí">Jacobina do Piauí</option>
+                            <option value="Queimada Nova">Queimada Nova</option>
+                            <option value="Picos">Picos</option>
+                            <option value="Afrânio">Afrânio</option>
+                            <option value="Petrolina">Petrolina</option>
+                        </select>
+
+                        <!-- Filtro por Bairro (populado dinamicamente conforme a cidade selecionada) -->
+                        <select class="select-filtro" id="filtro-bairro" aria-label="Filtrar por bairro" disabled style="opacity: 0.6; cursor: not-allowed;">
+                            <option value="todos">Todos os Bairros</option>
+                        </select>
+
+                        <!-- Ordenação -->
+                        <select class="select-filtro" id="filtro-ordem" aria-label="Ordenar produtos">
+                            <option value="recentes">Mais recentes</option>
+                            <option value="menor-preco">Menor preço</option>
+                            <option value="maior-preco">Maior preço</option>
+                        </select>
+
+                        <button type="button" class="btn-limpar-filtros" id="btn-limpar-filtros">
+                            ✕ Limpar filtros
+                        </button>
+                    </div>
+                </section>
+
+                <!-- GRADE DE CARDS DE PRODUTOS -->
+                <section class="grade-produtos" id="grade-produtos" aria-label="Lista de produtos à venda">
+                    <!-- Os cards são injetados dinamicamente via JS com dados reais da aplicação -->
+                </section>
+
             </div>
-
-            <div class="controles-filtros">
-                <!-- Filtro por Cidade -->
-                <select class="select-filtro" id="filtro-cidade" aria-label="Filtrar por cidade">
-                    <option value="todas">Todas as Cidades</option>
-                    <option value="Paulistana">Paulistana</option>
-                    <option value="Acauã">Acauã</option>
-                    <option value="Betânia do Piauí">Betânia do Piauí</option>
-                    <option value="Curral Novo">Curral Novo</option>
-                    <option value="Jacobina do Piauí">Jacobina do Piauí</option>
-                    <option value="Queimada Nova">Queimada Nova</option>
-                    <option value="Picos">Picos</option>
-                    <option value="Afrânio">Afrânio</option>
-                    <option value="Petrolina">Petrolina</option>
-                </select>
-
-                <!-- Filtro por Bairro (populado dinamicamente conforme a cidade selecionada) -->
-                <select class="select-filtro" id="filtro-bairro" aria-label="Filtrar por bairro" disabled style="opacity: 0.6; cursor: not-allowed;">
-                    <option value="todos">Todos os Bairros</option>
-                </select>
-
-                <!-- Ordenação -->
-                <select class="select-filtro" id="filtro-ordem" aria-label="Ordenar produtos">
-                    <option value="recentes">Mais recentes</option>
-                    <option value="menor-preco">Menor preço</option>
-                    <option value="maior-preco">Maior preço</option>
-                </select>
-
-                <button type="button" class="btn-limpar-filtros" id="btn-limpar-filtros">
-                    ✕ Limpar filtros
-                </button>
-            </div>
-        </section>
-
-        <!-- GRADE DE CARDS DE PRODUTOS -->
-        <section class="grade-produtos" id="grade-produtos" aria-label="Lista de produtos à venda">
-            <!-- Os cards são injetados dinamicamente via JS com dados reais da aplicação -->
-        </section>
+        </div>
     </main>
 
     <!-- A criação de anúncios ocorre na página dedicada: vender.html -->

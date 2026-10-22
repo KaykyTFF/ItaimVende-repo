@@ -115,25 +115,36 @@
                                     CADASTRE-SE
                                 </button>
 
-                                <div class="box-visitante" style="margin-top: 10px; text-align: center;">
-                                    <a href="pages/home/home.html" class="link-continuar-visitante" id="link-continuar-visitante" style="color: #64748B; font-size: 13.5px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 6px 12px; border-radius: 8px; transition: color 0.2s ease;">
-                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                        </svg>
-                                        <span>Continuar como visitante</span>
-                                    </a>
-                                </div>
-
-                                <div class="box-modo-dev" style="margin-top: 14px; text-align: center;">
-                                    <button type="button" class="btn-modo-dev" id="btn-modo-dev" style="background: rgba(46, 125, 50, 0.08); border: 1px dashed #2e7d32; color: #1b5e20; font-size: 0.8rem; font-weight: 600; padding: 7px 14px; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; gap: 6px; width: 100%;">
-                                        <span>⚡ Modo Dev Front-End (Entrar sem Backend)</span>
-                                    </button>
+                                <!-- Login Rápido com outros aplicativos (Google, E-mail, Facebook) - Apenas símbolos centralizados -->
+                                <div class="login-social-container" id="login-social-container">
+                                    <div class="login-social-icones-centralizados">
+                                        <button type="button" class="btn-social-icone btn-social-google" id="btn-social-google" title="Entrar com Google" aria-label="Entrar com Google">
+                                            <svg viewBox="0 0 24 24" width="20" height="20" class="social-icon" aria-hidden="true">
+                                                <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+                                                <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
+                                                <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+                                                <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+                                            </svg>
+                                        </button>
+                                        <button type="button" class="btn-social-icone btn-social-email" id="btn-social-email" title="Entrar com E-mail" aria-label="Entrar com E-mail">
+                                            <svg viewBox="0 0 24 24" width="20" height="20" class="social-icon" fill="none" stroke="#0284C7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                                                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                                            </svg>
+                                        </button>
+                                        <button type="button" class="btn-social-icone btn-social-facebook" id="btn-social-facebook" title="Entrar com Facebook" aria-label="Entrar com Facebook">
+                                            <svg viewBox="0 0 24 24" width="20" height="20" class="social-icon" fill="#1877F2" aria-hidden="true">
+                                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                                            </svg>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
+                        </form>
 
-                            <!-- Feedback de Status -->
-                            <div class="status-msg" id="status-msg-login" role="alert" aria-live="polite"></div>
-                                           </div>
+                        <!-- Feedback de Status -->
+                        <div class="status-msg" id="status-msg-login" role="alert" aria-live="polite"></div>
+                    </div>
 
                     <!-- ==========================================================
                          2. SEÇÃO DE CADASTRO (WIZARD EM 4 ETAPAS DIRETAMENTE NO BLOCO)
@@ -381,6 +392,24 @@
                         </form>
                     </div>
 
+                </div>
+
+                <!-- Ações secundárias compactas (visitante e modo dev) bem no canto direito embaixo, rente à linha -->
+                <div class="box-acoes-secundarias-mini" id="box-acoes-secundarias-mini">
+                    <div class="box-visitante">
+                        <a href="pages/home/home.html" class="link-continuar-visitante" id="link-continuar-visitante" style="color: #64748B; font-size: 11px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; justify-content: flex-end; gap: 4px; padding: 2px 4px; border-radius: 4px; transition: color 0.2s ease;">
+                            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            </svg>
+                            <span>Continuar como visitante</span>
+                        </a>
+                    </div>
+
+                    <div class="box-modo-dev">
+                        <button type="button" class="btn-modo-dev" id="btn-modo-dev" style="background: rgba(46, 125, 50, 0.05); border: 1px dashed #2e7d32; color: #1b5e20; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 4px; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; gap: 4px; opacity: 0.85;">
+                            <span>⚡ Entrar sem Backend (Dev)</span>
+                        </button>
+                    </div>
                 </div>
             </section>
         </div>

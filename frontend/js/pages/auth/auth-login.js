@@ -27,13 +27,7 @@
         },
 
         processarAvisoUrl: function () {
-            try {
-                const urlParams = new URLSearchParams(window.location.search);
-                const msgParam = urlParams.get('mensagem') || urlParams.get('aviso');
-                if (msgParam) {
-                    this.exibirMensagem(decodeURIComponent(msgParam), 'info');
-                }
-            } catch (e) {}
+            // Desativado a pedido: não exibe a frase de aviso azul no rodapé
         },
 
         executarLogin: async function (e) {
@@ -211,6 +205,96 @@
                         window.location.href = destino;
                     }, 400);
                 });
+            }
+
+            // Integração dos botões de login rápido (Google, E-mail, Facebook)
+            const btnGoogle = document.getElementById('btn-social-google');
+            if (btnGoogle) {
+                btnGoogle.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.realizarLoginSocial('Google', {
+                        id: 'usr_google_' + Date.now(),
+                        nome: 'Usuário Google',
+                        name: 'Usuário Google',
+                        username: 'google_user',
+                        email: 'usuario.google@gmail.com',
+                        provider: 'google',
+                        foto: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
+                        role: 'USER'
+                    });
+                });
+            }
+
+            const btnFacebook = document.getElementById('btn-social-facebook');
+            if (btnFacebook) {
+                btnFacebook.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.realizarLoginSocial('Facebook', {
+                        id: 'usr_fb_' + Date.now(),
+                        nome: 'Usuário Facebook',
+                        name: 'Usuário Facebook',
+                        username: 'facebook_user',
+                        email: 'usuario.fb@facebook.com',
+                        provider: 'facebook',
+                        foto: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=200&q=80',
+                        role: 'USER'
+                    });
+                });
+            }
+
+            const btnEmail = document.getElementById('btn-social-email');
+            if (btnEmail) {
+                btnEmail.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const inputEmail = document.getElementById('input-email');
+                    if (inputEmail) {
+                        inputEmail.focus();
+                        inputEmail.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        inputEmail.style.transition = 'box-shadow 0.3s ease, border-color 0.3s ease';
+                        inputEmail.style.borderColor = '#0284C7';
+                        inputEmail.style.boxShadow = '0 0 0 4px rgba(2, 132, 199, 0.25)';
+                        this.exibirMensagem('Digite seu e-mail e senha para continuar.', 'info');
+                        setTimeout(() => {
+                            inputEmail.style.borderColor = '';
+                            inputEmail.style.boxShadow = '';
+                        }, 2500);
+                    }
+                });
+            }
+        },
+
+        realizarLoginSocial: function (provedor, dadosUsuario) {
+            this.exibirMensagem(`Conectando com ${provedor}...`, '');
+            const tokenSocial = `token_${provedor.toLowerCase()}_${Date.now()}`;
+
+            try {
+                localStorage.removeItem('itaim_token');
+                localStorage.removeItem('itaim_usuario_logado');
+                localStorage.removeItem('itaim_perfil_customizado');
+
+                if (window.ItaimSessao && typeof window.ItaimSessao.definirUsuarioLogado === 'function') {
+                    window.ItaimSessao.definirUsuarioLogado(dadosUsuario.email, dadosUsuario);
+                } else {
+                    localStorage.setItem('itaim_usuario_logado_email', dadosUsuario.email);
+                    localStorage.setItem('itaim_usuario_logado', JSON.stringify(dadosUsuario));
+                }
+
+                localStorage.setItem('itaim_token', tokenSocial);
+                localStorage.setItem('itaim_ultima_atividade', Date.now().toString());
+
+                this.exibirMensagem(`Conectado com sucesso via ${provedor}! Redirecionando...`, 'sucesso');
+
+                setTimeout(() => {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const returnTo = urlParams.get('returnTo');
+                    let destino = window.ItaimRotas ? window.ItaimRotas.obterUrl('home') : 'pages/home/home.html';
+                    if (returnTo && !returnTo.includes('index.html')) {
+                        destino = returnTo;
+                    }
+                    window.location.href = destino;
+                }, 400);
+            } catch (err) {
+                this.exibirMensagem(`Erro ao conectar com ${provedor}. Tente novamente.`, 'erro');
             }
         }
     };
