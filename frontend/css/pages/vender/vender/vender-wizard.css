@@ -4,139 +4,58 @@
  */
 
 /* ==========================================================================
-   1. BARRA DE PROGRESSO E INDICADORES DE ETAPAS
+   1. BARRA DE PROGRESSO LIMPA (ESTILO CADASTRAR)
    ========================================================================== */
-.wizard-passos-container {
+.vender-progresso-box {
     width: 100%;
-    margin-bottom: 28px;
+    margin-bottom: 24px;
     background: #FFFFFF;
-    border-radius: 20px;
-    padding: 18px 24px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    border-radius: 16px;
+    padding: 16px 20px;
     border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-.wizard-passos-nav {
+.wizard-info-linha {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: relative;
-    max-width: 820px;
-    margin: 0 auto;
 }
 
-/* Linha de trilha conectando as etapas */
-.wizard-trilha-bg {
-    position: absolute;
-    top: 22px;
-    left: 45px;
-    right: 45px;
-    height: 4px;
-    background-color: #E2E8F0;
-    z-index: 1;
-    border-radius: 4px;
-}
-
-.wizard-trilha-fill {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, #59AA59, #44BD32);
-    border-radius: 4px;
-    transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 0 8px rgba(89, 170, 89, 0.5);
-}
-
-/* Item de Etapa */
-.passo-item {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-    background: none;
-    border: none;
-    padding: 0;
-    outline: none;
-    transition: transform 0.2s ease;
-}
-
-.passo-item:disabled {
-    cursor: not-allowed;
-    opacity: 0.75;
-}
-
-.passo-item:hover:not(:disabled) .passo-circulo {
-    transform: scale(1.08);
-}
-
-/* Círculo do passo */
-.passo-circulo {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background-color: #FFFFFF;
-    border: 3px solid #CBD5E1;
-    color: #64748B;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 15px;
-    font-weight: 800;
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-}
-
-.passo-circulo svg {
-    width: 20px;
-    height: 20px;
-    stroke-width: 2.2;
-}
-
-/* Estado Ativo */
-.passo-item.ativo .passo-circulo {
-    border-color: #59AA59;
-    background-color: #59AA59;
-    color: #FFFFFF;
-    box-shadow: 0 0 0 5px rgba(89, 170, 89, 0.22), 0 4px 14px rgba(89, 170, 89, 0.4);
-    transform: scale(1.06);
-}
-
-/* Estado Concluído */
-.passo-item.concluido .passo-circulo {
-    border-color: #44BD32;
-    background-color: #44BD32;
-    color: #FFFFFF;
-}
-
-/* Rótulos dos passos */
-.passo-info {
-    margin-top: 8px;
-    text-align: center;
-}
-
-.passo-titulo {
-    display: block;
-    font-size: 13.5px;
-    font-weight: 700;
-    color: #475569;
-    transition: color 0.2s ease;
-}
-
-.passo-item.ativo .passo-titulo {
-    color: #1E293B;
-    font-weight: 800;
-}
-
-.passo-item.concluido .passo-titulo {
-    color: #2F855A;
-}
-
-.passo-subtitulo {
-    display: block;
+.wizard-etapa-badge {
     font-size: 11px;
-    color: #94A3B8;
-    margin-top: 1px;
+    font-weight: 800;
+    color: #489636;
+    background: rgba(72, 150, 54, 0.12);
+    padding: 4px 12px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.wizard-etapa-nome {
+    font-size: 13.5px;
+    color: #64748B;
+    font-weight: 600;
+}
+
+.wizard-barra-trilha {
+    width: 100%;
+    height: 6px;
+    background: #E2E8F0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.wizard-barra-progresso {
+    height: 100%;
+    background: #44BD32;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(68, 189, 50, 0.4);
+    transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ==========================================================================
@@ -592,33 +511,9 @@
    7. RESPONSIVIDADE DO WIZARD (MOBILE E TABLETS)
    ========================================================================== */
 @media (max-width: 768px) {
-    .wizard-passos-container {
-        padding: 14px;
-    }
-
-    .passo-circulo {
-        width: 36px;
-        height: 36px;
-        font-size: 13px;
-    }
-
-    .passo-circulo svg {
-        width: 16px;
-        height: 16px;
-    }
-
-    .passo-subtitulo {
-        display: none;
-    }
-
-    .passo-titulo {
-        font-size: 11.5px;
-    }
-
-    .wizard-trilha-bg {
-        top: 18px;
-        left: 25px;
-        right: 25px;
+    .vender-progresso-box {
+        padding: 12px 16px;
+        margin-bottom: 20px;
     }
 
     .card-etapa-wizard {

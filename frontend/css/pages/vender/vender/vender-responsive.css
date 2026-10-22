@@ -80,17 +80,15 @@
 }
 
 @media (max-width: 480px) {
-    .grid-fotos-upload {
-        grid-template-rows: repeat(3, 78px);
-        gap: 8px;
+    .galeria-fotos-vender {
+        gap: 10px;
     }
 
-    .slot-foto-principal .rotulo-slot {
-        font-size: 12px;
-    }
-
-    .slot-foto-principal .subrotulo-slot {
-        font-size: 10px;
+    .quadrado-add-foto,
+    .item-foto-preview {
+        width: 96px;
+        height: 96px;
+        border-radius: 14px;
     }
 
     .btn-anunciar-destaque {
