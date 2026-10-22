@@ -230,7 +230,7 @@
                 document.body.classList.remove('usuario-logado');
             }
 
-            // Oculta todos os botões do usuário: Meus Anúncios, Vender, Conversas, Perfil e Notificações
+            // Oculta todos os botões do usuário: Meus Anúncios, Vender, Conversas, Perfil e Notificações (header e drawer)
             const seletoresOcultar = [
                 '#link-meus-anuncios',
                 '#btn-meus-anuncios',
@@ -241,7 +241,14 @@
                 '.btn-vender-destaque:not(#btn-header-entrar)',
                 '#btn-chat',
                 '#btn-notificacoes',
-                '.perfil-wrapper'
+                '.perfil-wrapper',
+                '#drawer-link-perfil',
+                '#drawer-link-anuncios',
+                '#drawer-link-favoritos',
+                '#drawer-link-chat',
+                '#drawer-link-vender',
+                '#drawer-link-notificacoes',
+                '#drawer-link-configuracoes'
             ];
             seletoresOcultar.forEach(sel => {
                 document.querySelectorAll(sel).forEach(el => {
@@ -260,7 +267,7 @@
                     btnEntrar.title = 'Entrar na sua conta';
                     headerRight.appendChild(btnEntrar);
                 }
-                const urlLogin = window.ItaimRotas ? window.ItaimRotas.obterUrl('login') : (window.location.pathname.toLowerCase().includes('/pages/') ? '../../index.html' : './index.html');
+                const urlLogin = resolverUrlLogin();
                 btnEntrar.setAttribute('href', urlLogin);
                 btnEntrar.style.display = 'inline-flex';
             }
@@ -279,18 +286,20 @@
             const drawerEmailEl = document.getElementById('drawer-user-email');
             if (drawerEmailEl) drawerEmailEl.textContent = 'Entre para anunciar e comprar';
 
-            // Altera botão de sair para Entrar / Cadastrar
-            const urlLogin = window.ItaimRotas ? window.ItaimRotas.obterUrl('login') : '../../index.html';
+            // Altera botão de sair para Entrar
+            const urlLogin = resolverUrlLogin();
             document.querySelectorAll('.item-sair').forEach(el => {
+                el.classList.add('item-entrar');
                 el.innerHTML = `
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
                         <polyline points="10 17 15 12 10 7"></polyline>
                         <line x1="15" y1="12" x2="3" y2="12"></line>
                     </svg>
-                    <span>Entrar / Cadastrar</span>
+                    <span>Entrar</span>
                 `;
                 el.setAttribute('href', urlLogin);
+                el.title = 'Entrar na sua conta';
             });
 
             // Badges zeradas
@@ -324,7 +333,14 @@
             '.btn-vender-destaque:not(#btn-header-entrar)',
             '#btn-chat',
             '#btn-notificacoes',
-            '.perfil-wrapper'
+            '.perfil-wrapper',
+            '#drawer-link-perfil',
+            '#drawer-link-anuncios',
+            '#drawer-link-favoritos',
+            '#drawer-link-chat',
+            '#drawer-link-vender',
+            '#drawer-link-notificacoes',
+            '#drawer-link-configuracoes'
         ];
         seletoresRestaurar.forEach(sel => {
             document.querySelectorAll(sel).forEach(el => {
@@ -361,17 +377,19 @@
         const drawerEmailEl = document.getElementById('drawer-user-email');
         if (drawerEmailEl) drawerEmailEl.textContent = user.email || '';
 
-        // Restaura texto de Sair se necessário
+        // Restaura texto e ícone de Sair quando autenticado
         document.querySelectorAll('.item-sair').forEach(el => {
+            el.classList.remove('item-entrar');
             el.innerHTML = `
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                     <polyline points="16 17 21 12 16 7"></polyline>
                     <line x1="21" y1="12" x2="9" y2="12"></line>
                 </svg>
                 <span>Sair</span>
             `;
-            el.setAttribute('href', window.ItaimRotas ? window.ItaimRotas.obterUrl('login') : '../../index.html');
+            el.setAttribute('href', window.ItaimRotas ? window.ItaimRotas.obterUrl('login') : (window.location.pathname.toLowerCase().includes('/pages/') ? '../../index.html' : './index.html'));
+            el.title = 'Sair da conta';
         });
 
         // Atualizar badges dinâmicos de notificações
@@ -602,24 +620,30 @@
             const path = window.location.pathname.toLowerCase();
             document.querySelectorAll('.drawer-link').forEach(link => link.classList.remove('ativo'));
 
-            if (path.includes('meus-anuncios.html')) {
-                document.getElementById('drawer-link-anuncios')?.classList.add('ativo');
-                document.getElementById('btn-meus-anuncios-mobile')?.classList.add('ativo');
-            } else if (path.includes('perfil.html')) {
-                document.getElementById('drawer-link-perfil')?.classList.add('ativo');
-            } else if (path.includes('favoritos.html')) {
-                document.getElementById('drawer-link-favoritos')?.classList.add('ativo');
-            } else if (path.includes('vender.html')) {
-                document.getElementById('drawer-link-vender')?.classList.add('ativo');
-            } else if (path.includes('notificacoes.html')) {
-                document.getElementById('drawer-link-notificacoes')?.classList.add('ativo');
-            } else if (path.includes('conversas.html') || path.includes('chat.html')) {
-                document.getElementById('drawer-link-chat')?.classList.add('ativo');
-                document.getElementById('btn-chat')?.classList.add('ativo-icone');
-            } else if (path.includes('configuracoes.html')) {
-                document.getElementById('drawer-link-configuracoes')?.classList.add('ativo');
-            } else if (path.includes('home.html') || path.endsWith('/') || path.endsWith('index.html')) {
-                document.getElementById('drawer-link-home')?.classList.add('ativo');
+            if (!usuarioEstaAutenticado()) {
+                if (path.includes('home.html') || path.endsWith('/') || path.endsWith('index.html')) {
+                    document.getElementById('drawer-link-home')?.classList.add('ativo');
+                }
+            } else {
+                if (path.includes('meus-anuncios.html')) {
+                    document.getElementById('drawer-link-anuncios')?.classList.add('ativo');
+                    document.getElementById('btn-meus-anuncios-mobile')?.classList.add('ativo');
+                } else if (path.includes('perfil.html')) {
+                    document.getElementById('drawer-link-perfil')?.classList.add('ativo');
+                } else if (path.includes('favoritos.html')) {
+                    document.getElementById('drawer-link-favoritos')?.classList.add('ativo');
+                } else if (path.includes('vender.html')) {
+                    document.getElementById('drawer-link-vender')?.classList.add('ativo');
+                } else if (path.includes('notificacoes.html')) {
+                    document.getElementById('drawer-link-notificacoes')?.classList.add('ativo');
+                } else if (path.includes('conversas.html') || path.includes('chat.html')) {
+                    document.getElementById('drawer-link-chat')?.classList.add('ativo');
+                    document.getElementById('btn-chat')?.classList.add('ativo-icone');
+                } else if (path.includes('configuracoes.html')) {
+                    document.getElementById('drawer-link-configuracoes')?.classList.add('ativo');
+                } else if (path.includes('home.html') || path.endsWith('/') || path.endsWith('index.html')) {
+                    document.getElementById('drawer-link-home')?.classList.add('ativo');
+                }
             }
         } catch(e) {}
     }

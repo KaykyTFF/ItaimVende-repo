@@ -283,3 +283,55 @@
     border-left-color: #FF5252;
 }
 
+/* ==========================================================
+   DRAWER - MODO VISITANTE (NÃO AUTENTICADO)
+   Exibe somente Início, Categorias, Modo Escuro e Entrar
+   ========================================================== */
+html.usuario-deslogado #drawer-link-perfil,
+html.usuario-deslogado #drawer-link-anuncios,
+html.usuario-deslogado #drawer-link-favoritos,
+html.usuario-deslogado #drawer-link-chat,
+html.usuario-deslogado #drawer-link-vender,
+html.usuario-deslogado #drawer-link-notificacoes,
+html.usuario-deslogado #drawer-link-configuracoes,
+body.usuario-deslogado #drawer-link-perfil,
+body.usuario-deslogado #drawer-link-anuncios,
+body.usuario-deslogado #drawer-link-favoritos,
+body.usuario-deslogado #drawer-link-chat,
+body.usuario-deslogado #drawer-link-vender,
+body.usuario-deslogado #drawer-link-notificacoes,
+body.usuario-deslogado #drawer-link-configuracoes {
+    display: none !important;
+}
+
+.drawer-link.item-sair.item-entrar,
+html.usuario-deslogado .drawer-link.item-sair,
+body.usuario-deslogado .drawer-link.item-sair {
+    color: #44BD32 !important;
+    border-left-color: #44BD32 !important;
+    font-weight: 700;
+}
+
+.drawer-link.item-sair.item-entrar:hover,
+html.usuario-deslogado .drawer-link.item-sair:hover,
+body.usuario-deslogado .drawer-link.item-sair:hover {
+    background: rgba(68, 189, 50, 0.12) !important;
+    color: #38A529 !important;
+    border-left-color: #38A529 !important;
+}
+
+[data-theme="dark"] .drawer-link.item-sair.item-entrar,
+[data-theme="dark"] html.usuario-deslogado .drawer-link.item-sair,
+[data-theme="dark"] body.usuario-deslogado .drawer-link.item-sair {
+    color: #4ADE80 !important;
+    border-left-color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .drawer-link.item-sair.item-entrar:hover,
+[data-theme="dark"] html.usuario-deslogado .drawer-link.item-sair:hover,
+[data-theme="dark"] body.usuario-deslogado .drawer-link.item-sair:hover {
+    background: rgba(74, 222, 128, 0.12) !important;
+    color: #86EFAC !important;
+    border-left-color: #86EFAC !important;
+}
+

@@ -118,6 +118,10 @@
     document.addEventListener('click', (e) => {
         const btnSair = e.target.closest('.item-sair, #btn-sair-banner');
         if (btnSair) {
+            // Se o botão for de entrar ou o visitante não estiver autenticado, não executa logout
+            if (btnSair.classList.contains('item-entrar') || (typeof Auth.usuarioEstaAutenticado === 'function' && !Auth.usuarioEstaAutenticado())) {
+                return;
+            }
             if (typeof Auth.deslogarUsuario === 'function') {
                 Auth.deslogarUsuario();
             }
