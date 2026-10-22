@@ -24,6 +24,7 @@
         'sessao-notificacoes.js',
         'sessao-avaliacoes.js',
         'sessao-ui.js',
+        'sessao-dropdown.js',
         'sessao-orquestrador.js'
     ];
 

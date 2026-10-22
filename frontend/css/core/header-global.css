@@ -23,6 +23,9 @@
 /* 6. Sistema Global de Transições e Animações de Página */
 @import url('transicoes.css');
 
+/* 7. Sistema Global Padronizado de Dropdowns */
+@import url('dropdown-global.css');
+
 /* 7. Modal Global de Login / Cadastro para Visitantes */
 @import url('modal-auth.css');
 

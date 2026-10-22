@@ -1,0 +1,250 @@
+/**
+ * ITAIM VENDE - SISTEMA PADRONIZADO DE DROPDOWNS CUSTOMIZADOS
+ * Arquivo: frontend/css/core/dropdown-global.css
+ * 
+ * Cria um design único, consistente e elegante para todos os menus dropdown do site,
+ * com botão estilo pílula verde e menu de escolha suspenso com cantos bem arredondados.
+ */
+
+/* Oculta o select nativo original enquanto mantém acessibilidade */
+select.itaim-select-oculto {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+/* Container do Dropdown Padronizado */
+.itaim-dropdown-container {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    font-family: var(--font-main, 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif);
+    user-select: none;
+}
+
+/* Botão Estilo Pílula (Idêntico ao design do site com cantos bem arredondados) */
+.itaim-dropdown-gatilho {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    height: 40px;
+    padding: 0 16px 0 18px;
+    background-color: #FFFFFF;
+    color: #2D3748;
+    border: 1.5px solid #44BD32; /* Borda verde exatamente como na imagem enviada */
+    border-radius: 9999px; /* Formato pílula */
+    font-size: 13.5px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.itaim-dropdown-gatilho:hover {
+    border-color: #38A128;
+    color: #1A202C;
+    box-shadow: 0 3px 10px rgba(68, 189, 50, 0.18);
+}
+
+/* Estado Aberto ou Focado */
+.itaim-dropdown-container.aberto .itaim-dropdown-gatilho,
+.itaim-dropdown-gatilho:focus-visible {
+    border-color: #38A128;
+    box-shadow: 0 0 0 3px rgba(68, 189, 50, 0.22);
+    color: #1A202C;
+}
+
+/* Rótulo de texto */
+.itaim-dropdown-rotulo {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 220px;
+}
+
+/* Ícone de seta / chevron verde */
+.itaim-dropdown-seta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #44BD32;
+    transition: transform 0.24s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.itaim-dropdown-container.aberto .itaim-dropdown-seta {
+    transform: rotate(180deg);
+}
+
+/* Desabilitado */
+.itaim-dropdown-container.desabilitado {
+    opacity: 0.55;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.itaim-dropdown-container.desabilitado .itaim-dropdown-gatilho {
+    cursor: not-allowed;
+    border-color: #CBD5E1;
+    box-shadow: none;
+}
+
+/* ==========================================================================
+   PARTE DE ESCOLHER: MENU SUSPENSO COM CANTOS BEM ARREDONDADOS
+   ========================================================================== */
+.itaim-dropdown-painel {
+    position: absolute;
+    top: calc(100% + 7px);
+    left: 0;
+    min-width: 100%;
+    width: max-content;
+    max-width: 290px;
+    background-color: #FFFFFF;
+    border: 1.5px solid #44BD32; /* Borda verde consistente com o botão */
+    border-radius: 18px; /* Cantos bem arredondados como solicitado */
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.12), 0 4px 14px rgba(68, 189, 50, 0.08);
+    padding: 7px;
+    z-index: 1000;
+    max-height: 270px;
+    overflow-y: auto;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px) scale(0.97);
+    transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+                visibility 0.2s;
+    pointer-events: none;
+}
+
+/* Abre o painel */
+.itaim-dropdown-container.aberto .itaim-dropdown-painel {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+/* Scrollbar fina e arredondada no painel de opções */
+.itaim-dropdown-painel::-webkit-scrollbar {
+    width: 5px;
+}
+
+.itaim-dropdown-painel::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 8px 0;
+}
+
+.itaim-dropdown-painel::-webkit-scrollbar-thumb {
+    background-color: #CBD5E1;
+    border-radius: 6px;
+}
+
+.itaim-dropdown-painel::-webkit-scrollbar-thumb:hover {
+    background-color: #94A3B8;
+}
+
+/* Lista de Opções */
+.itaim-dropdown-lista {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+/* Cada Item de Opção com Cantos Arredondados */
+.itaim-dropdown-opcao {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 9px 14px;
+    border-radius: 12px; /* Cantos arredondados na escolha */
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #334155;
+    cursor: pointer;
+    transition: background-color 0.16s ease, color 0.16s ease, transform 0.16s ease;
+}
+
+.itaim-dropdown-opcao:hover {
+    background-color: rgba(68, 189, 50, 0.09);
+    color: #2E7D32;
+    transform: translateX(3px);
+}
+
+/* Opção Selecionada (Destaque em Verde) */
+.itaim-dropdown-opcao.selecionada {
+    background-color: rgba(68, 189, 50, 0.14);
+    color: #2E7D32;
+    font-weight: 700;
+}
+
+/* Ícone de Marcação (Checkmark) verde */
+.itaim-dropdown-check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #44BD32;
+    opacity: 0;
+    transition: opacity 0.16s ease;
+}
+
+.itaim-dropdown-opcao.selecionada .itaim-dropdown-check {
+    opacity: 1;
+}
+
+/* ==========================================================================
+   SUPORTE AO MODO ESCURO (DARK THEME)
+   ========================================================================== */
+[data-theme="dark"] .itaim-dropdown-gatilho {
+    background-color: #1F2831;
+    color: #E2E8F0;
+    border-color: #334155;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="dark"] .itaim-dropdown-gatilho:hover,
+[data-theme="dark"] .itaim-dropdown-container.aberto .itaim-dropdown-gatilho {
+    border-color: #44BD32;
+    color: #FFFFFF;
+    box-shadow: 0 0 0 3px rgba(68, 189, 50, 0.22);
+}
+
+[data-theme="dark"] .itaim-dropdown-painel {
+    background-color: #1F2831;
+    border-color: rgba(68, 189, 50, 0.45);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.45);
+}
+
+[data-theme="dark"] .itaim-dropdown-opcao {
+    color: #CBD5E1;
+}
+
+[data-theme="dark"] .itaim-dropdown-opcao:hover {
+    background-color: rgba(68, 189, 50, 0.16);
+    color: #4ADE80;
+}
+
+[data-theme="dark"] .itaim-dropdown-opcao.selecionada {
+    background-color: rgba(68, 189, 50, 0.24);
+    color: #4ADE80;
+}
+
+[data-theme="dark"] .itaim-dropdown-painel::-webkit-scrollbar-thumb {
+    background-color: #475569;
+}
