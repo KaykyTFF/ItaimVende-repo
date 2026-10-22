@@ -176,3 +176,97 @@
     line-height: 1.4;
 }
 
+/* ==========================================================================
+   MENU DE AÇÕES DA AVALIAÇÃO (3 PONTINHOS - EDITAR / EXCLUIR)
+   ========================================================================== */
+.avaliacao-menu-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.btn-review-menu {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 8px;
+    color: #94A3B8;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.btn-review-menu:hover,
+.btn-review-menu.ativo {
+    background: rgba(148, 163, 184, 0.15);
+    color: #44BD32;
+}
+
+.dropdown-review-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    margin-top: 6px;
+    background: #1E293B;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.45), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+    min-width: 135px;
+    z-index: 100;
+    overflow: hidden;
+}
+
+.dropdown-review-menu.aberto {
+    display: block;
+}
+
+.dropdown-review-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: transparent;
+    border: none;
+    color: #F8FAFC;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.dropdown-review-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.dropdown-review-item.excluir {
+    color: #EF4444;
+    border-top: 1px solid #334155;
+}
+
+.dropdown-review-item.excluir:hover {
+    background: rgba(239, 68, 68, 0.12);
+}
+
+/* Modo Edição Inline da Avaliação */
+.box-edicao-inline-avaliacao {
+    background: rgba(15, 23, 42, 0.04);
+    border: 1px solid #CBD5E1;
+    border-radius: 12px;
+    padding: 14px;
+    margin-top: 8px;
+}
+
+[data-theme="dark"] .box-edicao-inline-avaliacao {
+    background: rgba(15, 23, 42, 0.6);
+    border-color: #334155;
+}
+
+[data-theme="dark"] .dropdown-review-menu {
+    background: #0F172A;
+    border-color: #1E293B;
+}
+

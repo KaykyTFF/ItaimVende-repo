@@ -60,6 +60,34 @@
                 headers: getCore().obterHeaders(true),
                 body: JSON.stringify({ reply })
             });
+        },
+
+        /**
+         * Atualiza uma avaliação existente pelo autor.
+         * Rota: PUT /api/v1/reviews/:id
+         * Requer autenticação (token JWT).
+         * @param {string} reviewId - ID da avaliação
+         * @param {{ rating: number, comment: string }} dados
+         */
+        async editar(reviewId, dados) {
+            return getCore().requisicao(`/reviews/${encodeURIComponent(reviewId)}`, {
+                method: 'PUT',
+                headers: getCore().obterHeaders(true),
+                body: JSON.stringify(dados)
+            });
+        },
+
+        /**
+         * Exclui uma avaliação feita pelo autor.
+         * Rota: DELETE /api/v1/reviews/:id
+         * Requer autenticação (token JWT).
+         * @param {string} reviewId - ID da avaliação
+         */
+        async excluir(reviewId) {
+            return getCore().requisicao(`/reviews/${encodeURIComponent(reviewId)}`, {
+                method: 'DELETE',
+                headers: getCore().obterHeaders(true)
+            });
         }
     };
 
