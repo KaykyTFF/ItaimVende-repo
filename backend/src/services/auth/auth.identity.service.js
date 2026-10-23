@@ -76,7 +76,7 @@ export async function registerUser({ name, username, email, password, phone, cit
   });
 
   const token = jwt.sign(
-    { userId: newUser.id, role: newUser.role },
+    { userId: newUser.id, id: newUser.id, role: newUser.role, email: newUser.email, name: newUser.name },
     ENV.JWT_SECRET,
     { expiresIn: ENV.JWT_EXPIRES_IN }
   );
@@ -115,7 +115,7 @@ export async function loginUser({ email, password }) {
   }).catch(() => {});
 
   const token = jwt.sign(
-    { userId: user.id, role: user.role },
+    { userId: user.id, id: user.id, role: user.role, email: user.email, name: user.name },
     ENV.JWT_SECRET,
     { expiresIn: ENV.JWT_EXPIRES_IN }
   );

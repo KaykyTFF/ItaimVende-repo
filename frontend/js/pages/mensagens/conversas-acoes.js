@@ -129,7 +129,8 @@
 
                 if (dados.isTyping) {
                     if (indicadorEl) indicadorEl.style.display = 'flex';
-                    if (textoEl) textoEl.textContent = `${dados.userName || 'O vendedor'} está digitando...`;
+                    const nomeExibicao = dados.userName || dom.headerNome?.textContent || 'Contato';
+                    if (textoEl) textoEl.textContent = `${nomeExibicao} está digitando...`;
                     if (headerStatusEl) {
                         if (!headerStatusEl.dataset.original) {
                             headerStatusEl.dataset.original = headerStatusEl.textContent;

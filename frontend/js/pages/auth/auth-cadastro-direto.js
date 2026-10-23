@@ -112,7 +112,8 @@
                 if (window.ItaimApi && window.ItaimApi.auth && typeof window.ItaimApi.auth.registrar === 'function') {
                     resposta = await window.ItaimApi.auth.registrar(payload);
                 } else {
-                    const res = await fetch('http://localhost:3000/api/v1/auth/register', {
+                    const apiBase = window.ItaimApiCore?.API_BASE_URL || '/api/v1';
+                    const res = await fetch(`${apiBase}/auth/register`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)

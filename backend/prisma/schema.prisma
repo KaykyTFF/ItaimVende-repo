@@ -199,8 +199,14 @@ model Product {
   updatedAt       DateTime         @updatedAt
   deletedAt       DateTime?
 
+  // Índices de Alta Performance para Consultas e Vitrine (<20ms)
+  @@index([status, createdAt(sort: Desc)])
+  @@index([city, categoryId])
+  @@index([status, city])
+  @@index([status, categoryId])
+  @@index([status, isFeatured, createdAt(sort: Desc)])
   @@index([status, city, categoryId, createdAt(sort: Desc)])
-  @@index([sellerId])
+  @@index([sellerId, status])
   @@index([slug])
   @@index([price])
 }

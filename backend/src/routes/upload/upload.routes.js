@@ -15,7 +15,7 @@ function handleMulterError(multerUpload) {
       if (err) {
         if (err instanceof multer.MulterError) {
           if (err.code === 'LIMIT_FILE_SIZE') {
-            return next(new AppError('A imagem excede o limite máximo permitido de 5MB.', 400));
+            return next(new AppError('A imagem excede o limite máximo permitido de 10MB.', 400));
           }
           if (err.code === 'LIMIT_FILE_COUNT') {
             return next(new AppError('Você pode enviar no máximo 6 fotos por vez.', 400));

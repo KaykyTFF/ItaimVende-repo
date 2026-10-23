@@ -120,30 +120,69 @@ export async function getProducts(query = {}) {
 
   const andConditions = [];
 
-  // 1. Filtro textual no título ou descrição
+  // 1. Filtro textual com suporte a unaccent no PostgreSQL (insensível a acentos e maiúsculas)
   if (search && search.trim()) {
     const termo = search.trim();
-    andConditions.push({
-      OR: [
-        { title: { contains: termo, mode: 'insensitive' } },
-        { description: { contains: termo, mode: 'insensitive' } },
-      ],
-    });
+    try {
+      // Consulta otimizada diretamente no PostgreSQL via unaccent
+      const matching = await prisma.$queryRaw`
+        SELECT p.id
+        FROM "Product" p
+        LEFT JOIN "Category" c ON p."categoryId" = c.id
+        WHERE (
+          unaccent_text(lower(p.title)) LIKE unaccent_text(lower(${'%' + termo + '%'}))
+          OR unaccent_text(lower(p.description)) LIKE unaccent_text(lower(${'%' + termo + '%'}))
+          OR unaccent_text(lower(c.name)) LIKE unaccent_text(lower(${'%' + termo + '%'}))
+        )
+      `;
+      const ids = matching.map((m) => m.id);
+      andConditions.push({ id: { in: ids } });
+    } catch (unaccentErr) {
+      // Fallback seguro caso o banco de dados não possua unaccent
+      andConditions.push({
+        OR: [
+          { title: { contains: termo, mode: 'insensitive' } },
+          { description: { contains: termo, mode: 'insensitive' } },
+        ],
+      });
+    }
   }
 
-  // 2. Filtro estrito de Categoria
+  // 2. Filtro estrito de Categoria (com tolerância a acentos)
   if (categoryId) {
     where.categoryId = parseInt(categoryId, 10);
   } else if (category && category !== 'todas' && category !== 'todos') {
-    const cat = await prisma.category.findFirst({
-      where: {
-        OR: [
-          { slug: category.toLowerCase() },
-          { name: { contains: category, mode: 'insensitive' } },
-        ],
-      },
-    });
-    if (cat) where.categoryId = cat.id;
+    try {
+      const catMatches = await prisma.$queryRaw`
+        SELECT id FROM "Category"
+        WHERE unaccent_text(lower(name)) LIKE unaccent_text(lower(${'%' + category + '%'}))
+           OR slug = ${category.toLowerCase()}
+        LIMIT 1
+      `;
+      if (catMatches.length > 0) {
+        where.categoryId = catMatches[0].id;
+      } else {
+        const cat = await prisma.category.findFirst({
+          where: {
+            OR: [
+              { slug: category.toLowerCase() },
+              { name: { contains: category, mode: 'insensitive' } },
+            ],
+          },
+        });
+        if (cat) where.categoryId = cat.id;
+      }
+    } catch {
+      const cat = await prisma.category.findFirst({
+        where: {
+          OR: [
+            { slug: category.toLowerCase() },
+            { name: { contains: category, mode: 'insensitive' } },
+          ],
+        },
+      });
+      if (cat) where.categoryId = cat.id;
+    }
   }
 
   // 3. Filtro avançado por Cidade do Vale do Itaim e cidades vizinhas (suporta city e cidade)

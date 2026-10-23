@@ -33,6 +33,9 @@ if (!process.env.DATABASE_URL || process.env.DATABASE_URL.trim() === '') {
   process.env.DATABASE_URL = DEFAULT_DATABASE_URL;
 }
 
+// Configuração do Supabase Storage e Otimização de Imagens
+const DEFAULT_SUPABASE_URL = 'https://pgrznndtajjzpwqgtkkz.supabase.co';
+
 export const ENV = {
   PORT: process.env.PORT || 3000,
   NODE_ENV: process.env.NODE_ENV || 'development',
@@ -40,4 +43,16 @@ export const ENV = {
   JWT_SECRET: process.env.JWT_SECRET || 'itaim_vende_super_segredo_jwt_auth_chave_2026',
   JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || '2h',
   CORS_ORIGIN: process.env.CORS_ORIGIN || '*',
+
+  // Supabase Storage & Armazenamento em Nuvem
+  SUPABASE_URL: process.env.SUPABASE_URL || DEFAULT_SUPABASE_URL,
+  SUPABASE_KEY: process.env.SUPABASE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || '',
+  SUPABASE_BUCKET: process.env.SUPABASE_BUCKET || 'marketplace',
+  STORAGE_PROVIDER: process.env.STORAGE_PROVIDER || (process.env.SUPABASE_KEY ? 'supabase' : 'local'),
+
+  // Otimização e Compressão de Fotos com Sharp
+  IMAGE_OPTIMIZATION_ENABLED: process.env.IMAGE_OPTIMIZATION_ENABLED !== 'false',
+  IMAGE_MAX_WIDTH: parseInt(process.env.IMAGE_MAX_WIDTH || '1600', 10),
+  IMAGE_QUALITY: parseInt(process.env.IMAGE_QUALITY || '82', 10),
 };
+

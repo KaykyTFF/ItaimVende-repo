@@ -104,7 +104,7 @@ export async function startTunnel() {
 
   try {
     tunnelProcess = spawn('cloudflared', args, {
-      shell: true,
+      shell: false,
       detached: false,
       windowsHide: true,
     });

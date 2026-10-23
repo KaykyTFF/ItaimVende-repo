@@ -96,7 +96,14 @@
                 }
             }
 
-            this.meuUserId = this.usuarioLogado?.id || null;
+            this.meuUserId = this.usuarioLogado?.id || this.usuarioLogado?.userId || null;
+            if (!this.meuUserId && this.token) {
+                try {
+                    const payloadBase64 = this.token.split('.')[1];
+                    const decodedToken = JSON.parse(atob(payloadBase64));
+                    this.meuUserId = decodedToken?.userId || decodedToken?.id || null;
+                } catch (e) {}
+            }
 
             this.STORAGE_KEY_LISTA = `itaim_chat_conversas_${this.meuUserId || 'anon'}`;
             this.STORAGE_KEY_ATIVA = `itaim_chat_ativa_${this.meuUserId || 'anon'}`;

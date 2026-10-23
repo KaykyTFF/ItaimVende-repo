@@ -4,6 +4,7 @@ import { performance } from 'perf_hooks';
 import prisma from '../../config/prisma.js';
 import { ENV } from '../../config/env.js';
 import { UPLOAD_DIR, UPLOAD_PERFIL_DIR, UPLOAD_VENDAS_DIR } from '../../config/upload.js';
+import { storageAdapter } from '../../adapters/storage/index.js';
 
 function humanizarTempo(segundos) {
   const d = Math.floor(segundos / (3600 * 24));
@@ -148,14 +149,21 @@ export async function getSystemOverview(serverBootId = 'boot_unknown') {
     }
   }
 
-  // Estatísticas de armazenamento
+  // Estatísticas de armazenamento (Nuvem e Disco Local)
   const storageUploads = obterEstatisticasPasta(UPLOAD_DIR);
   const storagePerfil = obterEstatisticasPasta(UPLOAD_PERFIL_DIR);
   const storageVendas = obterEstatisticasPasta(UPLOAD_VENDAS_DIR);
 
-  const storageStatus = (storageUploads.writable && storagePerfil.writable && storageVendas.writable)
+  let storageHealth;
+  try {
+    storageHealth = await storageAdapter.healthCheck();
+  } catch (err) {
+    storageHealth = { status: 'warning', message: err.message, provider: storageAdapter.provider };
+  }
+
+  const storageStatus = storageHealth.status === 'online'
     ? 'online'
-    : 'warning';
+    : (storageUploads.writable && storagePerfil.writable ? 'online' : 'warning');
 
   // Métricas do processo Node.js
   const uptimeSeconds = Math.floor(process.uptime());
@@ -189,6 +197,16 @@ export async function getSystemOverview(serverBootId = 'boot_unknown') {
     },
     storage: {
       status: storageStatus,
+      provider: storageAdapter.provider,
+      providerName: storageAdapter.provider === 'supabase' ? 'Supabase Storage (Nuvem)' : 'Local Disk Storage (/uploads/)',
+      health: storageHealth,
+      optimizer: {
+        engine: 'sharp',
+        format: 'webp',
+        enabled: ENV.IMAGE_OPTIMIZATION_ENABLED,
+        maxWidth: ENV.IMAGE_MAX_WIDTH,
+        quality: ENV.IMAGE_QUALITY,
+      },
       totalFiles: storageUploads.count + storagePerfil.count + storageVendas.count,
       totalSizeMb: (
         parseFloat(storageUploads.sizeMb) +
@@ -291,36 +309,29 @@ export async function runSelfDiagnostics() {
     });
   }
 
-  // Teste 4: Permissões de Gravação e Leitura no Disco (Uploads)
+  // Teste 4: Armazenamento em Nuvem / Disco (Storage Adapter & Sharp WebP)
   const t4Start = performance.now();
   try {
+    const storageHealth = await storageAdapter.healthCheck();
     const perfilCheck = obterEstatisticasPasta(UPLOAD_PERFIL_DIR);
     const vendasCheck = obterEstatisticasPasta(UPLOAD_VENDAS_DIR);
     const t4Time = Math.round(performance.now() - t4Start);
 
-    if (perfilCheck.writable && vendasCheck.writable) {
-      tests.push({
-        id: 'storage_check',
-        name: 'Pastas de Upload (Perfil e Vendas)',
-        category: 'storage',
-        status: 'pass',
-        durationMs: t4Time,
-        message: `Diretórios ativos e com permissão total de escrita/leitura.`,
-      });
-    } else {
-      tests.push({
-        id: 'storage_check',
-        name: 'Pastas de Upload (Perfil e Vendas)',
-        category: 'storage',
-        status: 'fail',
-        durationMs: t4Time,
-        message: 'Permissões insuficientes para gravação na pasta de uploads.',
-      });
-    }
+    const isHealthy = storageHealth.status === 'online' || (perfilCheck.writable && vendasCheck.writable);
+
+    tests.push({
+      id: 'storage_check',
+      name: `Armazenamento (${storageAdapter.provider === 'supabase' ? 'Supabase Storage' : 'Disco Local'} & Sharp WebP)`,
+      category: 'storage',
+      status: isHealthy ? 'pass' : 'fail',
+      durationMs: t4Time,
+      message: `${storageHealth.message} Compressão WebP com Sharp ativa.`,
+      details: storageHealth.details,
+    });
   } catch (err) {
     tests.push({
       id: 'storage_check',
-      name: 'Pastas de Upload (Perfil e Vendas)',
+      name: 'Armazenamento & Sharp WebP',
       category: 'storage',
       status: 'fail',
       durationMs: Math.round(performance.now() - t4Start),

@@ -41,11 +41,28 @@ export function initSocketServer(httpServer) {
       }
 
       const decoded = jwt.verify(token, ENV.JWT_SECRET);
+      const uid = decoded.userId || decoded.id;
+      if (!uid) {
+        socket.user = null;
+        return next();
+      }
+
+      // Busca dados essenciais do usuário no banco para garantir status ativo e nome atualizado
+      const user = await prisma.user.findUnique({
+        where: { id: uid },
+        select: { id: true, name: true, email: true, role: true, status: true },
+      });
+
+      if (!user || user.status === 'BANNED' || user.status === 'SUSPENDED') {
+        socket.user = null;
+        return next();
+      }
+
       socket.user = {
-        id: decoded.id,
-        role: decoded.role,
-        email: decoded.email,
-        name: decoded.name || 'Usuário',
+        id: user.id,
+        role: user.role,
+        email: user.email,
+        name: user.name || decoded.name || 'Usuário',
       };
       return next();
     } catch (err) {

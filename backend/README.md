@@ -140,18 +140,44 @@ O servidor estará ouvindo em: `http://localhost:3000`
 
 ---
 
+---
+
+## ☁️ Armazenamento em Nuvem e Otimização de Imagens (Sharp + Supabase Storage)
+
+O sistema conta com um **Storage Adapter Pattern** desacoplado e compressão inteligente em tempo de execução:
+
+1. **Otimização Inteligente com Sharp (`.webp`):**
+   - Reduz imagens pesadas de smartphones (3 a 5MB) para arquivos ultraotimizados de ~80 a 250KB (economia média de 75% a 93%).
+   - Auto-rotação via flags EXIF de fotos de celulares.
+   - Redimensionamento proporcional (máx. 1600px para produtos, 600px para avatares).
+   - Conversão automática para formato `.webp` com controle de qualidade sRGB.
+
+2. **Supabase Storage Adapter:**
+   - Envia arquivos diretamente para o bucket público do Supabase (`marketplace`).
+   - Salva a URL pública definitiva no banco de dados.
+   - Ideal para deploys serverless/efêmeros (Render, Railway, Fly.io, Vercel).
+   - **Fallback Automático**: Se `SUPABASE_KEY` não for informada no ambiente local, o sistema ativa automaticamente o `LocalStorageAdapter` (salvando em `uploads/`), garantindo que o desenvolvimento nunca quebre.
+
+### Variáveis no `.env`:
+```env
+SUPABASE_URL="https://pgrznndtajjzpwqgtkkz.supabase.co"
+SUPABASE_KEY="sua_chave_anon_ou_service_role"
+SUPABASE_BUCKET="marketplace"
+STORAGE_PROVIDER="supabase"
+IMAGE_OPTIMIZATION_ENABLED="true"
+IMAGE_MAX_WIDTH="1600"
+IMAGE_QUALITY="82"
+```
+
+---
+
 ## 🚀 Como Colocar no Ar (Produção)
 
-1. **Crie um Banco PostgreSQL gratuito** no [Neon.tech](https://neon.tech) ou [Supabase](https://supabase.com).
-2. No arquivo `prisma/schema.prisma`, altere o datasource:
-   ```prisma
-   datasource db {
-     provider = "postgresql"
-     url      = env("DATABASE_URL")
-   }
-   ```
+1. **Banco PostgreSQL Supabase:** Já configurado nativamente com a pooler URL.
+2. **Supabase Storage:** Adicione `SUPABASE_KEY` no painel da hospedagem (ex: Render/Railway).
 3. Suba o código no **GitHub**.
 4. Crie um Web Service no [Render.com](https://render.com) ou [Railway.app](https://railway.app):
    - **Build Command**: `npm install && npx prisma db push && npm run seed`
    - **Start Command**: `npm start`
-   - Configure a variável `DATABASE_URL` com a URL do seu PostgreSQL da nuvem e defina `JWT_SECRET`.
+   - Configure as variáveis de ambiente baseadas no `.env.example`.
+

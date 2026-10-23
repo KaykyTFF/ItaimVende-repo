@@ -27,6 +27,7 @@ import systemRoutes from './routes/system/index.js';
 import addressRoutes from './routes/address/index.js';
 import notificationRoutes from './routes/notification/index.js';
 import { UPLOAD_DIR, UPLOAD_PERFIL_DIR, UPLOAD_VENDAS_DIR } from './config/upload.js';
+import { storageAdapter } from './adapters/storage/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -237,13 +238,25 @@ const server = httpServer.listen(PORT, () => {
   console.log(`🚀 Servidor Itaim Vende Ativo na Porta: ${PORT}`);
   console.log(`🌐 Healthcheck: http://localhost:${PORT}/api/v1/health`);
   console.log(`📦 Produtos:    http://localhost:${PORT}/api/v1/products`);
+  console.log(`☁️ Storage:     ${storageAdapter.provider === 'supabase' && storageAdapter.isConfigured ? `Supabase Cloud Storage (Bucket: "${ENV.SUPABASE_BUCKET}")` : 'Local Disk Storage (/uploads/) [Fallback/Dev]'}`);
+  console.log(`🖼️ Otimizador:  Sharp WebP Converter (Max: ${ENV.IMAGE_MAX_WIDTH}px, Qualidade: ${ENV.IMAGE_QUALITY}%)`);
   console.log(`🔒 Modo:        ${ENV.NODE_ENV}`);
   console.log(`=========================================`);
 
-  // Teste de integridade do Banco de Dados no boot
+  // Teste de integridade do Banco de Dados no boot e garantia do unaccent
   prisma.$queryRaw`SELECT 1`
-    .then(() => {
+    .then(async () => {
       console.log(`✅ Banco de Dados (Supabase PostgreSQL): CONECTADO E RESPONDENDO`);
+      try {
+        await prisma.$executeRawUnsafe('CREATE EXTENSION IF NOT EXISTS unaccent;');
+        await prisma.$executeRawUnsafe(`
+          CREATE OR REPLACE FUNCTION unaccent_text(text)
+          RETURNS text AS $$ SELECT unaccent($1); $$ LANGUAGE sql IMMUTABLE PARALLEL SAFE;
+        `);
+        console.log(`🔍 Busca Inteligente: PostgreSQL unaccent (Insensível a Acentos) ATIVA`);
+      } catch (unaccentInitErr) {
+        // Ignora silenciosamente caso o banco já tenha unaccent
+      }
       console.log(`=========================================\n`);
     })
     .catch((err) => {

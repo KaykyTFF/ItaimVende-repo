@@ -61,7 +61,8 @@
                 if (window.ItaimApi && window.ItaimApi.auth && typeof window.ItaimApi.auth.login === 'function') {
                     resposta = await window.ItaimApi.auth.login(email, senha);
                 } else {
-                    const res = await fetch('http://localhost:3000/api/v1/auth/login', {
+                    const apiBase = window.ItaimApiCore?.API_BASE_URL || '/api/v1';
+                    const res = await fetch(`${apiBase}/auth/login`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ email, password: senha })

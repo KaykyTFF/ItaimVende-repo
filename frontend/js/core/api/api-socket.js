@@ -34,11 +34,21 @@
         return window.location.origin;
     }
 
+    let carregandoLibPromise = null;
+    let conexaoEmProgresso = false;
+
     /**
      * Garante que a biblioteca do cliente Socket.IO esteja carregada
      */
     function carregarBibliotecaSocketIO() {
-        return new Promise((resolve) => {
+        if (typeof window.io === 'function') {
+            return Promise.resolve(true);
+        }
+        if (carregandoLibPromise) {
+            return carregandoLibPromise;
+        }
+
+        carregandoLibPromise = new Promise((resolve) => {
             if (typeof window.io === 'function') {
                 return resolve(true);
             }
@@ -62,6 +72,8 @@
 
             document.head.appendChild(scriptLocal);
         });
+
+        return carregandoLibPromise;
     }
 
     /**
@@ -200,45 +212,70 @@
             const token = obterToken();
             if (!token) return;
 
-            const carregou = await carregarBibliotecaSocketIO();
-            if (!carregou || typeof window.io !== 'function') return;
+            if (socket && (socket.connected || conexaoEmProgresso)) return;
+            conexaoEmProgresso = true;
 
-            if (socket && socket.connected) return;
+            const carregou = await carregarBibliotecaSocketIO();
+            if (!carregou || typeof window.io !== 'function') {
+                conexaoEmProgresso = false;
+                return;
+            }
+
+            if (socket && socket.connected) {
+                conexaoEmProgresso = false;
+                return;
+            }
 
             const host = obterBackendHost();
             socket = window.io(host, {
                 auth: { token },
-                transports: ['websocket', 'polling'],
+                transports: ['polling', 'websocket'],
                 reconnection: true,
-                reconnectionAttempts: 20,
+                reconnectionAttempts: 25,
                 reconnectionDelay: 1000,
+                timeout: 15000,
             });
 
             socket.on('connect', () => {
                 conectado = true;
+                conexaoEmProgresso = false;
                 console.log('⚡ [ItaimSocket] Conectado ao servidor WebSocket com sucesso.');
 
                 // Se houver conversa ativa marcada, reingressa na sala
                 if (conversaAtivaId) {
-                    this.entrarConversa(conversaAtivaId);
+                    ItaimSocket.entrarConversa(conversaAtivaId);
                 }
+            });
+
+            socket.on('connect_error', (err) => {
+                conexaoEmProgresso = false;
+                console.warn('[ItaimSocket] Aviso na conexão WebSocket:', err.message);
             });
 
             socket.on('disconnect', (reason) => {
                 conectado = false;
+                conexaoEmProgresso = false;
                 console.log('[ItaimSocket] Desconectado:', reason);
+            });
+
+            socket.on('joined_conversation', (dados) => {
+                console.log('💬 [ItaimSocket] Ingressou na sala da conversa:', dados.conversationId);
+            });
+
+            socket.on('chat_error', (dados) => {
+                console.warn('⚠️ [ItaimSocket] Erro no chat:', dados.message);
             });
 
             // 1. Atualização Instantânea de Badges (Contador push)
             socket.on('badge_update', (dados) => {
                 aplicarBadgesAoVivo(dados);
-                this._emitirLocal('badge_update', dados);
+                ItaimSocket._emitirLocal('badge_update', dados);
             });
 
             // 2. Nova Notificação Push Recebida
             socket.on('notification_new', (notificacao) => {
                 exibirToastPush(notificacao);
-                this._emitirLocal('notification_new', notificacao);
+                ItaimSocket._emitirLocal('notification_new', notificacao);
 
                 // Dispara evento DOM para páginas ouvintes (ex: notificacoes.js)
                 window.dispatchEvent(new CustomEvent('itaim:notification_new', { detail: notificacao }));
@@ -246,25 +283,25 @@
 
             // 3. Nova Mensagem em Conversa
             socket.on('new_message', (mensagem) => {
-                this._emitirLocal('new_message', mensagem);
+                ItaimSocket._emitirLocal('new_message', mensagem);
                 window.dispatchEvent(new CustomEvent('itaim:new_message', { detail: mensagem }));
             });
 
             // 4. Atualização de Conversa (Sidebar Preview)
             socket.on('conversation_updated', (dados) => {
-                this._emitirLocal('conversation_updated', dados);
+                ItaimSocket._emitirLocal('conversation_updated', dados);
                 window.dispatchEvent(new CustomEvent('itaim:conversation_updated', { detail: dados }));
             });
 
             // 5. Atualização de Status de Proposta ao Vivo
             socket.on('proposal_status_changed', (dados) => {
-                this._emitirLocal('proposal_status_changed', dados);
+                ItaimSocket._emitirLocal('proposal_status_changed', dados);
                 window.dispatchEvent(new CustomEvent('itaim:proposal_status_changed', { detail: dados }));
             });
 
             // 6. Indicador de "digitando..."
             socket.on('user_typing', (dados) => {
-                this._emitirLocal('user_typing', dados);
+                ItaimSocket._emitirLocal('user_typing', dados);
                 window.dispatchEvent(new CustomEvent('itaim:user_typing', { detail: dados }));
             });
         },
@@ -277,6 +314,7 @@
                 socket.disconnect();
                 socket = null;
                 conectado = false;
+                conexaoEmProgresso = false;
             }
         },
 
@@ -285,8 +323,12 @@
          */
         entrarConversa(conversationId) {
             conversaAtivaId = conversationId;
-            if (socket && socket.connected && conversationId) {
+            if (!conversationId) return;
+
+            if (socket && socket.connected) {
                 socket.emit('join_conversation', { conversationId });
+            } else {
+                this.conectar();
             }
         },
 
@@ -306,7 +348,11 @@
          * Envia evento de "digitando..." para o outro participante da conversa
          */
         enviarDigitando(conversationId, isTyping) {
-            if (!socket || !socket.connected || !conversationId) return;
+            if (!conversationId) return;
+            if (!socket || !socket.connected) {
+                this.conectar();
+                return;
+            }
 
             socket.emit('typing', { conversationId, isTyping: Boolean(isTyping) });
 
