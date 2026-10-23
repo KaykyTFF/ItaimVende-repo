@@ -295,7 +295,15 @@
                 return;
             }
 
+            if (estado.conversaAtivaId && estado.conversaAtivaId !== id && window.ItaimSocket) {
+                window.ItaimSocket.sairConversa(estado.conversaAtivaId);
+            }
+
             estado.conversaAtivaId = id;
+            if (window.ItaimSocket && typeof window.ItaimSocket.entrarConversa === 'function') {
+                window.ItaimSocket.entrarConversa(id);
+            }
+
             try {
                 localStorage.setItem(estado.STORAGE_KEY_ATIVA, id);
             } catch (e) {}

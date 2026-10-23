@@ -1,3 +1,4 @@
+import http from 'http';
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -6,6 +7,7 @@ import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { ENV } from './config/env.js';
 import prisma from './config/prisma.js';
+import { initSocketServer } from './sockets/index.js';
 import { errorHandler } from './middlewares/error.middleware.js';
 import { requestLogger } from './middlewares/logger.middleware.js';
 import { globalLimiter } from './middlewares/rateLimiter.middleware.js';
@@ -225,9 +227,12 @@ app.use((req, res) => {
 // Middleware Global de Erros
 app.use(errorHandler);
 
-// Inicialização do Servidor
+// Inicialização do Servidor HTTP e WebSocket (Socket.IO)
 const PORT = ENV.PORT;
-const server = app.listen(PORT, () => {
+const httpServer = http.createServer(app);
+const io = initSocketServer(httpServer);
+
+const server = httpServer.listen(PORT, () => {
   console.log(`=========================================`);
   console.log(`🚀 Servidor Itaim Vende Ativo na Porta: ${PORT}`);
   console.log(`🌐 Healthcheck: http://localhost:${PORT}/api/v1/health`);

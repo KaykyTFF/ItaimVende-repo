@@ -25,6 +25,7 @@
     const Notificacoes = window.ItaimApiNotificacoes || {};
     const Sistema = window.ItaimApiSistema || {};
     const Reviews = window.ItaimApiReviews || {};
+    const Socket = window.ItaimSocket || {};
 
     const ItaimApi = {
         baseUrl: Core.API_BASE_URL || '',
@@ -41,7 +42,8 @@
         reviews: Reviews,
         chat: Chat,
         upload: Upload,
-        sistema: Sistema
+        sistema: Sistema,
+        socket: Socket
     };
 
     window.ItaimApi = ItaimApi;

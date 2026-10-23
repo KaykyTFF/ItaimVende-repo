@@ -29,33 +29,45 @@
     function atualizarBadgesGlobais() {
         const userEmail = obterEmailUsuarioAtivo();
 
-        // 1. Mensagens Não Lidas no Chat
-        try {
-            const rawConversas = localStorage.getItem('itaim_conversas');
-            if (rawConversas) {
-                const convs = JSON.parse(rawConversas);
-                let totalNaoLidas = 0;
-                if (Array.isArray(convs)) {
-                    convs.forEach(c => {
-                        const msgs = Array.isArray(c.mensagens) ? c.mensagens : [];
-                        totalNaoLidas += msgs.filter(m => {
-                            const rem = (m.remetenteEmail || '').toLowerCase().trim();
-                            return rem !== userEmail && !m.lida;
-                        }).length;
-                    });
-                }
-
-                const badgeChat = document.getElementById('badge-conversas-header');
-                if (badgeChat) {
-                    if (totalNaoLidas > 0) {
-                        badgeChat.textContent = totalNaoLidas > 99 ? '99+' : totalNaoLidas;
-                        badgeChat.style.display = 'inline-block';
-                    } else {
-                        badgeChat.style.display = 'none';
-                    }
+        function aplicarBadgeChat(totalNaoLidas) {
+            const badgeChat = document.getElementById('badge-conversas-header');
+            if (badgeChat) {
+                if (totalNaoLidas > 0) {
+                    badgeChat.textContent = totalNaoLidas > 99 ? '99+' : totalNaoLidas;
+                    badgeChat.style.display = 'inline-block';
+                } else {
+                    badgeChat.style.display = 'none';
                 }
             }
-        } catch(e) {}
+        }
+
+        // 1. Mensagens Não Lidas no Chat via API se autenticado
+        if (window.ItaimApi && window.ItaimApi.auth && window.ItaimApi.auth.obterToken() && window.ItaimApi.chat && typeof window.ItaimApi.chat.contarNaoLidas === 'function') {
+            window.ItaimApi.chat.contarNaoLidas().then(res => {
+                if (res && res.success && res.data && typeof res.data.unreadCount === 'number') {
+                    aplicarBadgeChat(res.data.unreadCount);
+                }
+            }).catch(() => {});
+        } else {
+            // Fallback para cache local
+            try {
+                const rawConversas = localStorage.getItem('itaim_conversas');
+                if (rawConversas) {
+                    const convs = JSON.parse(rawConversas);
+                    let totalNaoLidas = 0;
+                    if (Array.isArray(convs)) {
+                        convs.forEach(c => {
+                            const msgs = Array.isArray(c.mensagens) ? c.mensagens : [];
+                            totalNaoLidas += msgs.filter(m => {
+                                const rem = (m.remetenteEmail || '').toLowerCase().trim();
+                                return rem !== userEmail && !m.lida;
+                            }).length;
+                        });
+                    }
+                    aplicarBadgeChat(totalNaoLidas);
+                }
+            } catch(e) {}
+        }
 
         // 2. Notificações Não Lidas
         function aplicarBadgeNotifs(naoLidas) {

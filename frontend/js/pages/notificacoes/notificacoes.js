@@ -261,5 +261,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
+    // Atualização em tempo real via WebSockets (Push instantâneo)
+    window.addEventListener('itaim:notification_new', (e) => {
+        if (e.detail) {
+            const notif = e.detail;
+            if (!todasNotifs.some(n => n.id === notif.id)) {
+                todasNotifs.unshift(notif);
+                if (window.ItaimNotificacoes) {
+                    window.ItaimNotificacoes.salvarNotificacoes(todasNotifs);
+                }
+                renderizar();
+            }
+        }
+    });
+
     await carregarNotificacoes();
 });

@@ -67,5 +67,28 @@ export async function createOrder(buyerId, orderData) {
     });
   });
 
+  // Dispara notificação push em tempo real para os vendedores dos itens vendidos
+  const sellerMap = new Map();
+  for (const item of newOrder.items || []) {
+    const sId = item.product?.sellerId;
+    if (sId && sId !== buyerId) {
+      if (!sellerMap.has(sId)) sellerMap.set(sId, []);
+      sellerMap.get(sId).push(item.title || item.product?.title || 'Produto');
+    }
+  }
+
+  import('../notification/index.js').then(({ createNotification }) => {
+    for (const [sellerId, titles] of sellerMap.entries()) {
+      const resumo = titles.slice(0, 2).join(', ') + (titles.length > 2 ? ` e mais ${titles.length - 2}` : '');
+      createNotification({
+        userId: sellerId,
+        title: 'Venda Concretizada! 🛍️',
+        message: `Novo pedido ${orderCode} confirmado para: ${resumo}.`,
+        type: 'venda',
+        link: '/pages/vender/meus-anuncios.html',
+      }).catch(() => {});
+    }
+  }).catch(() => {});
+
   return newOrder;
 }

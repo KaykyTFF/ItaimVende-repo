@@ -55,18 +55,121 @@
             }
         },
 
+        iniciarRealTimeWebSocket: function () {
+            const estado = window.ItaimChatEstado;
+            const utils = window.ItaimChatUtils;
+            const dom = estado.dom;
+
+            if (!window.ItaimSocket) return;
+
+            window.ItaimSocket.conectar();
+
+            // 1. Recebimento de Nova Mensagem em Tempo Real
+            window.ItaimSocket.on('new_message', (novaMsg) => {
+                if (!novaMsg) return;
+
+                // Se a mensagem for da conversa ativa
+                if (estado.conversaAtivaId && novaMsg.conversationId === estado.conversaAtivaId) {
+                    const jaExiste = estado.mensagensAtivas.some(m => m.id === novaMsg.id || (m.tempId && m.tempId === novaMsg.tempId));
+                    if (!jaExiste) {
+                        novaMsg.eMeu = novaMsg.senderId === estado.meuUserId;
+                        estado.mensagensAtivas.push(novaMsg);
+                        utils.salvarMensagensCacheLocal(estado.conversaAtivaId, estado.mensagensAtivas, estado.STORAGE_KEY_MSGS_PREFIX);
+                        if (window.ItaimChatFeed) {
+                            window.ItaimChatFeed.renderizarFeedMensagens(estado.mensagensAtivas, false);
+                        }
+                    }
+                }
+
+                // Atualiza o card da conversa na barra lateral
+                const conv = estado.conversas.find(c => c.id === novaMsg.conversationId);
+                if (conv) {
+                    conv.ultimaMensagem = novaMsg.content;
+                    conv.dataUltimaMensagem = novaMsg.createdAt || new Date().toISOString();
+                    if (novaMsg.conversationId !== estado.conversaAtivaId && novaMsg.senderId !== estado.meuUserId) {
+                        conv.naoLidas = (Number(conv.naoLidas) || 0) + 1;
+                    }
+                    // Reordena: conversa que recebeu mensagem vai para o topo
+                    estado.conversas = [conv, ...estado.conversas.filter(c => c.id !== conv.id)];
+                    try {
+                        localStorage.setItem(estado.STORAGE_KEY_LISTA, JSON.stringify(estado.conversas));
+                    } catch (e) {}
+                    if (window.ItaimChatLista) {
+                        window.ItaimChatLista.renderizarListaConversas(dom.buscaInput?.value || '');
+                    }
+                } else if (window.ItaimChatLista) {
+                    window.ItaimChatLista.carregarListaConversas();
+                }
+            });
+
+            // 2. Atualização de Proposta de Valor ao Vivo
+            window.ItaimSocket.on('proposal_status_changed', (dados) => {
+                if (!dados || !dados.messageId) return;
+
+                const idx = estado.mensagensAtivas.findIndex(m => m.id === dados.messageId);
+                if (idx !== -1) {
+                    estado.mensagensAtivas[idx].offerStatus = dados.offerStatus;
+                    utils.salvarMensagensCacheLocal(estado.conversaAtivaId, estado.mensagensAtivas, estado.STORAGE_KEY_MSGS_PREFIX);
+                    if (window.ItaimChatFeed) {
+                        window.ItaimChatFeed.renderizarFeedMensagens(estado.mensagensAtivas, true);
+                    }
+                }
+            });
+
+            // 3. Indicador de "Digitando..."
+            let timerOcultarDigitando = null;
+            window.ItaimSocket.on('user_typing', (dados) => {
+                if (!dados || dados.conversationId !== estado.conversaAtivaId || dados.userId === estado.meuUserId) {
+                    return;
+                }
+
+                const indicadorEl = document.getElementById('chat-digitando-container');
+                const textoEl = document.getElementById('chat-digitando-texto');
+                const headerStatusEl = document.getElementById('chat-header-status-txt');
+
+                if (dados.isTyping) {
+                    if (indicadorEl) indicadorEl.style.display = 'flex';
+                    if (textoEl) textoEl.textContent = `${dados.userName || 'O vendedor'} está digitando...`;
+                    if (headerStatusEl) {
+                        if (!headerStatusEl.dataset.original) {
+                            headerStatusEl.dataset.original = headerStatusEl.textContent;
+                        }
+                        headerStatusEl.textContent = 'digitando...';
+                        headerStatusEl.style.color = '#0284c7';
+                    }
+
+                    clearTimeout(timerOcultarDigitando);
+                    timerOcultarDigitando = setTimeout(() => {
+                        if (indicadorEl) indicadorEl.style.display = 'none';
+                        if (headerStatusEl && headerStatusEl.dataset.original) {
+                            headerStatusEl.textContent = headerStatusEl.dataset.original;
+                            headerStatusEl.style.color = '';
+                        }
+                    }, 3500);
+                } else {
+                    if (indicadorEl) indicadorEl.style.display = 'none';
+                    if (headerStatusEl && headerStatusEl.dataset.original) {
+                        headerStatusEl.textContent = headerStatusEl.dataset.original;
+                        headerStatusEl.style.color = '';
+                    }
+                }
+            });
+        },
+
         iniciarPolling: function () {
             const estado = window.ItaimChatEstado;
             const utils = window.ItaimChatUtils;
 
             if (estado.intervaloPolling) clearInterval(estado.intervaloPolling);
 
+            // Com WebSockets ativos, o polling atua como fallback resiliente a cada 20s
             estado.intervaloPolling = setInterval(async () => {
                 if (document.hidden) return;
                 estado.contadorTicks++;
 
-                // A cada 3s: Atualiza mensagens da conversa ativa
-                if (estado.conversaAtivaId && !estado.enviandoMensagem) {
+                // Fallback de mensagens caso desconectado ou a cada 20s
+                const socketAtivo = window.ItaimSocket && window.ItaimSocket.estaConectado();
+                if (estado.conversaAtivaId && !estado.enviandoMensagem && (!socketAtivo || estado.contadorTicks % 4 === 0)) {
                     try {
                         if (window.ItaimApi && window.ItaimApi.chat && typeof window.ItaimApi.chat.obterMensagens === 'function') {
                             const resp = await window.ItaimApi.chat.obterMensagens(estado.conversaAtivaId);
@@ -84,8 +187,8 @@
                     } catch (e) {}
                 }
 
-                // A cada 6s: Atualiza a lista lateral de conversas
-                if (estado.contadorTicks % 2 === 0) {
+                // Fallback de sincronização da lista lateral a cada 20s
+                if (!socketAtivo || estado.contadorTicks % 4 === 0) {
                     try {
                         if (window.ItaimApi && window.ItaimApi.chat && typeof window.ItaimApi.chat.listarConversas === 'function') {
                             const resp = await window.ItaimApi.chat.listarConversas();
@@ -104,7 +207,7 @@
                         }
                     } catch (e) {}
                 }
-            }, 3000);
+            }, 5000);
         },
 
         inicializarEventos: function () {
@@ -183,6 +286,7 @@
                 }
             }
 
+            this.iniciarRealTimeWebSocket();
             this.iniciarPolling();
         }
     };

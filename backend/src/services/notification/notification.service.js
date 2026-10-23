@@ -1,5 +1,6 @@
 import prisma from '../../config/prisma.js';
 import { AppError } from '../../utils/errors.js';
+import { emitToUser, notifyBadgeUpdate } from '../../sockets/index.js';
 
 /**
  * Converte data para formato relativo amigável em português
@@ -116,6 +117,7 @@ export async function markNotificationAsRead(userId, notificationId) {
     data: { isRead: true },
   });
 
+  notifyBadgeUpdate(userId);
   return formatNotification(updated);
 }
 
@@ -128,6 +130,7 @@ export async function markAllNotificationsAsRead(userId) {
     data: { isRead: true },
   });
 
+  notifyBadgeUpdate(userId);
   return {
     success: true,
     message: 'Todas as notificações foram marcadas como lidas.',
@@ -151,6 +154,7 @@ export async function deleteNotification(userId, notificationId) {
     where: { id: notificationId },
   });
 
+  notifyBadgeUpdate(userId);
   return {
     success: true,
     message: 'Notificação excluída com sucesso.',
@@ -165,6 +169,7 @@ export async function clearAllNotifications(userId) {
     where: { userId },
   });
 
+  notifyBadgeUpdate(userId);
   return {
     success: true,
     message: 'Todas as notificações foram excluídas com sucesso.',
@@ -189,5 +194,8 @@ export async function createNotification({ userId, title, message, type = 'aviso
     },
   });
 
-  return formatNotification(notif);
+  const formatted = formatNotification(notif);
+  emitToUser(userId, 'notification_new', formatted);
+  notifyBadgeUpdate(userId);
+  return formatted;
 }

@@ -1,6 +1,7 @@
 import prisma from '../../config/prisma.js';
 import { AppError } from '../../utils/errors.js';
 import { formatarMensagem } from './chat.formatter.js';
+import { emitToConversation, emitToUser, notifyBadgeUpdate } from '../../sockets/index.js';
 
 /**
  * Seletor padrão de dados do remetente
@@ -41,7 +42,11 @@ export async function getConversationMessages(userId, userRole, conversationId, 
       isRead: false,
     },
     data: { isRead: true, readAt: new Date() },
-  }).catch((err) => console.error('Erro ao marcar mensagens como lidas:', err));
+  })
+    .then((res) => {
+      if (res.count > 0) notifyBadgeUpdate(userId);
+    })
+    .catch((err) => console.error('Erro ao marcar mensagens como lidas:', err));
 
   const whereClause = { conversationId };
   if (after) {
@@ -144,7 +149,36 @@ export async function sendConversationMessage(senderId, userRole, conversationId
     }).catch(() => {});
   }).catch(() => {});
 
-  return formatarMensagem(message, senderId);
+  const formatted = formatarMensagem(message, senderId);
+
+  // Emissão em tempo real para a sala da conversa (WebSocket)
+  emitToConversation(conversationId, 'new_message', formatted);
+
+  // Notifica ambos os participantes para atualizar o preview na lista de conversas
+  const convPreview = {
+    conversationId,
+    ultimaMensagem: content.trim(),
+    dataUltimaMensagem: message.createdAt || new Date().toISOString(),
+    lastMessageAt: message.createdAt || new Date().toISOString(),
+  };
+  emitToUser(recipientId, 'conversation_updated', convPreview);
+  emitToUser(senderId, 'conversation_updated', convPreview);
+
+  // Atualiza badge numérico do destinatário
+  notifyBadgeUpdate(recipientId);
+
+  // Se for proposta de valor ao vivo, emite evento específico para atualização em tempo real
+  if (messageType === 'OFFER_PROPOSAL') {
+    emitToConversation(conversationId, 'proposal_received', {
+      messageId: message.id,
+      offerValue: offerValNum,
+      senderId,
+      senderName: message.sender?.name,
+      createdAt: message.createdAt,
+    });
+  }
+
+  return formatted;
 }
 
 /**
@@ -187,7 +221,7 @@ export async function acceptOfferProposal(userId, userRole, messageId) {
     ? Number(message.offerValue).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
     : 'o valor proposto';
 
-  const [updatedMessage] = await prisma.$transaction([
+  const [updatedMessage, systemMessage] = await prisma.$transaction([
     prisma.message.update({
       where: { id: messageId },
       data: { offerStatus: 'ACCEPTED' },
@@ -200,6 +234,7 @@ export async function acceptOfferProposal(userId, userRole, messageId) {
         content: `✅ Proposta de ${valorFormatado} aceita!`,
         messageType: 'SYSTEM',
       },
+      include: { sender: { select: SENDER_SELECT } },
     }),
     prisma.conversation.update({
       where: { id: conv.id },
@@ -218,7 +253,22 @@ export async function acceptOfferProposal(userId, userRole, messageId) {
     }).catch(() => {});
   }).catch(() => {});
 
-  return formatarMensagem(updatedMessage, userId);
+  const formattedUpdated = formatarMensagem(updatedMessage, userId);
+  const formattedSystem = formatarMensagem(systemMessage, userId);
+
+  // Emite status atualizado da proposta ao vivo e mensagem de sistema para a conversa
+  emitToConversation(conv.id, 'proposal_status_changed', {
+    messageId,
+    offerStatus: 'ACCEPTED',
+    offerValue: message.offerValue,
+    updatedMessage: formattedUpdated,
+  });
+  emitToConversation(conv.id, 'new_message', formattedSystem);
+
+  notifyBadgeUpdate(message.senderId);
+  notifyBadgeUpdate(userId);
+
+  return formattedUpdated;
 }
 
 /**
@@ -261,7 +311,7 @@ export async function rejectOfferProposal(userId, userRole, messageId) {
     ? Number(message.offerValue).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
     : 'o valor proposto';
 
-  const [updatedMessage] = await prisma.$transaction([
+  const [updatedMessage, systemMessage] = await prisma.$transaction([
     prisma.message.update({
       where: { id: messageId },
       data: { offerStatus: 'REJECTED' },
@@ -274,6 +324,7 @@ export async function rejectOfferProposal(userId, userRole, messageId) {
         content: `❌ Proposta de ${valorFormatado} recusada.`,
         messageType: 'SYSTEM',
       },
+      include: { sender: { select: SENDER_SELECT } },
     }),
     prisma.conversation.update({
       where: { id: conv.id },
@@ -292,7 +343,22 @@ export async function rejectOfferProposal(userId, userRole, messageId) {
     }).catch(() => {});
   }).catch(() => {});
 
-  return formatarMensagem(updatedMessage, userId);
+  const formattedUpdated = formatarMensagem(updatedMessage, userId);
+  const formattedSystem = formatarMensagem(systemMessage, userId);
+
+  // Emite status atualizado da proposta ao vivo e mensagem de sistema para a conversa
+  emitToConversation(conv.id, 'proposal_status_changed', {
+    messageId,
+    offerStatus: 'REJECTED',
+    offerValue: message.offerValue,
+    updatedMessage: formattedUpdated,
+  });
+  emitToConversation(conv.id, 'new_message', formattedSystem);
+
+  notifyBadgeUpdate(message.senderId);
+  notifyBadgeUpdate(userId);
+
+  return formattedUpdated;
 }
 
 /**

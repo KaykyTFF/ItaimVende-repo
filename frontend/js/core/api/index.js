@@ -30,6 +30,7 @@
         'api-notificacoes.js',
         'api-reviews.js',
         'api-sistema.js',
+        'api-socket.js',
         'api-orquestrador.js'
 
     ];

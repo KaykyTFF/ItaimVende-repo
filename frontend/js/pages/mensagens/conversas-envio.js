@@ -110,7 +110,28 @@
             const utils = window.ItaimChatUtils;
             const dom = estado.dom;
 
-            // 1. Envio de Texto do Chat
+            // 1. Envio de Texto do Chat & Digitando
+            if (dom.inputTexto) {
+                let timerDigitando = null;
+                dom.inputTexto.addEventListener('input', () => {
+                    if (!estado.conversaAtivaId || !window.ItaimSocket) return;
+                    window.ItaimSocket.enviarDigitando(estado.conversaAtivaId, true);
+
+                    clearTimeout(timerDigitando);
+                    timerDigitando = setTimeout(() => {
+                        if (window.ItaimSocket && estado.conversaAtivaId) {
+                            window.ItaimSocket.enviarDigitando(estado.conversaAtivaId, false);
+                        }
+                    }, 2200);
+                });
+
+                dom.inputTexto.addEventListener('blur', () => {
+                    if (window.ItaimSocket && estado.conversaAtivaId) {
+                        window.ItaimSocket.enviarDigitando(estado.conversaAtivaId, false);
+                    }
+                });
+            }
+
             if (dom.formEnvio) {
                 dom.formEnvio.addEventListener('submit', async (e) => {
                     e.preventDefault();
@@ -118,6 +139,10 @@
                     if (!estado.conversaAtivaId || estado.enviandoMensagem) return;
                     const texto = dom.inputTexto?.value.trim();
                     if (!texto) return;
+
+                    if (window.ItaimSocket) {
+                        window.ItaimSocket.enviarDigitando(estado.conversaAtivaId, false);
+                    }
 
                     estado.enviandoMensagem = true;
                     if (dom.inputTexto) dom.inputTexto.value = '';

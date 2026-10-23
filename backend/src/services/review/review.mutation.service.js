@@ -83,6 +83,17 @@ export async function createReview(authorId, targetUserId, reviewData) {
     };
   });
 
+  // Dispara notificação push em tempo real para o vendedor avaliado
+  import('../notification/index.js').then(({ createNotification }) => {
+    createNotification({
+      userId: targetUser.id,
+      title: 'Nova Avaliação Recebida! ⭐',
+      message: `${result.review?.author?.name || 'Um comprador'} avaliou você com ${notaNum} estrela${notaNum > 1 ? 's' : ''}.`,
+      type: 'avaliacao',
+      link: `/pages/perfil/vendedor.html?id=${targetUser.id}`,
+    }).catch(() => {});
+  }).catch(() => {});
+
   return result;
 }
 
