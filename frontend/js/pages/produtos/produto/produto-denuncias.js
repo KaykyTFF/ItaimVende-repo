@@ -18,22 +18,54 @@
         const modalDenuncia = document.getElementById('modal-denuncia');
         const btnAbrirDenuncia = document.getElementById('btn-abrir-denuncia');
         const btnFecharDenuncia = document.getElementById('btn-fechar-denuncia');
-        const btnCancelarDenuncia = document.getElementById('btn-cancelar-denuncia');
-        const btnFecharHistorico = document.getElementById('btn-fechar-historico');
+        const btnDenunciaVoltar = document.getElementById('btn-denuncia-voltar');
         const btnVoltarAoAnuncio = document.getElementById('btn-voltar-ao-anuncio');
-        const btnConcluirTicket = document.getElementById('btn-concluir-ticket');
+        const btnFecharHistorico = document.getElementById('btn-fechar-historico');
         const btnVerMeusTickets = document.getElementById('btn-ver-meus-tickets');
         const btnEnviarDenuncia = document.getElementById('btn-enviar-denuncia');
         const btnCopiarTicket = document.getElementById('btn-copiar-ticket');
         const contadorMeusTicketsEl = document.getElementById('contador-meus-tickets');
 
-        const etapaForm = document.getElementById('denuncia-etapa-form');
-        const etapaSucesso = document.getElementById('denuncia-etapa-sucesso');
-        const etapaHistorico = document.getElementById('denuncia-etapa-historico');
+        // Controles de Navegação das Etapas
+        const btnProximo1 = document.getElementById('btn-proximo-etapa-1');
+        const btnProximo2 = document.getElementById('btn-proximo-etapa-2');
+        const btnProximo3 = document.getElementById('btn-proximo-etapa-3');
+        const btnRevisaoVoltar = document.getElementById('btn-revisao-voltar');
+        const revisaoBtnEditarMotivo = document.getElementById('revisao-btn-editar-motivo');
+        const revisaoBtnEditarDescricao = document.getElementById('revisao-btn-editar-descricao');
+
+        const progressoBox = document.getElementById('denuncia-progresso-box');
+        const etapaBadge = document.getElementById('denuncia-etapa-badge');
+        const etapaNome = document.getElementById('denuncia-etapa-nome');
+        const barraProgresso = document.getElementById('denuncia-barra-progresso');
+
+        const painelEtapa1 = document.getElementById('denuncia-etapa-1');
+        const painelEtapa2 = document.getElementById('denuncia-etapa-2');
+        const painelEtapa3 = document.getElementById('denuncia-etapa-3');
+        const painelEtapa4 = document.getElementById('denuncia-etapa-4');
+        const painelEtapa5 = document.getElementById('denuncia-etapa-5');
+        const painelEtapaHistorico = document.getElementById('denuncia-etapa-historico');
 
         const descTextarea = document.getElementById('denuncia-descricao');
         const charsCountEl = document.getElementById('denuncia-chars-val');
         const inputEmailContato = document.getElementById('denuncia-email-contato');
+
+        let etapaAtual = 1;
+
+        const ETAPAS_CONFIG = {
+            1: { badge: 'ETAPA 1 DE 4', nome: 'Início', progresso: '25%' },
+            2: { badge: 'ETAPA 2 DE 4', nome: 'Motivo', progresso: '50%' },
+            3: { badge: 'ETAPA 3 DE 4', nome: 'Detalhes', progresso: '75%' },
+            4: { badge: 'ETAPA 4 DE 4', nome: 'Revisão', progresso: '100%' }
+        };
+
+        const LABELS_MOTIVOS = {
+            'FRAUD': { label: 'Golpe ou Fraude', icon: '🚨', badgeClass: 'icone-box-red' },
+            'INAPPROPRIATE_CONTENT': { label: 'Conteúdo Impróprio', icon: '🔞', badgeClass: 'icone-box-blue' },
+            'SPAM': { label: 'Spam / Anúncio Falso', icon: '📄', badgeClass: 'icone-box-purple' },
+            'ALREADY_SOLD': { label: 'Já Vendido / Indisponível', icon: '📦', badgeClass: 'icone-box-orange' },
+            'OTHER': { label: 'Outro Motivo', icon: '💬', badgeClass: 'icone-box-violet' }
+        };
 
         const STORAGE_TICKETS_KEY = 'itaim_tickets_denuncias';
 
@@ -66,46 +98,101 @@
         }
         atualizarContadorTickets();
 
-        const LABELS_MOTIVOS = {
-            'FRAUD': 'Golpe ou Fraude',
-            'INAPPROPRIATE_CONTENT': 'Conteúdo Impróprio',
-            'SPAM': 'Spam / Anúncio Falso',
-            'COUNTERFEIT': 'Item Proibido / Réplica',
-            'ALREADY_SOLD': 'Já Vendido / Indisponível',
-            'OTHER': 'Outro Motivo'
-        };
-
         function preencherResumoProdutoModal() {
-            const resumoImg = document.getElementById('denuncia-resumo-img');
-            const resumoTitulo = document.getElementById('denuncia-resumo-titulo');
-            const resumoVendedor = document.getElementById('denuncia-resumo-vendedor');
-            const resumoPreco = document.getElementById('denuncia-resumo-preco');
+            const fotoUrl = (produto.fotos && produto.fotos[0]) || produto.imagem || produto.foto || '../../assets/produtos/anuncio_15.jpg';
+            const vNome = (dadosVendedor && (dadosVendedor.name || dadosVendedor.nome)) || produto.vendedorNome || produto.vendedor || 'Admin';
+            const precoFmt = formatarPreco(produto.preco);
 
-            if (resumoTitulo) resumoTitulo.textContent = produto.titulo;
-            if (resumoVendedor) {
-                const vNome = (dadosVendedor && (dadosVendedor.name || dadosVendedor.nome)) || produto.vendedorNome || produto.vendedor || 'Vendedor';
-                resumoVendedor.textContent = `Vendedor: ${vNome}`;
-            }
-            if (resumoPreco) {
-                resumoPreco.innerHTML = formatarPreco(produto.preco);
-            }
-            if (resumoImg) {
-                const fotoUrl = (produto.fotos && produto.fotos[0]) || produto.imagem || produto.foto || '../../assets/produtos/anuncio_15.jpg';
-                resumoImg.src = fotoUrl;
-                resumoImg.alt = produto.titulo;
-            }
+            ['denuncia-resumo', 'denuncia-revisao'].forEach(prefixo => {
+                const imgEl = document.getElementById(`${prefixo}-img`);
+                const titEl = document.getElementById(`${prefixo}-titulo`);
+                const precoEl = document.getElementById(`${prefixo}-preco`);
+                const vendEl = document.getElementById(`${prefixo}-vendedor`);
+
+                if (imgEl) {
+                    imgEl.src = fotoUrl;
+                    imgEl.alt = produto.titulo;
+                }
+                if (titEl) titEl.textContent = produto.titulo;
+                if (precoEl) precoEl.innerHTML = precoFmt;
+                if (vendEl) {
+                    vendEl.innerHTML = `
+                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                        <span>Vendedor: ${vNome}</span>
+                    `;
+                }
+            });
 
             const usuarioLogado = window.ItaimSessao ? window.ItaimSessao.obterUsuarioLogado() : null;
-            if (inputEmailContato && usuarioLogado && usuarioLogado.email) {
+            if (inputEmailContato && usuarioLogado && usuarioLogado.email && !inputEmailContato.value) {
                 inputEmailContato.value = usuarioLogado.email;
             }
         }
 
-        function abrirModalEtapa(etapa) {
+        function atualizarDadosRevisao() {
+            const radioSelecionado = document.querySelector('input[name="denuncia-motivo"]:checked');
+            const motivoVal = radioSelecionado ? radioSelecionado.value : 'FRAUD';
+            const motivoInfo = LABELS_MOTIVOS[motivoVal] || { label: motivoVal, badgeClass: 'icone-box-red', icon: '🚨' };
+
+            const revisaoMotivoTxt = document.getElementById('revisao-motivo-texto');
+            const revisaoMotivoIcone = document.getElementById('revisao-motivo-icone');
+            const revisaoDescricaoTxt = document.getElementById('revisao-descricao-texto');
+
+            if (revisaoMotivoTxt) revisaoMotivoTxt.textContent = motivoInfo.label;
+            if (revisaoMotivoIcone) {
+                revisaoMotivoIcone.className = `revisao-row-icone ${motivoInfo.badgeClass || ''}`;
+                revisaoMotivoIcone.textContent = motivoInfo.icon || '🚨';
+            }
+
+            const descDigitada = descTextarea ? descTextarea.value.trim() : '';
+            if (revisaoDescricaoTxt) {
+                revisaoDescricaoTxt.textContent = descDigitada || '(não informada)';
+                revisaoDescricaoTxt.style.fontStyle = descDigitada ? 'normal' : 'italic';
+                revisaoDescricaoTxt.style.color = descDigitada ? '#0F172A' : '#94A3B8';
+            }
+        }
+
+        function irParaEtapa(etapaNumero) {
+            etapaAtual = etapaNumero;
+
+            [painelEtapa1, painelEtapa2, painelEtapa3, painelEtapa4, painelEtapa5, painelEtapaHistorico].forEach(p => {
+                if (p) p.style.display = 'none';
+            });
+
+            if (etapaNumero >= 1 && etapaNumero <= 4) {
+                const config = ETAPAS_CONFIG[etapaNumero];
+                if (progressoBox) progressoBox.style.display = 'block';
+                if (etapaBadge) etapaBadge.textContent = config.badge;
+                if (etapaNome) etapaNome.textContent = config.nome;
+                if (barraProgresso) barraProgresso.style.width = config.progresso;
+
+                if (btnDenunciaVoltar) {
+                    btnDenunciaVoltar.style.visibility = (etapaNumero > 1) ? 'visible' : 'hidden';
+                }
+
+                if (etapaNumero === 1 && painelEtapa1) painelEtapa1.style.display = 'flex';
+                if (etapaNumero === 2 && painelEtapa2) painelEtapa2.style.display = 'flex';
+                if (etapaNumero === 3 && painelEtapa3) painelEtapa3.style.display = 'flex';
+                if (etapaNumero === 4) {
+                    atualizarDadosRevisao();
+                    if (painelEtapa4) painelEtapa4.style.display = 'flex';
+                }
+            } else if (etapaNumero === 5) {
+                // Tela de Concluído / Sucesso
+                if (progressoBox) progressoBox.style.display = 'none';
+                if (btnDenunciaVoltar) btnDenunciaVoltar.style.visibility = 'hidden';
+                if (painelEtapa5) painelEtapa5.style.display = 'flex';
+            } else if (etapaNumero === 'historico') {
+                if (progressoBox) progressoBox.style.display = 'none';
+                if (btnDenunciaVoltar) btnDenunciaVoltar.style.visibility = 'hidden';
+                if (painelEtapaHistorico) painelEtapaHistorico.style.display = 'flex';
+            }
+        }
+
+        function abrirModalDenuncia() {
             if (!modalDenuncia) return;
-            if (etapaForm) etapaForm.style.display = (etapa === 'form') ? 'block' : 'none';
-            if (etapaSucesso) etapaSucesso.style.display = (etapa === 'sucesso') ? 'block' : 'none';
-            if (etapaHistorico) etapaHistorico.style.display = (etapa === 'historico') ? 'block' : 'none';
+            preencherResumoProdutoModal();
+            irParaEtapa(1);
 
             modalDenuncia.style.display = 'flex';
             void modalDenuncia.offsetWidth;
@@ -127,18 +214,45 @@
         if (btnAbrirDenuncia) {
             btnAbrirDenuncia.addEventListener('click', (e) => {
                 e.preventDefault();
-
                 if (verificarSeUsuarioEhVendedor()) {
                     mostrarToast('Você é o autor deste anúncio.');
                     return;
                 }
-
-                preencherResumoProdutoModal();
-                abrirModalEtapa('form');
+                abrirModalDenuncia();
             });
         }
 
-        [btnFecharDenuncia, btnCancelarDenuncia, btnFecharHistorico, btnVoltarAoAnuncio, btnConcluirTicket].forEach(btn => {
+        // Navegação entre etapas (Próximo / Voltar)
+        if (btnProximo1) btnProximo1.addEventListener('click', () => irParaEtapa(2));
+        if (btnProximo2) btnProximo2.addEventListener('click', () => irParaEtapa(3));
+        if (btnProximo3) btnProximo3.addEventListener('click', () => irParaEtapa(4));
+
+        if (btnDenunciaVoltar) {
+            btnDenunciaVoltar.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (etapaAtual > 1 && etapaAtual <= 4) {
+                    irParaEtapa(etapaAtual - 1);
+                }
+            });
+        }
+
+        if (btnRevisaoVoltar) {
+            btnRevisaoVoltar.addEventListener('click', (e) => {
+                e.preventDefault();
+                irParaEtapa(3);
+            });
+        }
+
+        if (revisaoBtnEditarMotivo) {
+            revisaoBtnEditarMotivo.addEventListener('click', () => irParaEtapa(2));
+        }
+
+        if (revisaoBtnEditarDescricao) {
+            revisaoBtnEditarDescricao.addEventListener('click', () => irParaEtapa(3));
+        }
+
+        const btnCancelarEtapa2 = document.getElementById('btn-cancelar-etapa-2');
+        [btnFecharDenuncia, btnVoltarAoAnuncio, btnFecharHistorico, btnCancelarEtapa2].forEach(btn => {
             if (btn) {
                 btn.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -167,12 +281,20 @@
             });
         }
 
-        const radiosMotivo = document.querySelectorAll('input[name="denuncia-motivo"]');
-        radiosMotivo.forEach(radio => {
-            radio.addEventListener('change', () => {
-                document.querySelectorAll('.motivo-card-item').forEach(card => card.classList.remove('ativo'));
-                const cardPai = radio.closest('.motivo-card-item');
-                if (cardPai) cardPai.classList.add('ativo');
+        const cardsMotivo = document.querySelectorAll('.motivo-card-item');
+        cardsMotivo.forEach(card => {
+            card.addEventListener('click', () => {
+                cardsMotivo.forEach(c => c.classList.remove('ativo'));
+                card.classList.add('ativo');
+                const radio = card.querySelector('input[type="radio"]');
+                if (radio) radio.checked = true;
+
+                // No mobile (estilo lista da Image 2 com chevrons), avançar direto para a Etapa 3 (Detalhes)
+                if (window.innerWidth <= 600) {
+                    setTimeout(() => {
+                        irParaEtapa(3);
+                    }, 140);
+                }
             });
         });
 
@@ -192,7 +314,7 @@
                         <circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle>
                         <path d="M12 2a10 10 0 0 1 10 10"></path>
                     </svg>
-                    <span>Registrando Ticket...</span>
+                    <span>Enviando denúncia...</span>
                 `;
 
                 let ticketRetornado = null;
@@ -216,7 +338,7 @@
                                 productId: produto.id,
                                 productTitle: produto.titulo,
                                 reason: motivo,
-                                reasonLabel: LABELS_MOTIVOS[motivo] || motivo,
+                                reasonLabel: (LABELS_MOTIVOS[motivo] && LABELS_MOTIVOS[motivo].label) || motivo,
                                 description: descricao,
                                 status: 'PENDING',
                                 createdAt: new Date().toISOString()
@@ -235,9 +357,9 @@
                         productId: produto.id,
                         productTitle: produto.titulo,
                         productImage: (produto.fotos && produto.fotos[0]) || produto.imagem || null,
-                        sellerName: (dadosVendedor && (dadosVendedor.name || dadosVendedor.nome)) || produto.vendedorNome || 'Vendedor',
+                        sellerName: (dadosVendedor && (dadosVendedor.name || dadosVendedor.nome)) || produto.vendedorNome || 'Admin',
                         reason: motivo,
-                        reasonLabel: LABELS_MOTIVOS[motivo] || motivo,
+                        reasonLabel: (LABELS_MOTIVOS[motivo] && LABELS_MOTIVOS[motivo].label) || motivo,
                         description: descricao,
                         status: 'PENDING',
                         statusLabel: 'Em Análise',
@@ -255,21 +377,10 @@
                 if (charsCountEl) charsCountEl.textContent = '0';
 
                 const ticketProtocoloNum = document.getElementById('ticket-protocolo-num');
-                const ticketDadoProduto = document.getElementById('ticket-dado-produto');
-                const ticketDadoMotivo = document.getElementById('ticket-dado-motivo');
-                const ticketDadoData = document.getElementById('ticket-dado-data');
-
                 if (ticketProtocoloNum) ticketProtocoloNum.textContent = ticketRetornado.protocol;
-                if (ticketDadoProduto) ticketDadoProduto.textContent = ticketRetornado.productTitle || produto.titulo;
-                if (ticketDadoMotivo) ticketDadoMotivo.textContent = ticketRetornado.reasonLabel || LABELS_MOTIVOS[motivo] || motivo;
-                if (ticketDadoData) {
-                    ticketDadoData.textContent = new Date(ticketRetornado.createdAt).toLocaleDateString('pt-BR', {
-                        day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
-                    });
-                }
 
-                abrirModalEtapa('sucesso');
-                mostrarToast(`Denúncia recebida! Ticket #${ticketRetornado.protocol} gerado.`);
+                irParaEtapa(5);
+                mostrarToast(`Denúncia recebida! Protocolo #${ticketRetornado.protocol} gerado.`);
             });
         }
 

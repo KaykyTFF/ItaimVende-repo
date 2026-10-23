@@ -430,7 +430,7 @@
                         <!-- Nota das Avaliações no canto superior direito do card -->
                         <div class="vendedor-card-avaliacao-topo" id="vendedor-card-avaliacao-topo" title="Avaliações do vendedor">
                             <div class="stat-icone-wrapper-mini">
-                                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
                                     <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                                 </svg>
                             </div>
@@ -532,132 +532,195 @@
     <!-- ==========================================================
          MODAL DE DENÚNCIA / SISTEMA DE TICKETS DE MODERAÇÃO
          ========================================================== -->
+    <!-- ==========================================================
+         MODAL DE DENÚNCIA / TICKETS DE MODERAÇÃO (WIZARD POR ETAPAS)
+         ========================================================== -->
     <div class="modal-denuncia-backdrop" id="modal-denuncia" aria-hidden="true" role="dialog" aria-labelledby="modal-denuncia-titulo">
         <div class="modal-denuncia-card">
+            <!-- Puxador visual para estilo bottom sheet no mobile -->
+            <div class="modal-denuncia-drag-handle" aria-hidden="true"></div>
             
-            <!-- ETAPA 1: FORMULÁRIO DE ABERTURA DE TICKET -->
-            <div id="denuncia-etapa-form">
-                <div class="modal-denuncia-header">
-                    <div class="modal-denuncia-titulo-bloco">
-                        <div class="modal-denuncia-icone-topo">
-                            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#DC2626" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <!-- Cabeçalho do Wizard com Barra de Progresso Padronizada -->
+            <div class="denuncia-wizard-header" id="denuncia-wizard-header">
+                <div class="denuncia-wizard-topbar">
+                    <button type="button" class="btn-wizard-voltar" id="btn-denuncia-voltar" aria-label="Voltar etapa" style="visibility: hidden;">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </button>
+                    <button type="button" class="btn-fechar-modal-denuncia" id="btn-fechar-denuncia" aria-label="Fechar modal">&times;</button>
+                </div>
+
+                <!-- Barra de Progresso Padronizada (Estilo Cadastrar/Anúncio) -->
+                <div class="vender-progresso-box denuncia-progresso-box" id="denuncia-progresso-box" role="region" aria-label="Progresso da denúncia">
+                    <div class="wizard-info-linha">
+                        <span class="wizard-etapa-badge" id="denuncia-etapa-badge">ETAPA 1 DE 4</span>
+                        <span class="wizard-etapa-nome" id="denuncia-etapa-nome">Início</span>
+                    </div>
+                    <div class="wizard-barra-trilha">
+                        <div class="wizard-barra-progresso" id="denuncia-barra-progresso" style="width: 25%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CORPO DO WIZARD: ETAPAS -->
+            <div class="modal-denuncia-body">
+                
+                <!-- ETAPA 1: APRESENTAÇÃO / RESUMO DO ANÚNCIO -->
+                <div class="denuncia-etapa-painel etapa-ativa" id="denuncia-etapa-1">
+                    <div class="denuncia-step-center">
+                        <div class="denuncia-step-icone-wrapper alerta-vermelho">
+                            <svg viewBox="0 0 24 24" width="38" height="38" fill="none" stroke="#EF4444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
                                 <line x1="12" y1="9" x2="12" y2="13"></line>
                                 <line x1="12" y1="17" x2="12.01" y2="17"></line>
                             </svg>
                         </div>
-                        <div>
-                            <h3 class="modal-denuncia-titulo" id="modal-denuncia-titulo">Denunciar Anúncio</h3>
-                            <p class="modal-denuncia-subtitulo">Sua denúncia criará um ticket oficial de atendimento para a moderação.</p>
-                        </div>
+                        <h3 class="denuncia-step-titulo" id="modal-denuncia-titulo">Denunciar Anúncio</h3>
+                        <p class="denuncia-step-subtitulo">Sua denúncia será analisada pela nossa equipe de moderação.</p>
                     </div>
-                    <button type="button" class="btn-fechar-modal-denuncia" id="btn-fechar-denuncia" aria-label="Fechar modal">&times;</button>
-                </div>
 
-                <div class="modal-denuncia-body">
-                    <!-- Resumo do Anúncio Sendo Denunciado -->
                     <div class="denuncia-produto-resumo">
                         <img src="../../assets/produtos/anuncio_15.jpg" alt="Foto do Produto" id="denuncia-resumo-img" class="denuncia-resumo-img">
                         <div class="denuncia-resumo-info">
-                            <span class="denuncia-resumo-tag">Anúncio em verificação</span>
-                            <strong class="denuncia-resumo-titulo" id="denuncia-resumo-titulo">Título do anúncio</strong>
-                            <div class="denuncia-resumo-meta">
-                                <span id="denuncia-resumo-vendedor">Vendedor</span> &bull; 
-                                <span id="denuncia-resumo-preco">R$ 0,00</span>
+                            <strong class="denuncia-resumo-titulo" id="denuncia-resumo-titulo">Paulistana</strong>
+                            <div class="denuncia-resumo-preco" id="denuncia-resumo-preco">R$ 50,00</div>
+                            <div class="denuncia-resumo-vendedor" id="denuncia-resumo-vendedor">
+                                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                <span>Vendedor: Admin</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Seletor de Motivos (Formato Cards Interativos) -->
+                    <div class="denuncia-etapa-footer">
+                        <button type="button" class="btn-denuncia-proximo" id="btn-proximo-etapa-1">
+                            <span>Próximo</span>
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ETAPA 2: QUAL O MOTIVO DA DENÚNCIA? -->
+                <div class="denuncia-etapa-painel" id="denuncia-etapa-2" style="display: none;">
+                    <h3 class="denuncia-step-titulo-left">Qual o motivo da denúncia?</h3>
+                    
+                    <div class="denuncia-motivos-grid">
+                        <label class="motivo-card-item ativo" data-motivo="FRAUD">
+                            <input type="radio" name="denuncia-motivo" value="FRAUD" checked>
+                            <div class="motivo-check-badge">
+                                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#FFFFFF" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            </div>
+                            <div class="motivo-icone-quadrado icone-box-red">🚨</div>
+                            <div class="motivo-textos">
+                                <strong>Golpe ou Fraude</strong>
+                                <span>Preço suspeito, pedido de adiantamento, sinal enganoso.</span>
+                            </div>
+                            <svg class="motivo-chevron-right" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </label>
+
+                        <label class="motivo-card-item" data-motivo="INAPPROPRIATE_CONTENT">
+                            <input type="radio" name="denuncia-motivo" value="INAPPROPRIATE_CONTENT">
+                            <div class="motivo-check-badge">
+                                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#FFFFFF" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            </div>
+                            <div class="motivo-icone-quadrado icone-box-blue">🔞</div>
+                            <div class="motivo-textos">
+                                <strong>Conteúdo Impróprio</strong>
+                                <span>Imagens ofensivas, linguagem abusiva ou desrespeitosa.</span>
+                            </div>
+                            <svg class="motivo-chevron-right" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </label>
+
+                        <label class="motivo-card-item" data-motivo="SPAM">
+                            <input type="radio" name="denuncia-motivo" value="SPAM">
+                            <div class="motivo-check-badge">
+                                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#FFFFFF" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            </div>
+                            <div class="motivo-icone-quadrado icone-box-purple">📄</div>
+                            <div class="motivo-textos">
+                                <strong>Spam / Anúncio Falso</strong>
+                                <span>Produto duplicado, propaganda externa ou dados fakes.</span>
+                            </div>
+                            <svg class="motivo-chevron-right" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </label>
+
+                        <label class="motivo-card-item" data-motivo="ALREADY_SOLD">
+                            <input type="radio" name="denuncia-motivo" value="ALREADY_SOLD">
+                            <div class="motivo-check-badge">
+                                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#FFFFFF" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            </div>
+                            <div class="motivo-icone-quadrado icone-box-orange">📦</div>
+                            <div class="motivo-textos">
+                                <strong>Já Vendido / Indisponível</strong>
+                                <span>Vendedor informa que não tem mais o item à venda.</span>
+                            </div>
+                            <svg class="motivo-chevron-right" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </label>
+
+                        <label class="motivo-card-item motivo-card-full" data-motivo="OTHER">
+                            <input type="radio" name="denuncia-motivo" value="OTHER">
+                            <div class="motivo-check-badge">
+                                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#FFFFFF" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            </div>
+                            <div class="motivo-icone-quadrado icone-box-violet">💬</div>
+                            <div class="motivo-textos">
+                                <strong>Outro Motivo</strong>
+                                <span>Outra infração dos termos de uso da comunidade.</span>
+                            </div>
+                            <svg class="motivo-chevron-right" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </label>
+                    </div>
+
+                    <div class="denuncia-etapa-footer">
+                        <button type="button" class="btn-denuncia-proximo" id="btn-proximo-etapa-2">
+                            <span>Próximo</span>
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </button>
+                        <button type="button" class="btn-denuncia-mobile-cancelar" id="btn-cancelar-etapa-2">Cancelar</button>
+                    </div>
+                </div>
+
+                <!-- ETAPA 3: CONTE MAIS DETALHES -->
+                <div class="denuncia-etapa-painel" id="denuncia-etapa-3" style="display: none;">
+                    <div class="denuncia-step-center">
+                        <div class="denuncia-step-icone-wrapper icone-verde">
+                            <svg viewBox="0 0 24 24" width="38" height="38" fill="none" stroke="#44BD32" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                        </div>
+                        <h3 class="denuncia-step-titulo">Conte mais detalhes</h3>
+                        <p class="denuncia-step-subtitulo">Descreva o que aconteceu de forma clara e objetiva.</p>
+                    </div>
+
                     <div class="denuncia-campo-bloco">
-                        <label class="denuncia-label">Qual o motivo da denúncia? <span class="required">*</span></label>
-                        <div class="denuncia-motivos-grid">
-                            <label class="motivo-card-item ativo">
-                                <input type="radio" name="denuncia-motivo" value="FRAUD" checked>
-                                <div class="motivo-card-content">
-                                    <div class="motivo-icone">🚨</div>
-                                    <div class="motivo-textos">
-                                        <strong>Golpe ou Fraude</strong>
-                                        <span>Preço suspeito, pedido de adiantamento, sinal enganoso.</span>
-                                    </div>
-                                </div>
-                            </label>
-
-                            <label class="motivo-card-item">
-                                <input type="radio" name="denuncia-motivo" value="INAPPROPRIATE_CONTENT">
-                                <div class="motivo-card-content">
-                                    <div class="motivo-icone">🔞</div>
-                                    <div class="motivo-textos">
-                                        <strong>Conteúdo Impróprio</strong>
-                                        <span>Imagens ofensivas, linguagem abusiva ou desrespeitosa.</span>
-                                    </div>
-                                </div>
-                            </label>
-
-                            <label class="motivo-card-item">
-                                <input type="radio" name="denuncia-motivo" value="SPAM">
-                                <div class="motivo-card-content">
-                                    <div class="motivo-icone">📢</div>
-                                    <div class="motivo-textos">
-                                        <strong>Spam / Anúncio Falso</strong>
-                                        <span>Produto duplicado, propaganda externa ou dados fakes.</span>
-                                    </div>
-                                </div>
-                            </label>
-
-                            <label class="motivo-card-item">
-                                <input type="radio" name="denuncia-motivo" value="COUNTERFEIT">
-                                <div class="motivo-card-content">
-                                    <div class="motivo-icone">🛑</div>
-                                    <div class="motivo-textos">
-                                        <strong>Item Proibido ou Réplica</strong>
-                                        <span>Falsificação não declarada ou mercadoria ilegal.</span>
-                                    </div>
-                                </div>
-                            </label>
-
-                            <label class="motivo-card-item">
-                                <input type="radio" name="denuncia-motivo" value="ALREADY_SOLD">
-                                <div class="motivo-card-content">
-                                    <div class="motivo-icone">📦</div>
-                                    <div class="motivo-textos">
-                                        <strong>Já Vendido / Indisponível</strong>
-                                        <span>Vendedor informa que não tem mais o item à venda.</span>
-                                    </div>
-                                </div>
-                            </label>
-
-                            <label class="motivo-card-item">
-                                <input type="radio" name="denuncia-motivo" value="OTHER">
-                                <div class="motivo-card-content">
-                                    <div class="motivo-icone">💬</div>
-                                    <div class="motivo-textos">
-                                        <strong>Outro Motivo</strong>
-                                        <span>Outra infração dos termos de uso da comunidade.</span>
-                                    </div>
-                                </div>
-                            </label>
+                        <div class="denuncia-textarea-wrapper">
+                            <textarea 
+                                id="denuncia-descricao" 
+                                class="denuncia-textarea" 
+                                rows="4" 
+                                maxlength="600" 
+                                placeholder="Ex: O anunciante pediu PIX adiantado e depois não respondeu..."
+                            ></textarea>
+                            <div class="denuncia-chars-count"><span id="denuncia-chars-val">0</span>/600</div>
                         </div>
                     </div>
 
-                    <!-- Detalhes da Denúncia -->
-                    <div class="denuncia-campo-bloco">
-                        <label for="denuncia-descricao" class="denuncia-label">
-                            Descreva o que aconteceu <span class="opcional">(recomendado)</span>
-                        </label>
-                        <textarea 
-                            id="denuncia-descricao" 
-                            class="denuncia-textarea" 
-                            rows="3" 
-                            maxlength="600" 
-                            placeholder="Dê detalhes para que a moderação possa apurar rapidamente (ex: 'O anunciante pediu PIX adiantado e recusou entrega pessoal')..."
-                        ></textarea>
-                        <div class="denuncia-chars-count"><span id="denuncia-chars-val">0</span>/600</div>
-                    </div>
-
-                    <!-- Identificação do Usuário / E-mail de Contato -->
-                    <div class="denuncia-campo-bloco" id="bloco-contato-denuncia">
-                        <label for="denuncia-email-contato" class="denuncia-label">
+                    <div class="denuncia-campo-bloco" id="bloco-contato-denuncia" style="margin-top: 10px;">
+                        <label for="denuncia-email-contato" class="denuncia-label-suave">
                             Seu e-mail para receber atualizações do ticket <span class="opcional">(opcional)</span>
                         </label>
                         <input 
@@ -666,87 +729,98 @@
                             class="denuncia-input-text" 
                             placeholder="seu-email@exemplo.com"
                         >
-                        <p class="denuncia-dica-privacidade">
-                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                            Sua identidade é confidencial e nunca será compartilhada com o anunciante.
-                        </p>
+                    </div>
+
+                    <div class="denuncia-etapa-footer">
+                        <button type="button" class="btn-denuncia-proximo" id="btn-proximo-etapa-3">
+                            <span>Próximo</span>
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </button>
                     </div>
                 </div>
 
-                <div class="modal-denuncia-footer">
-                    <button type="button" class="btn-denuncia-cancelar" id="btn-cancelar-denuncia">Cancelar</button>
-                    <button type="button" class="btn-denuncia-enviar" id="btn-enviar-denuncia">
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 2L11 13"></path><path d="M22 2l-7 20-4-9-9-4 20-7z"></path></svg>
-                        <span>Abrir Ticket & Denunciar</span>
-                    </button>
-                </div>
-            </div>
+                <!-- ETAPA 4: CONFIRA OS DADOS -->
+                <div class="denuncia-etapa-painel" id="denuncia-etapa-4" style="display: none;">
+                    <h3 class="denuncia-step-titulo-left">Confira os dados</h3>
+                    <p class="denuncia-step-subtitulo-left">Verifique se está tudo certo antes de enviar.</p>
 
-            <!-- ETAPA 2: TICKET GERADO COM SUCESSO -->
-            <div id="denuncia-etapa-sucesso" style="display: none;">
-                <div class="ticket-sucesso-header">
-                    <div class="ticket-icone-sucesso">
-                        <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                            <polyline points="9 12 11 14 15 10"></polyline>
-                        </svg>
-                    </div>
-                    <h3 class="ticket-sucesso-titulo">Denúncia Registrada!</h3>
-                    <p class="ticket-sucesso-subtitulo">Um ticket oficial de moderação foi aberto para investigar este anúncio.</p>
-                </div>
-
-                <!-- Card de Apresentação do Ticket Oficial -->
-                <div class="ticket-card-visual">
-                    <div class="ticket-card-topo">
-                        <span class="ticket-tipo-badge">TICKET DE MODERAÇÃO</span>
-                        <span class="ticket-status-pill status-pendente" id="ticket-sucesso-status">Em Análise</span>
-                    </div>
-
-                    <div class="ticket-protocolo-box">
-                        <span class="ticket-protocolo-label">NÚMERO DO PROTOCOLO</span>
-                        <div class="ticket-protocolo-valor-row">
-                            <span class="ticket-protocolo-codigo" id="ticket-protocolo-num">TK-82910A</span>
-                            <button type="button" class="btn-copiar-protocolo" id="btn-copiar-ticket" title="Copiar protocolo">
-                                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                                <span id="btn-copiar-ticket-txt">Copiar Protocolo</span>
-                            </button>
+                    <!-- Resumo Produto -->
+                    <div class="denuncia-produto-resumo">
+                        <img src="../../assets/produtos/anuncio_15.jpg" alt="Foto do Produto" id="denuncia-revisao-img" class="denuncia-resumo-img">
+                        <div class="denuncia-resumo-info">
+                            <strong class="denuncia-resumo-titulo" id="denuncia-revisao-titulo">Paulistana</strong>
+                            <div class="denuncia-resumo-preco" id="denuncia-revisao-preco">R$ 50,00</div>
+                            <div class="denuncia-resumo-vendedor" id="denuncia-revisao-vendedor">
+                                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                <span>Vendedor: Admin</span>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="ticket-dados-grid">
-                        <div class="ticket-dado-item">
-                            <span class="ticket-dado-label">Anúncio:</span>
-                            <strong class="ticket-dado-val" id="ticket-dado-produto">--</strong>
+                    <!-- Dados da Denúncia Selecionados (Clicáveis para Editar) -->
+                    <div class="denuncia-revisao-cards-box">
+                        <div class="denuncia-revisao-row" id="revisao-btn-editar-motivo" title="Clique para editar o motivo">
+                            <div class="revisao-row-icone icone-box-red" id="revisao-motivo-icone">🚨</div>
+                            <div class="revisao-row-textos">
+                                <span class="revisao-row-label">Tipo de denúncia</span>
+                                <strong class="revisao-row-valor" id="revisao-motivo-texto">Golpe ou Fraude</strong>
+                            </div>
+                            <svg class="revisao-row-chevron" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="9 18 15 12 9 6"></polyline></svg>
                         </div>
-                        <div class="ticket-dado-item">
-                            <span class="ticket-dado-label">Motivo:</span>
-                            <strong class="ticket-dado-val" id="ticket-dado-motivo">--</strong>
-                        </div>
-                        <div class="ticket-dado-item">
-                            <span class="ticket-dado-label">Data de Abertura:</span>
-                            <strong class="ticket-dado-val" id="ticket-dado-data">Hoje</strong>
-                        </div>
-                        <div class="ticket-dado-item">
-                            <span class="ticket-dado-label">Prazo de Resposta:</span>
-                            <strong class="ticket-dado-val text-green">Até 24h úteis</strong>
+
+                        <div class="denuncia-revisao-row" id="revisao-btn-editar-descricao" title="Clique para editar a descrição">
+                            <div class="revisao-row-icone icone-box-purple">📄</div>
+                            <div class="revisao-row-textos">
+                                <span class="revisao-row-label">Descrição</span>
+                                <strong class="revisao-row-valor" id="revisao-descricao-texto">(texto informado)</strong>
+                            </div>
+                            <svg class="revisao-row-chevron" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="9 18 15 12 9 6"></polyline></svg>
                         </div>
                     </div>
 
-                    <div class="ticket-rodape-aviso">
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-                        <span>Este ticket foi salvo no seu histórico. Você pode acompanhar a análise a qualquer momento em <strong>Meus Tickets</strong>.</span>
+                    <div class="denuncia-etapa-footer">
+                        <button type="button" class="btn-denuncia-proximo btn-denuncia-enviar" id="btn-enviar-denuncia">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                            <span>Enviar denúncia</span>
+                        </button>
+                        <button type="button" class="btn-denuncia-voltar-link" id="btn-revisao-voltar">Voltar</button>
                     </div>
                 </div>
 
-                <div class="modal-denuncia-footer">
-                    <button type="button" class="btn-denuncia-fechar" id="btn-concluir-ticket">Concluir</button>
-                </div>
-            </div>
+                <!-- ETAPA 5: CONCLUÍDO / SUCESSO -->
+                <div class="denuncia-etapa-painel" id="denuncia-etapa-5" style="display: none;">
+                    <div class="denuncia-step-center">
+                        <div class="denuncia-sucesso-icone-circulo">
+                            <svg viewBox="0 0 24 24" width="46" height="46" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </div>
+                        <h3 class="denuncia-step-titulo">Denúncia enviada!</h3>
+                        <p class="denuncia-step-subtitulo">Obrigado por ajudar a manter a nossa comunidade segura.</p>
+                    </div>
 
-            <!-- ETAPA 3: LISTAGEM DE TICKETS DO USUÁRIO -->
-            <div id="denuncia-etapa-historico" style="display: none;">
-                <div class="modal-denuncia-header">
-                    <div class="modal-denuncia-titulo-bloco">
+                    <div class="denuncia-analise-aviso-box">
+                        <div class="analise-aviso-icone">
+                            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                        </div>
+                        <div class="analise-aviso-texto">
+                            Sua denúncia será analisada pela nossa equipe de moderação e o protocolo foi enviado para o seu e-mail.
+                        </div>
+                    </div>
+
+                    <div class="denuncia-etapa-footer" style="margin-top: 22px;">
+                        <button type="button" class="btn-denuncia-proximo" id="btn-voltar-ao-anuncio">
+                            <span>Voltar para o anúncio</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Painel de Histórico de Meus Tickets (se aberto) -->
+                <div class="denuncia-etapa-painel" id="denuncia-etapa-historico" style="display: none;">
+                    <div class="modal-denuncia-titulo-bloco" style="margin-bottom: 16px;">
                         <div class="modal-denuncia-icone-topo" style="background: rgba(68, 189, 50, 0.12); color: #44BD32;">
                             <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2">
                                 <circle cx="12" cy="12" r="10"></circle>
@@ -758,20 +832,19 @@
                             <p class="modal-denuncia-subtitulo">Acompanhe as denúncias que você abriu para análise da moderação.</p>
                         </div>
                     </div>
-                    <button type="button" class="btn-fechar-modal-denuncia" id="btn-fechar-historico" aria-label="Fechar">&times;</button>
-                </div>
 
-                <div class="modal-denuncia-body">
                     <div class="tickets-historico-lista" id="tickets-historico-lista">
                         <!-- Gerado dinamicamente via JS -->
                     </div>
+
+                    <div class="denuncia-etapa-footer" style="margin-top: 20px;">
+                        <button type="button" class="btn-denuncia-proximo" id="btn-fechar-historico">
+                            <span>Fechar</span>
+                        </button>
+                    </div>
                 </div>
 
-                <div class="modal-denuncia-footer">
-                    <button type="button" class="btn-denuncia-cancelar" id="btn-voltar-ao-anuncio">Fechar</button>
-                </div>
             </div>
-
         </div>
     </div>
 

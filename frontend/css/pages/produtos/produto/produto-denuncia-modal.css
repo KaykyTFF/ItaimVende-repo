@@ -96,8 +96,8 @@
 .modal-denuncia-card {
     background: #FFFFFF;
     width: 100%;
-    max-width: 580px;
-    max-height: 90vh;
+    max-width: 480px;
+    max-height: 92vh;
     border-radius: 20px;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.28), 0 0 0 1px rgba(226, 232, 240, 0.8);
     display: flex;
@@ -111,47 +111,39 @@
     transform: scale(1) translateY(0);
 }
 
-/* Modal Header */
-.modal-denuncia-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    padding: 22px 24px 18px;
-    border-bottom: 1px solid #F1F5F9;
+/* Header do Wizard de Denúncia */
+.denuncia-wizard-header {
     background: #FFFFFF;
-}
-
-.modal-denuncia-titulo-bloco {
+    border-bottom: 1px solid #F1F5F9;
     display: flex;
-    align-items: center;
-    gap: 14px;
-}
-
-.modal-denuncia-icone-topo {
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
-    background: rgba(220, 38, 38, 0.1);
-    color: #DC2626;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
     flex-shrink: 0;
 }
 
-.modal-denuncia-titulo {
-    font-size: 19px;
-    font-weight: 800;
-    color: #0F172A;
-    margin: 0;
-    line-height: 1.25;
+.denuncia-wizard-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px 0;
 }
 
-.modal-denuncia-subtitulo {
-    font-size: 13px;
-    color: #64748B;
-    margin: 3px 0 0;
-    line-height: 1.4;
+.btn-wizard-voltar {
+    background: transparent;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-wizard-voltar:hover {
+    background: #F1F5F9;
+    color: #0F172A;
 }
 
 .btn-fechar-modal-denuncia {
@@ -161,8 +153,12 @@
     color: #94A3B8;
     cursor: pointer;
     line-height: 1;
-    padding: 4px 8px;
-    border-radius: 8px;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: all 0.2s ease;
 }
 
@@ -171,31 +167,161 @@
     background: #F1F5F9;
 }
 
+/* Barra de Progresso Padronizada */
+.denuncia-progresso-box {
+    margin: 0 !important;
+    padding: 10px 22px 14px !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.denuncia-progresso-box .wizard-info-linha {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.denuncia-progresso-box .wizard-etapa-badge {
+    font-size: 11px;
+    font-weight: 800;
+    color: #44BD32;
+    background: rgba(68, 189, 50, 0.12);
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.denuncia-progresso-box .wizard-etapa-nome {
+    font-size: 13px;
+    color: #64748B;
+    font-weight: 600;
+}
+
+.denuncia-progresso-box .wizard-barra-trilha {
+    width: 100%;
+    height: 6px;
+    background: #E2E8F0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.denuncia-progresso-box .wizard-barra-progresso {
+    height: 100%;
+    background: #44BD32;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(68, 189, 50, 0.4);
+    transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 /* Modal Body */
 .modal-denuncia-body {
-    padding: 20px 24px;
+    padding: 24px 24px 28px 24px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 18px;
 }
 
-/* Resumo do Anúncio */
+.denuncia-etapa-painel {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    animation: fadeInStep 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeInStep {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Centro dos passos (Ícones e Títulos das Etapas 1, 3 e 5) */
+.denuncia-step-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
+    margin-bottom: 16px;
+}
+
+.denuncia-step-icone-wrapper {
+    width: 68px;
+    height: 68px;
+    border-radius: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 6px;
+}
+
+.denuncia-step-icone-wrapper.alerta-vermelho {
+    background: rgba(239, 68, 68, 0.1);
+    color: #EF4444;
+}
+
+.denuncia-step-icone-wrapper.icone-verde {
+    background: rgba(68, 189, 50, 0.12);
+    color: #44BD32;
+}
+
+.denuncia-step-titulo {
+    font-size: 21px;
+    font-weight: 800;
+    color: #0F172A;
+    margin: 0;
+    line-height: 1.25;
+}
+
+.denuncia-step-subtitulo {
+    font-size: 13.5px;
+    color: #64748B;
+    margin: 0;
+    line-height: 1.4;
+    max-width: 320px;
+}
+
+.denuncia-step-titulo-left {
+    font-size: 20px;
+    font-weight: 800;
+    color: #0F172A;
+    margin: 8px 0 28px 0;
+    line-height: 1.3;
+}
+
+.denuncia-step-subtitulo-left {
+    font-size: 13.5px;
+    color: #64748B;
+    margin: -16px 0 22px 0;
+    line-height: 1.45;
+}
+
+/* Resumo do Anúncio (Cards das Etapas 1 e 4) */
 .denuncia-produto-resumo {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
     padding: 12px 14px;
     background: #F8FAFC;
     border: 1px solid #E2E8F0;
-    border-radius: 12px;
+    border-radius: 14px;
+    margin: 10px 0 16px;
 }
 
 .denuncia-resumo-img {
-    width: 54px;
-    height: 54px;
+    width: 52px;
+    height: 52px;
     object-fit: cover;
-    border-radius: 8px;
+    border-radius: 10px;
     background: #E2E8F0;
     flex-shrink: 0;
 }
@@ -203,63 +329,38 @@
 .denuncia-resumo-info {
     flex: 1;
     min-width: 0;
-}
-
-.denuncia-resumo-tag {
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: #DC2626;
-    letter-spacing: 0.5px;
-    display: block;
-    margin-bottom: 2px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }
 
 .denuncia-resumo-titulo {
-    font-size: 14px;
-    color: #1E293B;
-    display: block;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #0F172A;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    line-height: 1.3;
+    line-height: 1.25;
 }
 
-.denuncia-resumo-meta {
-    font-size: 12.5px;
-    color: #64748B;
-    margin-top: 2px;
-}
-
-#denuncia-resumo-preco {
-    font-weight: 700;
+.denuncia-resumo-preco {
+    font-size: 14px;
+    font-weight: 800;
     color: #44BD32;
+    line-height: 1.2;
 }
 
-/* Campos do Form */
-.denuncia-campo-bloco {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.denuncia-label {
-    font-size: 13.5px;
-    font-weight: 700;
-    color: #1E293B;
-}
-
-.denuncia-label .required {
-    color: #DC2626;
-}
-
-.denuncia-label .opcional {
-    font-weight: 500;
-    color: #94A3B8;
+.denuncia-resumo-vendedor {
     font-size: 12px;
+    color: #64748B;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 1px;
 }
 
-/* Grid de Motivos */
+/* Grid de Motivos da Denúncia (Etapa 2) */
 .denuncia-motivos-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -269,16 +370,27 @@
 .motivo-card-item {
     position: relative;
     border: 1.5px solid #E2E8F0;
-    border-radius: 12px;
-    padding: 10px 12px;
+    border-radius: 14px;
+    padding: 12px 12px 14px;
     cursor: pointer;
     background: #FFFFFF;
     transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.motivo-card-item.motivo-card-full {
+    grid-column: span 2;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
 }
 
 .motivo-card-item:hover {
     border-color: #CBD5E1;
     background: #F8FAFC;
+    transform: translateY(-1px);
 }
 
 .motivo-card-item input[type="radio"] {
@@ -288,32 +400,61 @@
 }
 
 .motivo-card-item.ativo {
-    border-color: #DC2626;
-    background: rgba(220, 38, 38, 0.03);
-    box-shadow: 0 0 0 1px #DC2626;
+    border-color: #44BD32;
+    background: rgba(68, 189, 50, 0.04);
+    box-shadow: 0 0 0 1px #44BD32, 0 4px 12px rgba(68, 189, 50, 0.1);
 }
 
-.motivo-card-content {
+.motivo-check-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #44BD32;
+    color: #FFFFFF;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(68, 189, 50, 0.35);
+}
+
+.motivo-card-item.ativo .motivo-check-badge {
     display: flex;
-    align-items: flex-start;
-    gap: 10px;
 }
 
-.motivo-icone {
-    font-size: 18px;
+.motivo-icone-quadrado {
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
     line-height: 1;
     flex-shrink: 0;
-    margin-top: 2px;
+    transition: transform 0.2s ease, background 0.2s ease;
 }
+
+.motivo-card-item:hover .motivo-icone-quadrado {
+    transform: scale(1.08);
+}
+
+.icone-box-red { background: rgba(239, 68, 68, 0.12); color: #EF4444; }
+.icone-box-blue { background: rgba(59, 130, 246, 0.12); color: #3B82F6; }
+.icone-box-purple { background: rgba(168, 85, 247, 0.12); color: #9333EA; }
+.icone-box-orange { background: rgba(249, 115, 22, 0.12); color: #EA580C; }
+.icone-box-violet { background: rgba(139, 92, 246, 0.12); color: #7C3AED; }
 
 .motivo-textos {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 3px;
 }
 
 .motivo-textos strong {
-    font-size: 13px;
+    font-size: 13.5px;
     color: #0F172A;
     font-weight: 700;
     line-height: 1.25;
@@ -322,35 +463,56 @@
 .motivo-textos span {
     font-size: 11px;
     color: #64748B;
-    line-height: 1.3;
+    line-height: 1.35;
 }
 
-/* Inputs e Textarea */
+/* Detalhes e Textarea (Etapa 3) */
+.denuncia-campo-bloco {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.denuncia-textarea-wrapper {
+    position: relative;
+    width: 100%;
+}
+
 .denuncia-textarea {
     width: 100%;
     border: 1.5px solid #CBD5E1;
-    border-radius: 10px;
-    padding: 10px 14px;
+    border-radius: 12px;
+    padding: 12px 14px 26px;
     font-size: 13.5px;
     font-family: inherit;
-    color: #1E293B;
-    resize: vertical;
-    transition: all 0.2s ease;
+    color: #0F172A;
+    resize: none;
+    min-height: 130px;
     box-sizing: border-box;
+    transition: all 0.2s ease;
+    background: #FFFFFF;
 }
 
-.denuncia-textarea:focus,
-.denuncia-input-text:focus {
+.denuncia-textarea:focus {
     outline: none;
-    border-color: #DC2626;
-    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12);
+    border-color: #44BD32;
+    box-shadow: 0 0 0 3px rgba(68, 189, 50, 0.16);
 }
 
 .denuncia-chars-count {
+    position: absolute;
+    bottom: 8px;
+    right: 12px;
     font-size: 11px;
     color: #94A3B8;
-    text-align: right;
-    margin-top: 2px;
+    pointer-events: none;
+}
+
+.denuncia-label-suave {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #64748B;
+    margin-bottom: 2px;
 }
 
 .denuncia-input-text {
@@ -365,83 +527,429 @@
     box-sizing: border-box;
 }
 
-.denuncia-dica-privacidade {
-    font-size: 12px;
+.denuncia-input-text:focus {
+    outline: none;
+    border-color: #44BD32;
+    box-shadow: 0 0 0 3px rgba(68, 189, 50, 0.16);
+}
+
+/* Dados da Revisão (Etapa 4) */
+.denuncia-revisao-cards-box {
+    border: 1px solid #E2E8F0;
+    border-radius: 14px;
+    background: #FFFFFF;
+    overflow: hidden;
+    margin-top: 4px;
+}
+
+.denuncia-revisao-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-bottom: 1px solid #F1F5F9;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.denuncia-revisao-row:last-child {
+    border-bottom: none;
+}
+
+.denuncia-revisao-row:hover {
+    background: #F8FAFC;
+}
+
+.revisao-row-icone {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 19px;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.revisao-row-textos {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.revisao-row-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #94A3B8;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.revisao-row-valor {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #0F172A;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.revisao-row-chevron {
+    color: #94A3B8;
+    flex-shrink: 0;
+}
+
+/* Sucesso (Etapa 5) */
+.denuncia-sucesso-icone-circulo {
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    background: #44BD32;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+    box-shadow: 0 8px 24px rgba(68, 189, 50, 0.3);
+}
+
+.denuncia-analise-aviso-box {
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.analise-aviso-icone {
+    flex-shrink: 0;
     color: #64748B;
+}
+
+.analise-aviso-texto {
+    font-size: 13px;
+    color: #475569;
+    font-weight: 500;
+    line-height: 1.35;
+}
+
+/* Card do Protocolo */
+.ticket-protocolo-box {
+    background: #F8FAFC;
+    border: 1px dashed #CBD5E1;
+    border-radius: 12px;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.ticket-protocolo-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748B;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.ticket-protocolo-valor-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.ticket-protocolo-codigo {
+    font-family: monospace;
+    font-size: 17px;
+    font-weight: 800;
+    color: #0F172A;
+    letter-spacing: 1px;
+}
+
+.btn-copiar-protocolo {
     display: flex;
     align-items: center;
     gap: 6px;
-    margin: 4px 0 0;
-}
-
-/* Modal Footer */
-.modal-denuncia-footer {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 12px;
-    padding: 16px 24px;
-    background: #F8FAFC;
-    border-top: 1px solid #E2E8F0;
-}
-
-.btn-denuncia-cancelar {
     background: #FFFFFF;
-    border: 1.5px solid #CBD5E1;
-    color: #475569;
-    padding: 10px 20px;
-    border-radius: 10px;
-    font-size: 13.5px;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 12px;
     font-weight: 600;
+    color: #475569;
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
-.btn-denuncia-cancelar:hover {
+.btn-copiar-protocolo:hover {
     background: #F1F5F9;
-    color: #1E293B;
+    color: #0F172A;
+    border-color: #CBD5E1;
 }
 
-.btn-denuncia-enviar {
-    background: #DC2626;
-    border: none;
+/* Footers e Botões de Ação do Wizard */
+.denuncia-etapa-footer {
+    margin-top: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.btn-denuncia-proximo,
+.btn-denuncia-enviar,
+.btn-wizard-enviar,
+#btn-enviar-denuncia,
+#btn-voltar-ao-anuncio,
+#btn-fechar-historico {
+    width: 100%;
+    height: 48px;
+    background: #44BD32;
     color: #FFFFFF;
-    padding: 10px 22px;
-    border-radius: 10px;
-    font-size: 13.5px;
+    border: none;
+    border-radius: 14px;
+    font-size: 15px;
     font-weight: 700;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
+    box-shadow: 0 4px 14px rgba(68, 189, 50, 0.28);
     transition: all 0.2s ease;
+    text-decoration: none;
+    box-sizing: border-box;
 }
 
-.btn-denuncia-enviar:hover {
-    background: #B91C1C;
-    transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(220, 38, 38, 0.35);
+.btn-denuncia-proximo svg,
+.btn-denuncia-enviar svg,
+.btn-wizard-enviar svg,
+#btn-enviar-denuncia svg {
+    color: #FFFFFF !important;
+    stroke: #FFFFFF !important;
 }
 
-.btn-denuncia-enviar:disabled {
-    opacity: 0.65;
-    cursor: not-allowed;
-    transform: none;
-}
-
-.btn-denuncia-fechar {
-    background: #44BD32;
-    border: none;
-    color: #FFFFFF;
-    padding: 10px 28px;
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.btn-denuncia-fechar:hover {
+.btn-denuncia-proximo:hover,
+.btn-denuncia-enviar:hover,
+.btn-wizard-enviar:hover,
+#btn-enviar-denuncia:hover,
+#btn-voltar-ao-anuncio:hover,
+#btn-fechar-historico:hover {
     background: #3BA32B;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(68, 189, 50, 0.38);
+    color: #FFFFFF;
+}
+
+.btn-denuncia-proximo:active,
+.btn-denuncia-enviar:active,
+.btn-wizard-enviar:active,
+#btn-enviar-denuncia:active,
+#btn-voltar-ao-anuncio:active,
+#btn-fechar-historico:active {
+    transform: translateY(0);
+}
+
+.btn-denuncia-voltar-link {
+    background: transparent;
+    border: none;
+    color: #64748B;
+    font-size: 13.5px;
+    font-weight: 600;
+    padding: 8px 14px;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+    display: block;
+    margin: 2px auto 0;
+    width: fit-content;
+}
+
+.btn-denuncia-voltar-link:hover {
+    color: #0F172A;
+    background: #F1F5F9;
+}
+
+/* Elementos específicos de controle Mobile / Desktop */
+.modal-denuncia-drag-handle {
+    display: none;
+}
+
+.motivo-chevron-right {
+    display: none;
+}
+
+.btn-denuncia-mobile-cancelar {
+    display: none;
+}
+
+/* ==========================================================
+   VERSÃO MOBILE (ESTILO LISTA / BOTTOM SHEET NATIVO)
+   ========================================================== */
+@media (max-width: 600px) {
+    .modal-denuncia-backdrop {
+        padding: 0;
+        align-items: flex-end;
+    }
+
+    .modal-denuncia-card {
+        width: 100%;
+        max-width: 100%;
+        max-height: 88vh;
+        border-radius: 24px 24px 0 0;
+        border-bottom: none;
+        margin: 0;
+        animation: slideUpModalSheet 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes slideUpModalSheet {
+        from {
+            transform: translateY(100%);
+            opacity: 0.7;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    /* Puxador de topo estilo gaveta / bottom sheet */
+    .modal-denuncia-drag-handle {
+        display: block;
+        width: 38px;
+        height: 4.5px;
+        background: #CBD5E1;
+        border-radius: 99px;
+        margin: 10px auto 2px;
+        flex-shrink: 0;
+    }
+
+    .denuncia-wizard-topbar {
+        padding: 4px 16px 0;
+    }
+
+    .denuncia-progresso-box {
+        padding: 6px 18px 12px !important;
+    }
+
+    .modal-denuncia-body {
+        padding: 16px 18px 24px 18px;
+    }
+
+    .denuncia-step-titulo-left {
+        font-size: 19px;
+        margin: 2px 0 16px 0;
+    }
+
+    /* Layout em Linha Única / Lista para Celular (Image 2) */
+    .denuncia-motivos-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .motivo-card-item {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 12px 14px;
+        border-radius: 14px;
+        border: 1.5px solid #EEF2F6;
+        background: #FFFFFF;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+        gap: 12px;
+        min-height: 52px;
+        box-sizing: border-box;
+    }
+
+    .motivo-card-item.ativo {
+        border-color: #44BD32;
+        background: rgba(68, 189, 50, 0.05);
+        box-shadow: 0 0 0 1px #44BD32;
+    }
+
+    .motivo-icone-quadrado {
+        width: 36px;
+        height: 36px;
+        font-size: 19px;
+        border-radius: 10px;
+        flex-shrink: 0;
+    }
+
+    .motivo-textos {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .motivo-textos strong {
+        font-size: 14px;
+        font-weight: 700;
+        color: #1E293B;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.3;
+    }
+
+    /* Ocultar a descrição para manter o layout limpo de lista rápida */
+    .motivo-textos span {
+        display: none !important;
+    }
+
+    /* Ocultar check circular de desktop para mostrar o chevron de linha */
+    .motivo-check-badge {
+        display: none !important;
+    }
+
+    /* Chevron direito estilo lista iOS / Android */
+    .motivo-chevron-right {
+        display: flex !important;
+        color: #94A3B8;
+        flex-shrink: 0;
+        margin-left: auto;
+        transition: transform 0.2s ease, color 0.2s ease;
+    }
+
+    .motivo-card-item.ativo .motivo-chevron-right {
+        color: #44BD32;
+        transform: translateX(2px);
+    }
+
+    /* Na Etapa 2 em celular, o toque na linha avança diretamente; exibe Cancelar no rodapé */
+    #btn-proximo-etapa-2 {
+        display: none !important;
+    }
+
+    .btn-denuncia-mobile-cancelar {
+        display: flex !important;
+        width: 100%;
+        height: 46px;
+        background: #F1F5F9;
+        color: #475569;
+        border: none;
+        border-radius: 14px;
+        font-size: 14px;
+        font-weight: 700;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        margin-top: 4px;
+        transition: all 0.2s ease;
+    }
+
+    .btn-denuncia-mobile-cancelar:hover {
+        background: #E2E8F0;
+        color: #0F172A;
+    }
 }

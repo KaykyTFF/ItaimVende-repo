@@ -299,7 +299,7 @@ body[data-theme="dark"].pagina-produto,
     color: #4ADE80 !important;
 }
 
-/* Modal de Denúncia */
+/* Modal de Denúncia (Wizard Multietapas) */
 [data-theme="dark"] .modal-denuncia-card {
     background-color: #1F2831 !important;
     border: 1px solid #2C3946 !important;
@@ -307,26 +307,59 @@ body[data-theme="dark"].pagina-produto,
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6) !important;
 }
 
+[data-theme="dark"] .denuncia-wizard-header,
 [data-theme="dark"] .modal-denuncia-header {
     background-color: #1F2831 !important;
     border-bottom: 1px solid #2C3946 !important;
 }
 
+[data-theme="dark"] .btn-wizard-voltar,
+[data-theme="dark"] .btn-fechar-modal-denuncia {
+    background-color: #161C22 !important;
+    border-color: #2C3946 !important;
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .btn-wizard-voltar:hover,
+[data-theme="dark"] .btn-fechar-modal-denuncia:hover {
+    color: #F1F5F9 !important;
+    background-color: #2C3946 !important;
+    border-color: #3D4D5E !important;
+}
+
+[data-theme="dark"] .wizard-etapa-badge {
+    background: rgba(68, 189, 50, 0.18) !important;
+    color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .wizard-etapa-nome {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .wizard-barra-trilha {
+    background: #2C3946 !important;
+}
+
+[data-theme="dark"] .denuncia-step-titulo,
 [data-theme="dark"] .modal-denuncia-titulo {
     color: #F1F5F9 !important;
 }
 
+[data-theme="dark"] .denuncia-step-subtitulo,
 [data-theme="dark"] .modal-denuncia-subtitulo {
     color: #94A3B8 !important;
 }
 
-[data-theme="dark"] .btn-fechar-modal-denuncia {
-    color: #94A3B8 !important;
+[data-theme="dark"] .denuncia-step-icone-wrapper.alerta-vermelho {
+    background: rgba(239, 68, 68, 0.15) !important;
+    color: #F87171 !important;
+    border-color: rgba(239, 68, 68, 0.25) !important;
 }
 
-[data-theme="dark"] .btn-fechar-modal-denuncia:hover {
-    color: #F1F5F9 !important;
-    background-color: #2C3946 !important;
+[data-theme="dark"] .denuncia-step-icone-wrapper.icone-verde {
+    background: rgba(68, 189, 50, 0.15) !important;
+    color: #4ADE80 !important;
+    border-color: rgba(68, 189, 50, 0.25) !important;
 }
 
 [data-theme="dark"] .denuncia-produto-resumo {
@@ -354,11 +387,22 @@ body[data-theme="dark"].pagina-produto,
 
 [data-theme="dark"] .motivo-card-item:hover {
     border-color: #3D4D5E !important;
+    background-color: #1A222B !important;
 }
 
 [data-theme="dark"] .motivo-card-item.ativo {
-    border-color: #EF4444 !important;
-    background-color: rgba(239, 68, 68, 0.1) !important;
+    border-color: #44BD32 !important;
+    background-color: rgba(68, 189, 50, 0.14) !important;
+}
+
+[data-theme="dark"] .icone-box-red { background: rgba(239, 68, 68, 0.2) !important; color: #F87171 !important; }
+[data-theme="dark"] .icone-box-blue { background: rgba(59, 130, 246, 0.2) !important; color: #60A5FA !important; }
+[data-theme="dark"] .icone-box-purple { background: rgba(168, 85, 247, 0.2) !important; color: #C084FC !important; }
+[data-theme="dark"] .icone-box-orange { background: rgba(249, 115, 22, 0.2) !important; color: #FB923C !important; }
+[data-theme="dark"] .icone-box-violet { background: rgba(139, 92, 246, 0.2) !important; color: #A78BFA !important; }
+
+[data-theme="dark"] .motivo-card-item.ativo .motivo-icone-quadrado {
+    filter: brightness(1.15);
 }
 
 [data-theme="dark"] .motivo-textos strong {
@@ -369,19 +413,98 @@ body[data-theme="dark"].pagina-produto,
     color: #94A3B8 !important;
 }
 
-[data-theme="dark"] .denuncia-textarea {
+[data-theme="dark"] .denuncia-textarea,
+[data-theme="dark"] .denuncia-input-email {
     background-color: #161C22 !important;
-    border: 1px solid #2C3946 !important;
+    border: 1.5px solid #2C3946 !important;
     color: #F1F5F9 !important;
 }
 
-[data-theme="dark"] .denuncia-textarea:focus {
+[data-theme="dark"] .denuncia-textarea:focus,
+[data-theme="dark"] .denuncia-input-email:focus {
     border-color: #4ADE80 !important;
     box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.2) !important;
 }
 
-[data-theme="dark"] .denuncia-textarea::placeholder {
+[data-theme="dark"] .denuncia-textarea::placeholder,
+[data-theme="dark"] .denuncia-input-email::placeholder {
     color: #64748B !important;
+}
+
+[data-theme="dark"] .denuncia-char-counter {
+    color: #64748B !important;
+}
+
+/* Revisão (Etapa 4) */
+[data-theme="dark"] .denuncia-revisao-cards-box {
+    background-color: #161C22 !important;
+    border: 1px solid #2C3946 !important;
+}
+
+[data-theme="dark"] .denuncia-revisao-row {
+    border-bottom: 1px solid #2C3946 !important;
+}
+
+[data-theme="dark"] .denuncia-revisao-row:hover {
+    background-color: #1A222B !important;
+}
+
+[data-theme="dark"] .revisao-row-label {
+    color: #64748B !important;
+}
+
+[data-theme="dark"] .revisao-row-valor {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .revisao-row-chevron {
+    color: #64748B !important;
+}
+
+/* Sucesso (Etapa 5) */
+[data-theme="dark"] .denuncia-analise-aviso-box {
+    background-color: #161C22 !important;
+    border: 1px solid #2C3946 !important;
+}
+
+[data-theme="dark"] .analise-aviso-icone {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .analise-aviso-texto {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .ticket-protocolo-box {
+    background-color: #161C22 !important;
+    border: 1px dashed #2C3946 !important;
+}
+
+[data-theme="dark"] .ticket-protocolo-label {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .ticket-protocolo-codigo {
+    color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .btn-copiar-protocolo {
+    background-color: #1F2831 !important;
+    border: 1px solid #2C3946 !important;
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .btn-copiar-protocolo:hover {
+    background-color: #2C3946 !important;
+    color: #FFFFFF !important;
+}
+
+[data-theme="dark"] .btn-denuncia-voltar-link {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .btn-denuncia-voltar-link:hover {
+    color: #F1F5F9 !important;
 }
 
 [data-theme="dark"] .modal-denuncia-footer {
@@ -425,4 +548,28 @@ body[data-theme="dark"].pagina-produto,
 
 [data-theme="dark"] .tickets-vazio-box {
     color: #94A3B8 !important;
+}
+
+/* Modal Denúncia Mobile no Modo Escuro */
+[data-theme="dark"] .modal-denuncia-drag-handle {
+    background: #3D4D5E !important;
+}
+
+[data-theme="dark"] .btn-denuncia-mobile-cancelar {
+    background: #242E38 !important;
+    color: #94A3B8 !important;
+    border: 1px solid #2C3946 !important;
+}
+
+[data-theme="dark"] .btn-denuncia-mobile-cancelar:hover {
+    background: #2D3945 !important;
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .motivo-chevron-right {
+    color: #64748B !important;
+}
+
+[data-theme="dark"] .motivo-card-item.ativo .motivo-chevron-right {
+    color: #4ADE80 !important;
 }
