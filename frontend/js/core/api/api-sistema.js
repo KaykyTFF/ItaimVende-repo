@@ -16,49 +16,82 @@
 
     function getCore() {
         return window.ItaimApiCore || {
-            requisicao: () => Promise.reject(new Error('ItaimApiCore não carregado'))
+            requisicao: () => Promise.reject(new Error('ItaimApiCore não carregado')),
+            obterHeaders: () => ({})
         };
     }
 
     const sistema = {
         async obterStatus() {
-            return getCore().requisicao('/system/status');
+            return getCore().requisicao('/system/status', {
+                headers: getCore().obterHeaders(true)
+            });
         },
         async executarDiagnostico() {
-            return getCore().requisicao('/system/diagnostics', { method: 'POST' });
+            return getCore().requisicao('/system/diagnostics', {
+                method: 'POST',
+                headers: getCore().obterHeaders(true)
+            });
         },
         async health() {
             return getCore().requisicao('/health');
         },
         async obterTunnel() {
-            return getCore().requisicao('/system/tunnel');
+            return getCore().requisicao('/system/tunnel', {
+                headers: getCore().obterHeaders(true)
+            });
         },
         async iniciarTunnel() {
-            return getCore().requisicao('/system/tunnel/start', { method: 'POST' });
+            return getCore().requisicao('/system/tunnel/start', {
+                method: 'POST',
+                headers: getCore().obterHeaders(true)
+            });
         },
         async pararTunnel() {
-            return getCore().requisicao('/system/tunnel/stop', { method: 'POST' });
+            return getCore().requisicao('/system/tunnel/stop', {
+                method: 'POST',
+                headers: getCore().obterHeaders(true)
+            });
         },
         async auditarStorage() {
-            return getCore().requisicao('/system/storage/audit');
+            return getCore().requisicao('/system/storage/audit', {
+                headers: getCore().obterHeaders(true)
+            });
         },
         async limparStorageOrfaos() {
-            return getCore().requisicao('/system/storage/clean', { method: 'POST' });
+            return getCore().requisicao('/system/storage/clean', {
+                method: 'POST',
+                headers: getCore().obterHeaders(true)
+            });
         },
         async gerarProdutosDemo() {
-            return getCore().requisicao('/system/seed/products', { method: 'POST' });
+            return getCore().requisicao('/system/seed/products', {
+                method: 'POST',
+                headers: getCore().obterHeaders(true)
+            });
         },
         async limparProdutosDemo() {
-            return getCore().requisicao('/system/seed/clean', { method: 'POST' });
+            return getCore().requisicao('/system/seed/clean', {
+                method: 'POST',
+                headers: getCore().obterHeaders(true)
+            });
         },
         async obterVisaoGeralDados() {
-            return getCore().requisicao('/system/data/overview');
+            return getCore().requisicao('/system/data/overview', {
+                headers: getCore().obterHeaders(true)
+            });
         },
         async alternarStatusProduto(id) {
-            return getCore().requisicao(`/system/data/products/${encodeURIComponent(id)}/toggle`, { method: 'PATCH' });
+            return getCore().requisicao(`/system/data/products/${encodeURIComponent(id)}/toggle`, {
+                method: 'PATCH',
+                headers: getCore().obterHeaders(true)
+            });
         },
         async alternarStatusUsuario(id) {
-            return getCore().requisicao(`/system/data/users/${encodeURIComponent(id)}/toggle`, { method: 'PATCH' });
+            return getCore().requisicao(`/system/data/users/${encodeURIComponent(id)}/toggle`, {
+                method: 'PATCH',
+                headers: getCore().obterHeaders(true)
+            });
         }
     };
 

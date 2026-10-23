@@ -154,6 +154,22 @@
             });
         },
 
+        /**
+         * Exclui ou anonimiza permanentemente a conta do usuário autenticado no backend (LGPD)
+         */
+        async excluirConta() {
+            try {
+                const resposta = await getCore().requisicao('/auth/me', {
+                    method: 'DELETE',
+                    headers: getCore().obterHeaders(true)
+                });
+                this.logout();
+                return resposta;
+            } catch (err) {
+                this.logout();
+                throw err;
+            }
+        },
 
         /**
          * Encerra a sessão ativa e remove credenciais

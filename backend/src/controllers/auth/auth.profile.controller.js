@@ -1,4 +1,4 @@
-import { getUserProfile, updateUserProfile, changeUserPassword } from '../../services/auth/index.js';
+import { getUserProfile, updateUserProfile, changeUserPassword, deleteUserAccount } from '../../services/auth/index.js';
 
 export async function getProfile(req, res, next) {
   try {
@@ -61,3 +61,13 @@ export async function changePassword(req, res, next) {
     next(error);
   }
 }
+
+export async function deleteAccount(req, res, next) {
+  try {
+    const result = await deleteUserAccount(req.user.id);
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+}
+

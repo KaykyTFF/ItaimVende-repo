@@ -77,24 +77,38 @@
             });
         }
 
-        // Excluir conta definitivamente
+        // Excluir conta definitivamente (LGPD)
         const btnExcluir = $('btn-excluir-conta');
         if (btnExcluir) {
             btnExcluir.addEventListener('click', () => {
                 confirmar(
                     'Excluir conta permanentemente?',
                     'ATENÇÃO: Esta ação é definitiva e não poderá ser desfeita! Todos os seus dados cadastrais, seus anúncios publicados, fotos, favoritos e avaliações serão apagados para sempre do Itaim Vende. Tem certeza de que deseja excluir sua conta?',
-                    () => {
+                    async () => {
                         const user = (window.ItaimSessao && typeof window.ItaimSessao.obterUsuarioLogado === 'function')
                             ? window.ItaimSessao.obterUsuarioLogado()
                             : null;
+
+                        // 1. Invoca a rota DELETE /api/v1/auth/me no backend se autenticado
+                        if (window.ItaimApi?.auth?.excluirConta && window.ItaimApi?.auth?.obterToken()) {
+                            try {
+                                await window.ItaimApi.auth.excluirConta();
+                            } catch (errApi) {
+                                console.warn('[ConfigRisco] Falha ao excluir conta no backend:', errApi.message);
+                            }
+                        }
+
+                        // 2. Limpa cache e dados locais na sessão
                         if (window.ItaimSessao && typeof window.ItaimSessao.excluirContaPermanentemente === 'function') {
                             window.ItaimSessao.excluirContaPermanentemente(user ? user.email : '');
                         }
+
                         try {
                             localStorage.setItem('itaim_aviso_auth', 'Sua conta foi excluída permanentemente. Todos os seus dados foram apagados com sucesso.');
                         } catch (e) {}
-                        window.location.href = '../index.html?msg=conta_excluida';
+
+                        const urlDestino = window.ItaimRotas ? window.ItaimRotas.obterUrl('login', 'msg=conta_excluida') : '../../index.html?msg=conta_excluida';
+                        window.location.href = urlDestino;
                     },
                     'Excluir definitivamente',
                     true

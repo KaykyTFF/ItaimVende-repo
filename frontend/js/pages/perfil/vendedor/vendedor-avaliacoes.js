@@ -188,8 +188,9 @@
         // Verifica se o usuário logado é o próprio vendedor
         function verificarProprioPerfil() {
             if (!usuarioLogado) return false;
-            const meuId = String(usuarioLogado.id || '');
-            const vId = String(vendedorId || vendedor?.id || '');
+
+            const meuId = String(usuarioLogado.id || usuarioLogado.userId || '').trim();
+            const vId = String(vendedorId || vendedor?.id || vendedor?.userId || '').trim();
             if (meuId && vId && meuId === vId) return true;
 
             const meuEmail = (usuarioLogado.email || '').toLowerCase().trim();
@@ -198,15 +199,16 @@
 
             const meuUser = (usuarioLogado.username || usuarioLogado.usuario || '').toLowerCase().trim();
             const vUser = (vendedor?.username || vendedor?.usuario || '').toLowerCase().trim();
-            if (meuUser && vUser && meuUser === vUser) return true;
+            if (meuUser && vUser && meuUser !== 'admin' && vUser !== 'admin' && meuUser === vUser) return true;
 
             const meuNome = (usuarioLogado.name || usuarioLogado.nome || '').toLowerCase().trim();
             const vNome = (vendedor?.name || vendedor?.nome || '').toLowerCase().trim();
-            if (meuNome && vNome && (meuNome === vNome || meuNome.includes(vNome) || vNome.includes(meuNome))) return true;
+            if (meuNome && vNome && meuNome !== 'vendedor' && vNome !== 'vendedor' && meuNome !== 'admin' && vNome !== 'admin' && meuNome === vNome) return true;
 
+            // Se não tem parâmetros na URL E o vendedor atual tem os mesmos dados do usuário logado
             const params = new URLSearchParams(window.location.search);
-            const temParam = params.get('id') || params.get('sellerId') || params.get('userId') || params.get('email') || params.get('vendedor') || params.get('nome') || params.get('username');
-            if (!temParam) return true;
+            const temParam = Boolean(params.get('id') || params.get('sellerId') || params.get('userId') || params.get('email') || params.get('vendedor') || params.get('nome') || params.get('username'));
+            if (!temParam && meuId && vId && meuId === vId) return true;
 
             return false;
         }

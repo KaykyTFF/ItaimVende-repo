@@ -33,6 +33,22 @@
             } catch (errApi) {
                 console.info('[Vendedor] Busca direta por doVendedor falhou:', errApi.message);
             }
+
+            // Fallback secundário no backend por email ou username caso a busca por ID falhe
+            if (!vendedor && (paramEmail || paramUsername)) {
+                const fallbackId = (identificador === paramId) ? (paramEmail || paramUsername) : (paramId || paramUsername);
+                if (fallbackId && fallbackId !== identificador) {
+                    try {
+                        const resFb = await window.ItaimApi.produtos.doVendedor(fallbackId);
+                        if (resFb && resFb.success && resFb.seller) {
+                            vendedor = resFb.seller;
+                            if (Array.isArray(resFb.products)) {
+                                anunciosVendedor = resFb.products;
+                            }
+                        }
+                    } catch (_) {}
+                }
+            }
         }
 
         // Se não foi encontrado pelo endpoint do vendedor, tenta obter o perfil público por ID/Email
@@ -141,14 +157,12 @@
                        (vEmail && pEmail === vEmail) || 
                        (vNome && pNome === vNome);
             });
-
-            if (anunciosVendedor.length === 0 && (vendedor?.email === 'admin@gmail.com' || vendedor?.name === 'Admin' || paramNome.toLowerCase() === 'admin')) {
-                anunciosVendedor = todosProdutosLocais;
-            }
         }
 
         if (!vendedor) {
-            // Se não especificou parâmetro na URL, verifica se há usuário logado para exibir o próprio perfil
+            // Se NÃO especificou nenhum parâmetro na URL, verifica se há usuário logado para exibir o próprio perfil
+            const temParametrosVendedor = Boolean(paramId || paramEmail || paramNome || paramUsername || identificador);
+
             let usuarioLogado = (window.ItaimSessao && typeof window.ItaimSessao.obterUsuarioLogado === 'function')
                 ? window.ItaimSessao.obterUsuarioLogado()
                 : null;
@@ -159,7 +173,7 @@
                 try { usuarioLogado = JSON.parse(localStorage.getItem('itaim_perfil_usuario') || 'null'); } catch (_) {}
             }
 
-            if (!identificador && usuarioLogado && (usuarioLogado.id || usuarioLogado.email)) {
+            if (!temParametrosVendedor && usuarioLogado && (usuarioLogado.id || usuarioLogado.email)) {
                 vendedor = { ...usuarioLogado };
             } else {
                 const nomeFinal = paramNome || (paramEmail ? paramEmail.split('@')[0] : 'Vendedor');
@@ -167,7 +181,7 @@
                     id: paramId || Date.now(),
                     name: nomeFinal,
                     nome: nomeFinal,
-                    username: paramNome ? paramNome.toLowerCase().replace(/\s+/g, '') : (paramEmail ? paramEmail.split('@')[0] : 'vendedor'),
+                    username: paramUsername || (paramNome ? paramNome.toLowerCase().replace(/\s+/g, '') : (paramEmail ? paramEmail.split('@')[0] : 'vendedor')),
                     email: paramEmail || '',
                     phone: '(89) 99999-9999',
                     city: 'Paulistana',

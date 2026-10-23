@@ -397,9 +397,15 @@
                 };
             }
 
+            const paramsOutro = new URLSearchParams();
+            if (outro.id) paramsOutro.set('id', outro.id);
+            if (outro.nome) paramsOutro.set('vendedor', outro.nome);
+            if (outro.email) paramsOutro.set('email', outro.email);
+            if (outro.username) paramsOutro.set('username', outro.username);
+
             const urlPerfilOutro = window.ItaimRotas
-                ? window.ItaimRotas.obterUrl('vendedor', `id=${encodeURIComponent(outro.id || '')}&vendedor=${encodeURIComponent(outro.nome || '')}`)
-                : `../perfil/vendedor.html?id=${encodeURIComponent(outro.id || '')}&vendedor=${encodeURIComponent(outro.nome || '')}`;
+                ? window.ItaimRotas.obterUrl('vendedor', paramsOutro.toString())
+                : `../perfil/vendedor.html?${paramsOutro.toString()}`;
 
             if (dom.linkPerfilConversa) {
                 dom.linkPerfilConversa.href = urlPerfilOutro;

@@ -13,8 +13,12 @@ import {
   toggleProductStatusHandler,
   toggleUserStatusHandler,
 } from '../../controllers/system/index.js';
+import { authenticateToken, requireRole } from '../../middlewares/auth.middleware.js';
 
 const router = Router();
+
+// Blindagem: Todas as rotas operacionais e administrativas do sistema exigem token válido e perfil de ADMIN
+router.use(authenticateToken, requireRole('ADMIN'));
 
 // 1. Rota de status em tempo real e visão geral do sistema
 router.get('/status', getStatus);

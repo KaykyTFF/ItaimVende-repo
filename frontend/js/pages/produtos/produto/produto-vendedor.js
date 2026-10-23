@@ -26,14 +26,25 @@
         const linkPerfilVendedor = document.getElementById('link-perfil-vendedor') || boxVendedor.querySelector('.link-perfil-vendedor');
         const linkTopoVendedor = document.getElementById('link-vendedor-topo') || boxVendedor.querySelector('.vendedor-topo-row-link');
 
-        if (produto.seller && typeof produto.seller === 'object') {
-            dadosVendedor = produto.seller;
-        }
+        const vId = String(produto.vendedorId || produto.sellerId || (produto.seller && (produto.seller.id || produto.seller.userId)) || '').trim();
+        const vEmail = String(produto.vendedorEmail || (produto.seller && produto.seller.email) || '').toLowerCase().trim();
+        const vNome = String(produto.vendedorNome || produto.vendedor || (produto.seller && (produto.seller.name || produto.seller.nome)) || '').trim();
+        const vUsername = String(produto.vendedorUsername || (produto.seller && (produto.seller.username || produto.seller.usuario)) || '').toLowerCase().trim();
 
-        const vId = produto.vendedorId ? String(produto.vendedorId) : null;
-        const vEmail = (produto.vendedorEmail || '').toLowerCase().trim();
-        const vNome = (produto.vendedorNome || '').toLowerCase().trim();
-        const vUsername = (produto.vendedorUsername || '').toLowerCase().trim();
+        if (produto.seller && typeof produto.seller === 'object') {
+            dadosVendedor = {
+                ...produto.seller,
+                id: produto.seller.id || vId,
+                name: produto.seller.name || vNome,
+                nome: produto.seller.name || vNome,
+                email: produto.seller.email || vEmail,
+                username: produto.seller.username || vUsername,
+                city: produto.seller.city || produto.vendedorCidade || produto.cidade || 'Paulistana',
+                cidade: produto.seller.city || produto.vendedorCidade || produto.cidade || 'Paulistana',
+                avatar: produto.seller.avatar || produto.vendedorAvatar || fallbackAvatarVendedor,
+                phone: produto.seller.phone || produto.vendedorTelefone || ''
+            };
+        }
 
         // 1. Procura em todos os usuários gerenciados pela sessão
         if (!dadosVendedor && window.ItaimSessao && typeof window.ItaimSessao.obterTodosUsuarios === 'function') {
@@ -105,7 +116,24 @@
             }
         }
 
-        const nomeVendedor = (dadosVendedor && (dadosVendedor.name || dadosVendedor.nome)) || produto.vendedorNome || produto.vendedor || 'Vendedor';
+        // 5. Fallback com os dados do próprio anúncio para nunca ficar nulo
+        if (!dadosVendedor) {
+            dadosVendedor = {
+                id: vId || Date.now(),
+                name: vNome || 'Vendedor',
+                nome: vNome || 'Vendedor',
+                username: vUsername || (vEmail ? vEmail.split('@')[0] : 'vendedor'),
+                email: vEmail || '',
+                phone: produto.vendedorTelefone || '',
+                city: produto.vendedorCidade || produto.cidade || 'Paulistana',
+                avatar: produto.vendedorAvatar || fallbackAvatarVendedor,
+                ratingAverage: produto.vendedorAvaliacao || 0.0,
+                ratingCount: produto.vendedorTotalAvaliacoes || 0,
+                salesCount: produto.vendedorVendas || 0
+            };
+        }
+
+        const nomeVendedor = (dadosVendedor && (dadosVendedor.name || dadosVendedor.nome)) || vNome || produto.vendedorNome || produto.vendedor || 'Vendedor';
         const cidadeVendedor = (dadosVendedor && (dadosVendedor.city || dadosVendedor.cidade)) || produto.vendedorCidade || produto.cidade || 'Paulistana';
 
         // Foto de perfil do vendedor
@@ -132,22 +160,49 @@
         }
 
         // URL para o perfil público do vendedor
-        const emailParam = (dadosVendedor && dadosVendedor.email) || produto.vendedorEmail || '';
-        const idParam = (dadosVendedor && dadosVendedor.id) || produto.vendedorId || '';
+        const emailParam = (dadosVendedor && dadosVendedor.email) || vEmail || '';
+        const idParam = (dadosVendedor && (dadosVendedor.id || dadosVendedor.userId)) || vId || '';
+        const nomeParam = (dadosVendedor && (dadosVendedor.name || dadosVendedor.nome)) || vNome || nomeVendedor;
+        const userParam = (dadosVendedor && (dadosVendedor.username || dadosVendedor.usuario)) || vUsername || '';
+
         const queryParams = new URLSearchParams();
         if (idParam) queryParams.set('id', idParam);
         if (emailParam) queryParams.set('email', emailParam);
-        if (nomeVendedor) queryParams.set('vendedor', nomeVendedor);
+        if (nomeParam) queryParams.set('vendedor', nomeParam);
+        if (userParam) queryParams.set('username', userParam);
 
         const urlVendedor = (window.ItaimRotas ? window.ItaimRotas.obterUrl('vendedor', queryParams.toString()) : `../perfil/vendedor.html?${queryParams.toString()}`);
+
+        // Conecta os links do sidebar do vendedor à URL parametrizada do perfil
+        if (linkTopoVendedor) {
+            linkTopoVendedor.href = urlVendedor;
+            linkTopoVendedor.setAttribute('href', urlVendedor);
+            linkTopoVendedor.onclick = (e) => {
+                if (window.ItaimRotas && typeof window.ItaimRotas.executarTransicao === 'function') {
+                    e.preventDefault();
+                    window.ItaimRotas.executarTransicao(urlVendedor);
+                }
+            };
+        }
+
+        if (linkPerfilVendedor) {
+            linkPerfilVendedor.href = urlVendedor;
+            linkPerfilVendedor.setAttribute('href', urlVendedor);
+            linkPerfilVendedor.onclick = (e) => {
+                if (window.ItaimRotas && typeof window.ItaimRotas.executarTransicao === 'function') {
+                    e.preventDefault();
+                    window.ItaimRotas.executarTransicao(urlVendedor);
+                }
+            };
+        }
 
         // Nota e total de avaliações do vendedor no topo do card
         const notaEl = document.getElementById('vendedor-card-nota');
         const totalAvaliacoesEl = document.getElementById('vendedor-card-total-avaliacoes');
         const cardAvaliacaoTopo = document.getElementById('vendedor-card-avaliacao-topo');
 
-        let mediaNota = '5.0';
-        let totalAvaliacoes = 18;
+        let mediaNota = '0.0';
+        let totalAvaliacoes = 0;
 
         if (window.ItaimAvaliacoes && typeof window.ItaimAvaliacoes.obter === 'function') {
             const listaReviews = window.ItaimAvaliacoes.obter(dadosVendedor || nomeVendedor);
@@ -155,13 +210,13 @@
                 const stats = window.ItaimAvaliacoes.calcularMedia(listaReviews);
                 mediaNota = stats.media.toFixed(1);
                 totalAvaliacoes = stats.total;
-            } else if (dadosVendedor && dadosVendedor.avaliacao) {
-                mediaNota = parseFloat(dadosVendedor.avaliacao).toFixed(1);
-                if (dadosVendedor.totalAvaliacoes) totalAvaliacoes = dadosVendedor.totalAvaliacoes;
+            } else if (dadosVendedor && Number(dadosVendedor.ratingCount || dadosVendedor.totalAvaliacoes || 0) > 0) {
+                mediaNota = parseFloat(dadosVendedor.ratingAverage || dadosVendedor.avaliacao || 0).toFixed(1);
+                totalAvaliacoes = Number(dadosVendedor.ratingCount || dadosVendedor.totalAvaliacoes);
             }
-        } else if (dadosVendedor && dadosVendedor.avaliacao) {
-            mediaNota = parseFloat(dadosVendedor.avaliacao).toFixed(1);
-            if (dadosVendedor.totalAvaliacoes) totalAvaliacoes = dadosVendedor.totalAvaliacoes;
+        } else if (dadosVendedor && Number(dadosVendedor.ratingCount || dadosVendedor.totalAvaliacoes || 0) > 0) {
+            mediaNota = parseFloat(dadosVendedor.ratingAverage || dadosVendedor.avaliacao || 0).toFixed(1);
+            totalAvaliacoes = Number(dadosVendedor.ratingCount || dadosVendedor.totalAvaliacoes);
         }
 
         if (notaEl) notaEl.innerHTML = `${mediaNota} ★`;
@@ -171,7 +226,12 @@
             cardAvaliacaoTopo.style.cursor = 'pointer';
             cardAvaliacaoTopo.onclick = (e) => {
                 e.preventDefault();
-                window.location.href = `${urlVendedor}#avaliacoes`;
+                const urlAvaliacoes = `${urlVendedor}#avaliacoes`;
+                if (window.ItaimRotas && typeof window.ItaimRotas.executarTransicao === 'function') {
+                    window.ItaimRotas.executarTransicao(urlAvaliacoes);
+                } else {
+                    window.location.href = urlAvaliacoes;
+                }
             };
         }
 

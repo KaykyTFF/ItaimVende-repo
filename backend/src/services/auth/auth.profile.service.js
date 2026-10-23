@@ -130,3 +130,70 @@ export async function changeUserPassword(userId, { currentPassword, newPassword 
     message: 'Senha alterada com sucesso!',
   };
 }
+
+/**
+ * Exclui ou anonimiza permanentemente a conta do usuário conforme diretrizes da LGPD
+ * @param {string} userId - ID do usuário autenticado solicitando exclusão
+ */
+export async function deleteUserAccount(userId) {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { id: true, email: true, role: true },
+  });
+
+  if (!user) {
+    throw new AppError('Usuário não encontrado.', 404);
+  }
+
+  if (user.role === 'ADMIN') {
+    throw new AppError('Contas de administrador não podem ser excluídas diretamente.', 403);
+  }
+
+  const timestamp = Date.now();
+
+  try {
+    // 1. Tenta exclusão física direta se o usuário não possuir restrições relacionais históricas
+    await prisma.favorite.deleteMany({ where: { userId } });
+    await prisma.notification.deleteMany({ where: { userId } });
+    await prisma.address.deleteMany({ where: { userId } });
+    await prisma.review.deleteMany({ where: { OR: [{ authorId: userId }, { sellerId: userId }] } });
+    await prisma.product.deleteMany({ where: { sellerId: userId } });
+    await prisma.user.delete({ where: { id: userId } });
+
+    return {
+      success: true,
+      message: 'Conta e dados pessoais excluídos permanentemente com sucesso.',
+    };
+  } catch (error) {
+    // 2. Fallback de anonimização estrita nos termos da LGPD caso haja histórico de pedidos/mensagens com foreign key protegida
+    await prisma.$transaction([
+      prisma.favorite.deleteMany({ where: { userId } }),
+      prisma.notification.deleteMany({ where: { userId } }),
+      prisma.address.deleteMany({ where: { userId } }),
+      prisma.product.updateMany({
+        where: { sellerId: userId },
+        data: { status: 'VENDIDO', deletedAt: new Date() },
+      }),
+      prisma.user.update({
+        where: { id: userId },
+        data: {
+          name: 'Usuário Excluído (LGPD)',
+          username: `anon_${userId.slice(-6)}_${timestamp}`,
+          email: `anon_${userId.slice(-6)}_${timestamp}@itaimvende.deleted`,
+          phone: null,
+          avatar: 'assets/icons/icon-user.png',
+          bio: null,
+          status: 'BANNED',
+          deletedAt: new Date(),
+          password: `DELETED_LGPD_${timestamp}`,
+        },
+      }),
+    ]);
+
+    return {
+      success: true,
+      message: 'Conta encerrada e dados pessoais anonimizados permanentemente (LGPD).',
+    };
+  }
+}
+

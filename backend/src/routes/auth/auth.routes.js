@@ -7,6 +7,7 @@ import {
   updateProfile,
   getPublicProfile,
   changePassword,
+  deleteAccount,
 } from '../../controllers/auth/index.js';
 import { authenticateToken } from '../../middlewares/auth.middleware.js';
 import { validate } from '../../middlewares/validate.middleware.js';
@@ -40,6 +41,8 @@ router.put('/me', authenticateToken, validate(updateProfileSchema), updateProfil
 router.put('/profile', authenticateToken, validate(updateProfileSchema), updateProfile);
 router.put('/password', authenticateToken, validate(changePasswordSchema), changePassword);
 router.put('/change-password', authenticateToken, validate(changePasswordSchema), changePassword);
+router.delete('/me', authenticateToken, deleteAccount);
+router.delete('/profile', authenticateToken, deleteAccount);
 
 export default router;
 
