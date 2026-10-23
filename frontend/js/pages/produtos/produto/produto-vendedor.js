@@ -141,25 +141,37 @@
 
         const urlVendedor = (window.ItaimRotas ? window.ItaimRotas.obterUrl('vendedor', queryParams.toString()) : `../perfil/vendedor.html?${queryParams.toString()}`);
 
-        if (linkPerfilVendedor) linkPerfilVendedor.href = urlVendedor;
-        if (linkTopoVendedor) linkTopoVendedor.href = urlVendedor;
+        // Nota e total de avaliações do vendedor no topo do card
+        const notaEl = document.getElementById('vendedor-card-nota');
+        const totalAvaliacoesEl = document.getElementById('vendedor-card-total-avaliacoes');
+        const cardAvaliacaoTopo = document.getElementById('vendedor-card-avaliacao-topo');
 
-        const avatarBox = boxVendedor.querySelector('.vendedor-avatar-circulo');
-        if (avatarBox) {
-            avatarBox.style.cursor = 'pointer';
-            avatarBox.title = `Ver perfil de ${nomeVendedor}`;
-            avatarBox.onclick = (e) => {
-                e.preventDefault();
-                window.location.href = urlVendedor;
-            };
+        let mediaNota = '5.0';
+        let totalAvaliacoes = 18;
+
+        if (window.ItaimAvaliacoes && typeof window.ItaimAvaliacoes.obter === 'function') {
+            const listaReviews = window.ItaimAvaliacoes.obter(dadosVendedor || nomeVendedor);
+            if (listaReviews && listaReviews.length > 0) {
+                const stats = window.ItaimAvaliacoes.calcularMedia(listaReviews);
+                mediaNota = stats.media.toFixed(1);
+                totalAvaliacoes = stats.total;
+            } else if (dadosVendedor && dadosVendedor.avaliacao) {
+                mediaNota = parseFloat(dadosVendedor.avaliacao).toFixed(1);
+                if (dadosVendedor.totalAvaliacoes) totalAvaliacoes = dadosVendedor.totalAvaliacoes;
+            }
+        } else if (dadosVendedor && dadosVendedor.avaliacao) {
+            mediaNota = parseFloat(dadosVendedor.avaliacao).toFixed(1);
+            if (dadosVendedor.totalAvaliacoes) totalAvaliacoes = dadosVendedor.totalAvaliacoes;
         }
-        const nomeBox = boxVendedor.querySelector('.vendedor-nome-selo');
-        if (nomeBox) {
-            nomeBox.style.cursor = 'pointer';
-            nomeBox.title = `Ver perfil de ${nomeVendedor}`;
-            nomeBox.onclick = (e) => {
+
+        if (notaEl) notaEl.innerHTML = `${mediaNota} ★`;
+        if (totalAvaliacoesEl) totalAvaliacoesEl.textContent = `Avaliações (${totalAvaliacoes})`;
+
+        if (cardAvaliacaoTopo) {
+            cardAvaliacaoTopo.style.cursor = 'pointer';
+            cardAvaliacaoTopo.onclick = (e) => {
                 e.preventDefault();
-                window.location.href = urlVendedor;
+                window.location.href = `${urlVendedor}#avaliacoes`;
             };
         }
 

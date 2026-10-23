@@ -414,21 +414,32 @@
                 </a>
 
                 <div class="box-vendedor-sidebar">
-                    <a href="../perfil/vendedor.html" class="vendedor-topo-row-link" id="link-vendedor-topo" title="Ver perfil do vendedor">
-                        <div class="vendedor-avatar-circulo" id="vendedor-avatar-box">
-                            <img src="../../assets/icons/icon-user.png" alt="Foto de perfil do Vendedor" id="vendedor-avatar-img">
-                        </div>
-                        <div class="vendedor-textos">
-                            <div class="vendedor-nome-selo">
-                                <strong id="vendedor-nome-txt">Vendedor</strong>
+                    <div class="vendedor-card-header">
+                        <a href="../perfil/vendedor.html" class="vendedor-topo-row-link" id="link-vendedor-topo" title="Ver perfil do vendedor">
+                            <div class="vendedor-avatar-circulo" id="vendedor-avatar-box">
+                                <img src="../../assets/icons/icon-user.png" alt="Foto de perfil do Vendedor" id="vendedor-avatar-img">
                             </div>
-                            <span class="vendedor-cidade-txt" id="vendedor-cidade-txt">Paulistana - PI</span>
+                            <div class="vendedor-textos">
+                                <div class="vendedor-nome-selo">
+                                    <strong id="vendedor-nome-txt">Vendedor</strong>
+                                </div>
+                                <span class="vendedor-cidade-txt" id="vendedor-cidade-txt">Paulistana - PI</span>
+                            </div>
+                        </a>
+
+                        <!-- Nota das Avaliações no canto superior direito do card -->
+                        <div class="vendedor-card-avaliacao-topo" id="vendedor-card-avaliacao-topo" title="Avaliações do vendedor">
+                            <div class="stat-icone-wrapper-mini">
+                                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                </svg>
+                            </div>
+                            <div class="stat-dados-textos-mini">
+                                <span class="stat-valor-num-mini" id="vendedor-card-nota">5.0 ★</span>
+                                <span class="stat-rotulo-txt-mini" id="vendedor-card-total-avaliacoes">Avaliações (18)</span>
+                            </div>
                         </div>
-                    </a>
-                    <a href="../perfil/vendedor.html" class="link-perfil-vendedor" id="link-perfil-vendedor" title="Ver perfil completo do vendedor">
-                        <span>Ver perfil do vendedor</span>
-                        <span>&gt;</span>
-                    </a>
+                    </div>
                 </div>
 
                 <!-- Ação de Denúncia do Anúncio (Sistema de Tickets de Moderação) -->

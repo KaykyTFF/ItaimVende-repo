@@ -213,6 +213,21 @@ body[data-theme="dark"].pagina-produto,
     color: #94A3B8 !important;
 }
 
+[data-theme="dark"] .stat-icone-wrapper-mini {
+    background-color: rgba(68, 189, 50, 0.16) !important;
+    color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .stat-valor-num-mini,
+[data-theme="dark"] #vendedor-card-nota {
+    color: #F8FAFC !important;
+}
+
+[data-theme="dark"] .stat-rotulo-txt-mini,
+[data-theme="dark"] #vendedor-card-total-avaliacoes {
+    color: #94A3B8 !important;
+}
+
 [data-theme="dark"] .link-perfil-vendedor,
 [data-theme="dark"] #link-perfil-vendedor {
     color: #F1F5F9 !important;
