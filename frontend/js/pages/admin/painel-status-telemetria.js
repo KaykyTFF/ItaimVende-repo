@@ -131,14 +131,16 @@
      * Carrega os dados de status e métricas do sistema
      */
     async function carregarStatusSistema() {
-        const { el, API_BASE, setUltimoRelatorio, adicionarLog } = getUtils();
+        const { el, API_BASE, setUltimoRelatorio, adicionarLog, obterHeadersAdmin } = getUtils();
         if (el?.iconRefresh) el.iconRefresh.classList.add('fa-spin');
 
         const inicio = performance.now();
         try {
+            const headers = obterHeadersAdmin ? obterHeadersAdmin() : {};
+            headers['Cache-Control'] = 'no-cache';
             const res = await fetch(`${API_BASE}/system/status`, {
                 cache: 'no-store',
-                headers: { 'Cache-Control': 'no-cache' }
+                headers
             });
 
             const duracao = Math.round(performance.now() - inicio);

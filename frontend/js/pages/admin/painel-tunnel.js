@@ -18,11 +18,13 @@
      * Consulta o status do túnel Cloudflare
      */
     async function carregarStatusTunnel() {
-        const { API_BASE } = getUtils();
+        const { API_BASE, obterHeadersAdmin } = getUtils();
         try {
+            const headers = obterHeadersAdmin ? obterHeadersAdmin() : {};
+            headers['Cache-Control'] = 'no-cache';
             const res = await fetch(`${API_BASE}/system/tunnel`, {
                 cache: 'no-store',
-                headers: { 'Cache-Control': 'no-cache' }
+                headers
             });
             if (!res.ok) return;
             const json = await res.json();
@@ -102,7 +104,7 @@
      * Ação de ligar o site e gerar link público
      */
     async function ligarSiteCloudAction() {
-        const { el, API_BASE, mostrarToast, adicionarLog } = getUtils();
+        const { el, API_BASE, mostrarToast, adicionarLog, obterHeadersAdmin } = getUtils();
         if (el?.btnIniciarTunnel) el.btnIniciarTunnel.disabled = true;
         if (el?.textIniciarTunnel) el.textIniciarTunnel.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Ligando site na nuvem...';
         if (el?.btnHeaderTunnelText) el.btnHeaderTunnelText.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Ligando...';
@@ -114,7 +116,7 @@
         try {
             const res = await fetch(`${API_BASE}/system/tunnel/start`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: obterHeadersAdmin ? obterHeadersAdmin(true) : { 'Content-Type': 'application/json' },
             });
 
             const duracao = Math.round(performance.now() - inicio);
@@ -143,14 +145,14 @@
      * Ação de desligar o túnel Cloudflare
      */
     async function desligarTunnelAction() {
-        const { el, API_BASE, mostrarToast, adicionarLog } = getUtils();
+        const { el, API_BASE, mostrarToast, adicionarLog, obterHeadersAdmin } = getUtils();
         if (el?.btnDesligarTunnel) el.btnDesligarTunnel.disabled = true;
         if (mostrarToast) mostrarToast('Desconectando túnel...', 'info');
 
         try {
             const res = await fetch(`${API_BASE}/system/tunnel/stop`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: obterHeadersAdmin ? obterHeadersAdmin(true) : { 'Content-Type': 'application/json' },
             });
             const json = await res.json();
             atualizarInterfaceTunnel({ running: false, url: null });

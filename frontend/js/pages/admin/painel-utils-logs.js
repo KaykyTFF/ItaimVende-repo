@@ -247,6 +247,14 @@ PASTA VENDAS: ${ultimoRelatorio?.storage?.folders?.vendas?.count || 0} arquivos
         }
     }
 
+    function obterHeadersAdmin(isJson = false) {
+        const headers = {};
+        if (isJson) headers['Content-Type'] = 'application/json';
+        const token = localStorage.getItem('itaim_token');
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+        return headers;
+    }
+
     // Exportação do Módulo
     window.ItaimAdminUtils = {
         BACKEND_HOST,
@@ -257,6 +265,7 @@ PASTA VENDAS: ${ultimoRelatorio?.storage?.folders?.vendas?.count || 0} arquivos
         adicionarLog,
         detectarAmbienteRede,
         copiarRelatorio,
+        obterHeadersAdmin,
         getUltimoRelatorio: () => ultimoRelatorio,
         setUltimoRelatorio: (rel) => { ultimoRelatorio = rel; },
         getRefreshTimer: () => refreshTimer,

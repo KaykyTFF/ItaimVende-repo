@@ -17,8 +17,38 @@ import { authenticateToken, requireRole } from '../../middlewares/auth.middlewar
 
 const router = Router();
 
-// Blindagem: Todas as rotas operacionais e administrativas do sistema exigem token válido e perfil de ADMIN
-router.use(authenticateToken, requireRole('ADMIN'));
+/**
+ * Blindagem: Rotas do sistema exigem credenciais de ADMIN para qualquer visitante na internet
+ * (como acessos remotos via túnel Cloudflare). Requisições diretas de loopback local (localhost)
+ * no ambiente do desenvolvedor são permitidas para gerenciamento e inicialização do túnel.
+ */
+async function requireSystemAccess(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (token) {
+    return authenticateToken(req, res, () => {
+      return requireRole('ADMIN')(req, res, next);
+    });
+  }
+
+  // Verifica se a conexão é originada diretamente do loopback local
+  const forwarded = req.headers['x-forwarded-for'] || req.headers['cf-connecting-ip'];
+  const remoteIp = req.socket?.remoteAddress || req.ip || '';
+  const isLocalhost = !forwarded && (remoteIp === '127.0.0.1' || remoteIp === '::1' || remoteIp === '::ffff:127.0.0.1');
+
+  if (isLocalhost) {
+    req.user = { id: 'local_dev_admin', role: 'ADMIN', name: 'Administrador Local' };
+    return next();
+  }
+
+  return res.status(401).json({
+    success: false,
+    message: 'Acesso não autorizado. Esta rota do sistema requer autenticação de Administrador.',
+  });
+}
+
+router.use(requireSystemAccess);
 
 // 1. Rota de status em tempo real e visão geral do sistema
 router.get('/status', getStatus);
