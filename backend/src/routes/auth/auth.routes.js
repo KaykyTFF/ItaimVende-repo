@@ -8,6 +8,9 @@ import {
   getPublicProfile,
   changePassword,
   deleteAccount,
+  forgotPassword,
+  verifyResetCode,
+  resetPassword,
 } from '../../controllers/auth/index.js';
 import { authenticateToken } from '../../middlewares/auth.middleware.js';
 import { validate } from '../../middlewares/validate.middleware.js';
@@ -16,6 +19,9 @@ import {
   loginSchema,
   updateProfileSchema,
   changePasswordSchema,
+  forgotPasswordSchema,
+  verifyResetCodeSchema,
+  resetPasswordSchema,
 } from '../../schemas/auth/index.js';
 
 const router = Router();
@@ -34,6 +40,12 @@ const authLimiter = rateLimit({
 
 router.post('/register', authLimiter, validate(registerSchema), register);
 router.post('/login', authLimiter, validate(loginSchema), login);
+
+// Recuperação e Redefinição de Senha (Pilar 1)
+router.post('/forgot-password', authLimiter, validate(forgotPasswordSchema), forgotPassword);
+router.post('/verify-reset-code', authLimiter, validate(verifyResetCodeSchema), verifyResetCode);
+router.post('/reset-password', authLimiter, validate(resetPasswordSchema), resetPassword);
+
 router.get('/me', authenticateToken, getProfile);
 router.get('/profile', authenticateToken, getProfile);
 router.get('/user/:id', getPublicProfile);

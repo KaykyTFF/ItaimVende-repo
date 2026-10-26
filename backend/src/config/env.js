@@ -54,5 +54,15 @@ export const ENV = {
   IMAGE_OPTIMIZATION_ENABLED: process.env.IMAGE_OPTIMIZATION_ENABLED !== 'false',
   IMAGE_MAX_WIDTH: parseInt(process.env.IMAGE_MAX_WIDTH || '1600', 10),
   IMAGE_QUALITY: parseInt(process.env.IMAGE_QUALITY || '82', 10),
+
+  // Serviço de E-mail (Resend, Nodemailer/SMTP e Fallback de Desenvolvimento)
+  RESEND_API_KEY: process.env.RESEND_API_KEY || '',
+  EMAIL_FROM: process.env.EMAIL_FROM || 'Itaim Vende <onboarding@resend.dev>',
+  APP_URL: process.env.APP_URL || process.env.FRONTEND_URL || 'http://localhost:3000',
+  SMTP_HOST: process.env.SMTP_HOST || '',
+  SMTP_PORT: parseInt(process.env.SMTP_PORT || '587', 10),
+  SMTP_USER: process.env.SMTP_USER || '',
+  SMTP_PASS: process.env.SMTP_PASS || '',
+  SMTP_SECURE: process.env.SMTP_SECURE === 'true',
 };
 

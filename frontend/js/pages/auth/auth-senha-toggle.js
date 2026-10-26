@@ -36,6 +36,9 @@
 
             this.configurarToggle('btn-toggle-cad-senha', inputCadSenhaId);
             this.configurarToggle('btn-toggle-cad-confirma', inputCadConfirmaId);
+
+            this.configurarToggle('btn-toggle-rec-nova-senha', 'recuperar-nova-senha');
+            this.configurarToggle('btn-toggle-rec-confirma-senha', 'recuperar-confirmar-senha');
         }
     };
 

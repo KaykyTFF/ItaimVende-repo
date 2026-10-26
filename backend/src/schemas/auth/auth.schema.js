@@ -39,3 +39,29 @@ export const changePasswordSchema = z.object({
     .regex(/^(?=.*[A-Za-z])(?=.*\d)/, 'A nova senha deve conter pelo menos uma letra e um número para sua segurança.'),
 });
 
+export const forgotPasswordSchema = z.object({
+  email: z.string().email('E-mail informado é inválido.'),
+});
+
+export const verifyResetCodeSchema = z.object({
+  email: z.string().email('E-mail informado é inválido.'),
+  code: z
+    .string()
+    .min(6, 'O código deve conter 6 dígitos.')
+    .max(6, 'O código deve conter 6 dígitos.')
+    .regex(/^\d{6}$/, 'O código deve conter apenas números.'),
+});
+
+export const resetPasswordSchema = z.object({
+  email: z.string().email('E-mail informado é inválido.'),
+  token: z.string().optional(),
+  code: z.string().optional(),
+  newPassword: z
+    .string()
+    .min(6, 'A nova senha deve possuir pelo menos 6 caracteres.')
+    .regex(/^(?=.*[A-Za-z])(?=.*\d)/, 'A nova senha deve conter pelo menos uma letra e um número para sua segurança.'),
+}).refine(data => data.token || data.code, {
+  message: 'É necessário fornecer o código de 6 dígitos ou o token de recuperação.',
+  path: ['token'],
+});
+

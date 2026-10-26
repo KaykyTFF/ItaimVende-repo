@@ -172,6 +172,47 @@
         },
 
         /**
+         * Solicita código de recuperação de senha por e-mail (POST /auth/forgot-password)
+         */
+        async solicitarRecuperacao(email) {
+            return getCore().requisicao('/auth/forgot-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: (email || '').trim() })
+            });
+        },
+
+        /**
+         * Valida o código OTP numérico de 6 dígitos (POST /auth/verify-reset-code)
+         */
+        async validarCodigoRecuperacao(email, code) {
+            return getCore().requisicao('/auth/verify-reset-code', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: (email || '').trim(),
+                    code: (code || '').trim()
+                })
+            });
+        },
+
+        /**
+         * Redefine a senha do usuário com código ou token (POST /auth/reset-password)
+         */
+        async redefinirSenha({ email, token, code, newPassword }) {
+            return getCore().requisicao('/auth/reset-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: (email || '').trim(),
+                    token: token || undefined,
+                    code: code || undefined,
+                    newPassword
+                })
+            });
+        },
+
+        /**
          * Encerra a sessão ativa e remove credenciais
          */
         logout() {

@@ -902,6 +902,13 @@ html, body {
     color: var(--color-primary-hover);
 }
 
+.box-reenviar-codigo {
+    justify-content: center;
+    margin-top: 12px;
+    margin-bottom: 18px;
+    text-align: center;
+}
+
 /* Botões do Login */
 .box-botoes {
     display: flex;
