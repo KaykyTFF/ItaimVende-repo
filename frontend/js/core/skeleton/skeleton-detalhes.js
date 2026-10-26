@@ -94,10 +94,99 @@
         }
     }
 
+    function obterConversasHtml(qtd = 5) {
+        let html = '<div class="skeleton-conversas-wrapper" aria-hidden="true">';
+        for (let i = 0; i < qtd; i++) {
+            html += `
+                <div class="skeleton-conversa-item">
+                    <div class="skeleton-conversa-avatar"></div>
+                    <div class="skeleton-conversa-info">
+                        <div class="skeleton-conversa-linha-topo">
+                            <div class="skeleton-conversa-nome"></div>
+                            <div class="skeleton-conversa-tempo"></div>
+                        </div>
+                        <div class="skeleton-conversa-msg"></div>
+                    </div>
+                </div>
+            `;
+        }
+        html += '</div>';
+        return html;
+    }
+
+    function renderizarConversas(container, qtd = 5) {
+        const el = (typeof container === 'string') ? document.querySelector(container) : container;
+        if (el) {
+            el.innerHTML = obterConversasHtml(qtd);
+        }
+    }
+
+    function obterNotificacoesHtml(qtd = 5) {
+        let html = '<div class="skeleton-notificacoes-wrapper" aria-hidden="true">';
+        for (let i = 0; i < qtd; i++) {
+            html += `
+                <div class="skeleton-notificacao-card">
+                    <div class="skeleton-notificacao-icone"></div>
+                    <div class="skeleton-notificacao-info">
+                        <div class="skeleton-notificacao-titulo"></div>
+                        <div class="skeleton-notificacao-texto"></div>
+                        <div class="skeleton-notificacao-data"></div>
+                    </div>
+                </div>
+            `;
+        }
+        html += '</div>';
+        return html;
+    }
+
+    function renderizarNotificacoes(container, qtd = 5) {
+        const el = (typeof container === 'string') ? document.querySelector(container) : container;
+        if (el) {
+            el.innerHTML = obterNotificacoesHtml(qtd);
+        }
+    }
+
+    function obterAvaliacoesHtml(qtd = 3) {
+        let html = '<div class="skeleton-avaliacoes-wrapper" aria-hidden="true">';
+        for (let i = 0; i < qtd; i++) {
+            html += `
+                <div class="skeleton-avaliacao-item">
+                    <div class="skeleton-avaliacao-topo">
+                        <div class="skeleton-avaliacao-autor-row">
+                            <div class="skeleton-avaliacao-avatar"></div>
+                            <div class="skeleton-avaliacao-autor-linhas">
+                                <div class="skeleton-avaliacao-nome"></div>
+                                <div class="skeleton-avaliacao-data"></div>
+                            </div>
+                        </div>
+                        <div class="skeleton-avaliacao-estrelas"></div>
+                    </div>
+                    <div class="skeleton-avaliacao-comentario"></div>
+                </div>
+            `;
+        }
+        html += '</div>';
+        return html;
+    }
+
+    function renderizarAvaliacoes(container, qtd = 3) {
+        const el = (typeof container === 'string') ? document.querySelector(container) : container;
+        if (el) {
+            el.innerHTML = obterAvaliacoesHtml(qtd);
+        }
+    }
+
     window.ItaimSkeletonDetalhes = {
         obterDetalhesProdutoHtml,
         obterMeusAnunciosHtml,
-        renderizarMeusAnuncios
+        renderizarMeusAnuncios,
+        obterConversasHtml,
+        renderizarConversas,
+        obterNotificacoesHtml,
+        renderizarNotificacoes,
+        obterAvaliacoesHtml,
+        renderizarAvaliacoes
     };
 
 })();
+

@@ -7,6 +7,15 @@
     'use strict';
 
     async function inicializar() {
+        if (window.ItaimSkeleton) {
+            if (typeof window.ItaimSkeleton.renderizarCards === 'function') {
+                window.ItaimSkeleton.renderizarCards('#grade-produtos-vendedor', 4);
+            }
+            if (typeof window.ItaimSkeleton.renderizarAvaliacoes === 'function') {
+                window.ItaimSkeleton.renderizarAvaliacoes('#lista-avaliacoes-vendedor', 3);
+            }
+        }
+
         if (window.ItaimVendedorDados?.inicializar) {
             await window.ItaimVendedorDados.inicializar();
         }

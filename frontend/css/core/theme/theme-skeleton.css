@@ -10,13 +10,22 @@
 [data-theme="dark"] .skeleton-produto-card-topo,
 [data-theme="dark"] .skeleton-card-vendedor,
 [data-theme="dark"] .skeleton-meu-anuncio-card,
+[data-theme="dark"] .skeleton-conversa-item,
+[data-theme="dark"] .skeleton-notificacao-card,
 .dark-theme .skeleton-card-produto,
 .dark-theme .skeleton-produto-card-topo,
 .dark-theme .skeleton-card-vendedor,
-.dark-theme .skeleton-meu-anuncio-card {
+.dark-theme .skeleton-meu-anuncio-card,
+.dark-theme .skeleton-conversa-item,
+.dark-theme .skeleton-notificacao-card {
     background-color: #1F2831 !important;
     border-color: #2C3946 !important;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35) !important;
+}
+
+[data-theme="dark"] .skeleton-avaliacao-item,
+.dark-theme .skeleton-avaliacao-item {
+    border-bottom-color: #2C3946 !important;
 }
 
 [data-theme="dark"] .skeleton-card-produto .skeleton-rodape,
@@ -57,6 +66,19 @@
 [data-theme="dark"] .skeleton-stat-box,
 [data-theme="dark"] .skeleton-meu-anuncio-thumb,
 [data-theme="dark"] .skeleton-acao-btn,
+[data-theme="dark"] .skeleton-conversa-avatar,
+[data-theme="dark"] .skeleton-conversa-nome,
+[data-theme="dark"] .skeleton-conversa-tempo,
+[data-theme="dark"] .skeleton-conversa-msg,
+[data-theme="dark"] .skeleton-notificacao-icone,
+[data-theme="dark"] .skeleton-notificacao-titulo,
+[data-theme="dark"] .skeleton-notificacao-texto,
+[data-theme="dark"] .skeleton-notificacao-data,
+[data-theme="dark"] .skeleton-avaliacao-avatar,
+[data-theme="dark"] .skeleton-avaliacao-nome,
+[data-theme="dark"] .skeleton-avaliacao-data,
+[data-theme="dark"] .skeleton-avaliacao-estrelas,
+[data-theme="dark"] .skeleton-avaliacao-comentario,
 .dark-theme .itaim-skeleton-shimmer,
 .dark-theme .skeleton-line,
 .dark-theme .skeleton-box,
@@ -83,7 +105,20 @@
 .dark-theme .skeleton-avatar-vendedor,
 .dark-theme .skeleton-stat-box,
 .dark-theme .skeleton-meu-anuncio-thumb,
-.dark-theme .skeleton-acao-btn {
+.dark-theme .skeleton-acao-btn,
+.dark-theme .skeleton-conversa-avatar,
+.dark-theme .skeleton-conversa-nome,
+.dark-theme .skeleton-conversa-tempo,
+.dark-theme .skeleton-conversa-msg,
+.dark-theme .skeleton-notificacao-icone,
+.dark-theme .skeleton-notificacao-titulo,
+.dark-theme .skeleton-notificacao-texto,
+.dark-theme .skeleton-notificacao-data,
+.dark-theme .skeleton-avaliacao-avatar,
+.dark-theme .skeleton-avaliacao-nome,
+.dark-theme .skeleton-avaliacao-data,
+.dark-theme .skeleton-avaliacao-estrelas,
+.dark-theme .skeleton-avaliacao-comentario {
     background: linear-gradient(
         90deg,
         #242E38 0%,

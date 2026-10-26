@@ -525,6 +525,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Carrega dados da API do Backend com filtros e fallback automático
     async function carregarProdutosApi() {
+        if (gradeProdutos && window.ItaimSkeleton && typeof window.ItaimSkeleton.renderizarCards === 'function') {
+            window.ItaimSkeleton.renderizarCards(gradeProdutos, 8);
+        }
+
         if (window.ItaimApi && typeof window.ItaimApi.produtos.listar === 'function') {
             try {
                 const apiFiltros = {};

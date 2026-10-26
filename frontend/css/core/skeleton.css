@@ -70,7 +70,23 @@ body.dark-theme,
 .skeleton-avatar-vendedor,
 .skeleton-stat-box,
 .skeleton-meu-anuncio-thumb,
-.skeleton-acao-btn {
+.skeleton-acao-btn,
+/* Chat */
+.skeleton-conversa-avatar,
+.skeleton-conversa-nome,
+.skeleton-conversa-tempo,
+.skeleton-conversa-msg,
+/* Notificações */
+.skeleton-notificacao-icone,
+.skeleton-notificacao-titulo,
+.skeleton-notificacao-texto,
+.skeleton-notificacao-data,
+/* Avaliações */
+.skeleton-avaliacao-avatar,
+.skeleton-avaliacao-nome,
+.skeleton-avaliacao-data,
+.skeleton-avaliacao-estrelas,
+.skeleton-avaliacao-comentario {
     background: linear-gradient(
         90deg,
         var(--skeleton-shimmer-1, #f1f5f9) 0%,
@@ -448,68 +464,170 @@ body.dark-theme,
     background-color: #161C22 !important;
 }
 
-/* Shimmer dos elementos internos no modo escuro */
-[data-theme="dark"] .itaim-skeleton-shimmer,
-[data-theme="dark"] .skeleton-line,
-[data-theme="dark"] .skeleton-box,
-[data-theme="dark"] .skeleton-circle,
-[data-theme="dark"] .skeleton-thumb,
-[data-theme="dark"] .skeleton-tag,
-[data-theme="dark"] .skeleton-pill,
-[data-theme="dark"] .skeleton-btn,
-[data-theme="dark"] .skeleton-titulo-linha1,
-[data-theme="dark"] .skeleton-titulo-linha2,
-[data-theme="dark"] .skeleton-preco-box,
-[data-theme="dark"] .skeleton-local,
-[data-theme="dark"] .skeleton-tempo,
-[data-theme="dark"] .skeleton-foto-destaque,
-[data-theme="dark"] .skeleton-miniatura-item,
-[data-theme="dark"] .skeleton-selo-topo,
-[data-theme="dark"] .skeleton-titulo-grande-1,
-[data-theme="dark"] .skeleton-titulo-grande-2,
-[data-theme="dark"] .skeleton-localizacao-bar,
-[data-theme="dark"] .skeleton-preco-destaque,
-[data-theme="dark"] .skeleton-especificacao-pill,
-[data-theme="dark"] .skeleton-botao-whatsapp,
-[data-theme="dark"] .skeleton-botao-chat,
-[data-theme="dark"] .skeleton-avatar-vendedor,
-[data-theme="dark"] .skeleton-stat-box,
-[data-theme="dark"] .skeleton-meu-anuncio-thumb,
-[data-theme="dark"] .skeleton-acao-btn,
-.dark-theme .itaim-skeleton-shimmer,
-.dark-theme .skeleton-line,
-.dark-theme .skeleton-box,
-.dark-theme .skeleton-circle,
-.dark-theme .skeleton-thumb,
-.dark-theme .skeleton-tag,
-.dark-theme .skeleton-pill,
-.dark-theme .skeleton-btn,
-.dark-theme .skeleton-titulo-linha1,
-.dark-theme .skeleton-titulo-linha2,
-.dark-theme .skeleton-preco-box,
-.dark-theme .skeleton-local,
-.dark-theme .skeleton-tempo,
-.dark-theme .skeleton-foto-destaque,
-.dark-theme .skeleton-miniatura-item,
-.dark-theme .skeleton-selo-topo,
-.dark-theme .skeleton-titulo-grande-1,
-.dark-theme .skeleton-titulo-grande-2,
-.dark-theme .skeleton-localizacao-bar,
-.dark-theme .skeleton-preco-destaque,
-.dark-theme .skeleton-especificacao-pill,
-.dark-theme .skeleton-botao-whatsapp,
-.dark-theme .skeleton-botao-chat,
-.dark-theme .skeleton-avatar-vendedor,
-.dark-theme .skeleton-stat-box,
-.dark-theme .skeleton-meu-anuncio-thumb,
-.dark-theme .skeleton-acao-btn {
-    background: linear-gradient(
-        90deg,
-        #242E38 0%,
-        #334150 40%,
-        #2A3644 60%,
-        #242E38 100%
-    ) !important;
-    background-size: 250% 100% !important;
+/* Shimmer no modo escuro: as variáveis CSS já trocam as cores automaticamente.
+   Não é necessário sobrescrever aqui — a regra base consome as variáveis do tema
+   e a animação itaimShimmer continua ativa em ambos os modos. */
+
+/* ==========================================================================
+   6. SKELETON: CONVERSAS DO CHAT (MENSAGENS/CONVERSAS.HTML)
+   ========================================================================== */
+.skeleton-conversa-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: var(--skeleton-card-bg, #FFFFFF);
+    border: 1px solid var(--skeleton-card-border, #E2E8F0);
+    margin-bottom: 8px;
+    pointer-events: none;
 }
+
+.skeleton-conversa-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.skeleton-conversa-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+}
+
+.skeleton-conversa-linha-topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.skeleton-conversa-nome {
+    width: 50%;
+    height: 14px;
+    border-radius: 4px;
+}
+
+.skeleton-conversa-tempo {
+    width: 25%;
+    height: 11px;
+    border-radius: 3px;
+}
+
+.skeleton-conversa-msg {
+    width: 80%;
+    height: 12px;
+    border-radius: 4px;
+}
+
+/* ==========================================================================
+   7. SKELETON: NOTIFICAÇÕES (NOTIFICACOES/NOTIFICACOES.HTML)
+   ========================================================================== */
+.skeleton-notificacao-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px;
+    border-radius: 14px;
+    background: var(--skeleton-card-bg, #FFFFFF);
+    border: 1px solid var(--skeleton-card-border, #E2E8F0);
+    margin-bottom: 10px;
+    pointer-events: none;
+}
+
+.skeleton-notificacao-icone {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.skeleton-notificacao-info {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    flex: 1;
+}
+
+.skeleton-notificacao-titulo {
+    width: 40%;
+    height: 15px;
+    border-radius: 4px;
+}
+
+.skeleton-notificacao-texto {
+    width: 75%;
+    height: 13px;
+    border-radius: 4px;
+}
+
+.skeleton-notificacao-data {
+    width: 20%;
+    height: 11px;
+    border-radius: 3px;
+}
+
+/* ==========================================================================
+   8. SKELETON: AVALIAÇÕES (PERFIL.HTML & VENDEDOR.HTML)
+   ========================================================================== */
+.skeleton-avaliacao-item {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--skeleton-rodape-border, #F1F5F9);
+    pointer-events: none;
+}
+
+.skeleton-avaliacao-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.skeleton-avaliacao-autor-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.skeleton-avaliacao-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.skeleton-avaliacao-autor-linhas {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.skeleton-avaliacao-nome {
+    width: 100px;
+    height: 14px;
+    border-radius: 4px;
+}
+
+.skeleton-avaliacao-data {
+    width: 60px;
+    height: 11px;
+    border-radius: 3px;
+}
+
+.skeleton-avaliacao-estrelas {
+    width: 70px;
+    height: 14px;
+    border-radius: 4px;
+}
+
+.skeleton-avaliacao-comentario {
+    width: 85%;
+    height: 14px;
+    border-radius: 4px;
+    margin-left: 44px;
+}
+
 
