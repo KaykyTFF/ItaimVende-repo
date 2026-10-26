@@ -17,6 +17,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     async function carregarNotificacoes() {
+        if (lista && todasNotifs.length === 0 && window.ItaimSkeleton && typeof window.ItaimSkeleton.renderizarNotificacoes === 'function') {
+            window.ItaimSkeleton.renderizarNotificacoes(lista, 5);
+        }
+
         if (estaAutenticado() && window.ItaimApi.notificacoes) {
             try {
                 const res = await window.ItaimApi.notificacoes.listar();

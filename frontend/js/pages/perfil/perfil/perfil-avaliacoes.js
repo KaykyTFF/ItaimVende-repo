@@ -117,9 +117,9 @@
                         <div style="display:flex;align-items:center;gap:10px;">
                             <div style="display:flex;align-items:center;">${avatarHtml}</div>
                             <div>
-                                <div style="font-weight:700;font-size:13.5px;color:#1E293B;display:flex;align-items:center;gap:6px;">
-                                    ${nomeAutor}
-                                    ${isMinha ? '<span style="font-size:10.5px;background:#E2E8F0;color:#475569;padding:2px 6px;border-radius:4px;font-weight:700;">Você</span>' : ''}
+                                <div class="avaliacao-autor-nome" style="font-weight:700;font-size:13.5px;display:flex;align-items:center;gap:6px;">
+                                    <span>${nomeAutor}</span>
+                                    ${isMinha ? '<span class="avaliacao-badge-voce" style="font-size:10.5px;padding:2px 6px;border-radius:4px;font-weight:700;">Você</span>' : ''}
                                 </div>
                                 <div style="font-size:11.5px;color:#94A3B8;">${formatarData(item.data)}</div>
                             </div>
@@ -131,7 +131,7 @@
                             ${menuDropdownHtml}
                         </div>
                     </div>
-                    ${item.comentario ? `<p style="font-size:13.5px;color:#475569;line-height:1.5;margin:4px 0 0 44px;">${item.comentario}</p>` : ''}
+                    ${item.comentario ? `<p class="avaliacao-comentario-txt" style="font-size:13.5px;line-height:1.5;margin:4px 0 0 44px;">${item.comentario}</p>` : ''}
                     ${respostaHtml}
                 </div>
                 <div class="avaliacao-container-edicao" style="display:none;"></div>
@@ -183,6 +183,10 @@
         let usouApi = false;
 
         const idBusca = userId || perfilExibido.email || perfilExibido.username;
+        if (container && window.ItaimSkeleton && typeof window.ItaimSkeleton.renderizarAvaliacoes === 'function') {
+            window.ItaimSkeleton.renderizarAvaliacoes(container, 3);
+        }
+
         if (idBusca && window.ItaimApi?.reviews?.listar) {
             try {
                 const res = await window.ItaimApi.reviews.listar(idBusca);

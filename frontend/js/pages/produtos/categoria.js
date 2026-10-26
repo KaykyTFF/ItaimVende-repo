@@ -404,6 +404,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 4. Carregar Produtos (API com Fallback Local)
     async function carregarProdutosCategoria() {
+        if (gradeProdutos && window.ItaimSkeleton && typeof window.ItaimSkeleton.renderizarCards === 'function') {
+            window.ItaimSkeleton.renderizarCards(gradeProdutos, 8);
+        }
+
         if (window.ItaimApi && typeof window.ItaimApi.produtos.listar === 'function') {
             try {
                 const apiParams = {};

@@ -131,8 +131,8 @@
                             <div style="display:flex;align-items:center;">${avatarHtml}</div>
                             <div>
                                 <div class="avaliacao-autor-nome" style="font-weight:700;font-size:13.5px;display:flex;align-items:center;gap:6px;">
-                                    ${nomeAutor}
-                                    ${isMinha ? '<span style="font-size:10.5px;background:#E2E8F0;color:#475569;padding:2px 6px;border-radius:4px;font-weight:700;">Você</span>' : ''}
+                                    <span>${nomeAutor}</span>
+                                    ${isMinha ? '<span class="avaliacao-badge-voce" style="font-size:10.5px;padding:2px 6px;border-radius:4px;font-weight:700;">Você</span>' : ''}
                                 </div>
                                 <div style="font-size:11.5px;color:#94A3B8;">${formatarData(item.data)}</div>
                             </div>

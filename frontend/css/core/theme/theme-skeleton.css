@@ -10,13 +10,22 @@
 [data-theme="dark"] .skeleton-produto-card-topo,
 [data-theme="dark"] .skeleton-card-vendedor,
 [data-theme="dark"] .skeleton-meu-anuncio-card,
+[data-theme="dark"] .skeleton-conversa-item,
+[data-theme="dark"] .skeleton-notificacao-card,
 .dark-theme .skeleton-card-produto,
 .dark-theme .skeleton-produto-card-topo,
 .dark-theme .skeleton-card-vendedor,
-.dark-theme .skeleton-meu-anuncio-card {
+.dark-theme .skeleton-meu-anuncio-card,
+.dark-theme .skeleton-conversa-item,
+.dark-theme .skeleton-notificacao-card {
     background-color: #1F2831 !important;
     border-color: #2C3946 !important;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35) !important;
+}
+
+[data-theme="dark"] .skeleton-avaliacao-item,
+.dark-theme .skeleton-avaliacao-item {
+    border-bottom-color: #2C3946 !important;
 }
 
 [data-theme="dark"] .skeleton-card-produto .skeleton-rodape,
@@ -29,67 +38,17 @@
     background-color: #161C22 !important;
 }
 
-/* Efeito Shimmer em tons escuros no modo escuro */
-[data-theme="dark"] .itaim-skeleton-shimmer,
-[data-theme="dark"] .skeleton-line,
-[data-theme="dark"] .skeleton-box,
-[data-theme="dark"] .skeleton-circle,
-[data-theme="dark"] .skeleton-thumb,
-[data-theme="dark"] .skeleton-tag,
-[data-theme="dark"] .skeleton-pill,
-[data-theme="dark"] .skeleton-btn,
-[data-theme="dark"] .skeleton-titulo-linha1,
-[data-theme="dark"] .skeleton-titulo-linha2,
-[data-theme="dark"] .skeleton-preco-box,
-[data-theme="dark"] .skeleton-local,
-[data-theme="dark"] .skeleton-tempo,
-[data-theme="dark"] .skeleton-foto-destaque,
-[data-theme="dark"] .skeleton-miniatura-item,
-[data-theme="dark"] .skeleton-selo-topo,
-[data-theme="dark"] .skeleton-titulo-grande-1,
-[data-theme="dark"] .skeleton-titulo-grande-2,
-[data-theme="dark"] .skeleton-localizacao-bar,
-[data-theme="dark"] .skeleton-preco-destaque,
-[data-theme="dark"] .skeleton-especificacao-pill,
-[data-theme="dark"] .skeleton-botao-whatsapp,
-[data-theme="dark"] .skeleton-botao-chat,
-[data-theme="dark"] .skeleton-avatar-vendedor,
-[data-theme="dark"] .skeleton-stat-box,
-[data-theme="dark"] .skeleton-meu-anuncio-thumb,
-[data-theme="dark"] .skeleton-acao-btn,
-.dark-theme .itaim-skeleton-shimmer,
-.dark-theme .skeleton-line,
-.dark-theme .skeleton-box,
-.dark-theme .skeleton-circle,
-.dark-theme .skeleton-thumb,
-.dark-theme .skeleton-tag,
-.dark-theme .skeleton-pill,
-.dark-theme .skeleton-btn,
-.dark-theme .skeleton-titulo-linha1,
-.dark-theme .skeleton-titulo-linha2,
-.dark-theme .skeleton-preco-box,
-.dark-theme .skeleton-local,
-.dark-theme .skeleton-tempo,
-.dark-theme .skeleton-foto-destaque,
-.dark-theme .skeleton-miniatura-item,
-.dark-theme .skeleton-selo-topo,
-.dark-theme .skeleton-titulo-grande-1,
-.dark-theme .skeleton-titulo-grande-2,
-.dark-theme .skeleton-localizacao-bar,
-.dark-theme .skeleton-preco-destaque,
-.dark-theme .skeleton-especificacao-pill,
-.dark-theme .skeleton-botao-whatsapp,
-.dark-theme .skeleton-botao-chat,
-.dark-theme .skeleton-avatar-vendedor,
-.dark-theme .skeleton-stat-box,
-.dark-theme .skeleton-meu-anuncio-thumb,
-.dark-theme .skeleton-acao-btn {
-    background: linear-gradient(
-        90deg,
-        #242E38 0%,
-        #334150 40%,
-        #2A3644 60%,
-        #242E38 100%
-    ) !important;
-    background-size: 250% 100% !important;
-}
+/*
+ * NOTA: O bloco de shimmer escuro foi REMOVIDO intencionalmente.
+ *
+ * Motivo técnico (CSS Cascade Level 4):
+ *   "background: gradient !important" em folha de autor fica ACIMA de CSS
+ *   Animations na cascata. Isso reseta background-position para 0 com força
+ *   !important, impedindo a animação itaimShimmer de mover o gradiente.
+ *
+ * Solução adotada:
+ *   As variáveis --skeleton-shimmer-1/2/3 definidas em skeleton.css já
+ *   assumem valores escuros quando [data-theme="dark"] está ativo no <html>.
+ *   A regra base em skeleton.css usa essas variáveis e a animação funciona
+ *   nativamente em ambos os modos — sem necessidade de override aqui.
+ */

@@ -29,17 +29,11 @@
             const listaScroll = estado?.dom?.listaScroll;
             if (!listaScroll) return;
 
-            // Se for a primeira carga e a lista estiver vazia, exibe shimmer sutil
+            // Se for a primeira carga e a lista estiver vazia, exibe skeleton loading padronizado
             if (estado.conversas.length === 0) {
-                listaScroll.innerHTML = `
-                    <div style="padding: 24px 18px; text-align: center; color: #8E9AA7; font-size: 13.5px;">
-                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation: spin 0.8s linear infinite; margin-bottom: 8px;">
-                            <circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle>
-                            <path d="M12 2a10 10 0 0 1 10 10"></path>
-                        </svg>
-                        <div>Carregando suas mensagens...</div>
-                    </div>
-                `;
+                if (window.ItaimSkeleton && typeof window.ItaimSkeleton.renderizarConversas === 'function') {
+                    window.ItaimSkeleton.renderizarConversas(listaScroll, 5);
+                }
             }
 
             try {
