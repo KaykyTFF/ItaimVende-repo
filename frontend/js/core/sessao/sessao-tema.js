@@ -15,20 +15,39 @@
 
     const CHAVE_STORAGE = 'itaim_tema';
 
-    // 1. Aplicação imediata para evitar tela piscando ao carregar a página
+    /**
+     * Verifica se a página atual é a tela de login / autenticação.
+     * Na tela de login, o modo escuro NUNCA deve alterar nada e os botões nunca devem ter fundo escuro.
+     */
+    function ehPaginaLogin() {
+        try {
+            const path = (window.location.pathname || '').toLowerCase();
+            if (path.endsWith('index.html') || 
+                path === '/' || 
+                path.endsWith('/') || 
+                path.includes('/auth/') || 
+                path.includes('login') || 
+                path.includes('cadastro')) {
+                return true;
+            }
+            if (document.querySelector && document.querySelector('.auth-wrapper, .auth-floating-card, #secao-login, #form-login')) {
+                return true;
+            }
+        } catch (e) {}
+        return false;
+    }
+
+    // 1. Aplicação imediata: o tema padrão do site é SEMPRE o modo claro ('light')
     function obterTemaInicial() {
         try {
             const temaSalvo = localStorage.getItem(CHAVE_STORAGE);
             if (temaSalvo === 'dark' || temaSalvo === 'light') {
                 return temaSalvo;
             }
-            // Se não houver tema salvo, verificar preferência do sistema operacional
-            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                return 'dark';
-            }
         } catch (e) {
             console.warn('[ItaimTema] Não foi possível ler preferência do tema:', e);
         }
+        // Sempre padrão claro por padrão
         return 'light';
     }
 
@@ -36,6 +55,17 @@
 
     // Aplica no elemento raiz (HTML) o mais cedo possível
     function aplicarClasseRaiz(tema) {
+        // Se estiver na tela de login / autenticação, NUNCA aplica modo escuro
+        if (ehPaginaLogin()) {
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.classList.remove('dark-theme');
+            if (document.body) {
+                document.body.setAttribute('data-theme', 'light');
+                document.body.classList.remove('dark-theme');
+            }
+            return;
+        }
+
         const isDark = (tema === 'dark');
         document.documentElement.setAttribute('data-theme', tema);
         document.documentElement.classList.toggle('dark-theme', isDark);
@@ -255,6 +285,10 @@
     // Sincronização entre abas em tempo real
     window.addEventListener('storage', (e) => {
         if (e.key === CHAVE_STORAGE && e.newValue) {
+            if (ehPaginaLogin()) {
+                aplicarClasseRaiz('light');
+                return;
+            }
             definirTema(e.newValue, false);
         }
     });

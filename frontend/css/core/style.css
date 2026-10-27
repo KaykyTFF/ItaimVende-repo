@@ -1092,26 +1092,120 @@ html, body {
     transform: scale(1.15);
 }
 
-/* Modo escuro para botões de login social */
-[data-theme="dark"] .btn-social-icone {
-    background-color: #1E293B;
-    border-color: #334155;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+/* Garantia absoluta: Fundo dos botões de login social NUNCA fica escuro */
+.btn-social-icone,
+[data-theme="dark"] .btn-social-icone,
+.dark-theme .btn-social-icone {
+    background-color: #FFFFFF !important;
+    border: 1.5px solid #E2E8F0 !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
 }
 
-[data-theme="dark"] .btn-social-icone.btn-social-google:hover {
-    background-color: #273549;
-    border-color: #60A5FA;
+.btn-social-icone.btn-social-google:hover,
+[data-theme="dark"] .btn-social-icone.btn-social-google:hover,
+.dark-theme .btn-social-icone.btn-social-google:hover {
+    background-color: #F8FAFC !important;
+    border-color: #4285F4 !important;
 }
 
-[data-theme="dark"] .btn-social-icone.btn-social-email:hover {
-    background-color: #0C4A6E;
-    border-color: #38BDF8;
+.btn-social-icone.btn-social-email:hover,
+[data-theme="dark"] .btn-social-icone.btn-social-email:hover,
+.dark-theme .btn-social-icone.btn-social-email:hover {
+    background-color: #F0F9FF !important;
+    border-color: #0284C7 !important;
 }
 
-[data-theme="dark"] .btn-social-icone.btn-social-facebook:hover {
-    background-color: #1E3A8A;
-    border-color: #60A5FA;
+.btn-social-icone.btn-social-facebook:hover,
+[data-theme="dark"] .btn-social-icone.btn-social-facebook:hover,
+.dark-theme .btn-social-icone.btn-social-facebook:hover {
+    background-color: #F0F7FF !important;
+    border-color: #1877F2 !important;
+}
+
+/* ==========================================================================
+   BLINDAGEM CONTRA MODO ESCURO NA TELA DE LOGIN / AUTENTICAÇÃO
+   O modo escuro não deve alterar nada na parte de login
+   ========================================================================== */
+.auth-wrapper,
+[data-theme="dark"] .auth-wrapper,
+.dark-theme .auth-wrapper {
+    background: transparent !important;
+    color: #2F3640 !important;
+}
+
+.auth-floating-card,
+[data-theme="dark"] .auth-floating-card,
+.dark-theme .auth-floating-card {
+    background-color: transparent !important;
+}
+
+.auth-form-block,
+.auth-form-side,
+[data-theme="dark"] .auth-form-block,
+[data-theme="dark"] .auth-form-side,
+.dark-theme .auth-form-block,
+.dark-theme .auth-form-side {
+    background-color: #FFFFFF !important;
+    color: #2F3640 !important;
+    box-shadow: 14px 0 45px rgba(0, 0, 0, 0.4) !important;
+}
+
+.titulo-login,
+[data-theme="dark"] .titulo-login,
+.dark-theme .titulo-login {
+    color: #2F3640 !important;
+}
+
+.label-campo,
+[data-theme="dark"] .label-campo,
+.dark-theme .label-campo {
+    color: #2F3640 !important;
+}
+
+.campo-texto,
+[data-theme="dark"] .campo-texto,
+.dark-theme .campo-texto {
+    background-color: #F0F2F5 !important;
+    color: #2F3640 !important;
+    border-color: transparent !important;
+}
+
+.campo-texto:focus,
+[data-theme="dark"] .campo-texto:focus,
+.dark-theme .campo-texto:focus {
+    background-color: #FFFFFF !important;
+    border-color: #489636 !important;
+    box-shadow: 0 0 0 3px rgba(72, 150, 54, 0.25) !important;
+}
+
+.btn-entrar,
+[data-theme="dark"] .btn-entrar,
+.dark-theme .btn-entrar {
+    background-color: #489636 !important;
+    color: #FFFFFF !important;
+}
+
+.btn-entrar:hover,
+[data-theme="dark"] .btn-entrar:hover,
+.dark-theme .btn-entrar:hover {
+    background-color: #3E822E !important;
+    border-color: #3E822E !important;
+}
+
+.btn-cadastrar,
+[data-theme="dark"] .btn-cadastrar,
+.dark-theme .btn-cadastrar {
+    background-color: #FFFFFF !important;
+    color: #489636 !important;
+    border: 2px solid #489636 !important;
+}
+
+.btn-cadastrar:hover,
+[data-theme="dark"] .btn-cadastrar:hover,
+.dark-theme .btn-cadastrar:hover {
+    background-color: rgba(72, 150, 54, 0.08) !important;
+    border-color: #3E822E !important;
+    color: #3E822E !important;
 }
 
 /* ==========================================================================

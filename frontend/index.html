@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="light">
 
 <head>
     <meta charset="UTF-8">
@@ -483,6 +483,26 @@
             </section>
         </div>
     </main>
+
+    <!-- Modal Pop-up: Recurso em Desenvolvimento (Login Social) -->
+    <div class="modal-social-backdrop" id="modal-social-aviso" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="modal-social-card">
+            <button type="button" class="modal-social-fechar" id="btn-fechar-modal-social" aria-label="Fechar pop-up">
+                &times;
+            </button>
+            <div class="modal-social-icone-box" id="modal-social-icone-box">
+                <!-- Ícone dinâmico inserido via JS -->
+            </div>
+            <span class="modal-social-badge" id="modal-social-badge">EM BREVE</span>
+            <h3 class="modal-social-titulo" id="modal-social-titulo">Entrar com Google</h3>
+            <p class="modal-social-mensagem" id="modal-social-mensagem">
+                O login rápido com esta opção ainda não foi implementado. Por favor, utilize seu e-mail e senha cadastrados no formulário para entrar normalmente.
+            </p>
+            <button type="button" class="btn-modal-social-entendi" id="btn-modal-social-entendi">
+                ENTENDI
+            </button>
+        </div>
+    </div>
 
     <!-- Script JS -->
     <script src="js/core/rotas/index.js"></script>
