@@ -15,6 +15,7 @@
     function getCore() {
         return window.ItaimApiCore || {
             requisicao: () => Promise.reject(new Error('ItaimApiCore não carregado')),
+            obterHeaders: () => ({}),
             obterToken: () => localStorage.getItem('itaim_token') || ''
         };
     }
@@ -36,14 +37,18 @@
             if (filtros.limit) params.append('limit', String(filtros.limit));
 
             const query = params.toString() ? `?${params.toString()}` : '';
-            return getCore().requisicao(`/notifications${query}`);
+            return getCore().requisicao(`/notifications${query}`, {
+                headers: getCore().obterHeaders ? getCore().obterHeaders(true) : {}
+            });
         },
 
         /**
          * Retorna a contagem de notificações não lidas para o badge do sino
          */
         async obterContadorNaoLidas() {
-            return getCore().requisicao('/notifications/unread-count');
+            return getCore().requisicao('/notifications/unread-count', {
+                headers: getCore().obterHeaders ? getCore().obterHeaders(true) : {}
+            });
         },
 
         /**
@@ -52,7 +57,8 @@
          */
         async marcarComoLida(id) {
             return getCore().requisicao(`/notifications/${encodeURIComponent(id)}/read`, {
-                method: 'PATCH'
+                method: 'PATCH',
+                headers: getCore().obterHeaders ? getCore().obterHeaders(true) : {}
             });
         },
 
@@ -61,7 +67,8 @@
          */
         async marcarTodasComoLidas() {
             return getCore().requisicao('/notifications/read-all', {
-                method: 'PATCH'
+                method: 'PATCH',
+                headers: getCore().obterHeaders ? getCore().obterHeaders(true) : {}
             });
         },
 
@@ -71,7 +78,8 @@
          */
         async remover(id) {
             return getCore().requisicao(`/notifications/${encodeURIComponent(id)}`, {
-                method: 'DELETE'
+                method: 'DELETE',
+                headers: getCore().obterHeaders ? getCore().obterHeaders(true) : {}
             });
         },
 
@@ -80,7 +88,8 @@
          */
         async limparTodas() {
             return getCore().requisicao('/notifications', {
-                method: 'DELETE'
+                method: 'DELETE',
+                headers: getCore().obterHeaders ? getCore().obterHeaders(true) : {}
             });
         }
     };

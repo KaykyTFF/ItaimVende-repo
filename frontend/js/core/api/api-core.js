@@ -52,8 +52,25 @@
     async function requisicao(endpoint, opcoes = {}) {
         const url = endpoint.startsWith('http') ? endpoint : `${API_BASE_URL}${endpoint}`;
         
+        // Injeta automaticamente os headers padrão com Content-Type e Authorization Bearer
+        const isFormData = (opcoes.body instanceof FormData);
+        const headersPadrao = obterHeaders(!isFormData);
+        const headersFinais = {
+            ...headersPadrao,
+            ...(opcoes.headers || {})
+        };
+
+        if (isFormData) {
+            delete headersFinais['Content-Type'];
+        }
+
+        const opcoesFinais = {
+            ...opcoes,
+            headers: headersFinais
+        };
+
         try {
-            const resposta = await fetch(url, opcoes);
+            const resposta = await fetch(url, opcoesFinais);
             
             // 1. Registra header X-Server-Boot se disponível
             const serverBoot = resposta.headers.get('X-Server-Boot');
@@ -68,14 +85,17 @@
 
             const dados = await resposta.json().catch(() => ({}));
 
-            // 2. Se 401 Unauthorized, limpa sessão inválida completamente sem forçar redirecionamento de tela
+            // 2. Tratamento de 401 Unauthorized:
+            // Só invalida a sessão se for a rota de verificação de identidade central (/auth/me)
+            // e se não for modo dev. Rotas secundárias (notificações, endereços, etc.) NUNCA deslogam o usuário.
             if (resposta.status === 401) {
-                if (obterToken() && !endpoint.includes('/auth/login') && !endpoint.includes('/auth/register')) {
-                    console.info('[ItaimApi] Token expirado ou inválido.');
+                const isAuthCheck = endpoint.includes('/auth/me');
+                const isDevMode = localStorage.getItem('itaim_modo_dev') === 'true';
+                if (isAuthCheck && obterToken() && !isDevMode) {
+                    console.info('[ItaimApi] Token expirado ou rejeitado em /auth/me.');
                     localStorage.removeItem('itaim_token');
                     localStorage.removeItem('itaim_usuario_logado');
                     localStorage.removeItem('itaim_usuario_logado_email');
-                    localStorage.removeItem('itaim_modo_dev');
                     if (window.ItaimSessao && typeof window.ItaimSessao.atualizarHeaderUsuario === 'function') {
                         window.ItaimSessao.atualizarHeaderUsuario();
                     }

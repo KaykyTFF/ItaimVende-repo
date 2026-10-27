@@ -17,6 +17,7 @@
     function getCore() {
         return window.ItaimApiCore || {
             requisicao: () => Promise.reject(new Error('ItaimApiCore não carregado')),
+            obterHeaders: () => ({}),
             obterToken: () => localStorage.getItem('itaim_token') || ''
         };
     }
@@ -26,14 +27,18 @@
          * Lista todos os endereços do usuário
          */
         async listar() {
-            return getCore().requisicao('/addresses');
+            return getCore().requisicao('/addresses', {
+                headers: getCore().obterHeaders ? getCore().obterHeaders(true) : {}
+            });
         },
 
         /**
          * Obtém detalhes de um endereço pelo ID
          */
         async obter(id) {
-            return getCore().requisicao(`/addresses/${encodeURIComponent(id)}`);
+            return getCore().requisicao(`/addresses/${encodeURIComponent(id)}`, {
+                headers: getCore().obterHeaders ? getCore().obterHeaders(true) : {}
+            });
         },
 
         /**
@@ -42,6 +47,7 @@
         async criar(dados) {
             return getCore().requisicao('/addresses', {
                 method: 'POST',
+                headers: getCore().obterHeaders ? getCore().obterHeaders(true) : {},
                 body: JSON.stringify(dados)
             });
         },
@@ -52,6 +58,7 @@
         async atualizar(id, dados) {
             return getCore().requisicao(`/addresses/${encodeURIComponent(id)}`, {
                 method: 'PUT',
+                headers: getCore().obterHeaders ? getCore().obterHeaders(true) : {},
                 body: JSON.stringify(dados)
             });
         },
@@ -61,7 +68,8 @@
          */
         async remover(id) {
             return getCore().requisicao(`/addresses/${encodeURIComponent(id)}`, {
-                method: 'DELETE'
+                method: 'DELETE',
+                headers: getCore().obterHeaders ? getCore().obterHeaders(true) : {}
             });
         },
 
@@ -70,7 +78,8 @@
          */
         async tornarPrincipal(id) {
             return getCore().requisicao(`/addresses/${encodeURIComponent(id)}/primary`, {
-                method: 'PATCH'
+                method: 'PATCH',
+                headers: getCore().obterHeaders ? getCore().obterHeaders(true) : {}
             });
         }
     };
