@@ -49,10 +49,7 @@ export async function changeProductStatus(req, res, next) {
 export async function deleteProduct(req, res, next) {
   try {
     await deleteProductService(req.user.id, req.user.role, req.params.id);
-    res.status(200).json({
-      success: true,
-      message: 'Anúncio removido com sucesso.',
-    });
+    res.status(204).send();
   } catch (error) {
     next(error);
   }

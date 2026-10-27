@@ -15,7 +15,10 @@ export function validate(schema, source = 'body') {
 
       return res.status(400).json({
         success: false,
+        code: 'VALIDATION_ERROR',
         message: 'Falha na validação dos dados enviados.',
+        detalhes: formattedErrors,
+        details: formattedErrors,
         errors: formattedErrors,
       });
     }

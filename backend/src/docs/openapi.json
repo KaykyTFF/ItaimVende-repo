@@ -1,0 +1,524 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Itaim Vende API",
+    "version": "2.0.0",
+    "description": "API RESTful completa e original do marketplace regional Itaim Vende, voltada para Paulistana - PI e municípios do Vale do Itaim no semiárido piauiense.\n\n### Eixos de Inovação Atendidos:\n1. **Dados e Domínio**: Atende uma microrregião do semiárido piauiense sem cobertura de APIs públicas ou marketplaces formais, suportando comércio e produtores locais.\n2. **Regra de Negócio e Consulta**: Busca fonética resiliente com PostgreSQL unaccent, filtros combinados (categoria, cidade, bairro, preço, condição) e cálculo de integridade financeira de pedidos no servidor.\n3. **Tempo Real e Eventos**: Negociação instantânea por WebSockets (Socket.IO) com mecanismo de fallback que dispara e-mails transacionais assíncronos quando o usuário está offline.\n4. **Moderação Automatizada**: Painel de moderação com purga atômica de mídias órfãs no bucket do Supabase Storage.",
+    "contact": {
+      "name": "Equipe Itaim Vende - IFPI",
+      "email": "contato@itaimvende.com.br"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api/v1",
+      "description": "Servidor Local de Desenvolvimento"
+    },
+    {
+      "url": "https://itaim-vende.onrender.com/api/v1",
+      "description": "Servidor de Produção (Nuvem)"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Token JWT obtido via POST /auth/login ou POST /auth/register"
+      }
+    },
+    "schemas": {
+      "StandardError": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean", "example": false },
+          "code": { "type": "string", "example": "VALIDATION_ERROR" },
+          "message": { "type": "string", "example": "Falha na validação dos dados enviados." },
+          "details": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "object",
+              "properties": {
+                "field": { "type": "string", "example": "email" },
+                "message": { "type": "string", "example": "E-mail inválido." }
+              }
+            }
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "example": "usr_cm39xyz123" },
+          "name": { "type": "string", "example": "Kayky Ferreira" },
+          "email": { "type": "string", "example": "kayky@exemplo.com" },
+          "role": { "type": "string", "enum": ["BUYER", "SELLER", "MODERATOR", "ADMIN"], "example": "SELLER" },
+          "avatarUrl": { "type": "string", "nullable": true, "example": "https://pgrznndtajjzpwqgtkkz.supabase.co/storage/v1/object/public/marketplace/avatar.webp" },
+          "phone": { "type": "string", "nullable": true, "example": "89994000000" },
+          "city": { "type": "string", "nullable": true, "example": "Paulistana" },
+          "state": { "type": "string", "nullable": true, "example": "PI" },
+          "verified": { "type": "boolean", "example": true },
+          "createdAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "Product": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "example": "prd_cm39abc987" },
+          "title": { "type": "string", "example": "Mel Orgânico do Sertão 1kg" },
+          "description": { "type": "string", "example": "Mel puro de abelha produzido no Vale do Itaim, florada silvestre." },
+          "price": { "type": "number", "example": 45.0 },
+          "originalPrice": { "type": "number", "nullable": true, "example": 55.0 },
+          "categoryId": { "type": "string", "example": "cat_agro" },
+          "condition": { "type": "string", "enum": ["NOVO", "USADO", "RECONDICIONADO"], "example": "NOVO" },
+          "status": { "type": "string", "enum": ["ATIVO", "PAUSADO", "VENDIDO", "MODERADO"], "example": "ATIVO" },
+          "city": { "type": "string", "example": "Paulistana" },
+          "neighborhood": { "type": "string", "example": "Centro" },
+          "images": {
+            "type": "array",
+            "items": { "type": "string" },
+            "example": ["https://pgrznndtajjzpwqgtkkz.supabase.co/storage/v1/object/public/marketplace/mel1.webp"]
+          },
+          "sellerId": { "type": "string", "example": "usr_cm39xyz123" },
+          "viewsCount": { "type": "integer", "example": 124 },
+          "contactsCount": { "type": "integer", "example": 18 },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "Category": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "example": "cat_agro" },
+          "name": { "type": "string", "example": "Agricultura & Produção Local" },
+          "slug": { "type": "string", "example": "agricultura-producao-local" },
+          "icon": { "type": "string", "example": "sprout" },
+          "_count": {
+            "type": "object",
+            "properties": {
+              "products": { "type": "integer", "example": 42 }
+            }
+          }
+        }
+      },
+      "Conversation": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "example": "conv_12345" },
+          "productId": { "type": "string", "example": "prd_cm39abc987" },
+          "buyerId": { "type": "string", "example": "usr_buyer1" },
+          "sellerId": { "type": "string", "example": "usr_seller2" },
+          "unreadCount": { "type": "integer", "example": 2 },
+          "lastMessageAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "Message": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "example": "msg_98765" },
+          "conversationId": { "type": "string", "example": "conv_12345" },
+          "senderId": { "type": "string", "example": "usr_buyer1" },
+          "content": { "type": "string", "example": "Olá, ainda está disponível?" },
+          "type": { "type": "string", "enum": ["TEXT", "IMAGE", "PROPOSAL", "SYSTEM"], "example": "TEXT" },
+          "proposalAmount": { "type": "number", "nullable": true, "example": 40.0 },
+          "proposalStatus": { "type": "string", "nullable": true, "enum": ["PENDING", "ACCEPTED", "REJECTED"], "example": null },
+          "createdAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "Order": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "example": "ord_777888" },
+          "buyerId": { "type": "string", "example": "usr_buyer1" },
+          "status": { "type": "string", "enum": ["PENDING", "PAID", "SHIPPED", "DELIVERED", "CANCELLED"], "example": "PENDING" },
+          "totalAmount": { "type": "number", "example": 90.0 },
+          "paymentMethod": { "type": "string", "enum": ["PIX", "CREDIT_CARD", "CASH_ON_DELIVERY"], "example": "PIX" },
+          "createdAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "Report": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "example": "rep_555" },
+          "protocol": { "type": "string", "example": "TK-84A12B" },
+          "productId": { "type": "string", "example": "prd_cm39abc987" },
+          "reason": { "type": "string", "example": "FRAUDE" },
+          "description": { "type": "string", "example": "Preço suspeito e recusa em mostrar o produto." },
+          "status": { "type": "string", "enum": ["PENDING", "REVIEWING", "RESOLVED", "DISMISSED"], "example": "PENDING" },
+          "createdAt": { "type": "string", "format": "date-time" }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": ["Diagnóstico & Saúde"],
+        "summary": "Verifica integridade e status de execução da API",
+        "responses": {
+          "200": {
+            "description": "API operando normalmente."
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "tags": ["Autenticação & Contas"],
+        "summary": "Registra novo usuário comprador ou vendedor",
+        "responses": {
+          "201": { "description": "Conta criada com sucesso." },
+          "400": { "description": "Dados de entrada inválidos." },
+          "409": { "description": "E-mail já cadastrado." }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": ["Autenticação & Contas"],
+        "summary": "Autentica usuário e emite JWT Bearer Token",
+        "responses": {
+          "200": { "description": "Login realizado com sucesso." },
+          "401": { "description": "Credenciais incorretas." },
+          "429": { "description": "Rate limit de autenticação excedido." }
+        }
+      }
+    },
+    "/auth/forgot-password": {
+      "post": {
+        "tags": ["Autenticação & Contas"],
+        "summary": "Inicia recuperação de senha por e-mail",
+        "responses": {
+          "200": { "description": "Instruções enviadas por e-mail." }
+        }
+      }
+    },
+    "/auth/verify-reset-code": {
+      "post": {
+        "tags": ["Autenticação & Contas"],
+        "summary": "Valida código de 6 dígitos de recuperação de senha",
+        "responses": {
+          "200": { "description": "Código válido." },
+          "400": { "description": "Código inválido." },
+          "429": { "description": "Bloqueio por excesso de tentativas incorretas." }
+        }
+      }
+    },
+    "/auth/reset-password": {
+      "post": {
+        "tags": ["Autenticação & Contas"],
+        "summary": "Redefine senha utilizando código verificado",
+        "responses": {
+          "200": { "description": "Senha alterada com sucesso." }
+        }
+      }
+    },
+    "/auth/me": {
+      "get": {
+        "tags": ["Autenticação & Contas"],
+        "summary": "Retorna perfil do usuário autenticado",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Dados do usuário logado." },
+          "401": { "description": "Não autorizado." }
+        }
+      },
+      "put": {
+        "tags": ["Autenticação & Contas"],
+        "summary": "Atualiza dados cadastrais do perfil",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Perfil atualizado." },
+          "401": { "description": "Não autorizado." }
+        }
+      },
+      "delete": {
+        "tags": ["Autenticação & Contas"],
+        "summary": "Exclui a conta do usuário logado",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Conta desativada." },
+          "401": { "description": "Não autorizado." }
+        }
+      }
+    },
+    "/auth/user/{id}": {
+      "get": {
+        "tags": ["Autenticação & Contas"],
+        "summary": "Consulta perfil público de vendedor",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": {
+          "200": { "description": "Perfil público do vendedor." },
+          "404": { "description": "Vendedor não encontrado." }
+        }
+      }
+    },
+    "/products": {
+      "get": {
+        "tags": ["Anúncios & Produtos"],
+        "summary": "Lista produtos com busca fonética, filtros, ordenação e paginação",
+        "parameters": [
+          { "name": "search", "in": "query", "schema": { "type": "string" } },
+          { "name": "category", "in": "query", "schema": { "type": "string" } },
+          { "name": "city", "in": "query", "schema": { "type": "string" } },
+          { "name": "minPrice", "in": "query", "schema": { "type": "number" } },
+          { "name": "maxPrice", "in": "query", "schema": { "type": "number" } },
+          { "name": "sort", "in": "query", "schema": { "type": "string", "enum": ["newest", "price_asc", "price_desc", "popular"] } },
+          { "name": "page", "in": "query", "schema": { "type": "integer" } },
+          { "name": "limit", "in": "query", "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "Lista de produtos com metadados de paginação." }
+        }
+      },
+      "post": {
+        "tags": ["Anúncios & Produtos"],
+        "summary": "Publica um novo anúncio no marketplace",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "201": { "description": "Anúncio publicado com sucesso." },
+          "400": { "description": "Dados inválidos." },
+          "401": { "description": "Não autorizado." }
+        }
+      }
+    },
+    "/products/{id}": {
+      "get": {
+        "tags": ["Anúncios & Produtos"],
+        "summary": "Obtém detalhes de um anúncio específico por ID ou slug",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": {
+          "200": { "description": "Detalhes do anúncio." },
+          "404": { "description": "Anúncio não encontrado." }
+        }
+      },
+      "put": {
+        "tags": ["Anúncios & Produtos"],
+        "summary": "Atualiza dados de um anúncio existente",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": {
+          "200": { "description": "Anúncio atualizado." },
+          "401": { "description": "Não autenticado." },
+          "403": { "description": "Apenas dono ou admin." }
+        }
+      },
+      "delete": {
+        "tags": ["Anúncios & Produtos"],
+        "summary": "Exclui anúncio e purga imagens órfãs do Supabase Storage",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": {
+          "204": { "description": "Anúncio removido com sucesso." },
+          "401": { "description": "Não autenticado." },
+          "403": { "description": "Não autorizado." },
+          "404": { "description": "Anúncio não encontrado." }
+        }
+      }
+    },
+    "/products/{id}/status": {
+      "patch": {
+        "tags": ["Anúncios & Produtos"],
+        "summary": "Altera status do anúncio (ATIVO, PAUSADO, VENDIDO)",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": {
+          "200": { "description": "Status alterado com sucesso." }
+        }
+      }
+    },
+    "/categories": {
+      "get": {
+        "tags": ["Categorias"],
+        "summary": "Lista todas as categorias do marketplace (Cache-Control ativo)",
+        "responses": {
+          "200": { "description": "Categorias retornadas com cache de 5 minutos." }
+        }
+      }
+    },
+    "/chat/conversations": {
+      "get": {
+        "tags": ["Chat & Negociação"],
+        "summary": "Lista conversas do usuário",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Lista de conversas ativas." }
+        }
+      },
+      "post": {
+        "tags": ["Chat & Negociação"],
+        "summary": "Inicia nova negociação para um anúncio",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "201": { "description": "Negociação iniciada." }
+        }
+      }
+    },
+    "/chat/conversations/{id}/messages": {
+      "get": {
+        "tags": ["Chat & Negociação"],
+        "summary": "Obtém mensagens da conversa",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": {
+          "200": { "description": "Histórico de mensagens." }
+        }
+      },
+      "post": {
+        "tags": ["Chat & Negociação"],
+        "summary": "Envia mensagem em tempo real com fallback para e-mail transacional",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": {
+          "201": { "description": "Mensagem entregue ou notificada por e-mail." }
+        }
+      }
+    },
+    "/orders": {
+      "post": {
+        "tags": ["Pedidos & Checkout"],
+        "summary": "Cria pedido com validação financeira direta no banco de dados",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "201": { "description": "Pedido registrado com integridade de preços." }
+        }
+      },
+      "get": {
+        "tags": ["Pedidos & Checkout"],
+        "summary": "Lista pedidos do comprador autenticado",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Pedidos do comprador." }
+        }
+      }
+    },
+    "/favorites": {
+      "get": {
+        "tags": ["Favoritos"],
+        "summary": "Lista produtos favoritados pelo usuário",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Lista de favoritos." }
+        }
+      }
+    },
+    "/favorites/{productId}/toggle": {
+      "post": {
+        "tags": ["Favoritos"],
+        "summary": "Alterna status de favorito",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "name": "productId", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": {
+          "200": { "description": "Favorito alternado." }
+        }
+      }
+    },
+    "/reviews/user/{userId}": {
+      "get": {
+        "tags": ["Avaliações (Reviews)"],
+        "summary": "Lista avaliações e média do vendedor",
+        "parameters": [{ "name": "userId", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": {
+          "200": { "description": "Avaliações e estatísticas do vendedor." }
+        }
+      },
+      "post": {
+        "tags": ["Avaliações (Reviews)"],
+        "summary": "Publica avaliação para o vendedor",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "name": "userId", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": {
+          "201": { "description": "Avaliação postada com sucesso." }
+        }
+      }
+    },
+    "/reviews/{id}": {
+      "delete": {
+        "tags": ["Avaliações (Reviews)"],
+        "summary": "Exclui avaliação existente",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": {
+          "204": { "description": "Avaliação excluída (Sem Conteúdo)." }
+        }
+      }
+    },
+    "/reports/{productId}": {
+      "post": {
+        "tags": ["Denúncias & Moderação"],
+        "summary": "Abre ticket de denúncia de anúncio fraudulento",
+        "parameters": [{ "name": "productId", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": {
+          "201": { "description": "Ticket gerado com protocolo." }
+        }
+      }
+    },
+    "/reports": {
+      "get": {
+        "tags": ["Denúncias & Moderação"],
+        "summary": "Lista denúncias para moderadores e administradores",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Tickets de denúncia." },
+          "403": { "description": "Acesso restrito a ADMIN/MODERATOR." }
+        }
+      }
+    },
+    "/reports/{id}/remove-product": {
+      "post": {
+        "tags": ["Denúncias & Moderação"],
+        "summary": "Ação de moderação: Remove anúncio e purga arquivos do bucket",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": {
+          "200": { "description": "Anúncio removido e mídias limpas do storage." }
+        }
+      }
+    },
+    "/addresses": {
+      "get": {
+        "tags": ["Endereços"],
+        "summary": "Lista endereços do usuário autenticado",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Endereços cadastrados." }
+        }
+      },
+      "post": {
+        "tags": ["Endereços"],
+        "summary": "Cadastra novo endereço",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "201": { "description": "Endereço cadastrado com sucesso." }
+        }
+      }
+    },
+    "/addresses/{id}": {
+      "delete": {
+        "tags": ["Endereços"],
+        "summary": "Remove endereço cadastrado",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": {
+          "204": { "description": "Endereço removido (Sem Conteúdo)." }
+        }
+      }
+    },
+    "/upload": {
+      "post": {
+        "tags": ["Uploads de Mídia"],
+        "summary": "Envia e converte imagens para WebP com Sharp e salva no Supabase Storage",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "201": { "description": "Upload concluído e URL pública gerada." }
+        }
+      }
+    }
+  }
+}

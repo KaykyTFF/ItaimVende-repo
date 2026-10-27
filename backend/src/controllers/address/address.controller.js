@@ -59,8 +59,8 @@ export async function updateAddress(req, res, next) {
 
 export async function deleteAddress(req, res, next) {
   try {
-    const result = await deleteUserAddress(req.user.id, req.params.id);
-    res.status(200).json(result);
+    await deleteUserAddress(req.user.id, req.params.id);
+    res.status(204).send();
   } catch (error) {
     next(error);
   }

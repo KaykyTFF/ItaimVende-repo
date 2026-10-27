@@ -46,12 +46,8 @@ export async function editReview(req, res, next) {
 
 export async function removeReview(req, res, next) {
   try {
-    const data = await deleteReview(req.params.id, req.user.id, req.user.role);
-    res.status(200).json({
-      success: true,
-      message: 'Avaliação excluída com sucesso!',
-      ...data,
-    });
+    await deleteReview(req.params.id, req.user.id, req.user.role);
+    res.status(204).send();
   } catch (error) {
     next(error);
   }

@@ -94,10 +94,13 @@ export function errorHandler(err, req, res, next) {
 
   // 6. Erro de Aplicação (AppError customizado) ou Erro Genérico
   const statusCode = err.statusCode || 500;
+  const errorDetails = err.details || err.errors || null;
   const response = {
     success: false,
     code: err.code || (statusCode === 500 ? 'INTERNAL_SERVER_ERROR' : 'REQUEST_ERROR'),
     message: err.message || 'Erro interno no servidor.',
+    detalhes: errorDetails,
+    details: errorDetails,
   };
 
   if (err.errors) {

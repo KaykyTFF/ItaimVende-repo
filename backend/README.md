@@ -1,6 +1,12 @@
-# 🚀 Itaim Vende - Backend API
+# 🚀 Itaim Vende v2.0.0 - Backend API
 
 API RESTful completa, funcional e segura desenvolvida para a plataforma **Itaim Vende**, com arquitetura em camadas, autenticação JWT, integridade relacional com Prisma ORM e proteção contra ataques comuns da web.
+
+> **IFPI - Programação para Internet II | Prof. Me. Julian Rodrigues Valério**  
+> 🏷️ **Versão:** `v2.0.0` | 📋 [Changelog Completo (CHANGELOG.md)](../CHANGELOG.md)  
+> 📄 **OpenAPI / Swagger UI:** `http://localhost:3000/api-docs` | `http://localhost:3000/api/v1/docs`  
+> 📬 **Coleção Postman:** [`../itaim-vende.postman_collection.json`](file:///c:/Users/kayky/Downloads/marketplace-frontend%20%281%29/marketplace-frontend/itaim-vende.postman_collection.json)  
+> 💡 **Relatório de Inovação:** [`../RELATORIO_INOVACAO.md`](file:///c:/Users/kayky/Downloads/marketplace-frontend%20%281%29/marketplace-frontend/RELATORIO_INOVACAO.md)  
 
 ---
 
@@ -8,8 +14,9 @@ API RESTful completa, funcional e segura desenvolvida para a plataforma **Itaim 
 
 - **Node.js (v20+)** com **ES Modules** (`import`/`export`)
 - **Express.js (v5)**: Framework HTTP rápido e flexível
+- **Swagger UI Express & OpenAPI 3.0.3**: Documentação interativa em `/api-docs`
 - **Prisma ORM (v6)**: Modelagem e controle relacional de banco de dados
-- **SQLite (Local)** / **PostgreSQL (Nuvem / Produção)**
+- **PostgreSQL (Supabase)** com extensões `unaccent` e `pg_trgm` para busca fonética regional
 - **Bcrypt.js**: Hash unidirecional de senhas com salt
 - **JSON Web Token (jsonwebtoken)**: Autenticação stateless com expiração
 - **Zod**: Validação e sanitização estrita de dados de entrada
@@ -180,4 +187,20 @@ IMAGE_QUALITY="82"
    - **Build Command**: `npm install && npx prisma db push && npm run seed`
    - **Start Command**: `npm start`
    - Configure as variáveis de ambiente baseadas no `.env.example`.
+
+---
+
+## 🤖 Declaração Obrigatória de Uso de Inteligência Artificial
+
+Em estrito cumprimento às normas da disciplina estabelecidas pelo **Prof. Me. Julian Rodrigues Valério**:
+
+> *"Uso de IA: permitido como apoio, desde que declarado no README (onde e para quê). Cada integrante deve saber explicar qualquer trecho do código."*
+
+Declaramos que ferramentas de Inteligência Artificial foram utilizadas como suporte técnico nos seguintes tópicos do projeto:
+1. **Otimização de Arquitetura e Modelagem:** Auxílio na estruturação modular do backend em camadas (*Controllers, Services, Routes, Middlewares e Schemas*) e refinamento do schema relacional do Prisma.
+2. **Segurança Defensiva:** Identificação de potenciais vulnerabilidades de Path Traversal no tratamento de arquivos estáticos, implementação de proteção de taxa (*Rate Limiter*) em rotas críticas e reforço anti-enumeração de usuários.
+3. **Pipeline de Mídia:** Suporte na implementação da conversão e auto-rotação de fotos de celulares via biblioteca `sharp` e integração com a API do Supabase Storage.
+4. **Padronização da Documentação:** Estruturação da especificação formal OpenAPI 3.0.3 e organização da coleção de testes no formato Postman v2.1.
+
+**Nota:** Todos os integrantes da equipe estudaram, testaram, revisaram e têm pleno domínio para explicar detalhadamente qualquer trecho do código-fonte e da arquitetura apresentada em sala.
 

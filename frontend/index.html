@@ -463,10 +463,10 @@
 
                 </div>
 
-                <!-- Ações secundárias compactas (visitante e modo dev) bem no canto direito embaixo, rente à linha -->
-                <div class="box-acoes-secundarias-mini" id="box-acoes-secundarias-mini">
+                <!-- Ações secundárias compactas (visitante e modo dev) ocultadas da tela de login -->
+                <div class="box-acoes-secundarias-mini" id="box-acoes-secundarias-mini" style="display: none !important;">
                     <div class="box-visitante">
-                        <a href="pages/home/home.html" class="link-continuar-visitante" id="link-continuar-visitante" style="color: #64748B; font-size: 11px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; justify-content: flex-end; gap: 4px; padding: 2px 4px; border-radius: 4px; transition: color 0.2s ease;">
+                        <a href="pages/home/home.html" class="link-continuar-visitante" id="link-continuar-visitante" style="display: none !important;">
                             <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                             </svg>
@@ -475,7 +475,7 @@
                     </div>
 
                     <div class="box-modo-dev">
-                        <button type="button" class="btn-modo-dev" id="btn-modo-dev" style="background: rgba(46, 125, 50, 0.05); border: 1px dashed #2e7d32; color: #1b5e20; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 4px; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; gap: 4px; opacity: 0.85;">
+                        <button type="button" class="btn-modo-dev" id="btn-modo-dev" style="display: none !important;">
                             <span>⚡ Entrar sem Backend (Dev)</span>
                         </button>
                     </div>

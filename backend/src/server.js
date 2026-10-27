@@ -28,6 +28,8 @@ import addressRoutes from './routes/address/index.js';
 import notificationRoutes from './routes/notification/index.js';
 import { UPLOAD_DIR, UPLOAD_PERFIL_DIR, UPLOAD_VENDAS_DIR } from './config/upload.js';
 import { storageAdapter } from './adapters/storage/index.js';
+import swaggerUi from 'swagger-ui-express';
+import { openapiSpec } from './docs/openapi.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -170,7 +172,7 @@ const v1Router = express.Router();
 v1Router.get('/health', (req, res) => {
   res.status(200).json({
     status: 'online',
-    version: 'v1',
+    version: 'v2.0.0',
     platform: 'Itaim Vende API',
     bootId: SERVER_BOOT_ID,
     timestamp: new Date().toISOString(),
@@ -195,6 +197,16 @@ v1Router.use('/notifications', notificationRoutes);
 // Registra versão oficial /api/v1 e mantém /api para retrocompatibilidade
 app.use('/api/v1', v1Router);
 app.use('/api', v1Router);
+
+// Documentação Interativa OpenAPI 3.0 / Swagger UI
+app.get('/api/v1/docs/openapi.json', (req, res) => {
+  res.status(200).json(openapiSpec);
+});
+app.get('/api-docs/openapi.json', (req, res) => {
+  res.status(200).json(openapiSpec);
+});
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpec));
+app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(openapiSpec));
 
 
 // Rota Raiz Principal do Marketplace (Home como tela inicial para visitantes e usuários)

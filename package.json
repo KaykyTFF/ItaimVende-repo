@@ -1,6 +1,6 @@
 {
   "name": "itaim-vende",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Itaim Vende - Plataforma de Compra, Venda e Trocas",
   "private": true,
   "type": "module",
@@ -12,6 +12,8 @@
     "dev:frontend": "npx -y serve frontend -p 5500",
     "dev:backend": "npm --prefix backend run dev",
     "start:backend": "npm --prefix backend run start",
+    "test": "npm --prefix backend run test",
+    "test:backend": "npm --prefix backend run test",
     "install:backend": "npm --prefix backend install"
   },
   "keywords": [
