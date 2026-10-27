@@ -89,6 +89,14 @@
             endpoint: '/../uploads/vendas/nonexistent.jpg',
             metodo: 'GET',
             esperado: [200, 404], // 200 se retornar placeholder SVG ou 404
+        },
+        {
+            id: 'reports_guard',
+            nome: 'Moderação de Denúncias & Tickets (Role Guard)',
+            icone: 'fa-shield-halved',
+            endpoint: '/reports',
+            metodo: 'GET',
+            esperado: [200, 401, 403],
         }
     ];
 

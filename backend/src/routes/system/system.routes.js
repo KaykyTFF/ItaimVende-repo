@@ -32,12 +32,13 @@ async function requireSystemAccess(req, res, next) {
     });
   }
 
-  // Verifica se a conexão é originada diretamente do loopback local
+  // Permite bypass de loopback APENAS em ambiente de desenvolvimento local (NODE_ENV !== 'production')
+  const isDev = (process.env.NODE_ENV || 'development') !== 'production';
   const forwarded = req.headers['x-forwarded-for'] || req.headers['cf-connecting-ip'];
   const remoteIp = req.socket?.remoteAddress || req.ip || '';
   const isLocalhost = !forwarded && (remoteIp === '127.0.0.1' || remoteIp === '::1' || remoteIp === '::ffff:127.0.0.1');
 
-  if (isLocalhost) {
+  if (isDev && isLocalhost) {
     req.user = { id: 'local_dev_admin', role: 'ADMIN', name: 'Administrador Local' };
     return next();
   }

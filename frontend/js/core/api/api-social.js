@@ -99,6 +99,39 @@
                 headers: getCore().obterHeaders(true),
                 body: JSON.stringify({ status })
             });
+        },
+
+        /**
+         * Ação de Moderação: Remove anúncio fraudulento e limpa o bucket
+         */
+        async removerAnuncioFraudulento(id, reasonNote = '') {
+            return getCore().requisicao(`/reports/${encodeURIComponent(id)}/remove-product`, {
+                method: 'POST',
+                headers: getCore().obterHeaders(true),
+                body: JSON.stringify({ reasonNote })
+            });
+        },
+
+        /**
+         * Ação de Moderação: Suspende a conta do vendedor denunciado e arquiva seus anúncios
+         */
+        async suspenderConta(id, reasonNote = '', statusType = 'SUSPENDED') {
+            return getCore().requisicao(`/reports/${encodeURIComponent(id)}/suspend-account`, {
+                method: 'POST',
+                headers: getCore().obterHeaders(true),
+                body: JSON.stringify({ reasonNote, statusType })
+            });
+        },
+
+        /**
+         * Ação de Moderação: Descarta denúncia como improcedente
+         */
+        async descartarDenuncia(id, reasonNote = '') {
+            return getCore().requisicao(`/reports/${encodeURIComponent(id)}/dismiss`, {
+                method: 'POST',
+                headers: getCore().obterHeaders(true),
+                body: JSON.stringify({ reasonNote })
+            });
         }
     };
 

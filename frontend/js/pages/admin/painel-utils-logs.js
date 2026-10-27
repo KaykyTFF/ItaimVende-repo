@@ -128,12 +128,21 @@
         el.btnSeedDemo = document.getElementById('btn-seed-demo');
         el.btnCleanDemo = document.getElementById('btn-clean-demo');
 
-        // Central de Moderação Rápida
+        // Central de Moderação Rápida & Denúncias
         el.countModeracaoAds = document.getElementById('count-moderacao-ads');
         el.countModeracaoUsers = document.getElementById('count-moderacao-users');
         el.listaModeracaoAnuncios = document.getElementById('lista-moderacao-anuncios');
         el.listaModeracaoUsuarios = document.getElementById('lista-moderacao-usuarios');
         el.btnAtualizarModeracao = document.getElementById('btn-atualizar-moderacao');
+
+        // Fila de Denúncias (Tickets de Moderação)
+        el.listaModeracaoDenuncias = document.getElementById('lista-moderacao-denuncias');
+        el.badgeTotalReports = document.getElementById('badge-total-reports');
+        el.countReportsAll = document.getElementById('count-reports-all');
+        el.countReportsPending = document.getElementById('count-reports-pending');
+        el.countReportsReview = document.getElementById('count-reports-review');
+        el.countReportsResolved = document.getElementById('count-reports-resolved');
+        el.countReportsDismissed = document.getElementById('count-reports-dismissed');
     }
 
     /**

@@ -1,7 +1,9 @@
 import prisma from '../../config/prisma.js';
 import { AppError } from '../../utils/errors.js';
 import { formatarMensagem } from './chat.formatter.js';
-import { emitToConversation, emitToUser, notifyBadgeUpdate } from '../../sockets/index.js';
+import { emitToConversation, emitToUser, notifyBadgeUpdate, isUserOnline } from '../../sockets/index.js';
+import { ENV } from '../../config/env.js';
+import { enviarEmailNovaMensagem, enviarEmailPropostaAceita } from '../email/email.service.js';
 
 /**
  * Seletor padrão de dados do remetente
@@ -92,6 +94,9 @@ export async function sendConversationMessage(senderId, userRole, conversationId
 
   const conversation = await prisma.conversation.findUnique({
     where: { id: conversationId },
+    include: {
+      product: { select: { id: true, title: true } },
+    },
   });
 
   if (!conversation) {
@@ -148,6 +153,25 @@ export async function sendConversationMessage(senderId, userRole, conversationId
       link: `/pages/mensagens/conversas.html?id=${conversationId}`,
     }).catch(() => {});
   }).catch(() => {});
+
+  // Se o destinatário estiver offline no WebSocket, dispara e-mail transacional
+  if (!isUserOnline(recipientId)) {
+    prisma.user.findUnique({
+      where: { id: recipientId },
+      select: { email: true, name: true },
+    }).then((recipient) => {
+      if (recipient && recipient.email) {
+        enviarEmailNovaMensagem({
+          to: recipient.email,
+          name: recipient.name,
+          senderName: message.sender?.name || 'Um interessado',
+          productTitle: conversation.product?.title || 'seu anúncio',
+          messagePreview: content.trim().length > 120 ? `${content.trim().substring(0, 117)}...` : content.trim(),
+          conversationUrl: `${ENV.APP_URL}/pages/mensagens/conversas.html?id=${conversationId}`,
+        }).catch((err) => console.warn('[Email Notification] Erro ao enviar aviso de nova mensagem:', err.message));
+      }
+    }).catch(() => {});
+  }
 
   const formatted = formatarMensagem(message, senderId);
 
@@ -252,6 +276,26 @@ export async function acceptOfferProposal(userId, userRole, messageId) {
       link: `/pages/mensagens/conversas.html?id=${conv.id}`,
     }).catch(() => {});
   }).catch(() => {});
+
+  // Se o autor da proposta estiver offline, dispara e-mail transacional
+  if (!isUserOnline(message.senderId)) {
+    Promise.all([
+      prisma.user.findUnique({ where: { id: message.senderId }, select: { email: true, name: true } }),
+      prisma.user.findUnique({ where: { id: userId }, select: { name: true } }),
+      prisma.product.findUnique({ where: { id: conv.productId }, select: { title: true } }),
+    ]).then(([buyer, seller, prod]) => {
+      if (buyer && buyer.email) {
+        enviarEmailPropostaAceita({
+          to: buyer.email,
+          name: buyer.name,
+          productTitle: prod?.title || 'o produto',
+          offerValue: valorFormatado,
+          sellerName: seller?.name || 'O vendedor',
+          conversationUrl: `${ENV.APP_URL}/pages/mensagens/conversas.html?id=${conv.id}`,
+        }).catch((err) => console.warn('[Email Notification] Erro ao enviar aviso de proposta aceita:', err.message));
+      }
+    }).catch(() => {});
+  }
 
   const formattedUpdated = formatarMensagem(updatedMessage, userId);
   const formattedSystem = formatarMensagem(systemMessage, userId);

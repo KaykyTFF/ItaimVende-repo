@@ -114,14 +114,15 @@ export async function getTicketByProtocolOrId(protocolOrId) {
  * Lista denúncias/tickets para moderação ou painel administrativo
  */
 export async function listReports(filters = {}) {
-  const { status, productId, page = 1, limit = 20 } = filters;
+  const { status, productId, reason, page = 1, limit = 20 } = filters;
   const skip = (Number(page) - 1) * Number(limit);
 
   const where = {};
-  if (status) where.status = status;
+  if (status && status !== 'ALL') where.status = status;
   if (productId) where.productId = productId;
+  if (reason) where.reason = reason;
 
-  const [reports, total] = await Promise.all([
+  const [reports, total, countPending, countUnderReview, countResolved, countDismissed] = await Promise.all([
     prisma.report.findMany({
       where,
       skip,
@@ -135,11 +136,18 @@ export async function listReports(filters = {}) {
             slug: true,
             price: true,
             status: true,
+            images: {
+              where: { isCover: true },
+              take: 1,
+              select: { url: true },
+            },
             seller: {
               select: {
                 id: true,
                 name: true,
                 email: true,
+                role: true,
+                status: true,
               },
             },
           },
@@ -147,6 +155,10 @@ export async function listReports(filters = {}) {
       },
     }),
     prisma.report.count({ where }),
+    prisma.report.count({ where: { status: 'PENDING' } }),
+    prisma.report.count({ where: { status: 'UNDER_REVIEW' } }),
+    prisma.report.count({ where: { status: 'RESOLVED' } }),
+    prisma.report.count({ where: { status: 'DISMISSED' } }),
   ]);
 
   const items = reports.map((r) => {
@@ -156,8 +168,15 @@ export async function listReports(filters = {}) {
       protocol: `TK-${protocolSuffix}`,
       productId: r.productId,
       productTitle: r.product?.title || 'Anúncio removido',
+      productSlug: r.product?.slug || '',
+      productPrice: r.product?.price || null,
+      productStatus: r.product?.status || 'INDISPONIVEL',
+      productCover: r.product?.images?.[0]?.url || null,
+      sellerId: r.product?.seller?.id || '',
       sellerName: r.product?.seller?.name || 'Vendedor',
       sellerEmail: r.product?.seller?.email || '',
+      sellerRole: r.product?.seller?.role || 'BUYER',
+      sellerStatus: r.product?.seller?.status || 'ACTIVE',
       reason: r.reason,
       reasonLabel: REASON_LABELS[r.reason] || r.reason,
       description: r.description,
@@ -169,6 +188,13 @@ export async function listReports(filters = {}) {
 
   return {
     items,
+    summary: {
+      total,
+      pending: countPending,
+      underReview: countUnderReview,
+      resolved: countResolved,
+      dismissed: countDismissed,
+    },
     pagination: {
       total,
       page: Number(page),
@@ -176,6 +202,13 @@ export async function listReports(filters = {}) {
       totalPages: Math.ceil(total / Number(limit)) || 1,
     },
   };
+}
+
+/**
+ * Consulta detalhada de uma denúncia específica para moderadores
+ */
+export async function getReportById(reportId) {
+  return getTicketByProtocolOrId(reportId);
 }
 
 /**

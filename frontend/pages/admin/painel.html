@@ -470,13 +470,55 @@
         <section class="painel-section" id="section-moderacao">
             <div class="section-header">
                 <div>
-                    <h2 class="section-title"><i class="fa-solid fa-users-gear"></i> Central de Moderação Rápida</h2>
-                    <p class="section-subtitle">Supervisione os últimos anúncios publicados e usuários registrados com ações imediatas de status</p>
+                    <h2 class="section-title"><i class="fa-solid fa-shield-halved"></i> Central de Moderação e Auditoria</h2>
+                    <p class="section-subtitle">Supervisione denúncias de fraudes, anúncios recentes e contas de vendedores com ações imediatas</p>
                 </div>
                 <div class="section-actions">
                     <button type="button" class="btn-painel btn-refresh-small" id="btn-atualizar-moderacao">
-                        <i class="fa-solid fa-arrows-rotate"></i> Atualizar Dados
+                        <i class="fa-solid fa-arrows-rotate"></i> Atualizar Moderação
                     </button>
+                </div>
+            </div>
+
+            <!-- Fila de Moderação de Denúncias e Fraudes (Reports & Tickets) -->
+            <div class="moderacao-reports-container" id="container-moderacao-reports">
+                <div class="reports-header-row">
+                    <div class="reports-title-block">
+                        <div class="reports-icon-wrapper">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <div>
+                            <div class="reports-title-line">
+                                <h3 class="reports-title">Fila de Denúncias de Anúncios (Tickets de Moderação)</h3>
+                                <span class="badge-report-total" id="badge-total-reports">0 denúncias</span>
+                            </div>
+                            <p class="reports-subtitle">Analise queixas de compradores, investigue anúncios suspeitos e tome ações seguras de remoção ou suspensão</p>
+                        </div>
+                    </div>
+
+                    <!-- Filtros de Status -->
+                    <div class="reports-filter-tabs">
+                        <button type="button" class="btn-filter-report active" data-status="ALL" onclick="window.painelFiltrarDenuncias('ALL')">
+                            Todas (<span id="count-reports-all">0</span>)
+                        </button>
+                        <button type="button" class="btn-filter-report" data-status="PENDING" onclick="window.painelFiltrarDenuncias('PENDING')">
+                            <i class="fa-solid fa-clock text-amber"></i> Pendentes (<span id="count-reports-pending">0</span>)
+                        </button>
+                        <button type="button" class="btn-filter-report" data-status="UNDER_REVIEW" onclick="window.painelFiltrarDenuncias('UNDER_REVIEW')">
+                            <i class="fa-solid fa-magnifying-glass text-blue"></i> Em Análise (<span id="count-reports-review">0</span>)
+                        </button>
+                        <button type="button" class="btn-filter-report" data-status="RESOLVED" onclick="window.painelFiltrarDenuncias('RESOLVED')">
+                            <i class="fa-solid fa-check text-green"></i> Resolvidas (<span id="count-reports-resolved">0</span>)
+                        </button>
+                        <button type="button" class="btn-filter-report" data-status="DISMISSED" onclick="window.painelFiltrarDenuncias('DISMISSED')">
+                            <i class="fa-solid fa-xmark text-muted"></i> Descartadas (<span id="count-reports-dismissed">0</span>)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Lista Dinâmica de Tickets de Denúncias -->
+                <div class="reports-cards-list" id="lista-moderacao-denuncias">
+                    <div class="moderacao-empty"><i class="fa-solid fa-spinner fa-spin"></i> Carregando fila de denúncias...</div>
                 </div>
             </div>
 

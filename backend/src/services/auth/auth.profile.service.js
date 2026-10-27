@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import prisma from '../../config/prisma.js';
 import { AppError } from '../../utils/errors.js';
+import { storageAdapter } from '../../adapters/storage/index.js';
 
 /**
  * Busca perfil detalhado por ID, username ou email
@@ -51,10 +52,75 @@ export async function getUserProfile(userId) {
 }
 
 /**
+ * Busca perfil público de um vendedor/usuário por ID ou username (sem expor e-mail ou dados privados)
+ */
+export async function getPublicUserProfile(identifier) {
+  if (!identifier) {
+    throw new AppError('Identificador do usuário é obrigatório.', 400);
+  }
+
+  const clean = identifier.trim();
+
+  // Bloqueia busca pública direta por endereço de e-mail para impedir enumeração de contas
+  if (clean.includes('@')) {
+    throw new AppError('Usuário não encontrado.', 404);
+  }
+
+  const user = await prisma.user.findFirst({
+    where: {
+      OR: [
+        { id: clean },
+        { username: { equals: clean, mode: 'insensitive' } },
+      ],
+      deletedAt: null,
+      status: { notIn: ['BANNED', 'SUSPENDED'] },
+    },
+    select: {
+      id: true,
+      name: true,
+      username: true,
+      role: true,
+      city: true,
+      neighborhood: true,
+      bio: true,
+      avatar: true,
+      isVerified: true,
+      ratingAverage: true,
+      ratingCount: true,
+      salesCount: true,
+      createdAt: true,
+      _count: {
+        select: {
+          products: { where: { deletedAt: null, status: 'ATIVO' } },
+        },
+      },
+    },
+  });
+
+  if (!user) {
+    throw new AppError('Usuário não encontrado.', 404);
+  }
+
+  return {
+    ...user,
+    ratingAverage: Number(user.ratingCount) > 0 ? Number(user.ratingAverage) : 0,
+  };
+}
+
+/**
  * Atualiza perfil do usuário autenticado
  */
 export async function updateUserProfile(userId, updateData) {
   const { name, username, phone, city, neighborhood, bio, avatar } = updateData;
+
+  let oldAvatar = null;
+  if (avatar !== undefined) {
+    const current = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { avatar: true },
+    });
+    oldAvatar = current?.avatar || null;
+  }
 
   const dataToUpdate = {};
   if (name) dataToUpdate.name = name.trim();
@@ -85,6 +151,13 @@ export async function updateUserProfile(userId, updateData) {
       salesCount: true,
     },
   });
+
+  // Se o avatar foi substituído, remove a foto anterior do bucket para evitar mídia órfã
+  if (oldAvatar && avatar && oldAvatar !== avatar && !oldAvatar.includes('icon-user') && !oldAvatar.includes('placeholder')) {
+    storageAdapter.delete(oldAvatar).catch((err) => {
+      console.warn(`[updateUserProfile] Erro ao remover avatar anterior: ${err.message}`);
+    });
+  }
 
   return {
     ...updatedUser,

@@ -134,30 +134,98 @@ export class SupabaseStorageAdapter extends StorageAdapter {
   }
 
   /**
-   * Remove um arquivo do bucket
+   * Extrai o caminho relativo dentro do bucket a partir de qualquer URL pública ou relativa
+   * @param {string} pathOrUrl
+   * @returns {{ isLocal: boolean, path: string } | null}
+   */
+  extractStoragePath(pathOrUrl) {
+    if (!pathOrUrl || typeof pathOrUrl !== 'string') return null;
+    let clean = pathOrUrl.split('?')[0].split('#')[0].trim();
+
+    // Se for URL de fallback local (/uploads/...)
+    if (clean.includes('/uploads/') || clean.startsWith('uploads/')) {
+      return { isLocal: true, path: clean };
+    }
+
+    const publicMarker = `/storage/v1/object/public/${this.bucketName}/`;
+    const markerIndex = clean.indexOf(publicMarker);
+    if (markerIndex !== -1) {
+      clean = clean.substring(markerIndex + publicMarker.length);
+    } else {
+      const prefix = `${this.supabaseUrl}/storage/v1/object/public/${this.bucketName}/`;
+      if (clean.startsWith(prefix)) {
+        clean = clean.substring(prefix.length);
+      }
+    }
+
+    clean = clean.replace(/^\/+/, '');
+    try {
+      clean = decodeURIComponent(clean);
+    } catch {}
+
+    return { isLocal: false, path: clean };
+  }
+
+  /**
+   * Remove um ou múltiplos arquivos do bucket do Supabase (ou fallback local)
+   * @param {string|string[]} pathOrUrl - URL única ou lista de URLs a remover
+   * @returns {Promise<boolean>}
    */
   async delete(pathOrUrl) {
+    if (!pathOrUrl) return false;
+    const items = (Array.isArray(pathOrUrl) ? pathOrUrl : [pathOrUrl]).filter(Boolean);
+    if (items.length === 0) return true;
+
     if (!this.isConfigured) {
-      return this.localFallback.delete(pathOrUrl);
+      return this.localFallback.delete(items);
     }
 
     try {
-      let storagePath = pathOrUrl;
-      // Se for uma URL completa, extrai apenas o path relativo do bucket
-      const prefix = `${this.supabaseUrl}/storage/v1/object/public/${this.bucketName}/`;
-      if (storagePath.startsWith(prefix)) {
-        storagePath = storagePath.substring(prefix.length);
+      const supabasePaths = [];
+      const localPaths = [];
+
+      for (const item of items) {
+        const parsed = this.extractStoragePath(item);
+        if (!parsed || !parsed.path) continue;
+        if (parsed.isLocal) {
+          localPaths.push(parsed.path);
+        } else {
+          supabasePaths.push(parsed.path);
+        }
       }
 
-      const { error } = await this.supabase.storage
-        .from(this.bucketName)
-        .remove([storagePath]);
+      // 1. Remove eventuais arquivos gravados no disco local
+      if (localPaths.length > 0) {
+        await this.localFallback.delete(localPaths);
+      }
 
-      return !error;
+      // 2. Remove arquivos do bucket do Supabase em lote (Batch Delete)
+      if (supabasePaths.length > 0) {
+        const { error } = await this.supabase.storage
+          .from(this.bucketName)
+          .remove(supabasePaths);
+
+        if (error) {
+          console.warn(`[SupabaseStorageAdapter] Aviso ao deletar do Supabase: ${error.message}`);
+          return false;
+        }
+
+        console.log(`🗑️ [SupabaseStorageAdapter] ${supabasePaths.length} arquivo(s) removido(s) do bucket "${this.bucketName}".`);
+      }
+
+      return true;
     } catch (err) {
       console.warn(`[SupabaseStorageAdapter] Erro ao deletar do Supabase: ${err.message}`);
       return false;
     }
+  }
+
+  /**
+   * Remove múltiplos arquivos do armazenamento em lote
+   * @param {string[]} pathsOrUrls
+   */
+  async deleteMany(pathsOrUrls) {
+    return this.delete(pathsOrUrls);
   }
 
   /**

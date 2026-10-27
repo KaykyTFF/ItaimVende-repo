@@ -164,6 +164,17 @@ export function getIO() {
 }
 
 /**
+ * Verifica se um usuário específico está atualmente online no servidor WebSocket
+ * @param {string} userId
+ * @returns {boolean}
+ */
+export function isUserOnline(userId) {
+  if (!io || !userId) return false;
+  const room = io.sockets?.adapter?.rooms?.get(`user:${userId}`);
+  return Boolean(room && room.size > 0);
+}
+
+/**
  * Emite um evento diretamente para um usuário específico (todas as abas dele)
  * @param {string} userId
  * @param {string} event

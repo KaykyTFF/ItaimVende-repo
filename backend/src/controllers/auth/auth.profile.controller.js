@@ -1,4 +1,4 @@
-import { getUserProfile, updateUserProfile, changeUserPassword, deleteUserAccount } from '../../services/auth/index.js';
+import { getUserProfile, getPublicUserProfile, updateUserProfile, changeUserPassword, deleteUserAccount } from '../../services/auth/index.js';
 
 export async function getProfile(req, res, next) {
   try {
@@ -27,26 +27,10 @@ export async function updateProfile(req, res, next) {
 
 export async function getPublicProfile(req, res, next) {
   try {
-    const user = await getUserProfile(req.params.id);
-    const publicUser = {
-      id: user.id,
-      name: user.name,
-      username: user.username,
-      city: user.city,
-      neighborhood: user.neighborhood,
-      phone: user.phone,
-      bio: user.bio,
-      avatar: user.avatar,
-      isVerified: user.isVerified,
-      ratingAverage: user.ratingAverage,
-      ratingCount: user.ratingCount,
-      salesCount: user.salesCount,
-      createdAt: user.createdAt,
-      _count: user._count,
-    };
+    const user = await getPublicUserProfile(req.params.id);
     res.status(200).json({
       success: true,
-      user: publicUser,
+      user,
     });
   } catch (error) {
     next(error);

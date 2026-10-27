@@ -65,11 +65,19 @@ export class LocalStorageAdapter extends StorageAdapter {
   }
 
   /**
-   * Remove arquivo do disco local
+   * Remove arquivo do disco local (suporta caminho individual ou lista de caminhos)
+   * @param {string|string[]} pathOrUrl
    */
   async delete(pathOrUrl) {
+    if (Array.isArray(pathOrUrl)) {
+      const results = await Promise.all(pathOrUrl.map((p) => this.delete(p)));
+      return results.every(Boolean);
+    }
+
     try {
-      const relative = pathOrUrl.replace(/^\/uploads\//, '').replace(/^uploads\//, '');
+      if (!pathOrUrl || typeof pathOrUrl !== 'string') return false;
+      const clean = pathOrUrl.split('?')[0].split('#')[0].trim();
+      const relative = clean.replace(/^\/uploads\//, '').replace(/^uploads\//, '');
       const fullPath = path.join(this.rootDir, relative);
       if (fs.existsSync(fullPath)) {
         await fs.promises.unlink(fullPath);
@@ -80,6 +88,14 @@ export class LocalStorageAdapter extends StorageAdapter {
       console.warn(`[LocalStorageAdapter] Erro ao deletar arquivo: ${err.message}`);
       return false;
     }
+  }
+
+  /**
+   * Remove múltiplos arquivos do disco local
+   * @param {string[]} pathsOrUrls
+   */
+  async deleteMany(pathsOrUrls) {
+    return this.delete(pathsOrUrls);
   }
 
   /**

@@ -25,27 +25,31 @@ if (fs.existsSync(envBackend)) {
   dotenv.config();
 }
 
-// Fallback oficial do banco de dados (Supabase PostgreSQL do Itaim Vende)
-const DEFAULT_DATABASE_URL =
-  'postgresql://postgres.pgrznndtajjzpwqgtkkz:Itaim111251125@aws-1-ca-central-1.pooler.supabase.com:5432/postgres';
-
+// Validação e carregamento de variáveis de ambiente obrigatórias
 if (!process.env.DATABASE_URL || process.env.DATABASE_URL.trim() === '') {
-  process.env.DATABASE_URL = DEFAULT_DATABASE_URL;
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('❌ [ERRO DE SEGURANÇA]: DATABASE_URL obrigatória não foi encontrada no .env.');
+  }
+  console.warn('⚠️ [Config] DATABASE_URL não definida no .env. Certifique-se de configurar o arquivo .env.');
 }
 
-// Configuração do Supabase Storage e Otimização de Imagens
-const DEFAULT_SUPABASE_URL = 'https://pgrznndtajjzpwqgtkkz.supabase.co';
+if (!process.env.JWT_SECRET || process.env.JWT_SECRET.trim() === '') {
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('❌ [ERRO DE SEGURANÇA]: JWT_SECRET obrigatória não foi definida no .env.');
+  }
+  console.warn('⚠️ [Config] JWT_SECRET não configurada no .env. Usando chave de desenvolvimento.');
+}
 
 export const ENV = {
   PORT: process.env.PORT || 3000,
   NODE_ENV: process.env.NODE_ENV || 'development',
-  DATABASE_URL: process.env.DATABASE_URL,
-  JWT_SECRET: process.env.JWT_SECRET || 'itaim_vende_super_segredo_jwt_auth_chave_2026',
+  DATABASE_URL: process.env.DATABASE_URL || '',
+  JWT_SECRET: process.env.JWT_SECRET || 'dev_jwt_key_local_only',
   JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || '2h',
   CORS_ORIGIN: process.env.CORS_ORIGIN || '*',
 
   // Supabase Storage & Armazenamento em Nuvem
-  SUPABASE_URL: process.env.SUPABASE_URL || DEFAULT_SUPABASE_URL,
+  SUPABASE_URL: process.env.SUPABASE_URL || '',
   SUPABASE_KEY: process.env.SUPABASE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || '',
   SUPABASE_BUCKET: process.env.SUPABASE_BUCKET || 'marketplace',
   STORAGE_PROVIDER: process.env.STORAGE_PROVIDER || (process.env.SUPABASE_KEY ? 'supabase' : 'local'),

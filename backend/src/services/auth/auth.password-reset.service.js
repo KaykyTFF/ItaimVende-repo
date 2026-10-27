@@ -5,12 +5,18 @@ import { ENV } from '../../config/env.js';
 import { AppError } from '../../utils/errors.js';
 import { enviarEmailRecuperacaoSenha } from '../email/email.service.js';
 
+// Rastreador em memória de tentativas incorretas por e-mail para impedir força bruta no código de 6 dígitos
+const failedAttemptsMap = new Map();
+
 /**
  * Solicita a recuperação de senha: gera código OTP de 6 dígitos e token seguro (válidos por 1h)
  * e despacha o e-mail para o usuário.
  */
 export async function solicitarRecuperacao(email) {
   const emailNormalized = email.toLowerCase().trim();
+
+  // Reinicia contagem de tentativas para este e-mail
+  failedAttemptsMap.delete(emailNormalized);
 
   const user = await prisma.user.findUnique({
     where: { email: emailNormalized },
@@ -68,6 +74,18 @@ export async function validarCodigoRecuperacao(email, code) {
   const emailNormalized = email.toLowerCase().trim();
   const codeClean = (code || '').trim();
 
+  const attemptsInfo = failedAttemptsMap.get(emailNormalized) || { count: 0, lastAttempt: Date.now() };
+
+  // Se já errou 5 vezes anteriormente, bloqueia e cancela o código
+  if (attemptsInfo.count >= 5) {
+    await prisma.user.updateMany({
+      where: { email: emailNormalized },
+      data: { resetPasswordCode: null, resetPasswordToken: null, resetPasswordExpires: null },
+    });
+    failedAttemptsMap.delete(emailNormalized);
+    throw new AppError('Limite de tentativas excedido para este código. Por favor, solicite um novo código de recuperação.', 429);
+  }
+
   const user = await prisma.user.findUnique({
     where: { email: emailNormalized },
     select: {
@@ -88,8 +106,25 @@ export async function validarCodigoRecuperacao(email, code) {
   }
 
   if (user.resetPasswordCode !== codeClean) {
-    throw new AppError('Código incorreto. Por favor, confira os números digitados.', 400);
+    attemptsInfo.count += 1;
+    attemptsInfo.lastAttempt = Date.now();
+    failedAttemptsMap.set(emailNormalized, attemptsInfo);
+
+    const restantes = 5 - attemptsInfo.count;
+    if (restantes <= 0) {
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { resetPasswordCode: null, resetPasswordToken: null, resetPasswordExpires: null },
+      });
+      failedAttemptsMap.delete(emailNormalized);
+      throw new AppError('Você errou o código 5 vezes. O código foi cancelado por segurança. Solicite um novo código.', 429);
+    }
+
+    throw new AppError(`Código incorreto. Você tem mais ${restantes} tentativa(s).`, 400);
   }
+
+  // Sucesso na verificação: limpa tentativas incorretas
+  failedAttemptsMap.delete(emailNormalized);
 
   return {
     success: true,

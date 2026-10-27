@@ -79,18 +79,25 @@ app.use(sanitizeInput);
 // Servir pasta de uploads de imagens de forma estática com fallback gracioso para subpastas e placeholder
 app.use('/uploads', express.static(UPLOAD_DIR));
 app.use('/uploads', (req, res) => {
-  const requestedFile = req.path.replace(/^\//, '');
+  const rawPath = req.path || '';
+  const requestedFile = path.basename(rawPath);
+
+  // Prevenção estrita de Path Traversal
+  if (!requestedFile || requestedFile.includes('..') || rawPath.includes('..') || rawPath.includes('\\')) {
+    return res.status(400).json({ success: false, message: 'Caminho inválido.' });
+  }
 
   // Se o arquivo foi requisitado direto na raiz de /uploads/ (ex: URLs antigas), tenta localizar nas subpastas
-  if (requestedFile && !requestedFile.includes('/')) {
-    const perfilCandidate = path.join(UPLOAD_PERFIL_DIR, requestedFile);
-    if (fs.existsSync(perfilCandidate)) {
-      return res.sendFile(perfilCandidate);
-    }
-    const vendasCandidate = path.join(UPLOAD_VENDAS_DIR, requestedFile);
-    if (fs.existsSync(vendasCandidate)) {
-      return res.sendFile(vendasCandidate);
-    }
+  const perfilDir = path.resolve(UPLOAD_PERFIL_DIR);
+  const perfilCandidate = path.resolve(perfilDir, requestedFile);
+  if (perfilCandidate.startsWith(perfilDir) && fs.existsSync(perfilCandidate)) {
+    return res.sendFile(perfilCandidate);
+  }
+
+  const vendasDir = path.resolve(UPLOAD_VENDAS_DIR);
+  const vendasCandidate = path.resolve(vendasDir, requestedFile);
+  if (vendasCandidate.startsWith(vendasDir) && fs.existsSync(vendasCandidate)) {
+    return res.sendFile(vendasCandidate);
   }
 
   // Fallback para placeholder se a imagem solicitada não existir no disco
@@ -104,32 +111,50 @@ app.use('/uploads', (req, res) => {
   res.status(404).json({ success: false, message: 'Imagem não encontrada.' });
 });
 
-// Suporte e retrocompatibilidade para requisições legadas em /assets/:file
+// Suporte e retrocompatibilidade para requisições legadas em /assets/:filename (com proteção anti-Path Traversal)
 app.get('/assets/:filename', (req, res, next) => {
   const filename = req.params.filename;
+
+  // Bloqueio rigoroso contra Path Traversal: impede '..', barras e caracteres de navegação
+  if (!filename || filename.includes('..') || filename.includes('/') || filename.includes('\\') || path.basename(filename) !== filename) {
+    return next();
+  }
+
   const subpastas = ['logos', 'icons', 'placeholders', 'banners', 'categorias', 'backgrounds', 'usuarios', 'produtos'];
   for (const sub of subpastas) {
-    const candidate = path.join(FRONTEND_DIR, 'assets', sub, filename);
-    if (fs.existsSync(candidate)) {
+    const allowedDir = path.resolve(FRONTEND_DIR, 'assets', sub);
+    const candidate = path.resolve(allowedDir, filename);
+
+    // Garante que o caminho canônico do arquivo não escapa do diretório permitido
+    if (candidate.startsWith(allowedDir) && fs.existsSync(candidate)) {
       return res.sendFile(candidate);
     }
   }
   next();
 });
 
-// Suporte e retrocompatibilidade para requisições legadas em /css/:file
+// Suporte e retrocompatibilidade para requisições legadas em /css/:filename (com proteção anti-Path Traversal)
 app.get('/css/:filename', (req, res, next) => {
   const filename = req.params.filename;
+
+  // Bloqueio rigoroso contra Path Traversal
+  if (!filename || filename.includes('..') || filename.includes('/') || filename.includes('\\') || path.basename(filename) !== filename) {
+    return next();
+  }
+
   // Verifica em core/
-  const candidateCore = path.join(FRONTEND_DIR, 'css', 'core', filename);
-  if (fs.existsSync(candidateCore)) {
+  const coreDir = path.resolve(FRONTEND_DIR, 'css', 'core');
+  const candidateCore = path.resolve(coreDir, filename);
+  if (candidateCore.startsWith(coreDir) && fs.existsSync(candidateCore)) {
     return res.sendFile(candidateCore);
   }
+
   // Verifica em pages/*/
   const pageDirs = ['admin', 'favoritos', 'home', 'mensagens', 'notificacoes', 'perfil', 'produtos', 'vender'];
   for (const sub of pageDirs) {
-    const candidate = path.join(FRONTEND_DIR, 'css', 'pages', sub, filename);
-    if (fs.existsSync(candidate)) {
+    const pageDir = path.resolve(FRONTEND_DIR, 'css', 'pages', sub);
+    const candidate = path.resolve(pageDir, filename);
+    if (candidate.startsWith(pageDir) && fs.existsSync(candidate)) {
       return res.sendFile(candidate);
     }
   }
