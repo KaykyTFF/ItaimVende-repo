@@ -38,8 +38,13 @@ if (fs.existsSync(envTxtPath) && !fs.existsSync(envPath)) {
   fs.copyFileSync(envTxtPath, envPath);
   console.log('✅ Arquivo .env corrigido.');
 } else if (!fs.existsSync(envPath)) {
-  console.log('📝 Criando arquivo backend/.env com credenciais do Supabase...');
-  fs.writeFileSync(envPath, defaultEnvContent, 'utf-8');
+  if (fs.existsSync(path.join(BACKEND_DIR, '.env.supabase'))) {
+    console.log('📝 Restaurando backend/.env a partir de .env.supabase...');
+    fs.copyFileSync(path.join(BACKEND_DIR, '.env.supabase'), envPath);
+  } else {
+    console.log('📝 Criando arquivo backend/.env com credenciais do Supabase...');
+    fs.writeFileSync(envPath, defaultEnvContent, 'utf-8');
+  }
   console.log('✅ Arquivo backend/.env criado com sucesso.');
 } else {
   // Confere se DATABASE_URL está presente no .env

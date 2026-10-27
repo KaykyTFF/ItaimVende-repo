@@ -6,6 +6,8 @@
   "type": "module",
   "scripts": {
     "setup": "node scripts/setup-db.js",
+    "modo:ifpi": "node scripts/switch-env.js ifpi",
+    "modo:supabase": "node scripts/switch-env.js supabase",
     "start": "npm --prefix backend run start",
     "dev": "npm --prefix backend run dev",
     "tunnel": "cloudflared tunnel --url http://localhost:3000",

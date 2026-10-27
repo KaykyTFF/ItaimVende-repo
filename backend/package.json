@@ -7,6 +7,8 @@
   "scripts": {
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
+    "modo:ifpi": "node ../scripts/switch-env.js ifpi",
+    "modo:supabase": "node ../scripts/switch-env.js supabase",
     "prisma:generate": "prisma generate",
     "prisma:push": "prisma db push",
     "prisma:studio": "prisma studio",
