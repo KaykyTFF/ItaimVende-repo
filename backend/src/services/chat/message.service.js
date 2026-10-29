@@ -1,6 +1,6 @@
 import prisma from '../../config/prisma.js';
 import { AppError } from '../../utils/errors.js';
-import { formatarMensagem } from './chat.formatter.js';
+import { formatarMensagem, isImageContent, formatarPreviewMensagem } from './chat.formatter.js';
 import { emitToConversation, emitToUser, notifyBadgeUpdate, isUserOnline } from '../../sockets/index.js';
 import { ENV } from '../../config/env.js';
 import { enviarEmailNovaMensagem, enviarEmailPropostaAceita } from '../email/email.service.js';
@@ -84,6 +84,11 @@ export async function sendConversationMessage(senderId, userRole, conversationId
     messageType = 'OFFER_PROPOSAL';
   }
 
+  // Detecção automática de imagem se o conteúdo for um caminho/URL de foto
+  if (messageType === 'TEXT' && isImageContent(content)) {
+    messageType = 'IMAGE';
+  }
+
   if (!content || !content.trim()) {
     throw new AppError('A mensagem não pode estar vazia.', 400);
   }
@@ -139,16 +144,21 @@ export async function sendConversationMessage(senderId, userRole, conversationId
   import('../notification/index.js').then(({ createNotification }) => {
     let tituloNotif = `Nova mensagem de ${message.sender?.name || 'Usuário'}`;
     let tipoNotif = 'mensagem';
+    let previewNotif = content.trim();
 
-    if (messageType === 'OFFER_PROPOSAL') {
+    if (messageType === 'IMAGE') {
+      tituloNotif = `${message.sender?.name || 'Usuário'} enviou uma foto`;
+      previewNotif = '📷 Foto';
+    } else if (messageType === 'OFFER_PROPOSAL') {
       tituloNotif = `Nova proposta de R$ ${offerValNum?.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} de ${message.sender?.name || 'Usuário'}`;
+      previewNotif = `🤝 Proposta de R$ ${offerValNum?.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
       tipoNotif = 'oferta';
     }
 
     createNotification({
       userId: recipientId,
       title: tituloNotif,
-      message: content.trim().length > 60 ? `${content.trim().substring(0, 57)}...` : content.trim(),
+      message: previewNotif.length > 60 ? `${previewNotif.substring(0, 57)}...` : previewNotif,
       type: tipoNotif,
       link: `/pages/mensagens/conversas.html?id=${conversationId}`,
     }).catch(() => {});
@@ -161,12 +171,13 @@ export async function sendConversationMessage(senderId, userRole, conversationId
       select: { email: true, name: true },
     }).then((recipient) => {
       if (recipient && recipient.email) {
+        const emailPreview = messageType === 'IMAGE' ? '📷 Enviou uma foto' : (content.trim().length > 120 ? `${content.trim().substring(0, 117)}...` : content.trim());
         enviarEmailNovaMensagem({
           to: recipient.email,
           name: recipient.name,
           senderName: message.sender?.name || 'Um interessado',
           productTitle: conversation.product?.title || 'seu anúncio',
-          messagePreview: content.trim().length > 120 ? `${content.trim().substring(0, 117)}...` : content.trim(),
+          messagePreview: emailPreview,
           conversationUrl: `${ENV.APP_URL}/pages/mensagens/conversas.html?id=${conversationId}`,
         }).catch((err) => console.warn('[Email Notification] Erro ao enviar aviso de nova mensagem:', err.message));
       }
@@ -179,9 +190,11 @@ export async function sendConversationMessage(senderId, userRole, conversationId
   emitToConversation(conversationId, 'new_message', formatted);
 
   // Notifica ambos os participantes para atualizar o preview na lista de conversas
+  const previewAmigavel = formatarPreviewMensagem(message);
   const convPreview = {
     conversationId,
-    ultimaMensagem: content.trim(),
+    ultimaMensagem: previewAmigavel,
+    tipoUltimaMensagem: messageType,
     dataUltimaMensagem: message.createdAt || new Date().toISOString(),
     lastMessageAt: message.createdAt || new Date().toISOString(),
   };

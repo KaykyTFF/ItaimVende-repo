@@ -93,9 +93,12 @@ export async function startTunnel() {
 
   addTunnelLog('Iniciando processo do Cloudflare Tunnel na porta 3000...');
 
-  // 2. Dispara o executável cloudflared
+  // 2. Dispara o executável cloudflared com protocolo HTTP/2 (porta 443 TCP)
+  // Isso evita bloqueios de UDP/QUIC (porta 7844) comuns em redes como o Wi-Fi do IFPI
   const args = [
     'tunnel',
+    '--protocol',
+    'http2',
     '--url',
     'http://localhost:3000',
     '--metrics',

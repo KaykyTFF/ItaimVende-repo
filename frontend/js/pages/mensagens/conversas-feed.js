@@ -151,8 +151,9 @@
                 balao.className = `msg-balao ${souEu ? 'enviada' : 'recebida'}`;
                 if (m.tempId) balao.setAttribute('data-temp-id', m.tempId);
 
-                // 2. Foto / Imagem Anexada
-                if (m.messageType === 'IMAGE') {
+                // 2. Foto / Imagem Anexada (detecta por tipo explícito ou por caminho/URL de foto)
+                const ehFoto = (m.messageType === 'IMAGE') || (utils && typeof utils.ehImagem === 'function' && utils.ehImagem(m.content, m.messageType));
+                if (ehFoto) {
                     const fotoWrap = document.createElement('div');
                     fotoWrap.className = 'msg-foto-wrap';
                     const fotoImg = document.createElement('img');

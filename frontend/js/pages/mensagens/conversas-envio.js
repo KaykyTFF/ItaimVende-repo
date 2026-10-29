@@ -282,6 +282,19 @@
                             estado.mensagensAtivas.push(respMsg.data);
                             utils.salvarMensagensCacheLocal(estado.conversaAtivaId, estado.mensagensAtivas, estado.STORAGE_KEY_MSGS_PREFIX);
                             if (window.ItaimChatFeed) window.ItaimChatFeed.renderizarFeedMensagens(estado.mensagensAtivas, false);
+
+                            // Atualiza imediatamente o card da conversa na barra lateral
+                            const conv = estado.conversas.find(c => c.id === estado.conversaAtivaId);
+                            if (conv) {
+                                conv.ultimaMensagem = '📷 Foto';
+                                conv.tipoUltimaMensagem = 'IMAGE';
+                                conv.dataUltimaMensagem = respMsg.data.createdAt || new Date().toISOString();
+                                estado.conversas = [conv, ...estado.conversas.filter(c => c.id !== conv.id)];
+                                try {
+                                    localStorage.setItem(estado.STORAGE_KEY_LISTA, JSON.stringify(estado.conversas));
+                                } catch (e) {}
+                                if (window.ItaimChatLista) window.ItaimChatLista.renderizarListaConversas(dom.buscaInput?.value || '');
+                            }
                         } else {
                             throw new Error(respMsg?.message || 'Falha ao enviar a foto');
                         }

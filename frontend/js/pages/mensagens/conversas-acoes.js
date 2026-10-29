@@ -84,7 +84,12 @@
                 // Atualiza o card da conversa na barra lateral
                 const conv = estado.conversas.find(c => c.id === novaMsg.conversationId);
                 if (conv) {
-                    conv.ultimaMensagem = novaMsg.content;
+                    const previewObj = (utils && typeof utils.formatarPreviewMensagem === 'function')
+                        ? utils.formatarPreviewMensagem(novaMsg)
+                        : { isImage: false, isOffer: false, isSystem: false, texto: novaMsg.content };
+
+                    conv.ultimaMensagem = previewObj.texto;
+                    conv.tipoUltimaMensagem = previewObj.isImage ? 'IMAGE' : (novaMsg.messageType || 'TEXT');
                     conv.dataUltimaMensagem = novaMsg.createdAt || new Date().toISOString();
                     if (novaMsg.conversationId !== estado.conversaAtivaId && novaMsg.senderId !== estado.meuUserId) {
                         conv.naoLidas = (Number(conv.naoLidas) || 0) + 1;
@@ -99,6 +104,27 @@
                     }
                 } else if (window.ItaimChatLista) {
                     window.ItaimChatLista.carregarListaConversas();
+                }
+            });
+
+            // 1.1 Atualização de Metadados da Conversa (WebSocket)
+            window.ItaimSocket.on('conversation_updated', (dados) => {
+                if (!dados || !dados.conversationId) return;
+                const conv = estado.conversas.find(c => c.id === dados.conversationId);
+                if (conv) {
+                    const previewObj = (utils && typeof utils.formatarPreviewMensagem === 'function')
+                        ? utils.formatarPreviewMensagem(dados.ultimaMensagem, dados.tipoUltimaMensagem)
+                        : { isImage: false, texto: dados.ultimaMensagem };
+                    conv.ultimaMensagem = previewObj.texto;
+                    conv.tipoUltimaMensagem = previewObj.isImage ? 'IMAGE' : (dados.tipoUltimaMensagem || conv.tipoUltimaMensagem);
+                    conv.dataUltimaMensagem = dados.dataUltimaMensagem || dados.lastMessageAt || new Date().toISOString();
+                    estado.conversas = [conv, ...estado.conversas.filter(c => c.id !== conv.id)];
+                    try {
+                        localStorage.setItem(estado.STORAGE_KEY_LISTA, JSON.stringify(estado.conversas));
+                    } catch (e) {}
+                    if (window.ItaimChatLista) {
+                        window.ItaimChatLista.renderizarListaConversas(dom.buscaInput?.value || '');
+                    }
                 }
             });
 

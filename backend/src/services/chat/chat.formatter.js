@@ -4,6 +4,37 @@
  */
 
 /**
+ * Detecta se o conteúdo de uma mensagem representa uma imagem ou anexo
+ * @param {string} content
+ */
+export function isImageContent(content) {
+  if (!content || typeof content !== 'string') return false;
+  const clean = content.trim();
+  return /^\/uploads\/(perfil|vendas|chat)\//i.test(clean) ||
+         /^(https?:\/\/|\/uploads\/|data:image\/).*\.(webp|png|jpe?g|gif|svg|avif)(\?.*)?$/i.test(clean) ||
+         clean.startsWith('data:image/');
+}
+
+/**
+ * Retorna o texto formatado amigável para exibição no preview do card da conversa
+ * @param {object|null} msg - Objeto da última mensagem
+ */
+export function formatarPreviewMensagem(msg) {
+  if (!msg) return 'Conversa iniciada';
+  if (msg.messageType === 'IMAGE' || isImageContent(msg.content)) {
+    return '📷 Foto';
+  }
+  if (msg.messageType === 'OFFER_PROPOSAL') {
+    const val = msg.offerValue ? Number(msg.offerValue).toLocaleString('pt-BR', { minimumFractionDigits: 2 }) : '';
+    return val ? `🤝 Proposta de R$ ${val}` : '🤝 Proposta de valor';
+  }
+  if (msg.messageType === 'SYSTEM') {
+    return `🔔 ${msg.content}`;
+  }
+  return msg.content || 'Conversa iniciada';
+}
+
+/**
  * Formata um objeto de Conversa com metadados do interlocutor e do produto
  * @param {object} c - Conversa retornada pelo Prisma
  * @param {string} userId - ID do usuário atual requisitante
@@ -15,6 +46,9 @@ export function formatarConversa(c, userId) {
 
   const fotos = c.product?.images?.map((img) => img.url) || [];
   const fotoCapa = fotos[0] || 'assets/placeholders/produto-placeholder.svg';
+
+  const isImg = ultimaMsg && (ultimaMsg.messageType === 'IMAGE' || isImageContent(ultimaMsg.content));
+  const tipoMsg = isImg ? 'IMAGE' : (ultimaMsg?.messageType || 'TEXT');
 
   return {
     id: c.id,
@@ -63,7 +97,9 @@ export function formatarConversa(c, userId) {
       avatar: c.seller?.avatar || 'assets/icons/icon-user.png',
       phone: c.seller?.phone || '',
     },
-    ultimaMensagem: ultimaMsg ? ultimaMsg.content : 'Conversa iniciada',
+    ultimaMensagem: formatarPreviewMensagem(ultimaMsg),
+    tipoUltimaMensagem: tipoMsg,
+    lastMessageContent: ultimaMsg ? ultimaMsg.content : null,
     dataUltimaMensagem: c.lastMessageAt || c.createdAt,
     naoLidas: c._count?.messages || 0,
     status: c.status,
@@ -79,15 +115,18 @@ export function formatarConversa(c, userId) {
  * @param {string} userId - ID do usuário atual requisitante
  */
 export function formatarMensagem(m, userId) {
+  const isImg = m.messageType === 'IMAGE' || isImageContent(m.content);
+  const msgType = isImg ? 'IMAGE' : m.messageType;
+
   return {
     id: m.id,
     conversationId: m.conversationId,
     senderId: m.senderId,
     eMeu: m.senderId === userId,
     content: m.content,
-    messageType: m.messageType,
+    messageType: msgType,
     offerValue: m.offerValue ? Number(m.offerValue) : null,
-    offerStatus: m.offerStatus || (m.messageType === 'OFFER_PROPOSAL' ? 'PENDING' : null),
+    offerStatus: m.offerStatus || (msgType === 'OFFER_PROPOSAL' ? 'PENDING' : null),
     isRead: m.isRead,
     readAt: m.readAt,
     createdAt: m.createdAt,

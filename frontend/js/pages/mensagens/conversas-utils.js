@@ -21,6 +21,55 @@
         fallbackAvatar,
         fallbackProdutoImg,
 
+        /**
+         * Detecta se o conteúdo de uma mensagem ou URL representa uma imagem/foto
+         */
+        ehImagem: function (urlOuTexto, messageType = null) {
+            if (messageType === 'IMAGE') return true;
+            if (!urlOuTexto || typeof urlOuTexto !== 'string') return false;
+            const clean = urlOuTexto.trim();
+            return /^\/uploads\/(perfil|vendas|chat)\//i.test(clean) ||
+                   /^(https?:\/\/|\/uploads\/|data:image\/).*\.(webp|png|jpe?g|gif|svg|avif)(\?.*)?$/i.test(clean) ||
+                   clean.startsWith('data:image/');
+        },
+
+        /**
+         * Formata o texto de preview da conversa para a lista lateral (ex: 📷 Foto, 🤝 Proposta)
+         */
+        formatarPreviewMensagem: function (msgOuTexto, messageType = null) {
+            if (!msgOuTexto) return { isImage: false, isOffer: false, isSystem: false, texto: 'Conversa iniciada' };
+
+            let texto = '';
+            let tipo = messageType;
+
+            if (typeof msgOuTexto === 'object' && msgOuTexto !== null) {
+                tipo = msgOuTexto.messageType || msgOuTexto.tipoUltimaMensagem || tipo;
+                texto = msgOuTexto.content || msgOuTexto.ultimaMensagem || '';
+            } else {
+                texto = String(msgOuTexto || '').trim();
+            }
+
+            const isImg = tipo === 'IMAGE' || this.ehImagem(texto, tipo);
+            if (isImg) {
+                return { isImage: true, isOffer: false, isSystem: false, texto: '📷 Foto' };
+            }
+
+            if (tipo === 'OFFER_PROPOSAL' || texto.startsWith('Proposta de R$')) {
+                return {
+                    isImage: false,
+                    isOffer: true,
+                    isSystem: false,
+                    texto: texto.startsWith('Proposta de R$') ? `🤝 ${texto}` : '🤝 Proposta de Preço'
+                };
+            }
+
+            if (tipo === 'SYSTEM') {
+                return { isImage: false, isOffer: false, isSystem: true, texto: `🔔 ${texto}` };
+            }
+
+            return { isImage: false, isOffer: false, isSystem: false, texto: texto || 'Conversa iniciada' };
+        },
+
         formatarPreco: function (val) {
             const num = Number(val);
             if (isNaN(num) || num <= 0) return 'A combinar';

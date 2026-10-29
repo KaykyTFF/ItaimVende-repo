@@ -214,7 +214,20 @@
 
                 const previewMsg = document.createElement('p');
                 previewMsg.className = 'chat-card-preview';
-                previewMsg.textContent = c.ultimaMensagem || 'Conversa iniciada';
+
+                const previewObj = (utils && typeof utils.formatarPreviewMensagem === 'function')
+                    ? utils.formatarPreviewMensagem(c.ultimaMensagem, c.tipoUltimaMensagem)
+                    : { isImage: false, isOffer: false, isSystem: false, texto: c.ultimaMensagem || 'Conversa iniciada' };
+
+                if (previewObj.isImage) {
+                    previewMsg.classList.add('is-photo');
+                    previewMsg.innerHTML = '<span class="chat-preview-icon">📷</span> Foto';
+                } else if (previewObj.isOffer) {
+                    previewMsg.classList.add('is-offer');
+                    previewMsg.innerHTML = `<span class="chat-preview-icon">🤝</span> ${previewObj.texto.replace(/^🤝\s*/, '')}`;
+                } else {
+                    previewMsg.textContent = previewObj.texto || 'Conversa iniciada';
+                }
 
                 linhaBase.appendChild(previewMsg);
 
