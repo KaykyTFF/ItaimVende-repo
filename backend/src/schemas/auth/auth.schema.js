@@ -21,14 +21,27 @@ export const loginSchema = z.object({
   password: z.string().min(1, 'A senha é obrigatória.'),
 });
 
-export const updateProfileSchema = z.object({
-  name: z.string().min(2, 'O nome deve ter pelo menos 2 caracteres.').optional(),
-  username: z.string().min(3).optional(),
-  phone: z.string().optional(),
-  city: z.string().optional(),
-  neighborhood: z.string().optional(),
-  bio: z.string().max(300, 'A biografia não pode exceder 300 caracteres.').optional(),
+export const googleAuthSchema = z.object({
+  credential: z.string().optional(),
+  idToken: z.string().optional(),
+  email: z.string().email('E-mail informado é inválido.').optional(),
+  name: z.string().optional(),
   avatar: z.string().optional(),
+  googleId: z.string().optional(),
+}).refine(data => Boolean(data.credential || data.idToken || data.email), {
+  message: 'Credencial ou e-mail Google é obrigatório para autenticação.',
+});
+
+export const updateProfileSchema = z.object({
+  name: z.string().min(2, 'O nome deve ter pelo menos 2 caracteres.').optional().nullable(),
+  username: z.string().min(3, 'O nome de usuário deve ter pelo menos 3 caracteres.').optional().nullable().or(z.literal('')),
+  phone: z.string().optional().nullable().or(z.literal('')),
+  city: z.string().optional().nullable().or(z.literal('')),
+  state: z.string().optional().nullable().or(z.literal('')),
+  neighborhood: z.string().optional().nullable().or(z.literal('')),
+  postalCode: z.string().optional().nullable().or(z.literal('')),
+  bio: z.string().max(300, 'A biografia não pode exceder 300 caracteres.').optional().nullable().or(z.literal('')),
+  avatar: z.string().optional().nullable().or(z.literal('')),
 });
 
 export const changePasswordSchema = z.object({
@@ -64,4 +77,3 @@ export const resetPasswordSchema = z.object({
   message: 'É necessário fornecer o código de 6 dígitos ou o token de recuperação.',
   path: ['token'],
 });
-

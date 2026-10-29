@@ -86,6 +86,178 @@ export async function enviarEmail({ to, subject, html, text }) {
 }
 
 /**
+ * Envia e-mail de boas-vindas para novos usuários cadastrados no Itaim Vende
+ */
+export async function enviarEmailBoasVindas({ to, name }) {
+  const primeiroNome = (name || 'Amigo(a)').split(' ')[0];
+  const subject = `🎉 Bem-vindo ao Itaim Vende, ${primeiroNome}!`;
+  const appUrl = ENV.APP_URL || 'http://localhost:3000';
+  const catalogoUrl = `${appUrl}/pages/home/home.html`;
+
+  const html = `
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bem-vindo ao Itaim Vende</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f1f5f9;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      color: #334155;
+    }
+    .wrapper {
+      width: 100%;
+      table-layout: fixed;
+      background-color: #f1f5f9;
+      padding: 40px 16px;
+    }
+    .main {
+      background-color: #ffffff;
+      margin: 0 auto;
+      max-width: 560px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+      border: 1px solid #e2e8f0;
+    }
+    .header {
+      background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+      padding: 32px 24px;
+      text-align: center;
+    }
+    .header h1 {
+      margin: 0;
+      color: #ffffff;
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    .header p {
+      margin: 6px 0 0;
+      color: #e8f5e9;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .content {
+      padding: 36px 32px;
+      line-height: 1.6;
+    }
+    .greeting {
+      font-size: 20px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-top: 0;
+      margin-bottom: 14px;
+    }
+    .text {
+      font-size: 14px;
+      color: #475569;
+      margin-bottom: 20px;
+    }
+    .feature-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 18px 20px;
+      margin: 20px 0;
+    }
+    .feature-item {
+      margin-bottom: 12px;
+      font-size: 14px;
+      color: #334155;
+      line-height: 1.5;
+    }
+    .feature-item:last-child {
+      margin-bottom: 0;
+    }
+    .btn-container {
+      text-align: center;
+      margin: 30px 0 20px;
+    }
+    .btn-primary {
+      display: inline-block;
+      background-color: #2e7d32;
+      color: #ffffff !important;
+      font-weight: 700;
+      font-size: 14px;
+      text-decoration: none;
+      padding: 14px 32px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(46, 125, 50, 0.25);
+    }
+    .footer {
+      background-color: #f8fafc;
+      padding: 20px 32px;
+      text-align: center;
+      font-size: 12px;
+      color: #94a3b8;
+      border-top: 1px solid #e2e8f0;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="main">
+      <div class="header">
+        <h1>Itaim Vende</h1>
+        <p>Marketplace de Paulistana e Região</p>
+      </div>
+      <div class="content">
+        <h2 class="greeting">Olá, ${primeiroNome}! 🎉</h2>
+        <p class="text">
+          Sua conta no <strong>Itaim Vende</strong> foi criada com sucesso! Agora você faz parte da comunidade oficial de compras, vendas e negociações de Paulistana e região.
+        </p>
+
+        <div class="feature-box">
+          <div class="feature-item">
+            🛍️ <strong>Explore ofertas:</strong> Milhares de produtos e anúncios exclusivos de vendedores locais.
+          </div>
+          <div class="feature-item">
+            📢 <strong>Venda rápido:</strong> Publique seus anúncios de forma simples e converse diretamente com interessados.
+          </div>
+          <div class="feature-item">
+            🔒 <strong>Segurança e praticidade:</strong> Gerencie seus anúncios, favoritos e mensagens em um único lugar.
+          </div>
+        </div>
+
+        <div class="btn-container">
+          <a href="${catalogoUrl}" class="btn-primary" target="_blank" rel="noopener noreferrer">
+            Acessar o Marketplace
+          </a>
+        </div>
+      </div>
+      <div class="footer">
+        &copy; ${new Date().getFullYear()} Itaim Vende - Paulistana, PI. Todos os direitos reservados.
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+  `.trim();
+
+  const text = `
+Itaim Vende - Bem-vindo(a)!
+
+Olá, ${primeiroNome}!
+
+Sua conta no Itaim Vende foi criada com sucesso!
+Agora você pode comprar, vender e negociar com anunciantes de Paulistana e região.
+
+Acesse o marketplace:
+${catalogoUrl}
+
+Boas compras e boas vendas!
+Equipe Itaim Vende
+  `.trim();
+
+  return enviarEmail({ to, subject, html, text });
+}
+
+/**
  * Envia e-mail formatado para recuperação de senha com código OTP e link direto
  */
 export async function enviarEmailRecuperacaoSenha({ to, name, code, resetUrl }) {

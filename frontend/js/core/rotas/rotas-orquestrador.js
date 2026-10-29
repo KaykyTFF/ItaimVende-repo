@@ -116,6 +116,36 @@
         /**
          * Navega diretamente para uma página com transição suave
          */
+        salvarDestinoLogin(url) {
+            try {
+                if (!url) return;
+                const urlStr = String(url);
+                if (!urlStr.includes('index.html') && !urlStr.includes('login.html') && !urlStr.includes('cadastro.html')) {
+                    sessionStorage.setItem('itaim_return_to', urlStr);
+                }
+            } catch (e) {}
+        },
+
+        obterDestinoPosLogin() {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                let returnTo = urlParams.get('returnTo');
+                if (!returnTo) {
+                    returnTo = sessionStorage.getItem('itaim_return_to');
+                }
+                if (returnTo) {
+                    sessionStorage.removeItem('itaim_return_to');
+                    const returnToDecoded = decodeURIComponent(returnTo);
+                    if (!returnToDecoded.includes('index.html') && 
+                        !returnToDecoded.includes('login.html') && 
+                        !returnToDecoded.includes('cadastro.html')) {
+                        return returnToDecoded;
+                    }
+                }
+            } catch (e) {}
+            return this.obterUrl('home');
+        },
+
         navegarPara(destino, params = '') {
             const urlFinal = this.obterUrl(destino, params);
             this.executarTransicao(urlFinal);

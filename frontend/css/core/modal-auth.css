@@ -369,3 +369,136 @@
     background: #489636 !important;
     color: #FFFFFF !important;
 }
+
+
+/* ==========================================================
+   POP-UP DEDICADO DE AUTENTICAÇÃO E CADASTRO VIA GOOGLE
+   Totalmente imune ao modo escuro, sem neon, design elegante
+   ========================================================== */
+.modal-google-card {
+    max-width: 410px !important;
+    padding: 34px 28px 26px !important;
+    background: #FFFFFF !important;
+    border: 1px solid #CBD5E1 !important;
+    box-shadow: 0 16px 36px rgba(15, 23, 42, 0.12) !important;
+    border-radius: 20px !important;
+}
+
+[data-theme="dark"] .modal-google-card,
+.dark-theme .modal-google-card {
+    background: #FFFFFF !important;
+    border: 1px solid #CBD5E1 !important;
+}
+
+.modal-google-form {
+    width: 100%;
+    margin-top: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.modal-google-form .campo-texto {
+    background: #FFFFFF !important;
+    color: #1E293B !important;
+    border: 1.5px solid #CBD5E1 !important;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
+    outline: none !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.modal-google-form .campo-texto:focus {
+    border-color: #489636 !important;
+    box-shadow: 0 0 0 3px rgba(72, 150, 54, 0.15) !important;
+}
+
+.btn-modal-google-submit {
+    width: 100%;
+    height: 48px;
+    background: #FFFFFF;
+    color: #1E293B;
+    border: 1.5px solid #CBD5E1;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    font-size: 14.5px;
+    font-weight: 700;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+}
+
+.btn-modal-google-submit:hover {
+    background: #F8FAFC;
+    border-color: #94A3B8;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.btn-modal-google-submit:active {
+    transform: scale(0.99);
+}
+
+.btn-modal-google-submit.carregando {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+[data-theme="dark"] .btn-modal-google-submit,
+.dark-theme .btn-modal-google-submit {
+    background: #FFFFFF !important;
+    color: #1E293B !important;
+    border-color: #CBD5E1 !important;
+}
+
+/* Botão de cadastro rápido com Google na página de cadastro */
+.btn-cadastro-google {
+    width: 100%;
+    height: 46px;
+    background: #FFFFFF;
+    color: #1E293B;
+    border: 1.5px solid #CBD5E1;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    transition: all 0.2s ease;
+    margin-bottom: 16px;
+}
+
+.btn-cadastro-google:hover {
+    background: #F8FAFC;
+    border-color: #94A3B8;
+}
+
+.divisor-social {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 12px 0 20px;
+    width: 100%;
+    color: #94A3B8;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.divisor-social::before,
+.divisor-social::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #E2E8F0;
+}
+
+.divisor-social span {
+    padding: 0 12px;
+}

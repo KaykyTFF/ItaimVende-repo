@@ -16,6 +16,50 @@
     
     <!-- CSS -->
     <link rel="stylesheet" href="../../css/core/style.css">
+    <!-- Google Identity Services -->
+        <!-- Capturador Instantâneo de Retorno do Google OAuth na Mini Janela -->
+    <script>
+        (function() {
+            try {
+                var hash = window.location.hash;
+                if (hash && hash.indexOf('access_token=') !== -1) {
+                    var isPopup = (window.name === 'ItaimGoogleAuthWindow') ||
+                                  (hash.indexOf('state=itaim_popup') !== -1) ||
+                                  (window.opener && window.opener !== window) ||
+                                  (window.innerWidth < 650 && window.innerHeight < 750);
+
+                    if (isPopup) {
+                        var params = new URLSearchParams(hash.substring(1));
+                        var token = params.get('access_token');
+                        if (token) {
+                            try {
+                                localStorage.setItem('itaim_google_oauth_token', token);
+                                localStorage.setItem('itaim_google_oauth_timestamp', Date.now().toString());
+                            } catch (e) {}
+
+                            try {
+                                var channel = new BroadcastChannel('itaim_google_auth_channel');
+                                channel.postMessage({ type: 'GOOGLE_AUTH_TOKEN', accessToken: token });
+                                channel.close();
+                            } catch (e) {}
+
+                            if (window.opener) {
+                                try {
+                                    window.opener.postMessage({ type: 'GOOGLE_AUTH_TOKEN', accessToken: token }, '*');
+                                } catch (e) {}
+                            }
+
+                            document.documentElement.innerHTML = '<head><title>Autenticado</title></head><body style="background:#fff;display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;color:#489636;margin:0;"><h3>Autenticado com sucesso! Fechando janela...</h3></body>';
+                            window.close();
+                            setTimeout(function() { window.close(); }, 100);
+                            setTimeout(function() { window.close(); }, 300);
+                            throw new Error('OAuth Popup Terminated');
+                        }
+                    }
+                }
+            } catch (e) {}
+        })();
+    </script>
 </head>
 <body>
     <main class="auth-wrapper">
@@ -31,7 +75,20 @@
         <!-- ÁREA INFERIOR (PAINEL ESCURO COM LINHA VERDE RETINHA COMO NO DESKTOP) -->
         <section class="painel-inferior painel-reto" aria-label="Painel de Cadastro">
             <div class="container-cadastro">
-                <form id="form-cadastro-direto" class="form-auth" novalidate>
+                                <!-- Opção de Cadastro Rápido com Google -->
+                <button type="button" class="btn-cadastro-google" id="btn-cadastro-google">
+                    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                        <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+                        <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
+                        <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+                        <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+                    </svg>
+                    <span>Cadastrar-se com o Google</span>
+                </button>
+                <div class="divisor-social">
+                    <span>ou preencha com seus dados</span>
+                </div>
+<form id="form-cadastro-direto" class="form-auth" novalidate>
                     
                     <!-- Campo Nome Completo -->
                     <div class="grupo-campo">
@@ -81,7 +138,7 @@
                                 class="campo-texto" 
                                 placeholder="ex: PI" 
                                 maxlength="2"
-                                value="PI"
+
                             >
                         </div>
                     </div>

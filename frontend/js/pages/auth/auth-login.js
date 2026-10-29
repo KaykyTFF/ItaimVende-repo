@@ -1,13 +1,16 @@
 /**
- * ITAIM VENDE - AUTENTICAÇÃO: MÓDULO DE LOGIN
+ * ITAIM VENDE - AUTENTICAÇÃO: MÓDULO DE LOGIN & GOOGLE OAUTH 2.0
  * Arquivo: frontend/js/pages/auth/auth-login.js
  * 
  * Gerencia validação do formulário de login, autenticação via backend API,
- * suporte para login offline/admin, gravação de sessão e redirecionamento.
+ * suporte para login e cadastro oficial com Google (OAuth 2.0 Account Chooser),
+ * gravação de sessão e redirecionamento.
  */
 
 (function (window, document) {
     'use strict';
+
+    window.GOOGLE_CLIENT_ID = window.GOOGLE_CLIENT_ID || '573964082793-kor90ei9qbgnuh13i97crosid73uikh5.apps.googleusercontent.com';
 
     window.ItaimAuthLogin = {
         exibirMensagem: function (msg, tipo = 'erro') {
@@ -27,7 +30,7 @@
         },
 
         processarAvisoUrl: function () {
-            // Desativado a pedido: não exibe a frase de aviso azul no rodapé
+            // Desativado a pedido
         },
 
         executarLogin: async function (e) {
@@ -52,7 +55,6 @@
             this.exibirMensagem('Autenticando suas credenciais...', '');
 
             try {
-                // Limpa resquícios de sessões passadas para isolamento total
                 localStorage.removeItem('itaim_token');
                 localStorage.removeItem('itaim_usuario_logado');
                 localStorage.removeItem('itaim_perfil_customizado');
@@ -76,7 +78,6 @@
 
                 const usuarioAutenticado = (resposta && resposta.user) ? resposta.user : null;
 
-                // Sincroniza sessão
                 if (window.ItaimSessao && typeof window.ItaimSessao.definirUsuarioLogado === 'function') {
                     window.ItaimSessao.definirUsuarioLogado(usuarioAutenticado?.email || email, usuarioAutenticado);
                 } else {
@@ -94,30 +95,23 @@
                 this.exibirMensagem('Login realizado com sucesso! Redirecionando...', 'sucesso');
 
                 setTimeout(() => {
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const returnTo = urlParams.get('returnTo');
-                    let destino = window.ItaimRotas ? window.ItaimRotas.obterUrl('home') : 'pages/home/home.html';
-                    if (returnTo && !returnTo.includes('index.html')) {
-                        destino = returnTo;
-                    }
+                    const destino = window.ItaimRotas && typeof window.ItaimRotas.obterDestinoPosLogin === 'function'
+                        ? window.ItaimRotas.obterDestinoPosLogin()
+                        : 'pages/home/home.html';
                     window.location.href = destino;
                 }, 500);
 
             } catch (err) {
                 console.error('[Login] Falha na autenticação:', err);
 
-                // Fallback para admin caso offline/teste local
                 const isLocalAdmin = (email.toLowerCase() === 'admin@gmail.com' && (senha === 'admin' || senha === 'admin123'));
                 if (isLocalAdmin && window.ItaimSessao && typeof window.ItaimSessao.definirUsuarioLogado === 'function') {
                     window.ItaimSessao.definirUsuarioLogado('admin@gmail.com');
                     this.exibirMensagem('Login efetuado com sucesso! Redirecionando...', 'sucesso');
                     setTimeout(() => {
-                        const urlParams = new URLSearchParams(window.location.search);
-                        const returnTo = urlParams.get('returnTo');
-                        let destino = window.ItaimRotas ? window.ItaimRotas.obterUrl('home') : 'pages/home/home.html';
-                        if (returnTo && !returnTo.includes('index.html')) {
-                            destino = returnTo;
-                        }
+                        const destino = window.ItaimRotas && typeof window.ItaimRotas.obterDestinoPosLogin === 'function'
+                            ? window.ItaimRotas.obterDestinoPosLogin()
+                            : 'pages/home/home.html';
                         window.location.href = destino;
                     }, 500);
                     return;
@@ -131,7 +125,329 @@
             }
         },
 
+        /**
+         * Dispara a tela oficial do Google Accounts Chooser ("Escolha uma conta")
+         */
+                /**
+         * Dispara a tela oficial de login do Google através de mini janela pop-up dedicada e centralizada
+         */
+        iniciarLoginGoogleOAuth: function () {
+            const self = this;
+
+            if (self._oauthEmProgresso) {
+                return;
+            }
+            self._oauthEmProgresso = true;
+
+            const clientId = window.GOOGLE_CLIENT_ID || '573964082793-kor90ei9qbgnuh13i97crosid73uikh5.apps.googleusercontent.com';
+            const redirectUri = window.location.origin;
+
+            try {
+                localStorage.removeItem('itaim_google_oauth_token');
+            } catch (e) {}
+
+            self.exibirMensagem('Abrindo janela do Google...', 'sucesso');
+
+            const googleUrl = 'https://accounts.google.com/o/oauth2/v2/auth?' + new URLSearchParams({
+                client_id: clientId,
+                redirect_uri: redirectUri,
+                response_type: 'token',
+                scope: 'openid email profile',
+                prompt: 'select_account',
+                state: 'itaim_popup'
+            }).toString();
+
+            const width = 500;
+            const height = 650;
+            const left = window.screenX + Math.max(0, (window.outerWidth - width) / 2);
+            const top = window.screenY + Math.max(0, (window.outerHeight - height) / 2);
+
+            let popup = null;
+            try {
+                popup = window.open(
+                    googleUrl,
+                    'ItaimGoogleAuthWindow',
+                    `width=${width},height=${height},left=${left},top=${top},status=no,menubar=no,toolbar=no,scrollbars=yes,resizable=yes`
+                );
+            } catch (err) {
+                console.error('[Google OAuth] Erro ao abrir janela pop-up:', err);
+            }
+
+            if (!popup || popup.closed || typeof popup.closed === 'undefined') {
+                self.exibirMensagem('A mini janela foi bloqueada. Por favor, permita pop-ups neste site para entrar com o Google.', 'erro');
+                self._oauthEmProgresso = false;
+                return;
+            }
+
+            if (popup.focus) {
+                popup.focus();
+            }
+
+            self.exibirMensagem('Selecione sua conta na janela do Google...', 'sucesso');
+
+            let autenticado = false;
+
+            const concluirComToken = (token) => {
+                if (autenticado) return;
+                autenticado = true;
+                if (pollInterval) clearInterval(pollInterval);
+                try {
+                    localStorage.removeItem('itaim_google_oauth_token');
+                } catch (e) {}
+                if (popup && !popup.closed) {
+                    try { popup.close(); } catch (e) {}
+                }
+                self.processarTokenAcessoGoogle(token);
+            };
+
+                        // 0. BroadcastChannel para captura instantânea e confiável
+            try {
+                const channel = new BroadcastChannel('itaim_google_auth_channel');
+                channel.onmessage = (event) => {
+                    if (event.data && event.data.accessToken) {
+                        try { channel.close(); } catch (e) {}
+                        concluirComToken(event.data.accessToken);
+                    }
+                };
+            } catch (e) {}
+
+            // 1. Notificação direta via postMessage enviada pelo script do popup
+            const tratarMensagem = (event) => {
+                if (event.data && event.data.type === 'GOOGLE_AUTH_TOKEN' && event.data.accessToken) {
+                    window.removeEventListener('message', tratarMensagem);
+                    concluirComToken(event.data.accessToken);
+                }
+            };
+            window.addEventListener('message', tratarMensagem);
+
+            // 2. Notificação via storage event (compatibilidade cross-context Brave/Chrome)
+            const tratarStorage = (event) => {
+                if (event.key === 'itaim_google_oauth_token' && event.newValue) {
+                    window.removeEventListener('storage', tratarStorage);
+                    concluirComToken(event.newValue);
+                }
+            };
+            window.addEventListener('storage', tratarStorage);
+
+            // 3. Monitor de encerramento e fallback
+            let pollInterval = setInterval(() => {
+                try {
+                    const tokenSalvo = localStorage.getItem('itaim_google_oauth_token');
+                    if (tokenSalvo) {
+                        concluirComToken(tokenSalvo);
+                        return;
+                    }
+                } catch (e) {}
+
+                if (popup && popup.closed) {
+                    clearInterval(pollInterval);
+                    setTimeout(() => {
+                        try {
+                            const tokenSalvo = localStorage.getItem('itaim_google_oauth_token');
+                            if (tokenSalvo) {
+                                concluirComToken(tokenSalvo);
+                                return;
+                            }
+                        } catch (e) {}
+
+                        if (!autenticado) {
+                            self._oauthEmProgresso = false;
+                            self.exibirMensagem('', '');
+                        }
+                    }, 600);
+                }
+            }, 300);
+        },
+
+        abrirTelaGoogleDireta: function (clientId) {
+            this.iniciarLoginGoogleOAuth();
+        },
+
+        processarTokenAcessoGoogle: async function (accessToken) {
+            this._oauthEmProgresso = false;
+            this.exibirMensagem('Conta Google selecionada! Criando sessão...', 'sucesso');
+            try {
+                const userInfoRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                    headers: { Authorization: `Bearer ${accessToken}` }
+                });
+                if (!userInfoRes.ok) {
+                    throw new Error('Falha ao obter dados do perfil Google.');
+                }
+                const profile = await userInfoRes.json();
+
+                let resposta = null;
+                if (window.ItaimApi?.auth?.googleAuth) {
+                    resposta = await window.ItaimApi.auth.googleAuth({
+                        email: profile.email,
+                        name: profile.name,
+                        avatar: profile.picture,
+                        googleId: profile.sub
+                    });
+                } else {
+                    const apiBase = window.ItaimApiCore?.API_BASE_URL || '/api/v1';
+                    const res = await fetch(`${apiBase}/auth/google`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            email: profile.email,
+                            name: profile.name,
+                            avatar: profile.picture,
+                            googleId: profile.sub
+                        })
+                    });
+                    const resData = await res.json();
+                    if (!res.ok) {
+                        throw new Error(resData.message || 'Erro ao autenticar com Google');
+                    }
+                    resposta = resData;
+                }
+
+                this.concluirSessaoGoogle(resposta);
+
+            } catch (err) {
+                console.error('[GoogleAuth] Falha no processamento:', err);
+                this.exibirMensagem(err?.message || 'Falha ao autenticar com o Google.', 'erro');
+            }
+        },
+
+        verificarRetornoOAuthNaUrl: function () {
+            const self = this;
+            const hash = window.location.hash;
+            if (hash && hash.includes('access_token=')) {
+                const params = new URLSearchParams(hash.replace(/^#/, ''));
+                const accessToken = params.get('access_token');
+                if (accessToken) {
+                    if (window.opener && window.opener !== window) {
+                        try {
+                            window.opener.postMessage({ type: 'GOOGLE_AUTH_TOKEN', accessToken }, '*');
+                            window.close();
+                            return;
+                        } catch (e) {}
+                    } else {
+                        history.replaceState(null, '', window.location.pathname + window.location.search);
+                        self.processarTokenAcessoGoogle(accessToken);
+                    }
+                }
+            }
+
+            window.addEventListener('message', (event) => {
+                if (event.data && event.data.type === 'GOOGLE_AUTH_TOKEN' && event.data.accessToken) {
+                    self.processarTokenAcessoGoogle(event.data.accessToken);
+                }
+            });
+        },
+
+        concluirSessaoGoogle: function (resposta) {
+            const usuario = (resposta && resposta.user) ? resposta.user : null;
+
+            if (resposta && resposta.token) {
+                localStorage.setItem('itaim_token', resposta.token);
+                localStorage.setItem('itaim_ultima_atividade', Date.now().toString());
+            }
+            if (usuario) {
+                localStorage.setItem('itaim_usuario_logado', JSON.stringify(usuario));
+                localStorage.setItem('itaim_usuario_logado_email', usuario.email);
+                if (window.ItaimSessao && typeof window.ItaimSessao.definirUsuarioLogado === 'function') {
+                    window.ItaimSessao.definirUsuarioLogado(usuario.email, usuario);
+                }
+            }
+
+            // Se o usuário não for cadastrado ainda (ou tiver perfil incompleto sem telefone), redireciona para a parte de cadastro para completar os dados que faltam
+            const precisaCompletarCadastro = Boolean(
+                resposta?.isNewUser || 
+                !usuario?.phone || 
+                (typeof usuario?.phone === 'string' && usuario.phone.trim() === '')
+            );
+
+            if (precisaCompletarCadastro) {
+                this.iniciarConclusaoCadastroGoogle(usuario, resposta.token);
+                return;
+            }
+
+            this.exibirMensagem('Login com Google realizado com sucesso! Entrando...', 'sucesso');
+
+            setTimeout(() => {
+                const destino = window.ItaimRotas && typeof window.ItaimRotas.obterDestinoPosLogin === 'function'
+                    ? window.ItaimRotas.obterDestinoPosLogin()
+                    : 'pages/home/home.html';
+                window.location.href = destino;
+            }, 500);
+        },
+
+        iniciarConclusaoCadastroGoogle: function (usuario, token) {
+            this.exibirMensagem('Conta Google conectada! Complete apenas seu usuário e endereço.', 'sucesso');
+            window.ItaimGoogleCadastroAtivo = { user: usuario, token: token };
+
+            // Se estiver na tela inicial (index.html), navega para a seção de cadastro wizard
+            const secaoCadastro = document.getElementById('secao-cadastro');
+            if (secaoCadastro) {
+                if (window.ItaimAuthNavegacao && typeof window.ItaimAuthNavegacao.alternarTela === 'function') {
+                    window.ItaimAuthNavegacao.alternarTela('cadastro');
+                } else {
+                    const secaoLogin = document.getElementById('secao-login');
+                    if (secaoLogin) secaoLogin.style.display = 'none';
+                    secaoCadastro.style.display = 'block';
+                }
+                if (window.ItaimAuthCadastroWizard && typeof window.ItaimAuthCadastroWizard.ativarModoGoogle === 'function') {
+                    window.ItaimAuthCadastroWizard.ativarModoGoogle(usuario, token);
+                }
+                return;
+            }
+
+            // Se estiver na página direta de cadastro (pages/auth/cadastro.html)
+            if (window.ItaimAuthCadastroDireto && typeof window.ItaimAuthCadastroDireto.ativarModoGoogle === 'function') {
+                window.ItaimAuthCadastroDireto.ativarModoGoogle(usuario, token);
+                return;
+            }
+
+            // Fallback caso esteja em outra página
+            window.location.href = 'index.html#cadastro';
+        },
+
+        abrirModalSocial: function (provedor) {
+            const modal = document.getElementById('modal-social-aviso');
+            if (!modal) return;
+
+            const titulo = document.getElementById('modal-social-titulo');
+            const mensagem = document.getElementById('modal-social-mensagem');
+            const iconeBox = document.getElementById('modal-social-icone-box');
+
+            let iconeSvg = '';
+            if (provedor === 'Facebook') {
+                iconeSvg = '<svg viewBox="0 0 24 24" width="30" height="30" fill="#1877F2" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>';
+            } else {
+                iconeSvg = '<svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#0284C7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>';
+            }
+
+            if (iconeBox) iconeBox.innerHTML = iconeSvg;
+            if (provedor === 'Facebook') {
+                if (titulo) titulo.textContent = 'Login com Facebook em breve';
+                if (mensagem) {
+                    mensagem.textContent = 'Estamos preparando a integração oficial com o Facebook! Enquanto isso, utilize o botão do Google para entrar rapidamente ou seu e-mail cadastrado.';
+                }
+            } else {
+                if (titulo) titulo.textContent = `Acesso por ${provedor}`;
+                if (mensagem) {
+                    mensagem.textContent = 'O acesso com e-mail e senha já está disponível diretamente nos campos abaixo! Basta preencher seus dados de acesso.';
+                }
+            }
+
+            modal.classList.add('ativo');
+            modal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+        },
+
+        fecharModalSocial: function () {
+            const modal = document.getElementById('modal-social-aviso');
+            if (!modal) return;
+            modal.classList.remove('ativo');
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+        },
+
         inicializar: function () {
+            this.verificarRetornoOAuthNaUrl();
+
             // Se o usuário já estiver autenticado e não veio com aviso/motivo explícito de logout, redireciona para a Home
             try {
                 const token = localStorage.getItem('itaim_token');
@@ -145,11 +461,9 @@
                     const urlParams = new URLSearchParams(window.location.search);
                     const motivo = urlParams.get('mensagem') || urlParams.get('aviso');
                     if (token && userRaw && !motivo) {
-                        const returnTo = urlParams.get('returnTo');
-                        let destino = window.ItaimRotas ? window.ItaimRotas.obterUrl('home') : 'pages/home/home.html';
-                        if (returnTo && !returnTo.includes('index.html')) {
-                            destino = returnTo;
-                        }
+                        const destino = window.ItaimRotas && typeof window.ItaimRotas.obterDestinoPosLogin === 'function'
+                            ? window.ItaimRotas.obterDestinoPosLogin()
+                            : 'pages/home/home.html';
                         window.location.replace(destino);
                         return;
                     }
@@ -174,46 +488,28 @@
                 });
             }
 
-            const btnModoDev = document.getElementById('btn-modo-dev');
-            if (btnModoDev) {
-                btnModoDev.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    if (window.ItaimSessao && typeof window.ItaimSessao.ativarModoDevFrontend === 'function') {
-                        window.ItaimSessao.ativarModoDevFrontend();
-                    } else if (window.ItaimSessaoAuth && typeof window.ItaimSessaoAuth.ativarModoDevFrontend === 'function') {
-                        window.ItaimSessaoAuth.ativarModoDevFrontend();
-                    } else {
-                        localStorage.setItem('itaim_modo_dev', 'true');
-                        localStorage.setItem('itaim_token', 'token_mock_dev_frontend');
-                        localStorage.setItem('itaim_usuario_logado', JSON.stringify({
-                            id: "usr_dev_frontend_001",
-                            nome: "Dev Front-End",
-                            name: "Dev Front-End",
-                            username: "dev_front",
-                            email: "dev@itaimvende.com",
-                            role: "ADMIN"
-                        }));
-                        localStorage.setItem('itaim_usuario_logado_email', 'dev@itaimvende.com');
-                    }
-                    this.exibirMensagem('Modo Dev Front-End ativado! Entrando na plataforma...', 'sucesso');
-                    setTimeout(() => {
-                        const urlParams = new URLSearchParams(window.location.search);
-                        const returnTo = urlParams.get('returnTo');
-                        let destino = window.ItaimRotas ? window.ItaimRotas.obterUrl('home') : 'pages/home/home.html';
-                        if (returnTo && !returnTo.includes('index.html')) {
-                            destino = returnTo;
-                        }
-                        window.location.href = destino;
-                    }, 400);
-                });
-            }
-
-            // Integração dos botões de login rápido (Google, E-mail, Facebook) -> Exibe Pop-up elegante
+            // Integração dos botões de login Google -> Dispara tela oficial de escolha de contas
             const btnGoogle = document.getElementById('btn-social-google');
             if (btnGoogle) {
                 btnGoogle.addEventListener('click', (e) => {
                     e.preventDefault();
-                    this.abrirModalSocial('Google');
+                    this.iniciarLoginGoogleOAuth();
+                });
+            }
+
+            const btnCadGoogle = document.getElementById('btn-cadastro-google');
+            if (btnCadGoogle) {
+                btnCadGoogle.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.iniciarLoginGoogleOAuth();
+                });
+            }
+
+            const btnWizardGoogle = document.getElementById('btn-cadastro-wizard-google');
+            if (btnWizardGoogle) {
+                btnWizardGoogle.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.iniciarLoginGoogleOAuth();
                 });
             }
 
@@ -233,7 +529,6 @@
                 });
             }
 
-            // Listeners para fechar o pop-up social
             const btnFecharModalSocial = document.getElementById('btn-fechar-modal-social');
             if (btnFecharModalSocial) {
                 btnFecharModalSocial.addEventListener('click', () => this.fecharModalSocial());
@@ -258,42 +553,6 @@
                     this.fecharModalSocial();
                 }
             });
-        },
-
-        abrirModalSocial: function (provedor) {
-            const modal = document.getElementById('modal-social-aviso');
-            if (!modal) return;
-
-            const titulo = document.getElementById('modal-social-titulo');
-            const mensagem = document.getElementById('modal-social-mensagem');
-            const iconeBox = document.getElementById('modal-social-icone-box');
-
-            let iconeSvg = '';
-            if (provedor === 'Google') {
-                iconeSvg = '<svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/></svg>';
-            } else if (provedor === 'Facebook') {
-                iconeSvg = '<svg viewBox="0 0 24 24" width="30" height="30" fill="#1877F2" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>';
-            } else {
-                iconeSvg = '<svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#0284C7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>';
-            }
-
-            if (iconeBox) iconeBox.innerHTML = iconeSvg;
-            if (titulo) titulo.textContent = `Entrar com ${provedor}`;
-            if (mensagem) {
-                mensagem.textContent = `O login rápido com ${provedor} ainda não foi implementado. Por favor, utilize seu e-mail e senha cadastrados no formulário para acessar sua conta.`;
-            }
-
-            modal.classList.add('ativo');
-            modal.setAttribute('aria-hidden', 'false');
-            document.body.style.overflow = 'hidden';
-        },
-
-        fecharModalSocial: function () {
-            const modal = document.getElementById('modal-social-aviso');
-            if (!modal) return;
-            modal.classList.remove('ativo');
-            modal.setAttribute('aria-hidden', 'true');
-            document.body.style.overflow = '';
         }
     };
 

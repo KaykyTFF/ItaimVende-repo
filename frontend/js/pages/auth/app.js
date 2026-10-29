@@ -32,14 +32,39 @@
         document.write('<script src="' + base + arquivo + '"><\/script>');
     });
 
-    document.addEventListener('DOMContentLoaded', () => {
-        if (window.ItaimAuthNavegacao) window.ItaimAuthNavegacao.inicializar();
-        if (window.ItaimAuthSenhaToggle) window.ItaimAuthSenhaToggle.inicializar();
-        if (window.ItaimAuthMascarasCep) window.ItaimAuthMascarasCep.inicializar();
-        if (window.ItaimAuthLogin) window.ItaimAuthLogin.inicializar();
-        if (window.ItaimAuthCadastroWizard) window.ItaimAuthCadastroWizard.inicializar();
-        if (window.ItaimAuthCadastroDireto) window.ItaimAuthCadastroDireto.inicializar();
-        if (window.ItaimAuthRecuperar) window.ItaimAuthRecuperar.inicializar();
+    function inicializarTodos() {
+        if (window.ItaimAuthNavegacao && typeof window.ItaimAuthNavegacao.inicializar === 'function') {
+            window.ItaimAuthNavegacao.inicializar();
+        }
+        if (window.ItaimAuthSenhaToggle && typeof window.ItaimAuthSenhaToggle.inicializar === 'function') {
+            window.ItaimAuthSenhaToggle.inicializar();
+        }
+        if (window.ItaimAuthMascarasCep && typeof window.ItaimAuthMascarasCep.inicializar === 'function') {
+            window.ItaimAuthMascarasCep.inicializar();
+        }
+        if (window.ItaimAuthLogin && typeof window.ItaimAuthLogin.inicializar === 'function') {
+            window.ItaimAuthLogin.inicializar();
+        }
+        if (window.ItaimAuthCadastroWizard && typeof window.ItaimAuthCadastroWizard.inicializar === 'function') {
+            window.ItaimAuthCadastroWizard.inicializar();
+        }
+        if (window.ItaimAuthCadastroDireto && typeof window.ItaimAuthCadastroDireto.inicializar === 'function') {
+            window.ItaimAuthCadastroDireto.inicializar();
+        }
+        if (window.ItaimAuthRecuperar && typeof window.ItaimAuthRecuperar.inicializar === 'function') {
+            window.ItaimAuthRecuperar.inicializar();
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', inicializarTodos);
+    } else {
+        setTimeout(inicializarTodos, 50);
+    }
+
+    // Executa também após o carregamento completo dos scripts injetados
+    window.addEventListener('load', () => {
+        setTimeout(inicializarTodos, 80);
     });
 
 })();

@@ -10,6 +10,76 @@
     'use strict';
 
     window.ItaimAuthCadastroDireto = {
+        ativarModoGoogle: function (usuario, token) {
+            window.ItaimGoogleCadastroAtivo = { user: usuario, token: token };
+
+            // Oculta botão de cadastro Google e separador
+            const btnGoogle = document.getElementById('btn-cadastro-google');
+            const divisor = btnGoogle?.nextElementSibling;
+            if (btnGoogle) btnGoogle.style.display = 'none';
+            if (divisor && divisor.classList.contains('divisor-social')) divisor.style.display = 'none';
+
+            // Oculta os campos de senha pois a autenticação é via Google
+            const campoSenha = document.getElementById('cad-senha')?.closest('.grupo-campo');
+            const campoConfirma = document.getElementById('cad-confirma')?.closest('.grupo-campo');
+            if (campoSenha) campoSenha.style.display = 'none';
+            if (campoConfirma) campoConfirma.style.display = 'none';
+
+            // Banner moderno de status
+            let banner = document.getElementById('banner-google-direto');
+            if (!banner) {
+                banner = document.createElement('div');
+                banner.id = 'banner-google-direto';
+                banner.className = 'status-msg status-sucesso';
+                banner.style.cssText = 'margin-bottom: 14px; text-align: left; padding: 10px 14px; display: flex; align-items: center; gap: 8px; font-size: 13px; line-height: 1.4;';
+                const form = document.getElementById('form-cadastro-direto');
+                if (form && form.parentNode) {
+                    form.parentNode.insertBefore(banner, form);
+                }
+            }
+            banner.innerHTML = `<span>✓</span> <div><strong>Conta Google vinculada:</strong> ${usuario?.email || ''}. Complete suas informações abaixo para finalizar seu perfil!</div>`;
+            banner.style.display = 'flex';
+
+            const nomeEl = document.getElementById('cad-nome');
+            const usernameEl = document.getElementById('cad-username');
+            const emailEl = document.getElementById('cad-email') || document.getElementById('cad-email-completo');
+            const cepEl = document.getElementById('cad-cep');
+            const estadoEl = document.getElementById('cad-estado');
+            const cidadeEl = document.getElementById('cad-cidade');
+            const bairroEl = document.getElementById('cad-bairro');
+            const telEl = document.getElementById('cad-telefone');
+
+            if (nomeEl && usuario?.name) nomeEl.value = usuario.name;
+            if (usernameEl && usuario?.username) usernameEl.value = usuario.username;
+            if (emailEl && usuario?.email) {
+                emailEl.value = usuario.email;
+                emailEl.readOnly = true;
+                emailEl.style.backgroundColor = '#f8fafc';
+                emailEl.style.cursor = 'not-allowed';
+            }
+            if (cepEl && usuario?.postalCode) cepEl.value = usuario.postalCode;
+            if (estadoEl) {
+                estadoEl.value = (usuario?.state && usuario.state !== 'PI') ? usuario.state : '';
+            }
+            if (cidadeEl) {
+                cidadeEl.value = (usuario?.city && usuario.city !== 'Paulistana') ? usuario.city : '';
+            }
+            if (bairroEl) {
+                if (usuario?.neighborhood && usuario.neighborhood !== 'Centro') {
+                    bairroEl.value = usuario.neighborhood;
+                } else {
+                    bairroEl.value = '';
+                }
+            }
+            if (telEl && usuario?.phone) telEl.value = usuario.phone;
+
+            if (telEl && !usuario?.phone) {
+                telEl.focus();
+            } else if (usernameEl) {
+                usernameEl.focus();
+            }
+        },
+
         mostrarErro: function (msg, campoId) {
             const statusMsg = document.getElementById('status-msg-cadastro');
             if (statusMsg) {
@@ -35,9 +105,9 @@
             const nome = document.getElementById('cad-nome')?.value.trim() || '';
             let username = document.getElementById('cad-username')?.value.trim().toLowerCase().replace(/^@/, '') || '';
             const cep = document.getElementById('cad-cep')?.value.trim() || '';
-            const estado = document.getElementById('cad-estado')?.value.trim().toUpperCase() || 'PI';
-            const cidade = document.getElementById('cad-cidade')?.value.trim() || 'Paulistana';
-            const bairro = document.getElementById('cad-bairro')?.value.trim() || 'Centro';
+            const estado = document.getElementById('cad-estado')?.value.trim().toUpperCase() || '';
+            const cidade = document.getElementById('cad-cidade')?.value.trim() || '';
+            const bairro = document.getElementById('cad-bairro')?.value.trim() || '';
             const telefone = document.getElementById('cad-telefone')?.value.trim() || '';
             const email = (document.getElementById('cad-email')?.value || document.getElementById('cad-email-completo')?.value || '').trim().toLowerCase();
             const senha = (document.getElementById('cad-senha')?.value || document.getElementById('cad-senha-completo')?.value || '');
@@ -55,6 +125,100 @@
                 self.mostrarErro('O nome de usuário pode conter apenas letras, números e underline (_).', 'cad-username');
                 return;
             }
+
+            const cepLimpo = cep.replace(/\D/g, '');
+            if (!cepLimpo || cepLimpo.length !== 8) {
+                self.mostrarErro('Por favor, informe seu CEP completo (8 dígitos).', 'cad-cep');
+                return;
+            }
+            if (!estado || estado.length !== 2) {
+                self.mostrarErro('Por favor, informe a sigla do Estado com 2 letras (ex: PI).', 'cad-estado');
+                return;
+            }
+            if (!cidade || cidade.length < 2) {
+                self.mostrarErro('Por favor, informe o nome da sua Cidade.', 'cad-cidade');
+                return;
+            }
+            if (!bairro || bairro.length < 2) {
+                self.mostrarErro('Por favor, informe o seu Bairro.', 'cad-bairro');
+                return;
+            }
+
+            // FLUXO DE CONCLUSÃO DE CADASTRO COM CONTA GOOGLE
+            if (window.ItaimGoogleCadastroAtivo && window.ItaimGoogleCadastroAtivo.token) {
+                if (btnSubmit) {
+                    btnSubmit.disabled = true;
+                    btnSubmit.classList.add('carregando');
+                }
+                if (statusMsg) {
+                    statusMsg.textContent = 'Salvando suas informações e ativando seu perfil...';
+                    statusMsg.className = 'status-msg';
+                }
+
+                try {
+                    const tokenGoogle = window.ItaimGoogleCadastroAtivo.token;
+                    const updatePayload = {
+                        name: nome,
+                        username: username,
+                        phone: telefone ? telefone : null,
+                        city: cidade ? cidade : '',
+                        state: estado ? estado : '',
+                        neighborhood: bairro || null,
+                        postalCode: cep ? cep : null
+                    };
+
+                    const apiBase = window.ItaimApiCore?.API_BASE_URL || '/api/v1';
+                    const res = await fetch(`${apiBase}/auth/me`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${tokenGoogle}`
+                        },
+                        body: JSON.stringify(updatePayload)
+                    });
+                    const resData = await res.json();
+                    if (!res.ok) {
+                        const msgDetalhe = resData.detalhes?.[0]?.message || resData.errors?.[0]?.message || resData.message || 'Erro ao finalizar cadastro.';
+                        throw new Error(msgDetalhe);
+                    }
+
+                    const usuarioAtualizado = resData.user || {
+                        ...window.ItaimGoogleCadastroAtivo.user,
+                        ...updatePayload
+                    };
+
+                    localStorage.setItem('itaim_token', tokenGoogle);
+                    localStorage.setItem('itaim_usuario_logado', JSON.stringify(usuarioAtualizado));
+                    localStorage.setItem('itaim_usuario_logado_email', usuarioAtualizado.email);
+                    if (window.ItaimSessao && typeof window.ItaimSessao.definirUsuarioLogado === 'function') {
+                        window.ItaimSessao.definirUsuarioLogado(usuarioAtualizado.email, usuarioAtualizado);
+                    }
+
+                    window.ItaimGoogleCadastroAtivo = null;
+
+                    if (statusMsg) {
+                        statusMsg.textContent = 'Cadastro finalizado com sucesso! Redirecionando...';
+                        statusMsg.className = 'status-msg status-sucesso';
+                    }
+
+                    setTimeout(() => {
+                        const destino = window.ItaimRotas && typeof window.ItaimRotas.obterDestinoPosLogin === 'function'
+                            ? window.ItaimRotas.obterDestinoPosLogin()
+                            : '../../pages/home/home.html';
+                        window.location.href = destino;
+                    }, 500);
+                    return;
+                } catch (err) {
+                    self.mostrarErro(err?.message || 'Erro ao salvar informações restantes.');
+                    return;
+                } finally {
+                    if (btnSubmit) {
+                        btnSubmit.disabled = false;
+                        btnSubmit.classList.remove('carregando');
+                    }
+                }
+            }
+
             if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
                 self.mostrarErro('Por favor, informe um endereço de e-mail válido.', 'cad-email');
                 return;
@@ -155,12 +319,9 @@
                 }
 
                 setTimeout(() => {
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const returnTo = urlParams.get('returnTo');
-                    let destino = window.ItaimRotas ? window.ItaimRotas.obterUrl('home') : '../../pages/home/home.html';
-                    if (returnTo && !returnTo.includes('index.html')) {
-                        destino = returnTo;
-                    }
+                    const destino = window.ItaimRotas && typeof window.ItaimRotas.obterDestinoPosLogin === 'function'
+                        ? window.ItaimRotas.obterDestinoPosLogin()
+                        : '../../pages/home/home.html';
                     window.location.href = destino;
                 }, 600);
             } catch (err) {
@@ -180,6 +341,15 @@
             const formCadastroDireto = document.getElementById('form-cadastro-direto');
             if (formCadastroDireto) {
                 formCadastroDireto.addEventListener('submit', (e) => this.executarSubmissaoDireta(e, formCadastroDireto));
+            }
+            const btnCadGoogle = document.getElementById('btn-cadastro-google');
+            if (btnCadGoogle) {
+                btnCadGoogle.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (window.ItaimAuthLogin && typeof window.ItaimAuthLogin.abrirModalGoogle === 'function') {
+                        window.ItaimAuthLogin.abrirModalGoogle();
+                    }
+                });
             }
         }
     };

@@ -125,6 +125,9 @@
 
     // Helper para redirecionar visitante para a tela de login preservando a intenção (returnTo)
     function redirecionarParaLogin(motivo = '', forcar = false) {
+        if (window.ItaimRotas && typeof window.ItaimRotas.salvarDestinoLogin === 'function') {
+            window.ItaimRotas.salvarDestinoLogin(window.location.href);
+        }
         if (!forcar) {
             abrirModalAuth(motivo);
             return;
@@ -240,6 +243,11 @@
                 }
                 const urlLogin = window.ItaimRotas ? window.ItaimRotas.obterUrl('login') : (window.location.pathname.toLowerCase().includes('/pages/') ? '../../index.html' : './index.html');
                 btnEntrar.setAttribute('href', urlLogin);
+                btnEntrar.onclick = () => {
+                    if (window.ItaimRotas && typeof window.ItaimRotas.salvarDestinoLogin === 'function') {
+                        window.ItaimRotas.salvarDestinoLogin(window.location.href);
+                    }
+                };
                 btnEntrar.style.display = 'inline-flex';
             }
 
@@ -685,6 +693,14 @@
 
             if (id.includes('vender') || href.includes('vender.html') || classes.includes('vender')) {
                 motivo = 'Faça login para anunciar e vender seus produtos.';
+                const urlVender = window.ItaimRotas ? window.ItaimRotas.obterUrl('vender') : (window.location.pathname.includes('/pages/') ? '../vender/vender.html' : 'pages/vender/vender.html');
+                if (window.ItaimRotas && typeof window.ItaimRotas.salvarDestinoLogin === 'function') {
+                    window.ItaimRotas.salvarDestinoLogin(urlVender);
+                }
+            } else {
+                if (window.ItaimRotas && typeof window.ItaimRotas.salvarDestinoLogin === 'function') {
+                    window.ItaimRotas.salvarDestinoLogin(window.location.href);
+                }
             } else if (id.includes('anuncios') || href.includes('meus-anuncios.html')) {
                 motivo = 'Faça login para gerenciar seus anúncios.';
             } else if (id.includes('chat') || href.includes('conversas.html') || href.includes('chat.html')) {
