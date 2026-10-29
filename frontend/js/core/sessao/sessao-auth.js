@@ -176,7 +176,17 @@
         const token = localStorage.getItem('itaim_token');
         const bUserRaw = localStorage.getItem('itaim_usuario_logado');
         if (!token || !bUserRaw) return false;
-        if (token === 'token_mock_dev_frontend') return false;
+        if (token === 'token_mock_dev_frontend' || token === 'undefined' || token === 'null' || !token.trim()) {
+            return false;
+        }
+        try {
+            const parsed = JSON.parse(bUserRaw);
+            if (!parsed || typeof parsed !== 'object' || (!parsed.email && !parsed.id)) {
+                return false;
+            }
+        } catch (e) {
+            return false;
+        }
         return true;
     }
 

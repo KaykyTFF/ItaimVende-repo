@@ -23,11 +23,9 @@
         try {
             const path = (window.location.pathname || '').toLowerCase();
             if (path.endsWith('index.html') || 
-                path === '/' || 
-                path.endsWith('/') || 
                 path.includes('/auth/') || 
-                path.includes('login') || 
-                path.includes('cadastro')) {
+                path.includes('/login') || 
+                path.includes('/cadastro')) {
                 return true;
             }
             if (document.querySelector && document.querySelector('.auth-wrapper, .auth-floating-card, #secao-login, #form-login')) {

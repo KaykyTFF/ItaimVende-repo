@@ -519,11 +519,11 @@
             };
         }
 
-        // Clique no botão de perfil
+        // Clique no botão de perfil / avatar
         const btnAvatarHeader = document.getElementById('btn-avatar-dropdown') || document.querySelector('.btn-avatar-header');
         if (btnAvatarHeader) {
-            btnAvatarHeader.setAttribute('title', 'Ir para Meu Perfil');
-            btnAvatarHeader.setAttribute('aria-label', 'Ir para Meu Perfil');
+            btnAvatarHeader.setAttribute('title', 'Menu de perfil');
+            btnAvatarHeader.setAttribute('aria-label', 'Abrir menu de perfil');
             btnAvatarHeader.onclick = (e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -531,25 +531,30 @@
                     redirecionarParaLogin('Faça login para acessar seu perfil.');
                     return;
                 }
-                const urlPerfil = window.ItaimRotas ? window.ItaimRotas.obterUrl('perfil') : 'perfil.html';
-                if (window.ItaimRotas && typeof window.ItaimRotas.executarTransicao === 'function') {
-                    window.ItaimRotas.executarTransicao(urlPerfil);
-                } else {
-                    window.location.href = urlPerfil;
+                if (dropdownPerfil) {
+                    const aberto = dropdownPerfil.classList.toggle('aberto');
+                    dropdownPerfil.style.display = aberto ? 'block' : 'none';
                 }
             };
         }
 
-        // Garante que o dropdown de perfil nunca abra
-        if (dropdownPerfil) {
-            dropdownPerfil.classList.remove('aberto');
-            dropdownPerfil.style.display = 'none';
-        }
+        // Fecha o dropdown de perfil ao clicar fora
+        document.addEventListener('click', (e) => {
+            if (dropdownPerfil && dropdownPerfil.classList.contains('aberto')) {
+                if (!dropdownPerfil.contains(e.target) && !btnAvatarHeader?.contains(e.target)) {
+                    dropdownPerfil.classList.remove('aberto');
+                    dropdownPerfil.style.display = 'none';
+                }
+            }
+        });
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 alternarDrawer(false);
-                dropdownPerfil?.classList.remove('aberto');
+                if (dropdownPerfil) {
+                    dropdownPerfil.classList.remove('aberto');
+                    dropdownPerfil.style.display = 'none';
+                }
             }
         });
 
@@ -701,20 +706,21 @@
                 if (window.ItaimRotas && typeof window.ItaimRotas.salvarDestinoLogin === 'function') {
                     window.ItaimRotas.salvarDestinoLogin(window.location.href);
                 }
-            } else if (id.includes('anuncios') || href.includes('meus-anuncios.html')) {
-                motivo = 'Faça login para gerenciar seus anúncios.';
-            } else if (id.includes('chat') || href.includes('conversas.html') || href.includes('chat.html')) {
-                motivo = 'Faça login para conversar com os vendedores.';
-            } else if (id.includes('notificacoes') || href.includes('notificacoes.html')) {
-                motivo = 'Faça login para visualizar suas notificações.';
-            } else if (id.includes('favorito') || href.includes('favoritos.html') || classes.includes('btn-favorito') || classes.includes('favorit')) {
-                motivo = 'Faça login para salvar anúncios nos seus favoritos.';
-            } else if (id.includes('perfil') || href.includes('perfil.html')) {
-                motivo = 'Faça login para acessar seu perfil.';
-            } else if (id.includes('configuracoes') || href.includes('configuracoes.html')) {
-                motivo = 'Faça login para acessar as configurações.';
-            } else if (id.includes('denuncia') || id.includes('tickets')) {
-                motivo = 'Faça login para abrir denúncias ou acompanhar tickets.';
+                if (id.includes('anuncios') || href.includes('meus-anuncios.html')) {
+                    motivo = 'Faça login para gerenciar seus anúncios.';
+                } else if (id.includes('chat') || href.includes('conversas.html') || href.includes('chat.html')) {
+                    motivo = 'Faça login para conversar com os vendedores.';
+                } else if (id.includes('notificacoes') || href.includes('notificacoes.html')) {
+                    motivo = 'Faça login para visualizar suas notificações.';
+                } else if (id.includes('favorito') || href.includes('favoritos.html') || classes.includes('btn-favorito') || classes.includes('favorit')) {
+                    motivo = 'Faça login para salvar anúncios nos seus favoritos.';
+                } else if (id.includes('perfil') || href.includes('perfil.html')) {
+                    motivo = 'Faça login para acessar seu perfil.';
+                } else if (id.includes('configuracoes') || href.includes('configuracoes.html')) {
+                    motivo = 'Faça login para acessar as configurações.';
+                } else if (id.includes('denuncia') || id.includes('tickets')) {
+                    motivo = 'Faça login para abrir denúncias ou acompanhar tickets.';
+                }
             }
 
             abrirModalAuth(motivo);
