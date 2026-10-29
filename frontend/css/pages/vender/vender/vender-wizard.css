@@ -54,7 +54,7 @@
     height: 100%;
     background: #44BD32;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(68, 189, 50, 0.4);
+    box-shadow: none;
     transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 

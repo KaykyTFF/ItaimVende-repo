@@ -22,7 +22,7 @@ body.dark-theme {
     --primary: #44BD32;
     --primary-hover: #3ca92c;
     --primary-light: rgba(68, 189, 50, 0.16);
-    --primary-glow: rgba(68, 189, 50, 0.35);
+    --primary-glow: rgba(0, 0, 0, 0.2);
 
     /* Fundo suavemente mais escuro que o cabeçalho (#1E272E) */
     --light-bg: #141A20;
@@ -40,7 +40,7 @@ body.dark-theme {
     --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.35);
     --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.45);
     --shadow-lg: 0 14px 36px rgba(0, 0, 0, 0.55);
-    --shadow-hover: 0 12px 32px rgba(68, 189, 50, 0.25);
+    --shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.5);
 }
 
 /* Transições suaves ao trocar de tema */

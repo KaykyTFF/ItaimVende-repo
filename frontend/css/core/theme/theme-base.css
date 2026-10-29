@@ -147,8 +147,8 @@
 
 [data-theme="dark"] .card-produto:hover,
 [data-theme="dark"] .produto-card:hover {
-    border-color: rgba(68, 189, 50, 0.5) !important;
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(68, 189, 50, 0.25) !important;
+    border-color: #3B4B5A !important;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.55) !important;
     transform: translateY(-4px);
 }
 

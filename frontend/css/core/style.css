@@ -194,7 +194,7 @@ html, body {
     background-color: var(--color-primary);
     margin: 4px auto 0 auto;
     border-radius: 2px;
-    box-shadow: 0 0 10px rgba(72, 150, 54, 0.6), 0 1px 3px rgba(0, 0, 0, 0.7);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
 /* --------------------------------------------------------------------------
@@ -305,7 +305,7 @@ html, body {
     height: 100%;
     background: #44BD32;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(68, 189, 50, 0.4);
+    box-shadow: none;
     transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 

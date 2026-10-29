@@ -14,7 +14,7 @@
     border-radius: var(--radius-md);
     overflow: hidden;
     box-shadow: var(--shadow-sm);
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    border: 1px solid #E2E8F0;
     display: flex;
     flex-direction: column;
     cursor: pointer;
@@ -24,8 +24,8 @@
 
 .card-produto:hover {
     transform: translateY(-5px);
-    box-shadow: var(--shadow-hover);
-    border-color: rgba(68, 189, 50, 0.3);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.09);
+    border-color: #CBD5E1;
 }
 
 /* Imagem do Card */

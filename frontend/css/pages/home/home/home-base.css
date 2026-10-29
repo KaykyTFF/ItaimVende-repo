@@ -3,7 +3,7 @@
     --primary: #44BD32;
     --primary-hover: #3ca82b;
     --primary-light: rgba(68, 189, 50, 0.12);
-    --primary-glow: rgba(68, 189, 50, 0.28);
+    --primary-glow: rgba(0, 0, 0, 0.08);
     --dark-bg: #1E272E;
     --dark-surface: #24282B;
     --dark-elevated: #353B40;
@@ -21,7 +21,7 @@
     --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
     --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.09);
     --shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.14);
-    --shadow-hover: 0 14px 32px rgba(68, 189, 50, 0.18);
+    --shadow-hover: 0 12px 28px rgba(0, 0, 0, 0.09);
     --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     --font: 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif;
 }
