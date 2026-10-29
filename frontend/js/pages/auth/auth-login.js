@@ -12,21 +12,62 @@
 
     window.GOOGLE_CLIENT_ID = window.GOOGLE_CLIENT_ID || '573964082793-kor90ei9qbgnuh13i97crosid73uikh5.apps.googleusercontent.com';
 
-    window.ItaimAuthLogin = {
-        exibirMensagem: function (msg, tipo = 'erro') {
-            const statusMsgLogin = document.getElementById('status-msg-login');
-            if (statusMsgLogin) {
-                statusMsgLogin.textContent = msg;
-                statusMsgLogin.className = `status-msg ${tipo ? 'status-' + tipo : ''}`;
+    // Gerenciador universal de auto-ocultação suave com fade-out
+    window.ItaimStatusMsg = window.ItaimStatusMsg || {
+        _timers: new Map(),
+
+        exibir: function (elOuId, msg, tipo = 'erro', segundos = 4.2) {
+            const el = typeof elOuId === 'string' ? document.getElementById(elOuId) : elOuId;
+            if (!el) return;
+
+            if (this._timers.has(el)) {
+                clearTimeout(this._timers.get(el));
+                this._timers.delete(el);
+            }
+
+            el.classList.remove('fade-out');
+            el.textContent = msg;
+            el.className = `status-msg ${tipo ? 'status-' + tipo : ''}`;
+            el.style.opacity = '1';
+
+            // Oculta automaticamente mensagens de erro ou alertas após os segundos estipulados
+            if (msg && tipo && segundos > 0) {
+                const timer = setTimeout(() => {
+                    el.classList.add('fade-out');
+                    setTimeout(() => {
+                        if (el.classList.contains('fade-out')) {
+                            el.textContent = '';
+                            el.className = 'status-msg';
+                            el.classList.remove('fade-out');
+                            el.style.opacity = '';
+                        }
+                    }, 450);
+                }, segundos * 1000);
+                this._timers.set(el, timer);
             }
         },
 
-        limparMensagem: function () {
-            const statusMsgLogin = document.getElementById('status-msg-login');
-            if (statusMsgLogin) {
-                statusMsgLogin.textContent = '';
-                statusMsgLogin.className = 'status-msg';
+        limpar: function (elOuId) {
+            const el = typeof elOuId === 'string' ? document.getElementById(elOuId) : elOuId;
+            if (!el) return;
+            if (this._timers.has(el)) {
+                clearTimeout(this._timers.get(el));
+                this._timers.delete(el);
             }
+            el.classList.remove('fade-out');
+            el.textContent = '';
+            el.className = 'status-msg';
+            el.style.opacity = '';
+        }
+    };
+
+    window.ItaimAuthLogin = {
+        exibirMensagem: function (msg, tipo = 'erro', segundos = 4.2) {
+            window.ItaimStatusMsg.exibir('status-msg-login', msg, tipo, segundos);
+        },
+
+        limparMensagem: function () {
+            window.ItaimStatusMsg.limpar('status-msg-login');
         },
 
         processarAvisoUrl: function () {
@@ -474,6 +515,10 @@
             this.processarAvisoUrl();
             if (formLogin) {
                 formLogin.addEventListener('submit', (e) => this.executarLogin(e));
+                const inputEmail = document.getElementById('input-email');
+                const inputSenha = document.getElementById('input-senha');
+                if (inputEmail) inputEmail.addEventListener('input', () => this.limparMensagem());
+                if (inputSenha) inputSenha.addEventListener('input', () => this.limparMensagem());
             }
 
             const linkVisitante = document.getElementById('link-continuar-visitante');

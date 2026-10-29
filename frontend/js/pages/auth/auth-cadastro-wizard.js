@@ -24,10 +24,14 @@
         },
 
         exibirErro: function (mensagem, campoId = null) {
-            const statusMsgCadastro = document.getElementById('status-msg-cadastro');
-            if (statusMsgCadastro) {
-                statusMsgCadastro.textContent = mensagem;
-                statusMsgCadastro.className = 'status-msg status-erro';
+            if (window.ItaimStatusMsg && typeof window.ItaimStatusMsg.exibir === 'function') {
+                window.ItaimStatusMsg.exibir('status-msg-cadastro', mensagem, 'erro', 4.5);
+            } else {
+                const statusMsgCadastro = document.getElementById('status-msg-cadastro');
+                if (statusMsgCadastro) {
+                    statusMsgCadastro.textContent = mensagem;
+                    statusMsgCadastro.className = 'status-msg status-erro';
+                }
             }
             if (campoId) {
                 const campo = document.getElementById(campoId);
@@ -36,20 +40,21 @@
                     campo.focus();
                     campo.addEventListener('input', () => {
                         campo.classList.remove('com-erro');
-                        if (statusMsgCadastro && statusMsgCadastro.textContent === mensagem) {
-                            statusMsgCadastro.textContent = '';
-                            statusMsgCadastro.className = 'status-msg';
-                        }
+                        this.limparErro();
                     }, { once: true });
                 }
             }
         },
 
         limparErro: function () {
-            const statusMsgCadastro = document.getElementById('status-msg-cadastro');
-            if (statusMsgCadastro) {
-                statusMsgCadastro.textContent = '';
-                statusMsgCadastro.className = 'status-msg';
+            if (window.ItaimStatusMsg && typeof window.ItaimStatusMsg.limpar === 'function') {
+                window.ItaimStatusMsg.limpar('status-msg-cadastro');
+            } else {
+                const statusMsgCadastro = document.getElementById('status-msg-cadastro');
+                if (statusMsgCadastro) {
+                    statusMsgCadastro.textContent = '';
+                    statusMsgCadastro.className = 'status-msg';
+                }
             }
             document.querySelectorAll('#form-cadastro-completo .com-erro').forEach(el => {
                 el.classList.remove('com-erro');

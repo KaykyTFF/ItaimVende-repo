@@ -81,17 +81,26 @@
         },
 
         mostrarErro: function (msg, campoId) {
-            const statusMsg = document.getElementById('status-msg-cadastro');
-            if (statusMsg) {
-                statusMsg.textContent = msg;
-                statusMsg.className = 'status-msg status-erro';
+            if (window.ItaimStatusMsg && typeof window.ItaimStatusMsg.exibir === 'function') {
+                window.ItaimStatusMsg.exibir('status-msg-cadastro', msg, 'erro', 4.5);
+            } else {
+                const statusMsg = document.getElementById('status-msg-cadastro');
+                if (statusMsg) {
+                    statusMsg.textContent = msg;
+                    statusMsg.className = 'status-msg status-erro';
+                }
             }
             if (campoId) {
                 const el = document.getElementById(campoId);
                 if (el) {
                     el.focus();
                     el.classList.add('com-erro');
-                    el.addEventListener('input', () => el.classList.remove('com-erro'), { once: true });
+                    el.addEventListener('input', () => {
+                        el.classList.remove('com-erro');
+                        if (window.ItaimStatusMsg && typeof window.ItaimStatusMsg.limpar === 'function') {
+                            window.ItaimStatusMsg.limpar('status-msg-cadastro');
+                        }
+                    }, { once: true });
                 }
             }
         },

@@ -502,3 +502,16 @@
 .divisor-social span {
     padding: 0 12px;
 }
+
+/* Animação suave para desaparecimento das mensagens de aviso/erro */
+.status-msg {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1), transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.status-msg.fade-out {
+    opacity: 0 !important;
+    transform: translateY(-4px) !important;
+    pointer-events: none;
+}
