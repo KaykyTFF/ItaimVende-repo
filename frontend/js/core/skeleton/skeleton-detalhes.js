@@ -176,7 +176,38 @@
         }
     }
 
+
+    function obterEnderecosHtml(qtd = 1) {
+        let html = '';
+        for (let i = 0; i < qtd; i++) {
+            html += `
+                <div class="cfg-endereco-skeleton" aria-hidden="true">
+                    <div style="flex: 1;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <div class="skeleton-line" style="width: ${i === 0 ? '100px' : '85px'}; height: 18px; border-radius: 4px;"></div>
+                            ${i === 0 ? '<div class="skeleton-line" style="width: 72px; height: 18px; border-radius: 12px;"></div>' : ''}
+                        </div>
+                        <div class="skeleton-line" style="width: ${i === 0 ? '180px' : '150px'}; height: 13px; margin-top: 8px; border-radius: 4px;"></div>
+                    </div>
+                    <div class="cfg-endereco-acoes" style="display: flex; gap: 8px; align-items: center;">
+                        <div class="skeleton-line" style="width: 44px; height: 16px; border-radius: 4px;"></div>
+                        <div class="skeleton-line" style="width: 54px; height: 16px; border-radius: 4px;"></div>
+                    </div>
+                </div>
+            `;
+        }
+        return html;
+    }
+
+    function renderizarEnderecos(container, qtd = 1) {
+        const el = (typeof container === 'string') ? document.querySelector(container) : container;
+        if (!el) return;
+        el.innerHTML = obterEnderecosHtml(qtd);
+    }
+
     window.ItaimSkeletonDetalhes = {
+        obterEnderecosHtml,
+        renderizarEnderecos,
         obterDetalhesProdutoHtml,
         obterMeusAnunciosHtml,
         renderizarMeusAnuncios,

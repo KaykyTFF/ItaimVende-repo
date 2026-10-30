@@ -123,6 +123,7 @@
 
 /* Botões */
 .cfg-acoes { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 22px; }
+.cfg-btn[hidden] { display: none !important; }
 .cfg-btn {
     font-family: inherit; font-weight: 700; font-size: 14.5px;
     padding: 12px 24px; border-radius: var(--radius-md);
@@ -183,6 +184,25 @@
 .cfg-link-acao.perigo:hover { background: #FEE2E2; }
 .cfg-vazio { text-align: center; color: var(--text-secondary); padding: 24px 12px; font-size: 14px; border: 1px dashed var(--border-color); border-radius: var(--radius-md); }
 
+/* Skeleton para endereços */
+.cfg-endereco-skeleton {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    background: #F8FAFC;
+    pointer-events: none;
+}
+
+[data-theme="dark"] .cfg-endereco-skeleton,
+.dark-theme .cfg-endereco-skeleton {
+    background: #1F2831;
+    border-color: #2C3946;
+}
+
 .cfg-form-endereco { border-top: 1px solid var(--border-color); padding-top: 20px; margin-top: 6px; }
 .cfg-form-endereco h3 { font-size: 15px; font-weight: 800; margin-bottom: 14px; }
 
@@ -230,7 +250,7 @@
     .cfg-grid { grid-template-columns: 1fr; }
     .cfg-card { padding: 16px 14px; border-radius: 14px; }
     .cfg-titulo-pagina { font-size: 20px; }
-    .cfg-endereco { flex-direction: column; }
+    .cfg-endereco, .cfg-endereco-skeleton { flex-direction: column; }
     .cfg-endereco-acoes { justify-content: flex-start; }
     .cfg-acoes .cfg-btn { width: 100%; justify-content: center; }
 }

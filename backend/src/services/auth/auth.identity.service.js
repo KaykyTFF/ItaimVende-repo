@@ -77,6 +77,24 @@ export async function registerUser({ name, username, email, password, phone, cit
     },
   });
 
+  // Cria automaticamente o endereço cadastrado da conta como endereço principal
+  if (city || neighborhood || postalCode) {
+    await prisma.address.create({
+      data: {
+        userId: newUser.id,
+        nickname: 'Principal',
+        street: '',
+        neighborhood: neighborhood && neighborhood.trim() ? neighborhood.trim() : 'Centro',
+        city: city && city.trim() ? city.trim() : 'Paulistana',
+        state: state && state.trim() ? state.trim().toUpperCase() : 'PI',
+        postalCode: postalCode && postalCode.trim() ? postalCode.trim() : null,
+        isDefault: true,
+      },
+    }).catch((err) => {
+      console.warn('[Register] Falha ao criar endereço inicial:', err.message);
+    });
+  }
+
   // Dispara e-mail de boas-vindas de forma assíncrona para o novo usuário
   enviarEmailBoasVindas({ to: newUser.email, name: newUser.name }).catch((err) => {
     console.warn('[Register] Falha ao despachar e-mail de boas-vindas:', err.message);

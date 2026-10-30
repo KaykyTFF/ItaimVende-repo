@@ -33,38 +33,39 @@
 }
 
 .btn-acao-status {
-    background: #FFFFFF;
-    color: #475569;
-    border-color: #CBD5E1;
+    background-color: #F97316;
+    color: #FFFFFF;
+    border-color: #F97316;
 }
 
 .btn-acao-status:hover {
-    background: #F8FAFC;
-    color: var(--primary);
-    border-color: var(--primary);
+    background-color: #EA580C;
+    color: #FFFFFF;
+    border-color: #EA580C;
 }
 
 .btn-acao-excluir {
-    background: #FFFFFF;
-    color: #EF4444;
-    border-color: #FEE2E2;
+    background-color: #DC2626;
+    color: #FFFFFF;
+    border-color: #DC2626;
 }
 
 .btn-acao-excluir:hover {
-    background: #FEF2F2;
-    border-color: #EF4444;
+    background-color: #B91C1C;
+    color: #FFFFFF;
+    border-color: #B91C1C;
 }
 
 .btn-acao-marcar-vendido {
-    background: #E8F5E9;
-    color: #2E7D32;
-    border-color: #A5D6A7;
+    background-color: var(--primary, #44BD32);
+    color: #FFFFFF;
+    border-color: var(--primary, #44BD32);
 }
 
 .btn-acao-marcar-vendido:hover {
-    background: #C8E6C9;
-    color: #1B5E20;
-    border-color: #81C784;
+    background-color: var(--primary-hover, #3ca82b);
+    color: #FFFFFF;
+    border-color: var(--primary-hover, #3ca82b);
 }
 
 /* Estado Vazio */

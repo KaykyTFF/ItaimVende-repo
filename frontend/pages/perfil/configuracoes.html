@@ -323,7 +323,7 @@
                             </div>
                             <div class="cfg-campo">
                                 <label for="cfg-bairro">Bairro</label>
-                                <input class="cfg-input" type="text" id="cfg-bairro" maxlength="60" placeholder="Centro">
+                                <input class="cfg-input" type="text" id="cfg-bairro" maxlength="60">
                             </div>
                         </div>
                         <div class="cfg-acoes">
@@ -388,7 +388,21 @@
                     <div class="cfg-card">
                         <h2>Meus endereços</h2>
                         <p class="cfg-desc">Locais de retirada ou entrega que você usa nos anúncios e negociações.</p>
-                        <div class="cfg-enderecos" id="lista-enderecos"></div>
+                        <div class="cfg-enderecos" id="lista-enderecos">
+                            <div class="cfg-endereco-skeleton" aria-hidden="true">
+                                <div style="flex: 1;">
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <div class="skeleton-line" style="width: 100px; height: 18px; border-radius: 4px;"></div>
+                                        <div class="skeleton-line" style="width: 72px; height: 18px; border-radius: 12px;"></div>
+                                    </div>
+                                    <div class="skeleton-line" style="width: 180px; height: 13px; margin-top: 8px; border-radius: 4px;"></div>
+                                </div>
+                                <div class="cfg-endereco-acoes" style="display: flex; gap: 8px; align-items: center;">
+                                    <div class="skeleton-line" style="width: 44px; height: 16px; border-radius: 4px;"></div>
+                                    <div class="skeleton-line" style="width: 54px; height: 16px; border-radius: 4px;"></div>
+                                </div>
+                            </div>
+                        </div>
 
                         <form class="cfg-form-endereco" id="form-endereco" novalidate>
                             <h3 id="titulo-form-endereco">Adicionar endereço</h3>
@@ -400,26 +414,23 @@
                                 </div>
                                 <div class="cfg-campo">
                                     <label for="end-cep">CEP</label>
-                                    <input class="cfg-input" type="text" id="end-cep" maxlength="9" placeholder="64750-000" inputmode="numeric">
+                                    <input class="cfg-input" type="text" id="end-cep" maxlength="9" placeholder="00000-000" inputmode="numeric">
                                     <span class="cfg-erro" id="erro-end-cep"></span>
-                                </div>
-                                <div class="cfg-campo cheio">
-                                    <label for="end-rua">Rua e número</label>
-                                    <input class="cfg-input" type="text" id="end-rua" maxlength="100" placeholder="Rua das Flores, 120">
-                                    <span class="cfg-erro" id="erro-end-rua"></span>
                                 </div>
                                 <div class="cfg-campo">
                                     <label for="end-bairro">Bairro</label>
-                                    <input class="cfg-input" type="text" id="end-bairro" maxlength="60">
+                                    <input class="cfg-input" type="text" id="end-bairro" maxlength="60" placeholder="Centro, Cohab...">
+                                    <span class="cfg-erro" id="erro-end-bairro"></span>
                                 </div>
                                 <div class="cfg-campo">
                                     <label for="end-cidade">Cidade</label>
-                                    <select class="cfg-select" id="end-cidade"><option value="Paulistana">Paulistana</option><option value="Acauã">Acauã</option><option value="Betânia do Piauí">Betânia do Piauí</option><option value="Curral Novo">Curral Novo</option><option value="Jacobina do Piauí">Jacobina do Piauí</option><option value="Queimada Nova">Queimada Nova</option><option value="Picos">Picos</option><option value="Afrânio">Afrânio</option></select>
+                                    <input class="cfg-input" type="text" id="end-cidade" maxlength="60" placeholder="Patos, Paulistana...">
+                                    <span class="cfg-erro" id="erro-end-cidade"></span>
                                 </div>
                             </div>
                             <div class="cfg-acoes">
                                 <button type="submit" class="cfg-btn cfg-btn-primario" id="btn-salvar-endereco">Adicionar endereço</button>
-                                <button type="button" class="cfg-btn cfg-btn-neutro" id="btn-cancelar-endereco" hidden>Cancelar edição</button>
+                                <button type="button" class="cfg-btn cfg-btn-neutro" id="btn-cancelar-endereco" hidden style="display: none;">Cancelar edição</button>
                             </div>
                         </form>
                     </div>

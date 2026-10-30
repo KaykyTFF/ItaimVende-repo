@@ -137,7 +137,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3. RENDERIZAÇÃO DOS CARDS DE PRODUTOS E MODO DE PESQUISA COM SIDEBAR
     // ==========================================================================
     const gradeProdutos = document.getElementById('grade-produtos');
-    const contadorProdutos = document.getElementById('contador-produtos');
     const btnLimparFiltros = document.getElementById('btn-limpar-filtros');
     const layoutVitrine = document.getElementById('layout-vitrine-com-sidebar');
     const headerPesquisaResultados = document.getElementById('header-pesquisa-resultados');
@@ -375,11 +374,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return (b.id || 0) > (a.id || 0) ? 1 : -1;
             });
         }
-
         // Atualizar contadores
-        if (contadorProdutos) {
-            contadorProdutos.textContent = `(${lista.length} produto${lista.length !== 1 ? 's' : ''})`;
-        }
         if (pesquisaSubtituloContador) {
             pesquisaSubtituloContador.textContent = `${lista.length} produto${lista.length !== 1 ? 's' : ''} encontrado${lista.length !== 1 ? 's' : ''}`;
         }

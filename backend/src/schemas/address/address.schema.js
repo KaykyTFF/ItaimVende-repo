@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const createAddressSchema = z.object({
   nickname: z.string().trim().min(1, 'Dê um apelido ao endereço.').max(50, 'Apelido muito longo.').default('Casa'),
-  street: z.string().trim().min(2, 'Informe a rua e o número.').max(150, 'Endereço muito longo.'),
+  street: z.string().trim().max(150, 'Endereço muito longo.').optional().default(''),
   number: z.string().trim().max(20).optional().nullable(),
   complement: z.string().trim().max(100).optional().nullable(),
   neighborhood: z.string().trim().max(80).optional().nullable(),
@@ -14,7 +14,7 @@ export const createAddressSchema = z.object({
 
 export const updateAddressSchema = z.object({
   nickname: z.string().trim().min(1, 'Dê um apelido ao endereço.').max(50, 'Apelido muito longo.').optional(),
-  street: z.string().trim().min(2, 'Informe a rua e o número.').max(150, 'Endereço muito longo.').optional(),
+  street: z.string().trim().max(150, 'Endereço muito longo.').optional().nullable(),
   number: z.string().trim().max(20).optional().nullable(),
   complement: z.string().trim().max(100).optional().nullable(),
   neighborhood: z.string().trim().max(80).optional().nullable(),

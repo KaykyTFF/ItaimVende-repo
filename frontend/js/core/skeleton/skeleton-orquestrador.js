@@ -50,6 +50,8 @@
         obterDetalhesProdutoHtml: Detalhes.obterDetalhesProdutoHtml || (() => ''),
         obterMeusAnunciosHtml: Detalhes.obterMeusAnunciosHtml || (() => ''),
         renderizarMeusAnuncios: Detalhes.renderizarMeusAnuncios || (() => {}),
+        obterEnderecosHtml: Detalhes.obterEnderecosHtml || (() => ''),
+        renderizarEnderecos: Detalhes.renderizarEnderecos || (() => {}),
         obterConversasHtml: Detalhes.obterConversasHtml || (() => ''),
         renderizarConversas: Detalhes.renderizarConversas || (() => {}),
         obterNotificacoesHtml: Detalhes.obterNotificacoesHtml || (() => ''),
