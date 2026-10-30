@@ -33,26 +33,60 @@
     });
 
     function inicializarTodos() {
-        if (window.ItaimAuthNavegacao && typeof window.ItaimAuthNavegacao.inicializar === 'function') {
-            window.ItaimAuthNavegacao.inicializar();
+        try {
+            if (window.ItaimAuthNavegacao && typeof window.ItaimAuthNavegacao.inicializar === 'function') {
+                window.ItaimAuthNavegacao.inicializar();
+            }
+        } catch (e) {
+            console.warn('[Auth] Erro ao inicializar ItaimAuthNavegacao:', e);
         }
-        if (window.ItaimAuthSenhaToggle && typeof window.ItaimAuthSenhaToggle.inicializar === 'function') {
-            window.ItaimAuthSenhaToggle.inicializar();
+
+        try {
+            if (window.ItaimAuthSenhaToggle && typeof window.ItaimAuthSenhaToggle.inicializar === 'function') {
+                window.ItaimAuthSenhaToggle.inicializar();
+            }
+        } catch (e) {
+            console.warn('[Auth] Erro ao inicializar ItaimAuthSenhaToggle:', e);
         }
-        if (window.ItaimAuthMascarasCep && typeof window.ItaimAuthMascarasCep.inicializar === 'function') {
-            window.ItaimAuthMascarasCep.inicializar();
+
+        try {
+            if (window.ItaimAuthMascarasCep && typeof window.ItaimAuthMascarasCep.inicializar === 'function') {
+                window.ItaimAuthMascarasCep.inicializar();
+            }
+        } catch (e) {
+            console.warn('[Auth] Erro ao inicializar ItaimAuthMascarasCep:', e);
         }
-        if (window.ItaimAuthLogin && typeof window.ItaimAuthLogin.inicializar === 'function') {
-            window.ItaimAuthLogin.inicializar();
+
+        try {
+            if (window.ItaimAuthLogin && typeof window.ItaimAuthLogin.inicializar === 'function') {
+                window.ItaimAuthLogin.inicializar();
+            }
+        } catch (e) {
+            console.warn('[Auth] Erro ao inicializar ItaimAuthLogin:', e);
         }
-        if (window.ItaimAuthCadastroWizard && typeof window.ItaimAuthCadastroWizard.inicializar === 'function') {
-            window.ItaimAuthCadastroWizard.inicializar();
+
+        try {
+            if (window.ItaimAuthCadastroWizard && typeof window.ItaimAuthCadastroWizard.inicializar === 'function') {
+                window.ItaimAuthCadastroWizard.inicializar();
+            }
+        } catch (e) {
+            console.warn('[Auth] Erro ao inicializar ItaimAuthCadastroWizard:', e);
         }
-        if (window.ItaimAuthCadastroDireto && typeof window.ItaimAuthCadastroDireto.inicializar === 'function') {
-            window.ItaimAuthCadastroDireto.inicializar();
+
+        try {
+            if (window.ItaimAuthCadastroDireto && typeof window.ItaimAuthCadastroDireto.inicializar === 'function') {
+                window.ItaimAuthCadastroDireto.inicializar();
+            }
+        } catch (e) {
+            console.warn('[Auth] Erro ao inicializar ItaimAuthCadastroDireto:', e);
         }
-        if (window.ItaimAuthRecuperar && typeof window.ItaimAuthRecuperar.inicializar === 'function') {
-            window.ItaimAuthRecuperar.inicializar();
+
+        try {
+            if (window.ItaimAuthRecuperar && typeof window.ItaimAuthRecuperar.inicializar === 'function') {
+                window.ItaimAuthRecuperar.inicializar();
+            }
+        } catch (e) {
+            console.warn('[Auth] Erro ao inicializar ItaimAuthRecuperar:', e);
         }
     }
 

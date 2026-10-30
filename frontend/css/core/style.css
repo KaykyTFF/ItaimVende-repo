@@ -895,6 +895,8 @@ html, body {
 .btn-toggle-senha {
     position: absolute;
     right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
     background: none;
     border: none;
     color: #718093;
@@ -905,14 +907,31 @@ html, body {
     padding: 6px;
     border-radius: 6px;
     transition: color var(--transition-fast);
+    z-index: 5;
+    pointer-events: auto;
+    outline: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .btn-toggle-senha:hover {
     color: var(--color-primary);
 }
 
+.btn-toggle-senha:focus,
+.btn-toggle-senha:focus-visible,
+.btn-toggle-senha:active {
+    outline: none;
+    box-shadow: none;
+}
+
+.btn-toggle-senha svg {
+    pointer-events: none;
+    display: block;
+}
+
 .icone-oculto {
-    display: none;
+    display: none !important;
 }
 
 /* Link Esqueceu a Senha */
