@@ -136,6 +136,38 @@ export async function updateProduct(userId, userRole, productId, updateData) {
     throw new AppError('Sem permissão para alterar este anúncio.', 403);
   }
 
+  // --- REGRAS DE NEGÓCIO ANTI-FRAUDE NA EDIÇÃO ---
+  // 1. Bloqueio de alteração em anúncios já vendidos ou arquivados
+  if (existing.status === 'VENDIDO') {
+    throw new AppError('Anúncios já marcados como vendidos não podem ser editados para resguardar o histórico e evitar fraudes.', 400);
+  }
+  if (existing.status === 'ARQUIVADO') {
+    throw new AppError('Anúncios arquivados ou excluídos não podem ser editados.', 400);
+  }
+
+  // 2. Proteção contra "Metamorfose de Anúncio" (Bait-and-Switch)
+  // Impede que um vendedor troque a categoria de um produto já ativo para introduzir itens proibidos
+  if (updateData.categoryId !== undefined && updateData.categoryId !== existing.categoryId && userRole !== 'ADMIN') {
+    throw new AppError('Por segurança e prevenção a fraudes, a categoria do anúncio não pode ser alterada após a publicação.', 400);
+  }
+
+  // 3. Prevenção de Links Maliciosos, Phishing e Injeção no Título e Descrição
+  const PADROES_PHISHING = new RegExp('(https?:\\/\\/|www\\.|bit\\.ly|tinyurl|t\\.me|cutt\\.ly|is\\.gd|<\\s*script)', 'i');
+  if (updateData.title && PADROES_PHISHING.test(updateData.title)) {
+    throw new AppError('O título não pode conter links externos, encurtadores ou URLs por motivos de segurança.', 400);
+  }
+  if (updateData.description && PADROES_PHISHING.test(updateData.description)) {
+    throw new AppError('A descrição não pode conter links externos, encurtadores ou URLs por motivos de segurança.', 400);
+  }
+
+  // 4. Integridade de Preço
+  if (updateData.price !== undefined) {
+    const precoNum = parseFloat(updateData.price);
+    if (isNaN(precoNum) || precoNum < 0) {
+      throw new AppError('O preço do produto não pode ser negativo.', 400);
+    }
+  }
+
   const { images, price, originalPrice, ...otherData } = updateData;
   const dataToUpdate = { ...otherData };
 

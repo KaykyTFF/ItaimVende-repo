@@ -38,7 +38,7 @@
          */
         formatarPreco: function(valor) {
             if (!valor || valor <= 0) {
-                return '<span class="preco-gratis" style="color: #44BD32; font-weight: 800;">Doação / Grátis</span>';
+                return '<span class="preco-gratis" style="color: #44BD32; font-weight: 800;">Doação</span>';
             }
             return Number(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         },

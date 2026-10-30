@@ -8,9 +8,11 @@
 
     let produtoAtual = null;
 
-    function formatarPreco(val) {
-        if (val === 0 || val === '0' || val === null || val === undefined) {
-            return '<span style="color: #44BD32; font-weight: 800;">Grátis / Doação</span>';
+    function formatarPreco(val, item) {
+        const isDoacao = (item && (item.listingType === 'DOACAO' || item.listingType === 'doacao' || item.isDoacao))
+            || (val === 0 || val === '0' || val === null || val === undefined || Number(val) <= 0 || val === 'Doação');
+        if (isDoacao) {
+            return '<span style="color: #44BD32; font-weight: 800;">Doação</span>';
         }
         return Number(val).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     }
@@ -142,7 +144,7 @@
         if (elTitulo) elTitulo.textContent = produto.titulo;
 
         const elPreco = document.getElementById('preco-valor');
-        if (elPreco) elPreco.innerHTML = formatarPreco(produto.preco);
+        if (elPreco) elPreco.innerHTML = formatarPreco(produto.preco, produto);
 
         const elLoc = document.getElementById('produto-localizacao');
         if (elLoc) {

@@ -99,9 +99,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     atualizarContadorFavoritos();
 
-    function formatarPreco(val) {
-        if (!val || val <= 0) {
-            return '<span class="doacao">Doação / Grátis</span>';
+    function formatarPreco(val, item) {
+        const isDoacao = (item && (item.listingType === 'DOACAO' || item.listingType === 'doacao' || item.isDoacao))
+            || (!val || val <= 0 || val === '0' || val === 'Doação');
+        if (isDoacao) {
+            return '<span class="doacao" style="color: #44BD32; font-weight: 800;">Doação</span>';
         }
         return Number(val).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     }
@@ -223,7 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 3. Renderização dos Produtos e Aplicação de Filtros
     function renderizar() {
-        let lista = [...todosProdutos];
+        let lista = todosProdutos.filter(p => !p.status || String(p.status).toLowerCase() === 'ativo');
 
         // Filtro por termo de busca (se houver)
         if (termoBusca) {
@@ -343,8 +345,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="card-corpo">
                         <span class="card-categoria-tag">${p.categoria || 'Geral'}</span>
                         <h3 class="card-titulo" title="${p.titulo}">${p.titulo}</h3>
-                        <div class="card-preco ${!p.preco ? 'doacao' : ''}">
-                            ${formatarPreco(p.preco)}
+                        <div class="card-preco ${(!p.preco || p.listingType === 'DOACAO' || p.isDoacao) ? 'doacao' : ''}">
+                            ${formatarPreco(p.preco, p)}
                         </div>
                         <div class="card-rodape">
                             <span class="card-local" title="${p.bairro ? p.bairro + ', ' : ''}${p.cidade || 'Paulistana'}">
@@ -419,16 +421,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const res = await window.ItaimApi.produtos.listar(apiParams);
                 if (res && res.success && Array.isArray(res.data)) {
-                    todosProdutos = res.data.map(p => ({
-                        ...p,
-                        id: p.id,
-                        titulo: p.titulo || p.title,
-                        preco: Number(p.preco !== undefined ? p.preco : p.price),
-                        categoria: p.categoria || (p.category ? p.category.name : 'Geral'),
-                        cidade: p.cidade || p.city || 'Paulistana',
-                        bairro: p.bairro || p.neighborhood || 'Centro',
-                        imagem: window.ItaimApi.resolverUrlImagem(p.imagem || (p.images && p.images[0]) || '')
-                    }));
+                    const mapaExcluidos = (() => {
+                        try { return new Set(JSON.parse(localStorage.getItem('itaim_produtos_excluidos') || '[]').map(String)); } catch(e) { return new Set(); }
+                    })();
+                    const mapaStatus = (() => {
+                        try { return JSON.parse(localStorage.getItem('itaim_produtos_status_map') || '{}'); } catch(e) { return {}; }
+                    })();
+
+                    todosProdutos = res.data
+                        .filter(p => !mapaExcluidos.has(String(p.id)))
+                        .map(p => {
+                            const st = mapaStatus[String(p.id)] || p.status || 'ATIVO';
+                            return {
+                                ...p,
+                                id: p.id,
+                                status: st,
+                                titulo: p.titulo || p.title,
+                                preco: Number(p.preco !== undefined ? p.preco : p.price),
+                                categoria: p.categoria || (p.category ? p.category.name : 'Geral'),
+                                cidade: p.cidade || p.city || 'Paulistana',
+                                bairro: p.bairro || p.neighborhood || 'Centro',
+                                imagem: window.ItaimApi.resolverUrlImagem(p.imagem || (p.images && p.images[0]) || '')
+                            };
+                        })
+                        .filter(p => String(p.status).toLowerCase() === 'ativo');
                     atualizarSidebarFiltros();
                     renderizar();
                     return;

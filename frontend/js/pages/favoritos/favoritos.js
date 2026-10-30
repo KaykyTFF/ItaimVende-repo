@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     function formatarPreco(val) {
         if (!val || Number(val) <= 0) {
-            return '<span style="color: #44BD32; font-weight: 800;">Grátis / Doação</span>';
+            return '<span style="color: #44BD32; font-weight: 800;">Doação</span>';
         }
         return Number(val).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     }

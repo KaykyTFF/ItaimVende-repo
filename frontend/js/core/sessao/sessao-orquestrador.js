@@ -53,6 +53,7 @@
         obterAnunciosDoUsuario: Produtos.obterAnunciosDoUsuario || (() => []),
         adicionarNovoAnuncio: Produtos.adicionarNovoAnuncio || (() => null),
         atualizarStatusAnuncio: Produtos.atualizarStatusAnuncio || (() => false),
+        atualizarAnuncio: Produtos.atualizarAnuncio || (() => false),
         excluirAnuncio: Produtos.excluirAnuncio || (() => false),
         limparDadosZerados: Produtos.limparDadosZerados || (() => {}),
 

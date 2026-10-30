@@ -17,7 +17,7 @@
     <!-- CSS do Projeto e Estilos Específicos da Página Vender -->
     <link rel="stylesheet" href="../../css/pages/home/home.css">
     <link rel="stylesheet" href="../../css/core/header-global.css?v=10">
-    <link rel="stylesheet" href="../../css/pages/vender/vender.css?v=2">
+    <link rel="stylesheet" href="../../css/pages/vender/vender.css?v=3">
 </head>
 <body class="pagina-vender">
 
@@ -478,9 +478,21 @@
 
                         <!-- Bloco de Preço Destacado -->
                         <div class="bloco-preco-destacado">
-                            <label for="input-preco" class="rotulo-secao-campo">Preço *</label>
-                            <div class="campo-preco-grande">
-                                <span class="cifrao-destaque">R$</span>
+                            <div class="header-preco-linha">
+                                <label for="input-preco" class="rotulo-secao-campo" style="margin-bottom: 0;">Preço *</label>
+                                <button type="button" class="btn-toggle-doacao" id="btn-toggle-doacao" aria-pressed="false" title="Clique para anunciar este item como Doação gratuita">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <polyline points="20 12 20 22 4 22 4 12"></polyline>
+                                        <rect x="2" y="7" width="20" height="5"></rect>
+                                        <line x1="12" y1="22" x2="12" y2="7"></line>
+                                        <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+                                        <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+                                    </svg>
+                                    <span>Doação</span>
+                                </button>
+                            </div>
+                            <div class="campo-preco-grande" id="campo-preco-wrapper">
+                                <span class="cifrao-destaque" id="cifrao-preco">R$</span>
                                 <input 
                                     type="text" 
                                     class="input-vender-padrao input-preco-destacado" 

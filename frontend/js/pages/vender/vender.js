@@ -232,10 +232,45 @@ document.addEventListener('DOMContentLoaded', () => {
     renderizarGaleriaFotos();
 
     // ==========================================================================
-    // 2. MÁSCARA DINÂMICA DE PREÇO (R$ 0,00) E CONTADOR DE CARACTERES
+    // 2. MÁSCARA DINÂMICA DE PREÇO (R$ 0,00), MODO DOAÇÃO E CONTADOR DE CARACTERES
     // ==========================================================================
+    const btnToggleDoacao = document.getElementById('btn-toggle-doacao');
+    const campoPrecoWrapper = document.getElementById('campo-preco-wrapper');
+    let isModoDoacao = false;
+
+    function definirModoDoacao(ativo) {
+        isModoDoacao = !!ativo;
+        if (btnToggleDoacao) {
+            btnToggleDoacao.classList.toggle('ativo', isModoDoacao);
+            btnToggleDoacao.setAttribute('aria-pressed', isModoDoacao ? 'true' : 'false');
+        }
+        if (campoPrecoWrapper) {
+            campoPrecoWrapper.classList.toggle('modo-doacao', isModoDoacao);
+        }
+        if (inputPreco) {
+            if (isModoDoacao) {
+                inputPreco.value = 'Doação';
+                inputPreco.readOnly = true;
+            } else {
+                inputPreco.readOnly = false;
+                if (inputPreco.value === 'Doação' || inputPreco.value === '0,00' || inputPreco.value.trim() === '') {
+                    inputPreco.value = '';
+                }
+                inputPreco.focus();
+            }
+        }
+        if (typeof etapaAtual !== 'undefined' && etapaAtual === 4) {
+            atualizarPreviewRevisao();
+        }
+    }
+
+    btnToggleDoacao?.addEventListener('click', () => {
+        definirModoDoacao(!isModoDoacao);
+    });
+
     if (inputPreco) {
         inputPreco.addEventListener('input', (e) => {
+            if (isModoDoacao) return;
             let valor = e.target.value.replace(/\D/g, '');
             if (!valor) {
                 e.target.value = '';
@@ -426,7 +461,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Preço
         if (previewPreco) {
-            previewPreco.textContent = inputPreco?.value.trim() || 'R$ 0,00';
+            if (isModoDoacao) {
+                previewPreco.innerHTML = '<span style="color: #44BD32; font-weight: 800;">Doação</span>';
+            } else {
+                previewPreco.textContent = inputPreco?.value.trim() || 'R$ 0,00';
+            }
         }
 
         // Categoria (prioriza chip ativo ou dropdown)
@@ -473,23 +512,41 @@ document.addEventListener('DOMContentLoaded', () => {
             // Validação ao sair da Etapa 2 (Detalhes)
             if (etapaAtual === 2 || (etapaAtual < 2 && novaEtapa > 2)) {
                 const tit = inputTitulo?.value.trim() || '';
+                const desc = textareaDesc?.value.trim() || '';
                 if (tit.length < 3) {
                     exibirFeedback('O título do anúncio deve ter no mínimo 3 caracteres.');
                     if (etapaAtual !== 2) irParaEtapa(2);
                     inputTitulo?.focus();
                     return false;
                 }
+
+                // Regra Anti-Fraude: Prevenção de Phishing e Links Maliciosos
+                const PADROES_SUSPEITOS = /(https?:\/\/|www\.|bit\.ly|tinyurl|t\.me|cutt\.ly|is\.gd|<\s*script)/i;
+                if (PADROES_SUSPEITOS.test(tit)) {
+                    exibirFeedback('Por segurança contra fraudes, o título não pode conter links externos ou encurtadores.');
+                    if (etapaAtual !== 2) irParaEtapa(2);
+                    inputTitulo?.focus();
+                    return false;
+                }
+                if (PADROES_SUSPEITOS.test(desc)) {
+                    exibirFeedback('Por segurança contra golpes e phishing, a descrição não pode conter links externos ou encurtadores.');
+                    if (etapaAtual !== 2) irParaEtapa(2);
+                    textareaDesc?.focus();
+                    return false;
+                }
             }
 
             // Validação ao sair da Etapa 3 (Preço)
             if (etapaAtual === 3 || (etapaAtual < 3 && novaEtapa === 4)) {
-                const precoRaw = inputPreco?.value.replace(/\D/g, '') || '0';
-                const precoVal = parseFloat(precoRaw) / 100;
-                if (precoVal <= 0) {
-                    exibirFeedback('Por favor, informe um preço de venda válido.');
-                    if (etapaAtual !== 3) irParaEtapa(3);
-                    inputPreco?.focus();
-                    return false;
+                if (!isModoDoacao) {
+                    const precoRaw = inputPreco?.value.replace(/\D/g, '') || '0';
+                    const precoVal = parseFloat(precoRaw) / 100;
+                    if (precoVal <= 0) {
+                        exibirFeedback('Por favor, informe um preço de venda válido ou clique em "Doação".');
+                        if (etapaAtual !== 3) irParaEtapa(3);
+                        inputPreco?.focus();
+                        return false;
+                    }
                 }
             }
         }
@@ -630,8 +687,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================================================
     btnAnunciar?.addEventListener('click', async () => {
         const titulo = inputTitulo?.value.trim();
-        const precoRaw = inputPreco?.value.replace(/\D/g, '') || '0';
-        const preco = parseFloat(precoRaw) / 100;
+        let preco = 0;
+        let listingType = 'VENDA';
+
+        if (isModoDoacao) {
+            preco = 0;
+            listingType = 'DOACAO';
+        } else {
+            const precoRaw = inputPreco?.value.replace(/\D/g, '') || '0';
+            preco = parseFloat(precoRaw) / 100;
+        }
         let categoria = labelCategoria?.textContent.trim() || 'Geral';
         let condicao = labelCondicao?.textContent.trim() || 'Usado';
         const descricao = textareaDesc?.value.trim() || '';
@@ -651,8 +716,23 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        if (preco <= 0) {
-            exibirFeedback('Por favor, defina um preço de venda válido.');
+        // Regra Anti-Fraude: Validação de links maliciosos e phishing
+        const PADROES_SUSPEITOS = /(https?:\/\/|www\.|bit\.ly|tinyurl|t\.me|cutt\.ly|is\.gd|<\s*script)/i;
+        if (PADROES_SUSPEITOS.test(titulo)) {
+            exibirFeedback('Por segurança contra fraudes, o título não pode conter links externos ou encurtadores.');
+            irParaEtapa(2);
+            inputTitulo?.focus();
+            return;
+        }
+        if (PADROES_SUSPEITOS.test(descricao)) {
+            exibirFeedback('Por segurança contra golpes e phishing, a descrição não pode conter links externos ou encurtadores.');
+            irParaEtapa(2);
+            textareaDesc?.focus();
+            return;
+        }
+
+        if (!isModoDoacao && preco <= 0) {
+            exibirFeedback('Por favor, defina um preço de venda válido ou selecione "Doação".');
             irParaEtapa(3);
             inputPreco?.focus();
             return;
@@ -693,6 +773,52 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        if (modoEdicao) {
+            if (window.ItaimApi && window.ItaimApi.auth?.obterToken()) {
+                try {
+                    if (spanTexto) spanTexto.textContent = 'Atualizando no banco...';
+                    const dadosPayload = {
+                        title: titulo,
+                        description: descricaoFinal,
+                        price: isNaN(preco) ? 0 : preco,
+                        listingType: listingType,
+                        categoryId: obterCategoriaId(categoria),
+                        condition: normalizarCondicao(condicao),
+                        city: cidadeAnuncio,
+                        neighborhood: cepAnuncio,
+                        images: fotosUrlsBackend.length > 0 ? fotosUrlsBackend : (fotosColetadas.length > 0 ? fotosColetadas : ['assets/placeholders/produto-placeholder.svg'])
+                    };
+
+                    await window.ItaimApi.produtos.atualizar(idEdicao, dadosPayload);
+                } catch (apiErr) {
+                    console.warn('[Vender] Falha na API ao atualizar produto:', apiErr.message);
+                }
+            }
+
+            if (window.ItaimSessao && typeof window.ItaimSessao.atualizarAnuncio === 'function') {
+                window.ItaimSessao.atualizarAnuncio(idEdicao, {
+                    titulo: titulo,
+                    preco: preco,
+                    listingType: listingType,
+                    isDoacao: isModoDoacao,
+                    categoria: categoria,
+                    condicao: condicao,
+                    descricao: descricaoFinal,
+                    cidade: cidadeAnuncio,
+                    bairro: cepAnuncio,
+                    imagens: fotosUrlsBackend.length > 0 
+                        ? fotosUrlsBackend 
+                        : (fotosColetadas.length > 0 ? fotosColetadas : ['assets/placeholders/produto-placeholder.svg'])
+                });
+            }
+
+            ultimoAnuncioCriadoId = idEdicao;
+            btnAnunciar.classList.remove('carregando');
+            if (spanTexto) spanTexto.textContent = 'Salvar Alterações';
+            alternarParaSucesso();
+            return;
+        }
+
         let idCriado = null;
 
         // 2. Publica o anúncio na API central do Backend se autenticado
@@ -703,6 +829,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     title: titulo,
                     description: descricaoFinal,
                     price: isNaN(preco) ? 0 : preco,
+                    listingType: listingType,
                     categoryId: obterCategoriaId(categoria),
                     condition: normalizarCondicao(condicao),
                     city: cidadeAnuncio,
@@ -726,6 +853,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     id: idCriado || undefined,
                     titulo: titulo,
                     preco: preco,
+                    listingType: listingType,
+                    isDoacao: isModoDoacao,
                     categoria: categoria,
                     condicao: condicao,
                     descricao: descricaoFinal,
@@ -777,6 +906,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (inputPreco) inputPreco.value = '';
         if (contadorChar) contadorChar.textContent = '0 / 1000';
         
+        definirModoDoacao(false);
         // Limpa fotos da lista dinâmica
         fotosLista = [];
         renderizarGaleriaFotos();
@@ -789,4 +919,220 @@ document.addEventListener('DOMContentLoaded', () => {
 
         alternarParaFormulario();
     });
+
+    // ==========================================================================
+    // 8. MODO DE EDIÇÃO DE ANÚNCIO (SE ?editar=:id OU ?id=:id)
+    // ==========================================================================
+    const urlParams = new URLSearchParams(window.location.search);
+    const idEdicao = urlParams.get('editar') || urlParams.get('id');
+    const modoEdicao = !!idEdicao;
+
+    async function carregarProdutoParaEdicao(id) {
+        let produto = null;
+
+        // 1. Tentar buscar da API se autenticado
+        if (window.ItaimApi && window.ItaimApi.produtos && typeof window.ItaimApi.produtos.obter === 'function') {
+            try {
+                const res = await window.ItaimApi.produtos.obter(id);
+                if (res && res.success && res.data) {
+                    produto = res.data;
+                }
+            } catch (err) {
+                console.info('[Vender] Tentando buscar anúncio para edição no cache local:', err.message);
+            }
+        }
+
+        // 2. Fallback na sessão / cache local
+        if (!produto && window.ItaimSessao && typeof window.ItaimSessao.obterTodosProdutos === 'function') {
+            const todos = window.ItaimSessao.obterTodosProdutos(false);
+            produto = todos.find(p => String(p.id) === String(id));
+        }
+
+        // 3. Fallback no localStorage
+        if (!produto) {
+            try {
+                const locais = JSON.parse(localStorage.getItem('itaim_produtos_cadastrados') || '[]');
+                produto = locais.find(p => String(p.id) === String(id));
+            } catch (e) {}
+        }
+
+        if (!produto) {
+            exibirFeedback('Anúncio não encontrado para edição.');
+            return;
+        }
+
+        // REGRA ANTI-FRAUDE 1: Verificação de Titularidade (Ownership)
+        const userLogado = (window.ItaimSessao && typeof window.ItaimSessao.obterUsuarioLogado === 'function')
+            ? window.ItaimSessao.obterUsuarioLogado()
+            : null;
+
+        const meuId = userLogado?.id || '';
+        const meuEmail = (userLogado?.email || '').toLowerCase().trim();
+        const vendedorId = produto.sellerId || produto.vendedorId || '';
+        const vendedorEmail = (produto.seller?.email || produto.vendedorEmail || '').toLowerCase().trim();
+
+        const isDono = (!vendedorId && !vendedorEmail)
+            ? true
+            : ((meuId && vendedorId && String(meuId) === String(vendedorId))
+               || (meuEmail && vendedorEmail && meuEmail === vendedorEmail)
+               || userLogado?.role === 'ADMIN');
+
+        if (!isDono) {
+            exibirFeedback('Acesso negado: Você só pode editar anúncios pertencentes à sua própria conta.');
+            setTimeout(() => {
+                window.location.href = window.ItaimRotas ? window.ItaimRotas.obterUrl('meus-anuncios') : 'meus-anuncios.html';
+            }, 2200);
+            return;
+        }
+
+        // REGRA ANTI-FRAUDE 2: Anúncios finalizados (Vendido) ou arquivados não podem ser editados
+        const statusUpper = String(produto.status || '').toUpperCase();
+        if (statusUpper === 'VENDIDO') {
+            exibirFeedback('Este anúncio foi marcado como Vendido e não pode ser editado para resguardar o histórico da transação.');
+            setTimeout(() => {
+                window.location.href = window.ItaimRotas ? window.ItaimRotas.obterUrl('meus-anuncios') : 'meus-anuncios.html';
+            }, 2500);
+            return;
+        }
+        if (statusUpper === 'ARQUIVADO' || produto.deletedAt) {
+            exibirFeedback('Este anúncio foi arquivado ou excluído e não pode ser alterado.');
+            setTimeout(() => {
+                window.location.href = window.ItaimRotas ? window.ItaimRotas.obterUrl('meus-anuncios') : 'meus-anuncios.html';
+            }, 2500);
+            return;
+        }
+
+        // REGRA ANTI-FRAUDE 3: Proteção contra metamorfose de produto (Bloqueio de Categoria na Edição)
+        if (dropdownCategoria) {
+            dropdownCategoria.style.pointerEvents = 'none';
+            dropdownCategoria.style.opacity = '0.7';
+            dropdownCategoria.setAttribute('title', 'Categoria protegida contra alteração após publicação para segurança dos compradores.');
+        }
+        chipsCategoria.forEach(chip => {
+            chip.style.cursor = 'not-allowed';
+            chip.style.opacity = '0.75';
+            chip.addEventListener('click', (e) => {
+                e.stopPropagation();
+                exibirFeedback('Por segurança contra fraudes (bait-and-switch), a categoria do produto não pode ser alterada após a publicação.');
+            }, true);
+        });
+
+        const containerChips = document.getElementById('chips-categorias-container');
+        if (containerChips && !document.getElementById('aviso-categoria-protegida')) {
+            const aviso = document.createElement('div');
+            aviso.id = 'aviso-categoria-protegida';
+            aviso.className = 'aviso-seguranca-edicao';
+            aviso.style.cssText = 'display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #475569; background: #F8FAFC; border: 1px solid #E2E8F0; padding: 10px 14px; border-radius: 8px; margin-top: 12px;';
+            aviso.innerHTML = `
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                <span><strong>Categoria protegida:</strong> Não pode ser alterada após a publicação para garantir a transparência com os compradores.</span>
+            `;
+            containerChips.parentNode.insertBefore(aviso, containerChips.nextSibling);
+        }
+
+        // Preenche título
+        if (inputTitulo) {
+            inputTitulo.value = produto.titulo || produto.title || '';
+        }
+
+        // Preenche descrição
+        if (textareaDesc) {
+            textareaDesc.value = produto.descricao || produto.description || '';
+            if (contadorChar) {
+                contadorChar.textContent = `${textareaDesc.value.length} / 1000`;
+            }
+        }
+
+        // Preenche preço ou modo doação
+        if (produto.listingType === 'DOACAO' || produto.isDoacao || Number(produto.preco !== undefined ? produto.preco : produto.price) === 0) {
+            definirModoDoacao(true);
+        } else {
+            definirModoDoacao(false);
+            if (inputPreco) {
+                const num = parseFloat(produto.preco !== undefined ? produto.preco : produto.price) || 0;
+                if (num > 0) {
+                    inputPreco.value = num.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                }
+            }
+        }
+
+        // Preenche categoria
+        const catNome = produto.categoria || (produto.category ? (produto.category.name || produto.category) : '');
+        if (catNome && labelCategoria) {
+            labelCategoria.textContent = catNome.toUpperCase();
+            chipsCategoria.forEach(chip => {
+                const val = (chip.getAttribute('data-valor') || chip.textContent || '').trim().toLowerCase();
+                const match = val === catNome.toLowerCase() || catNome.toLowerCase().includes(val) || val.includes(catNome.toLowerCase());
+                chip.classList.toggle('ativo', match);
+            });
+            if (menuCategoriaOpcoes) {
+                menuCategoriaOpcoes.querySelectorAll('.item-opcao-dropdown').forEach(item => {
+                    const val = (item.getAttribute('data-valor') || item.textContent || '').trim().toLowerCase();
+                    const match = val === catNome.toLowerCase() || catNome.toLowerCase().includes(val) || val.includes(catNome.toLowerCase());
+                    item.classList.toggle('selecionado', match);
+                });
+            }
+        }
+
+        // Preenche condição
+        const condNome = produto.condicao || produto.condition || 'Usado';
+        if (condNome && labelCondicao) {
+            labelCondicao.textContent = condNome.toUpperCase();
+            chipsCondicao.forEach(chip => {
+                const val = (chip.getAttribute('data-valor') || chip.textContent || '').trim().toLowerCase();
+                const match = val === condNome.toLowerCase() || condNome.toLowerCase().includes(val);
+                chip.classList.toggle('ativo', match);
+            });
+            if (menuCondicaoOpcoes) {
+                menuCondicaoOpcoes.querySelectorAll('.item-opcao-dropdown').forEach(item => {
+                    const val = (item.getAttribute('data-valor') || item.textContent || '').trim().toLowerCase();
+                    const match = val === condNome.toLowerCase() || condNome.toLowerCase().includes(val);
+                    item.classList.toggle('selecionado', match);
+                });
+            }
+        }
+
+        // Preenche localização
+        const cid = produto.cidade || produto.city || 'Paulistana';
+        const cepBairro = produto.bairro || produto.neighborhood || '64750-000';
+        if (textoLocalizacao) {
+            textoLocalizacao.textContent = `${cid} - ${cepBairro}`;
+        }
+        if (selectCidade) selectCidade.value = cid;
+        if (inputCep) inputCep.value = cepBairro;
+
+        // Preenche fotos
+        const rawFotos = Array.isArray(produto.images) && produto.images.length > 0
+            ? produto.images
+            : (Array.isArray(produto.fotos) && produto.fotos.length > 0
+                ? produto.fotos
+                : (produto.imagem ? [produto.imagem] : []));
+
+        fotosLista = rawFotos.map(img => (window.ItaimApi && typeof window.ItaimApi.resolverUrlImagem === 'function') ? window.ItaimApi.resolverUrlImagem(img) : img);
+        renderizarGaleriaFotos();
+    }
+
+    if (modoEdicao) {
+        document.title = 'Editar Anúncio - Itaim Vende';
+        const tit = document.querySelector('.vender-titulo-pagina');
+        if (tit) tit.textContent = 'Editar Anúncio';
+        const spanTxt = btnAnunciar?.querySelector('.texto-btn-anunciar');
+        if (spanTxt) spanTxt.textContent = 'Salvar Alterações';
+
+        const titSucesso = document.querySelector('.titulo-sucesso');
+        if (titSucesso) titSucesso.textContent = 'Anúncio atualizado com Sucesso!';
+
+        if (btnCriarOutro) {
+            btnCriarOutro.textContent = '← Voltar para Meus Anúncios';
+            btnCriarOutro.addEventListener('click', (e) => {
+                e.stopPropagation();
+                window.location.href = window.ItaimRotas ? window.ItaimRotas.obterUrl('meus-anuncios') : 'meus-anuncios.html';
+            });
+        }
+
+        carregarProdutoParaEdicao(idEdicao);
+    }
 });

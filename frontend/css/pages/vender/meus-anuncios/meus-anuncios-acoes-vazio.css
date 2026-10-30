@@ -23,6 +23,32 @@
 }
 
 /* Botões com cores sólidas modernas e vibrantes */
+.btn-acao-editar {
+    background-color: #334155;
+    color: #FFFFFF;
+    border: 1px solid #334155;
+    box-shadow: 0 2px 6px rgba(51, 65, 85, 0.25);
+}
+
+.btn-acao-editar:hover {
+    background-color: #1E293B;
+    color: #FFFFFF;
+    border-color: #1E293B;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(30, 41, 59, 0.35);
+}
+
+[data-theme="dark"] .btn-acao-editar {
+    background-color: #475569;
+    border-color: #475569;
+    color: #F8FAFC;
+}
+
+[data-theme="dark"] .btn-acao-editar:hover {
+    background-color: #64748B;
+    border-color: #64748B;
+}
+
 .btn-acao-ver {
     background-color: #475569;
     color: #FFFFFF;
@@ -144,3 +170,42 @@
     font-weight: 700;
 }
 
+
+
+/* Toast de Notificação de Meus Anúncios */
+.anuncios-toast {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 9999;
+    background: #0F172A;
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 12px 20px;
+    border-radius: var(--radius-md, 10px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: all 0.25s ease;
+    pointer-events: none;
+}
+
+.anuncios-toast.visivel {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.anuncios-toast.erro {
+    background: #DC2626;
+}
+
+[data-theme="dark"] .anuncios-toast {
+    background: #1E293B;
+    border: 1px solid #334155;
+    color: #F8FAFC;
+}

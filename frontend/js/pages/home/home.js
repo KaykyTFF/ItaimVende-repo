@@ -175,11 +175,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function formatarPreco(valor) {
-        if (!valor || valor <= 0) {
-            return '<span class="doacao">Doação / Grátis</span>';
+    function formatarPreco(valor, item) {
+        const isDoacao = (item && (item.listingType === 'DOACAO' || item.listingType === 'doacao' || item.isDoacao))
+            || (!valor || valor <= 0 || valor === '0' || valor === 'Doação');
+        if (isDoacao) {
+            return '<span class="doacao" style="color: #44BD32; font-weight: 800;">Doação</span>';
         }
-        return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        return Number(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     }
 
     // Atualiza opções dinâmicas da barra lateral ("filtrar por") com contagem real
@@ -301,6 +303,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Filtragem combinada
         let lista = produtos.filter(p => {
+            // 0. Apenas anúncios ativos aparecem na vitrine da loja
+            if (p.status && String(p.status).toLowerCase() !== 'ativo') return false;
+
             // Se modo pesquisa ativo com categorias selecionadas na sidebar
             if (modoPesquisaAtivo && categoriasSelecionadas.size > 0) {
                 if (!p.categoria || !categoriasSelecionadas.has(p.categoria)) return false;
@@ -440,8 +445,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="card-corpo">
                         <span class="card-categoria-tag">${p.categoria || 'Geral'}</span>
                         <h3 class="card-titulo" title="${p.titulo}">${p.titulo}</h3>
-                        <div class="card-preco ${!p.preco ? 'doacao' : ''}">
-                            ${formatarPreco(p.preco)}
+                        <div class="card-preco ${(!p.preco || p.listingType === 'DOACAO' || p.isDoacao) ? 'doacao' : ''}">
+                            ${formatarPreco(p.preco, p)}
                         </div>
                         <div class="card-rodape">
                             <span class="card-local" title="${p.bairro ? p.bairro + ', ' : ''}${p.cidade || 'Paulistana'}">
@@ -533,20 +538,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const res = await window.ItaimApi.produtos.listar(apiFiltros);
                 if (res && res.success && Array.isArray(res.data)) {
-                    const apiProdutos = res.data.map(p => ({
-                        ...p,
-                        id: p.id,
-                        titulo: p.titulo || p.title,
-                        preco: Number(p.preco !== undefined ? p.preco : p.price),
-                        categoria: p.categoria || (p.category ? p.category.name : 'Geral'),
-                        cidade: p.cidade || p.city || 'Paulistana',
-                        bairro: p.bairro || p.neighborhood || 'Centro',
-                        imagem: (window.ItaimApi && window.ItaimApi.resolverUrlImagem)
-                            ? window.ItaimApi.resolverUrlImagem(p.imagem || (p.images && p.images[0]) || '')
-                            : (window.ItaimRotas ? window.ItaimRotas.obterAsset('assets/produtos/anuncio_13.jpg') : '../../assets/produtos/anuncio_13.jpg')
-                    }));
+                    const mapaExcluidos = (() => {
+                        try { return new Set(JSON.parse(localStorage.getItem('itaim_produtos_excluidos') || '[]').map(String)); } catch(e) { return new Set(); }
+                    })();
+                    const mapaStatus = (() => {
+                        try { return JSON.parse(localStorage.getItem('itaim_produtos_status_map') || '{}'); } catch(e) { return {}; }
+                    })();
 
-                    // Se a API retornou anúncios (ou vitrine filtrada), atualiza
+                    const apiProdutos = res.data
+                        .filter(p => !mapaExcluidos.has(String(p.id)))
+                        .map(p => {
+                            const st = mapaStatus[String(p.id)] || p.status || 'ATIVO';
+                            return {
+                                ...p,
+                                id: p.id,
+                                status: st,
+                                titulo: p.titulo || p.title,
+                                preco: Number(p.preco !== undefined ? p.preco : p.price),
+                                categoria: p.categoria || (p.category ? p.category.name : 'Geral'),
+                                cidade: p.cidade || p.city || 'Paulistana',
+                                bairro: p.bairro || p.neighborhood || 'Centro',
+                                imagem: (window.ItaimApi && window.ItaimApi.resolverUrlImagem)
+                                    ? window.ItaimApi.resolverUrlImagem(p.imagem || (p.images && p.images[0]) || '')
+                                    : (window.ItaimRotas ? window.ItaimRotas.obterAsset('assets/produtos/anuncio_13.jpg') : '../../assets/produtos/anuncio_13.jpg')
+                            };
+                        })
+                        .filter(p => String(p.status).toLowerCase() === 'ativo');
+
                     produtos = apiProdutos;
                     renderizarVitrine();
                     return;

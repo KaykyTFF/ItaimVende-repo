@@ -14,7 +14,7 @@
     'use strict';
 
     // Retorna todos os produtos do sistema (iniciais + cadastrados localmente)
-    function obterTodosProdutos() {
+    function obterTodosProdutos(apenasAtivos = true) {
         let todos = [];
         if (typeof PRODUTOS_INICIAIS !== 'undefined' && Array.isArray(PRODUTOS_INICIAIS)) {
             todos = [...PRODUTOS_INICIAIS];
@@ -57,6 +57,9 @@
             }
         }
 
+        if (apenasAtivos) {
+            todos = todos.filter(p => !p.status || String(p.status).toLowerCase() === 'ativo');
+        }
         return todos;
     }
 
@@ -161,7 +164,7 @@
 
     // Retorna todos os anúncios pertencentes ao usuário solicitado
     function obterAnunciosDoUsuario(emailOuUsername) {
-        const todos = obterTodosProdutos();
+        const todos = obterTodosProdutos(false);
         if (!emailOuUsername) return [];
 
         const raw = emailOuUsername.toLowerCase().trim();
@@ -261,6 +264,58 @@
         return true;
     }
 
+    // Atualiza os dados de um anúncio existente
+    function atualizarAnuncio(id, novosDados) {
+        const idStr = String(id);
+        let locais = [];
+        try {
+            locais = JSON.parse(localStorage.getItem('itaim_produtos_cadastrados') || '[]');
+            if (!Array.isArray(locais)) locais = [];
+        } catch(e) {
+            locais = [];
+        }
+
+        let encontrou = false;
+        locais = locais.map(p => {
+            if (String(p.id) === idStr) {
+                encontrou = true;
+                return {
+                    ...p,
+                    ...novosDados,
+                    id: p.id,
+                    titulo: novosDados.titulo || novosDados.title || p.titulo,
+                    preco: novosDados.preco !== undefined ? novosDados.preco : p.preco,
+                    categoria: novosDados.categoria || p.categoria,
+                    condicao: novosDados.condicao || p.condicao,
+                    descricao: novosDados.descricao || p.descricao,
+                    cidade: novosDados.cidade || p.cidade,
+                    bairro: novosDados.bairro || p.bairro,
+                    imagem: (novosDados.imagens && novosDados.imagens[0]) || novosDados.imagem || p.imagem,
+                    fotos: novosDados.imagens || novosDados.fotos || p.fotos
+                };
+            }
+            return p;
+        });
+
+        if (!encontrou) {
+            locais.unshift({
+                id: isNaN(Number(id)) ? id : Number(id),
+                ...novosDados,
+                titulo: novosDados.titulo || novosDados.title || 'Produto sem título',
+                preco: novosDados.preco !== undefined ? novosDados.preco : 0,
+                imagem: (novosDados.imagens && novosDados.imagens[0]) || novosDados.imagem || 'assets/placeholders/produto-placeholder.svg',
+                fotos: novosDados.imagens || novosDados.fotos || ['assets/placeholders/produto-placeholder.svg']
+            });
+        }
+
+        try {
+            localStorage.setItem('itaim_produtos_cadastrados', JSON.stringify(locais));
+        } catch (e) {
+            console.warn('[Sessão] Erro ao salvar produto atualizado:', e);
+        }
+        return true;
+    }
+
     // Exclui um anúncio
     function excluirAnuncio(id) {
         const idStr = String(id);
@@ -323,6 +378,7 @@
         obterAnunciosDoUsuario,
         adicionarNovoAnuncio,
         atualizarStatusAnuncio,
+        atualizarAnuncio,
         excluirAnuncio,
         limparDadosZerados
     };
