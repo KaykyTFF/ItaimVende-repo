@@ -70,3 +70,12 @@
     color: #94A3B8 !important;
     border: 1px solid #2C3946 !important;
 }
+
+/* Badge de Propostas no tom verde do design */
+[data-theme="dark"] .msg-proposta-status-badge.pendente,
+[data-theme="dark"] .msg-proposta-status-badge.enviada,
+[data-theme="dark"] .msg-proposta-status-badge.recebida,
+[data-theme="dark"] .msg-proposta-status-badge.aceita {
+    background-color: rgba(168, 205, 151, 0.22) !important;
+    color: #A8CD97 !important;
+}
