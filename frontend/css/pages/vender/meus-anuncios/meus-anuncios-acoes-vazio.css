@@ -22,50 +22,78 @@
     font-family: inherit;
 }
 
+/* Botões com cores sólidas modernas e vibrantes */
 .btn-acao-ver {
-    background: #F1F5F9;
-    color: var(--text-primary);
-    border-color: #E2E8F0;
+    background-color: #475569;
+    color: #FFFFFF;
+    border: 1px solid transparent;
+    box-shadow: 0 2px 6px rgba(71, 85, 105, 0.25);
 }
 
 .btn-acao-ver:hover {
-    background: #E2E8F0;
+    background-color: #334155;
+    color: #FFFFFF;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(71, 85, 105, 0.35);
 }
 
 .btn-acao-status {
     background-color: #F97316;
     color: #FFFFFF;
-    border-color: #F97316;
+    border: 1px solid #F97316;
+    box-shadow: 0 2px 6px rgba(249, 115, 22, 0.25);
 }
 
 .btn-acao-status:hover {
     background-color: #EA580C;
     color: #FFFFFF;
     border-color: #EA580C;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(234, 88, 12, 0.35);
 }
 
-.btn-acao-excluir {
-    background-color: #DC2626;
+.btn-acao-status.btn-status-reativar {
+    background-color: #2563EB;
     color: #FFFFFF;
-    border-color: #DC2626;
+    border: 1px solid #2563EB;
+    box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
 }
 
-.btn-acao-excluir:hover {
-    background-color: #B91C1C;
+.btn-acao-status.btn-status-reativar:hover {
+    background-color: #1D4ED8;
     color: #FFFFFF;
-    border-color: #B91C1C;
+    border-color: #1D4ED8;
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.35);
 }
 
 .btn-acao-marcar-vendido {
     background-color: var(--primary, #44BD32);
     color: #FFFFFF;
-    border-color: var(--primary, #44BD32);
+    border: 1px solid var(--primary, #44BD32);
+    box-shadow: 0 2px 6px rgba(68, 189, 50, 0.25);
 }
 
 .btn-acao-marcar-vendido:hover {
     background-color: var(--primary-hover, #3ca82b);
     color: #FFFFFF;
     border-color: var(--primary-hover, #3ca82b);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(60, 168, 43, 0.35);
+}
+
+.btn-acao-excluir {
+    background-color: #DC2626;
+    color: #FFFFFF;
+    border: 1px solid #DC2626;
+    box-shadow: 0 2px 6px rgba(220, 38, 38, 0.25);
+}
+
+.btn-acao-excluir:hover {
+    background-color: #B91C1C;
+    color: #FFFFFF;
+    border-color: #B91C1C;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(220, 38, 38, 0.35);
 }
 
 /* Estado Vazio */

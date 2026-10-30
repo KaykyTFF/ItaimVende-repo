@@ -30,6 +30,15 @@
         const alertaNaoLogado = document.getElementById('perfil-alerta-nao-logado');
         const userDisplayEl = document.getElementById('perfil-username-display');
         const bioDisplayEl = document.getElementById('perfil-bio-display');
+        const btnEditarBioRapido = document.getElementById('btn-editar-bio-rapido');
+        const txtBtnBio = document.getElementById('txt-btn-bio');
+        const perfilBioInput = document.getElementById('perfil-bio-input');
+        const modalBio = document.getElementById('modal-editar-bio');
+        const modalTextareaBio = document.getElementById('modal-textarea-bio');
+        const modalContadorBio = document.getElementById('modal-contador-bio');
+        const btnFecharModalBio = document.getElementById('btn-fechar-modal-bio');
+        const btnCancelarModalBio = document.getElementById('btn-cancelar-modal-bio');
+        const btnSalvarModalBio = document.getElementById('btn-salvar-modal-bio');
 
         const nomeInput = document.getElementById('perfil-nome');
         const usuarioInput = document.getElementById('perfil-usuario');
@@ -43,6 +52,7 @@
         if (isPerfilProprio) {
             if (alertaNaoLogado) alertaNaoLogado.style.display = 'none';
             if (btnCameraAvatar) btnCameraAvatar.style.display = 'flex';
+            if (btnEditarBioRapido) btnEditarBioRapido.style.display = 'inline-flex';
             if (boxContatoExterno) boxContatoExterno.style.display = 'none';
             if (boxFormAvaliacao) boxFormAvaliacao.style.display = 'none';
 
@@ -87,6 +97,7 @@
             // Perfil de outro vendedor
             if (alertaNaoLogado) alertaNaoLogado.style.display = 'none';
             if (btnCameraAvatar) btnCameraAvatar.style.display = 'none';
+            if (btnEditarBioRapido) btnEditarBioRapido.style.display = 'none';
 
             if (paramId && window.ItaimApi && window.ItaimApi.auth) {
                 try {
@@ -159,7 +170,18 @@
 
         if (nomeDisplay) nomeDisplay.textContent = nomePrincipal;
         if (userDisplayEl) userDisplayEl.textContent = perfilExibido.username ? `@${perfilExibido.username}` : (perfilExibido.usuario ? `@${perfilExibido.usuario}` : '');
-        if (bioDisplayEl) bioDisplayEl.textContent = perfilExibido.bio || (isPerfilProprio ? 'Nenhuma biografia informada. Acesse Configurações para adicionar uma bio.' : 'Vendedor cadastrado no Itaim Vende.');
+        if (bioDisplayEl) {
+            if (perfilExibido.bio && perfilExibido.bio.trim()) {
+                bioDisplayEl.textContent = perfilExibido.bio;
+                if (txtBtnBio) txtBtnBio.textContent = 'Editar Bio';
+            } else {
+                bioDisplayEl.textContent = isPerfilProprio
+                    ? 'Nenhuma biografia informada. Clique em Adicionar Bio para se apresentar aos compradores.'
+                    : 'Vendedor cadastrado no Itaim Vende.';
+                if (txtBtnBio) txtBtnBio.textContent = 'Adicionar Bio';
+            }
+        }
+        if (perfilBioInput) perfilBioInput.value = perfilExibido.bio || '';
 
         const cidadeFormatada = `${perfilExibido.city || perfilExibido.cidade || 'Paulistana'} - ${perfilExibido.state || perfilExibido.estado || 'PI'}`;
         if (cidadeDisplay) cidadeDisplay.textContent = cidadeFormatada;
@@ -190,6 +212,83 @@
         if (telefoneInput) telefoneInput.value = formatarTelefoneBR(perfilExibido.phone || perfilExibido.telefone || '');
         if (cidadeInput) cidadeInput.value = perfilExibido.city || perfilExibido.cidade || 'Paulistana';
         if (bairroInput) bairroInput.value = perfilExibido.neighborhood || perfilExibido.bairro || 'Centro';
+
+        
+        // Configuração do modal de edição rápida de biografia
+        if (btnEditarBioRapido && modalBio) {
+            function abrirModalBio() {
+                modalBio.style.display = 'flex';
+                if (modalTextareaBio) {
+                    modalTextareaBio.value = perfilExibido.bio || '';
+                    if (modalContadorBio) modalContadorBio.textContent = `${modalTextareaBio.value.length}/300`;
+                    setTimeout(() => modalTextareaBio.focus(), 50);
+                }
+            }
+
+            function fecharModalBio() {
+                modalBio.style.display = 'none';
+            }
+
+            btnEditarBioRapido.onclick = abrirModalBio;
+            if (btnFecharModalBio) btnFecharModalBio.onclick = fecharModalBio;
+            if (btnCancelarModalBio) btnCancelarModalBio.onclick = fecharModalBio;
+
+            modalBio.onclick = (e) => {
+                if (e.target === modalBio) fecharModalBio();
+            };
+
+            if (modalTextareaBio && modalContadorBio) {
+                modalTextareaBio.oninput = (e) => {
+                    modalContadorBio.textContent = `${e.target.value.length}/300`;
+                };
+            }
+
+            if (btnSalvarModalBio) {
+                btnSalvarModalBio.onclick = async () => {
+                    const novaBio = modalTextareaBio ? modalTextareaBio.value.trim() : '';
+                    btnSalvarModalBio.disabled = true;
+                    btnSalvarModalBio.textContent = 'Salvando...';
+
+                    perfilExibido.bio = novaBio;
+                    if (bioDisplayEl) {
+                        bioDisplayEl.textContent = novaBio || 'Nenhuma biografia informada. Clique em Adicionar Bio para se apresentar aos compradores.';
+                    }
+                    if (txtBtnBio) txtBtnBio.textContent = novaBio ? 'Editar Bio' : 'Adicionar Bio';
+                    if (perfilBioInput) perfilBioInput.value = novaBio;
+
+                    // 1. Atualiza API se logado
+                    if (window.ItaimApi && window.ItaimApi.auth && typeof window.ItaimApi.auth.atualizarPerfil === 'function' && window.ItaimApi.auth.obterToken()) {
+                        try {
+                            await window.ItaimApi.auth.atualizarPerfil({ bio: novaBio });
+                        } catch (errApi) {
+                            console.warn('[Perfil] Falha ao sincronizar bio com API:', errApi);
+                        }
+                    }
+
+                    // 2. Atualiza Sessão Local
+                    const userEmail = perfilExibido.email || localStorage.getItem('itaim_usuario_logado_email');
+                    if (window.ItaimSessao && typeof window.ItaimSessao.atualizarDadosUsuario === 'function') {
+                        window.ItaimSessao.atualizarDadosUsuario(userEmail, { bio: novaBio });
+                    }
+                    try {
+                        localStorage.setItem('itaim_usuario_logado', JSON.stringify(perfilExibido));
+                    } catch(e) {}
+
+                    fecharModalBio();
+                    btnSalvarModalBio.disabled = false;
+                    btnSalvarModalBio.textContent = 'Salvar Biografia';
+
+                    // Exibe toast de sucesso
+                    const toastEl = document.getElementById('toast-sucesso');
+                    if (toastEl) {
+                        const span = toastEl.querySelector('span');
+                        if (span) span.textContent = 'Biografia salva com sucesso!';
+                        toastEl.classList.add('visivel');
+                        setTimeout(() => toastEl.classList.remove('visivel'), 3500);
+                    }
+                };
+            }
+        }
 
         window.ItaimPerfilDados.perfilExibido = perfilExibido;
         return perfilExibido;

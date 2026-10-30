@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="Configurações da conta no Itaim Vende: dados, segurança, endereços, notificações e privacidade.">
     <title>Configurações - Itaim Vende</title>
 
@@ -324,6 +324,14 @@
                             <div class="cfg-campo">
                                 <label for="cfg-bairro">Bairro</label>
                                 <input class="cfg-input" type="text" id="cfg-bairro" maxlength="60">
+                            </div>
+                            <div class="cfg-campo cheio">
+                                <label for="cfg-bio">Biografia / Sobre você</label>
+                                <textarea class="cfg-input cfg-textarea" id="cfg-bio" maxlength="300" rows="3" placeholder="Conte um pouco sobre você, o que costuma vender ou suas preferências de negociação..."></textarea>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+                                    <span style="font-size: 12px; color: var(--text-secondary);">Máximo de 300 caracteres. Visível no seu perfil.</span>
+                                    <span id="contador-bio" style="font-size: 12px; color: var(--text-secondary); font-weight: 600;">0/300</span>
+                                </div>
                             </div>
                         </div>
                         <div class="cfg-acoes">

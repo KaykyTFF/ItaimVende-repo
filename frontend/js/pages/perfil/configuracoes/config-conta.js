@@ -39,6 +39,8 @@
         const inputFotoCfg = $('cfg-input-foto');
         const btnRemoverFotoCfg = $('cfg-btn-remover-foto');
         const avatarPreviewCfg = $('cfg-avatar-preview');
+        const inputBio = $('cfg-bio');
+        const contadorBio = $('contador-bio');
         const formConta = $('form-conta');
 
         if (inputNome) inputNome.value = usuarioAtivo.nome || usuarioAtivo.name || '';
@@ -46,6 +48,13 @@
         if (inputEmail) inputEmail.value = usuarioAtivo.email || emailOriginal;
         if (inputTelefone) inputTelefone.value = maskTelefone(usuarioAtivo.telefone || usuarioAtivo.phone || '');
         if (inputBairro) inputBairro.value = usuarioAtivo.bairro || usuarioAtivo.neighborhood || 'Centro';
+        if (inputBio) {
+            inputBio.value = usuarioAtivo.bio || '';
+            if (contadorBio) contadorBio.textContent = `${inputBio.value.length}/300`;
+            inputBio.addEventListener('input', (e) => {
+                if (contadorBio) contadorBio.textContent = `${e.target.value.length}/300`;
+            });
+        }
 
         if (usuarioAtivo.cidade || usuarioAtivo.city) {
             const cid = usuarioAtivo.cidade || usuarioAtivo.city;
@@ -174,6 +183,10 @@
             if (inputEmail && dados.email) inputEmail.value = dados.email;
             if (inputTelefone && (dados.phone || dados.telefone)) inputTelefone.value = maskTelefone(dados.phone || dados.telefone);
             if (inputBairro && (dados.neighborhood || dados.bairro)) inputBairro.value = dados.neighborhood || dados.bairro;
+            if (inputBio && dados.bio !== undefined) {
+                inputBio.value = dados.bio || '';
+                if (contadorBio) contadorBio.textContent = `${inputBio.value.length}/300`;
+            }
             if (dados.avatar && avatarPreviewCfg) {
                 avatarPreviewCfg.src = window.ItaimRotas ? window.ItaimRotas.obterAsset(dados.avatar) : dados.avatar;
             }
@@ -208,6 +221,7 @@
                 const telefone = inputTelefone ? inputTelefone.value.trim() : '';
                 const cidade = selectCidade ? selectCidade.value : 'Paulistana';
                 const bairro = inputBairro ? inputBairro.value.trim() : 'Centro';
+                const bio = inputBio ? inputBio.value.trim() : '';
 
                 const okNome = marcarErro('cfg-nome', 'erro-nome', nome.length < 3 ? 'Informe seu nome completo.' : '');
                 const okUser = marcarErro('cfg-usuario', 'erro-usuario',

@@ -2018,3 +2018,21 @@ html, body {
         font-size: 15px;
     }
 }
+/* ==========================================================================
+   PREVENÇÃO DE ZOOM INDESEJADO NO CELULAR (iOS / Android)
+   ========================================================================== */
+html, body, button, input, select, textarea, a {
+    touch-action: manipulation;
+}
+
+@media screen and (max-width: 768px) {
+    input,
+    select,
+    textarea,
+    .campo-busca,
+    .cfg-input,
+    .campo-input-perfil,
+    .input-auth {
+        font-size: 16px !important;
+    }
+}

@@ -571,22 +571,26 @@
 .msg-proposta-status-badge {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
-    padding: 4px 10px;
-    border-radius: 6px;
-    font-size: 11.5px;
+    gap: 8px;
+    padding: 7px 14px;
+    border-radius: 12px;
+    font-size: 13px;
     font-weight: 700;
     width: fit-content;
+    line-height: 1.3;
+    letter-spacing: -0.2px;
 }
 
-.msg-proposta-status-badge.pendente {
-    background-color: #FEF3C7;
-    color: #92400E;
+.msg-proposta-status-badge.pendente,
+.msg-proposta-status-badge.enviada,
+.msg-proposta-status-badge.recebida {
+    background-color: rgba(16, 185, 129, 0.18);
+    color: #065F46;
 }
 
 .msg-proposta-status-badge.aceita {
-    background-color: #DCFCE7;
-    color: #166534;
+    background-color: rgba(16, 185, 129, 0.22);
+    color: #065F46;
 }
 
 .msg-proposta-status-badge.recusada {

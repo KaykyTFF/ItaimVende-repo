@@ -221,7 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 <div class="anuncio-acoes-coluna">
                     ${statusClass !== 'vendido' ? `
-                        <button type="button" class="btn-acao-anuncio btn-acao-status" data-action="toggle-status" data-id="${item.id}" data-atual="${statusClass}">
+                        <button type="button" class="btn-acao-anuncio btn-acao-status ${statusClass === 'pausado' ? 'btn-status-reativar' : ''}" data-action="toggle-status" data-id="${item.id}" data-atual="${statusClass}">
                             ${textoBtnPausar}
                         </button>
                     ` : ''}
