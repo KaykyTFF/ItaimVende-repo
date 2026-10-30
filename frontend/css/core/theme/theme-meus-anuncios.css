@@ -115,49 +115,58 @@
 
 /* Botões de Ação do Card */
 [data-theme="dark"] .btn-acao-status {
-    background-color: #242E38 !important;
-    color: #F1F5F9 !important;
-    border-color: #2C3946 !important;
+    background-color: #D97706 !important;
+    color: #FFFFFF !important;
+    border-color: transparent !important;
 }
 
 [data-theme="dark"] .btn-acao-status:hover {
-    background-color: #2D3945 !important;
-    color: #4ADE80 !important;
-    border-color: #4ADE80 !important;
+    background-color: #B45309 !important;
+    color: #FFFFFF !important;
+}
+
+[data-theme="dark"] .btn-acao-status.btn-status-reativar {
+    background-color: #2563EB !important;
+    color: #FFFFFF !important;
+    border-color: transparent !important;
+}
+
+[data-theme="dark"] .btn-acao-status.btn-status-reativar:hover {
+    background-color: #1D4ED8 !important;
+    color: #FFFFFF !important;
 }
 
 [data-theme="dark"] .btn-acao-ver {
-    background-color: #242E38 !important;
-    color: #F1F5F9 !important;
-    border-color: #2C3946 !important;
+    background-color: #475569 !important;
+    color: #FFFFFF !important;
+    border-color: transparent !important;
 }
 
 [data-theme="dark"] .btn-acao-ver:hover {
-    background-color: #2D3945 !important;
+    background-color: #334155 !important;
     color: #FFFFFF !important;
 }
 
 [data-theme="dark"] .btn-acao-marcar-vendido {
-    background-color: rgba(74, 222, 128, 0.15) !important;
-    color: #4ADE80 !important;
-    border-color: rgba(74, 222, 128, 0.3) !important;
+    background-color: #16A34A !important;
+    color: #FFFFFF !important;
+    border-color: transparent !important;
 }
 
 [data-theme="dark"] .btn-acao-marcar-vendido:hover {
-    background-color: rgba(74, 222, 128, 0.25) !important;
-    border-color: #4ADE80 !important;
+    background-color: #15803D !important;
     color: #FFFFFF !important;
 }
 
 [data-theme="dark"] .btn-acao-excluir {
-    background-color: rgba(239, 68, 68, 0.12) !important;
-    color: #F87171 !important;
-    border-color: rgba(239, 68, 68, 0.25) !important;
+    background-color: #DC2626 !important;
+    color: #FFFFFF !important;
+    border-color: transparent !important;
 }
 
 [data-theme="dark"] .btn-acao-excluir:hover {
-    background-color: rgba(239, 68, 68, 0.22) !important;
-    border-color: #EF4444 !important;
+    background-color: #B91C1C !important;
+    color: #FFFFFF !important;
 }
 
 /* Badges de Status */
