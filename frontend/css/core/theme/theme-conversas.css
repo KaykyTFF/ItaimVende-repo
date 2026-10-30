@@ -76,6 +76,6 @@
 [data-theme="dark"] .msg-proposta-status-badge.enviada,
 [data-theme="dark"] .msg-proposta-status-badge.recebida,
 [data-theme="dark"] .msg-proposta-status-badge.aceita {
-    background-color: rgba(168, 205, 151, 0.22) !important;
-    color: #A8CD97 !important;
+    background-color: rgba(16, 185, 129, 0.20) !important;
+    color: #34D399 !important;
 }

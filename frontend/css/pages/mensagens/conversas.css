@@ -10,7 +10,7 @@
 @import url('./conversas/conversas-sidebar-lista.css');
 
 /* 3. Coluna 2: Feed de Mensagens e Digitação */
-@import url('./conversas/conversas-feed-mensagens.css?v=2');
+@import url('./conversas/conversas-feed-mensagens.css?v=3');
 
 /* 4. Coluna 3: Detalhes do Produto e Estados Vazios */
 @import url('./conversas/conversas-produto-detalhes.css');

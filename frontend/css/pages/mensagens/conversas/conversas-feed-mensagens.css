@@ -584,13 +584,13 @@
 .msg-proposta-status-badge.pendente,
 .msg-proposta-status-badge.enviada,
 .msg-proposta-status-badge.recebida {
-    background-color: #A8CD97;
-    color: #244825;
+    background-color: rgba(16, 185, 129, 0.18);
+    color: #065F46;
 }
 
 .msg-proposta-status-badge.aceita {
-    background-color: #A8CD97;
-    color: #244825;
+    background-color: rgba(16, 185, 129, 0.22);
+    color: #065F46;
 }
 
 .msg-proposta-status-badge.recusada {
