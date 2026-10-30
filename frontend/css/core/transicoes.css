@@ -30,8 +30,8 @@
     left: 0;
     width: 0%;
     height: 3px;
-    background: linear-gradient(90deg, #44BD32, #2ecc71, #00d2d3);
-    box-shadow: 0 0 10px rgba(68, 189, 50, 0.8), 0 0 4px rgba(46, 204, 113, 0.6);
+    background: #44BD32;
+    box-shadow: none;
     z-index: 9999999;
     pointer-events: none;
     opacity: 0;

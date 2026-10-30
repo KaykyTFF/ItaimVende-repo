@@ -24,10 +24,14 @@
         },
 
         exibirErro: function (mensagem, campoId = null) {
-            const statusMsgCadastro = document.getElementById('status-msg-cadastro');
-            if (statusMsgCadastro) {
-                statusMsgCadastro.textContent = mensagem;
-                statusMsgCadastro.className = 'status-msg status-erro';
+            if (window.ItaimStatusMsg && typeof window.ItaimStatusMsg.exibir === 'function') {
+                window.ItaimStatusMsg.exibir('status-msg-cadastro', mensagem, 'erro', 4.5);
+            } else {
+                const statusMsgCadastro = document.getElementById('status-msg-cadastro');
+                if (statusMsgCadastro) {
+                    statusMsgCadastro.textContent = mensagem;
+                    statusMsgCadastro.className = 'status-msg status-erro';
+                }
             }
             if (campoId) {
                 const campo = document.getElementById(campoId);
@@ -36,24 +40,89 @@
                     campo.focus();
                     campo.addEventListener('input', () => {
                         campo.classList.remove('com-erro');
-                        if (statusMsgCadastro && statusMsgCadastro.textContent === mensagem) {
-                            statusMsgCadastro.textContent = '';
-                            statusMsgCadastro.className = 'status-msg';
-                        }
+                        this.limparErro();
                     }, { once: true });
                 }
             }
         },
 
         limparErro: function () {
-            const statusMsgCadastro = document.getElementById('status-msg-cadastro');
-            if (statusMsgCadastro) {
-                statusMsgCadastro.textContent = '';
-                statusMsgCadastro.className = 'status-msg';
+            if (window.ItaimStatusMsg && typeof window.ItaimStatusMsg.limpar === 'function') {
+                window.ItaimStatusMsg.limpar('status-msg-cadastro');
+            } else {
+                const statusMsgCadastro = document.getElementById('status-msg-cadastro');
+                if (statusMsgCadastro) {
+                    statusMsgCadastro.textContent = '';
+                    statusMsgCadastro.className = 'status-msg';
+                }
             }
             document.querySelectorAll('#form-cadastro-completo .com-erro').forEach(el => {
                 el.classList.remove('com-erro');
             });
+        },
+
+        ativarModoGoogle: function (usuario, token) {
+            window.ItaimGoogleCadastroAtivo = { user: usuario, token: token };
+            try {
+                sessionStorage.setItem('itaim_google_cadastro_ativo', JSON.stringify({ user: usuario, token: token }));
+            } catch (e) {}
+
+            // Oculta o botão de cadastro Google e o separador
+            const btnGoogle = document.getElementById('btn-cadastro-wizard-google');
+            const divisor = btnGoogle?.nextElementSibling;
+            if (btnGoogle) btnGoogle.style.display = 'none';
+            if (divisor && divisor.classList.contains('divisor-social')) divisor.style.display = 'none';
+
+            // Cria ou atualiza banner indicando conta conectada
+            let banner = document.getElementById('banner-google-conectado');
+            if (!banner) {
+                banner = document.createElement('div');
+                banner.id = 'banner-google-conectado';
+                banner.className = 'status-msg status-sucesso';
+                banner.style.cssText = 'margin-bottom: 14px; text-align: left; padding: 10px 14px; display: flex; align-items: center; gap: 8px; font-size: 13px; line-height: 1.4;';
+                const headerWizard = document.querySelector('.cadastro-wizard-header');
+                if (headerWizard && headerWizard.parentNode) {
+                    headerWizard.parentNode.insertBefore(banner, headerWizard.nextSibling);
+                }
+            }
+            banner.innerHTML = `<span>✓</span> <div><strong>Conta Google vinculada:</strong> ${usuario?.email || ''}. Complete suas informações restantes para ativar seu perfil!</div>`;
+            banner.style.display = 'flex';
+
+            // Preenche dados recebidos do Google
+            const nomeEl = document.getElementById('cad-nome');
+            const usernameEl = document.getElementById('cad-username');
+            const emailEl = document.getElementById('cad-email-completo');
+            const cidadeEl = document.getElementById('cad-cidade');
+            const estadoEl = document.getElementById('cad-estado');
+            const bairroEl = document.getElementById('cad-bairro');
+            const cepEl = document.getElementById('cad-cep');
+            const telEl = document.getElementById('cad-telefone');
+
+            if (nomeEl && usuario?.name) nomeEl.value = usuario.name;
+            if (usernameEl && usuario?.username) usernameEl.value = usuario.username;
+            if (emailEl && usuario?.email) {
+                emailEl.value = usuario.email;
+                emailEl.readOnly = true;
+                emailEl.style.backgroundColor = '#f8fafc';
+                emailEl.style.cursor = 'not-allowed';
+            }
+            if (cidadeEl) {
+                cidadeEl.value = (usuario?.city && usuario.city !== 'Paulistana') ? usuario.city : '';
+            }
+            if (estadoEl) {
+                estadoEl.value = (usuario?.state && usuario.state !== 'PI') ? usuario.state : '';
+            }
+            if (bairroEl) {
+                if (usuario?.neighborhood && usuario.neighborhood !== 'Centro') {
+                    bairroEl.value = usuario.neighborhood;
+                } else {
+                    bairroEl.value = '';
+                }
+            }
+            if (cepEl && usuario?.postalCode) cepEl.value = usuario.postalCode;
+            if (telEl && usuario?.phone) telEl.value = usuario.phone;
+
+            this.irParaEtapa(1);
         },
 
         irParaEtapa: function (etapa, manterMensagemErro = false) {
@@ -85,9 +154,27 @@
             const nomeEtapa = document.getElementById('wizard-etapa-nome');
             const barraProgresso = document.getElementById('wizard-barra-progresso');
 
-            if (badgeEtapa) badgeEtapa.textContent = `Etapa ${etapa} de 4`;
-            if (nomeEtapa) nomeEtapa.textContent = nomesEtapas[etapa] || '';
-            if (barraProgresso) barraProgresso.style.width = `${(etapa / 4) * 100}%`;
+            if (window.ItaimGoogleCadastroAtivo) {
+                const etapaVisual = etapa === 1 ? '1 de 3' : (etapa === 3 ? '2 de 3' : '3 de 3');
+                if (badgeEtapa) badgeEtapa.textContent = `Etapa ${etapaVisual}`;
+                if (nomeEtapa) nomeEtapa.textContent = nomesEtapas[etapa] || '';
+                const progressoPct = etapa === 1 ? 33 : (etapa === 3 ? 66 : 100);
+                if (barraProgresso) barraProgresso.style.width = `${progressoPct}%`;
+            } else {
+                if (badgeEtapa) badgeEtapa.textContent = `Etapa ${etapa} de 4`;
+                if (nomeEtapa) nomeEtapa.textContent = nomesEtapas[etapa] || '';
+                if (barraProgresso) barraProgresso.style.width = `${(etapa / 4) * 100}%`;
+            }
+
+            // Mensagem de conta conectada só aparece na etapa 1
+            const bannerGoogle = document.getElementById('banner-google-conectado');
+            if (bannerGoogle) {
+                if (etapa === 1 && window.ItaimGoogleCadastroAtivo) {
+                    bannerGoogle.style.display = 'flex';
+                } else {
+                    bannerGoogle.style.display = 'none';
+                }
+            }
 
             if (!manterMensagemErro) {
                 this.limparErro();
@@ -130,6 +217,12 @@
         },
 
         validarEtapa2: function () {
+            // Se for cadastro com Google, não há senha para validar ou criar
+            if (window.ItaimGoogleCadastroAtivo) {
+                this.limparErro();
+                return true;
+            }
+
             const emailEl = document.getElementById('cad-email-completo') || document.getElementById('cad-email');
             const senhaEl = document.getElementById('cad-senha-completo') || document.getElementById('cad-senha');
             const confirmaEl = document.getElementById('cad-confirma-senha') || document.getElementById('cad-confirma');
@@ -175,14 +268,36 @@
         },
 
         validarEtapa3: function () {
-            const cidadeEl = document.getElementById('cad-cidade');
+            const cepEl = document.getElementById('cad-cep');
             const estadoEl = document.getElementById('cad-estado');
-            if (cidadeEl && !cidadeEl.value.trim()) {
-                cidadeEl.value = 'Paulistana';
+            const cidadeEl = document.getElementById('cad-cidade');
+            const bairroEl = document.getElementById('cad-bairro');
+
+            const cep = (cepEl?.value || '').replace(/\D/g, '');
+            const estado = (estadoEl?.value || '').trim();
+            const cidade = (cidadeEl?.value || '').trim();
+            const bairro = (bairroEl?.value || '').trim();
+
+            if (!cep || cep.length !== 8) {
+                this.exibirErro('Por favor, informe seu CEP completo (8 dígitos).', cepEl?.id);
+                return false;
             }
-            if (estadoEl && !estadoEl.value.trim()) {
-                estadoEl.value = 'PI';
+
+            if (!estado || estado.length !== 2) {
+                this.exibirErro('Por favor, informe a sigla do Estado com 2 letras (ex: PI).', estadoEl?.id);
+                return false;
             }
+
+            if (!cidade || cidade.length < 2) {
+                this.exibirErro('Por favor, informe o nome da sua Cidade.', cidadeEl?.id);
+                return false;
+            }
+
+            if (!bairro || bairro.length < 2) {
+                this.exibirErro('Por favor, informe o seu Bairro.', bairroEl?.id);
+                return false;
+            }
+
             this.limparErro();
             return true;
         },
@@ -200,9 +315,12 @@
                 this.irParaEtapa(1, true);
                 return;
             }
-            if (!this.validarEtapa2()) {
-                this.irParaEtapa(2, true);
-                return;
+            // Etapa 2 (Senha) é totalmente dispensada no cadastro via Google
+            if (!window.ItaimGoogleCadastroAtivo) {
+                if (!this.validarEtapa2()) {
+                    this.irParaEtapa(2, true);
+                    return;
+                }
             }
             if (!this.validarEtapa3()) {
                 this.irParaEtapa(3, true);
@@ -217,9 +335,9 @@
             const email = document.getElementById('cad-email-completo')?.value.trim().toLowerCase() || '';
             const senha = document.getElementById('cad-senha-completo')?.value || '';
             const cep = document.getElementById('cad-cep')?.value.trim() || '';
-            const estado = document.getElementById('cad-estado')?.value.trim().toUpperCase() || 'PI';
-            const cidade = document.getElementById('cad-cidade')?.value.trim() || 'Paulistana';
-            const bairro = document.getElementById('cad-bairro')?.value.trim() || 'Centro';
+            const estado = document.getElementById('cad-estado')?.value.trim().toUpperCase() || '';
+            const cidade = document.getElementById('cad-cidade')?.value.trim() || '';
+            const bairro = document.getElementById('cad-bairro')?.value.trim() || '';
             const telefone = document.getElementById('cad-telefone')?.value.trim() || '';
 
             if (!username) {
@@ -232,8 +350,81 @@
                 btnConcluirCadastro.classList.add('carregando');
             }
             if (statusMsgCadastro) {
-                statusMsgCadastro.textContent = 'Criando e registrando sua conta com segurança...';
+                statusMsgCadastro.textContent = window.ItaimGoogleCadastroAtivo
+                    ? 'Salvando seus dados e finalizando cadastro...'
+                    : 'Criando e registrando sua conta com segurança...';
                 statusMsgCadastro.className = 'status-msg';
+            }
+
+            // MODO DE CONCLUSÃO DO CADASTRO GOOGLE:
+            if (window.ItaimGoogleCadastroAtivo && window.ItaimGoogleCadastroAtivo.token) {
+                try {
+                    const tokenGoogle = window.ItaimGoogleCadastroAtivo.token;
+                    const updatePayload = {
+                        name: nome,
+                        username: username,
+                        phone: telefone ? telefone : null,
+                        city: cidade ? cidade : '',
+                        state: estado ? estado : '',
+                        neighborhood: bairro || null,
+                        postalCode: cep ? cep : null
+                    };
+
+                    const apiBase = window.ItaimApiCore?.API_BASE_URL || '/api/v1';
+                    const res = await fetch(`${apiBase}/auth/me`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${tokenGoogle}`
+                        },
+                        body: JSON.stringify(updatePayload)
+                    });
+                    const resData = await res.json();
+                    if (!res.ok) {
+                        const msgDetalhe = resData.detalhes?.[0]?.message || resData.errors?.[0]?.message || resData.message || 'Erro ao finalizar perfil.';
+                        throw new Error(msgDetalhe);
+                    }
+
+                    const usuarioAtualizado = resData.user || {
+                        ...window.ItaimGoogleCadastroAtivo.user,
+                        ...updatePayload
+                    };
+
+                    localStorage.setItem('itaim_token', tokenGoogle);
+                    localStorage.setItem('itaim_usuario_logado', JSON.stringify(usuarioAtualizado));
+                    localStorage.setItem('itaim_usuario_logado_email', usuarioAtualizado.email);
+                    if (window.ItaimSessao && typeof window.ItaimSessao.definirUsuarioLogado === 'function') {
+                        window.ItaimSessao.definirUsuarioLogado(usuarioAtualizado.email, usuarioAtualizado);
+                    }
+
+                    window.ItaimGoogleCadastroAtivo = null;
+                    try { sessionStorage.removeItem("itaim_google_cadastro_ativo"); } catch(e) {}
+
+                    if (statusMsgCadastro) {
+                        statusMsgCadastro.textContent = 'Cadastro finalizado com sucesso! Entrando na plataforma...';
+                        statusMsgCadastro.className = 'status-msg status-sucesso';
+                    }
+
+                    setTimeout(() => {
+                        const destino = window.ItaimRotas && typeof window.ItaimRotas.obterDestinoPosLogin === 'function'
+                            ? window.ItaimRotas.obterDestinoPosLogin()
+                            : 'pages/home/home.html';
+                        window.location.href = destino;
+                    }, 500);
+                    return;
+                } catch (err) {
+                    console.error('[Cadastro Wizard Google] Erro ao finalizar cadastro:', err);
+                    if (statusMsgCadastro) {
+                        statusMsgCadastro.textContent = err?.message || 'Erro ao salvar informações restantes.';
+                        statusMsgCadastro.className = 'status-msg status-erro';
+                    }
+                    return;
+                } finally {
+                    if (btnConcluirCadastro) {
+                        btnConcluirCadastro.disabled = false;
+                        btnConcluirCadastro.classList.remove('carregando');
+                    }
+                }
             }
 
             try {
@@ -312,12 +503,9 @@
                 }
 
                 setTimeout(() => {
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const returnTo = urlParams.get('returnTo');
-                    let destino = window.ItaimRotas ? window.ItaimRotas.obterUrl('home') : 'pages/home/home.html';
-                    if (returnTo && !returnTo.includes('index.html')) {
-                        destino = returnTo;
-                    }
+                    const destino = window.ItaimRotas && typeof window.ItaimRotas.obterDestinoPosLogin === 'function'
+                        ? window.ItaimRotas.obterDestinoPosLogin()
+                        : 'pages/home/home.html';
                     window.location.href = destino;
                 }, 600);
 
@@ -352,7 +540,13 @@
             // Botões AVANÇAR
             document.getElementById('btn-avancar-etapa-1')?.addEventListener('click', (e) => {
                 e.preventDefault();
-                if (self.validarEtapa1()) self.irParaEtapa(2);
+                if (self.validarEtapa1()) {
+                    if (window.ItaimGoogleCadastroAtivo) {
+                        self.irParaEtapa(3);
+                    } else {
+                        self.irParaEtapa(2);
+                    }
+                }
             });
 
             document.getElementById('btn-avancar-etapa-2')?.addEventListener('click', (e) => {
@@ -375,7 +569,11 @@
             document.getElementById('btn-voltar-etapa-3')?.addEventListener('click', (e) => {
                 e.preventDefault();
                 self.limparErro();
-                self.irParaEtapa(2);
+                if (window.ItaimGoogleCadastroAtivo) {
+                    self.irParaEtapa(1);
+                } else {
+                    self.irParaEtapa(2);
+                }
             });
 
             document.getElementById('btn-voltar-etapa-4')?.addEventListener('click', (e) => {

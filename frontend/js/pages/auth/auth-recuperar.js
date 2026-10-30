@@ -87,6 +87,24 @@
             }
         },
 
+        exibirStatus: function (el, msg, tipo = 'erro', segundos = 4.5) {
+            if (window.ItaimStatusMsg && typeof window.ItaimStatusMsg.exibir === 'function') {
+                window.ItaimStatusMsg.exibir(el, msg, tipo, segundos);
+            } else if (el) {
+                el.textContent = msg;
+                el.className = `status-msg ${tipo ? 'status-' + tipo : ''}`;
+            }
+        },
+
+        limparStatus: function (el) {
+            if (window.ItaimStatusMsg && typeof window.ItaimStatusMsg.limpar === 'function') {
+                window.ItaimStatusMsg.limpar(el);
+            } else if (el) {
+                el.textContent = '';
+                el.className = 'status-msg';
+            }
+        },
+
         irParaEtapa: function (etapa) {
             const formRecEtapa1 = document.getElementById('form-recuperar-etapa1');
             const formRecEtapa2 = document.getElementById('form-recuperar-etapa2');
@@ -275,20 +293,14 @@
                 const email = inputEmail ? inputEmail.value.trim() : '';
 
                 if (!email) {
-                    if (statusRecEtapa1) {
-                        statusRecEtapa1.textContent = 'Por favor, informe seu e-mail cadastrado.';
-                        statusRecEtapa1.className = 'status-msg status-erro';
-                    }
+                    self.exibirStatus(statusRecEtapa1, 'Por favor, informe seu e-mail cadastrado.', 'erro');
                     if (inputEmail) inputEmail.focus();
                     return;
                 }
 
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!emailRegex.test(email)) {
-                    if (statusRecEtapa1) {
-                        statusRecEtapa1.textContent = 'Por favor, insira um e-mail válido.';
-                        statusRecEtapa1.className = 'status-msg status-erro';
-                    }
+                    self.exibirStatus(statusRecEtapa1, 'Por favor, insira um e-mail válido.', 'erro');
                     if (inputEmail) inputEmail.focus();
                     return;
                 }
@@ -313,10 +325,7 @@
                         self.irParaEtapa(2);
                     }
                 } catch (err) {
-                    if (statusRecEtapa1) {
-                        statusRecEtapa1.textContent = err.message || 'Erro ao enviar código. Tente novamente.';
-                        statusRecEtapa1.className = 'status-msg status-erro';
-                    }
+                    self.exibirStatus(statusRecEtapa1, err.message || 'Erro ao enviar código. Tente novamente.', 'erro');
                 } finally {
                     self.definirEstadoCarregando(btnEnviarRecuperacao, false, 'AVANÇAR');
                 }
@@ -365,10 +374,7 @@
                             statusRecEtapa2.className = 'status-msg status-sucesso';
                         }
                     } catch (err) {
-                        if (statusRecEtapa2) {
-                            statusRecEtapa2.textContent = err.message || 'Falha ao reenviar código.';
-                            statusRecEtapa2.className = 'status-msg status-erro';
-                        }
+                        self.exibirStatus(statusRecEtapa2, err.message || 'Falha ao reenviar código.', 'erro');
                     }
 
                     // Inicia cooldown de 30 segundos
@@ -400,10 +406,7 @@
                 const codigo = self.obterCodigoOtp();
 
                 if (codigo.length < 6) {
-                    if (statusRecEtapa2) {
-                        statusRecEtapa2.textContent = 'Por favor, insira todos os 6 números do código.';
-                        statusRecEtapa2.className = 'status-msg status-erro';
-                    }
+                    self.exibirStatus(statusRecEtapa2, 'Por favor, insira todos os 6 números do código.', 'erro');
                     self.destacarErroOtp();
                     return;
                 }
@@ -427,10 +430,7 @@
                         self.irParaEtapa(3);
                     }, 400);
                 } catch (err) {
-                    if (statusRecEtapa2) {
-                        statusRecEtapa2.textContent = err.message || 'Código incorreto ou expirado. Tente novamente.';
-                        statusRecEtapa2.className = 'status-msg status-erro';
-                    }
+                    self.exibirStatus(statusRecEtapa2, err.message || 'Código incorreto ou expirado. Tente novamente.', 'erro');
                     self.destacarErroOtp();
                 } finally {
                     self.definirEstadoCarregando(btnConfirmarCodigo, false, 'CONFIRMAR');
@@ -457,37 +457,25 @@
                 const confirmaSenha = inputConfirmaSenha ? inputConfirmaSenha.value : '';
 
                 if (!novaSenha) {
-                    if (statusRecEtapa3) {
-                        statusRecEtapa3.textContent = 'Por favor, informe a nova senha.';
-                        statusRecEtapa3.className = 'status-msg status-erro';
-                    }
+                    self.exibirStatus(statusRecEtapa3, 'Por favor, informe a nova senha.', 'erro');
                     if (inputNovaSenha) inputNovaSenha.focus();
                     return;
                 }
 
                 if (novaSenha.length < 6) {
-                    if (statusRecEtapa3) {
-                        statusRecEtapa3.textContent = 'A nova senha deve ter no mínimo 6 caracteres.';
-                        statusRecEtapa3.className = 'status-msg status-erro';
-                    }
+                    self.exibirStatus(statusRecEtapa3, 'A nova senha deve ter no mínimo 6 caracteres.', 'erro');
                     if (inputNovaSenha) inputNovaSenha.focus();
                     return;
                 }
 
                 if (!/^(?=.*[A-Za-z])(?=.*\d)/.test(novaSenha)) {
-                    if (statusRecEtapa3) {
-                        statusRecEtapa3.textContent = 'A senha deve conter pelo menos uma letra e um número.';
-                        statusRecEtapa3.className = 'status-msg status-erro';
-                    }
+                    self.exibirStatus(statusRecEtapa3, 'A senha deve conter pelo menos uma letra e um número.', 'erro');
                     if (inputNovaSenha) inputNovaSenha.focus();
                     return;
                 }
 
                 if (novaSenha !== confirmaSenha) {
-                    if (statusRecEtapa3) {
-                        statusRecEtapa3.textContent = 'As senhas não coincidem. Verifique a digitação.';
-                        statusRecEtapa3.className = 'status-msg status-erro';
-                    }
+                    self.exibirStatus(statusRecEtapa3, 'As senhas não coincidem. Verifique a digitação.', 'erro');
                     if (inputConfirmaSenha) inputConfirmaSenha.focus();
                     return;
                 }
@@ -541,10 +529,7 @@
                         }
                     }, 1200);
                 } catch (err) {
-                    if (statusRecEtapa3) {
-                        statusRecEtapa3.textContent = err.message || 'Falha ao redefinir a senha. Tente novamente.';
-                        statusRecEtapa3.className = 'status-msg status-erro';
-                    }
+                    self.exibirStatus(statusRecEtapa3, err.message || 'Falha ao redefinir a senha. Tente novamente.', 'erro');
                 } finally {
                     self.definirEstadoCarregando(btnSalvarNovaSenha, false, 'REDEFINIR SENHA');
                 }

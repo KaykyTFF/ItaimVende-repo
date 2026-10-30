@@ -4,29 +4,20 @@
    ========================================================================== */
 
 .categoria-hero {
-    background: linear-gradient(135deg, #FFFFFF 0%, #F9FBFA 100%);
-    border: 1px solid var(--border-color);
-    border-left: 5px solid var(--primary);
-    border-radius: var(--radius-lg);
-    padding: 28px 32px;
-    margin-bottom: 30px;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 8px 0 20px 0;
+    margin-bottom: 24px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+    box-shadow: none;
     position: relative;
-    overflow: hidden;
 }
 
 .categoria-hero::after {
-    content: '';
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 250px;
-    height: 100%;
-    background: radial-gradient(circle at 100% 50%, rgba(68, 189, 50, 0.07) 0%, transparent 70%);
-    pointer-events: none;
+    display: none;
 }
 
 .categoria-hero-info h1 {
@@ -211,8 +202,7 @@
         flex-direction: column;
         align-items: flex-start;
         gap: 12px;
-        padding: 20px 16px;
-        border-radius: 14px;
+        padding: 4px 0 16px 0;
         margin-bottom: 20px;
     }
 
@@ -268,7 +258,7 @@
 
 @media (max-width: 480px) {
     .categoria-hero {
-        padding: 16px 14px;
+        padding: 4px 0 12px 0;
     }
 
     .categoria-hero-info h1 {
@@ -306,14 +296,13 @@ body[data-theme="dark"].pagina-categoria,
 
 /* Hero Banner */
 [data-theme="dark"] .categoria-hero {
-    background: #1F2831 !important;
-    border: 1px solid #2C3946 !important;
-    border-left: 5px solid #44BD32 !important;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35) !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
 }
 
 [data-theme="dark"] .categoria-hero::after {
-    background: radial-gradient(circle at 100% 50%, rgba(68, 189, 50, 0.12) 0%, transparent 70%) !important;
+    display: none !important;
 }
 
 [data-theme="dark"] .categoria-hero-info h1,

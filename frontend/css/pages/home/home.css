@@ -14,11 +14,11 @@
 @import url('./home/home-drawer.css');
 
 /* 4. Conteúdo Principal e Vitrine */
-@import url('./home/home-hero-carrossel.css');
+@import url('./home/home-hero-carrossel.css?v=3');
 @import url('./home/home-categorias.css');
 @import url('./home/home-filtros.css');
 @import url('./home/home-produtos-grid.css');
-@import url('./home/home-sidebar-busca.css');
+@import url('./home/home-sidebar-busca.css?v=2');
 
 /* 5. Modais, Rodapé e Responsividade */
 @import url('./home/home-modais.css');

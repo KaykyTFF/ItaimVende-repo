@@ -47,11 +47,11 @@
         }
         const isEmPages = window.location.pathname.replace(/\\/g, '/').toLowerCase().includes('/pages/');
         const raiz = isEmPages ? '../../' : './';
-        let url = raiz + 'pages/auth/cadastro.html';
+        let url = raiz + 'index.html';
         if (params) {
             url += (url.includes('?') ? '&' : '?') + params.replace(/^[\?&]/, '');
         }
-        return url;
+        return url + '#cadastro';
     }
 
     // Modal Global de Login / Cadastro para Visitantes
@@ -112,7 +112,7 @@
         }
 
         const urlLogin = window.ItaimRotas ? window.ItaimRotas.obterUrl('login', query) : ('../../index.html?' + query);
-        const urlCadastro = window.ItaimRotas ? window.ItaimRotas.obterUrl('cadastro', query) : ('../../pages/auth/cadastro.html?' + query);
+        const urlCadastro = window.ItaimRotas ? window.ItaimRotas.obterUrl('cadastro', query) : ('../../index.html?' + query + '#cadastro');
 
         if (linkEntrar) linkEntrar.href = urlLogin;
         if (linkCad) linkCad.href = urlCadastro;
@@ -125,6 +125,9 @@
 
     // Helper para redirecionar visitante para a tela de login preservando a intenção (returnTo)
     function redirecionarParaLogin(motivo = '', forcar = false) {
+        if (window.ItaimRotas && typeof window.ItaimRotas.salvarDestinoLogin === 'function') {
+            window.ItaimRotas.salvarDestinoLogin(window.location.href);
+        }
         if (!forcar) {
             abrirModalAuth(motivo);
             return;
@@ -240,6 +243,11 @@
                 }
                 const urlLogin = window.ItaimRotas ? window.ItaimRotas.obterUrl('login') : (window.location.pathname.toLowerCase().includes('/pages/') ? '../../index.html' : './index.html');
                 btnEntrar.setAttribute('href', urlLogin);
+                btnEntrar.onclick = () => {
+                    if (window.ItaimRotas && typeof window.ItaimRotas.salvarDestinoLogin === 'function') {
+                        window.ItaimRotas.salvarDestinoLogin(window.location.href);
+                    }
+                };
                 btnEntrar.style.display = 'inline-flex';
             }
 
@@ -511,7 +519,7 @@
             };
         }
 
-        // Clique no botão de perfil
+        // Clique no botão de perfil (vai direto para a página de perfil)
         const btnAvatarHeader = document.getElementById('btn-avatar-dropdown') || document.querySelector('.btn-avatar-header');
         if (btnAvatarHeader) {
             btnAvatarHeader.setAttribute('title', 'Ir para Meu Perfil');
@@ -685,20 +693,29 @@
 
             if (id.includes('vender') || href.includes('vender.html') || classes.includes('vender')) {
                 motivo = 'Faça login para anunciar e vender seus produtos.';
-            } else if (id.includes('anuncios') || href.includes('meus-anuncios.html')) {
-                motivo = 'Faça login para gerenciar seus anúncios.';
-            } else if (id.includes('chat') || href.includes('conversas.html') || href.includes('chat.html')) {
-                motivo = 'Faça login para conversar com os vendedores.';
-            } else if (id.includes('notificacoes') || href.includes('notificacoes.html')) {
-                motivo = 'Faça login para visualizar suas notificações.';
-            } else if (id.includes('favorito') || href.includes('favoritos.html') || classes.includes('btn-favorito') || classes.includes('favorit')) {
-                motivo = 'Faça login para salvar anúncios nos seus favoritos.';
-            } else if (id.includes('perfil') || href.includes('perfil.html')) {
-                motivo = 'Faça login para acessar seu perfil.';
-            } else if (id.includes('configuracoes') || href.includes('configuracoes.html')) {
-                motivo = 'Faça login para acessar as configurações.';
-            } else if (id.includes('denuncia') || id.includes('tickets')) {
-                motivo = 'Faça login para abrir denúncias ou acompanhar tickets.';
+                const urlVender = window.ItaimRotas ? window.ItaimRotas.obterUrl('vender') : (window.location.pathname.includes('/pages/') ? '../vender/vender.html' : 'pages/vender/vender.html');
+                if (window.ItaimRotas && typeof window.ItaimRotas.salvarDestinoLogin === 'function') {
+                    window.ItaimRotas.salvarDestinoLogin(urlVender);
+                }
+            } else {
+                if (window.ItaimRotas && typeof window.ItaimRotas.salvarDestinoLogin === 'function') {
+                    window.ItaimRotas.salvarDestinoLogin(window.location.href);
+                }
+                if (id.includes('anuncios') || href.includes('meus-anuncios.html')) {
+                    motivo = 'Faça login para gerenciar seus anúncios.';
+                } else if (id.includes('chat') || href.includes('conversas.html') || href.includes('chat.html')) {
+                    motivo = 'Faça login para conversar com os vendedores.';
+                } else if (id.includes('notificacoes') || href.includes('notificacoes.html')) {
+                    motivo = 'Faça login para visualizar suas notificações.';
+                } else if (id.includes('favorito') || href.includes('favoritos.html') || classes.includes('btn-favorito') || classes.includes('favorit')) {
+                    motivo = 'Faça login para salvar anúncios nos seus favoritos.';
+                } else if (id.includes('perfil') || href.includes('perfil.html')) {
+                    motivo = 'Faça login para acessar seu perfil.';
+                } else if (id.includes('configuracoes') || href.includes('configuracoes.html')) {
+                    motivo = 'Faça login para acessar as configurações.';
+                } else if (id.includes('denuncia') || id.includes('tickets')) {
+                    motivo = 'Faça login para abrir denúncias ou acompanhar tickets.';
+                }
             }
 
             abrirModalAuth(motivo);
@@ -720,3 +737,5 @@
     protegerPagina();
 
 })();
+
+

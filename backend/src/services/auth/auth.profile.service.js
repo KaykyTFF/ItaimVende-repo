@@ -24,7 +24,9 @@ export async function getUserProfile(userId) {
       role: true,
       phone: true,
       city: true,
+      state: true,
       neighborhood: true,
+      postalCode: true,
       bio: true,
       avatar: true,
       isVerified: true,
@@ -81,7 +83,9 @@ export async function getPublicUserProfile(identifier) {
       username: true,
       role: true,
       city: true,
+      state: true,
       neighborhood: true,
+      postalCode: true,
       bio: true,
       avatar: true,
       isVerified: true,
@@ -111,7 +115,7 @@ export async function getPublicUserProfile(identifier) {
  * Atualiza perfil do usuário autenticado
  */
 export async function updateUserProfile(userId, updateData) {
-  const { name, username, phone, city, neighborhood, bio, avatar } = updateData;
+  const { name, username, phone, city, state, neighborhood, postalCode, bio, avatar } = updateData;
 
   let oldAvatar = null;
   if (avatar !== undefined) {
@@ -124,10 +128,24 @@ export async function updateUserProfile(userId, updateData) {
 
   const dataToUpdate = {};
   if (name) dataToUpdate.name = name.trim();
-  if (username) dataToUpdate.username = username.trim().toLowerCase();
+  if (username) {
+    const cleanUsername = username.trim().toLowerCase();
+    const existing = await prisma.user.findFirst({
+      where: {
+        username: cleanUsername,
+        NOT: { id: userId },
+      },
+    });
+    if (existing) {
+      throw new AppError('Este nome de usuário já está em uso por outra conta.', 409);
+    }
+    dataToUpdate.username = cleanUsername;
+  }
   if (phone !== undefined) dataToUpdate.phone = phone ? phone.trim() : null;
-  if (city !== undefined) dataToUpdate.city = city.trim();
-  if (neighborhood !== undefined) dataToUpdate.neighborhood = neighborhood.trim();
+  if (city !== undefined) dataToUpdate.city = city ? city.trim() : '';
+  if (state !== undefined) dataToUpdate.state = state ? state.trim().toUpperCase() : '';
+  if (neighborhood !== undefined) dataToUpdate.neighborhood = neighborhood ? neighborhood.trim() : null;
+  if (postalCode !== undefined) dataToUpdate.postalCode = postalCode ? postalCode.trim() : null;
   if (bio !== undefined) dataToUpdate.bio = bio;
   if (avatar !== undefined) dataToUpdate.avatar = avatar;
 
@@ -142,7 +160,9 @@ export async function updateUserProfile(userId, updateData) {
       role: true,
       phone: true,
       city: true,
+      state: true,
       neighborhood: true,
+      postalCode: true,
       bio: true,
       avatar: true,
       isVerified: true,
@@ -269,4 +289,7 @@ export async function deleteUserAccount(userId) {
     };
   }
 }
+
+
+
 

@@ -20,6 +20,50 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="css/core/style.css">
+    <!-- Google Identity Services -->
+        <!-- Capturador Instantâneo de Retorno do Google OAuth na Mini Janela -->
+    <script>
+        (function() {
+            try {
+                var hash = window.location.hash;
+                if (hash && hash.indexOf('access_token=') !== -1) {
+                    var isPopup = (window.name === 'ItaimGoogleAuthWindow') ||
+                                  (hash.indexOf('state=itaim_popup') !== -1) ||
+                                  (window.opener && window.opener !== window) ||
+                                  (window.innerWidth < 650 && window.innerHeight < 750);
+
+                    if (isPopup) {
+                        var params = new URLSearchParams(hash.substring(1));
+                        var token = params.get('access_token');
+                        if (token) {
+                            try {
+                                localStorage.setItem('itaim_google_oauth_token', token);
+                                localStorage.setItem('itaim_google_oauth_timestamp', Date.now().toString());
+                            } catch (e) {}
+
+                            try {
+                                var channel = new BroadcastChannel('itaim_google_auth_channel');
+                                channel.postMessage({ type: 'GOOGLE_AUTH_TOKEN', accessToken: token });
+                                channel.close();
+                            } catch (e) {}
+
+                            if (window.opener) {
+                                try {
+                                    window.opener.postMessage({ type: 'GOOGLE_AUTH_TOKEN', accessToken: token }, '*');
+                                } catch (e) {}
+                            }
+
+                            document.documentElement.innerHTML = '<head><title>Autenticado</title></head><body style="background:#fff;display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;color:#489636;margin:0;"><h3>Autenticado com sucesso! Fechando janela...</h3></body>';
+                            window.close();
+                            setTimeout(function() { window.close(); }, 100);
+                            setTimeout(function() { window.close(); }, 300);
+                            throw new Error('OAuth Popup Terminated');
+                        }
+                    }
+                }
+            } catch (e) {}
+        })();
+    </script>
 </head>
 
 <body>
@@ -132,7 +176,7 @@
                                                 <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
                                             </svg>
                                         </button>
-                                        <button type="button" class="btn-social-icone btn-social-facebook" id="btn-social-facebook" title="Entrar com Facebook" aria-label="Entrar com Facebook">
+                                        <button type="button" class="btn-social-icone btn-social-facebook" id="btn-social-facebook" title="Login com Facebook em breve" aria-label="Login com Facebook em breve">
                                             <svg viewBox="0 0 24 24" width="20" height="20" class="social-icon" fill="#1877F2" aria-hidden="true">
                                                 <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                                             </svg>
@@ -165,7 +209,20 @@
                             <div class="status-msg" id="status-msg-cadastro" role="alert" aria-live="polite"></div>
                         </div>
 
-                        <form id="form-cadastro-completo" class="form-auth form-wizard" novalidate>
+                                                <!-- Opção de Cadastro Rápido com Google -->
+                        <button type="button" class="btn-cadastro-google" id="btn-cadastro-wizard-google" style="margin-bottom: 14px;">
+                            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                                <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+                                <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
+                                <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+                                <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+                            </svg>
+                            <span>Cadastrar-se com o Google</span>
+                        </button>
+                        <div class="divisor-social">
+                            <span>ou preencha por etapas</span>
+                        </div>
+<form id="form-cadastro-completo" class="form-auth form-wizard" novalidate>
 
                             <!-- ETAPA 1: Sobre você (Identificação pessoal) -->
                             <div class="wizard-etapa-painel etapa-ativa" id="etapa-1" data-step="1">
@@ -484,7 +541,7 @@
         </div>
     </main>
 
-    <!-- Modal Pop-up: Recurso em Desenvolvimento (Login Social) -->
+        <!-- Modal Pop-up: Recurso em Desenvolvimento (Login Social) -->
     <div class="modal-social-backdrop" id="modal-social-aviso" role="dialog" aria-modal="true" aria-hidden="true">
         <div class="modal-social-card">
             <button type="button" class="modal-social-fechar" id="btn-fechar-modal-social" aria-label="Fechar pop-up">
@@ -494,7 +551,7 @@
                 <!-- Ícone dinâmico inserido via JS -->
             </div>
             <span class="modal-social-badge" id="modal-social-badge">EM BREVE</span>
-            <h3 class="modal-social-titulo" id="modal-social-titulo">Entrar com Google</h3>
+            <h3 class="modal-social-titulo" id="modal-social-titulo">Entrar com Rede Social</h3>
             <p class="modal-social-mensagem" id="modal-social-mensagem">
                 O login rápido com esta opção ainda não foi implementado. Por favor, utilize seu e-mail e senha cadastrados no formulário para entrar normalmente.
             </p>

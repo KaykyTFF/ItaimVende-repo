@@ -5,6 +5,7 @@
  * Responsabilidades:
  * - Login com e-mail/senha ou objeto
  * - Cadastro de novos usuários
+ * - Autenticação / Cadastro integrado via Google Sign-In
  * - Consulta de perfil autenticado (/auth/me) e dados de usuários (/auth/user/:id)
  * - Atualização cadastral de dados e sincronização com sessão
  * - Encerramento de sessão (logout/expiração)
@@ -96,6 +97,30 @@
                 localStorage.setItem('itaim_usuario_logado_email', resposta.user.email || dados.email);
                 if (window.ItaimSessao && typeof window.ItaimSessao.definirUsuarioLogado === 'function') {
                     window.ItaimSessao.definirUsuarioLogado(resposta.user.email || dados.email, resposta.user);
+                }
+            }
+            return resposta;
+        },
+
+        /**
+         * Autentica ou cadastra usuário via Google Sign-In (OAuth2 / Identity Services)
+         */
+        async googleAuth(payload) {
+            const resposta = await getCore().requisicao('/auth/google', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (resposta.token) {
+                localStorage.setItem('itaim_token', resposta.token);
+                localStorage.setItem('itaim_ultima_atividade', Date.now().toString());
+            }
+            if (resposta.user) {
+                localStorage.setItem('itaim_usuario_logado', JSON.stringify(resposta.user));
+                localStorage.setItem('itaim_usuario_logado_email', resposta.user.email);
+                if (window.ItaimSessao && typeof window.ItaimSessao.definirUsuarioLogado === 'function') {
+                    window.ItaimSessao.definirUsuarioLogado(resposta.user.email, resposta.user);
                 }
             }
             return resposta;

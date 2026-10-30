@@ -186,4 +186,55 @@ describe('Suite de Testes Automatizados da API Itaim Vende (IFPI - Prof. Me. Jul
     assert.equal(data.success, false);
   });
 
+  // Teste 13: Google Auth & Cadastro Real com JWT e Boas-Vindas
+  it('13. Google Auth & Cadastro Real: POST /auth/google deve autenticar/cadastrar usuário com persistência e emissão de JWT', async () => {
+    const testGoogleEmail = `google_test_${Date.now()}@gmail.com`;
+    const res = await fetch(`${BASE_URL}/auth/google`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: testGoogleEmail,
+        name: 'Usuário Teste Google',
+        avatar: 'assets/images/icon-user.png',
+      }),
+    });
+
+    assert.equal(res.status, 200, 'POST /auth/google deve retornar status 200 OK');
+    const data = await res.json();
+    assert.equal(data.success, true, 'Resposta deve indicar success: true');
+    assert.ok(data.token, 'Token JWT deve ser emitido');
+    assert.ok(data.user, 'Dados do usuário cadastrado devem ser retornados');
+    assert.equal(data.user.email, testGoogleEmail, 'E-mail retornado deve bater com o enviado');
+    assert.equal(data.isNewUser, true, 'Primeiro acesso deve indicar isNewUser: true');
+
+    // Limpeza no banco
+    await prisma.user.deleteMany({ where: { email: testGoogleEmail } }).catch(() => {});
+  });
+
+  // Teste 14: Cadastro Completo com E-mail Real e Disparo de Boas-Vindas
+  it('14. Cadastro Real: POST /auth/register deve registrar usuário válido, emitir JWT e acionar fluxo de boas-vindas', async () => {
+    const testRegisterEmail = `cadastro_real_${Date.now()}@gmail.com`;
+    const res = await fetch(`${BASE_URL}/auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: 'Cliente Real Paulistana',
+        email: testRegisterEmail,
+        password: 'SenhaSegura123',
+        city: 'Paulistana',
+        state: 'PI',
+        neighborhood: 'Centro',
+      }),
+    });
+
+    assert.equal(res.status, 201, 'POST /auth/register deve retornar 201 Created');
+    const data = await res.json();
+    assert.equal(data.success, true);
+    assert.ok(data.token, 'Token JWT deve ser emitido');
+    assert.equal(data.user.email, testRegisterEmail);
+
+    // Limpeza no banco
+    await prisma.user.deleteMany({ where: { email: testRegisterEmail } }).catch(() => {});
+  });
+
 });

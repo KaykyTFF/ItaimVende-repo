@@ -3,9 +3,9 @@
    Redesenho moderno conforme imagem de referência
    ========================================================================== */
 
-/* Fundo Geral da Página */
+/* Fundo Geral da Página - Padronizado com o fundo global da Home */
 body.pagina-perfil {
-    background-color: #f0f4f1;
+    background-color: var(--light-bg, #F4F6F8);
     color: #1e272e;
     min-height: 100vh;
 }

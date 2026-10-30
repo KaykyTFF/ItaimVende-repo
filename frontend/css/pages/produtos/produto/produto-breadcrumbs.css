@@ -4,7 +4,7 @@
 
 /* Fundo geral da página */
 body {
-    background-color: #F0F4F8;
+    background-color: var(--light-bg, #F4F6F8);
 }
 
 /* Breadcrumbs e Botão Voltar Circular no topo */

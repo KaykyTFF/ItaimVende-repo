@@ -43,13 +43,17 @@
             }
         },
 
-        processarHashNavegacao: function () {
+                processarHashNavegacao: function () {
             const hash = (window.location.hash || '').toLowerCase();
-            if (hash === '#cadastro') {
+            const path = (window.location.pathname || '').toLowerCase();
+            const params = new URLSearchParams(window.location.search);
+            const aba = (params.get('aba') || params.get('tela') || params.get('mode') || '').toLowerCase();
+
+            if (hash === '#cadastro' || aba === 'cadastro' || aba === 'register' || path.endsWith('/cadastro') || path.endsWith('/cadastro.html')) {
                 this.alternarTela('cadastro');
-            } else if (hash === '#recuperar-senha' || hash === '#recuperar') {
+            } else if (hash === '#recuperar-senha' || hash === '#recuperar' || aba === 'recuperar' || path.endsWith('/recuperar')) {
                 this.alternarTela('recuperar');
-            } else if (hash === '#login') {
+            } else if (hash === '#login' || aba === 'login') {
                 this.alternarTela('login');
             }
         },

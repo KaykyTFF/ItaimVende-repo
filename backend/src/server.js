@@ -219,26 +219,46 @@ app.get('/', (req, res) => {
 app.use(express.static(FRONTEND_DIR, { index: false }));
 app.use('/frontend', express.static(FRONTEND_DIR, { index: false }));
 
-// Rotas amigáveis (Clean URLs) para as páginas do Marketplace
+// Rotas amigáveis (Clean URLs) e retrocompatibilidade com extensões .html para as páginas do Marketplace
 const PAGE_ROUTES = [
   { route: '/', file: 'pages/home/home.html' },
   { route: '/home', file: 'pages/home/home.html' },
+  { route: '/home.html', file: 'pages/home/home.html' },
+  { route: '/home/home.html', file: 'pages/home/home.html' },
+  { route: '/index', file: 'index.html' },
+  { route: '/index.html', file: 'index.html' },
   { route: '/login', file: 'index.html' },
   { route: '/login.html', file: 'index.html' },
-  { route: '/cadastro', file: 'pages/auth/cadastro.html' },
+  { route: '/cadastro', file: 'index.html' },
+  { route: '/cadastro.html', file: 'index.html' },
   { route: '/categoria', file: 'pages/produtos/categoria.html' },
+  { route: '/categoria.html', file: 'pages/produtos/categoria.html' },
   { route: '/produto', file: 'pages/produtos/produto.html' },
+  { route: '/produto.html', file: 'pages/produtos/produto.html' },
   { route: '/vender', file: 'pages/vender/vender.html' },
+  { route: '/vender.html', file: 'pages/vender/vender.html' },
   { route: '/meus-anuncios', file: 'pages/vender/meus-anuncios.html' },
+  { route: '/meus-anuncios.html', file: 'pages/vender/meus-anuncios.html' },
   { route: '/conversas', file: 'pages/mensagens/conversas.html' },
+  { route: '/conversas.html', file: 'pages/mensagens/conversas.html' },
   { route: '/chat', file: 'pages/mensagens/conversas.html' },
+  { route: '/chat.html', file: 'pages/mensagens/conversas.html' },
   { route: '/perfil', file: 'pages/perfil/perfil.html' },
+  { route: '/perfil.html', file: 'pages/perfil/perfil.html' },
   { route: '/vendedor', file: 'pages/perfil/vendedor.html' },
+  { route: '/vendedor.html', file: 'pages/perfil/vendedor.html' },
   { route: '/configuracoes', file: 'pages/perfil/configuracoes.html' },
+  { route: '/configuracoes.html', file: 'pages/perfil/configuracoes.html' },
   { route: '/favoritos', file: 'pages/favoritos/favoritos.html' },
+  { route: '/favoritos.html', file: 'pages/favoritos/favoritos.html' },
   { route: '/notificacoes', file: 'pages/notificacoes/notificacoes.html' },
+  { route: '/notificacoes.html', file: 'pages/notificacoes/notificacoes.html' },
   { route: '/painel', file: 'pages/admin/painel.html' },
+  { route: '/painel.html', file: 'pages/admin/painel.html' },
   { route: '/status', file: 'pages/admin/painel.html' },
+  { route: '/status.html', file: 'pages/admin/painel.html' },
+  { route: '/404', file: '404.html' },
+  { route: '/404.html', file: '404.html' },
 ];
 
 PAGE_ROUTES.forEach(({ route, file }) => {
@@ -339,4 +359,7 @@ process.on('uncaughtException', (err) => {
 });
 
 export default app;
+
+
+
 

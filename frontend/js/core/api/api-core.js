@@ -85,19 +85,23 @@
 
             const dados = await resposta.json().catch(() => ({}));
 
-            // 2. Tratamento de 401 Unauthorized:
+            // 2. Tratamento de 401 Unauthorized / 403 Forbidden:
             // Só invalida a sessão se for a rota de verificação de identidade central (/auth/me)
             // e se não for modo dev. Rotas secundárias (notificações, endereços, etc.) NUNCA deslogam o usuário.
-            if (resposta.status === 401) {
+            if (resposta.status === 401 || resposta.status === 403) {
                 const isAuthCheck = endpoint.includes('/auth/me');
                 const isDevMode = localStorage.getItem('itaim_modo_dev') === 'true';
                 if (isAuthCheck && obterToken() && !isDevMode) {
                     console.info('[ItaimApi] Token expirado ou rejeitado em /auth/me.');
-                    localStorage.removeItem('itaim_token');
-                    localStorage.removeItem('itaim_usuario_logado');
-                    localStorage.removeItem('itaim_usuario_logado_email');
-                    if (window.ItaimSessao && typeof window.ItaimSessao.atualizarHeaderUsuario === 'function') {
-                        window.ItaimSessao.atualizarHeaderUsuario();
+                    if (window.ItaimSessao && typeof window.ItaimSessao.deslogarUsuario === 'function') {
+                        window.ItaimSessao.deslogarUsuario();
+                    } else {
+                        localStorage.removeItem('itaim_token');
+                        localStorage.removeItem('itaim_usuario_logado');
+                        localStorage.removeItem('itaim_usuario_logado_email');
+                        if (window.ItaimSessao && typeof window.ItaimSessao.atualizarHeaderUsuario === 'function') {
+                            window.ItaimSessao.atualizarHeaderUsuario();
+                        }
                     }
                 }
             }

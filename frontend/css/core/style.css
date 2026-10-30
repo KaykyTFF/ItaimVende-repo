@@ -194,7 +194,7 @@ html, body {
     background-color: var(--color-primary);
     margin: 4px auto 0 auto;
     border-radius: 2px;
-    box-shadow: 0 0 10px rgba(72, 150, 54, 0.6), 0 1px 3px rgba(0, 0, 0, 0.7);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
 /* --------------------------------------------------------------------------
@@ -305,7 +305,7 @@ html, body {
     height: 100%;
     background: #44BD32;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(68, 189, 50, 0.4);
+    box-shadow: none;
     transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -349,7 +349,13 @@ html, body {
     letter-spacing: 0.8px;
     cursor: pointer;
     box-shadow: 0 4px 14px rgba(72, 150, 54, 0.35);
-    transition: all var(--transition-fast);
+    transition: opacity 0.4s ease, transform 0.4s ease, color var(--transition-fast);
+}
+
+.status-msg.fade-out {
+    opacity: 0 !important;
+    transform: translateY(-4px) !important;
+    pointer-events: none;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -479,7 +485,13 @@ html, body {
     font-weight: 800;
     letter-spacing: 0.8px;
     cursor: pointer;
-    transition: all var(--transition-fast);
+    transition: opacity 0.4s ease, transform 0.4s ease, color var(--transition-fast);
+}
+
+.status-msg.fade-out {
+    opacity: 0 !important;
+    transform: translateY(-4px) !important;
+    pointer-events: none;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -554,7 +566,13 @@ html, body {
     color: #1E293B;
     outline: none;
     box-sizing: border-box;
-    transition: all var(--transition-fast);
+    transition: opacity 0.4s ease, transform 0.4s ease, color var(--transition-fast);
+}
+
+.status-msg.fade-out {
+    opacity: 0 !important;
+    transform: translateY(-4px) !important;
+    pointer-events: none;
     padding: 0;
     -webkit-appearance: none;
     margin: 0;
@@ -686,7 +704,13 @@ html, body {
     font-weight: 700;
     color: #57606F;
     cursor: pointer;
-    transition: all var(--transition-fast);
+    transition: opacity 0.4s ease, transform 0.4s ease, color var(--transition-fast);
+}
+
+.status-msg.fade-out {
+    opacity: 0 !important;
+    transform: translateY(-4px) !important;
+    pointer-events: none;
 }
 
 .btn-aba.aba-ativa {
@@ -797,7 +821,13 @@ html, body {
     font-weight: 500;
     outline: none;
     height: 50px;
-    transition: all var(--transition-fast);
+    transition: opacity 0.4s ease, transform 0.4s ease, color var(--transition-fast);
+}
+
+.status-msg.fade-out {
+    opacity: 0 !important;
+    transform: translateY(-4px) !important;
+    pointer-events: none;
 }
 
 .input-wrapper .campo-texto {
@@ -837,7 +867,13 @@ html, body {
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
-    transition: all var(--transition-fast);
+    transition: opacity 0.4s ease, transform 0.4s ease, color var(--transition-fast);
+}
+
+.status-msg.fade-out {
+    opacity: 0 !important;
+    transform: translateY(-4px) !important;
+    pointer-events: none;
 }
 
 .select-campo:focus {
@@ -934,7 +970,13 @@ html, body {
     align-items: center;
     justify-content: center;
     box-shadow: 0 4px 14px rgba(72, 150, 54, 0.32);
-    transition: all var(--transition-fast);
+    transition: opacity 0.4s ease, transform 0.4s ease, color var(--transition-fast);
+}
+
+.status-msg.fade-out {
+    opacity: 0 !important;
+    transform: translateY(-4px) !important;
+    pointer-events: none;
     position: relative;
     overflow: hidden;
 }
@@ -998,7 +1040,13 @@ html, body {
     align-items: center;
     justify-content: center;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-    transition: all var(--transition-fast);
+    transition: opacity 0.4s ease, transform 0.4s ease, color var(--transition-fast);
+}
+
+.status-msg.fade-out {
+    opacity: 0 !important;
+    transform: translateY(-4px) !important;
+    pointer-events: none;
 }
 
 .btn-cadastrar:hover {
@@ -1272,7 +1320,13 @@ html, body {
     align-items: center;
     justify-content: center;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
-    transition: all var(--transition-fast);
+    transition: opacity 0.4s ease, transform 0.4s ease, color var(--transition-fast);
+}
+
+.status-msg.fade-out {
+    opacity: 0 !important;
+    transform: translateY(-4px) !important;
+    pointer-events: none;
     margin-top: 16px;
 }
 
@@ -1311,7 +1365,13 @@ html, body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    transition: all var(--transition-fast);
+    transition: opacity 0.4s ease, transform 0.4s ease, color var(--transition-fast);
+}
+
+.status-msg.fade-out {
+    opacity: 0 !important;
+    transform: translateY(-4px) !important;
+    pointer-events: none;
     font-family: inherit;
     box-sizing: border-box;
 }
@@ -1339,7 +1399,13 @@ html, body {
     font-weight: 600;
     text-align: center;
     border-radius: 6px;
-    transition: all var(--transition-fast);
+    transition: opacity 0.4s ease, transform 0.4s ease, color var(--transition-fast);
+}
+
+.status-msg.fade-out {
+    opacity: 0 !important;
+    transform: translateY(-4px) !important;
+    pointer-events: none;
 }
 
 .status-msg.status-erro {

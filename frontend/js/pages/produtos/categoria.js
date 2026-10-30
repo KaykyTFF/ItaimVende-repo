@@ -76,7 +76,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const categoriasSelecionadas = new Set();
     const condicoesSelecionadas = new Set();
     const cidadesSelecionadas = new Set();
-    let faixaPrecoSelecionada = 'todos';
+    let precoMinFiltro = 0;
+    let precoMaxFiltro = 5000;
 
     // Se veio com categoria específica na URL, adiciona ao filtro da barra
     if (categoriaParam && categoriaParam.toLowerCase() !== 'todas') {
@@ -260,14 +261,12 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Filtro por faixa de preço
-        if (faixaPrecoSelecionada !== 'todos') {
+        // Filtro por faixa de preço (slider interativo)
+        if (precoMinFiltro > 0 || precoMaxFiltro < 5000) {
             lista = lista.filter(p => {
                 const pr = Number(p.preco || 0);
-                if (faixaPrecoSelecionada === '0-50') return pr <= 50;
-                if (faixaPrecoSelecionada === '50-200') return pr > 50 && pr <= 200;
-                if (faixaPrecoSelecionada === '200-500') return pr > 200 && pr <= 500;
-                if (faixaPrecoSelecionada === '500+') return pr > 500;
+                if (precoMinFiltro > 0 && pr < precoMinFiltro) return false;
+                if (precoMaxFiltro < 5000 && pr > precoMaxFiltro) return false;
                 return true;
             });
         }
@@ -533,28 +532,109 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Filtros de Faixa de Preço na Sidebar
-    document.querySelectorAll('input[name="faixa_preco"]').forEach(rad => {
-        rad.addEventListener('change', (e) => {
-            if (e.target.checked) {
-                faixaPrecoSelecionada = e.target.value;
-                renderizar();
+    // ==========================================================================
+    // Slider Interativo de Faixa de Preço
+    // ==========================================================================
+    const sliderMin = document.getElementById('filtro-preco-min');
+    const sliderMax = document.getElementById('filtro-preco-max');
+    const trackFill = document.getElementById('preco-slider-track-fill');
+    const displayMin = document.getElementById('preco-min-display');
+    const displayMax = document.getElementById('preco-max-display');
+    const btnResetPreco = document.getElementById('btn-reset-preco-slider');
+    const chipsPreco = document.querySelectorAll('.chip-preco');
+
+    function formatarMoedaSimples(val) {
+        return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }).format(val);
+    }
+
+    function atualizarSliderPreco(minVal, maxVal, dispararRender = true) {
+        if (!sliderMin || !sliderMax) return;
+
+        let min = parseInt(minVal !== undefined ? minVal : sliderMin.value, 10) || 0;
+        let max = parseInt(maxVal !== undefined ? maxVal : sliderMax.value, 10) || 5000;
+
+        if (min > max) {
+            if (minVal !== undefined) max = min;
+            else min = max;
+        }
+
+        sliderMin.value = min;
+        sliderMax.value = max;
+        precoMinFiltro = min;
+        precoMaxFiltro = max;
+
+        const maxLim = 5000;
+        const pctMin = (min / maxLim) * 100;
+        const pctMax = (max / maxLim) * 100;
+
+        if (trackFill) {
+            trackFill.style.left = `${pctMin}%`;
+            trackFill.style.width = `${pctMax - pctMin}%`;
+        }
+
+        if (displayMin) displayMin.textContent = formatarMoedaSimples(min);
+        if (displayMax) displayMax.textContent = max >= maxLim ? 'R$ 5.000+' : formatarMoedaSimples(max);
+
+        chipsPreco.forEach(chip => {
+            const cMin = parseInt(chip.getAttribute('data-min'), 10);
+            const cMax = parseInt(chip.getAttribute('data-max'), 10);
+            if (cMin === min && cMax === max) {
+                chip.classList.add('ativo');
+            } else {
+                chip.classList.remove('ativo');
             }
         });
+
+        if (dispararRender) {
+            renderizar();
+        }
+    }
+
+    sliderMin?.addEventListener('input', (e) => {
+        let min = parseInt(e.target.value, 10) || 0;
+        let max = parseInt(sliderMax.value, 10) || 5000;
+        if (min > max) {
+            min = max;
+            sliderMin.value = min;
+        }
+        atualizarSliderPreco(min, max, true);
     });
+
+    sliderMax?.addEventListener('input', (e) => {
+        let min = parseInt(sliderMin.value, 10) || 0;
+        let max = parseInt(e.target.value, 10) || 5000;
+        if (max < min) {
+            max = min;
+            sliderMax.value = max;
+        }
+        atualizarSliderPreco(min, max, true);
+    });
+
+    chipsPreco.forEach(chip => {
+        chip.addEventListener('click', () => {
+            const cMin = parseInt(chip.getAttribute('data-min'), 10);
+            const cMax = parseInt(chip.getAttribute('data-max'), 10);
+            atualizarSliderPreco(cMin, cMax, true);
+        });
+    });
+
+    btnResetPreco?.addEventListener('click', () => {
+        atualizarSliderPreco(0, 5000, true);
+    });
+
+    // Inicializa posição do slider visual
+    atualizarSliderPreco(0, 5000, false);
 
     // Botão Limpar Filtros da Barra Lateral
     btnLimparSidebar?.addEventListener('click', () => {
         categoriasSelecionadas.clear();
         condicoesSelecionadas.clear();
         cidadesSelecionadas.clear();
-        faixaPrecoSelecionada = 'todos';
         termoBusca = '';
         if (campoBusca) campoBusca.value = '';
 
         document.querySelectorAll('input[name="filtro_condicao"]').forEach(c => c.checked = false);
-        const radTodos = document.querySelector('input[name="faixa_preco"][value="todos"]');
-        if (radTodos) radTodos.checked = true;
+        atualizarSliderPreco(0, 5000, false);
 
         try {
             const url = new URL(window.location.href);

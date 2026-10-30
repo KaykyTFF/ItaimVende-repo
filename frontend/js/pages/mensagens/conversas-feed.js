@@ -205,20 +205,20 @@
 
                     if (st === 'ACCEPTED') {
                         statusBadge.className = 'msg-proposta-status-badge aceita';
-                        statusBadge.innerHTML = '✅ Proposta Aceita';
+                        statusBadge.innerHTML = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><polyline points="20 6 9 17 4 12"></polyline></svg><span>Proposta Aceita</span>`;
                         propostaCard.appendChild(statusBadge);
                     } else if (st === 'REJECTED') {
                         statusBadge.className = 'msg-proposta-status-badge recusada';
-                        statusBadge.innerHTML = '❌ Proposta Recusada';
+                        statusBadge.innerHTML = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg><span>Proposta Recusada</span>`;
                         propostaCard.appendChild(statusBadge);
                     } else {
                         if (souEu) {
-                            statusBadge.className = 'msg-proposta-status-badge pendente';
-                            statusBadge.innerHTML = '⏳ Proposta Enviada (Aguardando resposta)';
+                            statusBadge.className = 'msg-proposta-status-badge pendente enviada';
+                            statusBadge.innerHTML = `<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="flex-shrink: 0;"><path d="M12 22a2 2 0 0 0 2-2H10a2 2 0 0 0 2 2zm6-6V11a6 6 0 0 0-5-5.91V4a1 1 0 0 0-2 0v1.09A6 6 0 0 0 6 11v5l-2 2v1h16v-1l-2-2z"/></svg><span>Proposta Enviada</span>`;
                             propostaCard.appendChild(statusBadge);
                         } else {
-                            statusBadge.className = 'msg-proposta-status-badge pendente';
-                            statusBadge.innerHTML = '🔔 Proposta Recebida';
+                            statusBadge.className = 'msg-proposta-status-badge pendente recebida';
+                            statusBadge.innerHTML = `<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="flex-shrink: 0;"><path d="M12 22a2 2 0 0 0 2-2H10a2 2 0 0 0 2 2zm6-6V11a6 6 0 0 0-5-5.91V4a1 1 0 0 0-2 0v1.09A6 6 0 0 0 6 11v5l-2 2v1h16v-1l-2-2z"/></svg><span>Proposta Recebida</span>`;
                             propostaCard.appendChild(statusBadge);
 
                             const acoesBox = document.createElement('div');

@@ -21,7 +21,7 @@
         'produto/produto-dados.js',
         'produto/produto-galeria.js',
         'produto/produto-vendedor.js',
-        'produto/produto-acoes.js',
+        'produto/produto-acoes.js?v=2',
         'produto/produto-denuncias.js',
         'produto/index.js'
     ];

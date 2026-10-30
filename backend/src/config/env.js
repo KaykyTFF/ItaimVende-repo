@@ -68,5 +68,8 @@ export const ENV = {
   SMTP_USER: process.env.SMTP_USER || '',
   SMTP_PASS: process.env.SMTP_PASS || '',
   SMTP_SECURE: process.env.SMTP_SECURE === 'true',
+
+  // Google OAuth / Identity Services
+  GOOGLE_CLIENT_ID: (process.env.GOOGLE_CLIENT_ID || '573964082793-kor90ei9qbgnuh13i97crosid73uikh5.apps.googleusercontent.com').trim().replace(/^["']|["']$/g, ''),
 };
 

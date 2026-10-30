@@ -111,19 +111,29 @@
             });
         }
 
-        // 2. Botão WhatsApp com mensagem personalizada
+        // 2. Botão WhatsApp com mensagem personalizada (somente se o vendedor tiver telefone cadastrado)
         const btnWpp = document.getElementById('btn-comprar-wpp');
         if (btnWpp) {
-            let telVendedor = (produto.vendedorTelefone || (dadosVendedor && (dadosVendedor.phone || dadosVendedor.telefone)) || '5589999985858').replace(/\D/g, '');
-            if (telVendedor.length === 10 || telVendedor.length === 11) telVendedor = '55' + telVendedor;
-            const precoTexto = (produto.preco && produto.preco > 0) 
-                ? `por R$ ${Number(produto.preco).toFixed(2).replace('.', ',')}` 
-                : 'para doação/troca';
-            const msg = encodeURIComponent(
-                `Olá! Vi seu anúncio no Itaim Vende:\n"${produto.titulo}" (${precoTexto})\n` +
-                `Ainda está disponível? Tenho interesse!`
-            );
-            btnWpp.href = `https://wa.me/${telVendedor}?text=${msg}`;
+            const telRaw = (produto.vendedorTelefone || produto.telefone || (dadosVendedor && (dadosVendedor.phone || dadosVendedor.telefone)) || '');
+            let telVendedor = String(telRaw).replace(/\D/g, '');
+
+            // Se o usuário não tiver cadastrado número de telefone/WhatsApp válido, oculta o botão
+            if (!telVendedor || telVendedor.length < 10) {
+                btnWpp.style.display = 'none';
+            } else {
+                if (telVendedor.length === 10 || telVendedor.length === 11) {
+                    telVendedor = '55' + telVendedor;
+                }
+                const precoTexto = (produto.preco && produto.preco > 0) 
+                    ? `por R$ ${Number(produto.preco).toFixed(2).replace('.', ',')}` 
+                    : 'para doação/troca';
+                const msg = encodeURIComponent(
+                    `Olá! Vi seu anúncio no Itaim Vende:\n"${produto.titulo}" (${precoTexto})\n` +
+                    `Ainda está disponível? Tenho interesse!`
+                );
+                btnWpp.href = `https://wa.me/${telVendedor}?text=${msg}`;
+                btnWpp.style.display = 'flex';
+            }
 
             btnWpp.addEventListener('click', (e) => {
                 if (verificarSeUsuarioEhVendedor()) {

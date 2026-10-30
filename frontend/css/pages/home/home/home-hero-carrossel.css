@@ -11,7 +11,8 @@
 .secao-carrossel-wrapper {
     position: relative;
     width: 100%;
-    margin-bottom: 20px;
+    max-width: 1200px;
+    margin: 0 auto 20px auto;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -61,7 +62,7 @@
 /* Botões do Carrossel (< e >) */
 .btn-carrossel {
     position: absolute;
-    top: 50%;
+    top: calc(50% - 8px);
     transform: translateY(-50%);
     width: 40px;
     height: 40px;
@@ -91,11 +92,20 @@
 }
 
 .btn-carrossel.prev {
-    left: -18px;
+    left: -48px;
 }
 
 .btn-carrossel.next {
-    right: -18px;
+    right: -48px;
+}
+
+@media (max-width: 1320px) {
+    .btn-carrossel.prev {
+        left: 14px;
+    }
+    .btn-carrossel.next {
+        right: 14px;
+    }
 }
 
 /* Indicadores do Carrossel */

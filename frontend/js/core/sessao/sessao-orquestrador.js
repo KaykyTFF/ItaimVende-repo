@@ -116,7 +116,7 @@
                     window.dispatchEvent(new CustomEvent('itaim:usuario-atualizado', { detail: res.user }));
                 }
             }).catch(err => {
-                if (err && err.status === 401) {
+                if (err && (err.status === 401 || err.status === 403)) {
                     if (typeof Auth.deslogarUsuario === 'function') {
                         Auth.deslogarUsuario();
                     }

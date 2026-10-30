@@ -176,7 +176,17 @@
         const token = localStorage.getItem('itaim_token');
         const bUserRaw = localStorage.getItem('itaim_usuario_logado');
         if (!token || !bUserRaw) return false;
-        if (token === 'token_mock_dev_frontend') return false;
+        if (token === 'token_mock_dev_frontend' || token === 'undefined' || token === 'null' || !token.trim()) {
+            return false;
+        }
+        try {
+            const parsed = JSON.parse(bUserRaw);
+            if (!parsed || typeof parsed !== 'object' || (!parsed.email && !parsed.id)) {
+                return false;
+            }
+        } catch (e) {
+            return false;
+        }
         return true;
     }
 
@@ -216,12 +226,12 @@
             username: backendUser.username || user.username,
             usuario: backendUser.username || user.usuario,
             email: backendUser.email || user.email,
-            telefone: backendUser.phone ? formatarTelefoneBR(backendUser.phone) : (user.telefone || '(89) 99998-5858'),
-            phone: backendUser.phone || user.phone || '89999858585',
-            cidade: backendUser.city || user.cidade || 'Paulistana',
-            city: backendUser.city || user.city || 'Paulistana',
-            bairro: backendUser.neighborhood || user.bairro || 'Centro',
-            neighborhood: backendUser.neighborhood || user.neighborhood || 'Centro',
+            telefone: backendUser.phone ? formatarTelefoneBR(backendUser.phone) : (user?.telefone && user.telefone !== '(89) 99998-5858' ? user.telefone : ''),
+            phone: backendUser.phone || (user?.phone && user.phone !== '89999858585' ? user.phone : ''),
+            cidade: backendUser.city || user.cidade || '',
+            city: backendUser.city || user.city || '',
+            bairro: backendUser.neighborhood || user.bairro || '',
+            neighborhood: backendUser.neighborhood || user.neighborhood || '',
                     bio: backendUser.bio !== undefined ? backendUser.bio : user.bio,
                     avatar: backendUser.avatar || user.avatar || 'assets/icons/icon-user.png',
                     role: backendUser.role || user.role || 'ADMIN',
@@ -258,10 +268,10 @@
                 email: dadosCompletos.email || chaveLower,
                 role: dadosCompletos.role || 'BUYER',
                 avatar: dadosCompletos.avatar || 'assets/icons/icon-user.png',
-                city: dadosCompletos.city || 'Paulistana',
-                cidade: dadosCompletos.city || 'Paulistana',
-                neighborhood: dadosCompletos.neighborhood || 'Centro',
-                bairro: dadosCompletos.neighborhood || 'Centro',
+                city: dadosCompletos.city || '',
+                cidade: dadosCompletos.city || '',
+                neighborhood: dadosCompletos.neighborhood || '',
+                bairro: dadosCompletos.neighborhood || '',
                 phone: dadosCompletos.phone || '',
                 telefone: dadosCompletos.phone ? formatarTelefoneBR(dadosCompletos.phone) : ''
             };
@@ -342,12 +352,12 @@
             email: emailLower,
             telefone: dados.telefone || (dados.phone ? formatarTelefoneBR(dados.phone) : ''),
             phone: dados.phone || dados.telefone || '',
-            cidade: dados.cidade || dados.city || 'Paulistana',
-            city: dados.cidade || dados.city || 'Paulistana',
-            bairro: dados.bairro || dados.neighborhood || 'Centro',
-            neighborhood: dados.bairro || dados.neighborhood || 'Centro',
-            estado: dados.estado || dados.state || 'PI',
-            state: dados.estado || dados.state || 'PI',
+            cidade: dados.cidade || dados.city || '',
+            city: dados.cidade || dados.city || '',
+            bairro: dados.bairro || dados.neighborhood || '',
+            neighborhood: dados.bairro || dados.neighborhood || '',
+            estado: dados.estado || dados.state || '',
+            state: dados.estado || dados.state || '',
             avatar: dados.avatar || 'assets/icons/icon-user.png',
             bio: dados.bio || `Perfil de ${dados.nome || 'usuário'} no Itaim Vende.`,
             role: dados.role || 'BUYER',
@@ -510,8 +520,90 @@
         }
         window.dispatchEvent(new CustomEvent('itaim:logout'));
     }
+    // Captura global de retorno OAuth da Google em qualquer página (hash #access_token=...)
+    (function verificarRetornoGoogleOAuthGlobal() {
+        try {
+            const hash = window.location.hash;
+            if (hash && hash.includes('access_token=')) {
+                const isPopup = (window.name === 'ItaimGoogleAuthWindow') ||
+                                (hash.includes('state=itaim_popup')) ||
+                                (window.opener && window.opener !== window) ||
+                                (window.innerWidth < 650 && window.innerHeight < 750);
 
-    // Exporta API no namespace de Autenticação
+                if (isPopup) {
+                    try {
+                        const params = new URLSearchParams(hash.replace(/^#/, ''));
+                        const accessToken = params.get('access_token');
+                        if (accessToken) {
+                            localStorage.setItem('itaim_google_oauth_token', accessToken);
+                            const channel = new BroadcastChannel('itaim_google_auth_channel');
+                            channel.postMessage({ type: 'GOOGLE_AUTH_TOKEN', accessToken });
+                            channel.close();
+                        }
+                    } catch (e) {}
+                    try { window.close(); } catch (e) {}
+                    return;
+                }
+
+                // Se caiu na janela principal diretamente
+                const params = new URLSearchParams(hash.replace(/^#/, ''));
+                const accessToken = params.get('access_token');
+                if (accessToken) {
+                    history.replaceState(null, '', window.location.pathname + window.location.search);
+                    fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                        headers: { Authorization: `Bearer ${accessToken}` }
+                    }).then(res => res.json()).then(async profile => {
+                        if (profile && profile.email) {
+                            const apiBase = window.ItaimApiCore?.API_BASE_URL || '/api/v1';
+                            const req = await fetch(`${apiBase}/auth/google`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    email: profile.email,
+                                    name: profile.name,
+                                    avatar: profile.picture,
+                                    googleId: profile.sub
+                                })
+                            });
+                            const authRes = await req.json();
+                            if (authRes.token) {
+                                localStorage.setItem('itaim_token', authRes.token);
+                                localStorage.setItem('itaim_ultima_atividade', Date.now().toString());
+                            }
+                            if (authRes.user) {
+                                localStorage.setItem('itaim_usuario_logado', JSON.stringify(authRes.user));
+                                localStorage.setItem('itaim_usuario_logado_email', authRes.user.email);
+                                if (window.ItaimSessao && typeof window.ItaimSessao.definirUsuarioLogado === 'function') {
+                                    window.ItaimSessao.definirUsuarioLogado(authRes.user.email, authRes.user);
+                                }
+                            }
+
+                            const precisaCompletar = Boolean(authRes.isNewUser || !authRes.user?.phone || authRes.user.phone.trim() === '');
+                            if (precisaCompletar) {
+                                if (window.ItaimAuthLogin && typeof window.ItaimAuthLogin.iniciarConclusaoCadastroGoogle === 'function') {
+                                    window.ItaimAuthLogin.iniciarConclusaoCadastroGoogle(authRes.user, authRes.token);
+                                    return;
+                                }
+                                window.location.href = window.location.pathname.includes('cadastro.html') ? 'cadastro.html' : 'index.html#cadastro';
+                                return;
+                            }
+
+                            if (window.location.pathname.includes('index.html') || window.location.pathname.includes('login')) {
+                                window.location.href = window.ItaimRotas ? window.ItaimRotas.obterUrl('home') : 'pages/home/home.html';
+                            } else {
+                                window.location.reload();
+                            }
+                        }
+                    }).catch(err => {
+                        console.error('[Google OAuth Global] Erro ao autenticar:', err);
+                    });
+                }
+            }
+        } catch (e) {}
+    })();
+
+
+        // Exporta API no namespace de Autenticação
     window.ItaimSessaoAuth = {
         USUARIO_ADMIN,
         USUARIO_DEV,
