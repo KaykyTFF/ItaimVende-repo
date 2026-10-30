@@ -47,11 +47,11 @@
         }
         const isEmPages = window.location.pathname.replace(/\\/g, '/').toLowerCase().includes('/pages/');
         const raiz = isEmPages ? '../../' : './';
-        let url = raiz + 'pages/auth/cadastro.html';
+        let url = raiz + 'index.html';
         if (params) {
             url += (url.includes('?') ? '&' : '?') + params.replace(/^[\?&]/, '');
         }
-        return url;
+        return url + '#cadastro';
     }
 
     // Modal Global de Login / Cadastro para Visitantes
@@ -112,7 +112,7 @@
         }
 
         const urlLogin = window.ItaimRotas ? window.ItaimRotas.obterUrl('login', query) : ('../../index.html?' + query);
-        const urlCadastro = window.ItaimRotas ? window.ItaimRotas.obterUrl('cadastro', query) : ('../../pages/auth/cadastro.html?' + query);
+        const urlCadastro = window.ItaimRotas ? window.ItaimRotas.obterUrl('cadastro', query) : ('../../index.html?' + query + '#cadastro');
 
         if (linkEntrar) linkEntrar.href = urlLogin;
         if (linkCad) linkCad.href = urlCadastro;
@@ -737,3 +737,5 @@
     protegerPagina();
 
 })();
+
+

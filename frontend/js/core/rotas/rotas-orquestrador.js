@@ -58,6 +58,11 @@
 
             // 3. Mapeia para a rota canônica
             rotaBase = this.mapa[rotaBase] || rotaBase;
+            if (rotaBase.includes('#')) {
+                const idxHash = rotaBase.indexOf('#');
+                if (!hash) hash = rotaBase.slice(idxHash);
+                rotaBase = rotaBase.slice(0, idxHash);
+            }
 
             // Se o ambiente estiver usando Clean URLs (ex: npx serve sem extensão .html na URL do navegador)
             const usaCleanUrls = !window.location.pathname.toLowerCase().endsWith('.html') && 
@@ -332,3 +337,4 @@
     }
 
 })();
+

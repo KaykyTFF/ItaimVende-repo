@@ -120,14 +120,23 @@
                 };
             }
 
-            // Box de contato WhatsApp com vendedor externo
+            // Box de contato WhatsApp com vendedor externo (somente se tiver número cadastrado)
             if (boxContatoExterno && btnWppExterno) {
-                boxContatoExterno.style.display = 'block';
-                let fone = (perfilExibido.phone || perfilExibido.telefone || '89999858585').replace(/\D/g, '');
-                if (fone.length === 10 || fone.length === 11) fone = '55' + fone;
-                const nomeVendedor = perfilExibido.name || perfilExibido.nome || 'Vendedor';
-                const msg = encodeURIComponent(`Olá ${nomeVendedor}! Vi seu perfil no Itaim Vende e gostaria de conversar sobre seus anúncios.`);
-                btnWppExterno.href = `https://wa.me/${fone}?text=${msg}`;
+                const telRaw = perfilExibido.phone || perfilExibido.telefone || '';
+                let fone = String(telRaw).replace(/\D/g, '');
+                if (!fone || fone.length < 10) {
+                    boxContatoExterno.style.display = 'none';
+                    btnWppExterno.style.display = 'none';
+                } else {
+                    boxContatoExterno.style.display = 'block';
+                    btnWppExterno.style.display = 'inline-flex';
+                    if (fone.length === 10 || fone.length === 11) {
+                        fone = '55' + fone;
+                    }
+                    const nomeVendedor = perfilExibido.name || perfilExibido.nome || 'Vendedor';
+                    const msg = encodeURIComponent(`Olá ${nomeVendedor}! Vi seu perfil no Itaim Vende e gostaria de conversar sobre seus anúncios.`);
+                    btnWppExterno.href = `https://wa.me/${fone}?text=${msg}`;
+                }
             }
 
             // Formulário de avaliação

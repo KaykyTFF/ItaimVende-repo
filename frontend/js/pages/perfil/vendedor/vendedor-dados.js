@@ -283,13 +283,21 @@
             elData.textContent = `Membro desde ${anoCriacao}`;
         }
 
-        // Botão WhatsApp
+        // Botão WhatsApp (somente se tiver número cadastrado)
         const btnWpp = document.getElementById('btn-vendedor-wpp');
         if (btnWpp) {
-            let foneLimpo = String(vendedor.phone || vendedor.telefone || '8999985858').replace(/\D/g, '');
-            if (foneLimpo.length === 10 || foneLimpo.length === 11) foneLimpo = '55' + foneLimpo;
-            const msg = encodeURIComponent(`Olá ${nomeExibido}! Vi seu perfil de vendedor no portal Itaim Vende e gostaria de conversar sobre seus anúncios.`);
-            btnWpp.href = `https://wa.me/${foneLimpo}?text=${msg}`;
+            const telRaw = vendedor.phone || vendedor.telefone || '';
+            let foneLimpo = String(telRaw).replace(/\D/g, '');
+            if (!foneLimpo || foneLimpo.length < 10) {
+                btnWpp.style.display = 'none';
+            } else {
+                if (foneLimpo.length === 10 || foneLimpo.length === 11) {
+                    foneLimpo = '55' + foneLimpo;
+                }
+                const msg = encodeURIComponent(`Olá ${nomeExibido}! Vi seu perfil de vendedor no portal Itaim Vende e gostaria de conversar sobre seus anúncios.`);
+                btnWpp.href = `https://wa.me/${foneLimpo}?text=${msg}`;
+                btnWpp.style.display = 'inline-flex';
+            }
         }
 
         // Botão Compartilhar Perfil
