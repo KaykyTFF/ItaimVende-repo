@@ -11,7 +11,7 @@
 @import url('./vendedor/vendedor-hero.css');
 
 /* 3. Métricas e Reputação */
-@import url('./vendedor/vendedor-stats.css');
+@import url('./vendedor/vendedor-stats.css?v=2');
 
 /* 4. Vitrine de Anúncios e Filtros */
 @import url('./vendedor/vendedor-anuncios.css');
@@ -20,4 +20,4 @@
 @import url('./vendedor/vendedor-avaliacoes.css');
 
 /* 6. Responsividade (Tablet e Mobile) */
-@import url('./vendedor/vendedor-responsive.css');
+@import url('./vendedor/vendedor-responsive.css?v=2');
