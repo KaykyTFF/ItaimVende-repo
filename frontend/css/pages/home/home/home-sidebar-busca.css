@@ -495,3 +495,213 @@
         justify-content: space-between;
     }
 }
+
+
+/* ==========================================================================
+   Slider de Faixa de Preço Interativo
+   ========================================================================== */
+.sidebar-grupo-header-preco {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.btn-reset-preco-slider {
+    background: transparent;
+    border: none;
+    padding: 3px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #64748B;
+    border-radius: 4px;
+    cursor: pointer;
+    text-transform: lowercase;
+    transition: all 0.2s ease;
+}
+
+.btn-reset-preco-slider:hover {
+    color: #44BD32;
+    background: rgba(68, 189, 50, 0.08);
+}
+
+.sidebar-preco-slider-box {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 4px 0 10px;
+}
+
+.sidebar-preco-valores-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.preco-tag-display {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 8px;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #0F172A;
+    text-align: center;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+.preco-sep-txt {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #94A3B8;
+    user-select: none;
+}
+
+/* Container do Track do Slider */
+.preco-slider-container {
+    position: relative;
+    width: 100%;
+    height: 24px;
+    display: flex;
+    align-items: center;
+}
+
+.preco-slider-track-bg {
+    position: absolute;
+    width: 100%;
+    height: 6px;
+    background: #E2E8F0;
+    border-radius: 999px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+}
+
+.preco-slider-track-fill {
+    position: absolute;
+    height: 6px;
+    background: #44BD32;
+    border-radius: 999px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    left: 0%;
+    width: 100%;
+    transition: background-color 0.15s ease;
+}
+
+/* Range Inputs sobrepostos */
+.preco-slider-input {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0;
+    width: 100%;
+    height: 24px;
+    margin: 0;
+    background: transparent;
+    -webkit-appearance: none;
+    appearance: none;
+    pointer-events: none;
+    z-index: 3;
+    outline: none;
+}
+
+/* Thumb Styling Webkit */
+.preco-slider-input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    pointer-events: auto;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    border: 2.5px solid #44BD32;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    cursor: grab;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.preco-slider-input::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+    box-shadow: 0 3px 8px rgba(68, 189, 50, 0.35);
+}
+
+.preco-slider-input::-webkit-slider-thumb:active {
+    cursor: grabbing;
+    transform: scale(1.22);
+    box-shadow: 0 0 0 5px rgba(68, 189, 50, 0.2);
+}
+
+/* Thumb Styling Firefox */
+.preco-slider-input::-moz-range-thumb {
+    pointer-events: auto;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    border: 2.5px solid #44BD32;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    cursor: grab;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.preco-slider-input::-moz-range-thumb:hover {
+    transform: scale(1.15);
+    box-shadow: 0 3px 8px rgba(68, 189, 50, 0.35);
+}
+
+.preco-slider-input::-moz-range-thumb:active {
+    cursor: grabbing;
+    transform: scale(1.22);
+    box-shadow: 0 0 0 5px rgba(68, 189, 50, 0.2);
+}
+
+/* Linha de Marcas de Escala */
+.preco-slider-escala-marcas {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    font-weight: 500;
+    color: #94A3B8;
+    user-select: none;
+    padding: 0 2px;
+}
+
+/* Chips de Atalhos de Preço */
+.preco-atalhos-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 4px;
+}
+
+.chip-preco {
+    background: #F1F5F9;
+    color: #475569;
+    border: 1px solid #E2E8F0;
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-size: 11.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.chip-preco:hover {
+    background: #E2E8F0;
+    color: #0F172A;
+}
+
+.chip-preco.ativo {
+    background: rgba(68, 189, 50, 0.12);
+    color: #2D8A20;
+    border-color: #44BD32;
+    font-weight: 600;
+}
