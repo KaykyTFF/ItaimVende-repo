@@ -346,24 +346,10 @@ body.usuario-deslogado #btn-header-entrar {
     flex-shrink: 0;
 }
 
-/* Menu Dropdown de Perfil */
-.dropdown-perfil {
-    display: none;
-    position: absolute;
-    top: calc(100% + 8px);
-    right: 0;
-    width: 240px;
-    background-color: #FFFFFF;
-    border-radius: var(--radius-md, 12px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
-    border: 1px solid var(--border-color, #E2E8F0);
-    z-index: 1050;
-    overflow: hidden;
-}
-
+/* Menu Dropdown de Perfil Desativado (Avatar vai direto ao Perfil) */
+.dropdown-perfil,
 .dropdown-perfil.aberto {
-    display: block !important;
-    animation: fadeInDropdown 0.2s ease-out;
+    display: none !important;
 }
 
 @keyframes fadeInDropdown {

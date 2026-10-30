@@ -519,11 +519,11 @@
             };
         }
 
-        // Clique no botão de perfil / avatar
+        // Clique no botão de perfil (vai direto para a página de perfil)
         const btnAvatarHeader = document.getElementById('btn-avatar-dropdown') || document.querySelector('.btn-avatar-header');
         if (btnAvatarHeader) {
-            btnAvatarHeader.setAttribute('title', 'Menu de perfil');
-            btnAvatarHeader.setAttribute('aria-label', 'Abrir menu de perfil');
+            btnAvatarHeader.setAttribute('title', 'Ir para Meu Perfil');
+            btnAvatarHeader.setAttribute('aria-label', 'Ir para Meu Perfil');
             btnAvatarHeader.onclick = (e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -531,30 +531,25 @@
                     redirecionarParaLogin('Faça login para acessar seu perfil.');
                     return;
                 }
-                if (dropdownPerfil) {
-                    const aberto = dropdownPerfil.classList.toggle('aberto');
-                    dropdownPerfil.style.display = aberto ? 'block' : 'none';
+                const urlPerfil = window.ItaimRotas ? window.ItaimRotas.obterUrl('perfil') : 'perfil.html';
+                if (window.ItaimRotas && typeof window.ItaimRotas.executarTransicao === 'function') {
+                    window.ItaimRotas.executarTransicao(urlPerfil);
+                } else {
+                    window.location.href = urlPerfil;
                 }
             };
         }
 
-        // Fecha o dropdown de perfil ao clicar fora
-        document.addEventListener('click', (e) => {
-            if (dropdownPerfil && dropdownPerfil.classList.contains('aberto')) {
-                if (!dropdownPerfil.contains(e.target) && !btnAvatarHeader?.contains(e.target)) {
-                    dropdownPerfil.classList.remove('aberto');
-                    dropdownPerfil.style.display = 'none';
-                }
-            }
-        });
+        // Garante que o dropdown de perfil nunca abra
+        if (dropdownPerfil) {
+            dropdownPerfil.classList.remove('aberto');
+            dropdownPerfil.style.display = 'none';
+        }
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 alternarDrawer(false);
-                if (dropdownPerfil) {
-                    dropdownPerfil.classList.remove('aberto');
-                    dropdownPerfil.style.display = 'none';
-                }
+                dropdownPerfil?.classList.remove('aberto');
             }
         });
 

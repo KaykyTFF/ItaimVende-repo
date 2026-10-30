@@ -3,6 +3,7 @@
     --primary-hover: #3ca92c;
     --primary-glow: rgba(68, 189, 50, 0.25);
     --dark-bg: #1E272E;
+    --light-bg: #F4F6F8;
     --text-white: #FFFFFF;
     --text-primary: #2F3542;
     --text-secondary: #57606F;
@@ -46,6 +47,7 @@ body {
     overflow-x: hidden;
     max-width: 100%;
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--light-bg);
 }
 
 /* Box-sizing consistente para o cabeçalho e menu lateral em qualquer página (mesmo sem home.css) */

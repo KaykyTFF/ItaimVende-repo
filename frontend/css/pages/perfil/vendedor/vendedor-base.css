@@ -4,7 +4,7 @@
    ========================================================================== */
 
 body.pagina-vendedor {
-    background-color: #F8FAFC;
+    background-color: var(--light-bg, #F4F6F8);
     color: #1E293B;
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     min-height: 100vh;
