@@ -229,8 +229,8 @@ const PAGE_ROUTES = [
   { route: '/index.html', file: 'index.html' },
   { route: '/login', file: 'index.html' },
   { route: '/login.html', file: 'index.html' },
-  { route: '/cadastro', file: 'pages/auth/cadastro.html' },
-  { route: '/cadastro.html', file: 'pages/auth/cadastro.html' },
+  { route: '/cadastro', file: 'index.html' },
+  { route: '/cadastro.html', file: 'index.html' },
   { route: '/categoria', file: 'pages/produtos/categoria.html' },
   { route: '/categoria.html', file: 'pages/produtos/categoria.html' },
   { route: '/produto', file: 'pages/produtos/produto.html' },
@@ -257,6 +257,8 @@ const PAGE_ROUTES = [
   { route: '/painel.html', file: 'pages/admin/painel.html' },
   { route: '/status', file: 'pages/admin/painel.html' },
   { route: '/status.html', file: 'pages/admin/painel.html' },
+  { route: '/404', file: '404.html' },
+  { route: '/404.html', file: '404.html' },
 ];
 
 PAGE_ROUTES.forEach(({ route, file }) => {
@@ -357,4 +359,7 @@ process.on('uncaughtException', (err) => {
 });
 
 export default app;
+
+
+
 

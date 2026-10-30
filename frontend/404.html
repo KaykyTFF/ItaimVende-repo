@@ -9,20 +9,34 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Segoe+UI&display=swap" rel="stylesheet">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="assets/logos/header-logo.png">
+    <link rel="icon" type="image/png" href="/assets/logos/header-logo.png">
+    
+    <!-- CSS do Cabeçalho Global e Sistema Visual -->
+    <link rel="stylesheet" href="/css/core/header-global.css?v=12">
     
     <style>
         :root {
             --primary: #44BD32;
             --primary-hover: #38a128;
-            --bg-dark: #0F172A;
-            --card-bg: #1E293B;
-            --border-color: #334155;
-            --text-light: #F8FAFC;
-            --text-muted: #94A3B8;
+            --btn-verde: #16A34A;
+            --btn-verde-hover: #15803D;
+            --cor-404: #526071;
+            --titulo-cor: #111827;
+            --texto-sub: #64748B;
+            --bg-pagina: #FAF9F6;
+            --borda-botao: #111827;
+        }
+
+        /* Suporte ao Modo Escuro nativo do site */
+        [data-theme="dark"], body.dark-mode {
+            --bg-pagina: #0F172A;
+            --titulo-cor: #F8FAFC;
+            --texto-sub: #94A3B8;
+            --cor-404: #64748B;
+            --borda-botao: #E2E8F0;
         }
 
         * {
@@ -33,283 +47,567 @@
         }
 
         body {
-            background-color: var(--bg-dark);
-            color: var(--text-light);
+            background-color: var(--bg-pagina);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
+            color: var(--titulo-cor);
+            transition: background-color 0.3s ease, color 0.3s ease;
             overflow-x: hidden;
+        }
+
+        /* ==========================================================
+           ÁREA PRINCIPAL 404 (ESTILO MODERNO COM MASCOTE)
+           ========================================================== */
+        .pagina-404-main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 24px;
+            width: 100%;
+        }
+
+        .pagina-404-container {
+            max-width: 1140px;
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 48px;
+        }
+
+        /* Coluna Esquerda: Textos e Botões */
+        .pagina-404-conteudo {
+            flex: 1.1;
+            max-width: 540px;
+        }
+
+        .codigo-404 {
+            font-size: clamp(5.5rem, 11vw, 8.5rem);
+            font-weight: 800;
+            color: var(--cor-404);
+            line-height: 0.95;
+            letter-spacing: -3px;
+            margin: 0 0 16px 0;
+            user-select: none;
+        }
+
+        .titulo-404 {
+            font-size: clamp(1.85rem, 3.8vw, 2.5rem);
+            font-weight: 800;
+            color: var(--titulo-cor);
+            line-height: 1.2;
+            margin: 0 0 16px 0;
+            letter-spacing: -0.5px;
+        }
+
+        .descricao-404 {
+            font-size: clamp(0.95rem, 1.8vw, 1.05rem);
+            color: var(--texto-sub);
+            line-height: 1.6;
+            margin: 0 0 32px 0;
+            max-width: 470px;
+            font-weight: 400;
+        }
+
+        .botoes-404 {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .btn-404 {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            font-weight: 700;
+            border-radius: 9999px;
+            text-decoration: none;
+            transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        /* Botão 1: Página Inicial (Verde Sólido Pílula) */
+        .btn-404-primario {
+            background-color: var(--btn-verde);
+            color: #FFFFFF !important;
+            padding: 13px 32px;
+            border: 2px solid var(--btn-verde);
+            box-shadow: 0 4px 14px rgba(22, 163, 74, 0.25);
+        }
+
+        .btn-404-primario:hover {
+            background-color: var(--btn-verde-hover);
+            border-color: var(--btn-verde-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(22, 163, 74, 0.35);
+        }
+
+        /* Botão 2: Explorar Catálogo (Outline Pílula) */
+        .btn-404-secundario {
+            background-color: transparent;
+            color: var(--titulo-cor) !important;
+            padding: 13px 28px;
+            border: 1.8px solid var(--borda-botao);
+        }
+
+        .btn-404-secundario:hover {
+            background-color: var(--borda-botao);
+            color: #FFFFFF !important;
+            transform: translateY(-2px);
+        }
+
+        [data-theme="dark"] .btn-404-secundario:hover,
+        body.dark-mode .btn-404-secundario:hover {
+            color: #0F172A !important;
+        }
+
+        /* Coluna Direita: Mascote Tatu com Mapa */
+        .pagina-404-ilustracao {
+            flex: 1;
+            max-width: 480px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             position: relative;
         }
 
-        /* Fundo decorativo */
-        .bg-glow {
+        /* Halo suave de fundo atrás do tatu */
+        .halo-mascote {
             position: absolute;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(68, 189, 50, 0.12) 0%, rgba(15, 23, 42, 0) 70%);
-            top: 20%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 0;
+            width: 82%;
+            height: 82%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(254, 236, 177, 0.8) 0%, rgba(254, 243, 199, 0.45) 52%, rgba(254, 249, 195, 0) 72%);
+            z-index: 1;
+            filter: blur(16px);
             pointer-events: none;
         }
 
-        header {
-            width: 100%;
-            padding: 24px 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
+        [data-theme="dark"] .halo-mascote,
+        body.dark-mode .halo-mascote {
+            background: radial-gradient(circle, rgba(217, 119, 6, 0.25) 0%, rgba(180, 83, 9, 0.12) 50%, rgba(15, 23, 42, 0) 72%);
         }
 
-        .logo-img {
-            height: 52px;
+        .img-mascote-404 {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 440px;
+            height: auto;
             object-fit: contain;
-            transition: transform 0.25s ease;
+            user-select: none;
+            filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.08));
+            transition: transform 0.3s ease;
         }
 
-        .logo-img:hover {
-            transform: scale(1.04);
+        .img-mascote-404:hover {
+            transform: scale(1.02);
         }
 
-        main {
-            z-index: 10;
-            text-align: center;
+        /* Rodapé sutil e minimalista */
+        .footer-404 {
+            width: 100%;
             padding: 20px 24px;
-            max-width: 680px;
-            width: 100%;
-            margin: auto;
-        }
-
-        .badge-404 {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(68, 189, 50, 0.15);
-            color: var(--primary);
-            border: 1px solid rgba(68, 189, 50, 0.35);
-            padding: 6px 18px;
-            border-radius: 9999px;
-            font-size: 14px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            margin-bottom: 20px;
-        }
-
-        .illustration {
-            width: 130px;
-            height: 130px;
-            margin: 0 auto 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(30, 41, 59, 0.7);
-            border: 1px solid var(--border-color);
-            border-radius: 50%;
-            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-        }
-
-        .illustration svg {
-            width: 68px;
-            height: 68px;
-            stroke: var(--primary);
-        }
-
-        h1 {
-            font-size: clamp(2rem, 5vw, 2.75rem);
-            font-weight: 800;
-            line-height: 1.15;
-            margin-bottom: 14px;
-            color: #FFFFFF;
-        }
-
-        p {
-            font-size: clamp(1rem, 2vw, 1.125rem);
-            color: var(--text-muted);
-            line-height: 1.6;
-            margin-bottom: 32px;
-        }
-
-        .actions-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 14px;
-            justify-content: center;
-            margin-bottom: 36px;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 14px 28px;
-            border-radius: 30px;
-            font-size: 15px;
-            font-weight: 700;
-            text-decoration: none;
-            transition: all 0.25s ease;
-            cursor: pointer;
-        }
-
-        .btn-primary {
-            background-color: var(--primary);
-            color: #FFFFFF;
-            box-shadow: 0 4px 14px rgba(68, 189, 50, 0.35);
-            border: none;
-        }
-
-        .btn-primary:hover {
-            background-color: var(--primary-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(68, 189, 50, 0.45);
-        }
-
-        .btn-secondary {
-            background: var(--card-bg);
-            color: var(--text-light);
-            border: 1px solid var(--border-color);
-        }
-
-        .btn-secondary:hover {
-            background: #27354a;
-            border-color: #475569;
-            transform: translateY(-2px);
-        }
-
-        .categories-quick {
-            background: rgba(30, 41, 59, 0.6);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 18px 20px;
-            backdrop-filter: blur(10px);
-        }
-
-        .categories-quick h3 {
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--text-muted);
-            margin-bottom: 12px;
-            font-weight: 600;
-        }
-
-        .pills {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .pill {
-            background: rgba(15, 23, 42, 0.8);
-            border: 1px solid var(--border-color);
-            color: var(--text-light);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 500;
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-
-        .pill:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-            transform: scale(1.05);
-        }
-
-        footer {
-            width: 100%;
-            padding: 20px;
             text-align: center;
             font-size: 13px;
-            color: var(--text-muted);
-            border-top: 1px solid rgba(51, 65, 85, 0.4);
-            z-index: 10;
+            color: var(--texto-sub);
+            border-top: 1px solid rgba(226, 232, 240, 0.8);
+            margin-top: auto;
+        }
+
+        [data-theme="dark"] .footer-404,
+        body.dark-mode .footer-404 {
+            border-top: 1px solid rgba(51, 65, 85, 0.5);
+        }
+
+        /* ==========================================================
+           RESPONSIVIDADE (MOBILE & TABLET)
+           ========================================================== */
+        @media (max-width: 900px) {
+            .pagina-404-container {
+                flex-direction: column-reverse;
+                text-align: center;
+                gap: 24px;
+            }
+
+            .pagina-404-conteudo {
+                max-width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .codigo-404 {
+                font-size: 4.8rem;
+                margin-bottom: 8px;
+            }
+
+            .descricao-404 {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .botoes-404 {
+                justify-content: center;
+            }
+
+            .pagina-404-ilustracao {
+                max-width: 320px;
+            }
+
+            .img-mascote-404 {
+                max-width: 290px;
+            }
+
+            .halo-mascote {
+                width: 260px;
+                height: 260px;
+            }
         }
 
         @media (max-width: 480px) {
-            .btn {
+            .botoes-404 {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn-404 {
                 width: 100%;
             }
         }
     </style>
 </head>
 <body>
-    <div class="bg-glow"></div>
 
-    <header>
-        <a href="pages/home/home.html" title="Itaim Vende - Início">
-            <img src="assets/logos/header1-logo.png" alt="Itaim Vende" class="logo-img">
-        </a>
+    <!-- ==========================================================
+         1. CABEÇALHO GLOBAL (NAVBAR UNIFICADA DO SITE)
+         ========================================================== -->
+    <header class="header-principal">
+        <div class="header-container">
+            <!-- Esquerda: Menu Hambúrguer e Logo Oficial -->
+            <div class="header-left">
+                <button type="button" class="btn-menu-hamburguer" id="btn-abrir-drawer" aria-label="Abrir menu de navegação" title="Menu principal">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                <a href="/" class="header-logo-link" title="Itaim Vende - Página Inicial">
+                    <img src="/assets/logos/header1-logo.png" alt="Itaim Vende" class="header-logo-img" onerror="this.src='assets/logos/header1-logo.png'">
+                </a>
+            </div>
+
+            <!-- Centro: Barra de Pesquisa Estilo Pílula -->
+            <div class="header-center">
+                <form class="busca-form" id="form-busca" role="search" action="/categoria" method="GET">
+                    <input 
+                        type="search" 
+                        class="campo-busca" 
+                        id="campo-busca" 
+                        name="q"
+                        placeholder="Buscar produtos, marcas e muito mais..." 
+                        autocomplete="off"
+                        aria-label="Buscar produtos"
+                    >
+                    <button type="submit" class="btn-busca-submit" id="btn-submit-busca" aria-label="Pesquisar" title="Pesquisar">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Direita: Ações do Cabeçalho -->
+            <div class="header-right">
+                <!-- Botão Entrar (exibido para visitantes deslogados) -->
+                <a href="/login" class="btn-vender-destaque" id="btn-header-entrar" style="display: none;">
+                    <span>Entrar</span>
+                </a>
+
+                <!-- Desktop: Meus Anúncios (Ícone + Texto) -->
+                <a href="/meus-anuncios" class="btn-nav-texto" id="link-meus-anuncios">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 11l19-9-9 19-2-8-8-2z"></path>
+                    </svg>
+                    <span>Meus Anúncios</span>
+                </a>
+
+                <!-- Botão Vender -->
+                <a href="/vender" class="btn-vender-destaque" id="btn-abrir-modal-vender">
+                    <span>Vender</span>
+                </a>
+
+                <!-- Ícone Conversas -->
+                <a href="/conversas" class="btn-icone-header" id="btn-chat" aria-label="Conversas" title="Conversas">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                </a>
+
+                <!-- Ícone Notificações -->
+                <a href="/notificacoes" class="btn-icone-header" id="btn-notificacoes" aria-label="Notificações" title="Notificações">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                </a>
+
+                <!-- Mobile: Ícone Meus Anúncios -->
+                <a href="/meus-anuncios" class="btn-icone-header btn-meus-anuncios-mobile" id="btn-meus-anuncios-mobile" aria-label="Meus Anúncios" title="Meus Anúncios">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 11l19-9-9 19-2-8-8-2z"></path>
+                    </svg>
+                </a>
+
+                <!-- Perfil do Usuário com Dropdown -->
+                <div class="perfil-wrapper">
+                    <button type="button" class="btn-avatar-header" id="btn-avatar-dropdown" aria-label="Abrir menu de perfil">
+                        <img src="/assets/icons/icon-user.png" alt="Foto de perfil" class="avatar-img" id="img-avatar-user" onerror="this.src='assets/icons/icon-user.png'">
+                    </button>
+
+                    <div class="dropdown-perfil" id="dropdown-perfil">
+                        <a href="/perfil" class="dropdown-header-user" title="Ir para Meu Perfil">
+                            <strong id="dropdown-user-name">Usuário</strong>
+                            <span id="dropdown-user-email">usuario@itaimvende.com</span>
+                        </a>
+                        <a href="/perfil" class="dropdown-item" id="link-menu-perfil">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                            Meu Perfil
+                        </a>
+                        <a href="/meus-anuncios" class="dropdown-item" id="link-menu-anuncios">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l19-9-9 19-2-8-8-2z"></path></svg>
+                            Meus Anúncios
+                        </a>
+                        <a href="/favoritos" class="dropdown-item" id="link-menu-favoritos">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                            Favoritos (<span id="favoritos-contador-badge">0</span>)
+                        </a>
+                        <a href="/configuracoes" class="dropdown-item" id="link-menu-configuracoes">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="3"></circle>
+                                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0 1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                            </svg>
+                            Configurações
+                        </a>
+                        <a href="/login" class="dropdown-item item-sair">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                <polyline points="16 17 21 12 16 7"></polyline>
+                                <line x1="21" y1="12" x2="9" y2="12"></line>
+                            </svg>
+                            Sair
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </header>
 
-    <main>
-        <div class="badge-404">Erro 404</div>
+    <!-- ==========================================================
+         2. MENU LATERAL DESLIZANTE (DRAWER GLOBAL)
+         ========================================================== -->
+    <div class="drawer-backdrop" id="drawer-backdrop">
+        <aside class="drawer-menu" aria-label="Menu principal">
+            <div class="drawer-header">
+                <img src="/assets/logos/header1-logo.png" alt="Itaim Vende" class="drawer-logo" onerror="this.src='assets/logos/header1-logo.png'">
+                <button type="button" class="drawer-close" id="btn-fechar-drawer" aria-label="Fechar menu">&times;</button>
+            </div>
 
-        <div class="illustration" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"></circle>
-                <path d="M16 16s-1.5-2-4-2-4 2-4 2"></path>
-                <line x1="9" y1="9" x2="9.01" y2="9"></line>
-                <line x1="15" y1="9" x2="15.01" y2="9"></line>
-            </svg>
-        </div>
+            <nav class="drawer-nav">
+                <a href="/" class="drawer-link" id="drawer-link-home">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+                    Início
+                </a>
+                <a href="/perfil" class="drawer-link" id="drawer-link-perfil">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    Meu Perfil
+                </a>
+                <a href="/meus-anuncios" class="drawer-link" id="drawer-link-anuncios">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l19-9-9 19-2-8-8-2z"></path></svg>
+                    Meus Anúncios
+                </a>
+                <a href="/favoritos" class="drawer-link" id="drawer-link-favoritos">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    Meus Favoritos
+                </a>
+                <a href="/conversas" class="drawer-link" id="drawer-link-chat">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    Conversas
+                </a>
+                <a href="/vender" class="drawer-link" id="drawer-link-vender">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    Vender Produto
+                </a>
+                <a href="/notificacoes" class="drawer-link" id="drawer-link-notificacoes">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                    Notificações
+                </a>
 
-        <h1>Página Não Encontrada</h1>
-        <p>Ops! O anúncio ou a página que você tentou acessar não existe, foi removida ou o endereço digitado está incorreto.</p>
+                <!-- Seção Categorias Retrátil -->
+                <div class="drawer-secao-divisor"></div>
+                <button type="button" class="drawer-accordion-btn" id="btn-toggle-categorias" aria-expanded="false">
+                    <span class="drawer-accordion-label">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="14" width="7" height="7"></rect>
+                            <rect x="3" y="14" width="7" height="7"></rect>
+                        </svg>
+                        <span>Categorias</span>
+                    </span>
+                    <svg class="chevron-accordion" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div class="drawer-categorias-conteudo" id="drawer-categorias-conteudo">
+                    <a href="/categoria?cat=Eletrônicos" class="drawer-sublink">Eletrônicos</a>
+                    <a href="/categoria?cat=Decoração" class="drawer-sublink">Decoração</a>
+                    <a href="/categoria?cat=Móveis" class="drawer-sublink">Móveis</a>
+                    <a href="/categoria?cat=Moda" class="drawer-sublink">Moda & Vestuário</a>
+                    <a href="/categoria?cat=Infantil" class="drawer-sublink">Infantil & Bebês</a>
+                    <a href="/categoria?cat=Esportes" class="drawer-sublink">Esportes & Lazer</a>
+                    <a href="/categoria?cat=Hobbies" class="drawer-sublink">Hobbies & Games</a>
+                    <a href="/categoria?cat=Serviços" class="drawer-sublink">Serviços</a>
+                </div>
 
-        <div class="actions-group">
-            <a href="pages/home/home.html" class="btn btn-primary" id="btn-voltar-home">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                </svg>
-                Página Inicial
-            </a>
+                <div class="drawer-secao-divisor"></div>
+                <button type="button" class="drawer-link btn-alternar-tema" id="btn-tema-drawer" aria-label="Alternar tema do site">
+                    <svg class="icone-tema-lua" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg class="icone-tema-sol" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <span class="drawer-tema-texto">Modo Escuro</span>
+                    <span class="drawer-tema-switch" aria-hidden="true">
+                        <span class="drawer-tema-trilho">
+                            <span class="drawer-tema-bolinha"></span>
+                        </span>
+                    </span>
+                </button>
+                <a href="/configuracoes" class="drawer-link" id="drawer-link-configuracoes">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0 1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                    Configurações
+                </a>
+                <a href="/login" class="drawer-link item-sair">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    Sair
+                </a>
+            </nav>
+        </aside>
+    </div>
 
-            <a href="pages/produtos/categoria.html" class="btn btn-secondary" id="btn-explorar-categoria">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
-                Explorar Catálogo
-            </a>
-        </div>
+    <!-- ==========================================================
+         3. CONTEÚDO PRINCIPAL (404 COM MASCOTE TATU)
+         ========================================================== -->
+    <main class="pagina-404-main">
+        <div class="pagina-404-container">
+            <!-- Coluna da Esquerda: Textos e Botões Pílula -->
+            <div class="pagina-404-conteudo">
+                <h1 class="codigo-404">404</h1>
+                <h2 class="titulo-404">Página Não Encontrada</h2>
+                <p class="descricao-404">
+                    Ops! O anúncio ou a página que você tentou acessar não existe, foi removida ou o endereço digitado está incorreto.
+                </p>
+                <div class="botoes-404">
+                    <a href="/" class="btn-404 btn-404-primario" id="btn-404-home" title="Ir para a página inicial">
+                        Página Inicial
+                    </a>
+                    <a href="/categoria" class="btn-404 btn-404-secundario" id="btn-404-catalogo" title="Explorar todos os anúncios">
+                        Explorar Catálogo
+                    </a>
+                </div>
+            </div>
 
-        <div class="categories-quick">
-            <h3>Categorias Populares</h3>
-            <div class="pills">
-                <a href="pages/produtos/categoria.html?cat=Eletrônicos" class="pill">Eletrônicos</a>
-                <a href="pages/produtos/categoria.html?cat=Móveis" class="pill">Móveis</a>
-                <a href="pages/produtos/categoria.html?cat=Moda" class="pill">Moda</a>
-                <a href="pages/produtos/categoria.html?cat=Veículos" class="pill">Veículos</a>
-                <a href="pages/produtos/categoria.html?cat=Esportes" class="pill">Esportes</a>
-                <a href="pages/produtos/categoria.html?cat=Serviços" class="pill">Serviços</a>
+            <!-- Coluna da Direita: Mascote com Mapa Dobrado e Halo -->
+            <div class="pagina-404-ilustracao">
+                <div class="halo-mascote" aria-hidden="true"></div>
+                <img 
+                    src="/assets/logos/mascote-404.png" 
+                    alt="Mascote Itaim Vende confuso lendo o mapa" 
+                    class="img-mascote-404"
+                    onerror="this.onerror=null; this.src='assets/logos/mascote-404.png';"
+                >
             </div>
         </div>
     </main>
 
-    <footer>
-        <p>&copy; 2026 Itaim Vende. Todos os direitos reservados. Paulistana e região - PI.</p>
+    <!-- ==========================================================
+         4. RODAPÉ MINIMALISTA
+         ========================================================== -->
+    <footer class="footer-404">
+        <span>© 2026 Itaim Vende. Todos os direitos reservados. Paulistana e região - PI.</span>
     </footer>
 
-    <!-- Resolvedor dinâmico de rotas -->
-    <script src="js/core/rotas/index.js"></script>
+    <!-- ==========================================================
+         5. SCRIPTS GLOBAIS DE SESSÃO E COMPORTAMENTO
+         ========================================================== -->
+    <script src="/js/core/rotas/index.js" onerror="this.src='js/core/rotas/index.js'"></script>
+    <script src="/js/core/api/index.js" onerror="this.src='js/core/api/index.js'"></script>
+    <script src="/js/core/sessao/index.js" onerror="this.src='js/core/sessao/index.js'"></script>
+
+    <!-- Fallback de rotas caso acessado em ambiente estático isolado -->
     <script>
-        // Adapta URLs de acordo com a origem se necessário
-        if (window.ItaimRotas) {
-            const btnHome = document.getElementById('btn-voltar-home');
-            const btnCat = document.getElementById('btn-explorar-categoria');
-            if (btnHome) btnHome.href = window.ItaimRotas.obterUrl('home');
-            if (btnCat) btnCat.href = window.ItaimRotas.obterUrl('categoria');
-        }
+        (function() {
+            // Se aberto via protocolo file: ou caminho relativo de subdiretório
+            if (window.location.protocol === 'file:') {
+                const linksHome = document.querySelectorAll('a[href="/"]');
+                linksHome.forEach(a => a.href = 'pages/home/home.html');
+
+                const linksCat = document.querySelectorAll('a[href="/categoria"]');
+                linksCat.forEach(a => a.href = 'pages/produtos/categoria.html');
+
+                const linksLogin = document.querySelectorAll('a[href="/login"]');
+                linksLogin.forEach(a => a.href = 'index.html');
+
+                const linksVender = document.querySelectorAll('a[href="/vender"]');
+                linksVender.forEach(a => a.href = 'pages/vender/vender.html');
+
+                const linksMeusAnuncios = document.querySelectorAll('a[href="/meus-anuncios"]');
+                linksMeusAnuncios.forEach(a => a.href = 'pages/vender/meus-anuncios.html');
+
+                const linksConversas = document.querySelectorAll('a[href="/conversas"]');
+                linksConversas.forEach(a => a.href = 'pages/mensagens/conversas.html');
+
+                const linksNotif = document.querySelectorAll('a[href="/notificacoes"]');
+                linksNotif.forEach(a => a.href = 'pages/notificacoes/notificacoes.html');
+
+                const linksPerfil = document.querySelectorAll('a[href="/perfil"]');
+                linksPerfil.forEach(a => a.href = 'pages/perfil/perfil.html');
+
+                const linksFav = document.querySelectorAll('a[href="/favoritos"]');
+                linksFav.forEach(a => a.href = 'pages/favoritos/favoritos.html');
+
+                const linksConfig = document.querySelectorAll('a[href="/configuracoes"]');
+                linksConfig.forEach(a => a.href = 'pages/perfil/configuracoes.html');
+            }
+        })();
     </script>
 </body>
 </html>

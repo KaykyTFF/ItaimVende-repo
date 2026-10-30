@@ -599,8 +599,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (valorDigitado.length > 0) {
             e.preventDefault();
             const urlDestino = window.ItaimRotas 
-                ? window.ItaimRotas.obterUrl('categoria', `q=${encodeURIComponent(valorDigitado)}`)
-                : `../produtos/categoria.html?q=${encodeURIComponent(valorDigitado)}`;
+                ? window.ItaimRotas.obterUrl('categoria', `q=${encodeURIComponent(valorDigitado)}`) : `../produtos/categoria.html?q=${encodeURIComponent(valorDigitado)}`;
             window.location.href = urlDestino;
         }
     });
