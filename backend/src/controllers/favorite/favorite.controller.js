@@ -9,6 +9,7 @@ export async function listFavorites(req, res, next) {
     const data = await getUserFavorites(req.user.id);
     res.status(200).json({
       success: true,
+      data: data.favorites,
       ...data,
     });
   } catch (error) {

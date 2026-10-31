@@ -22,6 +22,25 @@
         };
     }
 
+    function sincronizarFavoritosUsuarioAposAuth(userEmail) {
+        if (!userEmail) return;
+        try {
+            if (window.ItaimApi && window.ItaimApi.favoritos && typeof window.ItaimApi.favoritos.listar === 'function') {
+                window.ItaimApi.favoritos.listar().then(resFavs => {
+                    if (resFavs && resFavs.success) {
+                        const lista = Array.isArray(resFavs.favorites) ? resFavs.favorites : (Array.isArray(resFavs.data) ? resFavs.data : []);
+                        const ids = lista.map(f => f.productId || f.product?.id || f.id).filter(Boolean);
+                        localStorage.setItem('itaim_favoritos', JSON.stringify(ids));
+                        localStorage.setItem('itaim_favoritos_' + userEmail.toLowerCase().trim(), JSON.stringify(ids));
+                        if (window.ItaimSessao && typeof window.ItaimSessao.atualizarHeaderUsuario === 'function') {
+                            window.ItaimSessao.atualizarHeaderUsuario();
+                        }
+                    }
+                }).catch(() => {});
+            }
+        } catch(e) {}
+    }
+
     const auth = {
         obterToken() {
             return getCore().obterToken();
@@ -75,6 +94,7 @@
                 if (window.ItaimSessao && typeof window.ItaimSessao.definirUsuarioLogado === 'function') {
                     window.ItaimSessao.definirUsuarioLogado(resposta.user.email || email, resposta.user);
                 }
+                sincronizarFavoritosUsuarioAposAuth(resposta.user.email || email);
             }
             return resposta;
         },
@@ -99,6 +119,7 @@
                 if (window.ItaimSessao && typeof window.ItaimSessao.definirUsuarioLogado === 'function') {
                     window.ItaimSessao.definirUsuarioLogado(resposta.user.email || dados.email, resposta.user);
                 }
+                sincronizarFavoritosUsuarioAposAuth(resposta.user.email || dados.email);
             }
             return resposta;
         },
@@ -123,6 +144,7 @@
                 if (window.ItaimSessao && typeof window.ItaimSessao.definirUsuarioLogado === 'function') {
                     window.ItaimSessao.definirUsuarioLogado(resposta.user.email, resposta.user);
                 }
+                sincronizarFavoritosUsuarioAposAuth(resposta.user.email);
             }
             return resposta;
         },

@@ -317,6 +317,17 @@
             localStorage.setItem('itaim_usuario_logado', JSON.stringify(user));
             localStorage.setItem('itaim_ultimo_email', user.email);
 
+            // Carrega favoritos isolados deste usuário específico
+            try {
+                const userFavsKey = 'itaim_favoritos_' + user.email.toLowerCase().trim();
+                const userFavs = localStorage.getItem(userFavsKey);
+                if (userFavs) {
+                    localStorage.setItem('itaim_favoritos', userFavs);
+                } else {
+                    localStorage.setItem('itaim_favoritos', JSON.stringify([]));
+                }
+            } catch (e) {}
+
             if (window.ItaimSessao && typeof window.ItaimSessao.atualizarHeaderUsuario === 'function') {
                 window.ItaimSessao.atualizarHeaderUsuario();
             }
