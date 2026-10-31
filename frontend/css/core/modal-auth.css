@@ -454,7 +454,8 @@
 }
 
 /* Botão de cadastro rápido com Google na página de cadastro */
-.btn-cadastro-google {
+.btn-cadastro-google,
+.btn-login-google {
     width: 100%;
     height: 46px;
     background: #FFFFFF;
@@ -474,7 +475,8 @@
     margin-bottom: 16px;
 }
 
-.btn-cadastro-google:hover {
+.btn-cadastro-google:hover,
+.btn-login-google:hover {
     background: #F8FAFC;
     border-color: #94A3B8;
 }

@@ -8,6 +8,7 @@
  * - produto-vendedor.js: Sidebar com perfil, avatar real e dados do vendedor
  * - produto-acoes.js: Chat integrado, botão WhatsApp, favoritos e toasts
  * - produto-denuncias.js: Modal de denúncias, motivos e histórico de tickets
+ * - produto-relacionados.js: Vitrine de outros anúncios da região/categoria
  * - index.js: Orquestrador do ciclo de vida da página
  */
 
@@ -23,6 +24,7 @@
         'produto/produto-vendedor.js',
         'produto/produto-acoes.js?v=2',
         'produto/produto-denuncias.js',
+        'produto/produto-relacionados.js',
         'produto/index.js'
     ];
 

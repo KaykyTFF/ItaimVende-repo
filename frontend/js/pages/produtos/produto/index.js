@@ -24,6 +24,9 @@
         if (window.ItaimProdutoDenuncias?.inicializar) {
             window.ItaimProdutoDenuncias.inicializar();
         }
+        if (window.ItaimProdutoRelacionados?.inicializar) {
+            window.ItaimProdutoRelacionados.inicializar(produto);
+        }
     }
 
     window.ItaimProdutoOrquestrador = {
