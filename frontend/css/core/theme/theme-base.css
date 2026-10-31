@@ -7,7 +7,11 @@
    2. ESTILOS DO MODO ESCURO NOS COMPONENTES DA PLATAFORMA
    ========================================================================== */
 
-[data-theme="dark"] body {
+[data-theme="dark"] body,
+html[data-theme="dark"] body,
+html.dark-theme body,
+body[data-theme="dark"],
+body.dark-theme {
     background-color: var(--light-bg) !important;
     color: var(--text-primary) !important;
 }

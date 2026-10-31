@@ -17,6 +17,7 @@
 /* Modo Escuro - Aplicado via data-theme="dark" no <html> ou <body> e classe .dark-theme */
 :root[data-theme="dark"],
 html[data-theme="dark"],
+html.dark-theme,
 body[data-theme="dark"],
 body.dark-theme {
     --theme-mode: dark;
@@ -44,8 +45,25 @@ body.dark-theme {
     --shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.5);
 }
 
-/* Transições suaves ao trocar de tema */
+/* Fundo escuro/claro imediato na raiz (html) e no corpo (body) */
+html {
+    background-color: var(--light-bg);
+}
+
 body {
     background-color: var(--light-bg);
     transition: var(--transition-theme);
+}
+
+/* Prevenção total de FOUC / flash de cor durante o carregamento inicial da página */
+html.tema-sem-transicao,
+html.tema-sem-transicao *,
+html.tema-sem-transicao *::before,
+html.tema-sem-transicao *::after,
+html.tema-sem-transicao body {
+    -webkit-transition: none !important;
+    -moz-transition: none !important;
+    -o-transition: none !important;
+    -ms-transition: none !important;
+    transition: none !important;
 }

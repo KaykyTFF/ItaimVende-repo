@@ -7,6 +7,53 @@
     <meta name="description" content="Detalhes do anúncio no Itaim Vende - Compra, Venda e Trocas no Piauí.">
     <title>Detalhes do Anúncio - Itaim Vende</title>
 
+    <!-- Anti-FOUC: Aplicação imediata do tema escuro/claro para eliminar qualquer flash visual -->
+    <script>
+        (function() {
+            try {
+                var p = (window.location.pathname || '').toLowerCase();
+                var isAuth = p.endsWith('index.html') || p.includes('/auth/') || p.includes('/login') || p.includes('/cadastro');
+                var tema = (!isAuth && localStorage.getItem('itaim_tema') === 'dark') ? 'dark' : 'light';
+                var d = document.documentElement;
+                d.setAttribute('data-theme', tema);
+                if (tema === 'dark') {
+                    d.classList.add('dark-theme');
+                } else {
+                    d.classList.remove('dark-theme');
+                }
+                d.classList.add('tema-sem-transicao');
+                var o = new MutationObserver(function() {
+                    if (document.body) {
+                        document.body.setAttribute('data-theme', tema);
+                        if (tema === 'dark') {
+                            document.body.classList.add('dark-theme');
+                        } else {
+                            document.body.classList.remove('dark-theme');
+                        }
+                        o.disconnect();
+                    }
+                });
+                o.observe(d, { childList: true, subtree: true });
+                window.addEventListener('DOMContentLoaded', function() {
+                    o.disconnect();
+                    if (document.body) {
+                        document.body.setAttribute('data-theme', tema);
+                        if (tema === 'dark') {
+                            document.body.classList.add('dark-theme');
+                        } else {
+                            document.body.classList.remove('dark-theme');
+                        }
+                    }
+                    requestAnimationFrame(function() {
+                        requestAnimationFrame(function() {
+                            d.classList.remove('tema-sem-transicao');
+                        });
+                    });
+                });
+            } catch (e) {}
+        })();
+    </script>
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

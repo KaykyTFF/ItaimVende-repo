@@ -169,6 +169,7 @@
             console.warn('[ItaimTema] Erro ao salvar tema no storage:', e);
         }
 
+        document.documentElement.classList.remove('tema-sem-transicao');
         aplicarClasseRaiz(novoTema);
         sincronizarBotoes();
 
