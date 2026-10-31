@@ -47,6 +47,13 @@
          * Retorna conjunto de IDs favoritados pelo usuário
          */
         obterFavoritos: function() {
+            const estaAutenticado = (window.ItaimSessao && typeof window.ItaimSessao.usuarioEstaAutenticado === 'function')
+                ? window.ItaimSessao.usuarioEstaAutenticado()
+                : !!(localStorage.getItem('itaim_token') && localStorage.getItem('itaim_usuario_logado'));
+            if (!estaAutenticado) {
+                try { localStorage.removeItem('itaim_favoritos'); } catch(e) {}
+                return new Set();
+            }
             try {
                 return new Set(JSON.parse(localStorage.getItem('itaim_favoritos') || '[]'));
             } catch(e) {

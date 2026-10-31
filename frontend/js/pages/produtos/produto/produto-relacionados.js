@@ -4,6 +4,8 @@
  * 
  * Responsabilidades:
  * - Buscar e exibir anúncios recomendados da mesma região e/ou categoria
+ * - Apresentar vitrine em linha única horizontal com rolagem lateral suave e snap
+ * - Botões de navegação lateral (< e >) e suporte a arrastar com mouse/toque
  * - Filtrar o anúncio atual e produtos encerrados/vendidos
  * - Atualizar link da categoria no cabeçalho da seção
  * - Gerenciar cards interativos, navegação e favoritos
@@ -69,6 +71,15 @@
     }
 
     function obterFavoritosSet() {
+        const estaAutenticado = (window.ItaimSessao && typeof window.ItaimSessao.usuarioEstaAutenticado === 'function')
+            ? window.ItaimSessao.usuarioEstaAutenticado()
+            : !!(localStorage.getItem('itaim_token') && localStorage.getItem('itaim_usuario_logado'));
+
+        if (!estaAutenticado) {
+            try { localStorage.removeItem('itaim_favoritos'); } catch(e) {}
+            return new Set();
+        }
+
         const set = new Set();
         if (window.ItaimSessao && typeof window.ItaimSessao.obterFavoritosIds === 'function') {
             const favs = window.ItaimSessao.obterFavoritosIds();
@@ -86,6 +97,106 @@
         return set;
     }
 
+    // Configura botões de navegação lateral (< e >) e suporte a arraste no carrossel
+    function configurarRolagemHorizontal(gradeEl) {
+        if (!gradeEl) return;
+
+        const btnPrev = document.getElementById('btn-relacionados-prev');
+        const btnNext = document.getElementById('btn-relacionados-next');
+
+        function atualizarEstadoBotoesNav() {
+            if (!btnPrev || !btnNext) return;
+            const maxScroll = Math.max(0, gradeEl.scrollWidth - gradeEl.clientWidth - 8);
+            if (gradeEl.scrollLeft <= 10) {
+                btnPrev.style.opacity = '0.35';
+                btnPrev.style.pointerEvents = 'none';
+            } else {
+                btnPrev.style.opacity = '1';
+                btnPrev.style.pointerEvents = 'auto';
+            }
+
+            if (gradeEl.scrollLeft >= maxScroll) {
+                btnNext.style.opacity = '0.35';
+                btnNext.style.pointerEvents = 'none';
+            } else {
+                btnNext.style.opacity = '1';
+                btnNext.style.pointerEvents = 'auto';
+            }
+        }
+
+        if (btnPrev && !btnPrev.dataset.bound) {
+            btnPrev.dataset.bound = 'true';
+            btnPrev.addEventListener('click', (e) => {
+                e.preventDefault();
+                const step = Math.max(240, Math.floor(gradeEl.clientWidth * 0.75));
+                gradeEl.scrollBy({ left: -step, behavior: 'smooth' });
+            });
+        }
+
+        if (btnNext && !btnNext.dataset.bound) {
+            btnNext.dataset.bound = 'true';
+            btnNext.addEventListener('click', (e) => {
+                e.preventDefault();
+                const step = Math.max(240, Math.floor(gradeEl.clientWidth * 0.75));
+                gradeEl.scrollBy({ left: step, behavior: 'smooth' });
+            });
+        }
+
+        gradeEl.addEventListener('scroll', atualizarEstadoBotoesNav, { passive: true });
+        setTimeout(atualizarEstadoBotoesNav, 150);
+
+        // Suporte para arrastar horizontalmente com o mouse em desktop
+        if (!gradeEl.dataset.dragBound) {
+            gradeEl.dataset.dragBound = 'true';
+            let isDown = false;
+            let startX = 0;
+            let scrollLeftPos = 0;
+            let arrastou = false;
+
+            gradeEl.addEventListener('mousedown', (e) => {
+                if (e.target.closest('button') || e.target.closest('a')) return;
+                isDown = true;
+                arrastou = false;
+                startX = e.pageX - gradeEl.offsetLeft;
+                scrollLeftPos = gradeEl.scrollLeft;
+            });
+
+            window.addEventListener('mouseup', () => {
+                if (isDown) {
+                    isDown = false;
+                    gradeEl.style.cursor = '';
+                }
+            });
+
+            gradeEl.addEventListener('mouseleave', () => {
+                if (isDown) {
+                    isDown = false;
+                    gradeEl.style.cursor = '';
+                }
+            });
+
+            gradeEl.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                const x = e.pageX - gradeEl.offsetLeft;
+                const walk = (x - startX) * 1.3;
+                if (Math.abs(walk) > 5) {
+                    arrastou = true;
+                    gradeEl.style.cursor = 'grabbing';
+                    gradeEl.scrollLeft = scrollLeftPos - walk;
+                }
+            });
+
+            // Evita abrir produto se foi apenas um gesto de arrastar
+            gradeEl.addEventListener('click', (e) => {
+                if (arrastou) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    arrastou = false;
+                }
+            }, true);
+        }
+    }
+
     async function inicializar(produtoParam) {
         const gradeEl = document.getElementById('grade-relacionados');
         if (!gradeEl) return;
@@ -95,7 +206,7 @@
 
         // 1. Exibir skeleton enquanto busca
         if (window.ItaimSkeleton && typeof window.ItaimSkeleton.renderizarCards === 'function') {
-            window.ItaimSkeleton.renderizarCards(gradeEl, 4);
+            window.ItaimSkeleton.renderizarCards(gradeEl, 5);
         }
 
         // 2. Atualizar link de "Ver mais na categoria"
@@ -172,13 +283,13 @@
             return dataB - dataA;
         });
 
-        // Limita a exibição aos 4 até 8 anúncios mais relevantes
-        const relacionados = candidatos.slice(0, 8);
+        // Exibe até 16 anúncios em linha horizontal com rolagem lateral
+        const relacionados = candidatos.slice(0, 16);
 
         // 6. Caso não haja nenhum anúncio disponível
         if (relacionados.length === 0) {
             gradeEl.innerHTML = `
-                <div class="estado-vazio" style="grid-column: 1 / -1; text-align: center; padding: 36px 20px; background: #FFFFFF; border-radius: 14px; border: 1px dashed #CBD5E1; margin: 10px 0;">
+                <div class="estado-vazio" style="width: 100%; text-align: center; padding: 36px 20px; background: #FFFFFF; border-radius: 14px; border: 1px dashed #CBD5E1; margin: 10px 0;">
                     <p style="color: #64748B; font-size: 14.5px; margin: 0; font-weight: 500;">
                         Nenhum outro anúncio encontrado na região no momento.
                     </p>
@@ -196,7 +307,10 @@
         // 7. Renderizar Cards no padrão visual oficial
         gradeEl.innerHTML = relacionados.map(p => {
             const pId = String(p.id);
-            const isFav = favoritosSet.has(pId);
+            const estaLogado = (window.ItaimSessao && typeof window.ItaimSessao.usuarioEstaAutenticado === 'function')
+                ? window.ItaimSessao.usuarioEstaAutenticado()
+                : !!(localStorage.getItem('itaim_token') && localStorage.getItem('itaim_usuario_logado'));
+            const isFav = estaLogado && favoritosSet.has(pId);
 
             let fotoRaw = p.imagem || (Array.isArray(p.images) && p.images[0]) || (Array.isArray(p.fotos) && p.fotos[0]) || '';
             let imagemUrl = placeholderSrc;
@@ -254,7 +368,10 @@
             `;
         }).join('');
 
-        // 8. Evento de clique no Card para navegar ao produto
+        // 8. Ativar controles de rolagem horizontal lateral
+        configurarRolagemHorizontal(gradeEl);
+
+        // 9. Evento de clique no Card para navegar ao produto
         gradeEl.querySelectorAll('.card-produto').forEach(card => {
             card.addEventListener('click', (e) => {
                 if (e.target.closest('.btn-favorito')) return;
@@ -267,7 +384,7 @@
             });
         });
 
-        // 9. Evento de clique no Botão de Favorito
+        // 10. Evento de clique no Botão de Favorito
         gradeEl.querySelectorAll('.btn-favorito').forEach(btn => {
             btn.addEventListener('click', async (e) => {
                 e.stopPropagation();
@@ -309,4 +426,3 @@
         carregarRelacionados: inicializar
     };
 })();
-

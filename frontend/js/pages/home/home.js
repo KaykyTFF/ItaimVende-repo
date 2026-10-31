@@ -118,17 +118,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     produtos = carregarProdutosLocais();
 
-    // Carregar favoritos do localStorage (com IDs padronizados como String)
+    // Carregar favoritos apenas para usuários autenticados (visitantes iniciam sempre com zero favoritos)
+    const estaAutenticado = (window.ItaimSessao && typeof window.ItaimSessao.usuarioEstaAutenticado === 'function')
+        ? window.ItaimSessao.usuarioEstaAutenticado()
+        : !!(localStorage.getItem('itaim_token') && localStorage.getItem('itaim_usuario_logado'));
+
     let favoritosSet = new Set();
-    try {
-        const salvos = JSON.parse(localStorage.getItem('itaim_favoritos') || '[]');
-        favoritosSet = new Set(salvos.map(String));
-    } catch (e) {}
+    if (estaAutenticado) {
+        try {
+            const salvos = JSON.parse(localStorage.getItem('itaim_favoritos') || '[]');
+            favoritosSet = new Set(salvos.map(String));
+        } catch (e) {}
+    } else {
+        try {
+            localStorage.removeItem('itaim_favoritos');
+        } catch (e) {}
+    }
 
     function atualizarContadorFavoritos() {
         const badge = document.getElementById('favoritos-contador-badge');
         if (badge) {
-            badge.textContent = favoritosSet.size;
+            const estaLogado = (window.ItaimSessao && typeof window.ItaimSessao.usuarioEstaAutenticado === 'function')
+                ? window.ItaimSessao.usuarioEstaAutenticado()
+                : !!(localStorage.getItem('itaim_token') && localStorage.getItem('itaim_usuario_logado'));
+            badge.textContent = estaLogado ? favoritosSet.size : 0;
         }
     }
     atualizarContadorFavoritos();
@@ -427,7 +440,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Gerar Cards com botão de favorito e botão de ação rápida vermelho "+"
         gradeProdutos.innerHTML = lista.map(p => {
             const pId = String(p.id);
-            const isFav = favoritosSet.has(pId);
+            const estaLogado = (window.ItaimSessao && typeof window.ItaimSessao.usuarioEstaAutenticado === 'function')
+                ? window.ItaimSessao.usuarioEstaAutenticado()
+                : !!(localStorage.getItem('itaim_token') && localStorage.getItem('itaim_usuario_logado'));
+            const isFav = estaLogado && favoritosSet.has(pId);
             const imagemUrl = (window.ItaimApi && typeof window.ItaimApi.resolverUrlImagem === 'function')
                 ? window.ItaimApi.resolverUrlImagem(p.imagem || (p.images && p.images[0]) || '')
                 : (window.ItaimRotas ? window.ItaimRotas.obterAsset('assets/produtos/anuncio_13.jpg') : '../../assets/produtos/anuncio_13.jpg');

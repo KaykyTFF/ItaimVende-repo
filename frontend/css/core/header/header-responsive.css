@@ -134,6 +134,8 @@
         display: none !important;
     }
 
+    html:not(.usuario-logado) #btn-header-entrar,
+    body:not(.usuario-logado) #btn-header-entrar,
     html.usuario-deslogado #btn-header-entrar,
     body.usuario-deslogado #btn-header-entrar {
         display: inline-flex !important;

@@ -71,7 +71,22 @@
         notificarVendaFinalizada: Notificacoes.notificarVendaFinalizada || (() => {}),
         notificarMudancaPreco: Notificacoes.notificarMudancaPreco || (() => {}),
         notificarNovaAvaliacao: Notificacoes.notificarNovaAvaliacao || (() => {}),
-        exibirToastGlobal: Notificacoes.exibirToastGlobal || (() => {})
+        exibirToastGlobal: Notificacoes.exibirToastGlobal || (() => {}),
+        obterFavoritosIds: function() {
+            const estaAutenticado = (typeof Auth.usuarioEstaAutenticado === 'function')
+                ? Auth.usuarioEstaAutenticado()
+                : !!(localStorage.getItem('itaim_token') && localStorage.getItem('itaim_usuario_logado'));
+            if (!estaAutenticado) {
+                try { localStorage.removeItem('itaim_favoritos'); } catch(e) {}
+                return [];
+            }
+            try {
+                const salvos = JSON.parse(localStorage.getItem('itaim_favoritos') || '[]');
+                return Array.isArray(salvos) ? salvos.map(String) : [];
+            } catch(e) {
+                return [];
+            }
+        }
     };
 
     window.ItaimSessao = ItaimSessao;
@@ -87,6 +102,14 @@
                 localStorage.removeItem('itaim_usuario_logado_email');
                 localStorage.removeItem('itaim_modo_dev');
             } catch (e) {}
+        }
+
+        // Limpa favoritos residuais de visitante não autenticado
+        const visitanteLogado = (typeof Auth.usuarioEstaAutenticado === 'function')
+            ? Auth.usuarioEstaAutenticado()
+            : !!(localStorage.getItem('itaim_token') && localStorage.getItem('itaim_usuario_logado'));
+        if (!visitanteLogado) {
+            try { localStorage.removeItem('itaim_favoritos'); } catch(e) {}
         }
 
         if (typeof Produtos.limparDadosZerados === 'function') {

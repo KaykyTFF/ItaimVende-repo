@@ -169,6 +169,7 @@
 
     function desativarModoDevFrontend() {
         localStorage.removeItem('itaim_modo_dev');
+            localStorage.removeItem('itaim_favoritos');
     }
 
     // Retorna se há um usuário autenticado com credenciais válidas (ou false para visitantes)
@@ -514,6 +515,7 @@
             localStorage.removeItem('itaim_ultima_atividade');
             localStorage.removeItem('itaim_ultimo_email');
             localStorage.removeItem('itaim_modo_dev');
+            localStorage.removeItem('itaim_favoritos');
         } catch(e) {}
         if (window.ItaimSessao && typeof window.ItaimSessao.atualizarHeaderUsuario === 'function') {
             window.ItaimSessao.atualizarHeaderUsuario();

@@ -87,15 +87,30 @@ document.addEventListener('DOMContentLoaded', () => {
         cidadesSelecionadas.add(cidadeUrlParam);
     }
 
-    // Sincronizar favoritos com localStorage
+    // Sincronizar favoritos apenas para usuários autenticados
+    const estaAutenticado = (window.ItaimSessao && typeof window.ItaimSessao.usuarioEstaAutenticado === 'function')
+        ? window.ItaimSessao.usuarioEstaAutenticado()
+        : !!(localStorage.getItem('itaim_token') && localStorage.getItem('itaim_usuario_logado'));
+
     let favoritosSet = new Set();
-    try {
-        favoritosSet = new Set(JSON.parse(localStorage.getItem('itaim_favoritos') || '[]').map(String));
-    } catch (e) {}
+    if (estaAutenticado) {
+        try {
+            favoritosSet = new Set(JSON.parse(localStorage.getItem('itaim_favoritos') || '[]').map(String));
+        } catch (e) {}
+    } else {
+        try {
+            localStorage.removeItem('itaim_favoritos');
+        } catch (e) {}
+    }
 
     function atualizarContadorFavoritos() {
         const badge = document.getElementById('favoritos-contador-badge');
-        if (badge) badge.textContent = favoritosSet.size;
+        if (badge) {
+            const estaLogado = (window.ItaimSessao && typeof window.ItaimSessao.usuarioEstaAutenticado === 'function')
+                ? window.ItaimSessao.usuarioEstaAutenticado()
+                : !!(localStorage.getItem('itaim_token') && localStorage.getItem('itaim_usuario_logado'));
+            badge.textContent = estaLogado ? favoritosSet.size : 0;
+        }
     }
     atualizarContadorFavoritos();
 
@@ -331,7 +346,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Renderizar cards limpos (sem o botão "+")
         gradeProdutos.innerHTML = lista.map(p => {
             const pId = String(p.id);
-            const isFav = favoritosSet.has(pId);
+            const estaLogado = (window.ItaimSessao && typeof window.ItaimSessao.usuarioEstaAutenticado === 'function')
+                ? window.ItaimSessao.usuarioEstaAutenticado()
+                : !!(localStorage.getItem('itaim_token') && localStorage.getItem('itaim_usuario_logado'));
+            const isFav = estaLogado && favoritosSet.has(pId);
             return `
                 <article class="card-produto fade-in-content" data-id="${pId}">
                     <div class="card-img-box">

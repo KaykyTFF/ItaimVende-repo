@@ -13,6 +13,30 @@
 (function() {
     'use strict';
 
+    // Aplicação imediata do estado de autenticação para eliminar qualquer flash (Zero FOUC)
+    (function aplicarEstadoAuthImediato() {
+        try {
+            var token = localStorage.getItem('itaim_token');
+            var userRaw = localStorage.getItem('itaim_usuario_logado');
+            var autenticado = false;
+            if (token && userRaw && token !== 'token_mock_dev_frontend' && token !== 'null' && token !== 'undefined') {
+                try {
+                    var u = JSON.parse(userRaw);
+                    if (u && (u.email || u.id)) autenticado = true;
+                } catch(e) {}
+            }
+            if (autenticado) {
+                document.documentElement.classList.add('usuario-logado');
+                document.documentElement.classList.remove('usuario-deslogado');
+            } else {
+                document.documentElement.classList.add('usuario-deslogado');
+                document.documentElement.classList.remove('usuario-logado');
+            }
+        } catch(e) {
+            document.documentElement.classList.add('usuario-deslogado');
+        }
+    })();
+
     const CHAVE_STORAGE = 'itaim_tema';
 
     /**

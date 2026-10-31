@@ -103,7 +103,7 @@
             data: '19/10/2026',
             visualizacoes: 28,
             conversas: 3,
-            favorito: true,
+            favorito: false,
             vendedorId: 'cmv5iacmv0000ttiwu9wtemar',
             vendedorNome: 'Admin',
             vendedorEmail: 'admin@gmail.com',
@@ -336,6 +336,14 @@
     // Limpa produtos em venda e notificações a pedido do usuário
     function limparDadosZerados() {
         try {
+            // Garante que visitantes não autenticados não herdem favoritos residuais de sessões anteriores
+            const estaLogado = (window.ItaimSessaoAuth && typeof window.ItaimSessaoAuth.usuarioEstaAutenticado === 'function')
+                ? window.ItaimSessaoAuth.usuarioEstaAutenticado()
+                : !!(localStorage.getItem('itaim_token') && localStorage.getItem('itaim_usuario_logado'));
+            if (!estaLogado) {
+                localStorage.removeItem('itaim_favoritos');
+            }
+
             if (localStorage.getItem('itaim_zerado_v4') !== 'true') {
                 localStorage.setItem('itaim_produtos_cadastrados', JSON.stringify([]));
                 localStorage.setItem('itaim_notificacoes', JSON.stringify([]));

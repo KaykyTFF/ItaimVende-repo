@@ -529,6 +529,7 @@
                         localStorage.removeItem('itaim_usuario_logado');
                         localStorage.removeItem('itaim_usuario_logado_email');
                         localStorage.removeItem('itaim_modo_dev');
+                        localStorage.removeItem('itaim_favoritos');
                     } catch (e) {}
                 });
             }

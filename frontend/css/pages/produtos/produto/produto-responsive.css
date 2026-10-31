@@ -115,9 +115,13 @@
         gap: 8px;
     }
 
-    .secao-relacionados .grade-produtos {
-        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-        gap: 10px !important;
+    .secao-relacionados .grade-produtos,
+    #grade-relacionados {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        gap: 12px !important;
     }
 }
 

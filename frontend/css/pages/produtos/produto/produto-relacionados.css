@@ -1,8 +1,9 @@
 /* ==========================================================
-   PRODUTOS RELACIONADOS
+   PRODUTOS RELACIONADOS - LINHA ÚNICA COM ROLAGEM HORIZONTAL
    ========================================================== */
 .secao-relacionados {
     margin-top: 40px;
+    width: 100%;
 }
 
 .secao-relacionados-topo {
@@ -10,23 +11,140 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: 20px;
+    gap: 16px;
+    flex-wrap: wrap;
 }
 
 .secao-relacionados-topo h2 {
     font-size: 22px;
     font-weight: 800;
-    color: var(--text-primary);
+    color: var(--text-primary, #1E293B);
+}
+
+.secao-relacionados-acoes {
+    display: flex;
+    align-items: center;
+    gap: 14px;
 }
 
 .link-ver-mais-categoria {
     font-size: 14px;
     font-weight: 700;
-    color: var(--primary);
+    color: var(--primary, #44BD32);
     text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: color 0.2s;
+    white-space: nowrap;
 }
 
 .link-ver-mais-categoria:hover {
     text-decoration: underline;
+    color: #2e8b20;
+}
+
+/* Botões de navegação lateral (< e >) */
+.relacionados-nav-botoes {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-nav-relacionados {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    color: #475569;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+}
+
+.btn-nav-relacionados:hover {
+    background: #F8FAFC;
+    color: #44BD32;
+    border-color: #44BD32;
+    transform: scale(1.08);
+    box-shadow: 0 4px 12px rgba(68, 189, 50, 0.2);
+}
+
+.btn-nav-relacionados:active {
+    transform: scale(0.95);
+}
+
+/* Wrapper e Carrossel em Linha Única com Rolagem Lateral */
+.relacionados-carrossel-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.secao-relacionados .grade-produtos,
+#grade-relacionados {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    gap: 18px !important;
+    padding: 6px 4px 18px 4px !important;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    width: 100% !important;
+    cursor: grab;
+}
+
+.secao-relacionados .grade-produtos:active,
+#grade-relacionados:active {
+    cursor: grabbing;
+}
+
+/* Cards em Linha Única com largura fixa */
+.secao-relacionados .grade-produtos .card-produto,
+#grade-relacionados .card-produto,
+.secao-relacionados .grade-produtos .skeleton-card-produto,
+#grade-relacionados .skeleton-card-produto {
+    flex: 0 0 235px !important;
+    min-width: 235px !important;
+    max-width: 235px !important;
+    scroll-snap-align: start;
+    scroll-snap-stop: normal;
+}
+
+/* Barra de rolagem suave e moderna */
+.secao-relacionados .grade-produtos::-webkit-scrollbar,
+#grade-relacionados::-webkit-scrollbar {
+    height: 6px;
+}
+
+.secao-relacionados .grade-produtos::-webkit-scrollbar-track,
+#grade-relacionados::-webkit-scrollbar-track {
+    background: #F1F5F9;
+    border-radius: 999px;
+}
+
+.secao-relacionados .grade-produtos::-webkit-scrollbar-thumb,
+#grade-relacionados::-webkit-scrollbar-thumb {
+    background: #CBD5E1;
+    border-radius: 999px;
+    transition: background 0.2s ease;
+}
+
+.secao-relacionados .grade-produtos::-webkit-scrollbar-thumb:hover,
+#grade-relacionados::-webkit-scrollbar-thumb:hover {
+    background: #94A3B8;
+}
+
+.secao-relacionados .grade-produtos,
+#grade-relacionados {
+    scrollbar-width: thin;
+    scrollbar-color: #CBD5E1 #F1F5F9;
 }
 
 /* Toast de Compartilhamento */
@@ -188,7 +306,7 @@
         line-height: 1.6;
     }
 
-    /* Relacionados com 2 Colunas */
+    /* Relacionados em Linha Única Mobile */
     .secao-relacionados {
         margin-top: 28px;
     }
@@ -197,9 +315,23 @@
         font-size: 18px;
     }
 
-    .secao-relacionados .grade-produtos {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 10px;
+    .secao-relacionados .grade-produtos,
+    #grade-relacionados {
+        gap: 12px !important;
+        padding: 4px 2px 14px 2px !important;
+    }
+
+    .secao-relacionados .grade-produtos .card-produto,
+    #grade-relacionados .card-produto,
+    .secao-relacionados .grade-produtos .skeleton-card-produto,
+    #grade-relacionados .skeleton-card-produto {
+        flex: 0 0 195px !important;
+        min-width: 195px !important;
+        max-width: 195px !important;
+    }
+
+    .relacionados-nav-botoes {
+        display: none;
     }
 }
 

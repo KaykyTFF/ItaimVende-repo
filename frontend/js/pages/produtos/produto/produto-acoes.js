@@ -143,17 +143,30 @@
             });
         }
 
-        // 3. Sistema de Favoritos
+        // 3. Sistema de Favoritos (somente autenticado)
+        const estaAutenticado = (window.ItaimSessao && typeof window.ItaimSessao.usuarioEstaAutenticado === 'function')
+            ? window.ItaimSessao.usuarioEstaAutenticado()
+            : !!(localStorage.getItem('itaim_token') && localStorage.getItem('itaim_usuario_logado'));
+
         let favoritosSet = new Set();
-        try {
-            const salvos = JSON.parse(localStorage.getItem('itaim_favoritos') || '[]');
-            if (Array.isArray(salvos)) favoritosSet = new Set(salvos);
-        } catch (e) {}
+        if (estaAutenticado) {
+            try {
+                const salvos = JSON.parse(localStorage.getItem('itaim_favoritos') || '[]');
+                if (Array.isArray(salvos)) favoritosSet = new Set(salvos.map(String));
+            } catch (e) {}
+        } else {
+            try {
+                localStorage.removeItem('itaim_favoritos');
+            } catch (e) {}
+        }
 
         const btnFavorito = document.getElementById('btn-favoritar-detalhe');
 
         function atualizarEstadoFavorito() {
-            const isFav = favoritosSet.has(produto.id);
+            const estaLogado = (window.ItaimSessao && typeof window.ItaimSessao.usuarioEstaAutenticado === 'function')
+                ? window.ItaimSessao.usuarioEstaAutenticado()
+                : !!(localStorage.getItem('itaim_token') && localStorage.getItem('itaim_usuario_logado'));
+            const isFav = estaLogado && favoritosSet.has(String(produto.id));
             btnFavorito?.classList.toggle('ativo', isFav);
         }
         atualizarEstadoFavorito();

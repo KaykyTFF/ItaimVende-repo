@@ -43,6 +43,7 @@
             localStorage.removeItem('itaim_token');
             localStorage.removeItem('itaim_usuario_logado');
             localStorage.removeItem('itaim_ultima_atividade');
+            localStorage.removeItem('itaim_favoritos');
 
             if (window.ItaimSessao && typeof window.ItaimSessao.deslogarUsuario === 'function') {
                 window.ItaimSessao.deslogarUsuario();
