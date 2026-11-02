@@ -236,10 +236,31 @@
 }
 
 .drawer-categorias-conteudo.aberto {
-    max-height: 380px;
+    max-height: 480px;
+    overflow-y: auto;
     opacity: 1;
-    padding: 4px 0 6px 0;
+    padding: 6px 0 8px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(68, 189, 50, 0.4) rgba(0, 0, 0, 0.2);
+}
+
+.drawer-categorias-conteudo::-webkit-scrollbar {
+    width: 5px;
+}
+
+.drawer-categorias-conteudo::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+}
+
+.drawer-categorias-conteudo::-webkit-scrollbar-thumb {
+    background: rgba(68, 189, 50, 0.4);
+    border-radius: 4px;
+}
+
+.drawer-categorias-conteudo::-webkit-scrollbar-thumb:hover {
+    background: rgba(68, 189, 50, 0.7);
 }
 
 .drawer-sublink {
@@ -294,8 +315,6 @@ html:not(.usuario-logado) #drawer-link-vender,
 html:not(.usuario-logado) #drawer-link-notificacoes,
 html:not(.usuario-logado) #drawer-link-painel,
 html:not(.usuario-logado) #drawer-link-configuracoes,
-html:not(.usuario-logado) #btn-toggle-categorias,
-html:not(.usuario-logado) #drawer-categorias-conteudo,
 html:not(.usuario-logado) .drawer-secao-divisor,
 html.usuario-deslogado #drawer-link-perfil,
 html.usuario-deslogado #drawer-link-anuncios,
@@ -305,8 +324,6 @@ html.usuario-deslogado #drawer-link-vender,
 html.usuario-deslogado #drawer-link-notificacoes,
 html.usuario-deslogado #drawer-link-painel,
 html.usuario-deslogado #drawer-link-configuracoes,
-html.usuario-deslogado #btn-toggle-categorias,
-html.usuario-deslogado #drawer-categorias-conteudo,
 html.usuario-deslogado .drawer-secao-divisor,
 body:not(.usuario-logado) #drawer-link-perfil,
 body:not(.usuario-logado) #drawer-link-anuncios,
@@ -316,8 +333,6 @@ body:not(.usuario-logado) #drawer-link-vender,
 body:not(.usuario-logado) #drawer-link-notificacoes,
 body:not(.usuario-logado) #drawer-link-painel,
 body:not(.usuario-logado) #drawer-link-configuracoes,
-body:not(.usuario-logado) #btn-toggle-categorias,
-body:not(.usuario-logado) #drawer-categorias-conteudo,
 body:not(.usuario-logado) .drawer-secao-divisor,
 body.usuario-deslogado #drawer-link-perfil,
 body.usuario-deslogado #drawer-link-anuncios,
@@ -327,8 +342,6 @@ body.usuario-deslogado #drawer-link-vender,
 body.usuario-deslogado #drawer-link-notificacoes,
 body.usuario-deslogado #drawer-link-painel,
 body.usuario-deslogado #drawer-link-configuracoes,
-body.usuario-deslogado #btn-toggle-categorias,
-body.usuario-deslogado #drawer-categorias-conteudo,
 body.usuario-deslogado .drawer-secao-divisor {
     display: none !important;
 }

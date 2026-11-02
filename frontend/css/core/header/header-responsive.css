@@ -28,151 +28,195 @@
    ========================================================================== */
 @media (max-width: 960px) {
     /* =====================================================================
-       MOBILE: CABEÇALHO EM UMA ÚNICA LINHA
-       Layout: [☰] [🦔] [── busca ──────────────] [👤]
+       MOBILE: CABEÇALHO EM UMA ÚNICA LINHA LIMPA
+       Layout estrito: [☰] [🦔 Símbolo Animal] [── busca ──────────────] [👤 Avatar]
        ===================================================================== */
 
     .header-principal {
-        padding: 0;
+        padding: 0 !important;
+        background-color: #1E272E !important;
     }
 
     .header-container {
-        padding: 6px 10px;
-        display: flex;
-        flex-wrap: nowrap;
-        /* UMA LINHA — sem quebra */
-        align-items: center;
-        gap: 8px;
-        box-sizing: border-box;
-        width: 100%;
-        max-width: 100%;
+        padding: 6px 10px !important;
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 8px !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+        max-width: 100% !important;
     }
 
-    /* --- Lado esquerdo: hambúrguer + animal --- */
+    /* --- LADO ESQUERDO: HAMBÚRGUER + SÍMBOLO ANIMAL DA LOGO --- */
     .header-left {
-        order: 1;
-        flex: 0 0 auto;
-        display: flex;
-        align-items: center;
-        gap: 6px;
+        order: 1 !important;
+        flex: 0 0 auto !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 6px !important;
     }
 
     .btn-menu-hamburguer {
-        font-size: 20px;
-        padding: 4px;
-        line-height: 1;
+        font-size: 20px !important;
+        padding: 4px !important;
+        line-height: 1 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        color: #FFFFFF !important;
+        background: transparent !important;
+        border: none !important;
+        cursor: pointer !important;
     }
 
     .btn-menu-hamburguer svg {
-        width: 20px;
-        height: 20px;
+        width: 22px !important;
+        height: 22px !important;
     }
 
-    /* Janela que recorta somente o animal (esquerda da imagem) */
+    /* Recorte perfeito que exibe somente o símbolo animal da logo */
     .header-logo-link {
-        width: 36px;
-        height: 36px;
-        overflow: hidden;
-        display: block;
-        flex-shrink: 0;
-        border-radius: 4px;
+        width: 36px !important;
+        height: 36px !important;
+        overflow: hidden !important;
+        display: block !important;
+        flex-shrink: 0 !important;
+        border-radius: 6px !important;
+        position: relative !important;
     }
 
-    /* Imagem flui em altura total; a largura automática empurra o texto para fora da janela */
     .header-logo-img {
-        height: 100%;
-        width: auto;
-        max-width: none;
-        /* anula qualquer max-width herdado */
-        object-fit: initial;
-        /* reset — deixamos o recorte para o overflow do link */
-        display: block;
-        flex-shrink: 0;
-        transform: none;
+        height: 100% !important;
+        width: auto !important;
+        max-width: none !important;
+        object-fit: initial !important;
+        display: block !important;
+        flex-shrink: 0 !important;
+        transform: none !important;
     }
 
-    /* --- Centro: barra de busca ocupa o espaço restante --- */
-    .header-center {
-        order: 2;
-        flex: 1 1 0;
-        /* cresce para preencher o espaço */
-        min-width: 0;
-        max-width: 100%;
+    /* --- CENTRO: BARRA DE BUSCA EXPANSIVA --- */
+    .header-center,
+    .header-search {
+        order: 2 !important;
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        display: block !important;
+        margin: 0 !important;
     }
 
-    .campo-busca {
-        height: 36px;
-        font-size: 16px;
-        padding: 0 40px 0 12px;
+    .busca-form,
+    .search-form {
+        position: relative !important;
+        width: 100% !important;
+        margin: 0 !important;
+        display: flex !important;
+        align-items: center !important;
     }
 
-    .btn-busca-submit {
-        width: 34px;
-        height: 34px;
+    .campo-busca,
+    .search-input {
+        width: 100% !important;
+        height: 36px !important;
+        font-size: 14px !important;
+        padding: 0 38px 0 14px !important;
+        background-color: #F1F2F6 !important;
+        border: 2px solid transparent !important;
+        border-radius: 9999px !important;
+        outline: none !important;
+        box-sizing: border-box !important;
+        color: #1E272E !important;
+        font-family: inherit !important;
+        line-height: normal !important;
     }
 
-    .btn-busca-submit svg {
-        width: 16px;
-        height: 16px;
+    .campo-busca:focus,
+    .search-input:focus {
+        background-color: #FFFFFF !important;
+        border-color: #44BD32 !important;
+        box-shadow: 0 0 0 3px rgba(68, 189, 50, 0.25) !important;
     }
 
-    /* --- Lado direito: somente avatar --- */
+    .btn-busca-submit,
+    .btn-submit-search {
+        position: absolute !important;
+        right: 4px !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        width: 28px !important;
+        height: 28px !important;
+        border: none !important;
+        background: transparent !important;
+        color: #57606F !important;
+        cursor: pointer !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 0 !important;
+        border-radius: 50% !important;
+    }
+
+    .btn-busca-submit svg,
+    .btn-submit-search svg {
+        width: 16px !important;
+        height: 16px !important;
+    }
+
+    /* --- LADO DIREITO: SOMENTE O AVATAR DO PERFIL --- */
     .header-right {
-        order: 3;
-        flex: 0 0 auto;
-        display: flex;
-        align-items: center;
-        gap: 4px;
+        order: 3 !important;
+        flex: 0 0 auto !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 0 !important;
     }
 
-    /* Ocultar botões no header-right exceto o avatar (ou Entrar se deslogado) */
+    /* Ocultar rigorosamente botões indesejados no mobile */
     .btn-nav-texto,
-    .btn-vender-destaque:not(#btn-header-entrar),
+    .btn-texto-header,
+    #btn-meus-anuncios,
+    #link-meus-anuncios,
+    .btn-vender-destaque,
+    #btn-abrir-modal-vender,
     .btn-meus-anuncios-mobile,
+    #btn-meus-anuncios-mobile,
     #btn-chat,
-    #btn-notificacoes {
+    #btn-notificacoes,
+    .badge-contador-header,
+    #btn-header-entrar {
         display: none !important;
     }
 
-    html:not(.usuario-logado) #btn-header-entrar,
-    body:not(.usuario-logado) #btn-header-entrar,
-    html.usuario-deslogado #btn-header-entrar,
-    body.usuario-deslogado #btn-header-entrar {
-        display: inline-flex !important;
-        height: 32px;
-        min-height: 32px;
-        padding: 0 16px;
-        font-size: 13.5px;
-        font-weight: 700;
-    }
-
-
-    .avatar-img {
-        box-sizing: border-box;
-        width: 32px;
-        height: 32px;
-        flex-shrink: 0;
-        display: block;
-        /* elimina espaço fantasma abaixo da imagem */
+    .perfil-wrapper {
+        display: flex !important;
+        align-items: center !important;
+        flex-shrink: 0 !important;
     }
 
     .btn-avatar-header {
-        padding: 0;
-        /* sem padding extra no mobile */
-        border-width: 0;
-        /* sem borda visível no mobile para não inflar */
-        line-height: 0;
-        /* evita espaço de linha abaixo da imagem */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
+        padding: 0 !important;
+        border: none !important;
+        background: transparent !important;
+        line-height: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex-shrink: 0 !important;
+        cursor: pointer !important;
     }
 
-    .perfil-wrapper {
-        display: flex;
-        align-items: center;
-        flex-shrink: 0;
+    .avatar-img {
+        box-sizing: border-box !important;
+        width: 33px !important;
+        height: 33px !important;
+        border-radius: 50% !important;
+        object-fit: cover !important;
+        display: block !important;
+        border: 2px solid #FFFFFF !important;
+        background-color: #2F3640 !important;
     }
 }
 

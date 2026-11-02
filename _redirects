@@ -12,6 +12,8 @@
 /perfil                  /frontend/pages/perfil/perfil.html       200
 /vendedor                /frontend/pages/perfil/vendedor.html     200
 /configuracoes           /frontend/pages/perfil/configuracoes.html 200
+/tickets                 /frontend/pages/admin/tickets.html       200
+/moderacao               /frontend/pages/admin/tickets.html       200
 /favoritos               /frontend/pages/favoritos/favoritos.html 200
 /notificacoes            /frontend/pages/notificacoes/notificacoes.html 200
 

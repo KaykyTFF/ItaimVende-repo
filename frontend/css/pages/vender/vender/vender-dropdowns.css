@@ -68,12 +68,32 @@
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18), 0 2px 8px rgba(0, 0, 0, 0.08);
     padding: 8px;
     z-index: 50;
-    max-height: 250px;
+    max-height: 300px;
     overflow-y: auto;
     opacity: 0;
     visibility: hidden;
     transform: translateY(-8px) scale(0.98);
     transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(89, 170, 89, 0.4) #F1F5F9;
+}
+
+.menu-dropdown-opcoes::-webkit-scrollbar {
+    width: 6px;
+}
+
+.menu-dropdown-opcoes::-webkit-scrollbar-track {
+    background: #F1F5F9;
+    border-radius: 4px;
+}
+
+.menu-dropdown-opcoes::-webkit-scrollbar-thumb {
+    background: rgba(89, 170, 89, 0.4);
+    border-radius: 4px;
+}
+
+.menu-dropdown-opcoes::-webkit-scrollbar-thumb:hover {
+    background: rgba(89, 170, 89, 0.7);
 }
 
 .dropdown-pill-container.aberto .menu-dropdown-opcoes {

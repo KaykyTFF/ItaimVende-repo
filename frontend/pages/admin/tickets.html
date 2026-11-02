@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Itaim Vende - Painel de Moderação, Tickets de Denúncia e Atendimento com o Suporte">
+    <title>Painel de Moderação & Tickets - Itaim Vende</title>
+
+    <!-- Anti-FOUC: Aplicação imediata do tema escuro/claro -->
+    <script>
+        (function() {
+            try {
+                var tema = localStorage.getItem('itaim_tema') === 'dark' ? 'dark' : 'light';
+                var d = document.documentElement;
+                d.setAttribute('data-theme', tema);
+                if (tema === 'dark') {
+                    d.classList.add('dark-theme');
+                } else {
+                    d.classList.remove('dark-theme');
+                }
+            } catch (e) {}
+        })();
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/pages/admin/tickets.css?v=1">
+    <link rel="icon" type="image/png" href="../../assets/logos/header-logo.png">
+</head>
+<body class="tickets-body">
+
+    <!-- ==========================================================
+         CABEÇALHO DA MODERAÇÃO
+         ========================================================== -->
+    <header class="tickets-header">
+        <div class="tickets-header-container">
+            <div class="tickets-brand">
+                <a href="../home/home.html" class="tickets-logo-link" title="Voltar para a Página Inicial">
+                    <img src="../../assets/logos/header1-logo.png" alt="Itaim Vende Logo" class="tickets-logo-img">
+                </a>
+                <div class="tickets-title-box">
+                    <h1>
+                        <i class="fa-solid fa-shield-halved" style="color: #44BD32;"></i>
+                        Central de Tickets & Moderação
+                        <span class="badge-mod-tag">Moderador</span>
+                    </h1>
+                </div>
+            </div>
+
+            <div class="tickets-header-actions">
+                <button type="button" class="btn-tk-nav" id="btn-alternar-tema-tickets" title="Alternar tema claro/escuro">
+                    <i class="fa-solid fa-moon" id="icone-tema"></i>
+                    <span id="label-tema">Tema</span>
+                </button>
+                <a href="painel.html" class="btn-tk-nav" title="Painel de Infraestrutura & Diagnóstico">
+                    <i class="fa-solid fa-server"></i>
+                    <span>Diagnóstico</span>
+                </a>
+                <a href="../home/home.html" class="btn-tk-nav btn-primary-action" id="btn-ver-site" title="Ir para a Loja Pública">
+                    <i class="fa-solid fa-store"></i>
+                    <span>Ver Site</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==========================================================
+         CONTEÚDO PRINCIPAL DO PAINEL
+         ========================================================== -->
+    <main class="tickets-container">
+
+        <!-- Banner Hero de Apresentação e Status de Acesso -->
+        <section class="tickets-hero">
+            <div class="tickets-hero-text">
+                <h2>Fila de Atendimento & Moderação de Segurança</h2>
+                <p>Gerencie denúncias de fraudes, anúncios suspeitos relatados pela comunidade e converse diretamente com usuários que solicitaram suporte oficial.</p>
+            </div>
+            <div class="tickets-hero-badges">
+                <span class="hero-pill" id="mod-user-badge">
+                    <i class="fa-solid fa-user-shield"></i>
+                    <span id="mod-user-name">Moderador Ativo</span>
+                </span>
+                <span class="hero-pill">
+                    <i class="fa-solid fa-bolt" style="color: #10B981;"></i>
+                    SLA Médio: &lt; 30 min
+                </span>
+                <button type="button" class="btn-tk-nav" id="btn-atualizar-tickets" title="Recarregar dados">
+                    <i class="fa-solid fa-rotate-right"></i> Atualizar
+                </button>
+            </div>
+        </section>
+
+        <!-- Cards de Estatísticas em Tempo Real -->
+        <section class="tickets-stats-grid">
+            <div class="stat-card-tk">
+                <div class="stat-icon-box total">
+                    <i class="fa-solid fa-layer-group"></i>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-val" id="stat-total-reports">0</span>
+                    <span class="stat-label">Total de Denúncias</span>
+                </div>
+            </div>
+
+            <div class="stat-card-tk">
+                <div class="stat-icon-box pending">
+                    <i class="fa-solid fa-clock"></i>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-val" id="stat-pending-reports" style="color: #F59E0B;">0</span>
+                    <span class="stat-label">Pendentes de Ação</span>
+                </div>
+            </div>
+
+            <div class="stat-card-tk">
+                <div class="stat-icon-box review">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-val" id="stat-review-reports" style="color: #8B5CF6;">0</span>
+                    <span class="stat-label">Em Análise</span>
+                </div>
+            </div>
+
+            <div class="stat-card-tk">
+                <div class="stat-icon-box resolved">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-val" id="stat-resolved-reports" style="color: #10B981;">0</span>
+                    <span class="stat-label">Resolvidos / Tratados</span>
+                </div>
+            </div>
+
+            <div class="stat-card-tk">
+                <div class="stat-icon-box support">
+                    <i class="fa-solid fa-headset"></i>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-val" id="stat-support-conversations" style="color: #44BD32;">0</span>
+                    <span class="stat-label">Chats com Suporte</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Navegação por Abas: Denúncias vs Suporte -->
+        <nav class="tickets-tabs-nav" role="tablist">
+            <button type="button" class="tab-btn ativo" id="tab-btn-denuncias" role="tab" aria-selected="true" data-tab="denuncias">
+                <i class="fa-solid fa-shield-virus"></i>
+                Tickets de Denúncia
+                <span class="tab-count-badge" id="tab-count-denuncias">0</span>
+            </button>
+            <button type="button" class="tab-btn" id="tab-btn-suporte" role="tab" aria-selected="false" data-tab="suporte">
+                <i class="fa-solid fa-comments"></i>
+                Conversas com o Suporte
+                <span class="tab-count-badge" id="tab-count-suporte">0</span>
+            </button>
+        </nav>
+
+        <!-- ==========================================================
+             ABA 1: TICKETS DE DENÚNCIA (MODERAÇÃO)
+             ========================================================== -->
+        <section id="aba-conteudo-denuncias" class="tab-content-section" style="display: block;">
+            
+            <!-- Toolbar de Filtros e Busca de Denúncias -->
+            <div class="tickets-toolbar">
+                <div class="toolbar-pills" id="filtro-status-pills">
+                    <button type="button" class="filter-pill ativo" data-status="ALL">Todos (<span id="count-all">0</span>)</button>
+                    <button type="button" class="filter-pill" data-status="PENDING">Pendentes (<span id="count-pending">0</span>)</button>
+                    <button type="button" class="filter-pill" data-status="UNDER_REVIEW">Em Análise (<span id="count-review">0</span>)</button>
+                    <button type="button" class="filter-pill" data-status="RESOLVED">Resolvidos (<span id="count-resolved">0</span>)</button>
+                    <button type="button" class="filter-pill" data-status="DISMISSED">Descartados (<span id="count-dismissed">0</span>)</button>
+                </div>
+
+                <div class="toolbar-search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" class="toolbar-search-input" id="input-busca-tickets" placeholder="Buscar por protocolo (TK-...), produto, vendedor ou motivo...">
+                </div>
+
+                <div class="toolbar-actions-right">
+                    <select class="select-tk-custom" id="select-motivo-filtro" aria-label="Filtrar por motivo">
+                        <option value="">Todos os Motivos</option>
+                        <option value="FRAUD_SUSPECTED">Fraude / Golpe</option>
+                        <option value="PROHIBITED_ITEM">Item Ilegal / Proibido</option>
+                        <option value="INCORRECT_PRICE">Preço Falso / Abusivo</option>
+                        <option value="SPAM">Spam / Conteúdo Duplicado</option>
+                        <option value="ALREADY_SOLD">Produto Já Vendido</option>
+                        <option value="OTHER">Outros Motivos</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Fila Dinâmica de Tickets de Denúncias -->
+            <div class="tickets-grid" id="lista-tickets-denuncias">
+                <div class="tickets-empty-box">
+                    <i class="fa-solid fa-spinner fa-spin tickets-empty-icon"></i>
+                    <h3>Carregando tickets de denúncia...</h3>
+                    <p>Buscando denúncias na central de moderação.</p>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ==========================================================
+             ABA 2: CONVERSAS COM O SUPORTE
+             ========================================================== -->
+        <section id="aba-conteudo-suporte" class="tab-content-section" style="display: none;">
+            
+            <div class="support-inbox-grid">
+                
+                <!-- Coluna Esquerda: Lista de Conversas com o Suporte -->
+                <div class="support-threads-col">
+                    <div class="support-threads-header">
+                        <h3>
+                            <span>Tickets de Atendimento</span>
+                            <span class="badge-count" id="badge-total-suporte">0 abertos</span>
+                        </h3>
+                        <div class="toolbar-search-box" style="max-width: 100%;">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" class="toolbar-search-input" id="input-busca-suporte" placeholder="Buscar por usuário ou assunto...">
+                        </div>
+                    </div>
+
+                    <div class="support-threads-list" id="lista-threads-suporte">
+                        <!-- Itens inseridos dinamicamente pelo JS -->
+                    </div>
+                </div>
+
+                <!-- Coluna Direita: Conversa Ativa com o Usuário -->
+                <div class="support-chat-col" id="coluna-chat-suporte">
+                    
+                    <!-- Cabeçalho do Chat Selecionado -->
+                    <div class="support-chat-header" id="chat-suporte-header">
+                        <div class="support-user-meta">
+                            <img src="../../assets/icons/icon-user.png" alt="Foto do Usuário" class="thread-avatar" id="chat-suporte-avatar">
+                            <div>
+                                <h3 class="support-user-name" id="chat-suporte-nome">Selecione uma conversa</h3>
+                                <div class="support-user-details" id="chat-suporte-detalhes">Clique em um ticket na coluna ao lado para iniciar o atendimento.</div>
+                            </div>
+                        </div>
+
+                        <div class="ticket-status-select-wrap" id="chat-status-acoes" style="display: none;">
+                            <label for="select-status-suporte">Status:</label>
+                            <select class="select-tk-custom" id="select-status-suporte">
+                                <option value="ABERTO">🟡 Aberto</option>
+                                <option value="EM_ATENDIMENTO">🔵 Em Atendimento</option>
+                                <option value="CONCLUIDO">🟢 Concluído</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Mensagens do Feed -->
+                    <div class="support-messages-feed" id="feed-mensagens-suporte">
+                        <div class="tickets-empty-box" style="border: none; background: transparent;">
+                            <i class="fa-solid fa-headset tickets-empty-icon" style="opacity: 0.6;"></i>
+                            <h3>Nenhuma conversa selecionada</h3>
+                            <p>Escolha um ticket de suporte à esquerda para ler e responder mensagens.</p>
+                        </div>
+                    </div>
+
+                    <!-- Respostas Rápidas Sugeridas -->
+                    <div class="support-quick-replies" id="suporte-quick-replies" style="display: none;">
+                        <span style="font-size: 0.75rem; color: var(--tk-text-dim); font-weight: 700;">RESPOSTAS RÁPIDAS:</span>
+                        <button type="button" class="quick-reply-btn" data-texto="Olá! Já estamos analisando seu caso. Em instantes retornaremos com uma solução.">Analisando caso</button>
+                        <button type="button" class="quick-reply-btn" data-texto="Identificamos a situação e tomamos as providências de moderação cabíveis.">Providência tomada</button>
+                        <button type="button" class="quick-reply-btn" data-texto="Seu anúncio foi revisado e já se encontra ativo na plataforma.">Anúncio aprovado</button>
+                        <button type="button" class="quick-reply-btn" data-texto="Obrigado por entrar em contato com o suporte do Itaim Vende! Tenha um ótimo dia.">Encerramento</button>
+                    </div>
+
+                    <!-- Input de Envio de Mensagem pelo Suporte -->
+                    <div class="support-composer" id="suporte-composer" style="display: none;">
+                        <input type="text" class="composer-input" id="input-mensagem-suporte" placeholder="Escreva uma resposta oficial como Suporte Itaim Vende..." autocomplete="off">
+                        <button type="button" class="btn-send-support" id="btn-enviar-suporte">
+                            <i class="fa-solid fa-paper-plane"></i>
+                            <span>Enviar</span>
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- ==========================================================
+         MODAL DE DETALHES COMPLETOS DA DENÚNCIA
+         ========================================================== -->
+    <div class="modal-investigacao-backdrop" id="modal-detalhes-ticket" style="display: none;" role="dialog" aria-modal="true">
+        <div class="modal-investigacao-card">
+            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--tk-border); padding-bottom: 12px;">
+                <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-file-shield" style="color: #44BD32;"></i>
+                    Dossiê do Ticket <span id="modal-ticket-protocol" style="font-family: 'JetBrains Mono', monospace; color: #44BD32;"></span>
+                </h3>
+                <button type="button" class="btn-copy-protocol" id="btn-fechar-modal-detalhes" style="font-size: 1.3rem;">&times;</button>
+            </div>
+
+            <div id="modal-ticket-conteudo" style="display: flex; flex-direction: column; gap: 14px; font-size: 0.9rem; max-height: 420px; overflow-y: auto;">
+                <!-- Preenchido dinamicamente -->
+            </div>
+
+            <div style="display: flex; align-items: center; justify-content: flex-end; gap: 10px; border-top: 1px solid var(--tk-border); padding-top: 12px;">
+                <button type="button" class="btn-tk-nav" id="btn-fechar-modal-acao">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast de Feedback -->
+    <div id="tickets-toast" class="tickets-toast" style="position: fixed; bottom: 24px; right: 24px; z-index: 2000; display: none;"></div>
+
+    <!-- Scripts Core e Módulos -->
+    <script src="../../js/core/produtos-dados/index.js"></script>
+    <script src="../../js/core/rotas/index.js"></script>
+    <script src="../../js/core/api/index.js"></script>
+    <script src="../../js/core/sessao/index.js"></script>
+    <script src="../../js/core/categorias/index.js"></script>
+    <script src="../../js/pages/admin/tickets.js?v=1.0"></script>
+</body>
+</html>
+

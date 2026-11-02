@@ -80,10 +80,17 @@
 
         function salvarTicketLocal(ticket) {
             try {
-                const tickets = obterTicketsLocais();
-                const filtrados = tickets.filter(t => t.id !== ticket.id && t.protocol !== ticket.protocol);
-                filtrados.unshift(ticket);
-                localStorage.setItem(STORAGE_TICKETS_KEY, JSON.stringify(filtrados));
+                const keys = ['itaim_tickets_denuncias', 'itaim_denuncias_moderacao', 'itaim_meus_tickets'];
+                keys.forEach(k => {
+                    let lista = [];
+                    try {
+                        lista = JSON.parse(localStorage.getItem(k) || '[]');
+                        if (!Array.isArray(lista)) lista = [];
+                    } catch (e) { lista = []; }
+                    const filtrados = lista.filter(t => t.id !== ticket.id && t.protocol !== ticket.protocol);
+                    filtrados.unshift(ticket);
+                    localStorage.setItem(k, JSON.stringify(filtrados));
+                });
                 atualizarContadorTickets();
             } catch (e) {
                 console.warn('[Tickets] Não foi possível salvar localmente:', e);
@@ -99,7 +106,7 @@
         atualizarContadorTickets();
 
         function preencherResumoProdutoModal() {
-            const fotoUrl = (produto.fotos && produto.fotos[0]) || produto.imagem || produto.foto || '../../assets/produtos/anuncio_15.jpg';
+            const fotoUrl = (produto.fotos && produto.fotos[0]) || produto.imagem || produto.foto || '../../assets/placeholders/produto-placeholder.svg';
             const vNome = (dadosVendedor && (dadosVendedor.name || dadosVendedor.nome)) || produto.vendedorNome || produto.vendedor || 'Admin';
             const precoFmt = formatarPreco(produto.preco);
 

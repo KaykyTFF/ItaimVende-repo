@@ -248,14 +248,25 @@
                     </svg>
                 </button>
                 <div class="drawer-categorias-conteudo" id="drawer-categorias-conteudo">
-                    <a href="../produtos/categoria.html?cat=Eletrônicos" class="drawer-sublink">Eletrônicos</a>
-                    <a href="../produtos/categoria.html?cat=Decoração" class="drawer-sublink">Decoração</a>
-                    <a href="../produtos/categoria.html?cat=Móveis" class="drawer-sublink">Móveis</a>
-                    <a href="../produtos/categoria.html?cat=Moda" class="drawer-sublink">Moda & Vestuário</a>
+                    <a href="../produtos/categoria.html?cat=Ve%C3%ADculos" class="drawer-sublink">Veículos & Autopeças</a>
+                    <a href="../produtos/categoria.html?cat=Im%C3%B3veis" class="drawer-sublink">Imóveis & Terrenos</a>
+                    <a href="../produtos/categoria.html?cat=Agro" class="drawer-sublink">Agro & Pecuária</a>
+                    <a href="../produtos/categoria.html?cat=Celulares" class="drawer-sublink">Celulares & Telefonia</a>
+                    <a href="../produtos/categoria.html?cat=Eletr%C3%B4nicos" class="drawer-sublink">Eletrônicos, Áudio & Vídeo</a>
+                    <a href="../produtos/categoria.html?cat=Inform%C3%A1tica" class="drawer-sublink">Informática & Games</a>
+                    <a href="../produtos/categoria.html?cat=M%C3%B3veis" class="drawer-sublink">Casa, Móveis & Decoração</a>
+                    <a href="../produtos/categoria.html?cat=Eletrodom%C3%A9sticos" class="drawer-sublink">Eletrodomésticos</a>
+                    <a href="../produtos/categoria.html?cat=Moda" class="drawer-sublink">Moda, Calçados & Acessórios</a>
+                    <a href="../produtos/categoria.html?cat=Beleza" class="drawer-sublink">Beleza & Cuidado Pessoal</a>
                     <a href="../produtos/categoria.html?cat=Infantil" class="drawer-sublink">Infantil & Bebês</a>
-                    <a href="../produtos/categoria.html?cat=Esportes" class="drawer-sublink">Esportes & Lazer</a>
-                    <a href="../produtos/categoria.html?cat=Hobbies" class="drawer-sublink">Hobbies & Games</a>
-                    <a href="../produtos/categoria.html?cat=Serviços" class="drawer-sublink">Serviços</a>
+                    <a href="../produtos/categoria.html?cat=Esportes" class="drawer-sublink">Esportes, Fitness & Lazer</a>
+                    <a href="../produtos/categoria.html?cat=Constru%C3%A7%C3%A3o" class="drawer-sublink">Construção & Ferramentas</a>
+                    <a href="../produtos/categoria.html?cat=Com%C3%A9rcio" class="drawer-sublink">Comércio, Negócios & Escritório</a>
+                    <a href="../produtos/categoria.html?cat=Servi%C3%A7os" class="drawer-sublink">Serviços & Profissionais</a>
+                    <a href="../produtos/categoria.html?cat=Hobbies" class="drawer-sublink">Música, Arte & Hobbies</a>
+                    <a href="../produtos/categoria.html?cat=Pets" class="drawer-sublink">Animais de Estimação & Pet Shop</a>
+                    <a href="../produtos/categoria.html?cat=Doa%C3%A7%C3%B5es" class="drawer-sublink">Doações, Trocas & Solidariedade</a>
+                    <a href="../produtos/categoria.html?cat=Outros" class="drawer-sublink">Outros & Diversos</a>
                 </div>
 
                 <div class="drawer-secao-divisor"></div>
@@ -281,6 +292,12 @@
                         </span>
                     </span>
                 </button>
+                <a href="../admin/tickets.html" class="drawer-link" id="drawer-link-tickets" title="Central de denúncias e suporte">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                    Tickets & Moderação
+                </a>
                 <a href="../perfil/configuracoes.html" class="drawer-link" id="drawer-link-configuracoes">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="3"></circle>
@@ -407,22 +424,9 @@
                                 >
                             </div>
 
-                            <!-- Categoria com Seleção Rápida por Chips -->
+                            <!-- Categoria (Gaveta Verde Oficial) -->
                             <div class="campo-vender-wrapper">
                                 <label class="rotulo-secao-campo">Categoria *</label>
-                                <div class="chips-selecao-rapida" id="chips-categorias-container">
-                                    <span class="chip-opcao" data-valor="Celulares e Smartphones">Celulares</span>
-                                    <span class="chip-opcao" data-valor="Eletrônicos e Áudio">Eletrônicos</span>
-                                    <span class="chip-opcao" data-valor="Computadores e Informática">Informática</span>
-                                    <span class="chip-opcao" data-valor="Móveis e Decoração">Móveis</span>
-                                    <span class="chip-opcao" data-valor="Carros e Motos">Veículos</span>
-                                    <span class="chip-opcao" data-valor="Moda e Acessórios">Moda</span>
-                                    <span class="chip-opcao" data-valor="Games e Brinquedos">Games</span>
-                                    <span class="chip-opcao" data-valor="Serviços e Trabalhos">Serviços</span>
-                                    <span class="chip-opcao" data-valor="Outros Produtos">Outros</span>
-                                </div>
-
-                                <!-- Dropdown de Categoria (Retrocompatível) -->
                                 <div class="dropdown-pill-container" id="dropdown-categoria">
                                     <button type="button" class="btn-dropdown-pill" id="btn-dropdown-categoria" aria-haspopup="listbox">
                                         <span id="label-categoria-texto">SELECIONAR CATEGORIA</span>
@@ -431,31 +435,32 @@
                                         </svg>
                                     </button>
                                     <div class="menu-dropdown-opcoes" id="menu-categoria-opcoes" role="listbox">
-                                        <div class="item-opcao-dropdown" data-valor="Celulares e Smartphones">Celulares e Smartphones</div>
-                                        <div class="item-opcao-dropdown" data-valor="Eletrônicos e Áudio">Eletrônicos e Áudio</div>
-                                        <div class="item-opcao-dropdown" data-valor="Computadores e Informática">Informática & PC</div>
-                                        <div class="item-opcao-dropdown" data-valor="Móveis e Decoração">Móveis e Decoração</div>
-                                        <div class="item-opcao-dropdown" data-valor="Moda e Acessórios">Moda e Calçados</div>
-                                        <div class="item-opcao-dropdown" data-valor="Carros e Motos">Carros e Motos</div>
-                                        <div class="item-opcao-dropdown" data-valor="Games e Brinquedos">Games e Brinquedos</div>
-                                        <div class="item-opcao-dropdown" data-valor="Serviços e Trabalhos">Serviços e Negócios</div>
-                                        <div class="item-opcao-dropdown" data-valor="Outros Produtos">Outros</div>
+                                        <div class="item-opcao-dropdown" data-valor="Veículos & Autopeças">Veículos & Autopeças</div>
+                                        <div class="item-opcao-dropdown" data-valor="Imóveis & Terrenos">Imóveis & Terrenos</div>
+                                        <div class="item-opcao-dropdown" data-valor="Agro & Pecuária">Agro & Pecuária</div>
+                                        <div class="item-opcao-dropdown" data-valor="Celulares & Telefonia">Celulares & Telefonia</div>
+                                        <div class="item-opcao-dropdown" data-valor="Eletrônicos, Áudio & Vídeo">Eletrônicos, Áudio & Vídeo</div>
+                                        <div class="item-opcao-dropdown" data-valor="Informática & Games">Informática & Games</div>
+                                        <div class="item-opcao-dropdown" data-valor="Casa, Móveis & Decoração">Casa, Móveis & Decoração</div>
+                                        <div class="item-opcao-dropdown" data-valor="Eletrodomésticos">Eletrodomésticos</div>
+                                        <div class="item-opcao-dropdown" data-valor="Moda, Calçados & Acessórios">Moda, Calçados & Acessórios</div>
+                                        <div class="item-opcao-dropdown" data-valor="Beleza & Cuidado Pessoal">Beleza & Cuidado Pessoal</div>
+                                        <div class="item-opcao-dropdown" data-valor="Infantil & Bebês">Infantil & Bebês</div>
+                                        <div class="item-opcao-dropdown" data-valor="Esportes, Fitness & Lazer">Esportes, Fitness & Lazer</div>
+                                        <div class="item-opcao-dropdown" data-valor="Construção & Ferramentas">Construção & Ferramentas</div>
+                                        <div class="item-opcao-dropdown" data-valor="Comércio, Negócios & Escritório">Comércio, Negócios & Escritório</div>
+                                        <div class="item-opcao-dropdown" data-valor="Serviços & Profissionais">Serviços & Profissionais</div>
+                                        <div class="item-opcao-dropdown" data-valor="Música, Arte & Hobbies">Música, Arte & Hobbies</div>
+                                        <div class="item-opcao-dropdown" data-valor="Animais de Estimação & Pet Shop">Animais de Estimação & Pet Shop</div>
+                                        <div class="item-opcao-dropdown" data-valor="Doações, Trocas & Solidariedade">Doações, Trocas & Solidariedade</div>
+                                        <div class="item-opcao-dropdown" data-valor="Outros & Diversos">Outros & Diversos</div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Condição com Seleção Rápida por Chips -->
+                            <!-- Condição (Gaveta Verde Oficial) -->
                             <div class="campo-vender-wrapper">
                                 <label class="rotulo-secao-campo">Condição *</label>
-                                <div class="chips-selecao-rapida" id="chips-condicao-container">
-                                    <span class="chip-opcao" data-valor="Novo">Novo (Lacrado)</span>
-                                    <span class="chip-opcao" data-valor="Usado - Excelente">Usado - Excelente</span>
-                                    <span class="chip-opcao" data-valor="Usado - Bom">Usado - Bom</span>
-                                    <span class="chip-opcao" data-valor="Usado - Sinais de uso">Sinais de uso</span>
-                                    <span class="chip-opcao" data-valor="Para Peças / Defeito">Para peças</span>
-                                </div>
-
-                                <!-- Dropdown de Condição (Retrocompatível) -->
                                 <div class="dropdown-pill-container" id="dropdown-condicao">
                                     <button type="button" class="btn-dropdown-pill" id="btn-dropdown-condicao" aria-haspopup="listbox">
                                         <span id="label-condicao-texto">SELECIONAR CONDIÇÃO</span>

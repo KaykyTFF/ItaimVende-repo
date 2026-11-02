@@ -32,9 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const labelCondicao = document.getElementById('label-condicao-texto');
     const menuCondicaoOpcoes = document.getElementById('menu-condicao-opcoes');
 
-    // Chips de seleção rápida
-    const chipsCategoria = document.querySelectorAll('#chips-categorias-container .chip-opcao');
-    const chipsCondicao = document.querySelectorAll('#chips-condicao-container .chip-opcao');
+
 
     // Localização
     const textoLocalizacao = document.getElementById('texto-localizacao');
@@ -320,55 +318,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    configurarDropdownPill(dropdownCategoria, btnDropdownCategoria, labelCategoria, menuCategoriaOpcoes, (valor) => {
-        chipsCategoria.forEach(chip => {
-            if (chip.getAttribute('data-valor') === valor) {
-                chip.classList.add('ativo');
-            } else {
-                chip.classList.remove('ativo');
-            }
-        });
-    });
-
-    configurarDropdownPill(dropdownCondicao, btnDropdownCondicao, labelCondicao, menuCondicaoOpcoes, (valor) => {
-        chipsCondicao.forEach(chip => {
-            if (chip.getAttribute('data-valor') === valor) {
-                chip.classList.add('ativo');
-            } else {
-                chip.classList.remove('ativo');
-            }
-        });
-    });
-
-    // Chips de Categoria
-    chipsCategoria.forEach(chip => {
-        chip.addEventListener('click', () => {
-            chipsCategoria.forEach(c => c.classList.remove('ativo'));
-            chip.classList.add('ativo');
-            const valor = chip.getAttribute('data-valor');
-            if (labelCategoria) labelCategoria.textContent = valor.toUpperCase();
-            if (menuCategoriaOpcoes) {
-                menuCategoriaOpcoes.querySelectorAll('.item-opcao-dropdown').forEach(item => {
-                    item.classList.toggle('selecionado', item.getAttribute('data-valor') === valor);
-                });
-            }
-        });
-    });
-
-    // Chips de Condição
-    chipsCondicao.forEach(chip => {
-        chip.addEventListener('click', () => {
-            chipsCondicao.forEach(c => c.classList.remove('ativo'));
-            chip.classList.add('ativo');
-            const valor = chip.getAttribute('data-valor');
-            if (labelCondicao) labelCondicao.textContent = valor.toUpperCase();
-            if (menuCondicaoOpcoes) {
-                menuCondicaoOpcoes.querySelectorAll('.item-opcao-dropdown').forEach(item => {
-                    item.classList.toggle('selecionado', item.getAttribute('data-valor') === valor);
-                });
-            }
-        });
-    });
+    configurarDropdownPill(dropdownCategoria, btnDropdownCategoria, labelCategoria, menuCategoriaOpcoes);
+    configurarDropdownPill(dropdownCondicao, btnDropdownCondicao, labelCondicao, menuCondicaoOpcoes);
 
     // Fecha dropdowns ao clicar fora
     document.addEventListener('click', () => {
@@ -468,24 +419,18 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Categoria (prioriza chip ativo ou dropdown)
+        // Categoria (Gaveta Verde Oficial)
         let catTexto = 'GERAL';
-        const chipCatAtivo = document.querySelector('#chips-categorias-container .chip-opcao.ativo');
-        if (chipCatAtivo) {
-            catTexto = chipCatAtivo.getAttribute('data-valor') || chipCatAtivo.textContent.trim();
-        } else if (labelCategoria && labelCategoria.textContent.trim() !== 'SELECIONAR CATEGORIA') {
+        if (labelCategoria && labelCategoria.textContent.trim() !== 'SELECIONAR CATEGORIA') {
             catTexto = labelCategoria.textContent.trim();
         }
         if (previewTagCat) {
             previewTagCat.textContent = catTexto.toUpperCase();
         }
 
-        // Condição (prioriza chip ativo ou dropdown)
+        // Condição (Gaveta Verde Oficial)
         let condTexto = 'USADO';
-        const chipCondAtivo = document.querySelector('#chips-condicao-container .chip-opcao.ativo');
-        if (chipCondAtivo) {
-            condTexto = chipCondAtivo.getAttribute('data-valor') || chipCondAtivo.textContent.trim();
-        } else if (labelCondicao && labelCondicao.textContent.trim() !== 'SELECIONAR CONDIÇÃO') {
+        if (labelCondicao && labelCondicao.textContent.trim() !== 'SELECIONAR CONDIÇÃO') {
             condTexto = labelCondicao.textContent.trim();
         }
         if (previewTagCond) {
@@ -517,6 +462,24 @@ document.addEventListener('DOMContentLoaded', () => {
                     exibirFeedback('O título do anúncio deve ter no mínimo 3 caracteres.');
                     if (etapaAtual !== 2) irParaEtapa(2);
                     inputTitulo?.focus();
+                    return false;
+                }
+
+                const catSelecionada = (labelCategoria?.textContent || '').trim().toUpperCase();
+                if (!catSelecionada || catSelecionada === 'SELECIONAR CATEGORIA') {
+                    exibirFeedback('Por favor, selecione uma categoria para o seu anúncio.');
+                    if (etapaAtual !== 2) irParaEtapa(2);
+                    btnDropdownCategoria?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    btnDropdownCategoria?.focus();
+                    return false;
+                }
+
+                const condSelecionada = (labelCondicao?.textContent || '').trim().toUpperCase();
+                if (!condSelecionada || condSelecionada === 'SELECIONAR CONDIÇÃO') {
+                    exibirFeedback('Por favor, selecione a condição do produto.');
+                    if (etapaAtual !== 2) irParaEtapa(2);
+                    btnDropdownCondicao?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    btnDropdownCondicao?.focus();
                     return false;
                 }
 
@@ -911,11 +874,10 @@ document.addEventListener('DOMContentLoaded', () => {
         fotosLista = [];
         renderizarGaleriaFotos();
 
-        // Reseta chips
-        chipsCategoria.forEach(c => c.classList.remove('ativo'));
-        chipsCondicao.forEach(c => c.classList.remove('ativo'));
         if (labelCategoria) labelCategoria.textContent = 'SELECIONAR CATEGORIA';
         if (labelCondicao) labelCondicao.textContent = 'SELECIONAR CONDIÇÃO';
+        menuCategoriaOpcoes?.querySelectorAll('.item-opcao-dropdown').forEach(i => i.classList.remove('selecionado'));
+        menuCondicaoOpcoes?.querySelectorAll('.item-opcao-dropdown').forEach(i => i.classList.remove('selecionado'));
 
         alternarParaFormulario();
     });
@@ -1007,30 +969,21 @@ document.addEventListener('DOMContentLoaded', () => {
             dropdownCategoria.style.pointerEvents = 'none';
             dropdownCategoria.style.opacity = '0.7';
             dropdownCategoria.setAttribute('title', 'Categoria protegida contra alteração após publicação para segurança dos compradores.');
-        }
-        chipsCategoria.forEach(chip => {
-            chip.style.cursor = 'not-allowed';
-            chip.style.opacity = '0.75';
-            chip.addEventListener('click', (e) => {
-                e.stopPropagation();
-                exibirFeedback('Por segurança contra fraudes (bait-and-switch), a categoria do produto não pode ser alterada após a publicação.');
-            }, true);
-        });
 
-        const containerChips = document.getElementById('chips-categorias-container');
-        if (containerChips && !document.getElementById('aviso-categoria-protegida')) {
-            const aviso = document.createElement('div');
-            aviso.id = 'aviso-categoria-protegida';
-            aviso.className = 'aviso-seguranca-edicao';
-            aviso.style.cssText = 'display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #475569; background: #F8FAFC; border: 1px solid #E2E8F0; padding: 10px 14px; border-radius: 8px; margin-top: 12px;';
-            aviso.innerHTML = `
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
-                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                </svg>
-                <span><strong>Categoria protegida:</strong> Não pode ser alterada após a publicação para garantir a transparência com os compradores.</span>
-            `;
-            containerChips.parentNode.insertBefore(aviso, containerChips.nextSibling);
+            if (!document.getElementById('aviso-categoria-protegida')) {
+                const aviso = document.createElement('div');
+                aviso.id = 'aviso-categoria-protegida';
+                aviso.className = 'aviso-seguranca-edicao';
+                aviso.style.cssText = 'display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #475569; background: #F8FAFC; border: 1px solid #E2E8F0; padding: 10px 14px; border-radius: 8px; margin-top: 12px;';
+                aviso.innerHTML = `
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    <span><strong>Categoria protegida:</strong> Não pode ser alterada após a publicação para garantir a transparência com os compradores.</span>
+                `;
+                dropdownCategoria.parentNode.insertBefore(aviso, dropdownCategoria.nextSibling);
+            }
         }
 
         // Preenche título
@@ -1063,11 +1016,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const catNome = produto.categoria || (produto.category ? (produto.category.name || produto.category) : '');
         if (catNome && labelCategoria) {
             labelCategoria.textContent = catNome.toUpperCase();
-            chipsCategoria.forEach(chip => {
-                const val = (chip.getAttribute('data-valor') || chip.textContent || '').trim().toLowerCase();
-                const match = val === catNome.toLowerCase() || catNome.toLowerCase().includes(val) || val.includes(catNome.toLowerCase());
-                chip.classList.toggle('ativo', match);
-            });
             if (menuCategoriaOpcoes) {
                 menuCategoriaOpcoes.querySelectorAll('.item-opcao-dropdown').forEach(item => {
                     const val = (item.getAttribute('data-valor') || item.textContent || '').trim().toLowerCase();
@@ -1081,11 +1029,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const condNome = produto.condicao || produto.condition || 'Usado';
         if (condNome && labelCondicao) {
             labelCondicao.textContent = condNome.toUpperCase();
-            chipsCondicao.forEach(chip => {
-                const val = (chip.getAttribute('data-valor') || chip.textContent || '').trim().toLowerCase();
-                const match = val === condNome.toLowerCase() || condNome.toLowerCase().includes(val);
-                chip.classList.toggle('ativo', match);
-            });
             if (menuCondicaoOpcoes) {
                 menuCondicaoOpcoes.querySelectorAll('.item-opcao-dropdown').forEach(item => {
                     const val = (item.getAttribute('data-valor') || item.textContent || '').trim().toLowerCase();

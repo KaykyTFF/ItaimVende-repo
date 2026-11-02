@@ -220,8 +220,6 @@
                 '#drawer-link-notificacoes',
                 '#drawer-link-painel',
                 '#drawer-link-configuracoes',
-                '#btn-toggle-categorias',
-                '#drawer-categorias-conteudo',
                 '.drawer-secao-divisor'
             ];
             seletoresOcultar.forEach(sel => {
@@ -321,7 +319,6 @@
             '#drawer-link-notificacoes',
             '#drawer-link-painel',
             '#drawer-link-configuracoes',
-            '#btn-toggle-categorias',
             '.drawer-secao-divisor'
         ];
         seletoresRestaurar.forEach(sel => {
@@ -460,6 +457,44 @@
     // 2. INICIALIZAÇÃO GLOBAL UNIFICADA DO CABEÇALHO E MENU LATERAL (DRAWER)
     // ==========================================================================
     function inicializarHeaderGlobal() {
+    // Delegação resiliente de eventos para o Drawer e Acordeão de Categorias (garante funcionamento após re-injeções dinâmicas)
+    if (!window.DRAWER_EVENT_DELEGATION_INITIALIZED) {
+        window.DRAWER_EVENT_DELEGATION_INITIALIZED = true;
+        document.addEventListener('click', (e) => {
+            // Acordeão de Categorias
+            const btnToggle = e.target.closest('#btn-toggle-categorias, .drawer-accordion-btn');
+            if (btnToggle) {
+                e.preventDefault();
+                e.stopPropagation();
+                const conteudo = document.getElementById('drawer-categorias-conteudo') || btnToggle.nextElementSibling;
+                if (conteudo) {
+                    const isOpen = conteudo.classList.toggle('aberto');
+                    btnToggle.classList.toggle('aberto', isOpen);
+                    btnToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+                }
+                return;
+            }
+
+            // Abertura do Drawer
+            if (e.target.closest('#btn-abrir-drawer, .btn-menu-hamburguer, [aria-label="Abrir menu lateral"]')) {
+                e.preventDefault();
+                if (typeof window.alternarDrawer === 'function') {
+                    window.alternarDrawer(true);
+                }
+                return;
+            }
+
+            // Fechamento do Drawer
+            if (e.target.closest('#btn-fechar-drawer, .drawer-close, [aria-label="Fechar menu"]')) {
+                e.preventDefault();
+                if (typeof window.alternarDrawer === 'function') {
+                    window.alternarDrawer(false);
+                }
+                return;
+            }
+        });
+    }
+
         const backdrop = document.getElementById('drawer-backdrop') || document.querySelector('.drawer-backdrop');
         const btnAbrirDrawer = document.getElementById('btn-abrir-drawer');
         const btnFecharDrawer = document.getElementById('btn-fechar-drawer');

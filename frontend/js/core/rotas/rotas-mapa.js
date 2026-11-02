@@ -42,7 +42,12 @@
         'painel': 'pages/admin/painel.html',
         'painel.html': 'pages/admin/painel.html',
         'status': 'pages/admin/painel.html',
-        'status.html': 'pages/admin/painel.html'
+        'status.html': 'pages/admin/painel.html',
+        'tickets': 'pages/admin/tickets.html',
+        'tickets.html': 'pages/admin/tickets.html',
+        'moderacao': 'pages/admin/tickets.html',
+        'moderacao.html': 'pages/admin/tickets.html',
+        'admin/tickets': 'pages/admin/tickets.html'
     };
 
     window.ItaimRotasMapa = MAPA_ROTAS;

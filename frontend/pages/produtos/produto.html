@@ -300,14 +300,25 @@
                     </svg>
                 </button>
                 <div class="drawer-categorias-conteudo" id="drawer-categorias-conteudo">
-                    <a href="categoria.html?cat=Eletrônicos" class="drawer-sublink">Eletrônicos</a>
-                    <a href="categoria.html?cat=Decoração" class="drawer-sublink">Decoração</a>
-                    <a href="categoria.html?cat=Móveis" class="drawer-sublink">Móveis</a>
-                    <a href="categoria.html?cat=Moda" class="drawer-sublink">Moda & Vestuário</a>
+                    <a href="categoria.html?cat=Ve%C3%ADculos" class="drawer-sublink">Veículos & Autopeças</a>
+                    <a href="categoria.html?cat=Im%C3%B3veis" class="drawer-sublink">Imóveis & Terrenos</a>
+                    <a href="categoria.html?cat=Agro" class="drawer-sublink">Agro & Pecuária</a>
+                    <a href="categoria.html?cat=Celulares" class="drawer-sublink">Celulares & Telefonia</a>
+                    <a href="categoria.html?cat=Eletr%C3%B4nicos" class="drawer-sublink">Eletrônicos, Áudio & Vídeo</a>
+                    <a href="categoria.html?cat=Inform%C3%A1tica" class="drawer-sublink">Informática & Games</a>
+                    <a href="categoria.html?cat=M%C3%B3veis" class="drawer-sublink">Casa, Móveis & Decoração</a>
+                    <a href="categoria.html?cat=Eletrodom%C3%A9sticos" class="drawer-sublink">Eletrodomésticos</a>
+                    <a href="categoria.html?cat=Moda" class="drawer-sublink">Moda, Calçados & Acessórios</a>
+                    <a href="categoria.html?cat=Beleza" class="drawer-sublink">Beleza & Cuidado Pessoal</a>
                     <a href="categoria.html?cat=Infantil" class="drawer-sublink">Infantil & Bebês</a>
-                    <a href="categoria.html?cat=Esportes" class="drawer-sublink">Esportes & Lazer</a>
-                    <a href="categoria.html?cat=Hobbies" class="drawer-sublink">Hobbies & Games</a>
-                    <a href="categoria.html?cat=Serviços" class="drawer-sublink">Serviços</a>
+                    <a href="categoria.html?cat=Esportes" class="drawer-sublink">Esportes, Fitness & Lazer</a>
+                    <a href="categoria.html?cat=Constru%C3%A7%C3%A3o" class="drawer-sublink">Construção & Ferramentas</a>
+                    <a href="categoria.html?cat=Com%C3%A9rcio" class="drawer-sublink">Comércio, Negócios & Escritório</a>
+                    <a href="categoria.html?cat=Servi%C3%A7os" class="drawer-sublink">Serviços & Profissionais</a>
+                    <a href="categoria.html?cat=Hobbies" class="drawer-sublink">Música, Arte & Hobbies</a>
+                    <a href="categoria.html?cat=Pets" class="drawer-sublink">Animais de Estimação & Pet Shop</a>
+                    <a href="categoria.html?cat=Doa%C3%A7%C3%B5es" class="drawer-sublink">Doações, Trocas & Solidariedade</a>
+                    <a href="categoria.html?cat=Outros" class="drawer-sublink">Outros & Diversos</a>
                 </div>
 
                 <div class="drawer-secao-divisor"></div>
@@ -337,6 +348,12 @@
                         </span>
                     </span>
                 </button>
+                <a href="../admin/tickets.html" class="drawer-link" id="drawer-link-tickets" title="Central de denúncias e suporte">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                    Tickets & Moderação
+                </a>
                 <a href="../perfil/configuracoes.html" class="drawer-link" id="drawer-link-configuracoes">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
@@ -380,11 +397,7 @@
             <ul class="breadcrumb-ref-lista">
                 <li><a href="../home/home.html" class="breadcrumb-home-link" title="Página Inicial">Início</a></li>
                 <li class="sep">&gt;</li>
-                <li><a href="categoria.html?cat=Eletrônicos">Eletrônicos</a></li>
-                <li class="sep">&gt;</li>
-                <li><a href="categoria.html?cat=Acessórios">Acessórios</a></li>
-                <li class="sep">&gt;</li>
-                <li class="atual">Controles Remotos</li>
+                <li class="atual" id="breadcrumb-atual">Carregando anúncio...</li>
             </ul>
         </div>
     </nav>
@@ -392,9 +405,59 @@
     <!-- ==========================================================
          3. CONTEÚDO PRINCIPAL DO ANÚNCIO (ESTILO REFERÊNCIA)
          ========================================================== -->
-    <div id="skeleton-produto-container"></div>
+    <div id="skeleton-produto-container">
+        <div class="skeleton-produto-wrapper" id="skeleton-produto-placeholder" aria-hidden="true">
+            <div class="skeleton-produto-grid">
+                <div class="skeleton-produto-card-topo">
+                    <div class="skeleton-grid-carrossel">
+                        <div class="skeleton-galeria-area">
+                            <div class="skeleton-foto-destaque"></div>
+                            <div class="skeleton-miniaturas-fila">
+                                <div class="skeleton-miniatura-item"></div>
+                                <div class="skeleton-miniatura-item"></div>
+                                <div class="skeleton-miniatura-item"></div>
+                                <div class="skeleton-miniatura-item"></div>
+                            </div>
+                        </div>
+                        <div class="skeleton-detalhes-info">
+                            <div class="skeleton-selo-topo"></div>
+                            <div class="skeleton-titulo-grande-1"></div>
+                            <div class="skeleton-titulo-grande-2"></div>
+                            <div class="skeleton-localizacao-bar"></div>
+                            <div class="skeleton-preco-destaque"></div>
+                            <div class="skeleton-especificacoes-linha">
+                                <div class="skeleton-especificacao-pill"></div>
+                                <div class="skeleton-especificacao-pill"></div>
+                            </div>
+                            <div class="skeleton-descricao-curta">
+                                <div class="skeleton-line" style="width: 100%; height: 14px; border-radius: 4px;"></div>
+                                <div class="skeleton-line" style="width: 90%; height: 14px; border-radius: 4px;"></div>
+                                <div class="skeleton-line" style="width: 75%; height: 14px; border-radius: 4px;"></div>
+                            </div>
+                            <div class="skeleton-botao-whatsapp"></div>
+                            <div class="skeleton-botao-chat"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="skeleton-card-vendedor">
+                    <div class="skeleton-vendedor-topo">
+                        <div class="skeleton-avatar-vendedor"></div>
+                        <div class="skeleton-vendedor-info-linhas">
+                            <div class="skeleton-line" style="width: 120px; height: 16px; border-radius: 6px;"></div>
+                            <div class="skeleton-line" style="width: 80px; height: 13px; border-radius: 4px;"></div>
+                        </div>
+                    </div>
+                    <div class="skeleton-vendedor-stats">
+                        <div class="skeleton-stat-box"></div>
+                        <div class="skeleton-stat-box"></div>
+                    </div>
+                    <div class="skeleton-line" style="width: 100%; height: 42px; border-radius: 12px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <main class="layout-anuncio-wrapper" id="main-anuncio-conteudo">
+    <main class="layout-anuncio-wrapper" id="main-anuncio-conteudo" style="display: none;">
         <div class="grid-anuncio-conteudo">
 
             <!-- COLUNA ESQUERDA & CENTRO: PRODUTO + SOBRE ESTE ANÚNCIO -->
@@ -440,9 +503,7 @@
                                 </button>
 
                                 <div class="foto-bg-blur" id="foto-bg-blur"></div>
-                                <img src="../../assets/produtos/anuncio_15.jpg"
-                                    alt="Controle Remoto para Televisão SMART TV SAMSUNG" id="foto-principal-img"
-                                    class="foto-principal-display">
+                                <img src="../../assets/placeholders/produto-placeholder.svg" alt="Foto do anúncio" id="foto-principal-img" class="foto-principal-display">
 
                                 <div class="badge-contador-fotos" id="contador-fotos-badge">
                                     <span id="contador-fotos-texto">1/2</span>
@@ -450,30 +511,7 @@
                             </div>
 
                             <!-- Miniaturas -->
-                            <div class="miniaturas-row" id="miniaturas-row">
-                                <div class="thumb-box ativa" data-index="0"
-                                    data-src="../../assets/produtos/anuncio_15.jpg" title="Foto 1">
-                                    <img src="../../assets/produtos/anuncio_15.jpg" alt="Miniatura 1">
-                                </div>
-                                <div class="thumb-box" data-index="1" data-src="../../assets/produtos/anuncio_15_2.jpg"
-                                    title="Foto 2">
-                                    <img src="../../assets/produtos/anuncio_15_2.jpg" alt="Miniatura 2">
-                                </div>
-                                <div class="thumb-box" data-index="0" data-src="../../assets/produtos/anuncio_15.jpg"
-                                    title="Foto 3 (Teclas)">
-                                    <img src="../../assets/produtos/anuncio_15.jpg" alt="Miniatura 3"
-                                        style="transform: scale(1.6); object-fit: cover;">
-                                </div>
-                                <div class="thumb-box" data-index="1" data-src="../../assets/produtos/anuncio_15_2.jpg"
-                                    title="Foto 4 (Design)">
-                                    <img src="../../assets/produtos/anuncio_15_2.jpg" alt="Miniatura 4"
-                                        style="transform: scale(1.6); object-fit: cover;">
-                                </div>
-                                <div class="thumb-box" data-index="0" data-src="../../assets/produtos/anuncio_15.jpg"
-                                    title="Foto 5 (Traseira)">
-                                    <img src="../../assets/produtos/anuncio_15.jpg" alt="Miniatura 5">
-                                </div>
-                            </div>
+                            <div class="miniaturas-row" id="miniaturas-row"></div>
                         </div>
 
                         <!-- 2. Detalhes do Anúncio (Centro) -->
@@ -486,8 +524,7 @@
                                 <span>ANÚNCIO VERIFICADO</span>
                             </div>
 
-                            <h1 class="produto-titulo-destaque" id="produto-titulo">Controle Remoto para Televisão SMART
-                                TV SAMSUNG</h1>
+                            <h1 class="produto-titulo-destaque" id="produto-titulo">Carregando anúncio...</h1>
 
                             <div class="produto-localizacao-linha" id="produto-localizacao">
                                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
@@ -495,7 +532,7 @@
                                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                                     <circle cx="12" cy="10" r="3"></circle>
                                 </svg>
-                                <span>Betânia do Piauí - PI</span>
+                                <span id="produto-cidade-texto">Paulistana - PI</span>
                             </div>
 
                             <hr class="divisor-suave">
@@ -513,11 +550,7 @@
 
                             <div class="bloco-descricao-curta">
                                 <h2 class="subtitulo-secao">Descrição do produto</h2>
-                                <p class="texto-descricao-paragrafo" id="descricao-curta-texto">
-                                    Controle remoto para Smart TV Samsung, modelo ergonômico com teclas macias e
-                                    resposta rápida. Ideal para reposição do controle original com todas as funções
-                                    integradas, atalhos para streaming e navegação precisa.
-                                </p>
+                                <p class="texto-descricao-paragrafo" id="descricao-curta-texto">Carregando detalhes do anúncio...</p>
                             </div>
                         </div>
 
@@ -536,7 +569,7 @@
                     <span>Ótimo preço</span>
                 </div>
 
-                <div class="valor-preco-grande" id="preco-valor">R$ 30,00</div>
+                <div class="valor-preco-grande" id="preco-valor">--</div>
 
                 <div class="legenda-negociavel">
                     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
@@ -771,7 +804,7 @@
                     </div>
 
                     <div class="denuncia-produto-resumo">
-                        <img src="../../assets/produtos/anuncio_15.jpg" alt="Foto do Produto" id="denuncia-resumo-img"
+                        <img src="../../assets/placeholders/produto-placeholder.svg" alt="Foto do Produto" id="denuncia-resumo-img"
                             class="denuncia-resumo-img">
                         <div class="denuncia-resumo-info">
                             <strong class="denuncia-resumo-titulo" id="denuncia-resumo-titulo">Paulistana</strong>
@@ -966,7 +999,7 @@
 
                     <!-- Resumo Produto -->
                     <div class="denuncia-produto-resumo">
-                        <img src="../../assets/produtos/anuncio_15.jpg" alt="Foto do Produto" id="denuncia-revisao-img"
+                        <img src="../../assets/placeholders/produto-placeholder.svg" alt="Foto do Produto" id="denuncia-revisao-img"
                             class="denuncia-resumo-img">
                         <div class="denuncia-resumo-info">
                             <strong class="denuncia-resumo-titulo" id="denuncia-revisao-titulo">Paulistana</strong>

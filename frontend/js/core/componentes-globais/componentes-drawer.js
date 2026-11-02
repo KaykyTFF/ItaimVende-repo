@@ -85,14 +85,25 @@
                     </svg>
                 </button>
                 <div class="drawer-categorias-conteudo" id="drawer-categorias-conteudo">
-                    <a href="${urlPara('categoria', 'cat=Eletrônicos')}" class="drawer-sublink">Eletrônicos</a>
-                    <a href="${urlPara('categoria', 'cat=Decoração')}" class="drawer-sublink">Decoração</a>
-                    <a href="${urlPara('categoria', 'cat=Móveis')}" class="drawer-sublink">Móveis</a>
-                    <a href="${urlPara('categoria', 'cat=Moda')}" class="drawer-sublink">Moda & Vestuário</a>
+                    <a href="${urlPara('categoria', 'cat=Veículos')}" class="drawer-sublink">Veículos & Autopeças</a>
+                    <a href="${urlPara('categoria', 'cat=Imóveis')}" class="drawer-sublink">Imóveis & Terrenos</a>
+                    <a href="${urlPara('categoria', 'cat=Agro')}" class="drawer-sublink">Agro & Pecuária</a>
+                    <a href="${urlPara('categoria', 'cat=Celulares')}" class="drawer-sublink">Celulares & Telefonia</a>
+                    <a href="${urlPara('categoria', 'cat=Eletrônicos')}" class="drawer-sublink">Eletrônicos, Áudio & Vídeo</a>
+                    <a href="${urlPara('categoria', 'cat=Informática')}" class="drawer-sublink">Informática & Games</a>
+                    <a href="${urlPara('categoria', 'cat=Móveis')}" class="drawer-sublink">Casa, Móveis & Decoração</a>
+                    <a href="${urlPara('categoria', 'cat=Eletrodomésticos')}" class="drawer-sublink">Eletrodomésticos</a>
+                    <a href="${urlPara('categoria', 'cat=Moda')}" class="drawer-sublink">Moda, Calçados & Acessórios</a>
+                    <a href="${urlPara('categoria', 'cat=Beleza')}" class="drawer-sublink">Beleza & Cuidado Pessoal</a>
                     <a href="${urlPara('categoria', 'cat=Infantil')}" class="drawer-sublink">Infantil & Bebês</a>
-                    <a href="${urlPara('categoria', 'cat=Esportes')}" class="drawer-sublink">Esportes & Lazer</a>
-                    <a href="${urlPara('categoria', 'cat=Hobbies')}" class="drawer-sublink">Hobbies & Games</a>
-                    <a href="${urlPara('categoria', 'cat=Serviços')}" class="drawer-sublink">Serviços</a>
+                    <a href="${urlPara('categoria', 'cat=Esportes')}" class="drawer-sublink">Esportes, Fitness & Lazer</a>
+                    <a href="${urlPara('categoria', 'cat=Construção')}" class="drawer-sublink">Construção & Ferramentas</a>
+                    <a href="${urlPara('categoria', 'cat=Comércio')}" class="drawer-sublink">Comércio, Negócios & Escritório</a>
+                    <a href="${urlPara('categoria', 'cat=Serviços')}" class="drawer-sublink">Serviços & Profissionais</a>
+                    <a href="${urlPara('categoria', 'cat=Hobbies')}" class="drawer-sublink">Música, Arte & Hobbies</a>
+                    <a href="${urlPara('categoria', 'cat=Pets')}" class="drawer-sublink">Animais de Estimação & Pet Shop</a>
+                    <a href="${urlPara('categoria', 'cat=Doações')}" class="drawer-sublink">Doações, Trocas & Solidariedade</a>
+                    <a href="${urlPara('categoria', 'cat=Outros')}" class="drawer-sublink">Outros & Diversos</a>
                 </div>
 
                 <div class="drawer-secao-divisor"></div>
@@ -126,6 +137,12 @@
                         </span>
                     </span>
                 </button>
+                <a href="${urlPara('tickets')}" class="drawer-link ${pagina === 'tickets' ? 'ativo' : ''}" id="drawer-link-tickets" title="Fila de denúncias e conversas com suporte">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                    Tickets & Moderação
+                </a>
                 <a href="${urlPara('configuracoes')}" class="drawer-link ${pagina === 'configuracoes' ? 'ativo' : ''}" id="drawer-link-configuracoes">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="3"></circle>
