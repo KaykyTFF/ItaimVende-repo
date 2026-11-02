@@ -4,9 +4,12 @@
  * 
  * Responsabilidades:
  * - Montagem e desmontagem do DOM do modal de enquadramento
- * - Suporte a mouse drag e touch drag/gestos móveis
- * - Controles de zoom slider e rotação 90°
- * - Integração com o motor Canvas para renderização e exportação
+ * - Bloqueio estrito de rolagem do fundo (body/html lock) durante o ajuste
+ * - Suporte a mouse drag e zoom por roda do mouse no desktop
+ * - Suporte completo a gestos touch no celular: arrasto (pan) e pinça de 2 dedos (pinch-to-zoom)
+ * - Sincronização bidirecional em tempo real com o slider de zoom
+ * - Suporte a rotação de 90° e atalho de toque duplo (double-tap zoom)
+ * - Integração com o motor Canvas para renderização e exportação de alta qualidade
  */
 
 (function() {
@@ -26,6 +29,15 @@
         // Remove modal anterior caso exista
         const modalAntigo = document.getElementById('modal-ajuste-foto-container');
         if (modalAntigo) modalAntigo.remove();
+
+        // 1. Bloqueia a rolagem do fundo da página (Prevenção de mexer o fundo)
+        const overflowBodyOriginal = document.body.style.overflow;
+        const overflowHtmlOriginal = document.documentElement.style.overflow;
+        const touchActionBodyOriginal = document.body.style.touchAction;
+
+        document.body.style.overflow = 'hidden';
+        document.documentElement.style.overflow = 'hidden';
+        document.body.style.touchAction = 'none';
 
         const backdrop = document.createElement('div');
         backdrop.id = 'modal-ajuste-foto-container';
@@ -57,7 +69,7 @@
                     </div>
 
                     <p class="modal-ajuste-dica">
-                        Arraste a foto com o mouse ou dedo para enquadrar
+                        Arraste para reposicionar e use pinça com os dedos (ou o slider) para aproximar
                     </p>
 
                     <div class="modal-ajuste-controles">
@@ -67,7 +79,7 @@
                             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                             <line x1="8" y1="11" x2="14" y2="11"></line>
                         </svg>
-                        <input type="range" class="modal-ajuste-slider" id="slider-zoom" min="1" max="3" step="0.05" value="1" title="Aproximar">
+                        <input type="range" class="modal-ajuste-slider" id="slider-zoom" min="1" max="3" step="0.01" value="1" title="Aproximar" aria-label="Controle de Zoom">
                         <!-- Ícone Lupa Mais -->
                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="11" cy="11" r="8"></circle>
@@ -124,10 +136,6 @@
             posY: 0
         };
 
-        let arrastando = false;
-        let inicioX = 0;
-        let inicioY = 0;
-
         function desenhar() {
             getCanvasMotor().renderizarPreview(ctx, img, estado, viewLargura, viewAltura);
         }
@@ -143,57 +151,236 @@
             desenhar();
         });
 
-        // Botão Girar
+        // Botão Girar (90 graus)
         btnGirar.addEventListener('click', function () {
             estado.angulo = (estado.angulo + 90) % 360;
             desenhar();
         });
 
-        // Arrastar com Mouse
+        // -------------------------------------------------------------
+        // 2. ARRASTAR COM MOUSE (DESKTOP) E ZOOM COM SCROLL DA RODA
+        // -------------------------------------------------------------
+        let arrastandoMouse = false;
+        let inicioMouseX = 0;
+        let inicioMouseY = 0;
+
         viewport.addEventListener('mousedown', function (e) {
-            arrastando = true;
-            inicioX = e.clientX - estado.posX;
-            inicioY = e.clientY - estado.posY;
+            e.preventDefault();
+            arrastandoMouse = true;
+            inicioMouseX = e.clientX - estado.posX;
+            inicioMouseY = e.clientY - estado.posY;
         });
 
         const onMouseMove = function (e) {
-            if (!arrastando) return;
-            estado.posX = e.clientX - inicioX;
-            estado.posY = e.clientY - inicioY;
+            if (!arrastandoMouse) return;
+            estado.posX = e.clientX - inicioMouseX;
+            estado.posY = e.clientY - inicioMouseY;
             desenhar();
         };
 
         const onMouseUp = function () {
-            arrastando = false;
+            arrastandoMouse = false;
         };
 
         window.addEventListener('mousemove', onMouseMove);
         window.addEventListener('mouseup', onMouseUp);
 
-        // Arrastar com Toque (Touch / Mobile)
-        viewport.addEventListener('touchstart', function (e) {
-            if (e.touches.length === 1) {
-                arrastando = true;
-                inicioX = e.touches[0].clientX - estado.posX;
-                inicioY = e.touches[0].clientY - estado.posY;
-            }
-        }, { passive: true });
-
-        viewport.addEventListener('touchmove', function (e) {
-            if (!arrastando || e.touches.length !== 1) return;
-            estado.posX = e.touches[0].clientX - inicioX;
-            estado.posY = e.touches[0].clientY - inicioY;
+        // Zoom com a roda do mouse (Desktop) sem rolar a página
+        viewport.addEventListener('wheel', function (e) {
+            e.preventDefault();
+            const sensibilidade = 0.0015;
+            const delta = -e.deltaY * sensibilidade;
+            const minZoom = parseFloat(sliderZoom.min) || 1.0;
+            const maxZoom = parseFloat(sliderZoom.max) || 3.0;
+            const novoZoom = Math.min(Math.max(estado.zoom + delta, minZoom), maxZoom);
+            estado.zoom = Math.round(novoZoom * 100) / 100;
+            sliderZoom.value = estado.zoom;
             desenhar();
-        }, { passive: true });
+        }, { passive: false });
 
-        viewport.addEventListener('touchend', function () {
-            arrastando = false;
+        // -------------------------------------------------------------
+        // 3. GESTOS DE TOQUE (TOUCH / CELULAR): ARRASTO E PINÇA (PINCH-TO-ZOOM)
+        // -------------------------------------------------------------
+        function getDistancia(t1, t2) {
+            const dx = t1.clientX - t2.clientX;
+            const dy = t1.clientY - t2.clientY;
+            return Math.hypot(dx, dy);
+        }
+
+        function getCentro(t1, t2) {
+            return {
+                x: (t1.clientX + t2.clientX) / 2,
+                y: (t1.clientY + t2.clientY) / 2
+            };
+        }
+
+        let emGestoTouch = false;
+        let emPinca = false;
+        let toqueInicioX = 0;
+        let toqueInicioY = 0;
+        let distPincaInicial = 0;
+        let zoomBasePinca = 1.0;
+        let centroPincaInicial = { x: 0, y: 0 };
+        let posBasePincaX = 0;
+        let posBasePincaY = 0;
+        let ultimoTapTime = 0;
+        let movimentoOcorreu = false;
+
+        const onTouchStart = function (e) {
+            // Previne imediatamente qualquer scroll do browser no canvas
+            e.preventDefault();
+            e.stopPropagation();
+
+            movimentoOcorreu = false;
+
+            if (e.touches.length === 1) {
+                // Toque com 1 dedo: arrastar
+                emGestoTouch = true;
+                emPinca = false;
+                toqueInicioX = e.touches[0].clientX - estado.posX;
+                toqueInicioY = e.touches[0].clientY - estado.posY;
+            } else if (e.touches.length >= 2) {
+                // Toque com 2 dedos: início do zoom de pinça (pinch)
+                emGestoTouch = true;
+                emPinca = true;
+                distPincaInicial = getDistancia(e.touches[0], e.touches[1]);
+                zoomBasePinca = estado.zoom;
+                centroPincaInicial = getCentro(e.touches[0], e.touches[1]);
+                posBasePincaX = estado.posX;
+                posBasePincaY = estado.posY;
+            }
+        };
+
+        const onTouchMove = function (e) {
+            if (!emGestoTouch) return;
+            // Prevenção crítica: nunca permitir que o fundo role
+            e.preventDefault();
+            e.stopPropagation();
+
+            movimentoOcorreu = true;
+
+            if (e.touches.length >= 2 && emPinca) {
+                // Gesto de Pinça Ativo: Ajuste fino de Zoom proporcional
+                const distAtual = getDistancia(e.touches[0], e.touches[1]);
+                if (distPincaInicial > 10) {
+                    const fator = distAtual / distPincaInicial;
+                    let novoZoom = zoomBasePinca * fator;
+                    const minZoom = parseFloat(sliderZoom.min) || 1.0;
+                    const maxZoom = parseFloat(sliderZoom.max) || 3.0;
+                    novoZoom = Math.min(Math.max(novoZoom, minZoom), maxZoom);
+                    estado.zoom = Math.round(novoZoom * 100) / 100;
+                    sliderZoom.value = estado.zoom;
+                }
+
+                // Ajusta simultaneamente o enquadramento conforme os dedos se movem
+                const centroAtual = getCentro(e.touches[0], e.touches[1]);
+                estado.posX = posBasePincaX + (centroAtual.x - centroPincaInicial.x);
+                estado.posY = posBasePincaY + (centroAtual.y - centroPincaInicial.y);
+                desenhar();
+
+            } else if (e.touches.length === 1 && !emPinca) {
+                // Arrasto com 1 dedo (Pan)
+                estado.posX = e.touches[0].clientX - toqueInicioX;
+                estado.posY = e.touches[0].clientY - toqueInicioY;
+                desenhar();
+            }
+        };
+
+        const onTouchEnd = function (e) {
+            if (!emGestoTouch) return;
+
+            if (e.touches.length >= 2) {
+                // Ainda há 2 dedos na tela: recalibra base para evitar pulos
+                distPincaInicial = getDistancia(e.touches[0], e.touches[1]);
+                zoomBasePinca = estado.zoom;
+                centroPincaInicial = getCentro(e.touches[0], e.touches[1]);
+                posBasePincaX = estado.posX;
+                posBasePincaY = estado.posY;
+            } else if (e.touches.length === 1) {
+                // Usuário levantou 1 dedo: transição suave para arrasto simples
+                emPinca = false;
+                toqueInicioX = e.touches[0].clientX - estado.posX;
+                toqueInicioY = e.touches[0].clientY - estado.posY;
+            } else {
+                // Todos os dedos levantados: fim do gesto
+                emGestoTouch = false;
+                emPinca = false;
+                distPincaInicial = 0;
+
+                // Toque Duplo Rápido (Double-Tap) para alternar zoom (1x <-> 2x)
+                if (!movimentoOcorreu) {
+                    const agora = Date.now();
+                    if (agora - ultimoTapTime < 300) {
+                        if (estado.zoom > 1.05) {
+                            estado.zoom = 1.0;
+                            estado.posX = 0;
+                            estado.posY = 0;
+                        } else {
+                            estado.zoom = 2.0;
+                        }
+                        sliderZoom.value = estado.zoom;
+                        desenhar();
+                        ultimoTapTime = 0;
+                    } else {
+                        ultimoTapTime = agora;
+                    }
+                }
+            }
+        };
+
+        viewport.addEventListener('touchstart', onTouchStart, { passive: false });
+        window.addEventListener('touchmove', onTouchMove, { passive: false });
+        window.addEventListener('touchend', onTouchEnd, { passive: false });
+        window.addEventListener('touchcancel', onTouchEnd, { passive: false });
+
+        // -------------------------------------------------------------
+        // 4. BLOQUEIO DE ROLAGEM NO BACKDROP
+        // -------------------------------------------------------------
+        const onBackdropTouchMove = function (e) {
+            e.preventDefault();
+        };
+        backdrop.addEventListener('touchmove', onBackdropTouchMove, { passive: false });
+
+        const onBackdropWheel = function (e) {
+            if (!e.target.closest('#viewport-ajuste')) {
+                e.preventDefault();
+            }
+        };
+        backdrop.addEventListener('wheel', onBackdropWheel, { passive: false });
+
+        // Fechar ao clicar fora do card
+        backdrop.addEventListener('click', function (e) {
+            if (e.target === backdrop) {
+                fechar();
+                if (typeof aoCancelar === 'function') aoCancelar();
+            }
         });
 
-        // Fechar Modal
+        // -------------------------------------------------------------
+        // 5. FECHAMENTO DO MODAL E RESTAURAÇÃO
+        // -------------------------------------------------------------
+        const onKeyDown = function (e) {
+            if (e.key === 'Escape') {
+                fechar();
+                if (typeof aoCancelar === 'function') aoCancelar();
+            }
+        };
+        window.addEventListener('keydown', onKeyDown);
+
         function fechar() {
+            // Remove listeners globais
             window.removeEventListener('mousemove', onMouseMove);
             window.removeEventListener('mouseup', onMouseUp);
+            window.removeEventListener('touchmove', onTouchMove);
+            window.removeEventListener('touchend', onTouchEnd);
+            window.removeEventListener('touchcancel', onTouchEnd);
+            window.removeEventListener('keydown', onKeyDown);
+
+            // Restaura o scroll e touch do body/html original
+            document.body.style.overflow = overflowBodyOriginal;
+            document.documentElement.style.overflow = overflowHtmlOriginal;
+            document.body.style.touchAction = touchActionBodyOriginal;
+
             backdrop.remove();
         }
 

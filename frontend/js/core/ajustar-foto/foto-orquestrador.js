@@ -1,6 +1,6 @@
 /**
  * ITAIM VENDE - API UNIFICADA DE AJUSTE DE FOTOS (ORQUESTRADOR)
- * Arquivo: frontend/js/core/ajustar-foto/index.js
+ * Arquivo: frontend/js/core/ajustar-foto/foto-orquestrador.js
  * 
  * Unifica todos os submódulos da pasta ajustar-foto/ sob a interface global:
  * - foto-estilos.js: Tema e injeção de CSS
@@ -43,6 +43,7 @@
 
             if (!arquivo) {
                 console.warn('ItaimFoto: Nenhum arquivo fornecido.');
+                if (typeof aoCancelar === 'function') aoCancelar();
                 return;
             }
 
@@ -62,24 +63,26 @@
         /**
          * Atalho direto para foto de Perfil (400x400)
          */
-        ajustarPerfil: function (arquivo, callback) {
+        ajustarPerfil: function (arquivo, callback, aoCancelar) {
             this.abrir({
                 arquivo: arquivo,
                 tipo: 'perfil',
                 tamanho: 400,
-                aoSalvar: callback
+                aoSalvar: callback,
+                aoCancelar: aoCancelar
             });
         },
 
         /**
          * Atalho direto para foto de Produto (800x800)
          */
-        ajustarProduto: function (arquivo, callback) {
+        ajustarProduto: function (arquivo, callback, aoCancelar) {
             this.abrir({
                 arquivo: arquivo,
                 tipo: 'produto',
                 tamanho: 800,
-                aoSalvar: callback
+                aoSalvar: callback,
+                aoCancelar: aoCancelar
             });
         },
 

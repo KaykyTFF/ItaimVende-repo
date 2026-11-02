@@ -141,7 +141,19 @@ document.addEventListener('DOMContentLoaded', () => {
     function processarArquivoImagem(file) {
         return new Promise((resolve) => {
             if (window.ItaimFoto && typeof window.ItaimFoto.ajustarProduto === 'function') {
-                window.ItaimFoto.ajustarProduto(file, (dataUrl) => resolve(dataUrl));
+                window.ItaimFoto.ajustarProduto(
+                    file,
+                    (dataUrl) => resolve(dataUrl),
+                    () => resolve(null)
+                );
+            } else if (window.ItaimFoto && typeof window.ItaimFoto.abrir === 'function') {
+                window.ItaimFoto.abrir({
+                    arquivo: file,
+                    tipo: 'produto',
+                    tamanho: 800,
+                    aoSalvar: (dataUrl) => resolve(dataUrl),
+                    aoCancelar: () => resolve(null)
+                });
             } else if (window.ItaimFoto && typeof window.ItaimFoto.ajustar === 'function') {
                 window.ItaimFoto.ajustar(file, 800, (dataUrl) => resolve(dataUrl));
             } else {

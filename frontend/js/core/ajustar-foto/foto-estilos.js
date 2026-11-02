@@ -6,6 +6,7 @@
  * - Injeção dinâmica de CSS com tema moderno, responsivo e dark-backdrop
  * - Estilização do modal, viewport de corte 1:1 (quadrado ou circular para perfil),
  *   sliders de zoom e botões de ação
+ * - Bloqueio de scroll de fundo e suporte a toque móvel (touch-action)
  */
 
 (function() {
@@ -27,6 +28,8 @@
                 justify-content: center;
                 padding: 16px;
                 animation: fadeInModal 0.2s ease-out;
+                overscroll-behavior: contain;
+                touch-action: none;
             }
             @keyframes fadeInModal {
                 from { opacity: 0; }
@@ -36,12 +39,16 @@
                 background: #ffffff;
                 width: 100%;
                 max-width: 440px;
+                max-height: 94vh;
                 border-radius: 16px;
                 box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
                 overflow: hidden;
                 display: flex;
                 flex-direction: column;
                 user-select: none;
+                -webkit-user-select: none;
+                overscroll-behavior: contain;
+                touch-action: manipulation;
             }
             .modal-ajuste-topo {
                 display: flex;
@@ -49,6 +56,7 @@
                 justify-content: space-between;
                 padding: 16px 20px;
                 border-bottom: 1px solid #E2E8F0;
+                flex-shrink: 0;
             }
             .modal-ajuste-titulo {
                 font-size: 17px;
@@ -81,6 +89,8 @@
                 align-items: center;
                 gap: 16px;
                 background: #F8FAFC;
+                overflow-y: auto;
+                overscroll-behavior: contain;
             }
             /* Área de visualização do corte (quadrada) */
             .modal-ajuste-viewport {
@@ -92,6 +102,8 @@
                 border-radius: 12px;
                 cursor: grab;
                 touch-action: none;
+                -webkit-user-select: none;
+                user-select: none;
                 box-shadow: inset 0 0 0 2px rgba(255,255,255,0.2), 0 8px 20px rgba(0,0,0,0.15);
             }
             .modal-ajuste-viewport.modo-perfil {
@@ -118,6 +130,7 @@
                 color: #64748B;
                 text-align: center;
                 margin: 0;
+                line-height: 1.4;
             }
             /* Controles de Zoom e Rotação */
             .modal-ajuste-controles {
@@ -129,6 +142,7 @@
                 padding: 10px 14px;
                 border-radius: 10px;
                 border: 1px solid #E2E8F0;
+                flex-shrink: 0;
             }
             .modal-ajuste-controles svg {
                 color: #64748B;
@@ -138,6 +152,7 @@
                 flex: 1;
                 accent-color: #44BD32;
                 cursor: pointer;
+                touch-action: pan-x;
             }
             .modal-ajuste-btn-girar {
                 background: #F1F5F9;
@@ -165,6 +180,7 @@
                 padding: 14px 20px;
                 border-top: 1px solid #E2E8F0;
                 background: #ffffff;
+                flex-shrink: 0;
             }
             .modal-ajuste-btn-cancelar {
                 padding: 9px 16px;
