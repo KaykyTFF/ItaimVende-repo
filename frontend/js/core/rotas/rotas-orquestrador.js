@@ -16,9 +16,20 @@
 
     const ItaimRotas = {
         /**
-         * Retorna o prefixo relativo para a raiz da pasta frontend ('./' ou '../../')
+         * Retorna o prefixo relativo para a raiz da pasta frontend ('/' em HTTP ou '../../' em file:///)
          */
         obterRaiz() {
+            // Em ambiente de servidor web (HTTP/HTTPS)
+            if (window.location.protocol && window.location.protocol.startsWith('http')) {
+                const path = window.location.pathname.replace(/\\/g, '/').toLowerCase();
+                const frontendIdx = path.indexOf('/frontend/');
+                if (frontendIdx !== -1) {
+                    return path.substring(0, frontendIdx) + '/frontend/';
+                }
+                return '/';
+            }
+
+            // Modo local offline (file:///): calcula profundidade relativa estrita
             const path = window.location.pathname.replace(/\\/g, '/').toLowerCase();
             if (path.includes('/pages/')) {
                 return '../../';
@@ -241,12 +252,18 @@
                 'perfil-giselly.jpg': 'assets/usuarios/perfil-giselly.jpg'
             };
 
-            // Se for um asset mapeado para subpasta e o caminho ainda estiver na raiz de assets
-            if (mapaSubpastas[nomeBase] && (limpo === `assets/${nomeBase}` || limpo === nomeBase)) {
+            // Se for o placeholder oficial de produto
+            if (nomeBase === 'produto-placeholder.svg' || limpo.includes('produto-placeholder')) {
+                limpo = 'assets/placeholders/produto-placeholder.svg';
+            } else if (mapaSubpastas[nomeBase] && (limpo === `assets/${nomeBase}` || limpo === nomeBase)) {
                 limpo = mapaSubpastas[nomeBase];
             }
 
-            return this.obterRaiz() + limpo;
+            const raiz = this.obterRaiz();
+            if (raiz.endsWith('/') && limpo.startsWith('/')) {
+                return raiz + limpo.substring(1);
+            }
+            return raiz + limpo;
         }
     };
 

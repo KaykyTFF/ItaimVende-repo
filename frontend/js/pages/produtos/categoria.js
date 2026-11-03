@@ -341,7 +341,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const placeholderSrc = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
             ? window.ItaimRotas.obterAsset('assets/placeholders/produto-placeholder.svg')
-            : '../../assets/placeholders/produto-placeholder.svg';
+            : (window.location.protocol && window.location.protocol.startsWith('http') ? '/assets/placeholders/produto-placeholder.svg' : '../../assets/placeholders/produto-placeholder.svg');
 
         // Renderizar cards limpos (sem o botão "+")
         gradeProdutos.innerHTML = lista.map(p => {

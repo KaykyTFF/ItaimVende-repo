@@ -113,6 +113,74 @@ app.use('/uploads', (req, res) => {
   res.status(404).json({ success: false, message: 'Imagem não encontrada.' });
 });
 
+// Servir assets estáticos (imagens, ícones, placeholders) com suporte universal direto e aninhado (ex: /assets/..., /home/assets/..., /pages/*/assets/...)
+app.use((req, res, next) => {
+  const assetsIdx = req.path.indexOf('/assets/');
+  if (assetsIdx !== -1) {
+    const subpath = req.path.substring(assetsIdx + '/assets/'.length);
+
+    // Prevenção estrita contra Path Traversal
+    if (!subpath || subpath.includes('..') || subpath.includes('\\')) {
+      return res.status(400).json({ success: false, message: 'Caminho inválido.' });
+    }
+
+    const fullPath = path.resolve(FRONTEND_DIR, 'assets', subpath);
+    if (fullPath.startsWith(path.resolve(FRONTEND_DIR, 'assets')) && fs.existsSync(fullPath)) {
+      try {
+        const stat = fs.statSync(fullPath);
+        if (stat.isFile()) {
+          return res.sendFile(fullPath);
+        }
+      } catch (err) {}
+    }
+
+    // Se o arquivo solicitado for um placeholder ou imagem de produto/anúncio inexistente no disco, entrega o placeholder oficial
+    if (req.path.includes('placeholder') || req.path.includes('/produtos/')) {
+      const placeholderPath = path.resolve(FRONTEND_DIR, 'assets/placeholders/produto-placeholder.svg');
+      if (fs.existsSync(placeholderPath)) {
+        res.setHeader('Content-Type', 'image/svg+xml');
+        return res.sendFile(placeholderPath);
+      }
+    }
+  }
+
+  // Suporte universal a CSS aninhado (ex: /home/css/..., /pages/*/css/...)
+  const cssIdx = req.path.indexOf('/css/');
+  if (cssIdx !== -1) {
+    const subpath = req.path.substring(cssIdx + '/css/'.length);
+    if (subpath && !subpath.includes('..') && !subpath.includes('\\')) {
+      const fullPath = path.resolve(FRONTEND_DIR, 'css', subpath);
+      if (fullPath.startsWith(path.resolve(FRONTEND_DIR, 'css')) && fs.existsSync(fullPath)) {
+        try {
+          if (fs.statSync(fullPath).isFile()) {
+            res.setHeader('Content-Type', 'text/css');
+            return res.sendFile(fullPath);
+          }
+        } catch (err) {}
+      }
+    }
+  }
+
+  // Suporte universal a JS aninhado (ex: /home/js/..., /pages/*/js/...)
+  const jsIdx = req.path.indexOf('/js/');
+  if (jsIdx !== -1) {
+    const subpath = req.path.substring(jsIdx + '/js/'.length);
+    if (subpath && !subpath.includes('..') && !subpath.includes('\\')) {
+      const fullPath = path.resolve(FRONTEND_DIR, 'js', subpath);
+      if (fullPath.startsWith(path.resolve(FRONTEND_DIR, 'js')) && fs.existsSync(fullPath)) {
+        try {
+          if (fs.statSync(fullPath).isFile()) {
+            res.setHeader('Content-Type', 'application/javascript');
+            return res.sendFile(fullPath);
+          }
+        } catch (err) {}
+      }
+    }
+  }
+
+  next();
+});
+
 // Suporte e retrocompatibilidade para requisições legadas em /assets/:filename (com proteção anti-Path Traversal)
 app.get('/assets/:filename', (req, res, next) => {
   const filename = req.params.filename;

@@ -45,24 +45,43 @@
             });
         }
 
-        // Verifica autenticação
-        const usuario = window.ItaimSessao ? window.ItaimSessao.obterUsuarioAtual() : null;
-        const modBadge = document.getElementById('mod-user-name');
-        if (modBadge && usuario) {
-            modBadge.textContent = `${usuario.name || usuario.nome || 'Moderador'} (${usuario.role || 'MODERATOR'})`;
+        // Verifica autenticação com tolerância a falhas
+        try {
+            let usuario = null;
+            if (window.ItaimSessao && typeof window.ItaimSessao.obterUsuarioLogado === 'function') {
+                usuario = window.ItaimSessao.obterUsuarioLogado();
+            } else if (window.ItaimApi && typeof window.ItaimApi.auth?.obterUsuarioLogado === 'function') {
+                usuario = window.ItaimApi.auth.obterUsuarioLogado();
+            } else {
+                usuario = JSON.parse(localStorage.getItem('itaim_usuario_logado') || 'null');
+            }
+            const modBadge = document.getElementById('mod-user-name');
+            if (modBadge && usuario) {
+                modBadge.textContent = `${usuario.name || usuario.nome || 'Moderador'} (${usuario.role || 'MODERATOR'})`;
+            }
+        } catch (e) {
+            console.warn('[Tickets] Aviso ao verificar usuário moderador:', e);
         }
 
-        // Carrega dados iniciais
-        await carregarTicketsDenuncias();
-        await carregarConversasSuporte();
+        // Carrega dados iniciais de forma assíncrona garantida
+        try {
+            await Promise.allSettled([
+                carregarTicketsDenuncias(),
+                carregarConversasSuporte()
+            ]);
+        } catch (err) {
+            console.error('[Tickets] Erro na carga inicial assíncrona:', err);
+        }
 
         // Botão de atualização manual
         const btnAtualizar = document.getElementById('btn-atualizar-tickets');
         if (btnAtualizar) {
             btnAtualizar.addEventListener('click', async () => {
                 mostrarToast('Atualizando dados...');
-                await carregarTicketsDenuncias();
-                await carregarConversasSuporte();
+                await Promise.allSettled([
+                    carregarTicketsDenuncias(),
+                    carregarConversasSuporte()
+                ]);
             });
         }
     }
@@ -409,7 +428,7 @@
                     </div>
 
                     <div class="ticket-card-body">
-                        <img src="${thumbUrl}" alt="Thumbnail" class="ticket-product-thumb" onerror="this.src='../../assets/placeholders/produto-placeholder.svg'">
+                        <img src="${thumbUrl}" alt="Thumbnail" class="ticket-product-thumb" onerror="this.onerror=null; this.src=(window.location.protocol && window.location.protocol.startsWith('http')) ? '/assets/placeholders/produto-placeholder.svg' : '../../assets/placeholders/produto-placeholder.svg'">
                         
                         <div class="ticket-product-info">
                             <h3 title="${t.productTitle || 'Anúncio'}">
@@ -993,10 +1012,18 @@
     }
 
     function resolverUrlImagem(url) {
-        if (!url) return '../../assets/placeholders/produto-placeholder.svg';
+        const isHttp = (window.location.protocol && window.location.protocol.startsWith('http'));
+        const defaultPlaceholder = isHttp
+            ? '/assets/placeholders/produto-placeholder.svg'
+            : '../../assets/placeholders/produto-placeholder.svg';
+
+        if (!url) return defaultPlaceholder;
         if (url.startsWith('http') || url.startsWith('data:')) return url;
         if (window.ItaimApi && typeof window.ItaimApi.resolverUrlImagem === 'function') {
             return window.ItaimApi.resolverUrlImagem(url);
+        }
+        if (isHttp) {
+            return `/${url.replace(/^\/+/, '')}`;
         }
         return `../../${url.replace(/^\/+/, '')}`;
     }

@@ -150,7 +150,9 @@
     function resolverUrlImagem(url) {
         const placeholder = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
             ? window.ItaimRotas.obterAsset('assets/placeholders/produto-placeholder.svg')
-            : (window.location.pathname.toLowerCase().includes('/pages/') ? '../../assets/placeholders/produto-placeholder.svg' : './assets/placeholders/produto-placeholder.svg');
+            : (window.location.protocol && window.location.protocol.startsWith('http')
+                ? '/assets/placeholders/produto-placeholder.svg'
+                : (window.location.pathname.toLowerCase().includes('/pages/') ? '../../assets/placeholders/produto-placeholder.svg' : './assets/placeholders/produto-placeholder.svg'));
 
         if (!url) return placeholder;
         if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
@@ -169,6 +171,10 @@
 
         if (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function') {
             return window.ItaimRotas.obterAsset(limpo);
+        }
+
+        if (window.location.protocol && window.location.protocol.startsWith('http')) {
+            return '/' + limpo;
         }
 
         const prefixo = window.location.pathname.toLowerCase().includes('/pages/') ? '../../' : './';
