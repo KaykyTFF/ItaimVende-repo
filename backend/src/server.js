@@ -277,71 +277,155 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpec));
 app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(openapiSpec));
 
 
-// Rota Raiz Principal do Marketplace (Home como tela inicial para visitantes e usuários)
+// =============================================================================
+// SISTEMA ROBUSTO DE ROTEAMENTO DO FRONTEND (CLEAN URLS & RETROCOMPATIBILIDADE)
+// =============================================================================
+
+const FRONTEND_PAGES_MAP = {
+  // Página Inicial
+  '': 'pages/home/home.html',
+  '/': 'pages/home/home.html',
+  'home': 'pages/home/home.html',
+
+  // Catálogo e Produtos
+  'categoria': 'pages/produtos/categoria.html',
+  'produto': 'pages/produtos/produto.html',
+
+  // Vendas
+  'vender': 'pages/vender/vender.html',
+  'meus-anuncios': 'pages/vender/meus-anuncios.html',
+
+  // Mensagens
+  'conversas': 'pages/mensagens/conversas.html',
+  'chat': 'pages/mensagens/conversas.html',
+
+  // Perfil e Configurações
+  'perfil': 'pages/perfil/perfil.html',
+  'vendedor': 'pages/perfil/vendedor.html',
+  'configuracoes': 'pages/perfil/configuracoes.html',
+
+  // Favoritos e Notificações
+  'favoritos': 'pages/favoritos/favoritos.html',
+  'notificacoes': 'pages/notificacoes/notificacoes.html',
+
+  // Autenticação
+  'login': 'index.html',
+  'cadastro': 'index.html',
+  'index': 'index.html',
+
+  // Administração e Moderação
+  'tickets': 'pages/admin/tickets.html',
+  'moderacao': 'pages/admin/tickets.html',
+  'painel': 'pages/admin/painel.html',
+  'status': 'pages/admin/painel.html',
+
+  // 404
+  '404': '404.html',
+};
+
+/**
+ * Resolve qualquer requisição de página para o arquivo HTML correspondente
+ */
+function resolverPaginaHtml(urlPath) {
+  if (!urlPath) return null;
+  let p = urlPath.replace(/\\/g, '/').toLowerCase();
+
+  // Remove query string e hash se presentes
+  p = p.split('?')[0].split('#')[0];
+
+  // Normaliza barras repetidas e trailing slash
+  p = p.replace(/\/+/g, '/');
+  if (p.length > 1 && p.endsWith('/')) {
+    p = p.slice(0, -1);
+  }
+
+  // Raiz exata
+  if (p === '' || p === '/') return FRONTEND_PAGES_MAP['home'];
+
+  // Remove prefixo /frontend se presente
+  if (p.startsWith('/frontend')) {
+    p = p.substring('/frontend'.length) || '/';
+    if (p === '/') return FRONTEND_PAGES_MAP['home'];
+  }
+
+  // Se o caminho solicitado apontar diretamente para um arquivo HTML existente em frontend/
+  const caminhoLimpo = p.startsWith('/') ? p.substring(1) : p;
+  const caminhoFisicoDireto = path.resolve(FRONTEND_DIR, caminhoLimpo);
+  if (caminhoFisicoDireto.startsWith(FRONTEND_DIR) && fs.existsSync(caminhoFisicoDireto)) {
+    try {
+      if (fs.statSync(caminhoFisicoDireto).isFile() && caminhoLimpo.endsWith('.html')) {
+        return caminhoLimpo;
+      }
+    } catch (e) {}
+  }
+
+  // Remove prefixo /pages se presente
+  if (p.startsWith('/pages/')) {
+    p = p.substring('/pages'.length);
+  }
+
+  // Se terminar em .html, remove para busca canônica
+  const semHtml = p.endsWith('.html') ? p.slice(0, -5) : p;
+  const rotaLimpa = semHtml.startsWith('/') ? semHtml.substring(1) : semHtml;
+
+  // 1. Mapeamento direto por nome da rota
+  if (FRONTEND_PAGES_MAP[rotaLimpa]) {
+    return FRONTEND_PAGES_MAP[rotaLimpa];
+  }
+
+  // 2. Mapeamento por último segmento do caminho (ex: /produtos/categoria, /vender/meus-anuncios)
+  const partes = rotaLimpa.split('/').filter(Boolean);
+  const ultimoSegmento = partes[partes.length - 1];
+  if (ultimoSegmento && FRONTEND_PAGES_MAP[ultimoSegmento]) {
+    return FRONTEND_PAGES_MAP[ultimoSegmento];
+  }
+
+  return null;
+}
+
+// Rota raiz oficial
 app.get('/', (req, res) => {
-  res.sendFile(path.join(FRONTEND_DIR, 'pages/home/home.html'));
+  res.sendFile(path.join(FRONTEND_DIR, FRONTEND_PAGES_MAP['home']));
 });
 
-// Servir arquivos estáticos da pasta frontend (CSS, JS, Assets, Pages)
-// index: false garante que '/' e diretórios nunca sirvam o formulário de login por engano
+// Servir arquivos estáticos da pasta frontend (CSS, JS, Assets)
 app.use(express.static(FRONTEND_DIR, { index: false }));
 app.use('/frontend', express.static(FRONTEND_DIR, { index: false }));
 
-// Rotas amigáveis (Clean URLs) e retrocompatibilidade com extensões .html para as páginas do Marketplace
-const PAGE_ROUTES = [
-  { route: '/', file: 'pages/home/home.html' },
-  { route: '/home', file: 'pages/home/home.html' },
-  { route: '/home.html', file: 'pages/home/home.html' },
-  { route: '/home/home.html', file: 'pages/home/home.html' },
-  { route: '/index', file: 'index.html' },
-  { route: '/index.html', file: 'index.html' },
-  { route: '/login', file: 'index.html' },
-  { route: '/login.html', file: 'index.html' },
-  { route: '/cadastro', file: 'index.html' },
-  { route: '/cadastro.html', file: 'index.html' },
-  { route: '/categoria', file: 'pages/produtos/categoria.html' },
-  { route: '/categoria.html', file: 'pages/produtos/categoria.html' },
-  { route: '/produto', file: 'pages/produtos/produto.html' },
-  { route: '/produto.html', file: 'pages/produtos/produto.html' },
-  { route: '/vender', file: 'pages/vender/vender.html' },
-  { route: '/vender.html', file: 'pages/vender/vender.html' },
-  { route: '/meus-anuncios', file: 'pages/vender/meus-anuncios.html' },
-  { route: '/meus-anuncios.html', file: 'pages/vender/meus-anuncios.html' },
-  { route: '/conversas', file: 'pages/mensagens/conversas.html' },
-  { route: '/conversas.html', file: 'pages/mensagens/conversas.html' },
-  { route: '/chat', file: 'pages/mensagens/conversas.html' },
-  { route: '/chat.html', file: 'pages/mensagens/conversas.html' },
-  { route: '/perfil', file: 'pages/perfil/perfil.html' },
-  { route: '/perfil.html', file: 'pages/perfil/perfil.html' },
-  { route: '/vendedor', file: 'pages/perfil/vendedor.html' },
-  { route: '/vendedor.html', file: 'pages/perfil/vendedor.html' },
-  { route: '/configuracoes', file: 'pages/perfil/configuracoes.html' },
-  { route: '/configuracoes.html', file: 'pages/perfil/configuracoes.html' },
-  { route: '/favoritos', file: 'pages/favoritos/favoritos.html' },
-  { route: '/favoritos.html', file: 'pages/favoritos/favoritos.html' },
-  { route: '/notificacoes', file: 'pages/notificacoes/notificacoes.html' },
-  { route: '/notificacoes.html', file: 'pages/notificacoes/notificacoes.html' },
-  { route: '/tickets', file: 'pages/admin/tickets.html' },
-  { route: '/tickets.html', file: 'pages/admin/tickets.html' },
-  { route: '/moderacao', file: 'pages/admin/tickets.html' },
-  { route: '/moderacao.html', file: 'pages/admin/tickets.html' },
-  { route: '/admin/tickets', file: 'pages/admin/tickets.html' },
-  { route: '/admin/tickets.html', file: 'pages/admin/tickets.html' },
-  { route: '/painel', file: 'pages/admin/painel.html' },
-  { route: '/painel.html', file: 'pages/admin/painel.html' },
-  { route: '/status', file: 'pages/admin/painel.html' },
-  { route: '/status.html', file: 'pages/admin/painel.html' },
-  { route: '/404', file: '404.html' },
-  { route: '/404.html', file: '404.html' },
-];
+// Roteador Universal de Páginas do Frontend (Clean URLs, aliases e retrocompatibilidade)
+app.use((req, res, next) => {
+  if (req.method !== 'GET' && req.method !== 'HEAD') {
+    return next();
+  }
+  // Ignora endpoints da API RESTful e documentação OpenAPI
+  if (req.path.startsWith('/api') || req.path.startsWith('/api-docs')) {
+    return next();
+  }
 
-PAGE_ROUTES.forEach(({ route, file }) => {
-  app.get(route, (req, res) => {
-    res.sendFile(path.join(FRONTEND_DIR, file));
-  });
+  // Ignora arquivos estáticos por extensão (exceto .html)
+  const ext = path.extname(req.path).toLowerCase();
+  const extensoesEstaticas = [
+    '.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp', '.ico',
+    '.css', '.js', '.map', '.woff', '.woff2', '.ttf', '.eot',
+    '.json', '.xml', '.txt'
+  ];
+  if (ext && extensoesEstaticas.includes(ext)) {
+    return next();
+  }
+
+  // Tenta resolver a página solicitada
+  const arquivoPagina = resolverPaginaHtml(req.path);
+  if (arquivoPagina) {
+    const filePath = path.resolve(FRONTEND_DIR, arquivoPagina);
+    if (fs.existsSync(filePath)) {
+      return res.sendFile(filePath);
+    }
+  }
+
+  next();
 });
 
-// Tratamento de rota não encontrada (404)
+// Tratamento profissional de rotas inexistentes (404 com status HTTP correto)
 app.use((req, res) => {
   if (req.originalUrl.startsWith('/api')) {
     return res.status(404).json({
@@ -349,6 +433,17 @@ app.use((req, res) => {
       message: `A rota '${req.originalUrl}' não foi encontrada na API do Itaim Vende.`,
     });
   }
+
+  // Para assets estáticos inexistentes, responde com 404 limpo (sem HTML pesado)
+  const ext = path.extname(req.path).toLowerCase();
+  const extensoesEstaticas = [
+    '.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp', '.ico',
+    '.css', '.js', '.map', '.woff', '.woff2', '.ttf', '.eot'
+  ];
+  if (ext && extensoesEstaticas.includes(ext)) {
+    return res.status(404).send('Recurso estático não encontrado.');
+  }
+
   const notFoundPage = path.join(FRONTEND_DIR, '404.html');
   if (fs.existsSync(notFoundPage)) {
     return res.status(404).sendFile(notFoundPage);

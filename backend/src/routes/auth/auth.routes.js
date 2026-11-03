@@ -13,8 +13,9 @@ import {
   forgotPassword,
   verifyResetCode,
   resetPassword,
+  checkUsername,
 } from '../../controllers/auth/index.js';
-import { authenticateToken } from '../../middlewares/auth.middleware.js';
+import { authenticateToken, optionalAuth } from '../../middlewares/auth.middleware.js';
 import { validate } from '../../middlewares/validate.middleware.js';
 import {
   registerSchema,
@@ -57,6 +58,7 @@ router.post('/forgot-password', authLimiter, validate(forgotPasswordSchema), for
 router.post('/verify-reset-code', authLimiter, validate(verifyResetCodeSchema), verifyResetCode);
 router.post('/reset-password', authLimiter, validate(resetPasswordSchema), resetPassword);
 
+router.get('/check-username', optionalAuth, checkUsername);
 router.get('/me', authenticateToken, getProfile);
 router.get('/profile', authenticateToken, getProfile);
 router.get('/user/:id', getPublicProfile);

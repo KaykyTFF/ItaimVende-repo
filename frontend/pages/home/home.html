@@ -95,7 +95,7 @@
 
             <!-- Centro: Barra de Pesquisa Estilo Pílula -->
             <div class="header-center">
-                <form class="busca-form" id="form-busca" role="search" action="../produtos/categoria.html" method="GET">
+                <form class="busca-form" id="form-busca" role="search" action="/categoria" method="GET">
                     <input type="search" class="campo-busca" id="campo-busca" name="q"
                         placeholder="Buscar produtos, marcas e muito mais..." autocomplete="off"
                         aria-label="Buscar produtos">
@@ -112,12 +112,12 @@
             <!-- Direita: Ações do Cabeçalho -->
             <div class="header-right">
                 <!-- Botão Entrar (exibido para visitantes deslogados) -->
-                <a href="../../index.html" class="btn-vender-destaque" id="btn-header-entrar">
+                <a href="/login" class="btn-vender-destaque" id="btn-header-entrar">
                     <span>Entrar</span>
                 </a>
 
                 <!-- Desktop: Meus Anúncios (Ícone + Texto) -->
-                <a href="../vender/meus-anuncios.html" class="btn-nav-texto" id="link-meus-anuncios">
+                <a href="/meus-anuncios" class="btn-nav-texto" id="link-meus-anuncios">
                     <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
                         <path d="M3 11l19-9-9 19-2-8-8-2z"></path>
@@ -126,12 +126,12 @@
                 </a>
 
                 <!-- Botão Vender -->
-                <a href="../vender/vender.html" class="btn-vender-destaque" id="btn-abrir-modal-vender">
+                <a href="/vender" class="btn-vender-destaque" id="btn-abrir-modal-vender">
                     <span>Vender</span>
                 </a>
 
                 <!-- Ícone Conversas -->
-                <a href="../mensagens/conversas.html" class="btn-icone-header" id="btn-chat" aria-label="Conversas"
+                <a href="/conversas" class="btn-icone-header" id="btn-chat" aria-label="Conversas"
                     title="Conversas">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
@@ -140,7 +140,7 @@
                 </a>
 
                 <!-- Ícone Notificações -->
-                <a href="../notificacoes/notificacoes.html" class="btn-icone-header" id="btn-notificacoes"
+                <a href="/notificacoes" class="btn-icone-header" id="btn-notificacoes"
                     aria-label="Notificações" title="Notificações">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
@@ -150,7 +150,7 @@
                 </a>
 
                 <!-- Mobile: Ícone Meus Anúncios (substitui o coração no celular) -->
-                <a href="../vender/meus-anuncios.html" class="btn-icone-header btn-meus-anuncios-mobile"
+                <a href="/meus-anuncios" class="btn-icone-header btn-meus-anuncios-mobile"
                     id="btn-meus-anuncios-mobile" aria-label="Meus Anúncios" title="Meus Anúncios">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
@@ -167,11 +167,11 @@
                     </button>
 
                     <div class="dropdown-perfil" id="dropdown-perfil">
-                        <a href="../perfil/perfil.html" class="dropdown-header-user" title="Ir para Meu Perfil">
+                        <a href="/perfil" class="dropdown-header-user" title="Ir para Meu Perfil">
                             <strong id="dropdown-user-name">Admin</strong>
                             <span id="dropdown-user-email">admin@gmail.com</span>
                         </a>
-                        <a href="../perfil/perfil.html" class="dropdown-item" id="link-menu-perfil">
+                        <a href="/perfil" class="dropdown-item" id="link-menu-perfil">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
                                 stroke-width="2">
                                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
@@ -179,14 +179,14 @@
                             </svg>
                             Meu Perfil
                         </a>
-                        <a href="../vender/meus-anuncios.html" class="dropdown-item" id="link-menu-anuncios">
+                        <a href="/meus-anuncios" class="dropdown-item" id="link-menu-anuncios">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
                                 stroke-width="2">
                                 <path d="M3 11l19-9-9 19-2-8-8-2z"></path>
                             </svg>
                             Meus Anúncios
                         </a>
-                        <a href="../favoritos/favoritos.html" class="dropdown-item" id="link-menu-favoritos">
+                        <a href="/favoritos" class="dropdown-item" id="link-menu-favoritos">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
                                 stroke-width="2">
                                 <path
@@ -195,7 +195,7 @@
                             </svg>
                             Favoritos (<span id="favoritos-contador-badge">0</span>)
                         </a>
-                        <a href="../perfil/configuracoes.html" class="dropdown-item" id="link-menu-configuracoes">
+                        <a href="/configuracoes" class="dropdown-item" id="link-menu-configuracoes">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="3"></circle>
@@ -205,7 +205,7 @@
                             </svg>
                             Configurações
                         </a>
-                        <a href="../../index.html" class="dropdown-item item-sair">
+                        <a href="/login" class="dropdown-item item-sair">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
@@ -238,20 +238,20 @@
                     </svg>
                     Início
                 </a>
-                <a href="../perfil/perfil.html" class="drawer-link" id="drawer-link-perfil">
+                <a href="/perfil" class="drawer-link" id="drawer-link-perfil">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                         <circle cx="12" cy="7" r="4"></circle>
                     </svg>
                     Meu Perfil
                 </a>
-                <a href="../vender/meus-anuncios.html" class="drawer-link" id="drawer-link-anuncios">
+                <a href="/meus-anuncios" class="drawer-link" id="drawer-link-anuncios">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M3 11l19-9-9 19-2-8-8-2z"></path>
                     </svg>
                     Meus Anúncios
                 </a>
-                <a href="../favoritos/favoritos.html" class="drawer-link" id="drawer-link-favoritos">
+                <a href="/favoritos" class="drawer-link" id="drawer-link-favoritos">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
                         <path
                             d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
@@ -259,21 +259,21 @@
                     </svg>
                     Meus Favoritos
                 </a>
-                <a href="../mensagens/conversas.html" class="drawer-link" id="drawer-link-chat">
+                <a href="/conversas" class="drawer-link" id="drawer-link-chat">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                     </svg>
                     Conversas
                 </a>
-                <a href="../vender/vender.html" class="drawer-link" id="drawer-link-vender">
+                <a href="/vender" class="drawer-link" id="drawer-link-vender">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="12" y1="5" x2="12" y2="19"></line>
                         <line x1="5" y1="12" x2="19" y2="12"></line>
                     </svg>
                     Vender Produto
                 </a>
-                <a href="../notificacoes/notificacoes.html" class="drawer-link" id="drawer-link-notificacoes">
+                <a href="/notificacoes" class="drawer-link" id="drawer-link-notificacoes">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
                         <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
@@ -300,25 +300,25 @@
                     </svg>
                 </button>
                 <div class="drawer-categorias-conteudo" id="drawer-categorias-conteudo">
-                    <a href="../produtos/categoria.html?cat=Ve%C3%ADculos" class="drawer-sublink">Veículos & Autopeças</a>
-                    <a href="../produtos/categoria.html?cat=Im%C3%B3veis" class="drawer-sublink">Imóveis & Terrenos</a>
-                    <a href="../produtos/categoria.html?cat=Agro" class="drawer-sublink">Agro & Pecuária</a>
-                    <a href="../produtos/categoria.html?cat=Celulares" class="drawer-sublink">Celulares & Telefonia</a>
-                    <a href="../produtos/categoria.html?cat=Eletr%C3%B4nicos" class="drawer-sublink">Eletrônicos, Áudio & Vídeo</a>
-                    <a href="../produtos/categoria.html?cat=Inform%C3%A1tica" class="drawer-sublink">Informática & Games</a>
-                    <a href="../produtos/categoria.html?cat=M%C3%B3veis" class="drawer-sublink">Casa, Móveis & Decoração</a>
-                    <a href="../produtos/categoria.html?cat=Eletrodom%C3%A9sticos" class="drawer-sublink">Eletrodomésticos</a>
-                    <a href="../produtos/categoria.html?cat=Moda" class="drawer-sublink">Moda, Calçados & Acessórios</a>
-                    <a href="../produtos/categoria.html?cat=Beleza" class="drawer-sublink">Beleza & Cuidado Pessoal</a>
-                    <a href="../produtos/categoria.html?cat=Infantil" class="drawer-sublink">Infantil & Bebês</a>
-                    <a href="../produtos/categoria.html?cat=Esportes" class="drawer-sublink">Esportes, Fitness & Lazer</a>
-                    <a href="../produtos/categoria.html?cat=Constru%C3%A7%C3%A3o" class="drawer-sublink">Construção & Ferramentas</a>
-                    <a href="../produtos/categoria.html?cat=Com%C3%A9rcio" class="drawer-sublink">Comércio, Negócios & Escritório</a>
-                    <a href="../produtos/categoria.html?cat=Servi%C3%A7os" class="drawer-sublink">Serviços & Profissionais</a>
-                    <a href="../produtos/categoria.html?cat=Hobbies" class="drawer-sublink">Música, Arte & Hobbies</a>
-                    <a href="../produtos/categoria.html?cat=Pets" class="drawer-sublink">Animais de Estimação & Pet Shop</a>
-                    <a href="../produtos/categoria.html?cat=Doa%C3%A7%C3%B5es" class="drawer-sublink">Doações, Trocas & Solidariedade</a>
-                    <a href="../produtos/categoria.html?cat=Outros" class="drawer-sublink">Outros & Diversos</a>
+                    <a href="/categoria?cat=Ve%C3%ADculos" class="drawer-sublink">Veículos & Autopeças</a>
+                    <a href="/categoria?cat=Im%C3%B3veis" class="drawer-sublink">Imóveis & Terrenos</a>
+                    <a href="/categoria?cat=Agro" class="drawer-sublink">Agro & Pecuária</a>
+                    <a href="/categoria?cat=Celulares" class="drawer-sublink">Celulares & Telefonia</a>
+                    <a href="/categoria?cat=Eletr%C3%B4nicos" class="drawer-sublink">Eletrônicos, Áudio & Vídeo</a>
+                    <a href="/categoria?cat=Inform%C3%A1tica" class="drawer-sublink">Informática & Games</a>
+                    <a href="/categoria?cat=M%C3%B3veis" class="drawer-sublink">Casa, Móveis & Decoração</a>
+                    <a href="/categoria?cat=Eletrodom%C3%A9sticos" class="drawer-sublink">Eletrodomésticos</a>
+                    <a href="/categoria?cat=Moda" class="drawer-sublink">Moda, Calçados & Acessórios</a>
+                    <a href="/categoria?cat=Beleza" class="drawer-sublink">Beleza & Cuidado Pessoal</a>
+                    <a href="/categoria?cat=Infantil" class="drawer-sublink">Infantil & Bebês</a>
+                    <a href="/categoria?cat=Esportes" class="drawer-sublink">Esportes, Fitness & Lazer</a>
+                    <a href="/categoria?cat=Constru%C3%A7%C3%A3o" class="drawer-sublink">Construção & Ferramentas</a>
+                    <a href="/categoria?cat=Com%C3%A9rcio" class="drawer-sublink">Comércio, Negócios & Escritório</a>
+                    <a href="/categoria?cat=Servi%C3%A7os" class="drawer-sublink">Serviços & Profissionais</a>
+                    <a href="/categoria?cat=Hobbies" class="drawer-sublink">Música, Arte & Hobbies</a>
+                    <a href="/categoria?cat=Pets" class="drawer-sublink">Animais de Estimação & Pet Shop</a>
+                    <a href="/categoria?cat=Doa%C3%A7%C3%B5es" class="drawer-sublink">Doações, Trocas & Solidariedade</a>
+                    <a href="/categoria?cat=Outros" class="drawer-sublink">Outros & Diversos</a>
                 </div>
 
                 <div class="drawer-secao-divisor"></div>
@@ -348,13 +348,7 @@
                         </span>
                     </span>
                 </button>
-                <a href="../admin/tickets.html" class="drawer-link" id="drawer-link-tickets" title="Central de denúncias e suporte">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                    </svg>
-                    Tickets & Moderação
-                </a>
-                <a href="../perfil/configuracoes.html" class="drawer-link" id="drawer-link-configuracoes">
+                <a href="/configuracoes" class="drawer-link" id="drawer-link-configuracoes">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="3"></circle>
@@ -364,7 +358,7 @@
                     </svg>
                     Configurações
                 </a>
-                <a href="../../index.html" class="drawer-link item-sair">
+                <a href="/login" class="drawer-link item-sair">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
@@ -430,63 +424,63 @@
         <!-- BARRA DE CATEGORIAS OFICIAIS (CÍRCULOS COMO LINKS PARA A PÁGINA DE CADA CATEGORIA) -->
         <section class="secao-categorias" aria-label="Categorias de Produtos">
             <div class="categorias-lista" id="categorias-lista">
-                <a href="../produtos/categoria.html?cat=todas" class="item-categoria" title="Ver todos os produtos">
+                <a href="/categoria?cat=todas" class="item-categoria" title="Ver todos os produtos">
                     <div class="circulo-categoria">
                         <img src="../../assets/logos/header-logo.png" alt="Todas as Categorias">
                     </div>
                     <span class="label-categoria">Todas</span>
                 </a>
 
-                <a href="../produtos/categoria.html?cat=Eletrônicos" class="item-categoria" title="Ver Eletrônicos">
+                <a href="/categoria?cat=Eletrônicos" class="item-categoria" title="Ver Eletrônicos">
                     <div class="circulo-categoria">
                         <img src="../../assets/categorias/cat-eletronicos.png" alt="Eletrônicos">
                     </div>
                     <span class="label-categoria">Eletrônicos</span>
                 </a>
 
-                <a href="../produtos/categoria.html?cat=Decoração" class="item-categoria" title="Ver Decoração">
+                <a href="/categoria?cat=Decoração" class="item-categoria" title="Ver Decoração">
                     <div class="circulo-categoria">
                         <img src="../../assets/categorias/cat-decoracao.png" alt="Decoração">
                     </div>
                     <span class="label-categoria">Decoração</span>
                 </a>
 
-                <a href="../produtos/categoria.html?cat=Móveis" class="item-categoria" title="Ver Móveis">
+                <a href="/categoria?cat=Móveis" class="item-categoria" title="Ver Móveis">
                     <div class="circulo-categoria">
                         <img src="../../assets/categorias/cat-moveis.png" alt="Móveis">
                     </div>
                     <span class="label-categoria">Móveis</span>
                 </a>
 
-                <a href="../produtos/categoria.html?cat=Moda" class="item-categoria" title="Ver Moda">
+                <a href="/categoria?cat=Moda" class="item-categoria" title="Ver Moda">
                     <div class="circulo-categoria">
                         <img src="../../assets/categorias/cat-moda.png" alt="Moda">
                     </div>
                     <span class="label-categoria">Moda</span>
                 </a>
 
-                <a href="../produtos/categoria.html?cat=Infantil" class="item-categoria" title="Ver Infantil">
+                <a href="/categoria?cat=Infantil" class="item-categoria" title="Ver Infantil">
                     <div class="circulo-categoria">
                         <img src="../../assets/categorias/cat-infantil.png" alt="Infantil">
                     </div>
                     <span class="label-categoria">Infantil</span>
                 </a>
 
-                <a href="../produtos/categoria.html?cat=Esportes" class="item-categoria" title="Ver Esportes">
+                <a href="/categoria?cat=Esportes" class="item-categoria" title="Ver Esportes">
                     <div class="circulo-categoria">
                         <img src="../../assets/categorias/cat-esportes.png" alt="Esportes">
                     </div>
                     <span class="label-categoria">Esportes</span>
                 </a>
 
-                <a href="../produtos/categoria.html?cat=Hobbies" class="item-categoria" title="Ver Hobbies">
+                <a href="/categoria?cat=Hobbies" class="item-categoria" title="Ver Hobbies">
                     <div class="circulo-categoria">
                         <img src="../../assets/categorias/cat-hobbies.png" alt="Hobbies">
                     </div>
                     <span class="label-categoria">Hobbies</span>
                 </a>
 
-                <a href="../produtos/categoria.html?cat=Serviços" class="item-categoria" title="Ver Serviços">
+                <a href="/categoria?cat=Serviços" class="item-categoria" title="Ver Serviços">
                     <div class="circulo-categoria">
                         <img src="../../assets/categorias/cat-servicos.png" alt="Serviços">
                     </div>
@@ -724,11 +718,11 @@
             <div class="footer-col">
                 <h4>Categorias</h4>
                 <ul class="footer-links">
-                    <li><a href="../produtos/categoria.html?cat=Eletrônicos">Eletrônicos</a></li>
-                    <li><a href="../produtos/categoria.html?cat=Móveis">Móveis</a></li>
-                    <li><a href="../produtos/categoria.html?cat=Decoração">Decoração</a></li>
-                    <li><a href="../produtos/categoria.html?cat=Moda">Moda & Vestuário</a></li>
-                    <li><a href="../produtos/categoria.html?cat=Serviços">Serviços</a></li>
+                    <li><a href="/categoria?cat=Eletrônicos">Eletrônicos</a></li>
+                    <li><a href="/categoria?cat=Móveis">Móveis</a></li>
+                    <li><a href="/categoria?cat=Decoração">Decoração</a></li>
+                    <li><a href="/categoria?cat=Moda">Moda & Vestuário</a></li>
+                    <li><a href="/categoria?cat=Serviços">Serviços</a></li>
                 </ul>
             </div>
 
@@ -746,11 +740,11 @@
             <div class="footer-col">
                 <h4>Minha Conta</h4>
                 <ul class="footer-links">
-                    <li><a href="../../index.html">Entrar / Cadastro</a></li>
-                    <li><a href="../vender/meus-anuncios.html" id="footer-link-anuncios">Meus Anúncios</a></li>
-                    <li><a href="../favoritos/favoritos.html" id="footer-link-favoritos">Meus Favoritos</a></li>
+                    <li><a href="/login">Entrar / Cadastro</a></li>
+                    <li><a href="/meus-anuncios" id="footer-link-anuncios">Meus Anúncios</a></li>
+                    <li><a href="/favoritos" id="footer-link-favoritos">Meus Favoritos</a></li>
 
-                    <li><a href="../perfil/perfil.html">Meu Perfil</a></li>
+                    <li><a href="/perfil">Meu Perfil</a></li>
                 </ul>
             </div>
         </div>

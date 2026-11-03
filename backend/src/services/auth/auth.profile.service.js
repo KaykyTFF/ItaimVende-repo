@@ -3,6 +3,45 @@ import prisma from '../../config/prisma.js';
 import { AppError } from '../../utils/errors.js';
 import { storageAdapter } from '../../adapters/storage/index.js';
 
+export const USERNAME_COOLDOWN_MS = 30 * 24 * 60 * 60 * 1000; // 30 dias
+
+/**
+ * Calcula o status de liberação da alteração do nome de usuário (@) com base na regra de 30 dias
+ */
+export function calcularStatusUsername(usernameLastChangedAt) {
+  const now = new Date();
+  if (!usernameLastChangedAt) {
+    return {
+      usernameLastChangedAt: null,
+      canChangeUsername: true,
+      nextUsernameChangeAt: null,
+      daysUntilNextUsernameChange: 0,
+    };
+  }
+
+  const lastChanged = new Date(usernameLastChangedAt).getTime();
+  const elapsedMs = now.getTime() - lastChanged;
+
+  if (elapsedMs < USERNAME_COOLDOWN_MS) {
+    const nextDate = new Date(lastChanged + USERNAME_COOLDOWN_MS);
+    const diffMs = nextDate.getTime() - now.getTime();
+    const daysRemaining = Math.max(1, Math.ceil(diffMs / (24 * 60 * 60 * 1000)));
+    return {
+      usernameLastChangedAt: new Date(usernameLastChangedAt).toISOString(),
+      canChangeUsername: false,
+      nextUsernameChangeAt: nextDate.toISOString(),
+      daysUntilNextUsernameChange: daysRemaining,
+    };
+  }
+
+  return {
+    usernameLastChangedAt: new Date(usernameLastChangedAt).toISOString(),
+    canChangeUsername: true,
+    nextUsernameChangeAt: null,
+    daysUntilNextUsernameChange: 0,
+  };
+}
+
 /**
  * Busca perfil detalhado por ID, username ou email
  */
@@ -34,6 +73,7 @@ export async function getUserProfile(userId) {
       ratingCount: true,
       salesCount: true,
       createdAt: true,
+      usernameLastChangedAt: true,
       _count: {
         select: {
           products: { where: { deletedAt: null, status: 'ATIVO' } },
@@ -47,8 +87,11 @@ export async function getUserProfile(userId) {
     throw new AppError('Usuário não encontrado.', 404);
   }
 
+  const statusCooldown = calcularStatusUsername(user.usernameLastChangedAt);
+
   return {
     ...user,
+    ...statusCooldown,
     ratingAverage: Number(user.ratingCount) > 0 ? Number(user.ratingAverage) : 0,
   };
 }
@@ -117,30 +160,88 @@ export async function getPublicUserProfile(identifier) {
 export async function updateUserProfile(userId, updateData) {
   const { name, username, phone, city, state, neighborhood, postalCode, bio, avatar } = updateData;
 
-  let oldAvatar = null;
-  if (avatar !== undefined) {
-    const current = await prisma.user.findUnique({
-      where: { id: userId },
-      select: { avatar: true },
-    });
-    oldAvatar = current?.avatar || null;
+  // Busca dados atuais do usuário para validações consistentes e controle de 30 dias
+  const currentUser = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      id: true,
+      username: true,
+      usernameLastChangedAt: true,
+      avatar: true,
+    },
+  });
+
+  if (!currentUser) {
+    throw new AppError('Usuário não encontrado.', 404);
   }
 
+  const oldAvatar = currentUser.avatar || null;
   const dataToUpdate = {};
-  if (name) dataToUpdate.name = name.trim();
-  if (username) {
-    const cleanUsername = username.trim().toLowerCase();
-    const existing = await prisma.user.findFirst({
-      where: {
-        username: cleanUsername,
-        NOT: { id: userId },
-      },
-    });
-    if (existing) {
-      throw new AppError('Este nome de usuário já está em uso por outra conta.', 409);
-    }
-    dataToUpdate.username = cleanUsername;
+
+  if (name !== undefined && name !== null) {
+    dataToUpdate.name = name.trim();
   }
+
+  // Validação e controle exclusivo de 30 dias para alteração do nome de usuário (@)
+  if (username !== undefined && username !== null && username.trim() !== '') {
+    const cleanUsername = username.trim().toLowerCase();
+
+    // Valida formato do @: de 3 a 30 caracteres alfanuméricos, ponto ou sublinhado
+    const usernameRegex = /^[a-z0-9._]{3,30}$/;
+    if (!usernameRegex.test(cleanUsername)) {
+      throw new AppError(
+        'Nome de usuário inválido. O @ deve conter de 3 a 30 caracteres (apenas letras minúsculas, números, ponto ou sublinhado).',
+        400,
+        'INVALID_USERNAME_FORMAT'
+      );
+    }
+
+    const currentUsernameClean = (currentUser.username || '').trim().toLowerCase();
+
+    // Se o usuário está efetivamente alterando seu username para um novo
+    if (cleanUsername !== currentUsernameClean) {
+      const statusCooldown = calcularStatusUsername(currentUser.usernameLastChangedAt);
+
+      if (!statusCooldown.canChangeUsername) {
+        const dataFormatada = statusCooldown.nextUsernameChangeAt
+          ? new Date(statusCooldown.nextUsernameChangeAt).toLocaleDateString('pt-BR', {
+              day: '2-digit',
+              month: '2-digit',
+              year: 'numeric',
+            })
+          : '';
+
+        throw new AppError(
+          `Você poderá alterar seu nome de usuário novamente em ${dataFormatada} (restam ${statusCooldown.daysUntilNextUsernameChange} ${statusCooldown.daysUntilNextUsernameChange === 1 ? 'dia' : 'dias'}).`,
+          403,
+          'USERNAME_COOLDOWN_ACTIVE',
+          {
+            nextAllowedDate: statusCooldown.nextUsernameChangeAt,
+            daysRemaining: statusCooldown.daysUntilNextUsernameChange,
+            lastChangedAt: statusCooldown.usernameLastChangedAt,
+          }
+        );
+      }
+
+      // Verifica se o novo username já está em uso por outra conta
+      const existing = await prisma.user.findFirst({
+        where: {
+          username: cleanUsername,
+          NOT: { id: userId },
+        },
+        select: { id: true },
+      });
+
+      if (existing) {
+        throw new AppError('Este nome de usuário já está em uso por outra conta.', 409, 'USERNAME_TAKEN');
+      }
+
+      // Conclui alteração do username e inicia a contagem de 30 dias com o horário do servidor
+      dataToUpdate.username = cleanUsername;
+      dataToUpdate.usernameLastChangedAt = new Date();
+    }
+  }
+
   if (phone !== undefined) dataToUpdate.phone = phone ? phone.trim() : null;
   if (city !== undefined) dataToUpdate.city = city ? city.trim() : '';
   if (state !== undefined) dataToUpdate.state = state ? state.trim().toUpperCase() : '';
@@ -169,6 +270,8 @@ export async function updateUserProfile(userId, updateData) {
       ratingAverage: true,
       ratingCount: true,
       salesCount: true,
+      usernameLastChangedAt: true,
+      createdAt: true,
     },
   });
 
@@ -179,9 +282,96 @@ export async function updateUserProfile(userId, updateData) {
     });
   }
 
+  const statusCooldown = calcularStatusUsername(updatedUser.usernameLastChangedAt);
+
   return {
     ...updatedUser,
+    ...statusCooldown,
     ratingAverage: Number(updatedUser.ratingCount) > 0 ? Number(updatedUser.ratingAverage) : 0,
+  };
+}
+
+/**
+ * Valida formato, disponibilidade e status de cooldown de alteração do @
+ */
+export async function checkUsernameAvailability(userId, usernameCandidate) {
+  if (!usernameCandidate || typeof usernameCandidate !== 'string') {
+    throw new AppError('Nome de usuário não informado.', 400);
+  }
+
+  const clean = usernameCandidate.trim().toLowerCase();
+  const usernameRegex = /^[a-z0-9._]{3,30}$/;
+  if (!usernameRegex.test(clean)) {
+    return {
+      success: true,
+      username: clean,
+      valid: false,
+      available: false,
+      message: 'Use de 3 a 30 caracteres (letras minúsculas, números, ponto ou sublinhado).',
+    };
+  }
+
+  let statusCooldown = { canChangeUsername: true, nextUsernameChangeAt: null, daysUntilNextUsernameChange: 0 };
+  let isCurrentUsername = false;
+
+  if (userId) {
+    const currentUser = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { username: true, usernameLastChangedAt: true },
+    });
+    if (currentUser) {
+      statusCooldown = calcularStatusUsername(currentUser.usernameLastChangedAt);
+      isCurrentUsername = (currentUser.username || '').toLowerCase() === clean;
+    }
+  }
+
+  // Se for o mesmo username atual do usuário logado
+  if (isCurrentUsername) {
+    return {
+      success: true,
+      username: clean,
+      valid: true,
+      available: true,
+      isCurrent: true,
+      ...statusCooldown,
+      message: 'Este é o seu nome de usuário atual.',
+    };
+  }
+
+  // Se o usuário autenticado está sob bloqueio de 30 dias
+  if (userId && !statusCooldown.canChangeUsername) {
+    const dataFormatada = statusCooldown.nextUsernameChangeAt
+      ? new Date(statusCooldown.nextUsernameChangeAt).toLocaleDateString('pt-BR')
+      : '';
+    return {
+      success: true,
+      username: clean,
+      valid: true,
+      available: false,
+      cooldownActive: true,
+      ...statusCooldown,
+      message: `Alteração bloqueada: você só poderá mudar seu nome de usuário em ${dataFormatada} (restam ${statusCooldown.daysUntilNextUsernameChange} dias).`,
+    };
+  }
+
+  // Verifica se outro usuário já possui este username
+  const existing = await prisma.user.findFirst({
+    where: {
+      username: clean,
+      ...(userId ? { NOT: { id: userId } } : {}),
+    },
+    select: { id: true },
+  });
+
+  const available = !existing;
+
+  return {
+    success: true,
+    username: clean,
+    valid: true,
+    available,
+    ...statusCooldown,
+    message: available ? 'Nome de usuário disponível!' : 'Este nome de usuário já está em uso.',
   };
 }
 

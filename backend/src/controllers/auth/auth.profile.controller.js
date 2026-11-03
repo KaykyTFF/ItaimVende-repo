@@ -1,4 +1,4 @@
-import { getUserProfile, getPublicUserProfile, updateUserProfile, changeUserPassword, deleteUserAccount } from '../../services/auth/index.js';
+import { getUserProfile, getPublicUserProfile, updateUserProfile, changeUserPassword, deleteUserAccount, checkUsernameAvailability } from '../../services/auth/index.js';
 
 export async function getProfile(req, res, next) {
   try {
@@ -55,3 +55,13 @@ export async function deleteAccount(req, res, next) {
   }
 }
 
+export async function checkUsername(req, res, next) {
+  try {
+    const username = req.query.username || req.body?.username || '';
+    const userId = req.user?.id || null;
+    const result = await checkUsernameAvailability(userId, username);
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+}

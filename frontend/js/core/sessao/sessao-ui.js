@@ -111,7 +111,7 @@
             query += '&mensagem=' + encodeURIComponent(motivo);
         }
 
-        const urlLogin = window.ItaimRotas ? window.ItaimRotas.obterUrl('login', query) : ('../../index.html?' + query);
+        const urlLogin = window.ItaimRotas ? window.ItaimRotas.obterUrl('login', query) : ('/login?' + query);
         const urlCadastro = window.ItaimRotas ? window.ItaimRotas.obterUrl('cadastro', query) : ('../../index.html?' + query + '#cadastro');
 
         if (linkEntrar) linkEntrar.href = urlLogin;
@@ -137,7 +137,7 @@
         if (motivo) {
             query += '&mensagem=' + encodeURIComponent(motivo);
         }
-        const urlLogin = window.ItaimRotas ? window.ItaimRotas.obterUrl('login', query) : ('../../index.html?' + query);
+        const urlLogin = window.ItaimRotas ? window.ItaimRotas.obterUrl('login', query) : ('/login?' + query);
         if (window.ItaimRotas && typeof window.ItaimRotas.executarTransicao === 'function') {
             window.ItaimRotas.executarTransicao(urlLogin);
         } else {
@@ -432,24 +432,63 @@
      */
     function protegerPagina() {
         const path = window.location.pathname.toLowerCase().replace(/\\/g, '/');
-        const paginasProtegidas = [
-            'vender.html',
-            'meus-anuncios.html',
-            'perfil.html',
-            'configuracoes.html',
-            'favoritos.html',
-            'notificacoes.html',
-            'conversas.html',
-            'chat.html'
+
+        // Identifica semanticamente a rota atual usando o orquestrador
+        let rotaAtual = '';
+        if (window.ItaimRotas && typeof window.ItaimRotas.identificarRota === 'function') {
+            rotaAtual = window.ItaimRotas.identificarRota(path);
+        } else if (window.ItaimRotasMapa && typeof window.ItaimRotasMapa.identificarRota === 'function') {
+            rotaAtual = window.ItaimRotasMapa.identificarRota(path);
+        } else {
+            const rotasPadrao = ['vender', 'meus-anuncios', 'perfil', 'configuracoes', 'favoritos', 'notificacoes', 'conversas', 'chat', 'tickets', 'painel'];
+            rotaAtual = rotasPadrao.find(p => path.includes(p)) || '';
+        }
+
+        const rotasProtegidas = (window.ItaimRotasMapa && window.ItaimRotasMapa.ROTAS_PROTEGIDAS) || [
+            'vender',
+            'meus-anuncios',
+            'perfil',
+            'configuracoes',
+            'favoritos',
+            'notificacoes',
+            'conversas',
+            'chat'
         ];
 
-        const precisaProtecao = paginasProtegidas.some(p => path.endsWith('/' + p) || path.includes('/' + p));
-        if (precisaProtecao) {
+        const rotasAdmin = (window.ItaimRotasMapa && window.ItaimRotasMapa.ROTAS_ADMIN) || [
+            'tickets',
+            'moderacao',
+            'painel',
+            'status'
+        ];
+
+        // 1. Verificação de rotas administrativas (RBAC)
+        if (rotasAdmin.includes(rotaAtual)) {
+            if (!usuarioEstaAutenticado()) {
+                redirecionarParaLogin('Acesso restrito. Faça login com uma conta administrativa.', true);
+                return false;
+            }
+            const usuario = obterUsuario();
+            const role = (usuario && (usuario.role || usuario.papel || '')).toUpperCase();
+            if (role !== 'ADMIN' && role !== 'MODERATOR') {
+                if (window.ItaimNotificacoes && typeof window.ItaimNotificacoes.exibirToastGlobal === 'function') {
+                    window.ItaimNotificacoes.exibirToastGlobal('Acesso negado: área exclusiva da equipe de moderação.', 'aviso');
+                }
+                const destinoHome = window.ItaimRotas ? window.ItaimRotas.obterUrl('home') : '/home';
+                setTimeout(() => { window.location.href = destinoHome; }, 300);
+                return false;
+            }
+            return true;
+        }
+
+        // 2. Verificação de rotas privadas (requer autenticação)
+        if (rotasProtegidas.includes(rotaAtual)) {
             if (!usuarioEstaAutenticado()) {
                 redirecionarParaLogin('Faça login para acessar esta página.', true);
                 return false;
             }
         }
+
         return true;
     }
 

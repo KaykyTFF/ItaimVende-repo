@@ -408,7 +408,7 @@
                     setTimeout(() => {
                         const destino = window.ItaimRotas && typeof window.ItaimRotas.obterDestinoPosLogin === 'function'
                             ? window.ItaimRotas.obterDestinoPosLogin()
-                            : 'pages/home/home.html';
+                            : (window.ItaimRotas ? window.ItaimRotas.obterUrl('home') : '/home');
                         window.location.href = destino;
                     }, 500);
                     return;
@@ -505,7 +505,7 @@
                 setTimeout(() => {
                     const destino = window.ItaimRotas && typeof window.ItaimRotas.obterDestinoPosLogin === 'function'
                         ? window.ItaimRotas.obterDestinoPosLogin()
-                        : 'pages/home/home.html';
+                        : (window.ItaimRotas ? window.ItaimRotas.obterUrl('home') : '/home');
                     window.location.href = destino;
                 }, 600);
 

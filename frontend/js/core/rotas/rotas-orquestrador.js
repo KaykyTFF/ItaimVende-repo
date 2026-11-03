@@ -3,24 +3,34 @@
  * Arquivo: frontend/js/core/rotas/rotas-orquestrador.js
  * 
  * Responsabilidades:
- * - Resolução do caminho raiz ('./' vs '../../')
- * - Geração de links normalizados com suporte a query params e hashes
+ * - Resolução do caminho raiz ('/' vs '../../') com suporte a HTTP/HTTPS e file:///
+ * - Geração de links normalizados com suporte a Clean URLs, query params e hashes
  * - Resolução dinâmica de URLs de assets e imagens de uploads
- * - Navegação programática (navegarPara)
+ * - Navegação programática (navegarPara) e preservação segura do fluxo de login (returnTo)
+ * - Interceptação inteligente de cliques internos para navegação canônica suave
  */
 
 (function() {
     'use strict';
 
-    const mapa = window.ItaimRotasMapa || {};
+    const mapaModulo = window.ItaimRotasMapa || {};
 
     const ItaimRotas = {
+        mapa: mapaModulo,
+
         /**
-         * Retorna o prefixo relativo para a raiz da pasta frontend ('/' em HTTP ou '../../' em file:///)
+         * Verifica se o ambiente de execução é HTTP ou HTTPS
+         */
+        isHttp() {
+            return !!(window.location.protocol && window.location.protocol.startsWith('http'));
+        },
+
+        /**
+         * Retorna o prefixo relativo para a raiz da plataforma ('/' em HTTP ou '../../' em file:///)
          */
         obterRaiz() {
             // Em ambiente de servidor web (HTTP/HTTPS)
-            if (window.location.protocol && window.location.protocol.startsWith('http')) {
+            if (this.isHttp()) {
                 const path = window.location.pathname.replace(/\\/g, '/').toLowerCase();
                 const frontendIdx = path.indexOf('/frontend/');
                 if (frontendIdx !== -1) {
@@ -37,15 +47,22 @@
             return './';
         },
 
-        mapa: mapa,
+        /**
+         * Identifica semanticamente o nome da rota a partir de qualquer string, link ou URL
+         */
+        identificarRota(caminhoOuUrl) {
+            if (typeof mapaModulo.identificarRota === 'function') {
+                return mapaModulo.identificarRota(caminhoOuUrl);
+            }
+            return '';
+        },
 
         /**
          * Retorna a URL correta a partir de qualquer página, suportando query params e hash
          */
         obterUrl(destino, params = '') {
-            const raiz = this.obterRaiz();
-            let rotaBase = destino || '';
             let hash = '';
+            let rotaBase = destino || '';
 
             // 1. Extrai âncora (#hash) caso venha em params ou em destino
             if (params && params.includes('#')) {
@@ -68,30 +85,38 @@
             }
 
             // 3. Mapeia para a rota canônica
-            rotaBase = this.mapa[rotaBase] || rotaBase;
-            if (rotaBase.includes('#')) {
-                const idxHash = rotaBase.indexOf('#');
-                if (!hash) hash = rotaBase.slice(idxHash);
-                rotaBase = rotaBase.slice(0, idxHash);
+            const rotaId = this.identificarRota(rotaBase) || rotaBase;
+            const raiz = this.obterRaiz();
+            let urlFinal = '';
+
+            if (this.isHttp()) {
+                // AMBIENTE HTTP / HTTPS: Gera Clean URLs canônicas profissionais
+                if (rotaId === 'home' || rotaBase === '/' || rotaBase === '') {
+                    urlFinal = raiz; // Raiz limpa para a Home
+                } else if (rotaId === 'cadastro') {
+                    urlFinal = raiz + 'cadastro';
+                } else if (mapaModulo.ROTAS_CANONICAS && mapaModulo.ROTAS_CANONICAS[rotaId]) {
+                    const caminhoLimpo = mapaModulo.ROTAS_CANONICAS[rotaId].replace(/^\//, '');
+                    urlFinal = raiz + caminhoLimpo;
+                } else {
+                    const limpo = rotaBase.replace(/^\//, '').replace(/\.html$/, '');
+                    urlFinal = raiz + limpo;
+                }
+            } else {
+                // AMBIENTE OFFLINE (file:///): Resolve arquivo físico HTML
+                const arqFisico = (mapaModulo.ARQUIVOS_FISICOS && mapaModulo.ARQUIVOS_FISICOS[rotaId]) || rotaBase;
+                urlFinal = raiz + arqFisico;
             }
 
-            // Se o ambiente estiver usando Clean URLs (ex: npx serve sem extensão .html na URL do navegador)
-            const usaCleanUrls = !window.location.pathname.toLowerCase().endsWith('.html') && 
-                                 window.location.protocol !== 'file:' &&
-                                 window.location.pathname !== '/' &&
-                                 !window.location.pathname.endsWith('/');
-            if (usaCleanUrls && rotaBase.endsWith('.html')) {
-                rotaBase = rotaBase.replace(/\.html$/, '');
-            }
-
-            let urlFinal = raiz + rotaBase;
-
+            // 4. Anexa parâmetros de busca (?query)
             if (params) {
                 const limpo = params.replace(/^[\?&]/, '');
                 if (limpo) {
-                    urlFinal += '?' + limpo;
+                    urlFinal += (urlFinal.includes('?') ? '&' : '?') + limpo;
                 }
             }
+
+            // 5. Anexa âncora (#hash)
             if (hash) {
                 urlFinal += (hash.startsWith('#') ? '' : '#') + hash;
             }
@@ -120,28 +145,41 @@
             bar.style.width = '70%';
 
             // Classe de transição de saída no corpo
-            document.body.classList.add('pagina-saindo');
+            if (document.body) {
+                document.body.classList.add('pagina-saindo');
+            }
 
             // Timeout para transição suave antes da navegação do navegador
             setTimeout(() => {
-                bar.style.width = '95%';
+                if (bar) bar.style.width = '95%';
                 window.location.href = urlDestino;
-            }, 190);
+            }, 180);
         },
 
         /**
-         * Navega diretamente para uma página com transição suave
+         * Salva URL de destino pós-login com validação preventiva anti-loop e anti-404
          */
         salvarDestinoLogin(url) {
             try {
                 if (!url) return;
-                const urlStr = String(url);
-                if (!urlStr.includes('index.html') && !urlStr.includes('login.html') && !urlStr.includes('cadastro.html')) {
+                const urlStr = String(url).trim();
+                const rotaId = this.identificarRota(urlStr);
+                // Nunca salva rotas de autenticação, index ou de erro 404
+                if (['login', 'cadastro', 'index', '404'].includes(rotaId)) {
+                    return;
+                }
+                if (!urlStr.includes('index.html') && 
+                    !urlStr.includes('login') && 
+                    !urlStr.includes('cadastro') && 
+                    !urlStr.includes('404')) {
                     sessionStorage.setItem('itaim_return_to', urlStr);
                 }
             } catch (e) {}
         },
 
+        /**
+         * Recupera o destino pretendido após o login, garantindo rota válida e segura
+         */
         obterDestinoPosLogin() {
             try {
                 const urlParams = new URLSearchParams(window.location.search);
@@ -151,10 +189,16 @@
                 }
                 if (returnTo) {
                     sessionStorage.removeItem('itaim_return_to');
-                    const returnToDecoded = decodeURIComponent(returnTo);
+                    const returnToDecoded = decodeURIComponent(returnTo).trim();
+                    const rotaId = this.identificarRota(returnToDecoded);
+                    if (rotaId && !['login', 'cadastro', 'index', '404'].includes(rotaId)) {
+                        const query = returnToDecoded.includes('?') ? returnToDecoded.split('?')[1] : '';
+                        return this.obterUrl(rotaId, query);
+                    }
                     if (!returnToDecoded.includes('index.html') && 
-                        !returnToDecoded.includes('login.html') && 
-                        !returnToDecoded.includes('cadastro.html')) {
+                        !returnToDecoded.includes('login') && 
+                        !returnToDecoded.includes('cadastro') && 
+                        !returnToDecoded.includes('404')) {
                         return returnToDecoded;
                     }
                 }
@@ -162,6 +206,9 @@
             return this.obterUrl('home');
         },
 
+        /**
+         * Navega diretamente para uma página com transição suave
+         */
         navegarPara(destino, params = '') {
             const urlFinal = this.obterUrl(destino, params);
             this.executarTransicao(urlFinal);
@@ -194,6 +241,7 @@
                 'mascote-tatu-logo.png': 'assets/logos/mascote-tatu-logo.png',
                 'mascote-transparente.png': 'assets/logos/mascote-transparente.png',
                 'Mascote Tatu e Logo ItaimVende.png': 'assets/logos/Mascote Tatu e Logo ItaimVende.png',
+                'mascote-404.png': 'assets/logos/mascote-404.png',
 
                 // Icons
                 'icon-user.png': 'assets/icons/icon-user.png',
@@ -319,9 +367,17 @@
                     return;
                 }
 
-                // Executa a transição suave de saída
+                // Normaliza o destino usando o orquestrador para evitar 404 em links legados
                 e.preventDefault();
-                ItaimRotas.executarTransicao(destinoUrl.href);
+                const rotaId = ItaimRotas.identificarRota(destinoUrl.pathname);
+                let urlFinal = destinoUrl.href;
+                if (rotaId) {
+                    const search = destinoUrl.search ? destinoUrl.search.substring(1) : '';
+                    const hash = destinoUrl.hash ? destinoUrl.hash.substring(1) : '';
+                    urlFinal = ItaimRotas.obterUrl(rotaId, search + (hash ? '#' + hash : ''));
+                }
+
+                ItaimRotas.executarTransicao(urlFinal);
             } catch (err) {
                 // Fallback normal
             }
@@ -354,4 +410,3 @@
     }
 
 })();
-

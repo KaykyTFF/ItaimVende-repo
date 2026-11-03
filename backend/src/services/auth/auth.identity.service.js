@@ -5,6 +5,7 @@ import prisma from '../../config/prisma.js';
 import { ENV } from '../../config/env.js';
 import { AppError } from '../../utils/errors.js';
 import { enviarEmailBoasVindas } from '../email/email.service.js';
+import { calcularStatusUsername } from './auth.profile.service.js';
 
 /**
  * Registra novo usuário no sistema com hashing seguro de senha
@@ -74,6 +75,7 @@ export async function registerUser({ name, username, email, password, phone, cit
       isVerified: true,
       ratingAverage: true,
       createdAt: true,
+      usernameLastChangedAt: true,
     },
   });
 
@@ -106,7 +108,7 @@ export async function registerUser({ name, username, email, password, phone, cit
     { expiresIn: ENV.JWT_EXPIRES_IN }
   );
 
-  return { user: newUser, token };
+  return { user: { ...newUser, ...calcularStatusUsername(newUser.usernameLastChangedAt) }, token };
 }
 
 /**
@@ -230,6 +232,7 @@ export async function googleAuthUser({ credential, idToken, email, name, avatar,
     ratingCount: user.ratingCount,
     salesCount: user.salesCount || 0,
     createdAt: user.createdAt,
+    ...calcularStatusUsername(user.usernameLastChangedAt),
   };
 
   return { user: safeUser, token, isNewUser };
@@ -287,6 +290,7 @@ export async function loginUser({ email, password }) {
     ratingCount: user.ratingCount,
     salesCount: user.salesCount || 0,
     createdAt: user.createdAt,
+    ...calcularStatusUsername(user.usernameLastChangedAt),
   };
 
   return { user: safeUser, token };

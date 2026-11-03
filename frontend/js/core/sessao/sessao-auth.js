@@ -602,7 +602,7 @@
                             }
 
                             if (window.location.pathname.includes('index.html') || window.location.pathname.includes('login')) {
-                                window.location.href = window.ItaimRotas ? window.ItaimRotas.obterUrl('home') : 'pages/home/home.html';
+                                window.location.href = window.ItaimRotas ? window.ItaimRotas.obterUrl('home') : (window.ItaimRotas ? window.ItaimRotas.obterUrl('home') : '/home');
                             } else {
                                 window.location.reload();
                             }

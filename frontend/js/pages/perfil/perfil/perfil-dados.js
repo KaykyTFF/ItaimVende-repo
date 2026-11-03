@@ -32,20 +32,12 @@
         const bioDisplayEl = document.getElementById('perfil-bio-display');
         const btnEditarBioRapido = document.getElementById('btn-editar-bio-rapido');
         const txtBtnBio = document.getElementById('txt-btn-bio');
-        const perfilBioInput = document.getElementById('perfil-bio-input');
         const modalBio = document.getElementById('modal-editar-bio');
         const modalTextareaBio = document.getElementById('modal-textarea-bio');
         const modalContadorBio = document.getElementById('modal-contador-bio');
         const btnFecharModalBio = document.getElementById('btn-fechar-modal-bio');
         const btnCancelarModalBio = document.getElementById('btn-cancelar-modal-bio');
         const btnSalvarModalBio = document.getElementById('btn-salvar-modal-bio');
-
-        const nomeInput = document.getElementById('perfil-nome');
-        const usuarioInput = document.getElementById('perfil-usuario');
-        const emailInput = document.getElementById('perfil-email');
-        const telefoneInput = document.getElementById('perfil-telefone');
-        const cidadeInput = document.getElementById('perfil-cidade');
-        const bairroInput = document.getElementById('perfil-bairro');
 
         const token = window.ItaimApi?.auth?.obterToken();
 
@@ -181,7 +173,6 @@
                 if (txtBtnBio) txtBtnBio.textContent = 'Adicionar Bio';
             }
         }
-        if (perfilBioInput) perfilBioInput.value = perfilExibido.bio || '';
 
         const cidadeFormatada = `${perfilExibido.city || perfilExibido.cidade || 'Paulistana'} - ${perfilExibido.state || perfilExibido.estado || 'PI'}`;
         if (cidadeDisplay) cidadeDisplay.textContent = cidadeFormatada;
@@ -204,14 +195,6 @@
                 this.src = fallbackAvatarPerfil;
             };
         }
-
-        // Preenche campos de dados pessoais
-        if (nomeInput) nomeInput.value = nomePrincipal;
-        if (usuarioInput) usuarioInput.value = perfilExibido.username || perfilExibido.usuario || '';
-        if (emailInput) emailInput.value = perfilExibido.email || '';
-        if (telefoneInput) telefoneInput.value = formatarTelefoneBR(perfilExibido.phone || perfilExibido.telefone || '');
-        if (cidadeInput) cidadeInput.value = perfilExibido.city || perfilExibido.cidade || 'Paulistana';
-        if (bairroInput) bairroInput.value = perfilExibido.neighborhood || perfilExibido.bairro || 'Centro';
 
         
         // Configuração do modal de edição rápida de biografia
@@ -254,7 +237,6 @@
                         bioDisplayEl.textContent = novaBio || 'Nenhuma biografia informada. Clique em Adicionar Bio para se apresentar aos compradores.';
                     }
                     if (txtBtnBio) txtBtnBio.textContent = novaBio ? 'Editar Bio' : 'Adicionar Bio';
-                    if (perfilBioInput) perfilBioInput.value = novaBio;
 
                     // 1. Atualiza API se logado
                     if (window.ItaimApi && window.ItaimApi.auth && typeof window.ItaimApi.auth.atualizarPerfil === 'function' && window.ItaimApi.auth.obterToken()) {

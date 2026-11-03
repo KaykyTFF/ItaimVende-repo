@@ -170,6 +170,16 @@
         },
 
         /**
+         * Verifica disponibilidade e status de cooldown de 30 dias para o username (@)
+         */
+        async verificarDisponibilidadeUsername(username) {
+            return getCore().requisicao(`/auth/check-username?username=${encodeURIComponent((username || '').trim())}`, {
+                method: 'GET',
+                headers: getCore().obterHeaders(true)
+            });
+        },
+
+        /**
          * Atualiza informações cadastrais do perfil logado
          */
         async atualizarPerfil(dados) {

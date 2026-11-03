@@ -85,11 +85,12 @@
 
             const dados = await resposta.json().catch(() => ({}));
 
-            // 2. Tratamento de 401 Unauthorized / 403 Forbidden:
-            // Só invalida a sessão se for a rota de verificação de identidade central (/auth/me)
-            // e se não for modo dev. Rotas secundárias (notificações, endereços, etc.) NUNCA deslogam o usuário.
-            if (resposta.status === 401 || resposta.status === 403) {
-                const isAuthCheck = endpoint.includes('/auth/me');
+            // 2. Tratamento de 401 Unauthorized:
+            // Só invalida a sessão se for erro 401 na rota GET /auth/me (token expirado/inválido).
+            // Erros 403 ou operações PUT/DELETE (ex: cooldown de username) NUNCA deslogam o usuário.
+            if (resposta.status === 401) {
+                const metodo = (opcoesFinais.method || 'GET').toUpperCase();
+                const isAuthCheck = endpoint.includes('/auth/me') && metodo === 'GET';
                 const isDevMode = localStorage.getItem('itaim_modo_dev') === 'true';
                 if (isAuthCheck && obterToken() && !isDevMode) {
                     console.info('[ItaimApi] Token expirado ou rejeitado em /auth/me.');
