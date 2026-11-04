@@ -6,76 +6,532 @@
 /* ==========================================================================
    PÁGINA DE MENSAGENS / CHAT (CONVERSAS.HTML) - MODO ESCURO
    ========================================================================== */
+
+/* 1. Estrutura Base e Coluna Central de Mensagens */
 [data-theme="dark"] .chat-col-mensagens,
+.dark-theme .chat-col-mensagens,
 [data-theme="dark"] .chat-feed-mensagens,
 [data-theme="dark"] .chat-centro-vazio {
-    background-color: #141A20 !important;
-}
 
-[data-theme="dark"] .chat-centro-vazio h3,
-[data-theme="dark"] #chat-centro-vazio-titulo,
-[data-theme="dark"] .chat-feed-vazio-central h3 {
-    color: #F1F5F9 !important;
-}
+    .dark-theme .chat-feed-mensagens,
+    [data-theme="dark"] .chat-centro-vazio,
+    .dark-theme .chat-centro-vazio {
+        background-color: #141A20 !important;
+    }
 
-[data-theme="dark"] .chat-centro-vazio p,
-[data-theme="dark"] #chat-centro-vazio-desc,
-[data-theme="dark"] .chat-feed-vazio-central p {
-    color: #94A3B8 !important;
-}
+    [data-theme="dark"] .chat-centro-vazio h3,
+    .dark-theme .chat-centro-vazio h3,
+    [data-theme="dark"] #chat-centro-vazio-titulo,
+    [data-theme="dark"] .chat-feed-vazio-central h3 {
 
-[data-theme="dark"] .chat-centro-vazio-icone,
-[data-theme="dark"] .chat-feed-vazio-icone {
-    background-color: rgba(74, 222, 128, 0.14) !important;
-    color: #4ADE80 !important;
-}
+        .dark-theme #chat-centro-vazio-titulo,
+        [data-theme="dark"] .chat-feed-vazio-central h3,
+        .dark-theme .chat-feed-vazio-central h3 {
+            color: #F1F5F9 !important;
+        }
 
-[data-theme="dark"] .chat-barra-input {
-    background-color: #1A222A !important;
-    border-top: 1px solid #24303C !important;
-}
+        [data-theme="dark"] .chat-centro-vazio p,
+        .dark-theme .chat-centro-vazio p,
+        [data-theme="dark"] #chat-centro-vazio-desc,
+        [data-theme="dark"] .chat-feed-vazio-central p {
 
-[data-theme="dark"] .chat-input-texto {
-    background-color: #141A20 !important;
-    color: #F1F5F9 !important;
-    border-color: #24303C !important;
-}
+            .dark-theme #chat-centro-vazio-desc,
+            [data-theme="dark"] .chat-feed-vazio-central p,
+            .dark-theme .chat-feed-vazio-central p {
+                color: #94A3B8 !important;
+            }
 
-[data-theme="dark"] .chat-input-texto::placeholder {
-    color: #64748B !important;
-}
+            [data-theme="dark"] .chat-centro-vazio-icone,
+            [data-theme="dark"] .chat-feed-vazio-icone {
 
-[data-theme="dark"] .chat-input-texto:focus {
-    border-color: #4ADE80 !important;
-}
+                .dark-theme .chat-centro-vazio-icone,
+                [data-theme="dark"] .chat-feed-vazio-icone,
+                .dark-theme .chat-feed-vazio-icone {
+                    background-color: rgba(74, 222, 128, 0.14) !important;
+                    color: #4ADE80 !important;
+                }
 
-[data-theme="dark"] .chat-msg-item.recebida .chat-msg-bolha {
-    background-color: #1F2831 !important;
-    color: #F1F5F9 !important;
-    border: 1px solid #2C3946 !important;
-}
+                [data-theme="dark"] .chat-barra-input {
 
-[data-theme="dark"] .chat-msg-item.recebida .chat-msg-hora {
-    color: #94A3B8 !important;
-}
+                    /* ==========================================================================
+   2. CABEÇALHO DO CHAT ATIVO (NOME DO VENDEDOR, STATUS E AÇÕES)
+   ========================================================================== */
+                    [data-theme="dark"] .chat-topo-ativo,
+                    .dark-theme .chat-topo-ativo {
+                        background-color: #1A222A !important;
+                        border-top: 1px solid #24303C !important;
+                        border-bottom: 1px solid #283440 !important;
+                        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.28) !important;
+                    }
 
-[data-theme="dark"] .chat-msg-item.enviada .chat-msg-bolha {
-    background-color: rgba(68, 189, 50, 0.22) !important;
-    color: #F1F5F9 !important;
-    border: 1px solid rgba(68, 189, 50, 0.4) !important;
-}
+                    [data-theme="dark"] .chat-input-texto {
+                        background-color: #141A20 !important;
 
-[data-theme="dark"] .chat-data-divisor {
-    background-color: #1F2831 !important;
-    color: #94A3B8 !important;
-    border: 1px solid #2C3946 !important;
-}
+                        [data-theme="dark"] .chat-perfil-conversa:hover,
+                        .dark-theme .chat-perfil-conversa:hover {
+                            background-color: rgba(255, 255, 255, 0.06) !important;
+                        }
 
-/* Badge de Propostas no tom verde do design */
-[data-theme="dark"] .msg-proposta-status-badge.pendente,
-[data-theme="dark"] .msg-proposta-status-badge.enviada,
-[data-theme="dark"] .msg-proposta-status-badge.recebida,
-[data-theme="dark"] .msg-proposta-status-badge.aceita {
-    background-color: rgba(16, 185, 129, 0.20) !important;
-    color: #34D399 !important;
-}
+                        [data-theme="dark"] #chat-header-nome,
+                        .dark-theme #chat-header-nome,
+                        [data-theme="dark"] .chat-nome-status strong,
+                        .dark-theme .chat-nome-status strong {
+                            color: #F1F5F9 !important;
+                            border-color: #24303C !important;
+                        }
+
+                        [data-theme="dark"] .chat-input-texto::placeholder {
+                            color: #64748B !important;
+
+                            [data-theme="dark"] #chat-header-status-txt,
+                            .dark-theme #chat-header-status-txt,
+                            [data-theme="dark"] .chat-header-status-txt,
+                            .dark-theme .chat-header-status-txt {
+                                color: #94A3B8 !important;
+                            }
+
+                            [data-theme="dark"] .chat-input-texto:focus {
+
+                                [data-theme="dark"] .btn-voltar-mobile-chat,
+                                .dark-theme .btn-voltar-mobile-chat {
+                                    color: #F1F5F9 !important;
+                                }
+
+                                [data-theme="dark"] .btn-voltar-mobile-chat:hover,
+                                .dark-theme .btn-voltar-mobile-chat:hover {
+                                    background-color: #24303C !important;
+                                    color: #4ADE80 !important;
+                                }
+
+                                [data-theme="dark"] .chat-header-avatar,
+                                .dark-theme .chat-header-avatar {
+                                    border-color: #283440 !important;
+                                }
+
+                                /* Ações Rápidas no Cabeçalho */
+                                [data-theme="dark"] .btn-chat-acao-topo,
+                                .dark-theme .btn-chat-acao-topo {
+                                    background-color: #1F2831 !important;
+                                    border: 1px solid #2C3946 !important;
+                                    color: #F1F5F9 !important;
+                                }
+
+                                [data-theme="dark"] .btn-chat-acao-topo:hover,
+                                .dark-theme .btn-chat-acao-topo:hover {
+                                    background-color: #273440 !important;
+                                    border-color: #3B4B5A !important;
+                                    color: #FFFFFF !important;
+                                }
+
+                                [data-theme="dark"] .btn-chat-proposta-topo,
+                                .dark-theme .btn-chat-proposta-topo {
+                                    background-color: rgba(68, 189, 50, 0.16) !important;
+                                    border-color: rgba(68, 189, 50, 0.38) !important;
+                                    color: #4ADE80 !important;
+                                }
+
+                                [data-theme="dark"] .btn-chat-proposta-topo:hover,
+                                .dark-theme .btn-chat-proposta-topo:hover {
+                                    background-color: rgba(68, 189, 50, 0.28) !important;
+                                    border-color: #4ADE80 !important;
+                                    color: #FFFFFF !important;
+                                }
+
+                                [data-theme="dark"] .chat-msg-item.recebida .chat-msg-bolha {
+
+                                    [data-theme="dark"] .btn-chat-bloquear-topo,
+                                    .dark-theme .btn-chat-bloquear-topo {
+                                        color: #94A3B8 !important;
+                                    }
+
+                                    [data-theme="dark"] .btn-chat-bloquear-topo:hover,
+                                    .dark-theme .btn-chat-bloquear-topo:hover {
+                                        background-color: rgba(239, 68, 68, 0.12) !important;
+                                        border-color: rgba(239, 68, 68, 0.35) !important;
+                                        color: #F87171 !important;
+                                    }
+
+                                    [data-theme="dark"] .btn-chat-bloquear-topo.bloqueado,
+                                    .dark-theme .btn-chat-bloquear-topo.bloqueado {
+                                        background-color: rgba(239, 68, 68, 0.18) !important;
+                                        border-color: rgba(239, 68, 68, 0.45) !important;
+                                        color: #F87171 !important;
+                                    }
+
+                                    /* ==========================================================================
+   3. MINI RESUMO DO PRODUTO (PRÓXIMO AO NOME DO VENDEDOR NO TOPO)
+   ========================================================================== */
+                                    [data-theme="dark"] .mobile-resumo-produto-topo,
+                                    .dark-theme .mobile-resumo-produto-topo {
+                                        background-color: #171F27 !important;
+                                        border-bottom: 1px solid #283440 !important;
+                                    }
+
+                                    [data-theme="dark"] .mobile-mini-foto,
+                                    .dark-theme .mobile-mini-foto {
+                                        background-color: #10151A !important;
+                                        border-color: #283440 !important;
+                                    }
+
+                                    [data-theme="dark"] .mobile-mini-titulo,
+                                    .dark-theme .mobile-mini-titulo {
+                                        color: #F1F5F9 !important;
+                                    }
+
+                                    [data-theme="dark"] .mobile-mini-preco,
+                                    .dark-theme .mobile-mini-preco {
+                                        color: #4ADE80 !important;
+                                    }
+
+                                    [data-theme="dark"] .btn-mobile-ver-anuncio-topo,
+                                    .dark-theme .btn-mobile-ver-anuncio-topo {
+                                        background-color: #1F2831 !important;
+                                        border: 1px solid #2C3946 !important;
+                                        color: #F1F5F9 !important;
+                                    }
+
+                                    [data-theme="dark"] .btn-mobile-ver-anuncio-topo:hover,
+                                    .dark-theme .btn-mobile-ver-anuncio-topo:hover {
+                                        background-color: #273440 !important;
+                                        border-color: #4ADE80 !important;
+                                        color: #4ADE80 !important;
+                                    }
+
+                                    /* ==========================================================================
+   4. COLUNA DIREITA - PAINEL DE DETALHES DO ANÚNCIO (COMPUTADOR)
+   ========================================================================== */
+                                    [data-theme="dark"] .chat-col-produto,
+                                    .dark-theme .chat-col-produto {
+                                        background-color: #161D24 !important;
+                                        border-left: 1px solid #283440 !important;
+                                    }
+
+                                    [data-theme="dark"] .chat-produto-card-header h3,
+                                    .dark-theme .chat-produto-card-header h3 {
+                                        color: #F1F5F9 !important;
+                                    }
+
+                                    [data-theme="dark"] .chat-produto-foto-box,
+                                    .dark-theme .chat-produto-foto-box {
+                                        background-color: #10151A !important;
+                                        border-color: #283440 !important;
+                                    }
+
+                                    [data-theme="dark"] .chat-produto-nome,
+                                    .dark-theme .chat-produto-nome {
+                                        color: #F1F5F9 !important;
+                                    }
+
+                                    [data-theme="dark"] .chat-produto-preco-destaque,
+                                    .dark-theme .chat-produto-preco-destaque {
+                                        color: #4ADE80 !important;
+                                    }
+
+                                    [data-theme="dark"] .chat-produto-cidade-linha,
+                                    .dark-theme .chat-produto-cidade-linha {
+                                        color: #94A3B8 !important;
+                                    }
+
+                                    [data-theme="dark"] .chat-produto-especs-bloco,
+                                    .dark-theme .chat-produto-especs-bloco {
+                                        border-top: 1px solid #283440 !important;
+                                        border-bottom: 1px solid #283440 !important;
+                                    }
+
+                                    [data-theme="dark"] .espec-tag-label,
+                                    .dark-theme .espec-tag-label {
+                                        color: #94A3B8 !important;
+                                    }
+
+                                    [data-theme="dark"] .espec-tag-val,
+                                    .dark-theme .espec-tag-val {
+                                        color: #F1F5F9 !important;
+                                    }
+
+                                    [data-theme="dark"] .desc-bloco-titulo,
+                                    .dark-theme .desc-bloco-titulo {
+                                        color: #94A3B8 !important;
+                                    }
+
+                                    [data-theme="dark"] .desc-bloco-paragrafo,
+                                    .dark-theme .desc-bloco-paragrafo {
+                                        color: #CBD5E1 !important;
+                                    }
+
+                                    [data-theme="dark"] .btn-painel-ver-anuncio,
+                                    .dark-theme .btn-painel-ver-anuncio {
+                                        background-color: #1F2831 !important;
+                                        border: 1px solid #2C3946 !important;
+                                        color: #F1F5F9 !important;
+                                    }
+
+                                    [data-theme="dark"] .chat-msg-item.recebida .chat-msg-hora {
+
+                                        [data-theme="dark"] .btn-painel-ver-anuncio:hover,
+                                        .dark-theme .btn-painel-ver-anuncio:hover {
+                                            background-color: #273440 !important;
+                                            border-color: #4ADE80 !important;
+                                            color: #4ADE80 !important;
+                                        }
+
+                                        [data-theme="dark"] .btn-painel-denunciar-anuncio,
+                                        .dark-theme .btn-painel-denunciar-anuncio {
+                                            background-color: rgba(239, 68, 68, 0.12) !important;
+                                            border: 1px solid rgba(239, 68, 68, 0.3) !important;
+                                            color: #F87171 !important;
+                                        }
+
+                                        [data-theme="dark"] .btn-painel-denunciar-anuncio:hover,
+                                        .dark-theme .btn-painel-denunciar-anuncio:hover {
+                                            background-color: #EF4444 !important;
+                                            color: #FFFFFF !important;
+                                            border-color: #EF4444 !important;
+                                        }
+
+                                        [data-theme="dark"] .chat-produto-vazio-estado,
+                                        .dark-theme .chat-produto-vazio-estado {
+                                            background: rgba(255, 255, 255, 0.02) !important;
+                                            border-color: #283440 !important;
+                                        }
+
+                                        [data-theme="dark"] .chat-produto-vazio-titulo,
+                                        .dark-theme .chat-produto-vazio-titulo {
+                                            color: #F1F5F9 !important;
+                                        }
+
+                                        [data-theme="dark"] .chat-produto-vazio-desc,
+                                        .dark-theme .chat-produto-vazio-desc {
+                                            color: #94A3B8 !important;
+                                        }
+
+                                        [data-theme="dark"] .chat-msg-item.enviada .chat-msg-bolha {
+
+                                            [data-theme="dark"] .chat-produto-vazio-desc strong,
+                                            .dark-theme .chat-produto-vazio-desc strong {
+                                                color: #F1F5F9 !important;
+                                            }
+
+                                            /* ==========================================================================
+   5. MENSAGENS, BOLHAS E FEED
+   ========================================================================== */
+                                            [data-theme="dark"] .chat-msg-item.recebida .chat-msg-bolha,
+                                            .dark-theme .chat-msg-item.recebida .chat-msg-bolha {
+                                                background-color: #1F2831 !important;
+                                                color: #F1F5F9 !important;
+                                                border: 1px solid #2C3946 !important;
+                                            }
+
+                                            [data-theme="dark"] .chat-msg-item.recebida .chat-msg-hora,
+                                            .dark-theme .chat-msg-item.recebida .chat-msg-hora {
+                                                color: #94A3B8 !important;
+                                            }
+
+                                            [data-theme="dark"] .chat-msg-item.enviada .chat-msg-bolha,
+                                            .dark-theme .chat-msg-item.enviada .chat-msg-bolha {
+                                                background-color: rgba(68, 189, 50, 0.22) !important;
+                                                color: #F1F5F9 !important;
+                                                border: 1px solid rgba(68, 189, 50, 0.4) !important;
+                                            }
+
+                                            [data-theme="dark"] .chat-data-divisor {
+
+                                                [data-theme="dark"] .chat-data-divisor,
+                                                .dark-theme .chat-data-divisor {
+                                                    background-color: #1F2831 !important;
+                                                    color: #94A3B8 !important;
+                                                    border: 1px solid #2C3946 !important;
+                                                }
+
+                                                /* Badge de Propostas no tom verde do design */
+                                                /* Indicador de Digitando */
+                                                [data-theme="dark"] .chat-digitando-container,
+                                                .dark-theme .chat-digitando-container {
+                                                    background-color: #141A20 !important;
+                                                }
+
+                                                [data-theme="dark"] .chat-digitando-indicador,
+                                                .dark-theme .chat-digitando-indicador {
+                                                    background-color: #1E2732 !important;
+                                                    color: #38BDF8 !important;
+                                                }
+
+                                                /* ==========================================================================
+   6. BARRA DE DIGITAÇÃO E ENVIO
+   ========================================================================== */
+                                                [data-theme="dark"] .chat-envio-form,
+                                                .dark-theme .chat-envio-form,
+                                                [data-theme="dark"] .chat-barra-input,
+                                                .dark-theme .chat-barra-input {
+                                                    background-color: #1A222A !important;
+                                                    border-top: 1px solid #283440 !important;
+                                                }
+
+                                                [data-theme="dark"] .chat-input-wrapper,
+                                                .dark-theme .chat-input-wrapper {
+                                                    background-color: transparent !important;
+                                                }
+
+                                                [data-theme="dark"] .chat-input-texto,
+                                                .dark-theme .chat-input-texto {
+                                                    background-color: #141A20 !important;
+                                                    color: #F1F5F9 !important;
+                                                    border: 1px solid #283440 !important;
+                                                }
+
+                                                [data-theme="dark"] .chat-input-texto::placeholder,
+                                                .dark-theme .chat-input-texto::placeholder {
+                                                    color: #64748B !important;
+                                                }
+
+                                                [data-theme="dark"] .chat-input-texto:focus,
+                                                .dark-theme .chat-input-texto:focus {
+                                                    border-color: #4ADE80 !important;
+                                                    box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.22) !important;
+                                                }
+
+                                                [data-theme="dark"] .btn-anexo-chat,
+                                                .dark-theme .btn-anexo-chat {
+                                                    background-color: #141A20 !important;
+                                                    border: 1px solid #283440 !important;
+                                                    color: #94A3B8 !important;
+                                                }
+
+                                                [data-theme="dark"] .btn-anexo-chat:hover,
+                                                .dark-theme .btn-anexo-chat:hover {
+                                                    border-color: #4ADE80 !important;
+                                                    color: #4ADE80 !important;
+                                                    background-color: #1F2831 !important;
+                                                }
+
+                                                [data-theme="dark"] .chat-aviso-bloqueio,
+                                                .dark-theme .chat-aviso-bloqueio {
+                                                    background-color: rgba(239, 68, 68, 0.15) !important;
+                                                    border-color: rgba(239, 68, 68, 0.35) !important;
+                                                    color: #F87171 !important;
+                                                }
+
+                                                [data-theme="dark"] .btn-desbloquear-banner,
+                                                .dark-theme .btn-desbloquear-banner {
+                                                    background-color: #EF4444 !important;
+                                                    color: #FFFFFF !important;
+                                                }
+
+                                                /* ==========================================================================
+   7. MODAIS DE PROPOSTA E CONFIRMAÇÃO NO CHAT
+   ========================================================================== */
+                                                [data-theme="dark"] .chat-modal-card,
+                                                .dark-theme .chat-modal-card {
+                                                    background-color: #1F2831 !important;
+                                                    border: 1px solid #2C3946 !important;
+                                                    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6) !important;
+                                                }
+
+                                                [data-theme="dark"] .chat-modal-header,
+                                                .dark-theme .chat-modal-header {
+                                                    border-bottom: 1px solid #283440 !important;
+                                                }
+
+                                                [data-theme="dark"] .chat-modal-header h3,
+                                                .dark-theme .chat-modal-header h3 {
+                                                    color: #F1F5F9 !important;
+                                                }
+
+                                                [data-theme="dark"] .btn-fechar-modal-chat,
+                                                .dark-theme .btn-fechar-modal-chat {
+                                                    color: #94A3B8 !important;
+                                                }
+
+                                                [data-theme="dark"] .btn-fechar-modal-chat:hover,
+                                                .dark-theme .btn-fechar-modal-chat:hover {
+                                                    color: #F1F5F9 !important;
+                                                    background-color: #273440 !important;
+                                                }
+
+                                                [data-theme="dark"] .chat-modal-produto-mini,
+                                                .dark-theme .chat-modal-produto-mini {
+                                                    background-color: #141A20 !important;
+                                                    border: 1px solid #283440 !important;
+                                                }
+
+                                                [data-theme="dark"] .chat-modal-produto-mini strong,
+                                                .dark-theme .chat-modal-produto-mini strong {
+                                                    color: #F1F5F9 !important;
+                                                }
+
+                                                [data-theme="dark"] .chat-modal-produto-mini span,
+                                                .dark-theme .chat-modal-produto-mini span {
+                                                    color: #94A3B8 !important;
+                                                }
+
+                                                [data-theme="dark"] .chat-modal-campo label,
+                                                .dark-theme .chat-modal-campo label {
+                                                    color: #CBD5E1 !important;
+                                                }
+
+                                                [data-theme="dark"] .chat-input-moeda-prefix,
+                                                .dark-theme .chat-input-moeda-prefix {
+                                                    color: #4ADE80 !important;
+                                                }
+
+                                                [data-theme="dark"] .campo-proposta-input,
+                                                .dark-theme .campo-proposta-input {
+                                                    background-color: #141A20 !important;
+                                                    border: 1px solid #2C3946 !important;
+                                                    color: #F1F5F9 !important;
+                                                }
+
+                                                [data-theme="dark"] .campo-proposta-input:focus,
+                                                .dark-theme .campo-proposta-input:focus {
+                                                    border-color: #4ADE80 !important;
+                                                    box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.22) !important;
+                                                }
+
+                                                [data-theme="dark"] .btn-sugestao-valor,
+                                                .dark-theme .btn-sugestao-valor {
+                                                    background-color: #141A20 !important;
+                                                    border: 1px solid #2C3946 !important;
+                                                    color: #94A3B8 !important;
+                                                }
+
+                                                [data-theme="dark"] .btn-sugestao-valor:hover,
+                                                .dark-theme .btn-sugestao-valor:hover {
+                                                    background-color: #273440 !important;
+                                                    border-color: #4ADE80 !important;
+                                                    color: #4ADE80 !important;
+                                                }
+
+                                                [data-theme="dark"] .chat-modal-rodape,
+                                                .dark-theme .chat-modal-rodape {
+                                                    background-color: #1A222A !important;
+                                                    border-top: 1px solid #283440 !important;
+                                                }
+
+                                                [data-theme="dark"] .btn-modal-cancelar,
+                                                .dark-theme .btn-modal-cancelar {
+                                                    background-color: #1F2831 !important;
+                                                    border: 1px solid #2C3946 !important;
+                                                    color: #94A3B8 !important;
+                                                }
+
+                                                [data-theme="dark"] .btn-modal-cancelar:hover,
+                                                .dark-theme .btn-modal-cancelar:hover {
+                                                    background-color: #273440 !important;
+                                                    color: #F1F5F9 !important;
+                                                }
+
+                                                /* ==========================================================================
+   8. BADGES DE STATUS DE PROPOSTAS
+   ========================================================================== */
+                                                [data-theme="dark"] .msg-proposta-status-badge.pendente,
+                                                .dark-theme .msg-proposta-status-badge.pendente,
+                                                [data-theme="dark"] .msg-proposta-status-badge.enviada,
+                                                .dark-theme .msg-proposta-status-badge.enviada,
+                                                [data-theme="dark"] .msg-proposta-status-badge.recebida,
+                                                [data-theme="dark"] .msg-proposta-status-badge.aceita {
+
+                                                    .dark-theme .msg-proposta-status-badge.recebida,
+                                                    [data-theme="dark"] .msg-proposta-status-badge.aceita,
+                                                    .dark-theme .msg-proposta-status-badge.aceita {
+                                                        background-color: rgba(16, 185, 129, 0.20) !important;
+                                                        color: #34D399 !important;
+                                                    }

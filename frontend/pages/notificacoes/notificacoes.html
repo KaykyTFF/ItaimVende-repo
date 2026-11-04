@@ -64,7 +64,7 @@
     <!-- CSS -->
     <link rel="stylesheet" href="../../css/pages/home/home.css?v=2">
     <link rel="stylesheet" href="../../css/core/header-global.css?v=14">
-    <link rel="stylesheet" href="../../css/pages/notificacoes/notificacoes.css?v=5">
+    <link rel="stylesheet" href="../../css/pages/notificacoes/notificacoes.css?v=6">
 </head>
 <body>
 
@@ -329,28 +329,69 @@
         </nav>
 
         <div class="notificacoes-topo-header">
-            <div class="notificacoes-titulos">
-                <h1>Notificações</h1>
-                <p>Fique por dentro de mensagens, avaliações no perfil, favoritos e avisos da plataforma.</p>
+            <div class="notificacoes-titulos-wrapper">
+                <div class="notificacoes-icone-sino-header" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                </div>
+                <div class="notificacoes-titulos">
+                    <h1>Notificações</h1>
+                    <p>Fique por dentro de mensagens, avaliações no perfil, favoritos e avisos da plataforma.</p>
+                </div>
             </div>
             <div class="notificacoes-acoes-topo">
-                <button type="button" class="btn-marcar-lidas" id="btn-marcar-todas-lidas">
+                <button type="button" class="btn-marcar-lidas" id="btn-marcar-todas-lidas" title="Marcar todas como lidas">
                     Marcar todas como lidas
                 </button>
-                <button type="button" class="btn-marcar-lidas" id="btn-limpar-todas" style="border-color: #FECACA; color: #DC2626;">
+                <button type="button" class="btn-marcar-lidas btn-limpar-topo" id="btn-limpar-todas" title="Limpar todas as notificações">
                     Limpar todas
                 </button>
             </div>
         </div>
 
-        <!-- Abas de Filtros de Notificações -->
-        <div class="notificacoes-tabs-bar" role="tablist">
-            <button type="button" class="tab-notif-btn ativo" data-filtro="todas">Todas</button>
-            <button type="button" class="tab-notif-btn" data-filtro="nao-lidas">Não lidas</button>
-            <button type="button" class="tab-notif-btn" data-filtro="mensagem">Mensagens</button>
-            <button type="button" class="tab-notif-btn" data-filtro="avaliacao">Avaliações</button>
-            <button type="button" class="tab-notif-btn" data-filtro="favorito">Favoritos</button>
-            <button type="button" class="tab-notif-btn" data-filtro="aviso">Avisos</button>
+        <!-- Linha de Filtros e Ordenação -->
+        <div class="notificacoes-filtros-row">
+            <div class="notificacoes-tabs-bar" role="tablist">
+                <button type="button" class="tab-notif-btn ativo" data-filtro="todas">
+                    <span>Todas</span>
+                    <span class="tab-badge-contador" id="count-todas">0</span>
+                </button>
+                <button type="button" class="tab-notif-btn" data-filtro="mensagem">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                    <span>Mensagens</span>
+                    <span class="tab-badge-contador" id="count-mensagens" style="display: none;">0</span>
+                </button>
+                <button type="button" class="tab-notif-btn" data-filtro="avaliacao">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                    <span>Avaliações</span>
+                    <span class="tab-badge-contador" id="count-avaliacoes" style="display: none;">0</span>
+                </button>
+                <button type="button" class="tab-notif-btn" data-filtro="favorito">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    <span>Favoritos</span>
+                    <span class="tab-badge-contador" id="count-favoritos" style="display: none;">0</span>
+                </button>
+                <button type="button" class="tab-notif-btn" data-filtro="aviso">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                    <span>Avisos</span>
+                    <span class="tab-badge-contador" id="count-avisos" style="display: none;">0</span>
+                </button>
+            </div>
+
+            <!-- Seletor de Ordenação (# Mais recentes ∨) -->
+            <div class="notificacoes-ordenacao-box">
+                <div class="select-ordenacao-wrap">
+                    <span class="icone-ordem-hash">#</span>
+                    <select id="select-ordem-notifs" aria-label="Ordenar notificações">
+                        <option value="recentes">Mais recentes</option>
+                        <option value="antigas">Mais antigas</option>
+                        <option value="nao-lidas">Não lidas primeiro</option>
+                    </select>
+                    <svg class="chevron-ordem" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+            </div>
         </div>
 
         <!-- Lista de Notificações -->
@@ -364,6 +405,6 @@
     <script src="../../js/core/api/index.js"></script>
     <script src="../../js/core/sessao/index.js"></script>
     <script src="../../js/core/skeleton/index.js"></script>
-    <script src="../../js/pages/notificacoes/notificacoes.js"></script>
+    <script src="../../js/pages/notificacoes/notificacoes.js?v=6"></script>
 </body>
 </html>
