@@ -10,6 +10,10 @@
     color: #F1F5F9 !important;
 }
 
+[data-theme="dark"] .notificacoes-icone-sino-header {
+    color: #F1F5F9 !important;
+}
+
 [data-theme="dark"] .notificacoes-titulos h1 {
     color: #F1F5F9 !important;
 }
@@ -30,13 +34,13 @@
     border-color: #4ADE80 !important;
 }
 
-[data-theme="dark"] .btn-limpar-notificacoes {
+[data-theme="dark"] .btn-marcar-lidas.btn-limpar-topo {
     background-color: #1F2831 !important;
     color: #F87171 !important;
     border-color: rgba(239, 68, 68, 0.3) !important;
 }
 
-[data-theme="dark"] .btn-limpar-notificacoes:hover {
+[data-theme="dark"] .btn-marcar-lidas.btn-limpar-topo:hover {
     background-color: rgba(239, 68, 68, 0.16) !important;
     color: #EF4444 !important;
     border-color: #EF4444 !important;
@@ -54,27 +58,32 @@
 }
 
 [data-theme="dark"] .tab-notif-btn.ativo {
-    background-color: #44BD32 !important;
+    background-color: #0E8F1A !important;
     color: #FFFFFF !important;
-    border-color: #44BD32 !important;
+    border-color: #0E8F1A !important;
 }
 
-[data-theme="dark"] .notificacoes-vazio {
+[data-theme="dark"] .tab-badge-contador {
+    background-color: #2C3946 !important;
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .tab-notif-btn.ativo .tab-badge-contador {
+    background-color: #FFFFFF !important;
+    color: #0E8F1A !important;
+}
+
+[data-theme="dark"] .select-ordenacao-wrap {
     background-color: #1F2831 !important;
-    border: 1px dashed #2C3946 !important;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25) !important;
+    border-color: #2C3946 !important;
 }
 
-[data-theme="dark"] .notificacoes-vazio-icone {
-    background-color: rgba(74, 222, 128, 0.14) !important;
-    color: #4ADE80 !important;
-}
-
-[data-theme="dark"] .notificacoes-vazio h2 {
+[data-theme="dark"] .select-ordenacao-wrap select {
     color: #F1F5F9 !important;
 }
 
-[data-theme="dark"] .notificacoes-vazio p {
+[data-theme="dark"] .icone-ordem-hash,
+[data-theme="dark"] .chevron-ordem {
     color: #94A3B8 !important;
 }
 
@@ -89,35 +98,54 @@
 }
 
 [data-theme="dark"] .notificacao-card.nao-lida {
-    background-color: rgba(68, 189, 50, 0.08) !important;
-    border-color: rgba(68, 189, 50, 0.35) !important;
+    border-left-color: #4ADE80 !important;
+    background-color: rgba(74, 222, 128, 0.04) !important;
 }
 
-[data-theme="dark"] .notificacao-titulo {
-    color: #F1F5F9 !important;
+[data-theme="dark"] .avatar-badge-ponto {
+    border-color: #1F2831 !important;
 }
 
-[data-theme="dark"] .notificacao-texto {
-    color: #94A3B8 !important;
-}
-
-[data-theme="dark"] .notificacao-data {
-    color: #64748B !important;
-}
-
-[data-theme="dark"] .btn-acao-notif {
-    border-color: #2C3946 !important;
-    color: #94A3B8 !important;
-    background-color: #242E38 !important;
-}
-
-[data-theme="dark"] .btn-acao-notif:hover {
-    border-color: #4ADE80 !important;
+[data-theme="dark"] .notif-tag-nova {
+    background-color: rgba(74, 222, 128, 0.18) !important;
     color: #4ADE80 !important;
 }
 
-[data-theme="dark"] .btn-acao-notif.btn-excluir-notif:hover {
-    border-color: #EF4444 !important;
-    color: #EF4444 !important;
-    background-color: rgba(239, 68, 68, 0.18) !important;
+[data-theme="dark"] .notif-titulo {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .notif-descricao {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .notif-tempo-meta {
+    color: #64748B !important;
+}
+
+[data-theme="dark"] .notif-divisor-vertical {
+    background-color: #2C3946 !important;
+}
+
+[data-theme="dark"] .notif-thumb-produto {
+    background-color: #1A222A !important;
+    border-color: #2C3946 !important;
+}
+
+[data-theme="dark"] .notificacoes-vazio {
+    background-color: #1F2831 !important;
+    border-color: #2C3946 !important;
+}
+
+[data-theme="dark"] .notificacoes-vazio-icone {
+    background-color: rgba(74, 222, 128, 0.14) !important;
+    color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .notificacoes-vazio h2 {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .notificacoes-vazio p {
+    color: #94A3B8 !important;
 }
