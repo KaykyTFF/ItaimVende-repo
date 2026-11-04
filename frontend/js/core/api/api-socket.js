@@ -227,6 +227,11 @@
             const token = obterToken();
             if (!token) return;
 
+            // Se estiver em modo dev front-end offline, não precisa conectar ao websocket
+            if (localStorage.getItem('itaim_modo_dev') === 'true' || token.startsWith('token_mock') || token.startsWith('dev_mock')) {
+                return;
+            }
+
             if (socket && (socket.connected || conexaoEmProgresso)) return;
             conexaoEmProgresso = true;
 

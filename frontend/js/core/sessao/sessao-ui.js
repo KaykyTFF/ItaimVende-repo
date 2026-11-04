@@ -343,6 +343,24 @@
             };
         });
 
+        // Badge e identificador de Modo Dev no Header
+        const isModoDev = localStorage.getItem('itaim_modo_dev') === 'true';
+        let badgeDev = document.getElementById('badge-modo-dev-header');
+        if (isModoDev) {
+            if (!badgeDev) {
+                badgeDev = document.createElement('div');
+                badgeDev.id = 'badge-modo-dev-header';
+                badgeDev.className = 'badge-modo-dev-header';
+                badgeDev.title = 'Modo Desenvolvedor Front-End Ativo (Sem conexão com banco de dados)';
+                badgeDev.innerHTML = '<span>⚡ MODO DEV (SEM BD)</span>';
+                const headerLeft = document.querySelector('.header-left');
+                if (headerLeft) headerLeft.appendChild(badgeDev);
+            }
+            badgeDev.style.display = 'inline-flex';
+        } else if (badgeDev) {
+            badgeDev.style.display = 'none';
+        }
+
         // Nome no dropdown e no drawer
         const nomeFinal = user.nome || user.name || 'Usuário';
         const nomeEl = document.getElementById('dropdown-user-name');

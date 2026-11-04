@@ -48,13 +48,16 @@
             });
         } catch (e) {}
 
-        // Fallback de dados para desenvolvimento no front-end quando a base estiver vazia
-        if (todos.length === 0) {
-            const isDev = (window.ItaimSessaoAuth && typeof window.ItaimSessaoAuth.isModoDevFrontend === 'function' && window.ItaimSessaoAuth.isModoDevFrontend())
-                || (window.ItaimSessao && typeof window.ItaimSessao.isModoDevFrontend === 'function' && window.ItaimSessao.isModoDevFrontend());
-            if (isDev) {
-                return [...PRODUTOS_MOCK_DEV];
-            }
+        // Injeta anúncios do desenvolvedor se o Modo Dev Front-End estiver ativo
+        const isDev = (window.ItaimSessaoAuth && typeof window.ItaimSessaoAuth.isModoDevFrontend === 'function' && window.ItaimSessaoAuth.isModoDevFrontend())
+            || (window.ItaimSessao && typeof window.ItaimSessao.isModoDevFrontend === 'function' && window.ItaimSessao.isModoDevFrontend())
+            || (localStorage.getItem('itaim_modo_dev') === 'true');
+        if (isDev && typeof PRODUTOS_MOCK_DEV !== 'undefined' && Array.isArray(PRODUTOS_MOCK_DEV)) {
+            PRODUTOS_MOCK_DEV.forEach(mockProd => {
+                if (!todos.some(p => String(p.id) === String(mockProd.id))) {
+                    todos.unshift(mockProd);
+                }
+            });
         }
 
         if (apenasAtivos) {

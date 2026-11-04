@@ -160,16 +160,51 @@
         // Desativado por completo
     }
 
-    function ativarModoDevFrontend() {
+    // Ativa o Modo Dev Front-End com credenciais e sessão mock local completa (dispensa banco de dados)
+    function ativarModoDevFrontend(tipo = 'dev') {
+        const isAdm = (tipo === 'admin');
+        const user = isAdm ? { ...USUARIO_ADMIN } : { ...USUARIO_DEV };
+        const mockToken = isAdm ? 'dev_mock_admin_token' : 'token_mock_dev_frontend';
+
         localStorage.setItem('itaim_modo_dev', 'true');
-        localStorage.setItem('itaim_token', 'token_mock_dev_frontend');
-        localStorage.setItem('itaim_usuario_logado', JSON.stringify(USUARIO_DEV));
-        localStorage.setItem('itaim_usuario_logado_email', USUARIO_DEV.email);
+        localStorage.setItem('itaim_token', mockToken);
+        localStorage.setItem('itaim_usuario_logado', JSON.stringify(user));
+        localStorage.setItem('itaim_usuario_logado_email', user.email);
+        localStorage.setItem('itaim_ultimo_email', user.email);
+        localStorage.setItem('itaim_ultima_atividade', Date.now().toString());
+
+        // Garante que o usuário existe na base local de usuários
+        const todos = carregarUsuarios();
+        const uIdx = todos.findIndex(u => (u.email || '').toLowerCase().trim() === user.email.toLowerCase().trim());
+        if (uIdx !== -1) {
+            todos[uIdx] = { ...todos[uIdx], ...user };
+        } else {
+            todos.unshift({ ...user });
+        }
+        localStorage.setItem('itaim_usuarios_db', JSON.stringify(todos));
+
+        // Popula anúncios mock locais se a base estiver vazia
+        try {
+            const prodsSalvos = JSON.parse(localStorage.getItem('itaim_produtos_cadastrados') || '[]');
+            if (!Array.isArray(prodsSalvos) || prodsSalvos.length === 0) {
+                if (typeof PRODUTOS_MOCK_DEV !== 'undefined' && Array.isArray(PRODUTOS_MOCK_DEV)) {
+                    localStorage.setItem('itaim_produtos_cadastrados', JSON.stringify(PRODUTOS_MOCK_DEV));
+                }
+            }
+        } catch (e) {}
+
+        if (window.ItaimSessao && typeof window.ItaimSessao.atualizarHeaderUsuario === 'function') {
+            window.ItaimSessao.atualizarHeaderUsuario();
+        }
+
+        window.dispatchEvent(new CustomEvent('itaim:login-sucesso', { detail: user }));
+        window.dispatchEvent(new CustomEvent('itaim:usuario-atualizado', { detail: user }));
+        return user;
     }
 
     function desativarModoDevFrontend() {
         localStorage.removeItem('itaim_modo_dev');
-            localStorage.removeItem('itaim_favoritos');
+        deslogarUsuario();
     }
 
     // Retorna se há um usuário autenticado com credenciais válidas (ou false para visitantes)
@@ -177,7 +212,19 @@
         const token = localStorage.getItem('itaim_token');
         const bUserRaw = localStorage.getItem('itaim_usuario_logado');
         if (!token || !bUserRaw) return false;
-        if (token === 'token_mock_dev_frontend' || token === 'undefined' || token === 'null' || !token.trim()) {
+
+        // Se estiver em modo dev com token mock, é considerado autenticado com sucesso!
+        const isDev = localStorage.getItem('itaim_modo_dev') === 'true';
+        if (isDev && (token === 'token_mock_dev_frontend' || token.startsWith('token_mock') || token.startsWith('dev_mock'))) {
+            try {
+                const parsed = JSON.parse(bUserRaw);
+                return !!(parsed && (parsed.email || parsed.id));
+            } catch (e) {
+                return false;
+            }
+        }
+
+        if (token === 'undefined' || token === 'null' || !token.trim()) {
             return false;
         }
         try {

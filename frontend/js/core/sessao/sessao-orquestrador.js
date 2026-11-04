@@ -93,16 +93,27 @@
 
     // Inicialização da Sessão e Interface (Bootstrap)
     function bootstrap() {
-        // Se houver resquício de mock dev antigo, limpa para não transformar visitantes em dev front-end
+        // Se houver resquício de mock dev antigo sem o modo dev ativado, limpa
         const tokenAtual = localStorage.getItem('itaim_token');
-        if (tokenAtual === 'token_mock_dev_frontend') {
+        const modoDevAtivo = localStorage.getItem('itaim_modo_dev') === 'true';
+        if (!modoDevAtivo && (tokenAtual === 'token_mock_dev_frontend' || tokenAtual === 'dev_mock_admin_token')) {
             try {
                 localStorage.removeItem('itaim_token');
                 localStorage.removeItem('itaim_usuario_logado');
                 localStorage.removeItem('itaim_usuario_logado_email');
-                localStorage.removeItem('itaim_modo_dev');
             } catch (e) {}
         }
+
+        // Suporte a ativação automática via URL (?dev=true ou ?modo=dev)
+        try {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('dev') === 'true' || urlParams.get('modo') === 'dev') {
+                const perfilUrl = urlParams.get('perfil') === 'admin' ? 'admin' : 'dev';
+                if (typeof Auth.ativarModoDevFrontend === 'function') {
+                    Auth.ativarModoDevFrontend(perfilUrl);
+                }
+            }
+        } catch (e) {}
 
         // Limpa favoritos residuais de visitante não autenticado
         const visitanteLogado = (typeof Auth.usuarioEstaAutenticado === 'function')
@@ -125,8 +136,9 @@
             UI.inicializarHeaderGlobal();
         }
 
-        // Sincroniza dados e foto real do usuário com o backend se estiver autenticado com token
-        if (window.ItaimApi && window.ItaimApi.auth && typeof window.ItaimApi.auth.obterToken === 'function' && window.ItaimApi.auth.obterToken()) {
+        // Sincroniza dados e foto real do usuário com o backend se estiver autenticado com token (apenas se NÃO for modo dev)
+        const isModoDevAtual = localStorage.getItem('itaim_modo_dev') === 'true';
+        if (!isModoDevAtual && window.ItaimApi && window.ItaimApi.auth && typeof window.ItaimApi.auth.obterToken === 'function' && window.ItaimApi.auth.obterToken()) {
             window.ItaimApi.auth.perfil().then(res => {
                 if (res && res.user) {
                     localStorage.setItem('itaim_usuario_logado', JSON.stringify(res.user));
