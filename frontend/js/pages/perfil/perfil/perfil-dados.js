@@ -221,7 +221,7 @@
             if (modalTextareaBio) {
                 modalTextareaBio.value = perfilExibido.bio || '';
                 if (modalContadorBio) {
-                    modalContadorBio.textContent = `${modalTextareaBio.value.length}/300`;
+                    modalContadorBio.textContent = `${modalTextareaBio.value.length}/80`;
                 }
             }
             if (btnSalvarModalPerfil) {
@@ -267,7 +267,7 @@
         // Contador de caracteres da bio
         if (modalTextareaBio && modalContadorBio) {
             modalTextareaBio.oninput = (e) => {
-                modalContadorBio.textContent = `${e.target.value.length}/300`;
+                modalContadorBio.textContent = `${e.target.value.length}/80`;
             };
         }
 

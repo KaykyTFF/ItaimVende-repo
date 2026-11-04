@@ -114,9 +114,9 @@
         if (inputNome) inputNome.value = usuarioAtivo.nome || usuarioAtivo.name || '';
         if (inputBio) {
             inputBio.value = usuarioAtivo.bio || '';
-            if (contadorBio) contadorBio.textContent = `${inputBio.value.length}/300`;
+            if (contadorBio) contadorBio.textContent = `${inputBio.value.length}/80`;
             inputBio.addEventListener('input', (e) => {
-                if (contadorBio) contadorBio.textContent = `${e.target.value.length}/300`;
+                if (contadorBio) contadorBio.textContent = `${e.target.value.length}/80`;
             });
         }
 

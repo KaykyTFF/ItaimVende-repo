@@ -40,7 +40,7 @@ export const updateProfileSchema = z.object({
   state: z.string().optional().nullable().or(z.literal('')),
   neighborhood: z.string().optional().nullable().or(z.literal('')),
   postalCode: z.string().optional().nullable().or(z.literal('')),
-  bio: z.string().max(300, 'A biografia não pode exceder 300 caracteres.').optional().nullable().or(z.literal('')),
+  bio: z.string().max(80, 'A biografia não pode exceder 80 caracteres.').optional().nullable().or(z.literal('')),
   avatar: z.string().optional().nullable().or(z.literal('')),
 });
 
