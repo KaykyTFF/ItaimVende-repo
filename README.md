@@ -208,7 +208,39 @@ Declaramos que ferramentas de Inteligência Artificial foram utilizadas como sup
 ---
 
 ## 👥 Equipe do Projeto
-- Discentes do IFPI — Curso de Análise e Desenvolvimento de Sistemas / Informática
-- Disciplina: **Programação para Internet II**
+- Discentes do IFPI — Campus Paulistana
+- Disciplinas: **Engenharia de Software III** & **Programação para Internet II**
 - Professor: **Prof. Me. Julian Rodrigues Valério**
-- **Data da Demonstração:** 09/11/2026
+- **Data da Apresentação Oficial:** 09/11/2026
+
+| Integrante | Papel no Projeto | Foco Técnico | Papel Sprint 1 | Papel Sprint 2 |
+| :--- | :--- | :--- | :--- | :--- |
+| **Kayky** | Líder da Equipe | **Backend Developer** | **Product Owner (PO)** | **Product Owner (PO)** |
+| **Pedro Ravy** | Desenvolvedor | **Backend Developer** | Developer | Developer |
+| **Josimar** | Desenvolvedor | **Frontend Developer** | **Scrum Master (SM)** | Developer |
+| **Raili** | Desenvolvedora | **Frontend Developer** | Developer | Developer |
+| **Giselly** | Desenvolvedora | **Frontend Developer** | Developer | **Scrum Master (SM)** |
+
+---
+
+## 🏉 10. Metodologia Ágil (Scrum Aplicado ao Projeto de API Própria)
+
+A gestão do desenvolvimento da API e plataforma Itaim Vende foi conduzida estritamente através do framework **Scrum**, cumprindo todas as diretrizes e entregáveis definidos na disciplina de **Engenharia de Software III**:
+
+* 📌 **Quadro Kanban (GitHub Projects):** [Acessar GitHub Projects da Equipe](https://github.com/KaykyTFF/ItaimVende-repo/projects) *(Colunas: Backlog, Sprint Backlog, Em andamento, Em revisão e Pronto)*
+* 📂 **Pasta de Evidências Scrum no Repositório:** [`/scrum`](scrum/acordos.md)
+
+### Estrutura Completa de Documentos Scrum:
+```text
+/scrum
+  ├── acordos.md               # Product Goal, definição de papéis, DoD e acordos de trabalho
+  ├── product-backlog.md       # 13 histórias de usuário, critérios em Gherkin e matriz de rastreabilidade
+  ├── sprint-1/
+  │   ├── planning.md          # Sprint Goal, capacidade (24 pts), fatias verticais e mapa de testes (Q1-Q4)
+  │   ├── dailies.md           # 4 registros diários detalhados, tabela de impedimentos e burndown
+  │   └── review-retro.md      # Demonstração dos incrementos e melhoria escolhida (debounce + erros)
+  └── sprint-2/
+      ├── planning.md          # Sprint Goal, capacidade (28 pts), inovação e mapa de testes
+      ├── dailies.md           # 3 registros diários detalhados, tabela de impedimentos e burndown
+      └── review-retro.md      # Demonstração final e respostas obrigatórias às 3 perguntas da atividade
+```
