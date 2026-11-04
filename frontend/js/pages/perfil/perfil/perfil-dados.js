@@ -30,21 +30,26 @@
         const alertaNaoLogado = document.getElementById('perfil-alerta-nao-logado');
         const userDisplayEl = document.getElementById('perfil-username-display');
         const bioDisplayEl = document.getElementById('perfil-bio-display');
-        const btnEditarBioRapido = document.getElementById('btn-editar-bio-rapido');
-        const txtBtnBio = document.getElementById('txt-btn-bio');
-        const modalBio = document.getElementById('modal-editar-bio');
-        const modalTextareaBio = document.getElementById('modal-textarea-bio');
-        const modalContadorBio = document.getElementById('modal-contador-bio');
-        const btnFecharModalBio = document.getElementById('btn-fechar-modal-bio');
-        const btnCancelarModalBio = document.getElementById('btn-cancelar-modal-bio');
-        const btnSalvarModalBio = document.getElementById('btn-salvar-modal-bio');
+        const btnAbrirModalPerfil = document.getElementById('btn-abrir-modal-editar-perfil');
+        const modalPerfil = document.getElementById('modal-editar-perfil');
+        const btnFecharModalPerfil = document.getElementById('btn-fechar-modal-editar-perfil');
+        const btnCancelarModalPerfil = document.getElementById('btn-cancelar-modal-editar-perfil');
+        const formModalPerfil = document.getElementById('form-modal-editar-perfil');
+        const modalAvatarPreview = document.getElementById('modal-perfil-avatar-preview');
+        const modalInputFoto = document.getElementById('modal-input-foto-perfil');
+        const modalBtnRemoverFoto = document.getElementById('modal-btn-remover-foto-perfil');
+        const modalInputNome = document.getElementById('modal-input-nome-perfil');
+        const modalErroNome = document.getElementById('modal-erro-nome-perfil');
+        const modalTextareaBio = document.getElementById('modal-textarea-bio-perfil');
+        const modalContadorBio = document.getElementById('modal-contador-bio-perfil');
+        const btnSalvarModalPerfil = document.getElementById('btn-salvar-modal-editar-perfil');
 
         const token = window.ItaimApi?.auth?.obterToken();
 
         if (isPerfilProprio) {
             if (alertaNaoLogado) alertaNaoLogado.style.display = 'none';
             if (btnCameraAvatar) btnCameraAvatar.style.display = 'flex';
-            if (btnEditarBioRapido) btnEditarBioRapido.style.display = 'inline-flex';
+            if (btnAbrirModalPerfil) btnAbrirModalPerfil.style.display = 'inline-flex';
             if (boxContatoExterno) boxContatoExterno.style.display = 'none';
             if (boxFormAvaliacao) boxFormAvaliacao.style.display = 'none';
 
@@ -89,8 +94,7 @@
             // Perfil de outro vendedor
             if (alertaNaoLogado) alertaNaoLogado.style.display = 'none';
             if (btnCameraAvatar) btnCameraAvatar.style.display = 'none';
-            if (btnEditarBioRapido) btnEditarBioRapido.style.display = 'none';
-
+            if (btnAbrirModalPerfil) btnAbrirModalPerfil.style.display = 'none';
             if (paramId && window.ItaimApi && window.ItaimApi.auth) {
                 try {
                     const resOutro = await window.ItaimApi.auth.obterUsuario(paramId);
@@ -165,12 +169,10 @@
         if (bioDisplayEl) {
             if (perfilExibido.bio && perfilExibido.bio.trim()) {
                 bioDisplayEl.textContent = perfilExibido.bio;
-                if (txtBtnBio) txtBtnBio.textContent = 'Editar Bio';
             } else {
                 bioDisplayEl.textContent = isPerfilProprio
-                    ? 'Nenhuma biografia informada. Clique em Adicionar Bio para se apresentar aos compradores.'
+                    ? 'Nenhuma biografia informada.'
                     : 'Vendedor cadastrado no Itaim Vende.';
-                if (txtBtnBio) txtBtnBio.textContent = 'Adicionar Bio';
             }
         }
 
@@ -197,79 +199,234 @@
         }
 
         
-        // Configuração do modal de edição rápida de biografia
-        if (btnEditarBioRapido && modalBio) {
-            function abrirModalBio() {
-                modalBio.style.display = 'flex';
-                if (modalTextareaBio) {
-                    modalTextareaBio.value = perfilExibido.bio || '';
-                    if (modalContadorBio) modalContadorBio.textContent = `${modalTextareaBio.value.length}/300`;
-                    setTimeout(() => modalTextareaBio.focus(), 50);
+        // =========================================================================
+        // CONFIGURAÇÃO DO MODAL DE EDIÇÃO DE PERFIL (DADOS DA CONTA)
+        // =========================================================================
+        let avatarPendente = null;
+
+        function abrirModalPerfil(focoBio = false) {
+            if (!modalPerfil) return;
+            avatarPendente = null;
+
+            if (modalAvatarPreview && avatarImgView) {
+                modalAvatarPreview.src = avatarImgView.src;
+            }
+            if (modalInputNome) {
+                modalInputNome.value = perfilExibido.name || perfilExibido.nome || '';
+                modalInputNome.classList.remove('com-erro');
+            }
+            if (modalErroNome) {
+                modalErroNome.textContent = '';
+            }
+            if (modalTextareaBio) {
+                modalTextareaBio.value = perfilExibido.bio || '';
+                if (modalContadorBio) {
+                    modalContadorBio.textContent = `${modalTextareaBio.value.length}/300`;
                 }
             }
-
-            function fecharModalBio() {
-                modalBio.style.display = 'none';
+            if (btnSalvarModalPerfil) {
+                btnSalvarModalPerfil.disabled = false;
+                btnSalvarModalPerfil.textContent = 'Salvar alterações';
             }
 
-            btnEditarBioRapido.onclick = abrirModalBio;
-            if (btnFecharModalBio) btnFecharModalBio.onclick = fecharModalBio;
-            if (btnCancelarModalBio) btnCancelarModalBio.onclick = fecharModalBio;
+            modalPerfil.style.display = 'flex';
+            requestAnimationFrame(() => {
+                modalPerfil.classList.add('aberto');
+                if (focoBio && modalTextareaBio) {
+                    modalTextareaBio.focus();
+                } else if (modalInputNome) {
+                    modalInputNome.focus();
+                }
+            });
+        }
 
-            modalBio.onclick = (e) => {
-                if (e.target === modalBio) fecharModalBio();
+        function fecharModalPerfil() {
+            if (!modalPerfil) return;
+            modalPerfil.classList.remove('aberto');
+            setTimeout(() => {
+                modalPerfil.style.display = 'none';
+            }, 200);
+        }
+
+        if (btnAbrirModalPerfil) {
+            btnAbrirModalPerfil.onclick = () => abrirModalPerfil();
+        }
+        if (btnFecharModalPerfil) {
+            btnFecharModalPerfil.onclick = fecharModalPerfil;
+        }
+        if (btnCancelarModalPerfil) {
+            btnCancelarModalPerfil.onclick = fecharModalPerfil;
+        }
+
+        if (modalPerfil) {
+            modalPerfil.onclick = (e) => {
+                if (e.target === modalPerfil) fecharModalPerfil();
             };
+        }
 
-            if (modalTextareaBio && modalContadorBio) {
-                modalTextareaBio.oninput = (e) => {
-                    modalContadorBio.textContent = `${e.target.value.length}/300`;
-                };
-            }
+        // Contador de caracteres da bio
+        if (modalTextareaBio && modalContadorBio) {
+            modalTextareaBio.oninput = (e) => {
+                modalContadorBio.textContent = `${e.target.value.length}/300`;
+            };
+        }
 
-            if (btnSalvarModalBio) {
-                btnSalvarModalBio.onclick = async () => {
-                    const novaBio = modalTextareaBio ? modalTextareaBio.value.trim() : '';
-                    btnSalvarModalBio.disabled = true;
-                    btnSalvarModalBio.textContent = 'Salvando...';
+        // Validação em tempo real do nome completo
+        if (modalInputNome) {
+            modalInputNome.oninput = () => {
+                if (modalInputNome.value.trim().length >= 3) {
+                    modalInputNome.classList.remove('com-erro');
+                    if (modalErroNome) modalErroNome.textContent = '';
+                }
+            };
+        }
 
-                    perfilExibido.bio = novaBio;
-                    if (bioDisplayEl) {
-                        bioDisplayEl.textContent = novaBio || 'Nenhuma biografia informada. Clique em Adicionar Bio para se apresentar aos compradores.';
+        // Alterar Foto dentro do modal (com corte quadrado automático 1:1)
+        if (modalInputFoto) {
+            modalInputFoto.onchange = (e) => {
+                const file = e.target.files && e.target.files[0];
+                if (!file) return;
+
+                const aplicarFoto = (novaFotoDataUrl) => {
+                    if (modalAvatarPreview) {
+                        modalAvatarPreview.src = novaFotoDataUrl;
                     }
-                    if (txtBtnBio) txtBtnBio.textContent = novaBio ? 'Editar Bio' : 'Adicionar Bio';
+                    avatarPendente = novaFotoDataUrl;
+                };
 
-                    // 1. Atualiza API se logado
-                    if (window.ItaimApi && window.ItaimApi.auth && typeof window.ItaimApi.auth.atualizarPerfil === 'function' && window.ItaimApi.auth.obterToken()) {
+                if (window.ItaimFoto && typeof window.ItaimFoto.abrir === 'function') {
+                    window.ItaimFoto.abrir({
+                        arquivo: file,
+                        tipo: 'perfil',
+                        tamanho: 400,
+                        aoSalvar: aplicarFoto
+                    });
+                } else if (window.ItaimFoto && typeof window.ItaimFoto.ajustarPerfil === 'function') {
+                    window.ItaimFoto.ajustarPerfil(file, aplicarFoto);
+                } else if (window.ItaimAjustarFoto && typeof window.ItaimAjustarFoto.abrir === 'function') {
+                    window.ItaimAjustarFoto.abrir(file, aplicarFoto);
+                } else {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => aplicarFoto(ev.target.result);
+                    reader.readAsDataURL(file);
+                }
+            };
+        }
+
+        // Remover Foto dentro do modal
+        if (modalBtnRemoverFoto) {
+            modalBtnRemoverFoto.onclick = () => {
+                const fotoPadrao = fallbackAvatarPerfil;
+                if (modalAvatarPreview) {
+                    modalAvatarPreview.src = fotoPadrao;
+                }
+                avatarPendente = 'remover';
+            };
+        }
+
+        // Submissão do formulário de edição de perfil
+        if (formModalPerfil) {
+            formModalPerfil.onsubmit = async (e) => {
+                e.preventDefault();
+
+                const novoNome = modalInputNome ? modalInputNome.value.trim() : '';
+                const novaBio = modalTextareaBio ? modalTextareaBio.value.trim() : '';
+
+                if (novoNome.length < 3) {
+                    if (modalInputNome) modalInputNome.classList.add('com-erro');
+                    if (modalErroNome) modalErroNome.textContent = 'Informe seu nome completo (mínimo de 3 caracteres).';
+                    if (modalInputNome) modalInputNome.focus();
+                    return;
+                }
+
+                if (btnSalvarModalPerfil) {
+                    btnSalvarModalPerfil.disabled = true;
+                    btnSalvarModalPerfil.textContent = 'Salvando...';
+                }
+
+                let avatarFinalUrl = null;
+
+                // 1. Processar Foto se foi alterada no modal
+                if (avatarPendente === 'remover') {
+                    avatarFinalUrl = 'assets/icons/icon-user.png';
+                    if (avatarImgView) avatarImgView.src = fallbackAvatarPerfil;
+                } else if (avatarPendente && typeof avatarPendente === 'string') {
+                    if (avatarImgView) avatarImgView.src = avatarPendente;
+                    avatarFinalUrl = avatarPendente;
+
+                    if (window.ItaimApi && window.ItaimApi.upload && window.ItaimApi.auth && window.ItaimApi.auth.obterToken()) {
                         try {
-                            await window.ItaimApi.auth.atualizarPerfil({ bio: novaBio });
-                        } catch (errApi) {
-                            console.warn('[Perfil] Falha ao sincronizar bio com API:', errApi);
+                            const resUpload = await window.ItaimApi.upload.perfil(avatarPendente);
+                            if (resUpload && resUpload.data && resUpload.data.url) {
+                                avatarFinalUrl = resUpload.data.url;
+                                if (avatarImgView && window.ItaimApi.resolverUrlImagem) {
+                                    avatarImgView.src = window.ItaimApi.resolverUrlImagem(avatarFinalUrl);
+                                }
+                            }
+                        } catch (errUp) {
+                            console.warn('[Perfil] Upload de avatar via modal falhou, salvando local:', errUp);
                         }
                     }
+                }
 
-                    // 2. Atualiza Sessão Local
-                    const userEmail = perfilExibido.email || localStorage.getItem('itaim_usuario_logado_email');
-                    if (window.ItaimSessao && typeof window.ItaimSessao.atualizarDadosUsuario === 'function') {
-                        window.ItaimSessao.atualizarDadosUsuario(userEmail, { bio: novaBio });
-                    }
-                    try {
-                        localStorage.setItem('itaim_usuario_logado', JSON.stringify(perfilExibido));
-                    } catch(e) {}
-
-                    fecharModalBio();
-                    btnSalvarModalBio.disabled = false;
-                    btnSalvarModalBio.textContent = 'Salvar Biografia';
-
-                    // Exibe toast de sucesso
-                    const toastEl = document.getElementById('toast-sucesso');
-                    if (toastEl) {
-                        const span = toastEl.querySelector('span');
-                        if (span) span.textContent = 'Biografia salva com sucesso!';
-                        toastEl.classList.add('visivel');
-                        setTimeout(() => toastEl.classList.remove('visivel'), 3500);
-                    }
+                // 2. Montar payload do perfil
+                const payloadAtualizacao = {
+                    name: novoNome,
+                    bio: novaBio
                 };
-            }
+                if (avatarFinalUrl) {
+                    payloadAtualizacao.avatar = avatarFinalUrl;
+                }
+
+                // 3. Atualizar na API REST se usuário autenticado
+                if (window.ItaimApi && window.ItaimApi.auth && typeof window.ItaimApi.auth.atualizarPerfil === 'function' && window.ItaimApi.auth.obterToken()) {
+                    try {
+                        await window.ItaimApi.auth.atualizarPerfil(payloadAtualizacao);
+                    } catch (errApi) {
+                        console.warn('[Perfil] Falha ao sincronizar dados com API:', errApi);
+                    }
+                }
+
+                // 4. Atualizar objeto em memória e sessão local
+                perfilExibido.name = novoNome;
+                perfilExibido.nome = novoNome;
+                perfilExibido.bio = novaBio;
+                if (avatarFinalUrl) {
+                    perfilExibido.avatar = avatarFinalUrl;
+                }
+
+                const userEmail = perfilExibido.email || localStorage.getItem('itaim_usuario_logado_email');
+                if (window.ItaimSessao && typeof window.ItaimSessao.atualizarDadosUsuario === 'function') {
+                    window.ItaimSessao.atualizarDadosUsuario(userEmail, payloadAtualizacao);
+                }
+                if (window.ItaimSessao && typeof window.ItaimSessao.atualizarHeaderUsuario === 'function') {
+                    window.ItaimSessao.atualizarHeaderUsuario();
+                }
+                try {
+                    localStorage.setItem('itaim_usuario_logado', JSON.stringify(perfilExibido));
+                } catch (e) {}
+
+                // 5. Atualizar DOM do Banner de perfil imediatamente
+                if (nomeDisplay) nomeDisplay.textContent = novoNome;
+                if (breadcrumbCurrent) breadcrumbCurrent.textContent = isPerfilProprio ? 'Meu Perfil' : `Perfil de ${novoNome}`;
+                document.title = `${novoNome} - ${isPerfilProprio ? 'Meu Perfil' : 'Perfil'} - Itaim Vende`;
+
+                if (bioDisplayEl) {
+                    bioDisplayEl.textContent = novaBio || (isPerfilProprio ? 'Nenhuma biografia informada.' : 'Vendedor cadastrado no Itaim Vende.');
+                }
+
+                // 6. Fechar modal e exibir toast de confirmação
+                fecharModalPerfil();
+
+                if (btnSalvarModalPerfil) {
+                    btnSalvarModalPerfil.disabled = false;
+                    btnSalvarModalPerfil.textContent = 'Salvar alterações';
+                }
+
+                if (window.ItaimPerfilUtils && typeof window.ItaimPerfilUtils.exibirToast === 'function') {
+                    window.ItaimPerfilUtils.exibirToast('Perfil atualizado com sucesso!');
+                }
+            };
         }
 
         window.ItaimPerfilDados.perfilExibido = perfilExibido;

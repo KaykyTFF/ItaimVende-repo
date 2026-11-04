@@ -168,6 +168,7 @@ export async function updateUserProfile(userId, updateData) {
       username: true,
       usernameLastChangedAt: true,
       avatar: true,
+      phone: true,
     },
   });
 
@@ -182,67 +183,31 @@ export async function updateUserProfile(userId, updateData) {
     dataToUpdate.name = name.trim();
   }
 
-  // Validação e controle exclusivo de 30 dias para alteração do nome de usuário (@)
+  // O endpoint de perfil NÃO aceita alteração de username nem de email
   if (username !== undefined && username !== null && username.trim() !== '') {
     const cleanUsername = username.trim().toLowerCase();
-
-    // Valida formato do @: de 3 a 30 caracteres alfanuméricos, ponto ou sublinhado
-    const usernameRegex = /^[a-z0-9._]{3,30}$/;
-    if (!usernameRegex.test(cleanUsername)) {
-      throw new AppError(
-        'Nome de usuário inválido. O @ deve conter de 3 a 30 caracteres (apenas letras minúsculas, números, ponto ou sublinhado).',
-        400,
-        'INVALID_USERNAME_FORMAT'
-      );
-    }
-
     const currentUsernameClean = (currentUser.username || '').trim().toLowerCase();
-
-    // Se o usuário está efetivamente alterando seu username para um novo
     if (cleanUsername !== currentUsernameClean) {
-      const statusCooldown = calcularStatusUsername(currentUser.usernameLastChangedAt);
-
-      if (!statusCooldown.canChangeUsername) {
-        const dataFormatada = statusCooldown.nextUsernameChangeAt
-          ? new Date(statusCooldown.nextUsernameChangeAt).toLocaleDateString('pt-BR', {
-              day: '2-digit',
-              month: '2-digit',
-              year: 'numeric',
-            })
-          : '';
-
-        throw new AppError(
-          `Você poderá alterar seu nome de usuário novamente em ${dataFormatada} (restam ${statusCooldown.daysUntilNextUsernameChange} ${statusCooldown.daysUntilNextUsernameChange === 1 ? 'dia' : 'dias'}).`,
-          403,
-          'USERNAME_COOLDOWN_ACTIVE',
-          {
-            nextAllowedDate: statusCooldown.nextUsernameChangeAt,
-            daysRemaining: statusCooldown.daysUntilNextUsernameChange,
-            lastChangedAt: statusCooldown.usernameLastChangedAt,
-          }
-        );
-      }
-
-      // Verifica se o novo username já está em uso por outra conta
-      const existing = await prisma.user.findFirst({
-        where: {
-          username: cleanUsername,
-          NOT: { id: userId },
-        },
-        select: { id: true },
-      });
-
-      if (existing) {
-        throw new AppError('Este nome de usuário já está em uso por outra conta.', 409, 'USERNAME_TAKEN');
-      }
-
-      // Conclui alteração do username e inicia a contagem de 30 dias com o horário do servidor
-      dataToUpdate.username = cleanUsername;
-      dataToUpdate.usernameLastChangedAt = new Date();
+      throw new AppError(
+        'A alteração de nome de usuário (@) deve ser realizada exclusivamente através do endpoint dedicado /account/username.',
+        400,
+        'USE_DEDICATED_USERNAME_ENDPOINT'
+      );
     }
   }
 
-  if (phone !== undefined) dataToUpdate.phone = phone ? phone.trim() : null;
+  // O endpoint de perfil NÃO aceita alteração de telefone/WhatsApp
+  if (phone !== undefined && phone !== null && phone.trim() !== '') {
+    const cleanPhone = phone.replace(/\D/g, '');
+    const currentPhoneClean = (currentUser.phone || '').replace(/\D/g, '');
+    if (cleanPhone !== currentPhoneClean) {
+      throw new AppError(
+        'A alteração de WhatsApp/telefone deve ser realizada exclusivamente através do card e endpoint dedicado /account/phone.',
+        400,
+        'USE_DEDICATED_PHONE_ENDPOINT'
+      );
+    }
+  }
   if (city !== undefined) dataToUpdate.city = city ? city.trim() : '';
   if (state !== undefined) dataToUpdate.state = state ? state.trim().toUpperCase() : '';
   if (neighborhood !== undefined) dataToUpdate.neighborhood = neighborhood ? neighborhood.trim() : null;

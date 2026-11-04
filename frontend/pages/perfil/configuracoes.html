@@ -355,29 +355,10 @@
                         </div>
 
                         <div class="cfg-grid">
-                            <div class="cfg-campo">
+                            <div class="cfg-campo cheio">
                                 <label for="cfg-nome">Nome completo</label>
                                 <input class="cfg-input" type="text" id="cfg-nome" autocomplete="name" maxlength="80">
                                 <span class="cfg-erro" id="erro-nome"></span>
-                            </div>
-                            <div class="cfg-campo">
-                                <div style="display: flex; justify-content: space-between; align-items: baseline;">
-                                    <label for="cfg-usuario">Nome de usuário (@)</label>
-                                    <span id="cfg-usuario-badge" style="font-size: 11.5px; font-weight: 600; display: none;"></span>
-                                </div>
-                                <input class="cfg-input" type="text" id="cfg-usuario" autocomplete="username" maxlength="30" placeholder="seunome">
-                                <span class="cfg-erro" id="erro-usuario"></span>
-                                <div id="cfg-usuario-status" class="cfg-usuario-status" style="margin-top: 6px; font-size: 12.5px; line-height: 1.4;"></div>
-                            </div>
-                            <div class="cfg-campo">
-                                <label for="cfg-email">E-mail</label>
-                                <input class="cfg-input" type="email" id="cfg-email" autocomplete="email">
-                                <span class="cfg-erro" id="erro-email"></span>
-                            </div>
-                            <div class="cfg-campo">
-                                <label for="cfg-telefone">WhatsApp / Celular</label>
-                                <input class="cfg-input" type="tel" id="cfg-telefone" autocomplete="tel" placeholder="(89) 99999-9999" inputmode="numeric">
-                                <span class="cfg-erro" id="erro-telefone"></span>
                             </div>
                             <div class="cfg-campo cheio">
                                 <label for="cfg-bio">Biografia / Sobre você</label>
@@ -392,10 +373,113 @@
                             <button type="submit" class="cfg-btn cfg-btn-primario">Salvar alterações</button>
                         </div>
                     </form>
+
+                    <!-- CARD EXCLUSIVO: NOME DE USUÁRIO (@) -->
+                    <div class="cfg-card" id="card-username-secao" style="margin-top: 24px;">
+                        <h2>Nome de usuário</h2>
+                        <p class="cfg-desc">Seu identificador único no Itaim Vende. Usado no link do seu perfil público e em menções.</p>
+
+                        <div class="cfg-campo cheio">
+                            <label class="cfg-campo-label" for="cfg-username-display">Nome de usuário (@) atual</label>
+                            <div class="cfg-input-acao-linha">
+                                <div class="cfg-input-display">
+                                    <span class="cfg-username-arroba">@</span>
+                                    <span class="cfg-username-valor" id="cfg-username-display">...</span>
+                                </div>
+                                <button type="button" class="cfg-btn cfg-btn-secundario" id="btn-abrir-modal-trocar-username">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                    </svg>
+                                    <span>Alterar nome de usuário</span>
+                                </button>
+                            </div>
+                            <div class="cfg-dica-campo" id="box-status-cooldown-username">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                </svg>
+                                <span id="texto-status-cooldown-username">Você pode alterar seu nome de usuário uma vez a cada 30 dias.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CARD EXCLUSIVO: WHATSAPP / CELULAR -->
+                    <div class="cfg-card" id="card-telefone-secao" style="margin-top: 24px;">
+                        <h2>WhatsApp / Celular</h2>
+                        <p class="cfg-desc">Número utilizado para contato direto com compradores nos seus anúncios e no seu perfil.</p>
+
+                        <div class="cfg-campo cheio">
+                            <label class="cfg-campo-label" for="cfg-telefone-display">WhatsApp cadastrado</label>
+                            <div class="cfg-input-acao-linha">
+                                <div class="cfg-input-display">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cfg-icone-whatsapp">
+                                        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                                    </svg>
+                                    <span class="cfg-telefone-valor" id="cfg-telefone-display">...</span>
+                                </div>
+                                <div class="cfg-botoes-acao-wrap">
+                                    <button type="button" class="cfg-btn cfg-btn-remover-link" id="btn-remover-telefone" style="display: none;">
+                                        Remover
+                                    </button>
+                                    <button type="button" class="cfg-btn cfg-btn-secundario" id="btn-abrir-modal-trocar-telefone">
+                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                        </svg>
+                                        <span id="label-btn-trocar-telefone">Alterar WhatsApp</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="cfg-dica-campo">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                </svg>
+                                <span>Ao cadastrar seu WhatsApp, compradores poderão iniciar conversas diretamente pelo app nos seus anúncios.</span>
+                            </div>
+                        </div>
+                    </div>
                 </section>
 
                 <!-- SEGURANÇA -->
                 <section class="cfg-painel" id="painel-seguranca" role="tabpanel">
+                    <!-- CARD EXCLUSIVO: E-MAIL DE ACESSO -->
+                    <div class="cfg-card" id="card-email-secao" style="margin-bottom: 24px;">
+                        <h2>E-mail de acesso</h2>
+                        <p class="cfg-desc">Endereço de e-mail utilizado para login, avisos de compras/vendas e segurança.</p>
+
+                        <div class="cfg-campo cheio">
+                            <label class="cfg-campo-label" for="cfg-email-mascarado">E-mail atual cadastrado</label>
+                            <div class="cfg-input-acao-linha">
+                                <div class="cfg-input-display">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-secondary); flex-shrink: 0;">
+                                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                        <polyline points="22,6 12,13 2,6"></polyline>
+                                    </svg>
+                                    <span class="cfg-email-valor" id="cfg-email-mascarado">...</span>
+                                </div>
+                                <button type="button" class="cfg-btn cfg-btn-secundario" id="btn-abrir-modal-trocar-email">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                    </svg>
+                                    <span>Alterar e-mail</span>
+                                </button>
+                            </div>
+                            <div class="cfg-dica-campo">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                </svg>
+                                <span>Para alterar seu e-mail, é exigida confirmação com senha atual e código enviado ao novo endereço.</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <form class="cfg-card" id="form-senha" novalidate>
                         <h2>Alterar senha</h2>
                         <p class="cfg-desc">Use pelo menos 8 caracteres, misturando letras e números.</p>
@@ -672,6 +756,328 @@
             <div class="cfg-acoes">
                 <button type="button" class="cfg-btn cfg-btn-neutro" id="cfg-modal-cancelar">Cancelar</button>
                 <button type="button" class="cfg-btn cfg-btn-perigo" id="cfg-modal-confirmar">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Alteração do Nome de Usuário (@) -->
+    <div class="cfg-modal-fundo" id="modal-alterar-username" role="dialog" aria-modal="true" aria-labelledby="modal-username-titulo">
+        <div class="cfg-modal cfg-modal-lg">
+            <button type="button" class="cfg-modal-close" id="btn-fechar-modal-alterar-username" aria-label="Fechar">&times;</button>
+            
+            <!-- Fase 1: Digitação do Novo Username -->
+            <div id="username-modal-fase-edicao">
+                <div class="cfg-modal-header-icone">
+                    <div class="cfg-modal-icon-badge neutro">
+                        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </div>
+                    <h3 id="modal-username-titulo">Alterar nome de usuário</h3>
+                    <p class="cfg-modal-subdesc">Escolha seu novo @ exclusivo. O identificador atual será desvinculado da sua conta.</p>
+                </div>
+
+                <div class="cfg-campo" style="margin-top: 18px;">
+                    <label for="input-modal-novo-username">Novo nome de usuário (@)</label>
+                    <div class="cfg-input-com-prefixo">
+                        <span class="cfg-prefixo-arroba">@</span>
+                        <input type="text" id="input-modal-novo-username" class="cfg-input cfg-input-arroba" maxlength="20" placeholder="novousername" autocomplete="off" spellcheck="false">
+                        <div class="cfg-status-indicador" id="status-indicador-username"></div>
+                    </div>
+                    <span class="cfg-erro" id="erro-modal-username"></span>
+                    <div id="feedback-disp-username" class="cfg-feedback-validacao"></div>
+                </div>
+
+                <!-- Requisitos e Regra dos 30 dias -->
+                <div class="cfg-regras-lista">
+                    <div class="cfg-regra-item" id="regra-formato">
+                        <span class="cfg-regra-dot">•</span>
+                        <span>3 a 20 caracteres (apenas letras minúsculas, números, . ou _)</span>
+                    </div>
+                    <div class="cfg-regra-item" id="regra-simbolos">
+                        <span class="cfg-regra-dot">•</span>
+                        <span>Não pode começar nem terminar com símbolos</span>
+                    </div>
+                    <div class="cfg-regra-item" id="regra-disponivel">
+                        <span class="cfg-regra-dot">•</span>
+                        <span>Disponível e não reservado pelo sistema</span>
+                    </div>
+                </div>
+
+                <div class="cfg-modal-alerta-box">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                    <span><strong>Regra de segurança:</strong> Você só pode alterar o nome de usuário uma vez a cada <strong>30 dias</strong>.</span>
+                </div>
+
+                <div class="cfg-acoes" style="margin-top: 24px;">
+                    <button type="button" class="cfg-btn cfg-btn-neutro" id="btn-cancelar-modal-alterar-username">Cancelar</button>
+                    <button type="button" class="cfg-btn cfg-btn-primario" id="btn-avancar-modal-alterar-username" disabled>Continuar</button>
+                </div>
+            </div>
+
+            <!-- Fase 2: Confirmação Intencional -->
+            <div id="username-modal-fase-confirmacao" style="display: none;">
+                <div class="cfg-modal-icon-badge aviso">
+                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                </div>
+                <h3>Confirmar novo @</h3>
+                <p class="cfg-modal-destaque-texto">
+                    Seu perfil e links antigos passarão a usar <strong id="modal-preview-novo-username">@novo</strong>.
+                </p>
+
+                <div class="cfg-modal-info-box">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    <span>Ao confirmar, você <strong>não poderá alterar seu nome de usuário novamente pelos próximos 30 dias</strong>.</span>
+                </div>
+
+                <p class="cfg-modal-pergunta">Deseja realmente confirmar esta alteração?</p>
+
+                <div class="cfg-acoes">
+                    <button type="button" class="cfg-btn cfg-btn-neutro" id="btn-voltar-modal-alterar-username">Voltar</button>
+                    <button type="button" class="cfg-btn cfg-btn-primario" id="btn-confirmar-modal-alterar-username">Sim, alterar @</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Alteração Segura de E-mail em Etapas -->
+    <div class="cfg-modal-fundo" id="modal-alterar-email" role="dialog" aria-modal="true" aria-labelledby="modal-email-titulo">
+        <div class="cfg-modal cfg-modal-lg">
+            <button type="button" class="cfg-modal-close" id="btn-fechar-modal-alterar-email" aria-label="Fechar">&times;</button>
+
+            <!-- Stepper Visual -->
+            <div class="cfg-stepper">
+                <div class="cfg-step-item ativo" id="step-indicador-1">1. Senha</div>
+                <div class="cfg-step-item" id="step-indicador-2">2. Novo e-mail</div>
+                <div class="cfg-step-item" id="step-indicador-3">3. Código</div>
+            </div>
+
+            <!-- PASSO 1: Reautenticação com Senha Atual -->
+            <div id="email-step-1" class="cfg-email-step-pane">
+                <div class="cfg-modal-header-icone">
+                    <div class="cfg-modal-icon-badge neutro">
+                        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                    </div>
+                    <h3 id="modal-email-titulo">Confirme sua senha</h3>
+                    <p class="cfg-modal-subdesc">Por motivos de segurança, informe sua senha atual para autorizar a alteração de e-mail.</p>
+                </div>
+
+                <div class="cfg-campo" style="margin-top: 18px;">
+                    <label for="email-input-senha-atual">Senha atual</label>
+                    <div class="cfg-senha-wrap">
+                        <input type="password" id="email-input-senha-atual" class="cfg-input" autocomplete="current-password" placeholder="Digite sua senha">
+                        <button type="button" class="cfg-ver-senha" data-alvo="email-input-senha-atual">Mostrar</button>
+                    </div>
+                    <span class="cfg-erro" id="erro-email-senha-atual"></span>
+                </div>
+
+                <div class="cfg-acoes" style="margin-top: 24px;">
+                    <button type="button" class="cfg-btn cfg-btn-neutro" id="btn-cancelar-modal-email">Cancelar</button>
+                    <button type="button" class="cfg-btn cfg-btn-primario" id="btn-avancar-email-step-1">Continuar</button>
+                </div>
+            </div>
+
+            <!-- PASSO 2: Digitação e Validação do Novo E-mail -->
+            <div id="email-step-2" class="cfg-email-step-pane" style="display: none;">
+                <div class="cfg-modal-header-icone">
+                    <div class="cfg-modal-icon-badge neutro">
+                        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                    </div>
+                    <h3>Novo e-mail de acesso</h3>
+                    <p class="cfg-modal-subdesc">Digite o novo endereço de e-mail que passará a ser a chave de login da sua conta.</p>
+                </div>
+
+                <div class="cfg-campo" style="margin-top: 18px;">
+                    <label for="email-input-novo-email">Novo e-mail</label>
+                    <input type="email" id="email-input-novo-email" class="cfg-input" placeholder="exemplo@gmail.com" autocomplete="email">
+                    <span class="cfg-erro" id="erro-email-novo"></span>
+                </div>
+
+                <div class="cfg-modal-alerta-box">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                    <span>Enviaremos um código de 6 dígitos para o novo endereço para confirmar que você tem acesso a ele.</span>
+                </div>
+
+                <div class="cfg-acoes" style="margin-top: 24px;">
+                    <button type="button" class="cfg-btn cfg-btn-neutro" id="btn-voltar-email-step-2">Voltar</button>
+                    <button type="button" class="cfg-btn cfg-btn-primario" id="btn-avancar-email-step-2">Enviar código</button>
+                </div>
+            </div>
+
+            <!-- PASSO 3: Confirmação com Código OTP de 6 Dígitos -->
+            <div id="email-step-3" class="cfg-email-step-pane" style="display: none;">
+                <div class="cfg-modal-header-icone">
+                    <div class="cfg-modal-icon-badge sucesso">
+                        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                    </div>
+                    <h3>Digite o código de verificação</h3>
+                    <p class="cfg-modal-subdesc">
+                        Enviamos um código de 6 dígitos para <strong id="email-label-destinatario">novo@email.com</strong>.
+                    </p>
+                </div>
+
+                <div class="cfg-campo" style="margin-top: 18px; text-align: center;">
+                    <label for="email-input-codigo-otp" style="text-align: center; display: block;">Código de 6 dígitos</label>
+                    <input type="text" id="email-input-codigo-otp" class="cfg-input cfg-input-otp" maxlength="6" inputmode="numeric" placeholder="000000" autocomplete="one-time-code">
+                    <span class="cfg-erro" id="erro-email-codigo" style="text-align: center; display: block;"></span>
+                </div>
+
+                <div style="text-align: center; margin-top: 12px;">
+                    <span style="font-size: 13px; color: var(--text-secondary);">Não recebeu o código?</span>
+                    <button type="button" id="btn-reenviar-codigo-email" class="cfg-link-reenviar" style="background: none; border: none; color: var(--primary); font-weight: 700; cursor: pointer; text-decoration: underline; margin-left: 4px;">Reenviar código</button>
+                </div>
+
+                <div class="cfg-modal-info-box" style="margin-top: 16px;">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span>O código expira em <strong>15 minutos</strong>. Após a confirmação, seu e-mail antigo receberá um aviso de segurança.</span>
+                </div>
+
+                <div class="cfg-acoes" style="margin-top: 24px;">
+                    <button type="button" class="cfg-btn cfg-btn-neutro" id="btn-voltar-email-step-3">Voltar</button>
+                    <button type="button" class="cfg-btn cfg-btn-primario" id="btn-confirmar-email-step-3">Confirmar alteração</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================================
+         MODAL EXCLUSIVO: ALTERAR / CADASTRAR WHATSAPP (COM CONFIRMAÇÃO)
+         ========================================================== -->
+    <div class="cfg-modal-fundo" id="modal-alterar-telefone" role="dialog" aria-modal="true" aria-labelledby="modal-telefone-titulo">
+        <div class="cfg-modal cfg-modal-lg">
+            <button type="button" class="cfg-modal-close" id="btn-fechar-modal-alterar-telefone" aria-label="Fechar">&times;</button>
+
+            <!-- FASE 1: DIGITAÇÃO DO NÚMERO -->
+            <div id="telefone-modal-fase-edicao">
+                <div class="cfg-modal-header-icone">
+                    <div class="cfg-modal-icon-badge sucesso">
+                        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                        </svg>
+                    </div>
+                    <h3 id="modal-telefone-titulo">WhatsApp / Celular</h3>
+                </div>
+
+                <p class="cfg-modal-subdesc">Informe seu número de celular com DDD para que compradores possam entrar em contato com você via WhatsApp.</p>
+
+                <div class="cfg-campo" style="margin-top: 18px;">
+                    <label for="input-modal-novo-telefone">Número com DDD</label>
+                    <div class="cfg-input-prefix-wrap">
+                        <span class="cfg-prefix-badge">BR +55</span>
+                        <input type="tel" id="input-modal-novo-telefone" class="cfg-input cfg-input-com-badge" placeholder="(89) 99999-9999" maxlength="15" autocomplete="tel" inputmode="numeric">
+                        <div class="cfg-status-indicador" id="status-indicador-telefone"></div>
+                    </div>
+                    <span class="cfg-erro" id="erro-modal-telefone"></span>
+                </div>
+
+                <div class="cfg-regras-lista" style="margin-top: 14px;">
+                    <div class="cfg-regra-item" id="regra-telefone-ddd">
+                        <span class="cfg-regra-dot">○</span>
+                        <span>DDD válido do Brasil (11 a 99)</span>
+                    </div>
+                    <div class="cfg-regra-item" id="regra-telefone-formato">
+                        <span class="cfg-regra-dot">○</span>
+                        <span>Celular de 9 dígitos (iniciando em 9)</span>
+                    </div>
+                </div>
+
+                <div class="cfg-modal-acoes" style="margin-top: 24px;">
+                    <button type="button" class="cfg-btn cfg-btn-neutro" id="btn-cancelar-modal-alterar-telefone">Cancelar</button>
+                    <button type="button" class="cfg-btn cfg-btn-primario" id="btn-avancar-modal-telefone" disabled>Avançar</button>
+                </div>
+            </div>
+
+            <!-- FASE 2: CONFIRMAÇÃO DO NÚMERO -->
+            <div id="telefone-modal-fase-confirmacao" style="display: none;">
+                <div class="cfg-modal-header-icone">
+                    <div class="cfg-modal-icon-badge aviso">
+                        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                    </div>
+                    <h3 id="modal-telefone-titulo-conf">Confirmar número de WhatsApp</h3>
+                </div>
+
+                <p class="cfg-modal-destaque-texto">
+                    O número <strong id="modal-preview-novo-telefone" style="color: var(--primary);">(89) 99999-9999</strong> será associado à sua conta.
+                </p>
+
+                <div class="cfg-modal-info-box">
+                    <div class="cfg-modal-info-item">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                        <span>O botão "Conversar no WhatsApp" aparecerá nos seus anúncios e no seu perfil público.</span>
+                    </div>
+                    <div class="cfg-modal-info-item">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        <span>Você pode atualizar ou remover este número a qualquer momento.</span>
+                    </div>
+                </div>
+
+                <p class="cfg-modal-pergunta">Deseja realmente salvar este número para contato?</p>
+
+                <div class="cfg-modal-acoes">
+                    <button type="button" class="cfg-btn cfg-btn-secundario" id="btn-voltar-modal-telefone">Voltar</button>
+                    <button type="button" class="cfg-btn cfg-btn-primario" id="btn-confirmar-modal-telefone">Confirmar e salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE CONFIRMAÇÃO DE REMOÇÃO DE WHATSAPP -->
+    <div class="cfg-modal-fundo" id="modal-remover-telefone" role="dialog" aria-modal="true" aria-labelledby="modal-remover-telefone-titulo">
+        <div class="cfg-modal">
+            <div class="cfg-modal-header-icone">
+                <div class="cfg-modal-icon-badge perigo">
+                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        <line x1="10" y1="11" x2="10" y2="17"></line>
+                        <line x1="14" y1="11" x2="14" y2="17"></line>
+                    </svg>
+                </div>
+                <h3 id="modal-remover-telefone-titulo">Remover WhatsApp</h3>
+            </div>
+            <p class="cfg-modal-subdesc" style="text-align: center; margin-top: 8px;">
+                Ao remover seu WhatsApp, os botões de contato direto nos seus anúncios ficarão ocultos para os compradores.
+            </p>
+            <p class="cfg-modal-pergunta" style="text-align: center; margin-top: 14px;">
+                Deseja realmente desvincular o número atual (<strong id="modal-remover-telefone-preview">...</strong>)?
+            </p>
+            <div class="cfg-modal-acoes" style="justify-content: center; margin-top: 20px;">
+                <button type="button" class="cfg-btn cfg-btn-neutro" id="btn-cancelar-remover-telefone">Cancelar</button>
+                <button type="button" class="cfg-btn cfg-btn-perigo" id="btn-confirmar-remover-telefone">Sim, remover WhatsApp</button>
             </div>
         </div>
     </div>

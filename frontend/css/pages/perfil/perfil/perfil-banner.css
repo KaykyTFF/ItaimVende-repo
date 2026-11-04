@@ -190,3 +190,60 @@
     box-shadow: 0 4px 10px rgba(68, 189, 50, 0.18);
 }
 
+
+/* Botão Editar Perfil no Canto Superior Direito do Banner */
+.btn-editar-perfil-banner {
+    position: absolute;
+    top: 24px;
+    right: 28px;
+    z-index: 4;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #ffffff;
+    border: 1.5px solid #CBD5E1;
+    color: #1E293B;
+    font-size: 13.5px;
+    font-weight: 700;
+    padding: 8px 18px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    font-family: inherit;
+    text-decoration: none;
+}
+
+.btn-editar-perfil-banner:hover {
+    border-color: #44BD32;
+    color: #44BD32;
+    background-color: #F0FDF4;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(68, 189, 50, 0.2);
+}
+
+[data-theme="dark"] .btn-editar-perfil-banner,
+.dark-theme .btn-editar-perfil-banner {
+    background-color: #1F2831;
+    border-color: #334155;
+    color: #F1F5F9;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="dark"] .btn-editar-perfil-banner:hover,
+.dark-theme .btn-editar-perfil-banner:hover {
+    background-color: rgba(68, 189, 50, 0.15);
+    border-color: #44BD32;
+    color: #4ADE80;
+    box-shadow: 0 4px 12px rgba(68, 189, 50, 0.25);
+}
+
+@media (max-width: 680px) {
+    .btn-editar-perfil-banner {
+        top: 14px;
+        right: 14px;
+        padding: 6px 13px;
+        font-size: 12.5px;
+        gap: 6px;
+    }
+}

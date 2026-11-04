@@ -26,6 +26,7 @@ import reportRoutes from './routes/report/index.js';
 import systemRoutes from './routes/system/index.js';
 import addressRoutes from './routes/address/index.js';
 import notificationRoutes from './routes/notification/index.js';
+import accountRoutes from './routes/account/account.routes.js';
 import { UPLOAD_DIR, UPLOAD_PERFIL_DIR, UPLOAD_VENDAS_DIR } from './config/upload.js';
 import { storageAdapter } from './adapters/storage/index.js';
 import swaggerUi from 'swagger-ui-express';
@@ -250,6 +251,7 @@ v1Router.get('/health', (req, res) => {
 });
 
 v1Router.use('/auth', authRoutes);
+v1Router.use('/account', accountRoutes);
 v1Router.use('/products', productRoutes);
 v1Router.use('/categories', categoryRoutes);
 v1Router.use('/orders', orderRoutes);

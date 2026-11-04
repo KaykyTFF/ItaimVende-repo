@@ -1,6 +1,8 @@
 import { Router } from 'express';
 import rateLimit from 'express-rate-limit';
 import { ENV } from '../../config/env.js';
+import { changeUsername } from '../../controllers/account/account.controller.js';
+import { changeUsernameSchema } from '../../schemas/account/account.schema.js';
 import {
   register,
   login,
@@ -64,6 +66,7 @@ router.get('/profile', authenticateToken, getProfile);
 router.get('/user/:id', getPublicProfile);
 router.put('/me', authenticateToken, validate(updateProfileSchema), updateProfile);
 router.put('/profile', authenticateToken, validate(updateProfileSchema), updateProfile);
+router.patch('/username', authenticateToken, validate(changeUsernameSchema), changeUsername);
 router.put('/password', authenticateToken, validate(changePasswordSchema), changePassword);
 router.put('/change-password', authenticateToken, validate(changePasswordSchema), changePassword);
 router.delete('/me', authenticateToken, deleteAccount);

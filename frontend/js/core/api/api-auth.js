@@ -202,6 +202,80 @@
         },
 
         /**
+         * Altera exclusivamente o nome de usuário (@) com controle de 30 dias
+         */
+        async alterarUsername(username) {
+            return getCore().requisicao('/account/username', {
+                method: 'PATCH',
+                headers: getCore().obterHeaders(true),
+                body: JSON.stringify({ username: (username || '').trim().toLowerCase() })
+            });
+        },
+
+        /**
+         * Verifica disponibilidade e validação de nome de usuário (@) em tempo real
+         */
+        async verificarDisponibilidadeUsername(username) {
+            const clean = encodeURIComponent((username || '').trim().toLowerCase());
+            return getCore().requisicao('/account/username/check?username=' + clean, {
+                method: 'GET',
+                headers: getCore().obterHeaders(true)
+            });
+        },
+
+        /**
+         * Solicita a troca de e-mail com reautenticação por senha atual
+         */
+        async solicitarTrocaEmail(currentPassword, newEmail) {
+            return getCore().requisicao('/account/email/change-request', {
+                method: 'POST',
+                headers: getCore().obterHeaders(true),
+                body: JSON.stringify({
+                    currentPassword,
+                    newEmail: (newEmail || '').trim().toLowerCase()
+                })
+            });
+        },
+
+        /**
+         * Confirma a alteração do e-mail com código OTP de 6 dígitos
+         */
+        async confirmarTrocaEmail(newEmail, code) {
+            return getCore().requisicao('/account/email/confirm', {
+                method: 'POST',
+                headers: getCore().obterHeaders(true),
+                body: JSON.stringify({
+                    newEmail: (newEmail || '').trim().toLowerCase(),
+                    code: (code || '').trim()
+                })
+            });
+        },
+
+        /**
+         * Altera ou remove exclusivamente o número de WhatsApp/celular da conta
+         */
+        async alterarTelefone(phone) {
+            const resposta = await getCore().requisicao('/account/phone', {
+                method: 'PATCH',
+                headers: getCore().obterHeaders(true),
+                body: JSON.stringify({
+                    phone: phone ? String(phone).trim() : null
+                })
+            });
+            if (resposta && resposta.user) {
+                try {
+                    const atual = JSON.parse(localStorage.getItem('itaim_usuario_logado') || '{}');
+                    const fundido = { ...atual, ...resposta.user };
+                    localStorage.setItem('itaim_usuario_logado', JSON.stringify(fundido));
+                    if (window.ItaimSessao && typeof window.ItaimSessao.atualizarDadosUsuario === 'function') {
+                        window.ItaimSessao.atualizarDadosUsuario(fundido.email, fundido);
+                    }
+                } catch(e) {}
+            }
+            return resposta;
+        },
+
+        /**
          * Altera a senha do usuário autenticado no backend
          */
         async alterarSenha(currentPassword, newPassword) {

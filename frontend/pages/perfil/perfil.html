@@ -341,6 +341,14 @@
 
         <!-- 1. BANNER SUPERIOR (CABEÇALHO DO PERFIL) -->
         <div class="perfil-banner-card">
+            <!-- Botão Editar Perfil no Canto Superior Direito -->
+            <button type="button" id="btn-abrir-modal-editar-perfil" class="btn-editar-perfil-banner" style="display: none;" title="Editar Perfil">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                </svg>
+                <span>Editar Perfil</span>
+            </button>
             <!-- Estampa Desktop: listras completas de ponta a ponta na altura do banner -->
             <svg class="perfil-banner-stripes perfil-banner-stripes-desktop" viewBox="0 0 400 200" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" aria-hidden="true">
                 <!-- 1. Linha diagonal cinza sutil -->
@@ -385,12 +393,8 @@
                         <h1 class="perfil-nome-titulo" id="perfil-nome-display" style="margin: 0;">Carregando...</h1>
                     </div>
                     <span id="perfil-username-display" style="font-size: 13.5px; font-weight: 600; color: #64748B;">@...</span>
-                    <div class="perfil-bio-wrap" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 2px 0 6px;">
+                    <div class="perfil-bio-wrap" style="margin: 2px 0 6px;">
                         <p id="perfil-bio-display" style="font-size: 13.5px; color: #475569; margin: 0; line-height: 1.4;"></p>
-                        <button type="button" id="btn-editar-bio-rapido" style="display: none; align-items: center; gap: 5px; background: #F1F5F9; border: 1px solid #CBD5E1; color: #334155; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 6px; cursor: pointer; transition: all 0.2s;" title="Editar Biografia">
-                            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                            <span id="txt-btn-bio">Editar Bio</span>
-                        </button>
                     </div>
 
                     <div class="perfil-banner-detalhes">
@@ -554,26 +558,63 @@
             </div>
         </section>
     
-        <!-- Modal de Edição Rápida de Bio -->
-        <div id="modal-editar-bio" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); z-index: 9999; align-items: center; justify-content: center; padding: 16px; backdrop-filter: blur(2px);">
-            <div style="background: #FFFFFF; border-radius: 18px; max-width: 480px; width: 100%; padding: 26px; box-shadow: 0 16px 36px rgba(0, 0, 0, 0.2);">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                    <h3 style="font-size: 18px; font-weight: 800; color: #1E272E; margin: 0; display: flex; align-items: center; gap: 8px;">
-                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#44BD32" stroke-width="2.2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                        <span>Editar Biografia</span>
-                    </h3>
-                    <button type="button" id="btn-fechar-modal-bio" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #64748B; padding: 0; line-height: 1;" aria-label="Fechar">&times;</button>
+        <!-- Modal de Edição de Perfil (Dados da Conta) -->
+        <div id="modal-editar-perfil" class="modal-editar-perfil-fundo" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="modal-perfil-titulo">
+            <div class="modal-editar-perfil-card">
+                <div class="modal-perfil-cabecalho">
+                    <div>
+                        <h2 id="modal-perfil-titulo" class="modal-perfil-titulo">Dados da conta</h2>
+                        <p class="modal-perfil-desc">Essas informações aparecem para compradores e vendedores nos seus anúncios.</p>
+                    </div>
+                    <button type="button" id="btn-fechar-modal-editar-perfil" class="modal-perfil-btn-fechar" aria-label="Fechar modal">&times;</button>
                 </div>
-                <p style="font-size: 13.5px; color: #64748B; margin-bottom: 14px; line-height: 1.4;">Compartilhe uma breve apresentação com a comunidade do Itaim Vende. Sua bio fica visível no seu perfil público e em seus anúncios.</p>
-                <textarea id="modal-textarea-bio" maxlength="300" rows="4" style="width: 100%; box-sizing: border-box; padding: 12px 14px; border: 1.5px solid #CBD5E1; border-radius: 12px; font-family: inherit; font-size: 14px; color: #1E272E; outline: none; resize: vertical; transition: border-color 0.2s;" placeholder="Ex: Vendedor verificado em Paulistana. Negocio eletrônicos e produtos seminovos com entrega a combinar."></textarea>
-                <div style="display: flex; justify-content: space-between; align-items: center; margin: 8px 0 20px;">
-                    <span style="font-size: 12px; color: #94A3B8;">Máximo de 300 caracteres</span>
-                    <span id="modal-contador-bio" style="font-size: 12px; color: #64748B; font-weight: 700;">0/300</span>
-                </div>
-                <div style="display: flex; justify-content: flex-end; gap: 10px;">
-                    <button type="button" id="btn-cancelar-modal-bio" style="background: #F1F5F9; color: #475569; border: 1px solid #CBD5E1; padding: 10px 18px; border-radius: 10px; font-size: 13.5px; font-weight: 700; cursor: pointer; transition: all 0.2s;">Cancelar</button>
-                    <button type="button" id="btn-salvar-modal-bio" style="background: #44BD32; color: #FFFFFF; border: none; padding: 10px 22px; border-radius: 10px; font-size: 13.5px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(68, 189, 50, 0.28); transition: all 0.2s;">Salvar Biografia</button>
-                </div>
+
+                <form id="form-modal-editar-perfil" novalidate>
+                    <!-- FOTO DE PERFIL -->
+                    <div class="modal-avatar-box">
+                        <div class="modal-avatar-preview-wrap">
+                            <img src="../../assets/icons/icon-user.png" alt="Foto de perfil" id="modal-perfil-avatar-preview" class="modal-avatar-img" onerror="this.onerror=null; this.src='../../assets/icons/icon-user.png';">
+                        </div>
+                        <div class="modal-avatar-info">
+                            <span class="modal-avatar-titulo">Foto do Perfil</span>
+                            <span class="modal-avatar-sub">JPG, PNG ou WebP. Corte quadrado automático (1:1).</span>
+                            <div class="modal-avatar-botoes">
+                                <label for="modal-input-foto-perfil" class="modal-btn-avatar-upload" tabindex="0">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                                    Alterar foto
+                                </label>
+                                <input type="file" id="modal-input-foto-perfil" accept="image/*" style="display: none;">
+                                <button type="button" id="modal-btn-remover-foto-perfil" class="modal-btn-avatar-remover">
+                                    Remover
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CAMPOS: NOME COMPLETO & BIOGRAFIA -->
+                    <div class="modal-perfil-campos">
+                        <div class="modal-perfil-campo">
+                            <label for="modal-input-nome-perfil" class="modal-perfil-label">Nome completo</label>
+                            <input type="text" id="modal-input-nome-perfil" class="modal-perfil-input" autocomplete="name" maxlength="80" placeholder="Seu nome completo">
+                            <span class="modal-perfil-erro" id="modal-erro-nome-perfil"></span>
+                        </div>
+
+                        <div class="modal-perfil-campo">
+                            <label for="modal-textarea-bio-perfil" class="modal-perfil-label">Biografia / Sobre você</label>
+                            <textarea id="modal-textarea-bio-perfil" class="modal-perfil-input modal-perfil-textarea" maxlength="300" rows="3" placeholder="Conte um pouco sobre você, o que costuma vender ou suas preferências de negociação..."></textarea>
+                            <div class="modal-perfil-bio-footer">
+                                <span class="modal-perfil-bio-dica">Máximo de 300 caracteres. Visível no seu perfil.</span>
+                                <span id="modal-contador-bio-perfil" class="modal-perfil-bio-contador">0/300</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BOTÕES DE AÇÃO -->
+                    <div class="modal-perfil-acoes">
+                        <button type="button" id="btn-cancelar-modal-editar-perfil" class="modal-btn-cancelar">Cancelar</button>
+                        <button type="submit" id="btn-salvar-modal-editar-perfil" class="modal-btn-salvar">Salvar alterações</button>
+                    </div>
+                </form>
             </div>
         </div>
     </main>

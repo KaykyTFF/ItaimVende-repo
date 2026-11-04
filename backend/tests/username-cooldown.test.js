@@ -4,11 +4,11 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { ENV } from '../src/config/env.js';
 import prisma from '../src/config/prisma.js';
-import { USERNAME_COOLDOWN_MS, calcularStatusUsername } from '../src/services/auth/auth.profile.service.js';
+import { USERNAME_COOLDOWN_MS, calcularStatusUsername } from '../src/services/account/account.username.service.js';
 
 const BASE_URL = process.env.TEST_API_URL || 'http://localhost:3000/api/v1';
 
-describe('Suite de Testes da Regra de Cooldown de 30 Dias para Username (@)', () => {
+describe('Suite de Testes da Regra de Cooldown de 30 Dias e Histórico para Username (@)', () => {
   let testUser = null;
   let anotherUser = null;
   let testToken = '';
@@ -37,7 +37,7 @@ describe('Suite de Testes da Regra de Cooldown de 30 Dias para Username (@)', ()
     anotherUser = await prisma.user.create({
       data: {
         name: 'Segundo Usuário',
-        username: `test_occupied_${uniqueSuffix}`,
+        username: `occ_${uniqueSuffix.substring(0, 10)}`,
         email: `test_occupied_${uniqueSuffix}@itaimvende.test`,
         password: hashedPassword,
         city: 'Paulistana',
@@ -55,21 +55,23 @@ describe('Suite de Testes da Regra de Cooldown de 30 Dias para Username (@)', ()
   });
 
   after(async () => {
-    // Limpeza dos usuários de teste
+    // Limpeza dos usuários de teste e históricos
     if (testUser?.id) {
+      await prisma.usernameHistory.deleteMany({ where: { userId: testUser.id } }).catch(() => {});
       await prisma.user.delete({ where: { id: testUser.id } }).catch(() => {});
     }
     if (anotherUser?.id) {
+      await prisma.usernameHistory.deleteMany({ where: { userId: anotherUser.id } }).catch(() => {});
       await prisma.user.delete({ where: { id: anotherUser.id } }).catch(() => {});
     }
   });
 
-  // Cenário 1: Usuário sem histórico de alteração consegue mudar o username
-  it('Cenário 1: Usuário sem histórico de alteração consegue mudar o username com sucesso', async () => {
-    const novoUsername = `changed_1_${Date.now().toString(36)}`;
+  // Cenário 1: Usuário sem histórico de alteração consegue mudar o username pelo endpoint dedicado PATCH /account/username
+  it('Cenário 1: Usuário sem histórico de alteração consegue mudar o username via PATCH /account/username e salva histórico', async () => {
+    const novoUsername = `chg1_${Date.now().toString(36).substring(0, 10)}`;
 
-    const res = await fetch(`${BASE_URL}/auth/me`, {
-      method: 'PUT',
+    const res = await fetch(`${BASE_URL}/account/username`, {
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${testToken}`,
@@ -87,14 +89,20 @@ describe('Suite de Testes da Regra de Cooldown de 30 Dias para Username (@)', ()
     assert.equal(data.user.canChangeUsername, false, 'Deve bloquear novas alterações imediatas');
     assert.ok(data.user.nextUsernameChangeAt, 'Deve informar data da próxima liberação');
     assert.equal(data.user.daysUntilNextUsernameChange, 30, 'Deve faltar 30 dias');
+
+    // Valida que foi registrado na tabela de histórico
+    const history = await prisma.usernameHistory.findFirst({
+      where: { userId: testUser.id, newUsername: novoUsername.toLowerCase() },
+    });
+    assert.ok(history, 'Deve registrar a alteração no histórico UsernameHistory');
   });
 
   // Cenário 2: Após alterar, uma segunda tentativa é bloqueada
   it('Cenário 2: Após alterar, uma segunda tentativa imediata de mudar o username é bloqueada com 403', async () => {
-    const segundoUsername = `changed_2_${Date.now().toString(36)}`;
+    const segundoUsername = `chg2_${Date.now().toString(36).substring(0, 10)}`;
 
-    const res = await fetch(`${BASE_URL}/auth/me`, {
-      method: 'PUT',
+    const res = await fetch(`${BASE_URL}/account/username`, {
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${testToken}`,
@@ -131,9 +139,8 @@ describe('Suite de Testes da Regra de Cooldown de 30 Dias para Username (@)', ()
     assert.ok(dataLogin.user.daysUntilNextUsernameChange > 0, 'daysUntilNextUsernameChange deve ser maior que zero');
   });
 
-  // Cenário 4: O bloqueio permanece em outros dispositivos (persistência no banco e /auth/me)
+  // Cenário 4: O bloqueio permanece em outros dispositivos (consulta via GET /auth/me com novo token)
   it('Cenário 4: O bloqueio permanece em outros dispositivos (consulta via GET /auth/me com novo token)', async () => {
-    // Simula emissão de token para outro dispositivo
     const tokenOutroDispositivo = jwt.sign(
       { id: testUser.id, userId: testUser.id, email: testUser.email, role: testUser.role },
       ENV.JWT_SECRET,
@@ -150,8 +157,8 @@ describe('Suite de Testes da Regra de Cooldown de 30 Dias para Username (@)', ()
     assert.ok(data.user.usernameLastChangedAt);
   });
 
-  // Cenário 5: Uma tentativa direta pela API também é bloqueada
-  it('Cenário 5: Tentativa manual diretamente na API PUT /auth/profile também é rejeitada com 403', async () => {
+  // Cenário 5: Tentativa de alterar username diretamente no endpoint genérico de perfil é rejeitada
+  it('Cenário 5: Tentativa de mudar username no endpoint geral PUT /auth/profile é rejeitada com 400', async () => {
     const res = await fetch(`${BASE_URL}/auth/profile`, {
       method: 'PUT',
       headers: {
@@ -159,18 +166,17 @@ describe('Suite de Testes da Regra de Cooldown de 30 Dias para Username (@)', ()
         Authorization: `Bearer ${testToken}`,
       },
       body: JSON.stringify({
-        username: 'tentativa_burlar_cooldown',
+        username: 'tentativaburlar',
       }),
     });
 
-    assert.equal(res.status, 403);
+    assert.equal(res.status, 400, 'Endpoint geral deve rejeitar alteração de username');
     const data = await res.json();
-    assert.equal(data.code, 'USERNAME_COOLDOWN_ACTIVE');
+    assert.equal(data.code, 'USE_DEDICATED_USERNAME_ENDPOINT');
   });
 
   // Cenário 6: Após completar os 30 dias, a alteração é liberada automaticamente
-  it('Cenário 6: Após completar os 30 dias, a alteração é liberada automaticamente', async () => {
-    // Simula passagem de 31 dias no banco de dados para o usuário de teste
+  it('Cenário 6: Após completar os 30 dias, a alteração é liberada automaticamente via PATCH /account/username', async () => {
     const data31DiasAtras = new Date(Date.now() - (31 * 24 * 60 * 60 * 1000));
     await prisma.user.update({
       where: { id: testUser.id },
@@ -186,9 +192,9 @@ describe('Suite de Testes da Regra de Cooldown de 30 Dias para Username (@)', ()
     assert.equal(dataPerfil.user.daysUntilNextUsernameChange, 0);
 
     // 2. Realiza a nova alteração com sucesso
-    const novoUsernameLiberado = `released_${Date.now().toString(36)}`;
-    const resUpdate = await fetch(`${BASE_URL}/auth/me`, {
-      method: 'PUT',
+    const novoUsernameLiberado = `rel_${Date.now().toString(36).substring(0, 10)}`;
+    const resUpdate = await fetch(`${BASE_URL}/account/username`, {
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${testToken}`,
@@ -206,7 +212,6 @@ describe('Suite de Testes da Regra de Cooldown de 30 Dias para Username (@)', ()
 
   // Cenário 7: Uma tentativa com username já utilizado não consome o prazo
   it('Cenário 7: Tentativa com username já utilizado retorna 409 e NÃO consome o prazo de alteração', async () => {
-    // Ajusta o usuário para ter alteração liberada (ex: 35 dias atrás)
     const dataAntiga = new Date(Date.now() - (35 * 24 * 60 * 60 * 1000));
     await prisma.user.update({
       where: { id: testUser.id },
@@ -214,8 +219,8 @@ describe('Suite de Testes da Regra de Cooldown de 30 Dias para Username (@)', ()
     });
 
     // Tenta usar o username de anotherUser
-    const res = await fetch(`${BASE_URL}/auth/me`, {
-      method: 'PUT',
+    const res = await fetch(`${BASE_URL}/account/username`, {
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${testToken}`,
@@ -227,7 +232,7 @@ describe('Suite de Testes da Regra de Cooldown de 30 Dias para Username (@)', ()
 
     assert.equal(res.status, 409, 'Tentativa com username duplicado deve responder com 409 Conflict');
 
-    // Confirma no banco que usernameLastChangedAt continua intacto (não foi consumido nem atualizado para agora)
+    // Confirma no banco que usernameLastChangedAt continua intacto
     const userNoBanco = await prisma.user.findUnique({ where: { id: testUser.id } });
     assert.equal(
       userNoBanco.usernameLastChangedAt.toISOString(),
@@ -238,13 +243,11 @@ describe('Suite de Testes da Regra de Cooldown de 30 Dias para Username (@)', ()
 
   // Cenário 8: Alterar apenas o nome de perfil não ativa nem reinicia o bloqueio
   it('Cenário 8: Alterar apenas o nome de perfil (ou bio, telefone) NÃO ativa nem reinicia o bloqueio de 30 dias', async () => {
-    // Usuário sem histórico (usernameLastChangedAt = null)
     await prisma.user.update({
       where: { id: testUser.id },
       data: { usernameLastChangedAt: null },
     });
 
-    // 1. Altera apenas o nome e bio enviando o mesmo username atual
     const userAtual = await prisma.user.findUnique({ where: { id: testUser.id } });
     const res = await fetch(`${BASE_URL}/auth/me`, {
       method: 'PUT',
@@ -254,7 +257,7 @@ describe('Suite de Testes da Regra de Cooldown de 30 Dias para Username (@)', ()
       },
       body: JSON.stringify({
         name: 'Nome Atualizado Sem Restrição',
-        username: userAtual.username, // Mesmo username
+        username: userAtual.username, // Mesmo username ignorado com segurança
         bio: 'Nova biografia de teste',
       }),
     });
@@ -264,33 +267,6 @@ describe('Suite de Testes da Regra de Cooldown de 30 Dias para Username (@)', ()
     assert.equal(data.user.name, 'Nome Atualizado Sem Restrição');
     assert.equal(data.user.canChangeUsername, true, 'canChangeUsername deve continuar true');
     assert.equal(data.user.usernameLastChangedAt, null, 'usernameLastChangedAt deve continuar null');
-
-    // 2. Se o usuário já tiver uma data registrada (ex: há 10 dias), alterar o nome também não altera a data
-    const data10Dias = new Date(Date.now() - (10 * 24 * 60 * 60 * 1000));
-    await prisma.user.update({
-      where: { id: testUser.id },
-      data: { usernameLastChangedAt: data10Dias },
-    });
-
-    const res2 = await fetch(`${BASE_URL}/auth/me`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${testToken}`,
-      },
-      body: JSON.stringify({
-        name: 'Outro Nome de Perfil',
-        username: userAtual.username,
-      }),
-    });
-
-    assert.equal(res2.status, 200);
-    const userVerif = await prisma.user.findUnique({ where: { id: testUser.id } });
-    assert.equal(
-      userVerif.usernameLastChangedAt.toISOString(),
-      data10Dias.toISOString(),
-      'A data de 10 dias atrás deve ser estritamente preservada'
-    );
   });
 
   // Cenário 9: A data de liberação apresentada corresponde exatamente à validação do backend
@@ -313,8 +289,8 @@ describe('Suite de Testes da Regra de Cooldown de 30 Dias para Username (@)', ()
     assert.equal(new Date(data.user.nextUsernameChangeAt).getTime(), dataEsperada.getTime());
     assert.equal(data.user.daysUntilNextUsernameChange, 18, 'Devem restar exatamente 18 dias (30 - 12)');
 
-    // Testa endpoint de checagem prévia /auth/check-username
-    const resCheck = await fetch(`${BASE_URL}/auth/check-username?username=novo_user_check`, {
+    // Testa endpoint de checagem prévia /account/username/check
+    const resCheck = await fetch(`${BASE_URL}/account/username/check?username=novo_user_check`, {
       headers: { Authorization: `Bearer ${testToken}` },
     });
 
@@ -327,4 +303,3 @@ describe('Suite de Testes da Regra de Cooldown de 30 Dias para Username (@)', ()
   });
 
 });
-

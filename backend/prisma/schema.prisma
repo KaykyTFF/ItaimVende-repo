@@ -75,6 +75,9 @@ model User {
   auditLogs       AuditLog[]
   addresses       Address[]
   notifications   Notification[]
+  usernameHistory UsernameHistory[]
+  emailChangeRequests EmailChangeRequest[]
+  phoneHistory    PhoneHistory[]
 
   @@index([email])
   @@index([city, state])
@@ -427,3 +430,52 @@ model AuditLog {
 
   @@index([entity, entityId])
 }
+
+model UsernameHistory {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  oldUsername String?
+  newUsername String
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime @default(now())
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
+model EmailChangeRequest {
+  id               String    @id @default(cuid())
+  userId           String
+  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  oldEmail         String
+  newEmail         String
+  code             String
+  attempts         Int       @default(0)
+  maxAttempts      Int       @default(5)
+  expiresAt        DateTime
+  confirmedAt      DateTime?
+  ipAddress        String?
+  userAgent        String?
+  createdAt        DateTime  @default(now())
+
+  @@index([userId, newEmail])
+  @@index([expiresAt])
+}
+
+model PhoneHistory {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  oldPhone  String?
+  newPhone  String?
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
+
