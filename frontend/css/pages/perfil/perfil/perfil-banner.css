@@ -191,6 +191,57 @@
 }
 
 
+/* ==========================================================================
+   DARK MODE — BANNER DO PERFIL
+   ========================================================================== */
+
+/* Fundo do card no modo escuro */
+[data-theme="dark"] .perfil-banner-card,
+.dark-theme .perfil-banner-card {
+    background-color: #1A2332;
+    border-color: #2D3748;
+    border-bottom-color: #44BD32;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* Textos do banner no modo escuro */
+[data-theme="dark"] .perfil-nome-titulo,
+.dark-theme .perfil-nome-titulo {
+    color: #F1F5F9;
+}
+
+[data-theme="dark"] .perfil-detalhe-item,
+.dark-theme .perfil-detalhe-item {
+    color: #CBD5E1;
+}
+
+[data-theme="dark"] .perfil-detalhe-item svg,
+.dark-theme .perfil-detalhe-item svg {
+    color: #CBD5E1;
+}
+
+/*
+ * Polígonos do SVG decorativo (listras diagonais) no modo escuro.
+ *
+ * Layout de polígonos (desktop e mobile, mesma ordem):
+ *   1º polygon → linha fina cinza  (#cbd5e1 → troca para branco/cinza claro)
+ *   2º polygon → faixa verde       (#44BD32 → mantém)
+ *   3º polygon → bloco escuro      (#1E272E → troca para contraste visível no dark)
+ *   4º polygon → canto verde       (#44BD32 → mantém)
+ */
+
+/* Linha fina cinza: torna branca semi-transparente no dark mode */
+[data-theme="dark"] .perfil-banner-stripes polygon:nth-child(1),
+.dark-theme .perfil-banner-stripes polygon:nth-child(1) {
+    fill: rgba(255, 255, 255, 0.55);
+}
+
+/* Bloco escuro central: troca para um cinza azulado visível no dark */
+[data-theme="dark"] .perfil-banner-stripes polygon:nth-child(3),
+.dark-theme .perfil-banner-stripes polygon:nth-child(3) {
+    fill: #0F172A;
+}
+
 /* Botão Editar Perfil no Canto Superior Direito do Banner */
 .btn-editar-perfil-banner {
     position: absolute;

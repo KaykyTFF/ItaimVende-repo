@@ -1,4 +1,4 @@
-# ☀️ Daily Scrums e Burndown — Sprint 2 (Baseado nos Commits Reais)
+# ☀️ Daily Scrums e Burndown — Sprint 2 
 
 > **Scrum Master:** Giselly  
 > **Canal de Comunicação:** Discord (`#daily-scrum`) & WhatsApp  
