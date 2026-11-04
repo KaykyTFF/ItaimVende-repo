@@ -252,8 +252,8 @@
         },
 
         /**
-         * Altera ou remove exclusivamente o número de WhatsApp/celular da conta
-         */
+          * Altera ou remove exclusivamente o número de WhatsApp/celular da conta (Legado)
+          */
         async alterarTelefone(phone) {
             const resposta = await getCore().requisicao('/account/phone', {
                 method: 'PATCH',
@@ -273,6 +273,81 @@
                 } catch(e) {}
             }
             return resposta;
+        },
+
+        /**
+          * Solicita alteração segura de WhatsApp com envio de código OTP para telefone e e-mail
+          */
+        async solicitarAlteracaoTelefone(currentPassword, newPhone, channel = 'whatsapp') {
+            return getCore().requisicao('/account/phone/change-request', {
+                method: 'POST',
+                headers: getCore().obterHeaders(true),
+                body: JSON.stringify({
+                    currentPassword: currentPassword ? String(currentPassword).trim() : undefined,
+                    newPhone: String(newPhone).trim(),
+                    channel
+                })
+            });
+        },
+
+        /**
+          * Confirma alteração de WhatsApp com código OTP de 6 dígitos
+          */
+        async confirmarAlteracaoTelefone(newPhone, code) {
+            const resposta = await getCore().requisicao('/account/phone/confirm', {
+                method: 'POST',
+                headers: getCore().obterHeaders(true),
+                body: JSON.stringify({
+                    newPhone: String(newPhone).trim(),
+                    code: String(code).trim()
+                })
+            });
+            if (resposta && resposta.user) {
+                try {
+                    const atual = JSON.parse(localStorage.getItem('itaim_usuario_logado') || '{}');
+                    const fundido = { ...atual, ...resposta.user };
+                    localStorage.setItem('itaim_usuario_logado', JSON.stringify(fundido));
+                    if (window.ItaimSessao && typeof window.ItaimSessao.atualizarDadosUsuario === 'function') {
+                        window.ItaimSessao.atualizarDadosUsuario(fundido.email, fundido);
+                    }
+                } catch(e) {}
+            }
+            return resposta;
+        },
+
+        /**
+          * Remove com segurança o número de WhatsApp da conta
+          */
+        async removerTelefoneSeguro(currentPassword) {
+            const resposta = await getCore().requisicao('/account/phone', {
+                method: 'DELETE',
+                headers: getCore().obterHeaders(true),
+                body: JSON.stringify({
+                    currentPassword: currentPassword ? String(currentPassword).trim() : undefined
+                })
+            });
+            if (resposta && resposta.user) {
+                try {
+                    const atual = JSON.parse(localStorage.getItem('itaim_usuario_logado') || '{}');
+                    const fundido = { ...atual, ...resposta.user, phone: null, telefone: null, isPhoneVerified: false, phoneVerifiedAt: null };
+                    localStorage.setItem('itaim_usuario_logado', JSON.stringify(fundido));
+                    if (window.ItaimSessao && typeof window.ItaimSessao.atualizarDadosUsuario === 'function') {
+                        window.ItaimSessao.atualizarDadosUsuario(fundido.email, fundido);
+                    }
+                } catch(e) {}
+            }
+            return resposta;
+        },
+
+        /**
+          * Reverte a alteração de telefone via link de segurança "Não fui eu"
+          */
+        async reverterAlteracaoTelefone(token) {
+            return getCore().requisicao('/account/phone/revert', {
+                method: 'POST',
+                headers: getCore().obterHeaders(false),
+                body: JSON.stringify({ token })
+            });
         },
 
         /**

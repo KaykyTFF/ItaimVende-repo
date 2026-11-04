@@ -82,12 +82,18 @@
 
         // Card de WhatsApp / Celular
         const displayTelefone = $('cfg-telefone-display');
+        const badgeStatusTelefone = $('cfg-telefone-badge-status');
+        const btnVerificarTelefone = $('btn-verificar-telefone');
         const btnAbrirModalTelefone = $('btn-abrir-modal-trocar-telefone');
         const labelBtnTrocarTelefone = $('label-btn-trocar-telefone');
         const btnRemoverTelefone = $('btn-remover-telefone');
+        const boxCooldownTelefone = $('box-status-cooldown-telefone');
+        const textoCooldownTelefone = $('texto-status-cooldown-telefone');
 
         // Modal de Alteração de WhatsApp / Celular
         const modalTelefone = $('modal-alterar-telefone');
+        const stepTelefone1 = $('step-telefone-1');
+        const stepTelefone2 = $('step-telefone-2');
         const btnFecharModalTelefone = $('btn-fechar-modal-alterar-telefone');
         const btnCancelarModalTelefone = $('btn-cancelar-modal-alterar-telefone');
         const btnAvancarModalTelefone = $('btn-avancar-modal-telefone');
@@ -95,20 +101,40 @@
         const btnConfirmarModalTelefone = $('btn-confirmar-modal-telefone');
         const faseEdicaoTelefone = $('telefone-modal-fase-edicao');
         const faseConfirmacaoTelefone = $('telefone-modal-fase-confirmacao');
+
+        // Fase 1: Senha e Novo Telefone
+        const blocoSenhaTelefone = $('bloco-telefone-reautenticacao-senha');
+        const blocoGoogleTelefone = $('bloco-telefone-reautenticacao-google');
+        const inputSenhaTelefone = $('input-modal-telefone-senha');
+        const erroSenhaTelefone = $('erro-modal-telefone-senha');
         const inputNovoTelefone = $('input-modal-novo-telefone');
         const indicadorStatusTelefone = $('status-indicador-telefone');
         const erroModalTelefone = $('erro-modal-telefone');
-        const previewNovoTelefone = $('modal-preview-novo-telefone');
         const regraTelefoneDdd = $('regra-telefone-ddd');
         const regraTelefoneFormato = $('regra-telefone-formato');
 
+        // Fase 2: Código OTP (WhatsApp + E-mail)
+        const previewNovoTelefone = $('modal-preview-novo-telefone');
+        const previewEmailTelefone = $('modal-preview-email-telefone');
+        const inputCodigoTelefone = $('input-modal-telefone-codigo');
+        const erroCodigoTelefone = $('erro-modal-telefone-codigo');
+        const textoReenvioTelefone = $('texto-reenvio-telefone');
+        const contadorReenvioTelefone = $('contador-reenvio-telefone');
+        const btnReenviarCodigoTelefone = $('btn-reenviar-codigo-telefone');
+
         // Modal de Remoção de WhatsApp (Zero window.confirm)
         const modalRemoverTelefone = $('modal-remover-telefone');
+        const blocoRemoverSenha = $('bloco-remover-telefone-senha');
+        const blocoRemoverGoogle = $('bloco-remover-telefone-google');
+        const inputRemoverSenha = $('input-remover-telefone-senha');
+        const erroRemoverSenha = $('erro-remover-telefone-senha');
         const btnCancelarRemoverTelefone = $('btn-cancelar-remover-telefone');
         const btnConfirmarRemoverTelefone = $('btn-confirmar-remover-telefone');
         const previewRemoverTelefone = $('modal-remover-telefone-preview');
 
         let novoTelefoneValidado = '';
+        let timerReenvioTelefone = null;
+        let segundosRestantesTelefone = 60;
 
         // Preenche dados do formulário principal
         if (inputNome) inputNome.value = usuarioAtivo.nome || usuarioAtivo.name || '';
@@ -556,8 +582,18 @@
         }
 
         // =========================================================================
-        // 4. FLUXO EXCLUSIVO DE ALTERAÇÃO / REMOÇÃO DE WHATSAPP COM MODAL
+        // 4. FLUXO EXCLUSIVO DE ALTERAÇÃO / REMOÇÃO DE WHATSAPP COM MODAL EM ETAPAS
         // =========================================================================
+        function isGoogleUser(user) {
+            const u = user || usuarioAtivo;
+            return Boolean(
+                u.googleId ||
+                u.password === 'GOOGLE_OAUTH_USER' ||
+                (typeof u.password === 'string' && u.password.startsWith('GOOGLE_OAUTH')) ||
+                u.provider === 'google'
+            );
+        }
+
         function formatarTelefoneVisual(val) {
             const dig = soDigitos(val).slice(0, 11);
             if (!dig) return '';
@@ -567,11 +603,13 @@
             return `(${dig.slice(0, 2)}) ${dig.slice(2, 7)}-${dig.slice(7, 11)}`;
         }
 
-        function atualizarCardTelefone(user) {
+        function atualizarCardTelefone(dados) {
+            const user = dados || usuarioAtivo;
             const telBruto = user.telefone || user.phone || '';
             const digitos = soDigitos(telBruto);
             const temTel = digitos.length >= 10;
             const formatado = temTel ? formatarTelefoneVisual(digitos) : '';
+            const isVerified = Boolean(user.isPhoneVerified || user.phoneVerifiedAt);
 
             if (displayTelefone) {
                 if (temTel) {
@@ -583,12 +621,77 @@
                 }
             }
 
+            if (badgeStatusTelefone) {
+                if (!temTel) {
+                    badgeStatusTelefone.style.display = 'none';
+                } else if (isVerified) {
+                    badgeStatusTelefone.style.display = 'inline-flex';
+                    badgeStatusTelefone.className = 'cfg-status-badge verificado';
+                    badgeStatusTelefone.innerHTML = '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Verificado';
+                } else {
+                    badgeStatusTelefone.style.display = 'inline-flex';
+                    badgeStatusTelefone.className = 'cfg-status-badge nao-verificado';
+                    badgeStatusTelefone.innerHTML = '⚠ Não verificado';
+                }
+            }
+
+            if (btnVerificarTelefone) {
+                btnVerificarTelefone.style.display = (temTel && !isVerified) ? 'inline-flex' : 'none';
+            }
+
             if (btnRemoverTelefone) {
                 btnRemoverTelefone.style.display = temTel ? 'inline-flex' : 'none';
             }
 
             if (labelBtnTrocarTelefone) {
                 labelBtnTrocarTelefone.textContent = temTel ? 'Alterar WhatsApp' : 'Cadastrar WhatsApp';
+            }
+
+            // Cooldown de 7 dias
+            const canChange = user.canChangePhone !== false;
+            if (boxCooldownTelefone && textoCooldownTelefone) {
+                if (!canChange) {
+                    boxCooldownTelefone.classList.add('bloqueado');
+                    const dias = user.daysUntilNextPhoneChange || 7;
+                    let dataFmt = '';
+                    if (user.nextPhoneChangeAt) {
+                        try { dataFmt = new Date(user.nextPhoneChangeAt).toLocaleDateString('pt-BR'); } catch(e) {}
+                    }
+                    textoCooldownTelefone.innerHTML = dataFmt
+                        ? `Você poderá alterar ou remover seu WhatsApp novamente em <strong>${dataFmt}</strong> (restam ${dias} ${dias === 1 ? 'dia' : 'dias'}).`
+                        : `Você só pode alterar ou remover seu WhatsApp uma vez a cada 7 dias (restam ${dias} dias).`;
+
+                    if (btnAbrirModalTelefone) {
+                        btnAbrirModalTelefone.disabled = true;
+                        btnAbrirModalTelefone.style.opacity = '0.6';
+                        btnAbrirModalTelefone.style.cursor = 'not-allowed';
+                    }
+                    if (btnRemoverTelefone) {
+                        btnRemoverTelefone.disabled = true;
+                        btnRemoverTelefone.style.opacity = '0.6';
+                        btnRemoverTelefone.style.cursor = 'not-allowed';
+                    }
+                } else {
+                    boxCooldownTelefone.classList.remove('bloqueado');
+                    if (btnAbrirModalTelefone) {
+                        btnAbrirModalTelefone.disabled = false;
+                        btnAbrirModalTelefone.style.opacity = '';
+                        btnAbrirModalTelefone.style.cursor = '';
+                    }
+                    if (btnRemoverTelefone) {
+                        btnRemoverTelefone.disabled = false;
+                        btnRemoverTelefone.style.opacity = '';
+                        btnRemoverTelefone.style.cursor = '';
+                    }
+
+                    if (temTel && !isVerified) {
+                        textoCooldownTelefone.innerHTML = '⚠️ Seu número ainda não foi verificado. Clique em <strong>Verificar número</strong> para receber o código via WhatsApp e e-mail e ativar o botão de contato nos seus anúncios.';
+                    } else if (temTel && isVerified) {
+                        textoCooldownTelefone.innerHTML = '✅ WhatsApp verificado. Compradores podem iniciar conversas diretamente pelo app nos seus anúncios.';
+                    } else {
+                        textoCooldownTelefone.textContent = 'Ao cadastrar seu WhatsApp, compradores poderão iniciar conversas diretamente pelo app nos seus anúncios.';
+                    }
+                }
             }
         }
 
@@ -614,43 +717,105 @@
             setChecklistTelefone(regraTelefoneFormato, null);
         }
 
-        function abrirModalTelefone() {
+        function pararTimerReenvioTelefone() {
+            if (timerReenvioTelefone) {
+                clearInterval(timerReenvioTelefone);
+                timerReenvioTelefone = null;
+            }
+        }
+
+        function iniciarTimerReenvioTelefone(intervaloSegundos = 60) {
+            pararTimerReenvioTelefone();
+            segundosRestantesTelefone = intervaloSegundos;
+
+            if (textoReenvioTelefone) textoReenvioTelefone.style.display = '';
+            if (btnReenviarCodigoTelefone) btnReenviarCodigoTelefone.style.display = 'none';
+            if (contadorReenvioTelefone) contadorReenvioTelefone.textContent = String(segundosRestantesTelefone);
+
+            timerReenvioTelefone = setInterval(() => {
+                segundosRestantesTelefone--;
+                if (contadorReenvioTelefone) contadorReenvioTelefone.textContent = String(segundosRestantesTelefone);
+
+                if (segundosRestantesTelefone <= 0) {
+                    pararTimerReenvioTelefone();
+                    if (textoReenvioTelefone) textoReenvioTelefone.style.display = 'none';
+                    if (btnReenviarCodigoTelefone) btnReenviarCodigoTelefone.style.display = 'inline-block';
+                }
+            }, 1000);
+        }
+
+        function abrirModalTelefone(modo) {
             if (!modalTelefone) return;
 
             novoTelefoneValidado = '';
+            pararTimerReenvioTelefone();
+
+            // Configura Reautenticação
+            const ehGoogle = isGoogleUser(usuarioAtivo);
+            if (ehGoogle) {
+                if (blocoSenhaTelefone) blocoSenhaTelefone.style.display = 'none';
+                if (blocoGoogleTelefone) blocoGoogleTelefone.style.display = 'flex';
+            } else {
+                if (blocoSenhaTelefone) blocoSenhaTelefone.style.display = '';
+                if (blocoGoogleTelefone) blocoGoogleTelefone.style.display = 'none';
+                if (inputSenhaTelefone) {
+                    inputSenhaTelefone.value = '';
+                    inputSenhaTelefone.classList.remove('invalido');
+                }
+                if (erroSenhaTelefone) erroSenhaTelefone.textContent = '';
+            }
+
+            // Preenche ou limpa campo de telefone
             if (inputNovoTelefone) {
                 const telAtual = usuarioAtivo.telefone || usuarioAtivo.phone || '';
                 const digAtual = soDigitos(telAtual);
-                inputNovoTelefone.value = digAtual ? formatarTelefoneVisual(digAtual) : '';
+                inputNovoTelefone.value = (modo === 'verificar' || digAtual) ? formatarTelefoneVisual(digAtual) : '';
                 inputNovoTelefone.classList.remove('invalido');
             }
+
             if (erroModalTelefone) erroModalTelefone.textContent = '';
             if (indicadorStatusTelefone) indicadorStatusTelefone.innerHTML = '';
             if (btnAvancarModalTelefone) btnAvancarModalTelefone.disabled = true;
 
             resetarChecklistTelefone();
 
+            // Etapa 1 ativa
+            if (stepTelefone1) {
+                stepTelefone1.classList.add('ativo');
+                stepTelefone1.classList.remove('completo');
+            }
+            if (stepTelefone2) {
+                stepTelefone2.classList.remove('ativo', 'completo');
+            }
             if (faseEdicaoTelefone) faseEdicaoTelefone.style.display = '';
             if (faseConfirmacaoTelefone) faseConfirmacaoTelefone.style.display = 'none';
 
             modalTelefone.classList.add('aberto');
             setTimeout(() => {
                 if (inputNovoTelefone) {
-                    inputNovoTelefone.focus();
                     if (inputNovoTelefone.value) {
                         inputNovoTelefone.dispatchEvent(new Event('input'));
+                    }
+                    if (!ehGoogle && inputSenhaTelefone && !inputSenhaTelefone.value) {
+                        inputSenhaTelefone.focus();
+                    } else {
+                        inputNovoTelefone.focus();
                     }
                 }
             }, 100);
         }
 
         function fecharModalTelefone() {
+            pararTimerReenvioTelefone();
             if (modalTelefone) modalTelefone.classList.remove('aberto');
         }
 
         // Eventos de Abertura / Fechamento do Modal de Telefone
         if (btnAbrirModalTelefone) {
-            btnAbrirModalTelefone.addEventListener('click', abrirModalTelefone);
+            btnAbrirModalTelefone.addEventListener('click', () => abrirModalTelefone('alterar'));
+        }
+        if (btnVerificarTelefone) {
+            btnVerificarTelefone.addEventListener('click', () => abrirModalTelefone('verificar'));
         }
         if (btnFecharModalTelefone) {
             btnFecharModalTelefone.addEventListener('click', fecharModalTelefone);
@@ -664,7 +829,7 @@
             });
         }
 
-        // Validação e máscara em tempo real
+        // Validação e máscara em tempo real do novo telefone
         if (inputNovoTelefone) {
             inputNovoTelefone.addEventListener('input', (e) => {
                 const formatado = formatarTelefoneVisual(e.target.value);
@@ -728,43 +893,160 @@
             });
         }
 
-        // Avançar para a fase de confirmação do telefone
+        // ETAPA 1: Enviar código OTP para WhatsApp e E-mail
         if (btnAvancarModalTelefone) {
-            btnAvancarModalTelefone.addEventListener('click', () => {
+            btnAvancarModalTelefone.addEventListener('click', async () => {
                 if (!novoTelefoneValidado) return;
-                if (faseEdicaoTelefone) faseEdicaoTelefone.style.display = 'none';
-                if (faseConfirmacaoTelefone) faseConfirmacaoTelefone.style.display = '';
-                if (previewNovoTelefone) previewNovoTelefone.textContent = formatarTelefoneVisual(novoTelefoneValidado);
+
+                const ehGoogle = isGoogleUser(usuarioAtivo);
+                const senhaAtual = inputSenhaTelefone ? inputSenhaTelefone.value : '';
+
+                if (!ehGoogle && !senhaAtual) {
+                    marcarErro('input-modal-telefone-senha', 'erro-modal-telefone-senha', 'Digite sua senha atual para autorizar.');
+                    if (inputSenhaTelefone) inputSenhaTelefone.focus();
+                    return;
+                }
+
+                btnAvancarModalTelefone.disabled = true;
+                const textoOriginal = btnAvancarModalTelefone.innerHTML;
+                btnAvancarModalTelefone.innerHTML = '<span>Enviando código...</span>';
+
+                try {
+                    let res = null;
+                    if (window.ItaimApi && window.ItaimApi.auth && typeof window.ItaimApi.auth.solicitarAlteracaoTelefone === 'function') {
+                        res = await window.ItaimApi.auth.solicitarAlteracaoTelefone(senhaAtual, novoTelefoneValidado, 'whatsapp');
+                    }
+
+                    // Transição visual para a Fase 2 (Código OTP)
+                    if (stepTelefone1) {
+                        stepTelefone1.classList.remove('ativo');
+                        stepTelefone1.classList.add('completo');
+                    }
+                    if (stepTelefone2) {
+                        stepTelefone2.classList.add('ativo');
+                    }
+                    if (faseEdicaoTelefone) faseEdicaoTelefone.style.display = 'none';
+                    if (faseConfirmacaoTelefone) faseConfirmacaoTelefone.style.display = '';
+
+                    if (previewNovoTelefone) {
+                        previewNovoTelefone.textContent = formatarTelefoneVisual(novoTelefoneValidado);
+                    }
+                    if (previewEmailTelefone) {
+                        previewEmailTelefone.textContent = (res && res.targetEmail) || usuarioAtivo.email || 'e-mail da conta';
+                    }
+
+                    if (inputCodigoTelefone) {
+                        inputCodigoTelefone.value = '';
+                        inputCodigoTelefone.classList.remove('invalido');
+                        if (res && res.debugCode) {
+                            // Modo dev para facilidade de teste
+                            console.log('🔑 [DEBUG DEV] Código OTP:', res.debugCode);
+                        }
+                    }
+                    if (erroCodigoTelefone) erroCodigoTelefone.textContent = '';
+                    if (btnConfirmarModalTelefone) btnConfirmarModalTelefone.disabled = true;
+
+                    iniciarTimerReenvioTelefone((res && res.resendIntervalSeconds) || 60);
+
+                    toast('Código enviado para seu WhatsApp e e-mail!');
+                    setTimeout(() => {
+                        if (inputCodigoTelefone) inputCodigoTelefone.focus();
+                    }, 150);
+                } catch (err) {
+                    console.error('[Config] Erro ao solicitar código de telefone:', err);
+                    const msg = err.message || 'Erro ao enviar código de verificação.';
+                    toast(msg, true);
+                    if (err.code === 'INVALID_PASSWORD' || err.status === 401) {
+                        marcarErro('input-modal-telefone-senha', 'erro-modal-telefone-senha', msg);
+                    } else {
+                        marcarErro('input-modal-novo-telefone', 'erro-modal-telefone', msg);
+                    }
+                } finally {
+                    btnAvancarModalTelefone.disabled = false;
+                    btnAvancarModalTelefone.innerHTML = textoOriginal;
+                }
             });
         }
 
-        // Voltar da fase de confirmação para edição
+        // Validação do campo OTP (6 dígitos)
+        if (inputCodigoTelefone) {
+            inputCodigoTelefone.addEventListener('input', (e) => {
+                const limpo = soDigitos(e.target.value).slice(0, 6);
+                e.target.value = limpo;
+
+                if (erroCodigoTelefone) erroCodigoTelefone.textContent = '';
+                inputCodigoTelefone.classList.remove('invalido');
+
+                if (btnConfirmarModalTelefone) {
+                    btnConfirmarModalTelefone.disabled = limpo.length !== 6;
+                }
+            });
+        }
+
+        // Reenviar código OTP
+        if (btnReenviarCodigoTelefone) {
+            btnReenviarCodigoTelefone.addEventListener('click', async () => {
+                if (!novoTelefoneValidado) return;
+                const senhaAtual = inputSenhaTelefone ? inputSenhaTelefone.value : '';
+
+                btnReenviarCodigoTelefone.textContent = 'Enviando...';
+                try {
+                    const res = await window.ItaimApi.auth.solicitarAlteracaoTelefone(senhaAtual, novoTelefoneValidado, 'whatsapp');
+                    iniciarTimerReenvioTelefone((res && res.resendIntervalSeconds) || 60);
+                    toast('Novo código enviado para seu WhatsApp e e-mail!');
+                    if (res && res.debugCode) {
+                        console.log('🔑 [DEBUG DEV] Novo Código OTP:', res.debugCode);
+                    }
+                } catch (err) {
+                    toast(err.message || 'Falha ao reenviar código.', true);
+                } finally {
+                    btnReenviarCodigoTelefone.textContent = 'Reenviar código';
+                }
+            });
+        }
+
+        // Voltar da fase de código para edição do número
         if (btnVoltarModalTelefone) {
             btnVoltarModalTelefone.addEventListener('click', () => {
+                pararTimerReenvioTelefone();
+                if (stepTelefone1) {
+                    stepTelefone1.classList.add('ativo');
+                    stepTelefone1.classList.remove('completo');
+                }
+                if (stepTelefone2) {
+                    stepTelefone2.classList.remove('ativo', 'completo');
+                }
                 if (faseConfirmacaoTelefone) faseConfirmacaoTelefone.style.display = 'none';
                 if (faseEdicaoTelefone) faseEdicaoTelefone.style.display = '';
                 if (inputNovoTelefone) inputNovoTelefone.focus();
             });
         }
 
-        // Confirmar e salvar WhatsApp na API
+        // ETAPA 2: Confirmar código OTP e aplicar alteração
         if (btnConfirmarModalTelefone) {
             btnConfirmarModalTelefone.addEventListener('click', async () => {
-                if (!novoTelefoneValidado) return;
+                const codigo = inputCodigoTelefone ? inputCodigoTelefone.value.trim() : '';
+                if (codigo.length !== 6) {
+                    marcarErro('input-modal-telefone-codigo', 'erro-modal-telefone-codigo', 'Digite o código de 6 dígitos recebido.');
+                    return;
+                }
 
                 btnConfirmarModalTelefone.disabled = true;
-                btnConfirmarModalTelefone.textContent = 'Salvando...';
+                const textoOriginal = btnConfirmarModalTelefone.innerHTML;
+                btnConfirmarModalTelefone.innerHTML = '<span>Verificando...</span>';
 
                 try {
                     let res = null;
-                    if (window.ItaimApi && window.ItaimApi.auth && typeof window.ItaimApi.auth.alterarTelefone === 'function') {
-                        res = await window.ItaimApi.auth.alterarTelefone(novoTelefoneValidado);
+                    if (window.ItaimApi && window.ItaimApi.auth && typeof window.ItaimApi.auth.confirmarAlteracaoTelefone === 'function') {
+                        res = await window.ItaimApi.auth.confirmarAlteracaoTelefone(novoTelefoneValidado, codigo);
                     }
 
                     const dadosAtualizados = (res && res.user) ? { ...usuarioAtivo, ...res.user } : {
                         ...usuarioAtivo,
                         telefone: novoTelefoneValidado,
-                        phone: novoTelefoneValidado
+                        phone: novoTelefoneValidado,
+                        isPhoneVerified: true,
+                        phoneVerifiedAt: new Date().toISOString()
                     };
 
                     usuarioAtivo = dadosAtualizados;
@@ -776,22 +1058,20 @@
                     fecharModalTelefone();
                     atualizarCardTelefone(dadosAtualizados);
 
-                    toast('WhatsApp atualizado com sucesso!');
+                    toast('WhatsApp confirmado e ativado com sucesso!');
                 } catch (err) {
-                    console.error('[Config] Erro ao alterar telefone:', err);
-                    const msg = err.message || 'Erro ao salvar número de WhatsApp.';
+                    console.error('[Config] Erro ao confirmar código OTP de telefone:', err);
+                    const msg = err.message || 'Código incorreto ou expirado.';
                     toast(msg, true);
-                    if (faseConfirmacaoTelefone) faseConfirmacaoTelefone.style.display = 'none';
-                    if (faseEdicaoTelefone) faseEdicaoTelefone.style.display = '';
-                    marcarErro('input-modal-novo-telefone', 'erro-modal-telefone', msg);
+                    marcarErro('input-modal-telefone-codigo', 'erro-modal-telefone-codigo', msg);
                 } finally {
                     btnConfirmarModalTelefone.disabled = false;
-                    btnConfirmarModalTelefone.textContent = 'Confirmar e salvar';
+                    btnConfirmarModalTelefone.innerHTML = textoOriginal;
                 }
             });
         }
 
-        // Remoção de WhatsApp (Modal Customizado no Design System - ZERO window.confirm)
+        // Remoção de WhatsApp com Reautenticação
         if (btnRemoverTelefone) {
             btnRemoverTelefone.addEventListener('click', () => {
                 if (!modalRemoverTelefone) return;
@@ -799,7 +1079,25 @@
                 if (previewRemoverTelefone) {
                     previewRemoverTelefone.textContent = telAtual ? formatarTelefoneVisual(telAtual) : 'atual';
                 }
+
+                const ehGoogle = isGoogleUser(usuarioAtivo);
+                if (ehGoogle) {
+                    if (blocoRemoverSenha) blocoRemoverSenha.style.display = 'none';
+                    if (blocoRemoverGoogle) blocoRemoverGoogle.style.display = 'flex';
+                } else {
+                    if (blocoRemoverSenha) blocoRemoverSenha.style.display = '';
+                    if (blocoRemoverGoogle) blocoRemoverGoogle.style.display = 'none';
+                    if (inputRemoverSenha) {
+                        inputRemoverSenha.value = '';
+                        inputRemoverSenha.classList.remove('invalido');
+                    }
+                    if (erroRemoverSenha) erroRemoverSenha.textContent = '';
+                }
+
                 modalRemoverTelefone.classList.add('aberto');
+                setTimeout(() => {
+                    if (!ehGoogle && inputRemoverSenha) inputRemoverSenha.focus();
+                }, 100);
             });
         }
 
@@ -818,19 +1116,32 @@
 
         if (btnConfirmarRemoverTelefone) {
             btnConfirmarRemoverTelefone.addEventListener('click', async () => {
+                const ehGoogle = isGoogleUser(usuarioAtivo);
+                const senhaAtual = inputRemoverSenha ? inputRemoverSenha.value : '';
+
+                if (!ehGoogle && !senhaAtual) {
+                    marcarErro('input-remover-telefone-senha', 'erro-remover-telefone-senha', 'Digite sua senha para autorizar.');
+                    if (inputRemoverSenha) inputRemoverSenha.focus();
+                    return;
+                }
+
                 btnConfirmarRemoverTelefone.disabled = true;
                 btnConfirmarRemoverTelefone.textContent = 'Removendo...';
 
                 try {
                     let res = null;
-                    if (window.ItaimApi && window.ItaimApi.auth && typeof window.ItaimApi.auth.alterarTelefone === 'function') {
+                    if (window.ItaimApi && window.ItaimApi.auth && typeof window.ItaimApi.auth.removerTelefoneSeguro === 'function') {
+                        res = await window.ItaimApi.auth.removerTelefoneSeguro(senhaAtual);
+                    } else if (window.ItaimApi && window.ItaimApi.auth && typeof window.ItaimApi.auth.alterarTelefone === 'function') {
                         res = await window.ItaimApi.auth.alterarTelefone(null);
                     }
 
                     const dadosAtualizados = (res && res.user) ? { ...usuarioAtivo, ...res.user } : {
                         ...usuarioAtivo,
                         telefone: null,
-                        phone: null
+                        phone: null,
+                        isPhoneVerified: false,
+                        phoneVerifiedAt: null
                     };
 
                     usuarioAtivo = dadosAtualizados;
@@ -845,7 +1156,9 @@
                     toast('WhatsApp removido com sucesso.');
                 } catch (err) {
                     console.error('[Config] Erro ao remover WhatsApp:', err);
-                    toast(err.message || 'Erro ao remover número de WhatsApp.', true);
+                    const msg = err.message || 'Erro ao remover número de WhatsApp.';
+                    toast(msg, true);
+                    marcarErro('input-remover-telefone-senha', 'erro-remover-telefone-senha', msg);
                 } finally {
                     btnConfirmarRemoverTelefone.disabled = false;
                     btnConfirmarRemoverTelefone.textContent = 'Sim, remover WhatsApp';

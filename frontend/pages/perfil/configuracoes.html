@@ -407,10 +407,17 @@
 
                     <!-- CARD EXCLUSIVO: WHATSAPP / CELULAR -->
                     <div class="cfg-card" id="card-telefone-secao" style="margin-top: 24px;">
-                        <h2>WhatsApp / Celular</h2>
-                        <p class="cfg-desc">Número utilizado para contato direto com compradores nos seus anúncios e no seu perfil.</p>
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px;">
+                            <div>
+                                <h2>WhatsApp / Celular</h2>
+                                <p class="cfg-desc">Número utilizado para contato direto com compradores nos seus anúncios e no seu perfil.</p>
+                            </div>
+                            <span id="cfg-telefone-badge-status" class="cfg-status-badge nao-verificado">
+                                Não verificado
+                            </span>
+                        </div>
 
-                        <div class="cfg-campo cheio">
+                        <div class="cfg-campo cheio" style="margin-top: 14px;">
                             <label class="cfg-campo-label" for="cfg-telefone-display">WhatsApp cadastrado</label>
                             <div class="cfg-input-acao-linha">
                                 <div class="cfg-input-display">
@@ -420,6 +427,10 @@
                                     <span class="cfg-telefone-valor" id="cfg-telefone-display">...</span>
                                 </div>
                                 <div class="cfg-botoes-acao-wrap">
+                                    <button type="button" class="cfg-btn cfg-btn-verificar" id="btn-verificar-telefone" style="display: none;">
+                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                                        Verificar número
+                                    </button>
                                     <button type="button" class="cfg-btn cfg-btn-remover-link" id="btn-remover-telefone" style="display: none;">
                                         Remover
                                     </button>
@@ -432,13 +443,13 @@
                                     </button>
                                 </div>
                             </div>
-                            <div class="cfg-dica-campo">
+                            <div class="cfg-dica-campo" id="box-status-cooldown-telefone">
                                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <circle cx="12" cy="12" r="10"></circle>
                                     <line x1="12" y1="8" x2="12" y2="12"></line>
                                     <line x1="12" y1="16" x2="12.01" y2="16"></line>
                                 </svg>
-                                <span>Ao cadastrar seu WhatsApp, compradores poderão iniciar conversas diretamente pelo app nos seus anúncios.</span>
+                                <span id="texto-status-cooldown-telefone">Ao cadastrar seu WhatsApp, compradores poderão iniciar conversas diretamente pelo app nos seus anúncios.</span>
                             </div>
                         </div>
                     </div>
@@ -965,7 +976,13 @@
         <div class="cfg-modal cfg-modal-lg">
             <button type="button" class="cfg-modal-close" id="btn-fechar-modal-alterar-telefone" aria-label="Fechar">&times;</button>
 
-            <!-- FASE 1: DIGITAÇÃO DO NÚMERO -->
+            <!-- Stepper Visual de Etapas -->
+            <div class="cfg-stepper">
+                <div class="cfg-step-item ativo" id="step-telefone-1">1. Número & Segurança</div>
+                <div class="cfg-step-item" id="step-telefone-2">2. Código OTP & E-mail</div>
+            </div>
+
+            <!-- FASE 1: DADOS, REAUTENTICAÇÃO E NÚMERO -->
             <div id="telefone-modal-fase-edicao">
                 <div class="cfg-modal-header-icone">
                     <div class="cfg-modal-icon-badge sucesso">
@@ -973,13 +990,31 @@
                             <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
                         </svg>
                     </div>
-                    <h3 id="modal-telefone-titulo">WhatsApp / Celular</h3>
+                    <h3 id="modal-telefone-titulo">Cadastrar / Alterar WhatsApp</h3>
                 </div>
 
-                <p class="cfg-modal-subdesc">Informe seu número de celular com DDD para que compradores possam entrar em contato com você via WhatsApp.</p>
+                <p class="cfg-modal-subdesc">
+                    Informe seu número de celular com DDD. Por segurança, enviaremos um código de 6 dígitos para o seu WhatsApp e também para o seu e-mail cadastrado.
+                </p>
 
-                <div class="cfg-campo" style="margin-top: 18px;">
-                    <label for="input-modal-novo-telefone">Número com DDD</label>
+                <!-- Bloco Reautenticação Senha (Contas normais) -->
+                <div class="cfg-campo" id="bloco-telefone-reautenticacao-senha" style="margin-top: 14px;">
+                    <label for="input-modal-telefone-senha">Sua senha atual de acesso</label>
+                    <input type="password" id="input-modal-telefone-senha" class="cfg-input" placeholder="Digite sua senha atual para autorizar" autocomplete="current-password">
+                    <span class="cfg-erro" id="erro-modal-telefone-senha"></span>
+                </div>
+
+                <!-- Bloco Reautenticação Google (Contas Google) -->
+                <div class="cfg-box-google-note" id="bloco-telefone-reautenticacao-google" style="display: none; margin-top: 14px;">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                    <span>Conta conectada via Google. Reautenticação confirmada pela sua sessão ativa.</span>
+                </div>
+
+                <!-- Campo do Novo Telefone -->
+                <div class="cfg-campo" style="margin-top: 14px;">
+                    <label for="input-modal-novo-telefone">Novo número com DDD</label>
                     <div class="cfg-input-prefix-wrap">
                         <span class="cfg-prefix-badge">BR +55</span>
                         <input type="tel" id="input-modal-novo-telefone" class="cfg-input cfg-input-com-badge" placeholder="(89) 99999-9999" maxlength="15" autocomplete="tel" inputmode="numeric">
@@ -988,7 +1023,7 @@
                     <span class="cfg-erro" id="erro-modal-telefone"></span>
                 </div>
 
-                <div class="cfg-regras-lista" style="margin-top: 14px;">
+                <div class="cfg-regras-lista" style="margin-top: 12px;">
                     <div class="cfg-regra-item" id="regra-telefone-ddd">
                         <span class="cfg-regra-dot">○</span>
                         <span>DDD válido do Brasil (11 a 99)</span>
@@ -999,45 +1034,48 @@
                     </div>
                 </div>
 
-                <div class="cfg-modal-acoes" style="margin-top: 24px;">
+                <div class="cfg-modal-acoes" style="margin-top: 22px;">
                     <button type="button" class="cfg-btn cfg-btn-neutro" id="btn-cancelar-modal-alterar-telefone">Cancelar</button>
-                    <button type="button" class="cfg-btn cfg-btn-primario" id="btn-avancar-modal-telefone" disabled>Avançar</button>
+                    <button type="button" class="cfg-btn cfg-btn-primario" id="btn-avancar-modal-telefone" disabled>
+                        <span>Enviar código de verificação</span>
+                    </button>
                 </div>
             </div>
 
-            <!-- FASE 2: CONFIRMAÇÃO DO NÚMERO -->
+            <!-- FASE 2: CÓDIGO OTP (ENVIADO PARA WHATSAPP E E-MAIL) -->
             <div id="telefone-modal-fase-confirmacao" style="display: none;">
                 <div class="cfg-modal-header-icone">
-                    <div class="cfg-modal-icon-badge aviso">
+                    <div class="cfg-modal-icon-badge sucesso">
                         <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="12" y1="8" x2="12" y2="12"></line>
-                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                         </svg>
                     </div>
-                    <h3 id="modal-telefone-titulo-conf">Confirmar número de WhatsApp</h3>
+                    <h3 id="modal-telefone-titulo-conf">Digite o código de verificação</h3>
                 </div>
 
-                <p class="cfg-modal-destaque-texto">
-                    O número <strong id="modal-preview-novo-telefone" style="color: var(--primary);">(89) 99999-9999</strong> será associado à sua conta.
+                <p class="cfg-modal-subdesc" style="text-align: center;">
+                    Enviamos um código de 6 dígitos para <strong id="modal-preview-novo-telefone" style="color: var(--primary);">(89) 99999-9999</strong> e também para o seu e-mail cadastrado (<strong id="modal-preview-email-telefone" style="color: var(--text-primary);">...</strong>).
                 </p>
 
-                <div class="cfg-modal-info-box">
-                    <div class="cfg-modal-info-item">
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-                        <span>O botão "Conversar no WhatsApp" aparecerá nos seus anúncios e no seu perfil público.</span>
-                    </div>
-                    <div class="cfg-modal-info-item">
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                        <span>Você pode atualizar ou remover este número a qualquer momento.</span>
-                    </div>
+                <div class="cfg-campo" style="margin-top: 18px;">
+                    <label for="input-modal-telefone-codigo" style="text-align: center; display: block;">Código de 6 dígitos</label>
+                    <input type="text" id="input-modal-telefone-codigo" class="cfg-input cfg-input-otp" placeholder="000000" maxlength="6" inputmode="numeric" autocomplete="one-time-code">
+                    <span class="cfg-erro" id="erro-modal-telefone-codigo" style="text-align: center; display: block; margin-top: 6px;"></span>
                 </div>
 
-                <p class="cfg-modal-pergunta">Deseja realmente salvar este número para contato?</p>
+                <div style="text-align: center; margin-top: 14px; font-size: 13px; color: var(--text-secondary);">
+                    <span id="texto-reenvio-telefone">Aguarde <strong id="contador-reenvio-telefone">60</strong>s para reenviar o código</span>
+                    <button type="button" id="btn-reenviar-codigo-telefone" style="display: none; background: none; border: none; color: var(--primary); font-weight: 700; cursor: pointer; text-decoration: underline; margin-left: 6px;">
+                        Reenviar código
+                    </button>
+                </div>
 
-                <div class="cfg-modal-acoes">
+                <div class="cfg-modal-acoes" style="margin-top: 24px;">
                     <button type="button" class="cfg-btn cfg-btn-secundario" id="btn-voltar-modal-telefone">Voltar</button>
-                    <button type="button" class="cfg-btn cfg-btn-primario" id="btn-confirmar-modal-telefone">Confirmar e salvar</button>
+                    <button type="button" class="cfg-btn cfg-btn-primario" id="btn-confirmar-modal-telefone" disabled>
+                        <span>Confirmar e ativar</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -1063,6 +1101,22 @@
             <p class="cfg-modal-pergunta" style="text-align: center; margin-top: 14px;">
                 Deseja realmente desvincular o número atual (<strong id="modal-remover-telefone-preview">...</strong>)?
             </p>
+
+            <!-- Reautenticação para remoção de telefone -->
+            <div class="cfg-campo" id="bloco-remover-telefone-senha" style="margin-top: 16px;">
+                <label for="input-remover-telefone-senha">Sua senha atual para confirmar</label>
+                <input type="password" id="input-remover-telefone-senha" class="cfg-input" placeholder="Digite sua senha atual" autocomplete="current-password">
+                <span class="cfg-erro" id="erro-remover-telefone-senha"></span>
+            </div>
+
+            <!-- Nota Google para remoção de telefone -->
+            <div class="cfg-box-google-note" id="bloco-remover-telefone-google" style="display: none; margin-top: 16px;">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+                <span>Conta Google: confirmação imediata pela sessão autenticada.</span>
+            </div>
+
             <div class="cfg-modal-acoes" style="justify-content: center; margin-top: 20px;">
                 <button type="button" class="cfg-btn cfg-btn-neutro" id="btn-cancelar-remover-telefone">Cancelar</button>
                 <button type="button" class="cfg-btn cfg-btn-perigo" id="btn-confirmar-remover-telefone">Sim, remover WhatsApp</button>

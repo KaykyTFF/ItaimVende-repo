@@ -81,4 +81,43 @@ export const changePhoneSchema = z.object({
     }),
 });
 
+// =============================================================================
+// SCHEMAS DO NOVO FLUXO SEGURO DE VERIFICAÇÃO E ALTERAÇÃO DE WHATSAPP / CELULAR
+// =============================================================================
 
+export const requestPhoneChangeSchema = z.object({
+  currentPassword: z.string().optional().nullable(),
+  newPhone: z
+    .string({ required_error: 'O novo número de WhatsApp/celular é obrigatório.' })
+    .trim()
+    .refine((val) => {
+      const digitos = val.replace(/\D/g, '');
+      if (digitos.length !== 11) return false;
+      const ddd = parseInt(digitos.substring(0, 2), 10);
+      if (ddd < 11 || ddd > 99) return false;
+      if (digitos[2] !== '9') return false;
+      return true;
+    }, {
+      message: 'Informe um número de celular válido com DDD (11 dígitos, iniciando com 9).',
+    }),
+  channel: z.enum(['whatsapp', 'sms']).optional().default('whatsapp'),
+});
+
+export const confirmPhoneChangeSchema = z.object({
+  newPhone: z
+    .string({ required_error: 'O número de telefone é obrigatório.' })
+    .trim(),
+  code: z
+    .string({ required_error: 'O código de confirmação é obrigatório.' })
+    .trim()
+    .length(6, 'O código de confirmação deve possuir exatamente 6 dígitos.')
+    .regex(/^\d{6}$/, 'O código deve conter apenas números.'),
+});
+
+export const deletePhoneSchema = z.object({
+  currentPassword: z.string().optional().nullable(),
+});
+
+export const revertPhoneSchema = z.object({
+  token: z.string({ required_error: 'Token de reversão é obrigatório.' }).trim().min(1, 'Token inválido.'),
+});

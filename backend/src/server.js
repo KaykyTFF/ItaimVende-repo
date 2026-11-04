@@ -314,6 +314,7 @@ const FRONTEND_PAGES_MAP = {
   'login': 'index.html',
   'cadastro': 'index.html',
   'index': 'index.html',
+  'reverter-telefone': 'pages/auth/reverter-telefone.html',
 
   // Administração e Moderação
   'tickets': 'pages/admin/tickets.html',

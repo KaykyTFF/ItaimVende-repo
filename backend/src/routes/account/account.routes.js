@@ -6,6 +6,10 @@ import {
   requestEmailChange,
   confirmEmailChange,
   changePhone,
+  requestPhoneChange,
+  confirmPhoneChange,
+  deletePhone,
+  revertPhoneChange,
 } from '../../controllers/account/account.controller.js';
 import { authenticateToken, optionalAuth } from '../../middlewares/auth.middleware.js';
 import { validate } from '../../middlewares/validate.middleware.js';
@@ -14,6 +18,10 @@ import {
   requestEmailChangeSchema,
   confirmEmailChangeSchema,
   changePhoneSchema,
+  requestPhoneChangeSchema,
+  confirmPhoneChangeSchema,
+  deletePhoneSchema,
+  revertPhoneSchema,
 } from '../../schemas/account/account.schema.js';
 
 const router = Router();
@@ -57,14 +65,27 @@ const emailConfirmLimiter = rateLimit({
   legacyHeaders: false,
 });
 
-// Rate limiter para alteração de telefone/WhatsApp
-const phoneLimiter = rateLimit({
+// Rate limiter para solicitação de código de telefone
+const phoneRequestLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 30,
+  max: 20,
   skip: (req) => Boolean(req.headers['x-test-runner']),
   message: {
     success: false,
-    message: 'Muitas tentativas de alteração de telefone. Aguarde alguns minutos antes de prosseguir.',
+    message: 'Muitas tentativas de envio de código para telefone. Aguarde alguns minutos antes de tentar novamente.',
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Rate limiter para confirmação do código de telefone
+const phoneConfirmLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 25,
+  skip: (req) => Boolean(req.headers['x-test-runner']),
+  message: {
+    success: false,
+    message: 'Muitas tentativas de confirmação de código. Aguarde alguns minutos.',
   },
   standardHeaders: true,
   legacyHeaders: false,
@@ -76,13 +97,17 @@ router.get('/username/check', optionalAuth, checkUsername);
 // 2. Rota de alteração exclusiva do nome de usuário (@)
 router.patch('/username', authenticateToken, usernameLimiter, validate(changeUsernameSchema), changeUsername);
 
-// 3. Rota de solicitação de alteração de e-mail (com reautenticação)
+// 3. Rotas de alteração de e-mail
 router.post('/email/change-request', authenticateToken, emailRequestLimiter, validate(requestEmailChangeSchema), requestEmailChange);
-
-// 4. Rota de confirmação da alteração de e-mail com código de 6 dígitos
 router.post('/email/confirm', authenticateToken, emailConfirmLimiter, validate(confirmEmailChangeSchema), confirmEmailChange);
 
-// 5. Rota de alteração exclusiva de WhatsApp / celular
-router.patch('/phone', authenticateToken, phoneLimiter, validate(changePhoneSchema), changePhone);
+// 4. Rotas do Novo Fluxo Seguro de WhatsApp / Celular
+router.post('/phone/change-request', authenticateToken, phoneRequestLimiter, validate(requestPhoneChangeSchema), requestPhoneChange);
+router.post('/phone/confirm', authenticateToken, phoneConfirmLimiter, validate(confirmPhoneChangeSchema), confirmPhoneChange);
+router.delete('/phone', authenticateToken, validate(deletePhoneSchema), deletePhone);
+router.post('/phone/revert', optionalAuth, validate(revertPhoneSchema), revertPhoneChange);
+
+// 5. Rota legada de atualização de telefone
+router.patch('/phone', authenticateToken, validate(changePhoneSchema), changePhone);
 
 export default router;

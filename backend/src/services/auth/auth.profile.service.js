@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs';
 import prisma from '../../config/prisma.js';
 import { AppError } from '../../utils/errors.js';
 import { storageAdapter } from '../../adapters/storage/index.js';
+import { calcularStatusPhone } from '../account/account.phone.service.js';
 
 export const USERNAME_COOLDOWN_MS = 30 * 24 * 60 * 60 * 1000; // 30 dias
 

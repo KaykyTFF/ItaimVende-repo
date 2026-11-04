@@ -1042,3 +1042,79 @@
     padding-left: 78px !important;
     font-weight: 600;
 }
+
+/* Selos de Status de Verificação (WhatsApp, etc.) */
+.cfg-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: var(--radius-full);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.cfg-status-badge.verificado {
+    background: rgba(34, 197, 94, 0.14);
+    color: #15803d;
+    border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+[data-theme="dark"] .cfg-status-badge.verificado {
+    background: rgba(34, 197, 94, 0.22);
+    color: #4ade80;
+    border-color: rgba(34, 197, 94, 0.4);
+}
+
+.cfg-status-badge.nao-verificado {
+    background: rgba(245, 158, 11, 0.14);
+    color: #d97706;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+[data-theme="dark"] .cfg-status-badge.nao-verificado {
+    background: rgba(245, 158, 11, 0.22);
+    color: #fbbf24;
+    border-color: rgba(245, 158, 11, 0.4);
+}
+
+.cfg-btn-verificar {
+    background: #16a34a;
+    color: #ffffff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: var(--radius-md);
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all var(--transition);
+}
+
+.cfg-btn-verificar:hover {
+    background: #15803d;
+    transform: translateY(-1px);
+}
+
+.cfg-box-google-note {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(66, 133, 244, 0.08);
+    border: 1px solid rgba(66, 133, 244, 0.25);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: #1d4ed8;
+    margin-bottom: 16px;
+}
+
+[data-theme="dark"] .cfg-box-google-note {
+    background: rgba(66, 133, 244, 0.15);
+    border-color: rgba(66, 133, 244, 0.35);
+    color: #93c5fd;
+}

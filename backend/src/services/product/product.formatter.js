@@ -31,6 +31,7 @@ export function formatarProdutoParaFrontend(p) {
 
   return {
     ...p,
+    status: (p.status === 'ACTIVE' || p.status === 'ATIVO') ? 'ATIVO' : (p.status === 'PAUSED' ? 'PAUSADO' : (p.status === 'SOLD' ? 'VENDIDO' : p.status)),
     price: Number(p.price),
     originalPrice: p.originalPrice ? Number(p.originalPrice) : null,
     images: fotosUrls,
@@ -50,7 +51,8 @@ export function formatarProdutoParaFrontend(p) {
     vendedorUsername: p.seller?.username || '',
     vendedorEmail: p.seller?.email || '',
     vendedorCidade: p.city || p.seller?.city || 'Paulistana',
-    vendedorTelefone: p.seller?.phone || '',
+    vendedorTelefone: (p.seller?.phoneVerifiedAt || p.seller?.isPhoneVerified) ? (p.seller?.phone || '') : '',
+    vendedorTelefoneVerificado: Boolean(p.seller?.phoneVerifiedAt || p.seller?.isPhoneVerified),
     vendedorAvatar: p.seller?.avatar || 'assets/icons/icon-user.png',
     vendedorBio: p.seller?.bio || '',
     vendedorVerificado: Boolean(p.seller?.isVerified),

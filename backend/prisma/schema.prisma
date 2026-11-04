@@ -54,6 +54,7 @@ model User {
   lastLoginAt          DateTime?
   emailVerifiedAt      DateTime?
   phoneVerifiedAt      DateTime?
+  phoneLastChangedAt   DateTime? @map("phone_last_changed_at")
   usernameLastChangedAt DateTime? @map("username_last_changed_at")
   resetPasswordToken   String?       @unique
   resetPasswordCode    String?
@@ -78,6 +79,7 @@ model User {
   usernameHistory UsernameHistory[]
   emailChangeRequests EmailChangeRequest[]
   phoneHistory    PhoneHistory[]
+  phoneChangeRequests PhoneChangeRequest[]
 
   @@index([email])
   @@index([city, state])
@@ -478,4 +480,23 @@ model PhoneHistory {
   @@index([createdAt])
 }
 
+model PhoneChangeRequest {
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  oldPhone    String?
+  newPhone    String
+  codeHash    String
+  attempts    Int       @default(0)
+  maxAttempts Int       @default(5)
+  expiresAt   DateTime
+  confirmedAt DateTime?
+  revertToken String?   @unique
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime  @default(now())
 
+  @@index([userId, newPhone])
+  @@index([expiresAt])
+  @@index([revertToken])
+}

@@ -14,6 +14,7 @@ const SELLER_SELECT = {
   neighborhood: true,
   avatar: true,
   phone: true,
+  phoneVerifiedAt: true,
   bio: true,
   isVerified: true,
   ratingAverage: true,
