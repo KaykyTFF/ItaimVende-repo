@@ -319,7 +319,7 @@ document.addEventListener('DOMContentLoaded', () => {
             item.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const valor = item.getAttribute('data-valor') || item.textContent.trim();
-                label.textContent = valor.toUpperCase();
+                label.textContent = valor;
                 
                 menu.querySelectorAll('.item-opcao-dropdown').forEach(i => i.classList.remove('selecionado'));
                 item.classList.add('selecionado');
@@ -433,7 +433,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Categoria (Gaveta Verde Oficial)
         let catTexto = 'GERAL';
-        if (labelCategoria && labelCategoria.textContent.trim() !== 'SELECIONAR CATEGORIA') {
+        if (labelCategoria && labelCategoria.textContent.trim().toUpperCase() !== 'SELECIONAR CATEGORIA') {
             catTexto = labelCategoria.textContent.trim();
         }
         if (previewTagCat) {
@@ -442,7 +442,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Condição (Gaveta Verde Oficial)
         let condTexto = 'USADO';
-        if (labelCondicao && labelCondicao.textContent.trim() !== 'SELECIONAR CONDIÇÃO') {
+        if (labelCondicao && labelCondicao.textContent.trim().toUpperCase() !== 'SELECIONAR CONDIÇÃO') {
             condTexto = labelCondicao.textContent.trim();
         }
         if (previewTagCond) {
@@ -934,8 +934,8 @@ document.addEventListener('DOMContentLoaded', () => {
         fotosLista = [];
         renderizarGaleriaFotos();
 
-        if (labelCategoria) labelCategoria.textContent = 'SELECIONAR CATEGORIA';
-        if (labelCondicao) labelCondicao.textContent = 'SELECIONAR CONDIÇÃO';
+        if (labelCategoria) labelCategoria.textContent = 'Selecionar Categoria';
+        if (labelCondicao) labelCondicao.textContent = 'Selecionar Condição';
         menuCategoriaOpcoes?.querySelectorAll('.item-opcao-dropdown').forEach(i => i.classList.remove('selecionado'));
         menuCondicaoOpcoes?.querySelectorAll('.item-opcao-dropdown').forEach(i => i.classList.remove('selecionado'));
 
@@ -1075,7 +1075,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Preenche categoria
         const catNome = produto.categoria || (produto.category ? (produto.category.name || produto.category) : '');
         if (catNome && labelCategoria) {
-            labelCategoria.textContent = catNome.toUpperCase();
+            labelCategoria.textContent = catNome;
             if (menuCategoriaOpcoes) {
                 menuCategoriaOpcoes.querySelectorAll('.item-opcao-dropdown').forEach(item => {
                     const val = (item.getAttribute('data-valor') || item.textContent || '').trim().toLowerCase();
@@ -1088,7 +1088,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Preenche condição
         const condNome = produto.condicao || produto.condition || 'Usado';
         if (condNome && labelCondicao) {
-            labelCondicao.textContent = condNome.toUpperCase();
+            labelCondicao.textContent = condNome;
             if (menuCondicaoOpcoes) {
                 menuCondicaoOpcoes.querySelectorAll('.item-opcao-dropdown').forEach(item => {
                     const val = (item.getAttribute('data-valor') || item.textContent || '').trim().toLowerCase();
