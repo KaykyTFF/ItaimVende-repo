@@ -26,6 +26,20 @@
         },
 
         /**
+         * Verifica se o ambiente está executando diretamente arquivos físicos .html
+         * (ex: VS Code Live Server, python http.server, navegação direta por arquivo)
+         */
+        isAmbienteFisico() {
+            if (!this.isHttp()) return true;
+            const path = (window.location.pathname || '').toLowerCase();
+            if (path.includes('.html')) return true;
+            if (window.location.port === '5500' || window.location.port === '5501' || window.location.port === '8080' || window.location.port === '8000') {
+                return true;
+            }
+            return false;
+        },
+
+        /**
          * Retorna o prefixo relativo para a raiz da plataforma ('/' em HTTP ou '../../' em file:///)
          */
         obterRaiz() {
@@ -89,8 +103,18 @@
             const raiz = this.obterRaiz();
             let urlFinal = '';
 
-            if (this.isHttp()) {
-                // AMBIENTE HTTP / HTTPS: Gera Clean URLs canônicas profissionais
+            if (this.isAmbienteFisico()) {
+                // AMBIENTE COM ARQUIVOS FÍSICOS (Live Server, static server, file:///):
+                // Resolve o arquivo físico HTML correspondente para garantir navegação 100% sem 404
+                let arqFisico = (mapaModulo.ARQUIVOS_FISICOS && mapaModulo.ARQUIVOS_FISICOS[rotaId]) || (rotaBase.endsWith('.html') ? rotaBase : (rotaBase + '.html'));
+                if (arqFisico.includes('#')) {
+                    const partes = arqFisico.split('#');
+                    arqFisico = partes[0];
+                    if (!hash) hash = partes[1];
+                }
+                urlFinal = raiz + arqFisico.replace(/^\//, '');
+            } else {
+                // AMBIENTE SERVIDOR COM REESCRITA CANÔNICA (Express Backend):
                 if (rotaId === 'home' || rotaBase === '/' || rotaBase === '') {
                     urlFinal = raiz; // Raiz limpa para a Home
                 } else if (rotaId === 'cadastro') {
@@ -102,10 +126,6 @@
                     const limpo = rotaBase.replace(/^\//, '').replace(/\.html$/, '');
                     urlFinal = raiz + limpo;
                 }
-            } else {
-                // AMBIENTE OFFLINE (file:///): Resolve arquivo físico HTML
-                const arqFisico = (mapaModulo.ARQUIVOS_FISICOS && mapaModulo.ARQUIVOS_FISICOS[rotaId]) || rotaBase;
-                urlFinal = raiz + arqFisico;
             }
 
             // 4. Anexa parâmetros de busca (?query)

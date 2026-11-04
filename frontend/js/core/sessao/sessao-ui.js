@@ -241,9 +241,15 @@
                 }
                 const urlLogin = window.ItaimRotas ? window.ItaimRotas.obterUrl('login') : (window.location.pathname.toLowerCase().includes('/pages/') ? '../../index.html' : './index.html');
                 btnEntrar.setAttribute('href', urlLogin);
-                btnEntrar.onclick = () => {
+                btnEntrar.onclick = (e) => {
+                    if (e) e.preventDefault();
                     if (window.ItaimRotas && typeof window.ItaimRotas.salvarDestinoLogin === 'function') {
                         window.ItaimRotas.salvarDestinoLogin(window.location.href);
+                    }
+                    if (window.ItaimRotas && typeof window.ItaimRotas.navegarPara === 'function') {
+                        window.ItaimRotas.navegarPara('login');
+                    } else {
+                        window.location.href = urlLogin;
                     }
                 };
                 btnEntrar.style.display = 'inline-flex';
@@ -770,6 +776,8 @@
                 elementoInteracao.classList.contains('item-sair') || 
                 elementoInteracao.closest('.item-sair') || 
                 elementoInteracao.id === 'btn-header-entrar' ||
+                elementoInteracao.closest('#btn-header-entrar') ||
+                e.target.closest('#btn-header-entrar') ||
                 elementoInteracao.closest('#modal-auth-visitante')
             ) {
                 return;

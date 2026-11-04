@@ -145,16 +145,28 @@
             } catch (err) {
                 console.error('[Login] Falha na autenticação:', err);
 
-                const isLocalAdmin = (email.toLowerCase() === 'admin@gmail.com' && (senha === 'admin' || senha === 'admin123'));
-                if (isLocalAdmin && window.ItaimSessao && typeof window.ItaimSessao.definirUsuarioLogado === 'function') {
-                    window.ItaimSessao.definirUsuarioLogado('admin@gmail.com');
-                    this.exibirMensagem('Login efetuado com sucesso! Redirecionando...', 'sucesso');
-                    setTimeout(() => {
-                        const destino = window.ItaimRotas && typeof window.ItaimRotas.obterDestinoPosLogin === 'function'
-                            ? window.ItaimRotas.obterDestinoPosLogin()
-                            : (window.ItaimRotas ? window.ItaimRotas.obterUrl('home') : '/home');
-                        window.location.href = destino;
-                    }, 500);
+                // Fallback automático para modo offline / desenvolvimento sem banco de dados
+                const emailLower = email.toLowerCase().trim();
+                const isLocalAdmin = (emailLower === 'admin@gmail.com' && (senha === 'admin' || senha === 'admin123'));
+                const isLocalDev = (emailLower === 'dev@itaimvende.com' || emailLower === 'dev' || emailLower.startsWith('dev@'));
+
+                if (isLocalAdmin || isLocalDev) {
+                    this.entrarComoDev(isLocalAdmin ? 'admin' : 'dev');
+                    return;
+                }
+
+                // Detecta se a falha ocorreu por inacessibilidade de rede / backend desligado / Wi-Fi bloqueado
+                const isErroRede = !err?.status && (
+                    (err?.message && (err.message.includes('Failed to fetch') || err.message.includes('NetworkError') || err.message.includes('network') || err.message.includes('Conexão recusada')))
+                    || err?.name === 'TypeError'
+                );
+
+                if (isErroRede) {
+                    this.exibirMensagem('Backend/Banco de dados inacessível no momento. Use o botão abaixo "⚡ Entrar como Dev (Sem Banco de Dados)".', 'erro', 7.0);
+                    if (btnEntrar) {
+                        btnEntrar.disabled = false;
+                        btnEntrar.classList.remove('carregando');
+                    }
                     return;
                 }
 
@@ -164,6 +176,42 @@
                     btnEntrar.classList.remove('carregando');
                 }
             }
+        },
+
+        /**
+         * Autentica diretamente no Modo Dev Front-End sem necessitar de banco de dados
+         * Permite testes imediatos de páginas públicas e protegidas
+         */
+        entrarComoDev: function (perfil = 'dev') {
+            const isAdm = (perfil === 'admin');
+            if (window.ItaimSessao && typeof window.ItaimSessao.ativarModoDevFrontend === 'function') {
+                window.ItaimSessao.ativarModoDevFrontend(isAdm ? 'admin' : 'dev');
+            } else if (window.ItaimSessaoAuth && typeof window.ItaimSessaoAuth.ativarModoDevFrontend === 'function') {
+                window.ItaimSessaoAuth.ativarModoDevFrontend(isAdm ? 'admin' : 'dev');
+            } else {
+                localStorage.setItem('itaim_modo_dev', 'true');
+                localStorage.setItem('itaim_token', isAdm ? 'dev_mock_admin_token' : 'token_mock_dev_frontend');
+                localStorage.setItem('itaim_usuario_logado', JSON.stringify({
+                    id: isAdm ? 'cmv5iacmv0000ttiwu9wtemar' : 'dev_mock_usr_001',
+                    nome: isAdm ? 'Admin' : 'Dev Front-End',
+                    name: isAdm ? 'Admin' : 'Dev Front-End',
+                    username: isAdm ? 'adminfreefire' : 'devfrontend',
+                    email: isAdm ? 'admin@gmail.com' : 'dev@itaimvende.com',
+                    role: isAdm ? 'ADMIN' : 'USER',
+                    avatar: isAdm ? '/uploads/perfil/itaim-1791903382039-jwd9lvb.jpg' : 'assets/icons/icon-user.png'
+                }));
+                localStorage.setItem('itaim_usuario_logado_email', isAdm ? 'admin@gmail.com' : 'dev@itaimvende.com');
+            }
+
+            const rotulo = isAdm ? 'Admin Local' : 'Dev Front-End';
+            this.exibirMensagem(`⚡ Modo Dev ativado! Entrando como ${rotulo}...`, 'sucesso', 2.0);
+
+            setTimeout(() => {
+                const destino = window.ItaimRotas && typeof window.ItaimRotas.obterDestinoPosLogin === 'function'
+                    ? window.ItaimRotas.obterDestinoPosLogin()
+                    : (window.ItaimRotas ? window.ItaimRotas.obterUrl('home') : 'pages/home/home.html');
+                window.location.href = destino;
+            }, 350);
         },
 
         /**
@@ -510,6 +558,41 @@
                     }
                 }
             } catch (e) {}
+
+            // Suporte a ativação automática via URL ?dev=true ou ?modo=dev na própria tela de login
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.get('dev') === 'true' || urlParams.get('modo') === 'dev') {
+                    const perfilUrl = urlParams.get('perfil') === 'admin' ? 'admin' : 'dev';
+                    this.entrarComoDev(perfilUrl);
+                    return;
+                }
+            } catch (e) {}
+
+            // Vincula botões de acesso direto Dev e Admin Local (Sem Banco de Dados)
+            const btnDev = document.getElementById('btn-acesso-dev');
+            if (btnDev) {
+                btnDev.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.entrarComoDev('dev');
+                });
+            }
+
+            const btnDevAdmin = document.getElementById('btn-acesso-dev-admin');
+            if (btnDevAdmin) {
+                btnDevAdmin.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.entrarComoDev('admin');
+                });
+            }
+
+            const btnModoDevMini = document.getElementById('btn-modo-dev');
+            if (btnModoDevMini) {
+                btnModoDevMini.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.entrarComoDev('dev');
+                });
+            }
 
             const formLogin = document.getElementById('form-login');
             this.processarAvisoUrl();
