@@ -206,6 +206,12 @@
     visibility: visible;
 }
 
+/* Trava o scroll da página enquanto o modal de perfil estiver aberto */
+html.modal-perfil-aberto,
+body.modal-perfil-aberto {
+    overflow: hidden !important;
+}
+
 .modal-editar-perfil-card {
     background: #ffffff;
     border-radius: 20px;

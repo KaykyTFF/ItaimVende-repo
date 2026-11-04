@@ -230,6 +230,8 @@
             }
 
             modalPerfil.style.display = 'flex';
+            document.documentElement.classList.add('modal-perfil-aberto');
+            document.body.classList.add('modal-perfil-aberto');
             requestAnimationFrame(() => {
                 modalPerfil.classList.add('aberto');
                 if (focoBio && modalTextareaBio) {
@@ -243,6 +245,8 @@
         function fecharModalPerfil() {
             if (!modalPerfil) return;
             modalPerfil.classList.remove('aberto');
+            document.documentElement.classList.remove('modal-perfil-aberto');
+            document.body.classList.remove('modal-perfil-aberto');
             setTimeout(() => {
                 modalPerfil.style.display = 'none';
             }, 200);
