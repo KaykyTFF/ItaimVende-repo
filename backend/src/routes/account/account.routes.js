@@ -10,6 +10,8 @@ import {
   confirmPhoneChange,
   deletePhone,
   revertPhoneChange,
+  getPreferences,
+  updatePreferences,
 } from '../../controllers/account/account.controller.js';
 import { authenticateToken, optionalAuth } from '../../middlewares/auth.middleware.js';
 import { validate } from '../../middlewares/validate.middleware.js';
@@ -72,7 +74,7 @@ const phoneRequestLimiter = rateLimit({
   skip: (req) => Boolean(req.headers['x-test-runner']),
   message: {
     success: false,
-    message: 'Muitas tentativas de envio de código para telefone. Aguarde alguns minutos antes de tentar novamente.',
+    message: 'Limite de solicitações de código de telefone atingido. Tente mais tarde.',
   },
   standardHeaders: true,
   legacyHeaders: false,
@@ -109,5 +111,9 @@ router.post('/phone/revert', optionalAuth, validate(revertPhoneSchema), revertPh
 
 // 5. Rota legada de atualização de telefone
 router.patch('/phone', authenticateToken, validate(changePhoneSchema), changePhone);
+
+// 6. Rotas de Preferências do Usuário (Notificações e Privacidade)
+router.get('/preferences', authenticateToken, getPreferences);
+router.patch('/preferences', authenticateToken, updatePreferences);
 
 export default router;

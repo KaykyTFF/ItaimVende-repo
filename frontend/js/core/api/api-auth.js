@@ -420,6 +420,27 @@
         },
 
         /**
+         * Consulta as preferências do usuário no backend (GET /account/preferences)
+         */
+        async obterPreferencias() {
+            return getCore().requisicao('/account/preferences', {
+                method: 'GET',
+                headers: getCore().obterHeaders(true)
+            });
+        },
+
+        /**
+         * Atualiza as preferências do usuário no backend (PATCH /account/preferences)
+         */
+        async atualizarPreferencias(preferencias) {
+            return getCore().requisicao('/account/preferences', {
+                method: 'PATCH',
+                headers: getCore().obterHeaders(true),
+                body: JSON.stringify(preferencias)
+            });
+        },
+
+        /**
          * Encerra a sessão ativa e remove credenciais
          */
         logout() {

@@ -86,6 +86,21 @@
         const naPaginaNotifs = window.location.pathname.includes('notificacoes.html');
         if (naPaginaNotifs) return;
 
+        // Respeita as preferências de notificações configuradas pelo usuário
+        try {
+            const prefs = JSON.parse(localStorage.getItem('itaim_configuracoes') || '{}');
+            const tipo = String(notificacao.type || notificacao.tipo || '').toLowerCase();
+            if (tipo === 'mensagem' || tipo === 'message' || tipo === 'chat' || tipo === 'proposta' || tipo === 'proposal') {
+                if (prefs['not-mensagens'] === false) return;
+            } else if (tipo === 'avaliacao' || tipo === 'review' || tipo === 'rating') {
+                if (prefs['not-avaliacoes'] === false) return;
+            } else if (tipo === 'favorito' || tipo === 'favorite') {
+                if (prefs['not-favoritos'] === false) return;
+            } else if (tipo === 'aviso' || tipo === 'preco' || tipo === 'sistema' || tipo === 'alert' || tipo === 'system' || tipo === 'announcement') {
+                if (prefs['not-avisos'] === false) return;
+            }
+        } catch (e) {}
+
         let container = document.getElementById('itaim-toast-push-container');
         if (!container) {
             container = document.createElement('div');
@@ -264,6 +279,17 @@
 
             socket.on('chat_error', (dados) => {
                 console.warn('⚠️ [ItaimSocket] Erro no chat:', dados.message);
+            });
+
+            socket.on('auth_expired', (dados) => {
+                console.warn('⚠️ [ItaimSocket] Sessão expirada no servidor:', dados?.message);
+                ItaimSocket.desconectar();
+                localStorage.removeItem('itaim_token');
+                localStorage.removeItem('itaim_usuario_logado');
+                localStorage.removeItem('itaim_usuario_logado_email');
+                if (window.ItaimSessao && typeof window.ItaimSessao.atualizarHeaderUsuario === 'function') {
+                    window.ItaimSessao.atualizarHeaderUsuario();
+                }
             });
 
             // 1. Atualização Instantânea de Badges (Contador push)

@@ -462,7 +462,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                 imagem: window.ItaimApi.resolverUrlImagem(p.imagem || (p.images && p.images[0]) || '')
                             };
                         })
-                        .filter(p => String(p.status).toLowerCase() === 'ativo');
+                        .filter(p => {
+                            const s = String(p.status || '').toLowerCase();
+                            return s === 'ativo' || s === 'active' || !p.status;
+                        });
                     atualizarSidebarFiltros();
                     renderizar();
                     return;

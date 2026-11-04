@@ -579,7 +579,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                     : (window.ItaimRotas ? window.ItaimRotas.obterAsset('assets/produtos/anuncio_13.jpg') : '../../assets/produtos/anuncio_13.jpg')
                             };
                         })
-                        .filter(p => String(p.status).toLowerCase() === 'ativo');
+                        .filter(p => {
+                            const s = String(p.status || '').toLowerCase();
+                            return s === 'ativo' || s === 'active' || !p.status;
+                        });
 
                     produtos = apiProdutos;
                     renderizarVitrine();

@@ -86,14 +86,18 @@
             const dados = await resposta.json().catch(() => ({}));
 
             // 2. Tratamento de 401 Unauthorized:
-            // Só invalida a sessão se for erro 401 na rota GET /auth/me (token expirado/inválido).
-            // Erros 403 ou operações PUT/DELETE (ex: cooldown de username) NUNCA deslogam o usuário.
+            // Invalida a sessão se for erro 401 na rota GET /auth/me ou se o token estiver explicitamente expirado/inválido.
+            // Erros 403 ou operações PUT/DELETE normais não deslogam desnecessariamente.
             if (resposta.status === 401) {
                 const metodo = (opcoesFinais.method || 'GET').toUpperCase();
                 const isAuthCheck = endpoint.includes('/auth/me') && metodo === 'GET';
+                const isTokenExpired = dados && (dados.code === 'TOKEN_EXPIRED' || dados.code === 'TOKEN_INVALID' || dados.error === 'jwt expired');
                 const isDevMode = localStorage.getItem('itaim_modo_dev') === 'true';
-                if (isAuthCheck && obterToken() && !isDevMode) {
-                    console.info('[ItaimApi] Token expirado ou rejeitado em /auth/me.');
+                if ((isAuthCheck || isTokenExpired) && obterToken() && !isDevMode) {
+                    console.info('[ItaimApi] Sessão expirada ou token inválido. Limpando credenciais.');
+                    if (window.ItaimSocket && typeof window.ItaimSocket.desconectar === 'function') {
+                        window.ItaimSocket.desconectar();
+                    }
                     if (window.ItaimSessao && typeof window.ItaimSessao.deslogarUsuario === 'function') {
                         window.ItaimSessao.deslogarUsuario();
                     } else {

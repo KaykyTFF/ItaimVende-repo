@@ -69,6 +69,7 @@ export function initSocketServer(httpServer) {
       console.warn('[Socket Auth] Token inválido ou expirado:', err.message);
       // Conexão permitida como visitante anônimo
       socket.user = null;
+      socket.tokenExpired = true;
       return next();
     }
   });
@@ -76,6 +77,10 @@ export function initSocketServer(httpServer) {
   // Gerenciamento de conexões ativas
   io.on('connection', (socket) => {
     const userId = socket.user?.id;
+
+    if (socket.tokenExpired) {
+      socket.emit("auth_expired", { code: "TOKEN_EXPIRED", message: "Token expirado ou inválido." });
+    }
 
     if (userId) {
       // O usuário entra na sua sala pessoal para notificações push e badges
@@ -204,6 +209,19 @@ export async function notifyBadgeUpdate(userId) {
   if (!io || !userId) return;
 
   try {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { preferences: true },
+    });
+    const prefs = (user && user.preferences && typeof user.preferences === 'object') ? user.preferences : {};
+    const disabledTypes = [];
+    if (prefs['not-mensagens'] === false) disabledTypes.push('mensagem');
+    if (prefs['not-avaliacoes'] === false) disabledTypes.push('avaliacao');
+    if (prefs['not-favoritos'] === false) disabledTypes.push('favorito');
+    if (prefs['not-avisos'] === false) disabledTypes.push('aviso', 'preco', 'sistema');
+    const notifWhere = { userId, isRead: false };
+    if (disabledTypes.length > 0) notifWhere.type = { notIn: disabledTypes };
+
     const [unreadMessages, unreadNotifications] = await Promise.all([
       prisma.message.count({
         where: {
@@ -216,7 +234,7 @@ export async function notifyBadgeUpdate(userId) {
         },
       }),
       prisma.notification.count({
-        where: { userId, isRead: false },
+        where: notifWhere,
       }),
     ]);
 

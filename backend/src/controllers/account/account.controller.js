@@ -13,6 +13,10 @@ import {
   deletePhone as deletePhoneService,
   revertPhoneChange as revertPhoneChangeService,
 } from '../../services/account/account.phone.service.js';
+import {
+  getUserPreferences,
+  updateUserPreferences,
+} from '../../services/account/account.preferences.service.js';
 
 export async function changeUsername(req, res, next) {
   try {
@@ -64,7 +68,6 @@ export async function confirmEmailChange(req, res, next) {
     };
     const result = await confirmEmailChangeService({
       userId: req.user.id,
-      newEmail: req.body.newEmail,
       code: req.body.code,
       ...meta,
     });
@@ -153,6 +156,24 @@ export async function revertPhoneChange(req, res, next) {
       ...meta,
     });
     res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function getPreferences(req, res, next) {
+  try {
+    const preferences = await getUserPreferences(req.user.id);
+    res.status(200).json({ success: true, preferences });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function updatePreferences(req, res, next) {
+  try {
+    const preferences = await updateUserPreferences(req.user.id, req.body || {});
+    res.status(200).json({ success: true, message: 'Preferências salvas com sucesso.', preferences });
   } catch (error) {
     next(error);
   }

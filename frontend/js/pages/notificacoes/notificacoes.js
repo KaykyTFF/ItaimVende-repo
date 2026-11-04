@@ -76,19 +76,30 @@ document.addEventListener('DOMContentLoaded', async () => {
     function renderizar() {
         if (!lista) return;
 
-        let filtradas = todasNotifs;
+        const prefs = (() => {
+            try { return JSON.parse(localStorage.getItem('itaim_configuracoes') || '{}'); } catch(e) { return {}; }
+        })();
+
+        let filtradas = todasNotifs.filter(n => {
+            const t = String(n.tipo || n.type || '').toLowerCase();
+            if ((t === 'mensagem' || t === 'message' || t === 'proposta' || t === 'proposal') && prefs['not-mensagens'] === false) return false;
+            if ((t === 'avaliacao' || t === 'review' || t === 'rating') && prefs['not-avaliacoes'] === false) return false;
+            if ((t === 'favorito' || t === 'favorite') && prefs['not-favoritos'] === false) return false;
+            if ((t === 'aviso' || t === 'preco' || t === 'sistema' || t === 'alert' || t === 'system') && prefs['not-avisos'] === false) return false;
+            return true;
+        });
         if (filtroAtivo === 'nao-lidas') {
-            filtradas = todasNotifs.filter(n => !(n.lida || n.isRead));
+            filtradas = filtradas.filter(n => !(n.lida || n.isRead));
         } else if (filtroAtivo === 'mensagem') {
-            filtradas = todasNotifs.filter(n => (n.tipo || n.type) === 'mensagem');
+            filtradas = filtradas.filter(n => (n.tipo || n.type) === 'mensagem');
         } else if (filtroAtivo === 'avaliacao') {
-            filtradas = todasNotifs.filter(n => (n.tipo || n.type) === 'avaliacao');
+            filtradas = filtradas.filter(n => (n.tipo || n.type) === 'avaliacao');
         } else if (filtroAtivo === 'compra') {
-            filtradas = todasNotifs.filter(n => (n.tipo || n.type) === 'compra');
+            filtradas = filtradas.filter(n => (n.tipo || n.type) === 'compra');
         } else if (filtroAtivo === 'favorito') {
-            filtradas = todasNotifs.filter(n => (n.tipo || n.type) === 'favorito');
+            filtradas = filtradas.filter(n => (n.tipo || n.type) === 'favorito');
         } else if (filtroAtivo === 'aviso') {
-            filtradas = todasNotifs.filter(n => {
+            filtradas = filtradas.filter(n => {
                 const t = n.tipo || n.type;
                 return t === 'aviso' || t === 'preco' || t === 'sistema';
             });

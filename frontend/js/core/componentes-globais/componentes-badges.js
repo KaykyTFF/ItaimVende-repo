@@ -104,10 +104,19 @@
                     const notifs = JSON.parse(rawNotifs);
                     let naoLidas = 0;
                     if (Array.isArray(notifs)) {
+                        const prefs = (() => {
+                            try { return JSON.parse(localStorage.getItem('itaim_configuracoes') || '{}'); } catch(e) { return {}; }
+                        })();
                         naoLidas = notifs.filter(n => {
                             const dest = (n.destinatario || n.destinatarioEmail || '').toLowerCase().trim();
                             const ehParaMim = (!dest || dest === userEmail || dest === 'todos');
-                            return ehParaMim && !n.lida;
+                            if (!ehParaMim || n.lida) return false;
+                            const t = String(n.tipo || n.type || '').toLowerCase();
+                            if ((t === 'mensagem' || t === 'message' || t === 'proposta' || t === 'proposal') && prefs['not-mensagens'] === false) return false;
+                            if ((t === 'avaliacao' || t === 'review' || t === 'rating') && prefs['not-avaliacoes'] === false) return false;
+                            if ((t === 'favorito' || t === 'favorite') && prefs['not-favoritos'] === false) return false;
+                            if ((t === 'aviso' || t === 'preco' || t === 'sistema' || t === 'alert' || t === 'system') && prefs['not-avisos'] === false) return false;
+                            return true;
                         }).length;
                     }
                     aplicarBadgeNotifs(naoLidas);

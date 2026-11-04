@@ -1,6 +1,7 @@
 import prisma from '../../config/prisma.js';
 import { AppError } from '../../utils/errors.js';
 import { emitToUser, notifyBadgeUpdate } from '../../sockets/index.js';
+import { getUserPreferences } from '../account/account.preferences.service.js';
 
 /**
  * Converte data para formato relativo amigável em português
@@ -46,7 +47,7 @@ export function formatNotification(n) {
 }
 
 /**
- * Lista notificações do usuário com suporte a filtros e paginação
+ * Lista notificações do usuário com suporte a filtros, paginação e preferências
  */
 export async function listUserNotifications(userId, options = {}) {
   const { isRead, type, page = 1, limit = 30 } = options;
@@ -65,6 +66,29 @@ export async function listUserNotifications(userId, options = {}) {
     }
   }
 
+  // Aplica filtro com base nas preferências de notificações do usuário
+  const prefs = await getUserPreferences(userId);
+  const disabledTypes = [];
+  if (prefs['not-mensagens'] === false) disabledTypes.push('mensagem');
+  if (prefs['not-avaliacoes'] === false) disabledTypes.push('avaliacao');
+  if (prefs['not-favoritos'] === false) disabledTypes.push('favorito');
+  if (prefs['not-avisos'] === false) disabledTypes.push('aviso', 'preco', 'sistema');
+
+  if (disabledTypes.length > 0) {
+    if (where.type && typeof where.type === 'string') {
+      if (disabledTypes.includes(where.type)) {
+        return { notifications: [], total: 0, unreadCount: 0, page: 1, limit: 30, totalPages: 0 };
+      }
+    } else if (where.type && where.type.in) {
+      where.type.in = where.type.in.filter(t => !disabledTypes.includes(t));
+      if (where.type.in.length === 0) {
+        return { notifications: [], total: 0, unreadCount: 0, page: 1, limit: 30, totalPages: 0 };
+      }
+    } else {
+      where.type = { notIn: disabledTypes };
+    }
+  }
+
   const take = Math.min(Math.max(Number(limit) || 30, 1), 100);
   const skip = (Math.max(Number(page) || 1, 1) - 1) * take;
 
@@ -76,7 +100,7 @@ export async function listUserNotifications(userId, options = {}) {
       take,
     }),
     prisma.notification.count({ where }),
-    prisma.notification.count({ where: { userId, isRead: false } }),
+    prisma.notification.count({ where: { userId, isRead: false, ...(disabledTypes.length > 0 ? { type: { notIn: disabledTypes } } : {}) } }),
   ]);
 
   return {
@@ -90,13 +114,22 @@ export async function listUserNotifications(userId, options = {}) {
 }
 
 /**
- * Retorna contagem de notificações não lidas
+ * Retorna contagem de notificações não lidas considerando preferências
  */
 export async function getUnreadNotificationCount(userId) {
-  const count = await prisma.notification.count({
-    where: { userId, isRead: false },
-  });
+  const prefs = await getUserPreferences(userId);
+  const disabledTypes = [];
+  if (prefs['not-mensagens'] === false) disabledTypes.push('mensagem');
+  if (prefs['not-avaliacoes'] === false) disabledTypes.push('avaliacao');
+  if (prefs['not-favoritos'] === false) disabledTypes.push('favorito');
+  if (prefs['not-avisos'] === false) disabledTypes.push('aviso', 'preco', 'sistema');
 
+  const where = { userId, isRead: false };
+  if (disabledTypes.length > 0) {
+    where.type = { notIn: disabledTypes };
+  }
+
+  const count = await prisma.notification.count({ where });
   return { unreadCount: count };
 }
 
@@ -178,10 +211,17 @@ export async function clearAllNotifications(userId) {
 }
 
 /**
- * Helper interno: Cria notificação persistente no banco de dados para um usuário
+ * Helper interno: Cria notificação persistente no banco de dados respeitando preferências
  */
 export async function createNotification({ userId, title, message, type = 'aviso', link = null }) {
   if (!userId) return null;
+
+  const prefs = await getUserPreferences(userId);
+  const isTypeDisabled =
+    (type === 'mensagem' && prefs['not-mensagens'] === false) ||
+    (type === 'avaliacao' && prefs['not-avaliacoes'] === false) ||
+    (type === 'favorito' && prefs['not-favoritos'] === false) ||
+    ((type === 'aviso' || type === 'preco' || type === 'sistema') && prefs['not-avisos'] === false);
 
   const notif = await prisma.notification.create({
     data: {
@@ -190,12 +230,14 @@ export async function createNotification({ userId, title, message, type = 'aviso
       message: message || '',
       type: type || 'aviso',
       link: link || null,
-      isRead: false,
+      isRead: isTypeDisabled ? true : false,
     },
   });
 
   const formatted = formatNotification(notif);
-  emitToUser(userId, 'notification_new', formatted);
-  notifyBadgeUpdate(userId);
+  if (!isTypeDisabled) {
+    emitToUser(userId, 'notification_new', formatted);
+    notifyBadgeUpdate(userId);
+  }
   return formatted;
 }
