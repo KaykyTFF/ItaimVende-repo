@@ -1,0 +1,22 @@
+{
+  "outputDirectory": "frontend",
+  "cleanUrls": false,
+  "rewrites": [
+    { "source": "/", "destination": "/pages/home/home.html" },
+    { "source": "/home", "destination": "/pages/home/home.html" },
+    { "source": "/login", "destination": "/index.html" },
+    { "source": "/cadastro", "destination": "/pages/auth/cadastro.html" },
+    { "source": "/categoria", "destination": "/pages/produtos/categoria.html" },
+    { "source": "/produto", "destination": "/pages/produtos/produto.html" },
+    { "source": "/vender", "destination": "/pages/vender/vender.html" },
+    { "source": "/meus-anuncios", "destination": "/pages/vender/meus-anuncios.html" },
+    { "source": "/conversas", "destination": "/pages/mensagens/conversas.html" },
+    { "source": "/chat", "destination": "/pages/mensagens/conversas.html" },
+    { "source": "/perfil", "destination": "/pages/perfil/perfil.html" },
+    { "source": "/vendedor", "destination": "/pages/perfil/vendedor.html" },
+    { "source": "/configuracoes", "destination": "/pages/perfil/configuracoes.html" },
+    { "source": "/favoritos", "destination": "/pages/favoritos/favoritos.html" },
+    { "source": "/notificacoes", "destination": "/pages/notificacoes/notificacoes.html" },
+    { "source": "/reverter-telefone", "destination": "/pages/auth/reverter-telefone.html" }
+  ]
+}
