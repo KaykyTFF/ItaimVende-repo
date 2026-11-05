@@ -18,8 +18,12 @@
 }
 
 .footer-logo-img {
-    height: 52px;
-    margin-bottom: 14px;
+    height: 64px;
+    width: auto;
+    max-width: 260px;
+    object-fit: contain;
+    margin-bottom: 16px;
+    display: block;
 }
 
 .footer-sobre {
