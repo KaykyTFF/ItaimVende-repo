@@ -95,14 +95,16 @@
     text-overflow: ellipsis;
 }
 
-.anuncio-titulo:hover {
-    color: var(--primary);
+.anuncio-titulo:hover,
+.anuncio-titulo:focus,
+.anuncio-titulo:active {
+    color: #2E8B22;
 }
 
 .anuncio-preco {
     font-size: 19px;
     font-weight: 800;
-    color: var(--primary);
+    color: #2E8B22;
 }
 
 .anuncio-metricas {

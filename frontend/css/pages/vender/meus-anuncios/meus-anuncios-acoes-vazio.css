@@ -27,7 +27,7 @@
     background-color: #334155;
     color: #FFFFFF;
     border: 1px solid #334155;
-    box-shadow: 0 2px 6px rgba(51, 65, 85, 0.25);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 .btn-acao-editar:hover {
@@ -35,7 +35,7 @@
     color: #FFFFFF;
     border-color: #1E293B;
     transform: translateY(-1px);
-    box-shadow: 0 4px 10px rgba(30, 41, 59, 0.35);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.22);
 }
 
 [data-theme="dark"] .btn-acao-editar {
@@ -53,21 +53,21 @@
     background-color: #475569;
     color: #FFFFFF;
     border: 1px solid transparent;
-    box-shadow: 0 2px 6px rgba(71, 85, 105, 0.25);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 .btn-acao-ver:hover {
     background-color: #334155;
     color: #FFFFFF;
     transform: translateY(-1px);
-    box-shadow: 0 4px 10px rgba(71, 85, 105, 0.35);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.22);
 }
 
 .btn-acao-status {
     background-color: #F97316;
     color: #FFFFFF;
     border: 1px solid #F97316;
-    box-shadow: 0 2px 6px rgba(249, 115, 22, 0.25);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 .btn-acao-status:hover {
@@ -75,43 +75,43 @@
     color: #FFFFFF;
     border-color: #EA580C;
     transform: translateY(-1px);
-    box-shadow: 0 4px 10px rgba(234, 88, 12, 0.35);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.22);
 }
 
 .btn-acao-status.btn-status-reativar {
     background-color: #2563EB;
     color: #FFFFFF;
     border: 1px solid #2563EB;
-    box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 .btn-acao-status.btn-status-reativar:hover {
     background-color: #1D4ED8;
     color: #FFFFFF;
     border-color: #1D4ED8;
-    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.35);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.22);
 }
 
 .btn-acao-marcar-vendido {
-    background-color: var(--primary, #44BD32);
+    background-color: #38A129;
     color: #FFFFFF;
-    border: 1px solid var(--primary, #44BD32);
-    box-shadow: 0 2px 6px rgba(68, 189, 50, 0.25);
+    border: 1px solid #38A129;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 .btn-acao-marcar-vendido:hover {
-    background-color: var(--primary-hover, #3ca82b);
+    background-color: #2E8B22;
     color: #FFFFFF;
-    border-color: var(--primary-hover, #3ca82b);
+    border-color: #2E8B22;
     transform: translateY(-1px);
-    box-shadow: 0 4px 10px rgba(60, 168, 43, 0.35);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .btn-acao-excluir {
     background-color: #DC2626;
     color: #FFFFFF;
     border: 1px solid #DC2626;
-    box-shadow: 0 2px 6px rgba(220, 38, 38, 0.25);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 .btn-acao-excluir:hover {
@@ -119,7 +119,7 @@
     color: #FFFFFF;
     border-color: #B91C1C;
     transform: translateY(-1px);
-    box-shadow: 0 4px 10px rgba(220, 38, 38, 0.35);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.22);
 }
 
 /* Estado Vazio */
