@@ -1289,10 +1289,14 @@ html, body {
 }
 
 /* ==========================================================================
-   AÇÕES SECUNDÁRIAS (VISITANTE E DEV) - FIXADOS NO CANTO INFERIOR DIREITO
+   AÇÕES SECUNDÁRIAS (CONTINUAR COMO VISITANTE)
    ========================================================================== */
 .box-acoes-secundarias-mini {
-    display: none !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 16px;
+    padding-top: 4px;
 }
 
 .box-acoes-secundarias-mini .box-visitante,

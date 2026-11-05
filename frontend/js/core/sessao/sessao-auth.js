@@ -121,14 +121,14 @@
         return lista.find(u => (u.username || '').toLowerCase() === limpo) || null;
     }
 
-    // 1.1 USUÁRIO DEV FRONT-END (PARA TESTES RÁPIDOS NO LIVE SERVER SEM PRECISAR DE BACKEND)
+    // 1.1 USUÁRIO PADRÃO DEMO / PORTFÓLIO (SEM PRECISAR DE BACKEND)
     const USUARIO_DEV = Object.freeze({
         id: "usr_dev_frontend_001",
-        nome: "Dev Front-End",
-        name: "Dev Front-End",
-        username: "dev_front",
-        usuario: "dev_front",
-        email: "dev@itaimvende.com",
+        nome: "Kayky Terles Ferreira Feitosa",
+        name: "Kayky Terles Ferreira Feitosa",
+        username: "kaykyt",
+        usuario: "kaykyt",
+        email: "kayky@gmail.com",
         telefone: "(89) 99400-0000",
         phone: "89994000000",
         cidade: "Paulistana",
@@ -137,11 +137,11 @@
         neighborhood: "Centro",
         estado: "PI",
         state: "PI",
-        avatar: "assets/icons/icon-user.png",
-        bio: "Ambiente de Desenvolvimento Front-End ativo (Live Server).",
+        avatar: "assets/usuarios/perfil-kayky.jpg",
+        bio: "Perfil de demonstração oficial do Itaim Vende.",
         role: "ADMIN",
         isVerified: true,
-        dataCadastro: "Membro Dev",
+        dataCadastro: "Membro desde 2026",
         avaliacao: "5.0",
         ratingAverage: 5.0,
         totalAvaliacoes: 14,
