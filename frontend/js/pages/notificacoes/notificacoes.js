@@ -38,14 +38,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             id: 'demo_prop_2',
             tipo: 'mensagem',
             type: 'mensagem',
-            titulo: 'Proposta Aceita! 🎉',
+            titulo: 'Proposta Aceita!',
             texto: 'Sua proposta de R$ 270,00 foi aceita! Agora é só combinar a entrega.',
             tempo: '45 min atrás',
             criadoEm: Date.now() - 45 * 60 * 1000,
             lida: true,
             isRead: true,
             avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80',
-            badgePonto: 'laranja',
+            badgePonto: 'mensagem',
             produtoImagem: '../../assets/produtos/anuncio_8.jpg',
             link: '../mensagens/conversas.html',
             textoBotao: 'Conversar',
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             lida: true,
             isRead: true,
             avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80',
-            badgePonto: 'roxa',
+            badgePonto: 'avaliacao',
             estrelas: 5,
             link: '../perfil/perfil.html#avaliacoes',
             textoBotao: 'Ver avaliação',
@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             lida: true,
             isRead: true,
             avatar: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=150&q=80',
-            badgePonto: 'vermelha',
+            badgePonto: 'favorito',
             link: '../produtos/categoria.html',
             textoBotao: 'Enviar oferta',
             tipoAcao: 'oferta'
@@ -261,14 +261,16 @@ document.addEventListener('DOMContentLoaded', async () => {
             card.dataset.id = item.id;
 
             const tipo = String(item.tipo || item.type || 'aviso').toLowerCase();
-            const titulo = item.titulo || item.title || 'Notificação';
+            let titulo = item.titulo || item.title || 'Notificação';
+            // Remove quaisquer emojis residuais de títulos antigos em cache
+            titulo = titulo.replace(/[\u{1F300}-\u{1F9FF}]/gu, '').trim();
             const texto = item.texto || item.message || '';
             const tempo = item.tempo || 'Hoje';
 
-            // Determina avatar e badges
+            // Determina avatar e badges (ícones clean outline conforme design de abas)
             let avatarUrl = item.avatar || item.remetenteAvatar || '../../assets/icons/icon-user.png';
             let avatarRingClass = item.avatarRing || '';
-            let badgePontoClass = item.badgePonto || '';
+            let badgePontoClass = '';
             let badgePontoIcone = '';
 
             // Se for nova proposta e não tiver anel definido
@@ -277,14 +279,18 @@ document.addEventListener('DOMContentLoaded', async () => {
                 avatarRingClass = 'avatar-ring-verde';
             }
 
-            if (tipo === 'mensagem' || titulo.toLowerCase().includes('proposta aceita') || item.badgePonto === 'laranja') {
-                badgePontoClass = 'laranja';
-            } else if (tipo === 'avaliacao' || item.badgePonto === 'roxa') {
-                badgePontoClass = 'roxa';
-                badgePontoIcone = `<svg viewBox="0 0 24 24" width="9" height="9" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`;
-            } else if (tipo === 'favorito' || item.badgePonto === 'vermelha') {
-                badgePontoClass = 'vermelha';
-                badgePontoIcone = `<svg viewBox="0 0 24 24" width="9" height="9" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>`;
+            const badgeOrig = String(item.badgePonto || '').toLowerCase();
+            if (tipo === 'mensagem' || tipo === 'conversar' || titulo.toLowerCase().includes('proposta aceita') || badgeOrig === 'laranja' || badgeOrig === 'mensagem' || badgeOrig === 'chat') {
+                badgePontoClass = 'badge-tipo-mensagem';
+                badgePontoIcone = `<svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>`;
+            } else if (tipo === 'avaliacao' || badgeOrig === 'roxa' || badgeOrig === 'avaliacao' || badgeOrig === 'estrela') {
+                badgePontoClass = 'badge-tipo-avaliacao';
+                badgePontoIcone = `<svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`;
+            } else if (tipo === 'favorito' || badgeOrig === 'vermelha' || badgeOrig === 'favorito' || badgeOrig === 'coracao') {
+                badgePontoClass = 'badge-tipo-favorito';
+                badgePontoIcone = `<svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>`;
+            } else if (item.badgePonto) {
+                badgePontoClass = 'badge-tipo-outline';
             }
 
             // Mídia central (Thumbnail ou Estrelas)
