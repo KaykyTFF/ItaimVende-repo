@@ -168,8 +168,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                     ${formatarPreco(produto.preco, produto)}
                 </div>
                 <div class="card-rodape">
-                    <span class="card-local" title="${produto.bairro ? produto.bairro + ', ' : ''}${produto.cidade || 'Paulistana'}">
-                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -1px; margin-right: 2px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>${produto.bairro && produto.bairro !== 'Centro' ? produto.bairro + ' - ' : ''}${produto.cidade || 'Paulistana'}
+                    <span class="card-local" title="${produto.cidade || 'Paulistana'} - ${(!produto.bairro || /^\d/.test(produto.bairro) || /\d{5}/.test(produto.bairro)) ? 'Centro' : produto.bairro}">
+                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -1px; margin-right: 2px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>${produto.cidade || 'Paulistana'} - ${(!produto.bairro || /^\d/.test(produto.bairro) || /\d{5}/.test(produto.bairro)) ? 'Centro' : produto.bairro}
                     </span>
                     <span style="color: #44BD32; font-weight: 700; font-size: 12.5px;">Ver anúncio &rarr;</span>
                 </div>

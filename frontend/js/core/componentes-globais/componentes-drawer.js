@@ -85,25 +85,43 @@
                     </svg>
                 </button>
                 <div class="drawer-categorias-conteudo" id="drawer-categorias-conteudo">
-                    <a href="${urlPara('categoria', 'cat=Veículos')}" class="drawer-sublink">Veículos & Autopeças</a>
-                    <a href="${urlPara('categoria', 'cat=Imóveis')}" class="drawer-sublink">Imóveis & Terrenos</a>
-                    <a href="${urlPara('categoria', 'cat=Agro')}" class="drawer-sublink">Agro & Pecuária</a>
-                    <a href="${urlPara('categoria', 'cat=Celulares')}" class="drawer-sublink">Celulares & Telefonia</a>
-                    <a href="${urlPara('categoria', 'cat=Eletrônicos')}" class="drawer-sublink">Eletrônicos, Áudio & Vídeo</a>
-                    <a href="${urlPara('categoria', 'cat=Informática')}" class="drawer-sublink">Informática & Games</a>
-                    <a href="${urlPara('categoria', 'cat=Móveis')}" class="drawer-sublink">Casa, Móveis & Decoração</a>
+                    <a href="${urlPara('categoria', 'cat=Veículos')}" class="drawer-sublink">Veículos</a>
+                    <a href="${urlPara('categoria', 'cat=Autopeças')}" class="drawer-sublink">Autopeças</a>
+                    <a href="${urlPara('categoria', 'cat=Imóveis')}" class="drawer-sublink">Imóveis</a>
+                    <a href="${urlPara('categoria', 'cat=Terrenos')}" class="drawer-sublink">Terrenos</a>
+                    <a href="${urlPara('categoria', 'cat=Agro')}" class="drawer-sublink">Agro</a>
+                    <a href="${urlPara('categoria', 'cat=Pecuária')}" class="drawer-sublink">Pecuária</a>
+                    <a href="${urlPara('categoria', 'cat=Celulares')}" class="drawer-sublink">Celulares</a>
+                    <a href="${urlPara('categoria', 'cat=Telefonia')}" class="drawer-sublink">Telefonia</a>
+                    <a href="${urlPara('categoria', 'cat=Eletrônicos')}" class="drawer-sublink">Eletrônicos</a>
+                    <a href="${urlPara('categoria', 'cat=Áudio & Vídeo')}" class="drawer-sublink">Áudio & Vídeo</a>
+                    <a href="${urlPara('categoria', 'cat=Informática')}" class="drawer-sublink">Informática</a>
+                    <a href="${urlPara('categoria', 'cat=Games')}" class="drawer-sublink">Games</a>
+                    <a href="${urlPara('categoria', 'cat=Móveis')}" class="drawer-sublink">Móveis</a>
+                    <a href="${urlPara('categoria', 'cat=Decoração')}" class="drawer-sublink">Decoração</a>
                     <a href="${urlPara('categoria', 'cat=Eletrodomésticos')}" class="drawer-sublink">Eletrodomésticos</a>
-                    <a href="${urlPara('categoria', 'cat=Moda')}" class="drawer-sublink">Moda, Calçados & Acessórios</a>
-                    <a href="${urlPara('categoria', 'cat=Beleza')}" class="drawer-sublink">Beleza & Cuidado Pessoal</a>
-                    <a href="${urlPara('categoria', 'cat=Infantil')}" class="drawer-sublink">Infantil & Bebês</a>
-                    <a href="${urlPara('categoria', 'cat=Esportes')}" class="drawer-sublink">Esportes, Fitness & Lazer</a>
-                    <a href="${urlPara('categoria', 'cat=Construção')}" class="drawer-sublink">Construção & Ferramentas</a>
-                    <a href="${urlPara('categoria', 'cat=Comércio')}" class="drawer-sublink">Comércio, Negócios & Escritório</a>
-                    <a href="${urlPara('categoria', 'cat=Serviços')}" class="drawer-sublink">Serviços & Profissionais</a>
-                    <a href="${urlPara('categoria', 'cat=Hobbies')}" class="drawer-sublink">Música, Arte & Hobbies</a>
-                    <a href="${urlPara('categoria', 'cat=Pets')}" class="drawer-sublink">Animais de Estimação & Pet Shop</a>
-                    <a href="${urlPara('categoria', 'cat=Doações')}" class="drawer-sublink">Doações, Trocas & Solidariedade</a>
-                    <a href="${urlPara('categoria', 'cat=Outros')}" class="drawer-sublink">Outros & Diversos</a>
+                    <a href="${urlPara('categoria', 'cat=Moda')}" class="drawer-sublink">Moda</a>
+                    <a href="${urlPara('categoria', 'cat=Calçados')}" class="drawer-sublink">Calçados</a>
+                    <a href="${urlPara('categoria', 'cat=Acessórios')}" class="drawer-sublink">Acessórios</a>
+                    <a href="${urlPara('categoria', 'cat=Beleza')}" class="drawer-sublink">Beleza</a>
+                    <a href="${urlPara('categoria', 'cat=Cuidado Pessoal')}" class="drawer-sublink">Cuidado Pessoal</a>
+                    <a href="${urlPara('categoria', 'cat=Infantil')}" class="drawer-sublink">Infantil</a>
+                    <a href="${urlPara('categoria', 'cat=Bebês')}" class="drawer-sublink">Bebês</a>
+                    <a href="${urlPara('categoria', 'cat=Esportes')}" class="drawer-sublink">Esportes</a>
+                    <a href="${urlPara('categoria', 'cat=Fitness')}" class="drawer-sublink">Fitness</a>
+                    <a href="${urlPara('categoria', 'cat=Lazer')}" class="drawer-sublink">Lazer</a>
+                    <a href="${urlPara('categoria', 'cat=Construção')}" class="drawer-sublink">Construção</a>
+                    <a href="${urlPara('categoria', 'cat=Ferramentas')}" class="drawer-sublink">Ferramentas</a>
+                    <a href="${urlPara('categoria', 'cat=Comércio')}" class="drawer-sublink">Comércio</a>
+                    <a href="${urlPara('categoria', 'cat=Escritório')}" class="drawer-sublink">Escritório</a>
+                    <a href="${urlPara('categoria', 'cat=Serviços')}" class="drawer-sublink">Serviços</a>
+                    <a href="${urlPara('categoria', 'cat=Música')}" class="drawer-sublink">Música</a>
+                    <a href="${urlPara('categoria', 'cat=Hobbies')}" class="drawer-sublink">Hobbies</a>
+                    <a href="${urlPara('categoria', 'cat=Animais de Estimação')}" class="drawer-sublink">Animais de Estimação</a>
+                    <a href="${urlPara('categoria', 'cat=Pet Shop')}" class="drawer-sublink">Pet Shop</a>
+                    <a href="${urlPara('categoria', 'cat=Doações')}" class="drawer-sublink">Doações</a>
+                    <a href="${urlPara('categoria', 'cat=Trocas')}" class="drawer-sublink">Trocas</a>
+                    <a href="${urlPara('categoria', 'cat=Outros')}" class="drawer-sublink">Outros</a>
                 </div>
 
                 <div class="drawer-secao-divisor"></div>

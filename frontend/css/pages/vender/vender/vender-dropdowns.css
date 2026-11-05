@@ -1,10 +1,10 @@
 /* ==========================================================================
-   DROPDOWNS EM PÍLULA VERDE (CATEGORIA E CONDIÇÃO)
+   DROPDOWNS MODERNOS NA COR TEMA (CATEGORIA E CONDIÇÃO)
    ========================================================================== */
 .grupo-dropdowns-vender {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
     margin-top: 4px;
 }
 
@@ -15,38 +15,41 @@
 
 .btn-dropdown-pill {
     width: 100%;
-    height: 44px;
-    background-color: var(--vender-green);
+    min-height: 48px;
+    background: linear-gradient(135deg, #44BD32 0%, #3CA92C 100%);
     color: #FFFFFF;
-    border: none;
-    border-radius: 25px;
-    padding: 0 22px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 14px;
+    padding: 0 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 14px;
-    font-weight: 800;
-    letter-spacing: 0.8px;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    font-size: 14.5px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
     cursor: pointer;
-    box-shadow: 0 4px 14px rgba(89, 170, 89, 0.28);
+    box-shadow: 0 4px 14px rgba(68, 189, 50, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.22);
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .btn-dropdown-pill:hover {
-    background-color: var(--vender-green-hover);
-    box-shadow: 0 6px 18px rgba(89, 170, 89, 0.45);
+    background: linear-gradient(135deg, #48C735 0%, #3CA92C 100%);
+    box-shadow: 0 6px 20px rgba(68, 189, 50, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.3);
     transform: translateY(-1px);
 }
 
 .btn-dropdown-pill:active {
     transform: translateY(1px);
+    box-shadow: 0 2px 8px rgba(68, 189, 50, 0.3);
 }
 
 .btn-dropdown-pill .chevron-icon {
-    width: 20px;
-    height: 20px;
-    stroke-width: 2.8;
-    transition: transform 0.28s ease;
+    width: 19px;
+    height: 19px;
+    stroke-width: 2.2;
+    opacity: 0.95;
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .dropdown-pill-container.aberto .btn-dropdown-pill .chevron-icon {
@@ -54,7 +57,8 @@
 }
 
 .dropdown-pill-container.aberto .btn-dropdown-pill {
-    background-color: var(--vender-green-dark);
+    background: linear-gradient(135deg, #3CA92C 0%, #359826 100%);
+    box-shadow: 0 2px 10px rgba(68, 189, 50, 0.35), 0 0 0 3px rgba(68, 189, 50, 0.25);
 }
 
 /* Menu Flutuante de Opções */
@@ -64,18 +68,19 @@
     left: 0;
     width: 100%;
     background-color: #FFFFFF;
-    border-radius: 16px;
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18), 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(68, 189, 50, 0.18);
+    border-radius: 14px;
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.14), 0 2px 8px rgba(0, 0, 0, 0.05);
     padding: 8px;
     z-index: 50;
-    max-height: 300px;
+    max-height: 310px;
     overflow-y: auto;
     opacity: 0;
     visibility: hidden;
     transform: translateY(-8px) scale(0.98);
     transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
     scrollbar-width: thin;
-    scrollbar-color: rgba(89, 170, 89, 0.4) #F1F5F9;
+    scrollbar-color: rgba(68, 189, 50, 0.4) #F1F5F9;
 }
 
 .menu-dropdown-opcoes::-webkit-scrollbar {
@@ -88,12 +93,12 @@
 }
 
 .menu-dropdown-opcoes::-webkit-scrollbar-thumb {
-    background: rgba(89, 170, 89, 0.4);
+    background: rgba(68, 189, 50, 0.35);
     border-radius: 4px;
 }
 
 .menu-dropdown-opcoes::-webkit-scrollbar-thumb:hover {
-    background: rgba(89, 170, 89, 0.7);
+    background: rgba(68, 189, 50, 0.65);
 }
 
 .dropdown-pill-container.aberto .menu-dropdown-opcoes {
@@ -108,26 +113,27 @@
     justify-content: space-between;
     padding: 10px 14px;
     border-radius: 10px;
-    font-size: 13.5px;
-    font-weight: 600;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
     color: #374151;
     cursor: pointer;
     transition: background 0.15s, color 0.15s;
 }
 
 .item-opcao-dropdown:hover {
-    background-color: #F1F5F9;
-    color: var(--vender-green);
+    background-color: rgba(68, 189, 50, 0.08);
+    color: var(--primary-hover, #3CA92C);
 }
 
 .item-opcao-dropdown.selecionado {
-    background-color: rgba(89, 170, 89, 0.12);
-    color: var(--vender-green-dark);
+    background-color: rgba(68, 189, 50, 0.14);
+    color: #2E8B22;
+    font-weight: 600;
 }
 
 .item-opcao-dropdown.selecionado::after {
     content: "✓";
-    font-weight: bold;
-    color: var(--vender-green);
+    font-weight: 700;
+    color: var(--primary, #44BD32);
 }
-

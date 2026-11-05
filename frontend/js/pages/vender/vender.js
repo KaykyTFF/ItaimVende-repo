@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnFecharModalLoc = document.getElementById('btn-fechar-modal-loc');
     const btnSalvarLoc = document.getElementById('btn-salvar-loc');
     const selectCidade = document.getElementById('select-cidade-modal');
-    const inputCep = document.getElementById('input-cep-modal');
+    const inputBairro = document.getElementById('input-bairro-modal') || document.getElementById('input-cep-modal');
 
     // Elementos da galeria de fotos dinâmica
     const galeriaFotos = document.getElementById('galeria-fotos-vender');
@@ -319,7 +319,7 @@ document.addEventListener('DOMContentLoaded', () => {
             item.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const valor = item.getAttribute('data-valor') || item.textContent.trim();
-                label.textContent = valor.toUpperCase();
+                label.textContent = valor;
                 
                 menu.querySelectorAll('.item-opcao-dropdown').forEach(i => i.classList.remove('selecionado'));
                 item.classList.add('selecionado');
@@ -355,9 +355,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     btnSalvarLoc?.addEventListener('click', () => {
         const cidade = selectCidade?.value || 'Paulistana';
-        const cep = inputCep?.value.trim() || '64750-000';
+        const bairro = inputBairro?.value.trim() || 'Centro';
         if (textoLocalizacao) {
-            textoLocalizacao.textContent = `${cidade} - ${cep}`;
+            textoLocalizacao.textContent = `${cidade} - ${bairro}`;
         }
         modalLoc?.classList.remove('ativo');
     });
@@ -433,7 +433,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Categoria (Gaveta Verde Oficial)
         let catTexto = 'GERAL';
-        if (labelCategoria && labelCategoria.textContent.trim() !== 'SELECIONAR CATEGORIA') {
+        if (labelCategoria && labelCategoria.textContent.trim().toUpperCase() !== 'SELECIONAR CATEGORIA') {
             catTexto = labelCategoria.textContent.trim();
         }
         if (previewTagCat) {
@@ -442,7 +442,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Condição (Gaveta Verde Oficial)
         let condTexto = 'USADO';
-        if (labelCondicao && labelCondicao.textContent.trim() !== 'SELECIONAR CONDIÇÃO') {
+        if (labelCondicao && labelCondicao.textContent.trim().toUpperCase() !== 'SELECIONAR CONDIÇÃO') {
             condTexto = labelCondicao.textContent.trim();
         }
         if (previewTagCond) {
@@ -451,7 +451,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Localização
         if (previewLocal && textoLocalizacao) {
-            previewLocal.textContent = textoLocalizacao.textContent.trim() || 'Paulistana - 64750-000';
+            previewLocal.textContent = textoLocalizacao.textContent.trim() || 'Paulistana - Centro';
         }
 
         // Descrição
@@ -610,32 +610,80 @@ document.addEventListener('DOMContentLoaded', () => {
     // Mapeamento auxiliar de categorias
     const CATEGORIA_MAPA = {
         'veiculos': 1,
-        'carros e motos': 1,
-        'imoveis': 2,
-        'imoveis & terrenos': 2,
-        'eletronicos': 3,
-        'celulares e smartphones': 3,
-        'eletronicos e audio': 3,
-        'computadores e informatica': 3,
-        'informatica & pc': 3,
-        'moda': 4,
-        'moda e acessorios': 4,
-        'moda e calcados': 4,
-        'moveis': 5,
-        'moveis e decoracao': 5,
-        'moveis & casa': 5,
-        'agro': 6,
-        'esportes': 7,
-        'esportes & lazer': 7,
-        'infantil': 8,
-        'infantil & brinquedos': 8,
-        'games e brinquedos': 8,
-        'servicos': 9,
-        'servicos e trabalhos': 9,
-        'servicos e negocios': 9,
-        'outros': 10,
-        'outros produtos': 10,
-        'geral': 10
+        'veiculos': 1,
+        'autopecas': 2,
+        'autopecas': 2,
+        'imoveis': 3,
+        'imoveis': 3,
+        'terrenos': 4,
+        'terrenos': 4,
+        'agro': 5,
+        'agro': 5,
+        'pecuaria': 6,
+        'pecuaria': 6,
+        'celulares': 7,
+        'celulares': 7,
+        'telefonia': 8,
+        'telefonia': 8,
+        'eletronicos': 9,
+        'eletronicos': 9,
+        'audio-video': 10,
+        'audio & video': 10,
+        'informatica': 11,
+        'informatica': 11,
+        'games': 12,
+        'games': 12,
+        'moveis': 13,
+        'moveis': 13,
+        'decoracao': 14,
+        'decoracao': 14,
+        'eletrodomesticos': 15,
+        'eletrodomesticos': 15,
+        'moda': 16,
+        'moda': 16,
+        'calcados': 17,
+        'calcados': 17,
+        'acessorios': 18,
+        'acessorios': 18,
+        'beleza': 19,
+        'beleza': 19,
+        'cuidado-pessoal': 20,
+        'cuidado pessoal': 20,
+        'infantil': 21,
+        'infantil': 21,
+        'bebes': 22,
+        'bebes': 22,
+        'esportes': 23,
+        'esportes': 23,
+        'fitness': 24,
+        'fitness': 24,
+        'lazer': 25,
+        'lazer': 25,
+        'construcao': 26,
+        'construcao': 26,
+        'ferramentas': 27,
+        'ferramentas': 27,
+        'comercio': 28,
+        'comercio': 28,
+        'escritorio': 29,
+        'escritorio': 29,
+        'servicos': 30,
+        'servicos': 30,
+        'musica': 31,
+        'musica': 31,
+        'hobbies': 32,
+        'hobbies': 32,
+        'pets': 33,
+        'animais de estimacao': 33,
+        'pet-shop': 34,
+        'pet shop': 34,
+        'doacoes': 35,
+        'doacoes': 35,
+        'trocas': 36,
+        'trocas': 36,
+        'outros': 37,
+        'outros': 37,
+        'geral': 37
     };
 
     function obterCategoriaId(nome) {
@@ -726,11 +774,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (spanTexto) spanTexto.textContent = 'Publicando...';
 
         let cidadeAnuncio = 'Paulistana';
-        let cepAnuncio = '64750-000';
+        let bairroAnuncio = 'Centro';
         if (textoLocalizacao && textoLocalizacao.textContent) {
             const partes = textoLocalizacao.textContent.split('-');
             if (partes[0]) cidadeAnuncio = partes[0].trim();
-            if (partes[1]) cepAnuncio = partes[1].trim();
+            if (partes[1]) bairroAnuncio = partes[1].trim();
+        }
+        if (!bairroAnuncio || /^\d/.test(bairroAnuncio) || /\d{5}/.test(bairroAnuncio)) {
+            bairroAnuncio = 'Centro';
         }
 
         let fotosUrlsBackend = [];
@@ -760,7 +811,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         categoryId: obterCategoriaId(categoria),
                         condition: normalizarCondicao(condicao),
                         city: cidadeAnuncio,
-                        neighborhood: cepAnuncio,
+                        neighborhood: bairroAnuncio,
                         images: fotosUrlsBackend.length > 0 ? fotosUrlsBackend : (fotosColetadas.length > 0 ? fotosColetadas : ['assets/placeholders/produto-placeholder.svg'])
                     };
 
@@ -780,7 +831,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     condicao: condicao,
                     descricao: descricaoFinal,
                     cidade: cidadeAnuncio,
-                    bairro: cepAnuncio,
+                    bairro: bairroAnuncio,
                     imagens: fotosUrlsBackend.length > 0 
                         ? fotosUrlsBackend 
                         : (fotosColetadas.length > 0 ? fotosColetadas : ['assets/placeholders/produto-placeholder.svg'])
@@ -886,8 +937,8 @@ document.addEventListener('DOMContentLoaded', () => {
         fotosLista = [];
         renderizarGaleriaFotos();
 
-        if (labelCategoria) labelCategoria.textContent = 'SELECIONAR CATEGORIA';
-        if (labelCondicao) labelCondicao.textContent = 'SELECIONAR CONDIÇÃO';
+        if (labelCategoria) labelCategoria.textContent = 'Selecionar Categoria';
+        if (labelCondicao) labelCondicao.textContent = 'Selecionar Condição';
         menuCategoriaOpcoes?.querySelectorAll('.item-opcao-dropdown').forEach(i => i.classList.remove('selecionado'));
         menuCondicaoOpcoes?.querySelectorAll('.item-opcao-dropdown').forEach(i => i.classList.remove('selecionado'));
 
@@ -1027,7 +1078,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Preenche categoria
         const catNome = produto.categoria || (produto.category ? (produto.category.name || produto.category) : '');
         if (catNome && labelCategoria) {
-            labelCategoria.textContent = catNome.toUpperCase();
+            labelCategoria.textContent = catNome;
             if (menuCategoriaOpcoes) {
                 menuCategoriaOpcoes.querySelectorAll('.item-opcao-dropdown').forEach(item => {
                     const val = (item.getAttribute('data-valor') || item.textContent || '').trim().toLowerCase();
@@ -1040,7 +1091,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Preenche condição
         const condNome = produto.condicao || produto.condition || 'Usado';
         if (condNome && labelCondicao) {
-            labelCondicao.textContent = condNome.toUpperCase();
+            labelCondicao.textContent = condNome;
             if (menuCondicaoOpcoes) {
                 menuCondicaoOpcoes.querySelectorAll('.item-opcao-dropdown').forEach(item => {
                     const val = (item.getAttribute('data-valor') || item.textContent || '').trim().toLowerCase();
@@ -1052,7 +1103,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Preenche localização
         const cid = produto.cidade || produto.city || 'Paulistana';
-        const cepBairro = produto.bairro || produto.neighborhood || '64750-000';
+        let cepBairro = produto.bairro || produto.neighborhood || 'Centro';
+        if (!cepBairro || /^\d/.test(cepBairro) || /\d{5}/.test(cepBairro)) cepBairro = 'Centro';
         if (textoLocalizacao) {
             textoLocalizacao.textContent = `${cid} - ${cepBairro}`;
         }

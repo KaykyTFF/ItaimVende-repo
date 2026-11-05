@@ -44,7 +44,10 @@ export function formatarProdutoParaFrontend(p) {
     categoria: p.category ? p.category.name : 'Geral',
     categoriaSlug: p.category ? p.category.slug : 'geral',
     cidade: p.city || p.seller?.city || 'Paulistana',
-    bairro: p.neighborhood || p.seller?.neighborhood || 'Centro',
+    bairro: (() => {
+      const b = (p.neighborhood || p.seller?.neighborhood || 'Centro').trim();
+      return (!b || /^\d/.test(b) || /\d{5}/.test(b) || b.toLowerCase().includes('cep')) ? 'Centro' : b;
+    })(),
     vendedor: p.seller?.name || 'Vendedor',
     vendedorId: p.seller?.id || p.sellerId || '',
     vendedorNome: p.seller?.name || 'Vendedor',

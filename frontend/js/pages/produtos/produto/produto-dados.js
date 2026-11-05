@@ -148,9 +148,12 @@
 
         const elLoc = document.getElementById('produto-localizacao');
         if (elLoc) {
+            let bairroProd = (produto.bairro || produto.neighborhood || 'Centro').trim();
+            if (!bairroProd || /^\d/.test(bairroProd) || /\d{5}/.test(bairroProd)) bairroProd = 'Centro';
+            const cidadeProd = produto.cidade || produto.city || 'Paulistana';
             elLoc.innerHTML = `
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                <span>${produto.cidade || 'Paulistana'} - PI</span>
+                <span>${cidadeProd} - ${bairroProd}</span>
             `;
         }
 
