@@ -169,9 +169,10 @@
 
 /* Efeito extra no círculo ao passar o mouse */
 .item-categoria:hover .circulo-icon-categoria {
-    box-shadow: 0 5px 15px rgba(89, 170, 89, 0.4);
+    border: 2px solid #38A129;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
     background-color: #ffffff;
-    -fx-effect: dropshadow(three-pass-box, rgba(89, 170, 89, 0.4), 15, 0, 0, 5);
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.12), 15, 0, 0, 5);
     -fx-background-color: #ffffff;
 }
 
@@ -189,8 +190,8 @@
 }
 
 .item-categoria:hover .label-categoria {
-    color: #59AA59;
-    -fx-text-fill: #59AA59;
+    color: #2E8B22;
+    -fx-text-fill: #2E8B22;
 }
 
 @media (max-width: 768px) {
