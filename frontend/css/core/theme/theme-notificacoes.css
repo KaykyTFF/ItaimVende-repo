@@ -36,11 +36,12 @@
 
 [data-theme="dark"] .btn-marcar-lidas.btn-limpar-topo {
     background-color: #1F2831 !important;
-    color: #F87171 !important;
-    border-color: rgba(239, 68, 68, 0.3) !important;
+    color: #F1F5F9 !important;
+    border-color: #2C3946 !important;
 }
 
-[data-theme="dark"] .btn-marcar-lidas.btn-limpar-topo:hover {
+[data-theme="dark"] .btn-marcar-lidas.btn-limpar-topo:hover,
+[data-theme="dark"] .btn-marcar-lidas.btn-limpar-topo:active {
     background-color: rgba(239, 68, 68, 0.16) !important;
     color: #EF4444 !important;
     border-color: #EF4444 !important;
@@ -73,18 +74,16 @@
     color: #0E8F1A !important;
 }
 
-[data-theme="dark"] .select-ordenacao-wrap {
+[data-theme="dark"] .notificacoes-ordenacao-box .select-filtro {
     background-color: #1F2831 !important;
     border-color: #2C3946 !important;
-}
-
-[data-theme="dark"] .select-ordenacao-wrap select {
     color: #F1F5F9 !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") !important;
 }
 
-[data-theme="dark"] .icone-ordem-hash,
-[data-theme="dark"] .chevron-ordem {
-    color: #94A3B8 !important;
+[data-theme="dark"] .notificacoes-ordenacao-box .select-filtro:hover {
+    border-color: #3D4D5E !important;
+    color: #FFFFFF !important;
 }
 
 [data-theme="dark"] .notificacao-card {
@@ -103,7 +102,21 @@
 }
 
 [data-theme="dark"] .avatar-badge-ponto {
+    background-color: #1A222A !important;
     border-color: #1F2831 !important;
+    color: #E2E8F0 !important;
+    box-shadow: 0 1.5px 5px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .avatar-badge-ponto.badge-tipo-mensagem,
+[data-theme="dark"] .avatar-badge-ponto.badge-tipo-avaliacao,
+[data-theme="dark"] .avatar-badge-ponto.badge-tipo-favorito,
+[data-theme="dark"] .avatar-badge-ponto.badge-tipo-outline,
+[data-theme="dark"] .avatar-badge-ponto.laranja,
+[data-theme="dark"] .avatar-badge-ponto.roxa,
+[data-theme="dark"] .avatar-badge-ponto.vermelha {
+    background-color: #1A222A !important;
+    color: #E2E8F0 !important;
 }
 
 [data-theme="dark"] .notif-tag-nova {
