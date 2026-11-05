@@ -162,7 +162,7 @@
                 );
 
                 if (isErroRede) {
-                    this.exibirMensagem('Backend/Banco de dados inacessível no momento. Use o botão abaixo "⚡ Entrar como Dev (Sem Banco de Dados)".', 'erro', 7.0);
+                    this.exibirMensagem('Servidor temporariamente indisponível. Verifique se o backend está em execução.', 'erro', 5.0);
                     if (btnEntrar) {
                         btnEntrar.disabled = false;
                         btnEntrar.classList.remove('carregando');
@@ -682,6 +682,19 @@
                     this.fecharModalSocial();
                 }
             });
+        }
+    };
+
+    window.ItaimAuthLogin = ItaimAuthLogin;
+    window.entrarComoDev = (perfil = 'dev') => ItaimAuthLogin.entrarComoDev(perfil);
+    window.ItaimModoDev = {
+        ativar: (perfil = 'dev') => ItaimAuthLogin.entrarComoDev(perfil),
+        desativar: () => {
+            localStorage.removeItem('itaim_modo_dev');
+            localStorage.removeItem('itaim_token');
+            localStorage.removeItem('itaim_usuario_logado');
+            localStorage.removeItem('itaim_usuario_logado_email');
+            window.location.reload();
         }
     };
 

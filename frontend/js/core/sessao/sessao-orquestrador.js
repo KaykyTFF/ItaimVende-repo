@@ -104,13 +104,23 @@
             } catch (e) {}
         }
 
-        // Suporte a ativação automática via URL (?dev=true ou ?modo=dev)
+        // Suporte a ativação e desativação via comando de URL (?dev=true, ?dev=off, etc.)
         try {
             const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('dev') === 'true' || urlParams.get('modo') === 'dev') {
+            const devParam = (urlParams.get('dev') || urlParams.get('modo') || '').toLowerCase();
+            if (devParam === 'true' || devParam === '1' || devParam === 'dev') {
                 const perfilUrl = urlParams.get('perfil') === 'admin' ? 'admin' : 'dev';
                 if (typeof Auth.ativarModoDevFrontend === 'function') {
                     Auth.ativarModoDevFrontend(perfilUrl);
+                }
+            } else if (devParam === 'false' || devParam === 'off' || devParam === '0' || devParam === 'desativar') {
+                if (typeof Auth.desativarModoDevFrontend === 'function') {
+                    Auth.desativarModoDevFrontend();
+                } else {
+                    localStorage.removeItem('itaim_modo_dev');
+                    localStorage.removeItem('itaim_token');
+                    localStorage.removeItem('itaim_usuario_logado');
+                    localStorage.removeItem('itaim_usuario_logado_email');
                 }
             }
         } catch (e) {}
