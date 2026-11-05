@@ -5,5 +5,36 @@ node_modules
 *.env
 *.env.txt
 .env.txt
+!.env.example
 
 /generated/prisma
+
+# IA, Agentes e Skills
+.agent
+.agent/**
+.agents
+.agents/**
+.skills
+.skills/**
+skills
+skills/**
+.gemini
+.gemini/**
+.claude
+.claude/**
+.cursor
+.cursor/**
+**/.agent
+**/.agent/**
+**/.agents
+**/.agents/**
+**/.skills
+**/.skills/**
+**/skills
+**/skills/**
+
+# Arquivos e pastas legados
+legacy
+legacy/**
+**/legacy
+**/legacy/**
