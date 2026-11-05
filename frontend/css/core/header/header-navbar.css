@@ -183,10 +183,28 @@
 }
 
 .btn-vender-destaque:hover {
-    background-color: var(--primary);
-    color: var(--text-white);
+    background-color: #38A129;
+    color: #FFFFFF;
     transform: translateY(-2px);
-    box-shadow: 0 4px 14px rgba(68, 189, 50, 0.4);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.22);
+}
+
+.btn-vender-destaque:active {
+    background-color: #2E8B22;
+    color: #FFFFFF;
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+}
+
+.btn-vender-destaque.ativo {
+    background-color: #38A129;
+    color: #FFFFFF;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-vender-destaque:focus,
+.btn-vender-destaque:focus-visible {
+    outline: none;
 }
 
 /* ==========================================================
@@ -314,8 +332,8 @@ body.usuario-logado .perfil-wrapper {
 }
 
 #badge-conversas-header {
-    background-color: var(--primary);
-    box-shadow: 0 2px 6px rgba(68, 189, 50, 0.45);
+    background-color: #38A129;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
 }
 
 /* Badge de Condição no Card de Produto Global */
