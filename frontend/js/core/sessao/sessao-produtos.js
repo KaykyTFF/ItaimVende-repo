@@ -21,8 +21,20 @@
         }
         
         try {
-            const locais = JSON.parse(localStorage.getItem('itaim_produtos_cadastrados') || '[]');
+            let locais = JSON.parse(localStorage.getItem('itaim_produtos_cadastrados') || '[]');
             if (Array.isArray(locais)) {
+                let modificado = false;
+                locais = locais.map(p => {
+                    const b = (p.bairro || p.neighborhood || '').trim();
+                    if (!b || /^\d/.test(b) || /\d{5}/.test(b) || b.toLowerCase().includes('cep')) {
+                        modificado = true;
+                        return { ...p, bairro: 'Centro', neighborhood: 'Centro' };
+                    }
+                    return p;
+                });
+                if (modificado) {
+                    try { localStorage.setItem('itaim_produtos_cadastrados', JSON.stringify(locais)); } catch(_) {}
+                }
                 todos = [...locais, ...todos];
             }
         } catch (e) {}

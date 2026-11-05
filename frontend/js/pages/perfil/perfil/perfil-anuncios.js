@@ -121,7 +121,7 @@
                                 ${formatarPreco(item.preco !== undefined ? item.preco : item.price)}
                             </div>
                             <div class="card-rodape" style="display: flex; justify-content: space-between; font-size: 12px; color: #64748B;">
-                                <span class="card-local"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -1px; margin-right: 2px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>${item.cidade || item.city || perfilExibido.city || 'Paulistana'}</span>
+                                <span class="card-local"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -1px; margin-right: 2px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>${item.cidade || item.city || perfilExibido.city || 'Paulistana'} - ${(() => { const b = (item.bairro || item.neighborhood || 'Centro').trim(); return (!b || /^\d/.test(b) || /\d{5}/.test(b)) ? 'Centro' : b; })()}</span>
                                 <span style="color: #44BD32; font-weight: 600;">Ver anúncio &rarr;</span>
                             </div>
                         </div>

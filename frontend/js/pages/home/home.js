@@ -312,6 +312,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderizarVitrine() {
+    function formatarLocalCard(cidade, bairro) {
+        const c = (cidade || 'Paulistana').trim();
+        let b = (bairro || 'Centro').trim();
+        if (!b || /^\d/.test(b) || /\d{5}/.test(b) || b.toLowerCase().includes('cep')) {
+            b = 'Centro';
+        }
+        return `${c} - ${b}`;
+    }
+
         if (!gradeProdutos) return;
 
         // Filtragem combinada
@@ -465,8 +474,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             ${formatarPreco(p.preco, p)}
                         </div>
                         <div class="card-rodape">
-                            <span class="card-local" title="${p.bairro ? p.bairro + ', ' : ''}${p.cidade || 'Paulistana'}">
-                                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -1px; margin-right: 2px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>${p.bairro && p.bairro !== 'Centro' ? p.bairro + ' - ' : ''}${p.cidade || 'Paulistana'}
+                            <span class="card-local" title="${formatarLocalCard(p.cidade, p.bairro)}">
+                                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -1px; margin-right: 2px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>${formatarLocalCard(p.cidade, p.bairro)}
                             </span>
                             <span>Hoje</span>
                         </div>
@@ -573,7 +582,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                 preco: Number(p.preco !== undefined ? p.preco : p.price),
                                 categoria: p.categoria || (p.category ? p.category.name : 'Geral'),
                                 cidade: p.cidade || p.city || 'Paulistana',
-                                bairro: p.bairro || p.neighborhood || 'Centro',
+                                bairro: (() => {
+            const b = (p.bairro || p.neighborhood || 'Centro').trim();
+            return (!b || /^\d/.test(b) || /\d{5}/.test(b) || b.toLowerCase().includes('cep')) ? 'Centro' : b;
+        })(),
                                 imagem: (window.ItaimApi && window.ItaimApi.resolverUrlImagem)
                                     ? window.ItaimApi.resolverUrlImagem(p.imagem || (p.images && p.images[0]) || '')
                                     : (window.ItaimRotas ? window.ItaimRotas.obterAsset('assets/produtos/anuncio_13.jpg') : '../../assets/produtos/anuncio_13.jpg')

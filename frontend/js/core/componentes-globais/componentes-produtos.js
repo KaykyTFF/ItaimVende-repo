@@ -130,7 +130,7 @@
                             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                             <circle cx="12" cy="10" r="3"></circle>
                         </svg>
-                        <span>${cidade}, PI</span>
+                        <span>${cidade} - ${(() => { const b = (p.bairro || p.neighborhood || 'Centro').trim(); return (!b || /^\d/.test(b) || /\d{5}/.test(b)) ? 'Centro' : b; })()}</span>
                     </div>
                 </div>
             </article>

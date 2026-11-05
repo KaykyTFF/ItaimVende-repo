@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnFecharModalLoc = document.getElementById('btn-fechar-modal-loc');
     const btnSalvarLoc = document.getElementById('btn-salvar-loc');
     const selectCidade = document.getElementById('select-cidade-modal');
-    const inputCep = document.getElementById('input-cep-modal');
+    const inputBairro = document.getElementById('input-bairro-modal') || document.getElementById('input-cep-modal');
 
     // Elementos da galeria de fotos dinâmica
     const galeriaFotos = document.getElementById('galeria-fotos-vender');
@@ -355,9 +355,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     btnSalvarLoc?.addEventListener('click', () => {
         const cidade = selectCidade?.value || 'Paulistana';
-        const cep = inputCep?.value.trim() || '64750-000';
+        const bairro = inputBairro?.value.trim() || 'Centro';
         if (textoLocalizacao) {
-            textoLocalizacao.textContent = `${cidade} - ${cep}`;
+            textoLocalizacao.textContent = `${cidade} - ${bairro}`;
         }
         modalLoc?.classList.remove('ativo');
     });
@@ -451,7 +451,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Localização
         if (previewLocal && textoLocalizacao) {
-            previewLocal.textContent = textoLocalizacao.textContent.trim() || 'Paulistana - 64750-000';
+            previewLocal.textContent = textoLocalizacao.textContent.trim() || 'Paulistana - Centro';
         }
 
         // Descrição
@@ -774,11 +774,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (spanTexto) spanTexto.textContent = 'Publicando...';
 
         let cidadeAnuncio = 'Paulistana';
-        let cepAnuncio = '64750-000';
+        let bairroAnuncio = 'Centro';
         if (textoLocalizacao && textoLocalizacao.textContent) {
             const partes = textoLocalizacao.textContent.split('-');
             if (partes[0]) cidadeAnuncio = partes[0].trim();
-            if (partes[1]) cepAnuncio = partes[1].trim();
+            if (partes[1]) bairroAnuncio = partes[1].trim();
+        }
+        if (!bairroAnuncio || /^\d/.test(bairroAnuncio) || /\d{5}/.test(bairroAnuncio)) {
+            bairroAnuncio = 'Centro';
         }
 
         let fotosUrlsBackend = [];
@@ -808,7 +811,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         categoryId: obterCategoriaId(categoria),
                         condition: normalizarCondicao(condicao),
                         city: cidadeAnuncio,
-                        neighborhood: cepAnuncio,
+                        neighborhood: bairroAnuncio,
                         images: fotosUrlsBackend.length > 0 ? fotosUrlsBackend : (fotosColetadas.length > 0 ? fotosColetadas : ['assets/placeholders/produto-placeholder.svg'])
                     };
 
@@ -828,7 +831,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     condicao: condicao,
                     descricao: descricaoFinal,
                     cidade: cidadeAnuncio,
-                    bairro: cepAnuncio,
+                    bairro: bairroAnuncio,
                     imagens: fotosUrlsBackend.length > 0 
                         ? fotosUrlsBackend 
                         : (fotosColetadas.length > 0 ? fotosColetadas : ['assets/placeholders/produto-placeholder.svg'])
@@ -1100,7 +1103,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Preenche localização
         const cid = produto.cidade || produto.city || 'Paulistana';
-        const cepBairro = produto.bairro || produto.neighborhood || '64750-000';
+        let cepBairro = produto.bairro || produto.neighborhood || 'Centro';
+        if (!cepBairro || /^\d/.test(cepBairro) || /\d{5}/.test(cepBairro)) cepBairro = 'Centro';
         if (textoLocalizacao) {
             textoLocalizacao.textContent = `${cid} - ${cepBairro}`;
         }

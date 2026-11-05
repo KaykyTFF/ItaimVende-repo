@@ -335,7 +335,9 @@
             const categoria = p.categoria || p.category?.name || 'Geral';
             const cidade = p.cidade || p.city || 'Paulistana';
             const bairro = p.bairro || p.neighborhood || '';
-            const localTexto = (bairro && bairro !== 'Centro') ? `${bairro} - ${cidade}` : cidade;
+            let bairroLimpo = bairro || 'Centro';
+            if (!bairroLimpo || /^\d/.test(bairroLimpo) || /\d{5}/.test(bairroLimpo)) bairroLimpo = 'Centro';
+            const localTexto = `${cidade} - ${bairroLimpo}`;
             const tempoFormatado = formatarTempoPublicacao(p.createdAt || p.criadoEm);
 
             return `
