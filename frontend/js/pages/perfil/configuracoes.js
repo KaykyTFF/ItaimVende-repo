@@ -11,6 +11,7 @@
  * - config-enderecos.js: Múltiplos endereços com busca automática ViaCEP
  * - config-preferencias.js: Interruptores de notificações e privacidade
  * - config-tema.js: Alternância de temas Claro e Escuro
+ * - config-suporte.js: Abertura e listagem de tickets de suporte
  * - index.js: Orquestrador do ciclo de vida
  */
 
@@ -29,6 +30,7 @@
         'configuracoes/config-enderecos.js',
         'configuracoes/config-preferencias.js',
         'configuracoes/config-tema.js',
+        'configuracoes/config-suporte.js',
         'configuracoes/index.js'
     ];
 

@@ -14,6 +14,7 @@
         if (window.ItaimConfigEnderecos?.inicializar) window.ItaimConfigEnderecos.inicializar();
         if (window.ItaimConfigPreferencias?.inicializar) window.ItaimConfigPreferencias.inicializar();
         if (window.ItaimConfigTema?.inicializar) window.ItaimConfigTema.inicializar();
+        if (window.ItaimConfigSuporte?.inicializar) window.ItaimConfigSuporte.inicializar();
     }
 
     window.ItaimConfigOrquestrador = {
