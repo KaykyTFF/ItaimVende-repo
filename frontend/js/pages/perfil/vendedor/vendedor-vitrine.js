@@ -95,7 +95,6 @@
                                 <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                                 ${cidadeItem} - ${(() => { const b = (item.bairro || item.neighborhood || 'Centro').trim(); return (!b || /^\d/.test(b) || /\d{5}/.test(b)) ? 'Centro' : b; })()}
                             </span>
-                            <span style="color: #44BD32; font-weight: 700; font-size: 12px;">Ver anúncio &rarr;</span>
                         </div>
                     </div>
                 `;
