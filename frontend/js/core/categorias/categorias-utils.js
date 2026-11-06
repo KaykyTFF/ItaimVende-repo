@@ -10,6 +10,18 @@
  */
 
 /** Remove acentos, espaços extras e diferença de maiúsculas/minúsculas. */
+/** Verifica se o termo está contido como palavra inteira (evita que "imoveis" case com "moveis") */
+function termoPresenteComoPalavra(texto, termo) {
+    if (!texto || !termo) return false;
+    if (texto === termo) return true;
+    const pTexto = texto.split(/[^a-z0-9]+/).filter(Boolean);
+    const pTermo = termo.split(/[^a-z0-9]+/).filter(Boolean);
+    if (pTermo.length === 1) {
+        return pTexto.includes(pTermo[0]);
+    }
+    return (' ' + texto + ' ').includes(' ' + termo + ' ');
+}
+
 function normalizarTexto(texto) {
     return (texto || '')
         .toString()
@@ -83,9 +95,12 @@ function produtoPertenceCategoria(produto, categoria) {
     // Comparação exata normalizada
     if (listaNomes.some(n => normalizarTexto(n) === valor)) return true;
 
-    // Comparação por inclusão mútua (ex: "eletrônicos" em "eletrônicos, áudio & vídeo")
+    // Comparação por inclusão de palavra inteira (ex: "móveis" em "móveis e decoração")
     const chaveNorm = normalizarTexto(categoria.chave);
-    if (chaveNorm && (valor.includes(chaveNorm) || chaveNorm.includes(valor))) return true;
+    const nomeNorm = normalizarTexto(categoria.nome);
+    if (chaveNorm && termoPresenteComoPalavra(valor, chaveNorm)) return true;
+    if (nomeNorm && termoPresenteComoPalavra(valor, nomeNorm)) return true;
+    if (categoria.aliases && categoria.aliases.some(a => termoPresenteComoPalavra(valor, normalizarTexto(a)))) return true;
 
     return false;
 }
