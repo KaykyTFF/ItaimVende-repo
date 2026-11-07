@@ -1,7 +1,5 @@
 /**
  * Especificação OpenAPI 3.0.3 Oficial - Itaim Vende API
- * Disciplina: Programação para Internet II - IFPI
- * Professor: Prof. Me. Julian Rodrigues Valério
  */
 
 export const openapiSpec = {
@@ -9,15 +7,15 @@ export const openapiSpec = {
   info: {
     title: 'Itaim Vende API',
     version: '2.0.0',
-    description: `API RESTful completa e original do marketplace regional **Itaim Vende**, voltada para Paulistana - PI e municípios do Vale do Itaim no semiárido piauiense.
+    description: `API RESTful completa e profissional da plataforma de marketplace regional **Itaim Vende**, projetada para comércio, intermediação de anúncios e negociações seguras.
     
-### Eixos de Inovação Atendidos:
-1. **Dados e Domínio**: Atende uma microrregião do semiárido piauiense sem cobertura de APIs públicas ou marketplaces formais, suportando comércio e produtores locais.
-2. **Regra de Negócio e Consulta**: Busca fonética resiliente com PostgreSQL \`unaccent\` (ignora acentos em pesquisas como 'eletronicos' vs 'eletrônicos'), filtros combinados (categoria, cidade, bairro, preço, condição) e cálculo de integridade financeira de pedidos no servidor.
-3. **Tempo Real e Eventos**: Negociação instantânea por WebSockets (Socket.IO) com mecanismo de fallback que dispara e-mails transacionais assíncronos quando o usuário está offline.
-4. **Moderação Automatizada**: Painel de moderação com purga atômica de mídias órfãs no bucket do Supabase Storage.`,
+### Eixos de Arquitetura e Inovação:
+1. **Dados e Domínio**: Modelo de domínio completo para marketplaces com catálogo de produtos, intermediação de ordens, histórico auditável de segurança e preferências de conta.
+2. **Regra de Negócio e Consulta**: Busca fonética resiliente com PostgreSQL \`unaccent\` (ignora acentos em pesquisas como 'eletronicos' vs 'eletrônicos'), filtros combinados (categoria, cidade, bairro, faixa de preço, condição) e cálculo de integridade financeira no servidor.
+3. **Tempo Real e Eventos**: Negociação instantânea por WebSockets (Socket.IO) com mecanismo de fallback assíncrono para notificações offline.
+4. **Governança de Conta e Segurança**: Cooldown de 30 dias para alteração de username, verificação segura com código OTP de 6 dígitos para e-mail e telefone, controle de tentativas contra força bruta e tokens criptografados de reversão imediata.`,
     contact: {
-      name: 'Equipe Itaim Vende - IFPI',
+      name: 'Equipe de Engenharia Itaim Vende',
       email: 'contato@itaimvende.com.br',
     },
     license: {
