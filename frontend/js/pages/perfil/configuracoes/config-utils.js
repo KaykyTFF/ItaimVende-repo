@@ -9,6 +9,7 @@
     const CHAVE_PERFIL = 'itaim_perfil_usuario';
     const CHAVE_ENDERECOS = 'itaim_enderecos';
     const CHAVE_CONFIG = 'itaim_configuracoes';
+    const CHAVE_SUPORTE = 'itaim_suporte_tickets';
 
     const PADROES = {
         'seg-alerta-login': true,
@@ -89,6 +90,7 @@
         CHAVE_PERFIL,
         CHAVE_ENDERECOS,
         CHAVE_CONFIG,
+        CHAVE_SUPORTE,
         PADROES,
         ler,
         gravar,
