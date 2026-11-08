@@ -30,6 +30,7 @@
         'index': 'index.html',
         'tickets': 'pages/admin/tickets.html',
         'moderacao': 'pages/admin/tickets.html',
+        'login-tickets': 'pages/admin/login-tickets.html',
         'painel': 'pages/admin/painel.html',
         'status': 'pages/admin/painel.html',
         '404': '404.html'
@@ -54,13 +55,14 @@
         'index': '/login',
         'tickets': '/tickets',
         'moderacao': '/tickets',
+        'login-tickets': '/login-tickets',
         'painel': '/painel',
         'status': '/painel',
         '404': '/404'
     };
 
     // 3. Categorias de Controle de Acesso
-    const ROTAS_PUBLICAS = ['home', 'categoria', 'produto', 'vendedor', 'login', 'cadastro', 'index', '404'];
+    const ROTAS_PUBLICAS = ['home', 'categoria', 'produto', 'vendedor', 'login', 'cadastro', 'login-tickets', 'index', '404'];
     const ROTAS_PROTEGIDAS = ['vender', 'meus-anuncios', 'perfil', 'configuracoes', 'favoritos', 'notificacoes', 'conversas', 'chat'];
     const ROTAS_ADMIN = ['tickets', 'moderacao', 'painel', 'status'];
 
