@@ -205,7 +205,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const contagemCat = {};
         const contagemCid = {};
         let countNovo = 0;
-        let countUsado = 0;
+        let countExcelente = 0;
+        let countBom = 0;
+        let countSinais = 0;
+        let countDefeito = 0;
         let countPreco50 = 0;
         let countPreco200 = 0;
         let countPreco500 = 0;
@@ -229,9 +232,18 @@ document.addEventListener('DOMContentLoaded', () => {
             const cid = p.cidade || 'Paulistana';
             contagemCid[cid] = (contagemCid[cid] || 0) + 1;
 
-            const cond = (p.condicao || '').toLowerCase();
-            if (cond.includes('novo')) countNovo++;
-            else countUsado++;
+            const cond = (p.condicao || p.condition || '').toLowerCase();
+            if (cond.includes('novo') && !cond.includes('semi')) {
+                countNovo++;
+            } else if (cond.includes('excelente') || cond.includes('semi')) {
+                countExcelente++;
+            } else if (cond.includes('sinais')) {
+                countSinais++;
+            } else if (cond.includes('defeito') || cond.includes('peça') || cond.includes('peca')) {
+                countDefeito++;
+            } else {
+                countBom++;
+            }
 
             const pr = Number(p.preco || 0);
             if (pr > 0 && pr <= 50) countPreco50++;
@@ -242,9 +254,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Atualizar Contadores de Condição
         const elNovo = document.getElementById('count-condicao-novo');
-        const elUsado = document.getElementById('count-condicao-usado');
+        const elExcelente = document.getElementById('count-condicao-excelente');
+        const elBom = document.getElementById('count-condicao-bom');
+        const elSinais = document.getElementById('count-condicao-sinais');
+        const elDefeito = document.getElementById('count-condicao-defeito');
         if (elNovo) elNovo.textContent = `(${countNovo})`;
-        if (elUsado) elUsado.textContent = `(${countUsado})`;
+        if (elExcelente) elExcelente.textContent = `(${countExcelente})`;
+        if (elBom) elBom.textContent = `(${countBom})`;
+        if (elSinais) elSinais.textContent = `(${countSinais})`;
+        if (elDefeito) elDefeito.textContent = `(${countDefeito})`;
 
         // Atualizar Contadores de Preço
         const elP50 = document.getElementById('count-preco-50');
@@ -414,10 +432,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!matchesBairro) return false;
             }
 
-            // Condição (Novo vs Usado na sidebar)
+            // Condição na sidebar
             if (modoPesquisaAtivo && condicoesSelecionadas.size > 0) {
-                const cond = (p.condicao || 'usado').toLowerCase();
-                const matchesCond = Array.from(condicoesSelecionadas).some(c => cond.includes(c.toLowerCase()));
+                const cond = (p.condicao || p.condition || 'usado').toLowerCase();
+                const matchesCond = Array.from(condicoesSelecionadas).some(c => {
+                    const cLow = c.toLowerCase();
+                    if (cLow === 'novo') return cond.includes('novo') && !cond.includes('semi');
+                    if (cLow.includes('excelente') || cLow.includes('semi')) return cond.includes('excelente') || cond.includes('semi');
+                    if (cLow.includes('sinais')) return cond.includes('sinais');
+                    if (cLow.includes('defeito') || cLow.includes('peça') || cLow.includes('peca')) return cond.includes('defeito') || cond.includes('peça') || cond.includes('peca');
+                    if (cLow.includes('bom') || cLow === 'usado') return cond.includes('bom') || cond === 'usado' || (!cond.includes('novo') && !cond.includes('excelente') && !cond.includes('semi') && !cond.includes('sinais') && !cond.includes('defeito'));
+                    return cond.includes(cLow);
+                });
                 if (!matchesCond) return false;
             }
 
