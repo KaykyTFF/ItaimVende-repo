@@ -16,5 +16,8 @@
 /* 4. Dados Pessoais, Formulários e Segurança */
 @import url('./perfil/perfil-forms.css?v=20');
 
-/* 5. Responsividade (Tablets e Mobile) */
-@import url('./perfil/perfil-responsive.css?v=24');
+/* 5. Avaliações e Reputação */
+@import url('../vendedor/vendedor-avaliacoes.css?v=26');
+
+/* 6. Responsividade (Tablets e Mobile) */
+@import url('./perfil/perfil-responsive.css?v=25');

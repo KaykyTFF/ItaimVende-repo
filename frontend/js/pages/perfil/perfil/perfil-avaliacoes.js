@@ -56,8 +56,8 @@
 
         const avatarHtml = avatarAutor
             ? `<img src="${avatarAutor}" alt="${nomeAutor}" style="width:34px;height:34px;border-radius:50%;object-fit:cover;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-               <div style="width:34px;height:34px;border-radius:50%;background:#DCFCE7;color:#166534;font-weight:800;display:none;align-items:center;justify-content:center;font-size:14px;border:1px solid #BBF7D0;">${inicial}</div>`
-            : `<div style="width:34px;height:34px;border-radius:50%;background:#DCFCE7;color:#166534;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:14px;border:1px solid #BBF7D0;">${inicial}</div>`;
+               <div class="avaliacao-avatar-mini" style="width:34px;height:34px;border-radius:50%;background:#DCFCE7;color:#166534;font-weight:800;display:none;align-items:center;justify-content:center;font-size:14px;">${inicial}</div>`
+            : `<div class="avaliacao-avatar-mini" style="width:34px;height:34px;border-radius:50%;background:#DCFCE7;color:#166534;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:14px;">${inicial}</div>`;
 
         const respostaHtml = item.resposta
             ? `<div class="avaliacao-resposta">
@@ -220,10 +220,11 @@
             const totalNum = Number(total || 0);
             const mediaNum = totalNum > 0 ? Number(media || 0) : 0.0;
             const mediaStr = totalNum > 0 ? `${mediaNum.toFixed(1)} ★` : '0.0 ★';
-            const legendaStr = totalNum > 0 ? `Avaliações (${totalNum})` : 'Sem avaliações';
+            const legendaStr = `Avaliações (${totalNum})`;
+            const badgeStr = totalNum > 0 ? `${mediaNum.toFixed(1)} ★ (${totalNum})` : `0.0 ★ (${totalNum})`;
             if (statAvaliacao) statAvaliacao.textContent = mediaStr;
             if (statLegenda) statLegenda.textContent = legendaStr;
-            if (badgeAvaliacoes) badgeAvaliacoes.textContent = `${mediaNum.toFixed(1)} ★ (${totalNum})`;
+            if (badgeAvaliacoes) badgeAvaliacoes.textContent = badgeStr;
         }
 
         atualizarIndicadores(mediaGeral, totalAvaliacoes);
@@ -252,12 +253,12 @@
             if (!container) return;
             if (lista.length === 0) {
                 container.innerHTML = `
-                    <div style="text-align:center;padding:32px 18px;border-radius:12px;border:1px dashed #CBD5E1;">
+                    <div class="avaliacoes-vazio" style="text-align:center;padding:32px 18px;border-radius:12px;border:1px dashed #CBD5E1;margin-top:10px;">
                         <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#94A3B8" stroke-width="1.8" style="margin-bottom:8px;">
                             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                         </svg>
-                        <h4 style="font-size:14px;color:#1E293B;margin:0 0 4px;font-weight:700;">Nenhuma avaliação ainda</h4>
-                        <p style="font-size:13px;color:#64748B;margin:0;">As avaliações e comentários deixados por compradores aparecerão aqui.</p>
+                        <h4 style="margin:0;font-size:15px;font-weight:700;">Nenhuma avaliação ainda</h4>
+                        <p style="font-size:13.5px;margin:4px 0 0;color:#64748B;">Você ainda não possui avaliações de compradores.</p>
                     </div>`;
                 return;
             }
