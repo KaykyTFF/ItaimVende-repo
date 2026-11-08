@@ -58,11 +58,10 @@ Uma historia de usuario ou item de trabalho so e considerado formalmente "Pronto
 
 Os acordos operacionais estabelecidos pela equipe durante a Sprint 0 possuem vigencia permanente ao longo de todo o ciclo de desenvolvimento:
 
-1. **Horario, Canal e Estrutura da Daily Scrum:**  
-   As reunioes diarias ocorrem de segunda a sexta-feira, as **19h30**, via canal `#daily-scrum` no Discord, com complemento presencial de 15 minutos nas aulas da disciplina no IFPI Campus Paulistana. Cada integrante deve registrar de forma objetiva:
-   - O que realizou desde a reuniao anterior;
-   - O que pretende concluir ate a proxima;
-   - Qual impedimento esta bloqueando seu progresso.
+1. **Canal de Comunicacao e Dinamica da Daily Scrum:**  
+   - O alinhamento diario assincrono ocorre atraves do **grupo da equipe no WhatsApp**, adaptado a rotina academica dos integrantes (comunicacao ao longo do dia, respeitando o horario das aulas noturnas no campus).
+   - A distribuicao de demandas e feita via listas de tarefas no WhatsApp: cada integrante acompanha seus afazeres e vai compartilhando continuamente o que esta desenvolvendo, o que ja concluiu e eventuais duvidas ou bloqueios.
+   - Nos dias de aula presencial no IFPI Campus Paulistana, a equipe se reune fisicamente no laboratorio/sala para consolidar o status das tarefas, discutir novas funcionalidades a adicionar, realizar testes conjuntos a procura de bugs e planejar a evolucao da plataforma.
 
 2. **Fluxo de Trabalho Git, Branches e Pull Requests:**  
    - Branches devem seguir o padrao semantico: `feat/H<id>-descricao`, `fix/<descricao>` ou `docs/<descricao>`.

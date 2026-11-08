@@ -2,8 +2,8 @@
 
 **Periodo da Sprint 2:** 04/11/2026 a 08/11/2026  
 **Scrum Master:** Giselly *(alternancia com Josimar)*  
-**Canal de Comunicacao:** Discord (`#daily-scrum`) e WhatsApp, com alinhamento presencial no IFPI  
-**Horario Regular:** 19h30  
+**Canal de Comunicacao:** Grupo da equipe no WhatsApp (acompanhamento assincrono por listas de tarefas) e reunioes presenciais nos dias de aula no IFPI Campus Paulistana  
+**Dinamica Operacional:** Acompanhamento diario de tarefas e testes pelo WhatsApp, com encontros presenciais em aula para caca a bugs, testes de usabilidade e definicao de novas funcionalidades  
 **Rastreabilidade Tecnica:** Todos os relatos diarios estao vinculados aos commits correspondentes no repositorio Git.  
 
 ---

@@ -2,8 +2,8 @@
 
 **Periodo da Sprint 1:** 29/10/2026 a 03/11/2026  
 **Scrum Master:** Josimar  
-**Canal de Comunicacao:** Discord (`#daily-scrum`) e WhatsApp, com alinhamento presencial no IFPI  
-**Horario Regular:** 19h30  
+**Canal de Comunicacao:** Grupo da equipe no WhatsApp (acompanhamento assincrono por listas de tarefas) e reunioes presenciais nos dias de aula no IFPI Campus Paulistana  
+**Dinamica Operacional:** Compartilhamento diario do progresso no WhatsApp e encontros presenciais em sala de aula para discutir adicoes, procurar bugs e pensar na evolucao da plataforma  
 **Rastreabilidade Tecnica:** Todos os relatos diarios estao fundamentados nos registros de commits do repositorio Git.  
 
 ---
