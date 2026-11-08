@@ -177,7 +177,7 @@
 }
 
 .avaliacao-estrelas {
-    color: #F59E0B;
+    color: #F59E0B !important;
     font-size: 14px;
     letter-spacing: 2px;
     white-space: nowrap;
@@ -352,13 +352,22 @@
 
 .btn-responder-avaliacao {
     font-size: 12px;
-    padding: 5px 12px;
-    border-radius: 6px;
+    padding: 6px 14px;
+    border-radius: 8px;
     border: 1px solid #38A129;
-    background: transparent;
+    background: rgba(56, 161, 41, 0.1);
     color: #38A129;
     cursor: pointer;
-    font-weight: 600;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.btn-responder-avaliacao:hover {
+    background: #38A129;
+    color: #FFFFFF;
 }
 
 .form-resposta-inline textarea {

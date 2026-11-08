@@ -298,7 +298,13 @@ body[data-theme="dark"].pagina-vendedor {
 .dark-theme .btn-responder-avaliacao {
     border-color: #38A129 !important;
     color: #38A129 !important;
-    background: transparent !important;
+    background: rgba(56, 161, 41, 0.14) !important;
+}
+
+[data-theme="dark"] .btn-responder-avaliacao:hover,
+.dark-theme .btn-responder-avaliacao:hover {
+    background: #38A129 !important;
+    color: #FFFFFF !important;
 }
 
 [data-theme="dark"] .form-resposta-inline textarea,
@@ -427,8 +433,15 @@ body[data-theme="dark"].pagina-vendedor {
     color: #F59E0B !important;
 }
 
+[data-theme="dark"] .avaliacao-estrelas,
+.dark-theme .avaliacao-estrelas {
+    color: #F59E0B !important;
+}
+
 [data-theme="dark"] .avaliacao-estrelas span,
-.dark-theme .avaliacao-estrelas span {
+.dark-theme .avaliacao-estrelas span,
+[data-theme="dark"] .avaliacao-nota-numero,
+.dark-theme .avaliacao-nota-numero {
     color: #94A3B8 !important;
 }
 
