@@ -27,7 +27,7 @@
     ];
 
     arquivos.forEach(function (arquivo) {
-        document.write('<script src="' + base + arquivo + '?v=9"><\/script>');
+        document.write('<script src="' + base + arquivo + '?v=11"><\/script>');
     });
 
     document.addEventListener('DOMContentLoaded', async () => {
