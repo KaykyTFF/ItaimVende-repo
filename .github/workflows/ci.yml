@@ -68,7 +68,9 @@ jobs:
         working-directory: backend
         run: |
           node src/server.js &
-          npx wait-on http://localhost:3000/api/v1/health --timeout 20000 || sleep 5
+          for i in $(seq 1 30); do
+            curl -fsSL http://localhost:3000/api/v1/health && break || sleep 1
+          done
 
       - name: Executar Testes de Integração e Conformidade REST
         working-directory: backend
