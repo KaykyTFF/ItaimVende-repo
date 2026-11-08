@@ -413,15 +413,11 @@ body.dark-theme.pagina-vender {
 }
 
 [data-theme="dark"] .preview-tag-badge,
-.dark-theme .preview-tag-badge {
-    background: rgba(56, 161, 41, 0.12) !important;
-    color: #38A129 !important;
-}
-
+.dark-theme .preview-tag-badge,
 [data-theme="dark"] .preview-tag-condicao,
 .dark-theme .preview-tag-condicao {
-    background: rgba(59, 130, 246, 0.15) !important;
-    color: #60A5FA !important;
+    background: transparent !important;
+    color: var(--primary, #44BD32) !important;
 }
 
 /* ==========================================================================

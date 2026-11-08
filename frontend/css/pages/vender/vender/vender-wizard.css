@@ -585,22 +585,25 @@
 .preview-tags-row {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: 8px;
+    margin-bottom: 2px;
 }
 
 .preview-tag-badge {
-    background: #E8F5E9;
-    color: #2E7D32;
-    padding: 4px 10px;
-    border-radius: 6px;
-    font-size: 11.5px;
+    background: transparent;
+    color: var(--primary, #44BD32);
+    padding: 0;
+    border-radius: 0;
+    font-size: 12px;
     font-weight: 700;
     text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .preview-tag-condicao {
-    background: #EFF6FF;
-    color: #1D4ED8;
+    background: transparent;
+    color: var(--primary, #44BD32);
 }
 
 .preview-titulo-anuncio {
