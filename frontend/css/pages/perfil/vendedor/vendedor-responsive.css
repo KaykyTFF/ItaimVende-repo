@@ -130,6 +130,87 @@
         padding: 18px 14px;
         border-radius: 16px;
     }
+
+    /* Adaptações da Seção de Avaliações no Mobile */
+    .secao-avaliacoes-cabecalho {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 8px !important;
+        margin-bottom: 14px !important;
+    }
+
+    .secao-avaliacoes-cabecalho h3,
+    .secao-avaliacoes-cabecalho h2 {
+        font-size: 15.5px !important;
+        margin: 0 !important;
+    }
+
+    .badge-contador-avaliacoes {
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 12px !important;
+        padding: 3px 10px !important;
+        line-height: 1.2 !important;
+    }
+
+    .item-avaliacao-card {
+        padding: 12px 0 !important;
+    }
+
+    .avaliacao-topo-row {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 6px !important;
+        position: relative !important;
+        margin-bottom: 6px !important;
+    }
+
+    .avaliacao-autor-box {
+        width: 100% !important;
+        padding-right: 36px !important;
+        box-sizing: border-box !important;
+    }
+
+    .avaliacao-menu-wrapper {
+        position: absolute !important;
+        top: 0 !important;
+        right: 0 !important;
+    }
+
+    .avaliacao-acoes-estrelas {
+        width: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        gap: 6px !important;
+    }
+
+    .avaliacao-estrelas {
+        font-size: 13.5px !important;
+        letter-spacing: 1.5px !important;
+    }
+
+    .avaliacao-comentario-txt {
+        margin: 6px 0 0 0 !important;
+        font-size: 13.5px !important;
+        line-height: 1.5 !important;
+    }
+
+    .avaliacao-resposta {
+        margin: 8px 0 0 0 !important;
+        padding: 10px 12px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .avaliacao-responder-container {
+        margin: 8px 0 0 0 !important;
+    }
 }
 
 @media (max-width: 480px) {

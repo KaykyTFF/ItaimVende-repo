@@ -215,7 +215,9 @@ body[data-theme="dark"].pagina-vendedor {
 /* Badges e Avaliações */
 [data-theme="dark"] #perfil-badge-avaliacoes,
 [data-theme="dark"] #vendedor-badge-avaliacoes,
-[data-theme="dark"] #badge-contador-avaliacoes {
+[data-theme="dark"] #badge-contador-avaliacoes,
+[data-theme="dark"] .badge-contador-avaliacoes,
+.dark-theme .badge-contador-avaliacoes {
     background-color: rgba(56, 161, 41, 0.14) !important;
     color: #38A129 !important;
 }
@@ -266,6 +268,108 @@ body[data-theme="dark"].pagina-vendedor {
     color: #CBD5E1 !important;
 }
 
+/* Resposta do Vendedor na Avaliação no Modo Escuro */
+[data-theme="dark"] .avaliacao-resposta,
+.dark-theme .avaliacao-resposta {
+    background-color: #161C22 !important;
+    background: #161C22 !important;
+    border-left: 3px solid #38A129 !important;
+    color: #CBD5E1 !important;
+}
+
+[data-theme="dark"] .avaliacao-resposta-titulo,
+.dark-theme .avaliacao-resposta-titulo,
+[data-theme="dark"] .avaliacao-resposta div,
+.dark-theme .avaliacao-resposta div {
+    color: #38A129 !important;
+}
+
+[data-theme="dark"] .avaliacao-resposta-texto,
+.dark-theme .avaliacao-resposta-texto,
+[data-theme="dark"] .avaliacao-resposta p,
+.dark-theme .avaliacao-resposta p {
+    color: #CBD5E1 !important;
+}
+
+/* Botão Responder e Form Inline de Resposta */
+[data-theme="dark"] .btn-responder-avaliacao,
+.dark-theme .btn-responder-avaliacao {
+    border-color: #38A129 !important;
+    color: #38A129 !important;
+    background: transparent !important;
+}
+
+[data-theme="dark"] .form-resposta-inline textarea,
+.dark-theme .form-resposta-inline textarea {
+    background-color: #1F2831 !important;
+    border: 1px solid #2C3946 !important;
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .form-resposta-inline textarea:focus,
+.dark-theme .form-resposta-inline textarea:focus {
+    border-color: #38A129 !important;
+    box-shadow: none !important;
+}
+
+[data-theme="dark"] .btn-cancelar-resposta,
+.dark-theme .btn-cancelar-resposta {
+    border-color: #2C3946 !important;
+    color: #94A3B8 !important;
+    background: transparent !important;
+}
+
+[data-theme="dark"] .btn-publicar-resposta,
+.dark-theme .btn-publicar-resposta,
+[data-theme="dark"] .form-resposta-inline button[type="submit"],
+.dark-theme .form-resposta-inline button[type="submit"] {
+    background: #38A129 !important;
+    color: #FFFFFF !important;
+    box-shadow: none !important;
+}
+
+/* Edição Inline de Avaliação */
+[data-theme="dark"] .box-edicao-inline-avaliacao,
+.dark-theme .box-edicao-inline-avaliacao {
+    background-color: #161C22 !important;
+    background: #161C22 !important;
+    border: 1px solid #2C3946 !important;
+}
+
+[data-theme="dark"] .box-edicao-inline-avaliacao span,
+.dark-theme .box-edicao-inline-avaliacao span,
+[data-theme="dark"] .titulo-edicao-avaliacao,
+.dark-theme .titulo-edicao-avaliacao {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .box-edicao-inline-avaliacao textarea,
+.dark-theme .box-edicao-inline-avaliacao textarea {
+    background-color: #1F2831 !important;
+    border: 1px solid #2C3946 !important;
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .box-edicao-inline-avaliacao textarea:focus,
+.dark-theme .box-edicao-inline-avaliacao textarea:focus {
+    border-color: #38A129 !important;
+    box-shadow: none !important;
+}
+
+[data-theme="dark"] .btn-salvar-edicao,
+.dark-theme .btn-salvar-edicao {
+    background: #38A129 !important;
+    color: #FFFFFF !important;
+    box-shadow: none !important;
+}
+
+[data-theme="dark"] .btn-cancelar-edicao,
+.dark-theme .btn-cancelar-edicao {
+    border-color: #2C3946 !important;
+    color: #94A3B8 !important;
+    background: transparent !important;
+}
+
 [data-theme="dark"] .btn-excluir-avaliacao {
     background-color: rgba(239, 68, 68, 0.12) !important;
     border: 1px solid rgba(239, 68, 68, 0.3) !important;
@@ -301,6 +405,29 @@ body[data-theme="dark"].pagina-vendedor {
 [data-theme="dark"] #perfil-textarea-comentario::placeholder,
 [data-theme="dark"] #textarea-comentario::placeholder {
     color: #64748B !important;
+}
+
+[data-theme="dark"] .box-form-avaliacao,
+[data-theme="dark"] #box-form-avaliacao,
+[data-theme="dark"] #perfil-box-form-avaliacao {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .box-form-avaliacao span,
+[data-theme="dark"] #box-form-avaliacao span,
+[data-theme="dark"] #perfil-box-form-avaliacao span {
+    color: #CBD5E1 !important;
+}
+
+[data-theme="dark"] .box-form-avaliacao #label-nota-selecionada,
+[data-theme="dark"] #box-form-avaliacao #label-nota-selecionada,
+[data-theme="dark"] #perfil-box-form-avaliacao #perfil-label-nota-selecionada {
+    color: #F59E0B !important;
+}
+
+[data-theme="dark"] .avaliacao-estrelas span,
+.dark-theme .avaliacao-estrelas span {
+    color: #94A3B8 !important;
 }
 
 [data-theme="dark"] .badge-autor-fixo,
