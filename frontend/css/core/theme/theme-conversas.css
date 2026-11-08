@@ -340,6 +340,35 @@
     box-shadow: none !important;
 }
 
+/* Aviso de Início de Conversa (Boas-Vindas no Feed) */
+[data-theme="dark"] .chat-aviso-inicio,
+.dark-theme .chat-aviso-inicio {
+    background-color: #1A222A !important;
+    border: 1px solid #283440 !important;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme="dark"] .chat-aviso-inicio-icone,
+.dark-theme .chat-aviso-inicio-icone {
+    background-color: rgba(56, 161, 41, 0.12) !important;
+    color: #38A129 !important;
+}
+
+[data-theme="dark"] .chat-aviso-inicio p,
+.dark-theme .chat-aviso-inicio p {
+    color: #CBD5E1 !important;
+}
+
+[data-theme="dark"] .chat-aviso-inicio p strong,
+.dark-theme .chat-aviso-inicio p strong {
+    color: #F8FAFC !important;
+}
+
+[data-theme="dark"] .chat-aviso-inicio .chat-aviso-sub,
+.dark-theme .chat-aviso-inicio .chat-aviso-sub {
+    color: #94A3B8 !important;
+}
+
 /* Mensagens Recebidas */
 [data-theme="dark"] .msg-balao.recebida,
 .dark-theme .msg-balao.recebida,
