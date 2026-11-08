@@ -67,7 +67,8 @@
             : (isProprioUsuario
                 ? `<div class="avaliacao-responder-container" style="margin:6px 0 0 44px;">
                        <button type="button" class="btn-responder-avaliacao" data-id="${item.id}">
-                           Responder
+                           <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 17 4 12 9 7"></polyline><path d="M20 18v-2a4 4 0 0 0-4-4H4"></path></svg>
+                           <span>Responder</span>
                        </button>
                        <form class="form-resposta-inline" data-id="${item.id}" style="display:none;margin-top:8px;">
                            <textarea placeholder="Escreva sua resposta..." rows="2"></textarea>
