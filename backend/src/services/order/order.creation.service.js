@@ -91,9 +91,9 @@ export async function createOrder(buyerId, orderData) {
       const resumo = titles.slice(0, 2).join(', ') + (titles.length > 2 ? ` e mais ${titles.length - 2}` : '');
       createNotification({
         userId: sellerId,
-        title: 'Venda Concretizada! 🛍️',
+        title: 'Venda realizada',
         message: `Novo pedido ${orderCode} confirmado para: ${resumo}.`,
-        type: 'venda',
+        type: 'aviso',
         link: '/pages/vender/meus-anuncios.html',
       }).catch(() => {});
 

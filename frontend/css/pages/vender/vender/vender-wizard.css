@@ -436,29 +436,137 @@
     display: block;
 }
 
+/* Botões de Navegação de Fotos na Revisão (Passar imagem) */
+.preview-seta-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 5;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(4px);
+    border: none;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #1E272E;
+    transition: all 0.2s ease;
+    user-select: none;
+    padding: 0;
+}
+
+.preview-seta-nav:hover {
+    background-color: #FFFFFF;
+    color: #44BD32;
+    transform: translateY(-50%) scale(1.12);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.24);
+}
+
+.preview-seta-nav:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
+.preview-seta-nav svg {
+    width: 18px;
+    height: 18px;
+    display: block;
+    stroke: currentColor;
+}
+
+.preview-seta-prev {
+    left: 10px;
+}
+
+.preview-seta-next {
+    right: 10px;
+}
+
+/* Badge Contador de Fotos na Revisão (ex: 1/3) */
+.preview-badge-contador {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    z-index: 5;
+    background: rgba(15, 23, 42, 0.78);
+    color: #FFFFFF;
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    backdrop-filter: blur(4px);
+    letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    pointer-events: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
 .preview-fotos-miniaturas {
     display: flex;
     gap: 8px;
     overflow-x: auto;
-    padding-bottom: 4px;
+    padding: 4px 2px;
+    max-width: 100%;
 }
 
-.preview-thumb-item {
+.preview-thumb-item,
+.preview-miniatura-item {
     width: 52px;
     height: 52px;
-    border-radius: 8px;
-    object-fit: cover;
+    min-width: 52px;
+    max-width: 52px;
+    border-radius: 10px;
+    overflow: hidden;
     border: 2px solid transparent;
     cursor: pointer;
     background: #E2E8F0;
     flex-shrink: 0;
     transition: all 0.2s ease;
+    display: block;
+    box-sizing: border-box;
+}
+
+.preview-thumb-item img,
+.preview-miniatura-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
 .preview-thumb-item.ativo,
-.preview-thumb-item:hover {
-    border-color: #59AA59;
+.preview-thumb-item.ativa,
+.preview-miniatura-item.ativa,
+.preview-thumb-item:hover,
+.preview-miniatura-item:hover {
+    border-color: #44BD32;
     transform: scale(1.05);
+}
+
+[data-theme="dark"] .preview-seta-nav {
+    background-color: rgba(30, 41, 59, 0.92);
+    color: #F1F5F9;
+}
+
+[data-theme="dark"] .preview-seta-nav:hover {
+    background-color: #1E293B;
+    color: #44BD32;
+}
+
+[data-theme="dark"] .preview-col-foto {
+    background: #182026;
+}
+
+[data-theme="dark"] .preview-foto-principal-wrapper,
+[data-theme="dark"] .preview-thumb-item,
+[data-theme="dark"] .preview-miniatura-item {
+    background: #242D35;
 }
 
 .preview-col-dados {

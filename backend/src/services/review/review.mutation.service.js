@@ -84,15 +84,21 @@ export async function createReview(authorId, targetUserId, reviewData) {
   });
 
   // Dispara notificação push em tempo real para o vendedor avaliado
-  import('../notification/index.js').then(({ createNotification }) => {
-    createNotification({
-      userId: targetUser.id,
-      title: 'Nova Avaliação Recebida! ⭐',
-      message: `${result.review?.author?.name || 'Um comprador'} avaliou você com ${notaNum} estrela${notaNum > 1 ? 's' : ''}.`,
-      type: 'avaliacao',
-      link: `/pages/perfil/vendedor.html?id=${targetUser.id}`,
+  if (targetUser.id && targetUser.id !== authorId) {
+    import('../notification/index.js').then(({ createNotification }) => {
+      const authorName = result.review?.author?.name || 'Um comprador';
+      const authorAvatar = result.review?.author?.avatar || '';
+      const comentarioTxt = comment ? ` "${comment.length > 50 ? comment.substring(0, 47) + '...' : comment}"` : '';
+
+      createNotification({
+        userId: targetUser.id,
+        title: 'Nova avaliacao recebida',
+        message: `${authorName} avaliou voce com ${notaNum} estrela${notaNum > 1 ? 's' : ''}.${comentarioTxt}`,
+        type: 'avaliacao',
+        link: `/pages/perfil/vendedor.html?id=${targetUser.id}&stars=${notaNum}${authorAvatar ? `&avatar=${encodeURIComponent(authorAvatar)}` : ''}`,
+      }).catch(() => {});
     }).catch(() => {});
-  }).catch(() => {});
+  }
 
   return result;
 }

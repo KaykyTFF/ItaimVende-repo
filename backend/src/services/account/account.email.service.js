@@ -338,6 +338,16 @@ Se você NÃO realizou esta alteração, entre em contato imediatamente com noss
     console.warn('[EmailService] Falha ao enviar aviso para e-mail antigo:', err.message);
   }
 
+  import('../notification/index.js').then(({ createNotification }) => {
+    createNotification({
+      userId,
+      title: 'E-mail atualizado',
+      message: `O endereco de e-mail da sua conta foi alterado com sucesso para ${cleanEmail}.`,
+      type: 'aviso',
+      link: '/pages/perfil/configuracoes.html',
+    }).catch(() => {});
+  }).catch(() => {});
+
   return {
     success: true,
     message: 'E-mail de acesso alterado com sucesso!',

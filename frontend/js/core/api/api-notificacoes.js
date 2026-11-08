@@ -25,6 +25,7 @@
          * Lista notificações com filtros e paginação
          * @param {Object} [filtros]
          * @param {string} [filtros.type]
+         * @param {string} [filtros.sort]
          * @param {boolean|string} [filtros.isRead]
          * @param {number} [filtros.page]
          * @param {number} [filtros.limit]
@@ -32,12 +33,22 @@
         async listar(filtros = {}) {
             const params = new URLSearchParams();
             if (filtros.type && filtros.type !== 'todas') params.append('type', filtros.type);
+            if (filtros.sort) params.append('sort', filtros.sort);
             if (filtros.isRead !== undefined && filtros.isRead !== null) params.append('isRead', String(filtros.isRead));
             if (filtros.page) params.append('page', String(filtros.page));
             if (filtros.limit) params.append('limit', String(filtros.limit));
 
             const query = params.toString() ? `?${params.toString()}` : '';
             return getCore().requisicao(`/notifications${query}`, {
+                headers: getCore().obterHeaders ? getCore().obterHeaders(true) : {}
+            });
+        },
+
+        /**
+         * Retorna a contagem de notificações não lidas agrupadas por categoria
+         */
+        async obterContagens() {
+            return getCore().requisicao('/notifications/counts', {
                 headers: getCore().obterHeaders ? getCore().obterHeaders(true) : {}
             });
         },
