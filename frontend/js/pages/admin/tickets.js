@@ -733,7 +733,11 @@
                                                 exist.categoryLabel = CATEGORIAS_SUPORTE_LABEL[item.categoria] || item.categoria;
                                             }
                                             if (Array.isArray(item.anexos) && item.anexos.length > 0) {
-                                                exist.anexos = item.anexos;
+                                                const temDataUrlNovo = item.anexos.some(a => a && (a.dataUrl || a.url));
+                                                const temDataUrlExist = Array.isArray(exist.anexos) && exist.anexos.some(a => a && (a.dataUrl || a.url));
+                                                if (!exist.anexos || exist.anexos.length === 0 || (temDataUrlNovo && !temDataUrlExist)) {
+                                                    exist.anexos = item.anexos;
+                                                }
                                             }
                                         }
                                     }
@@ -812,7 +816,14 @@
         if (!raw) return null;
 
         const id = raw.id || raw.protocol || ('TKT-' + Math.random().toString(36).substring(2, 7).toUpperCase());
-        const protocol = raw.protocol || (id.startsWith('TK-') ? id : (id.startsWith('TKT-') ? `TK-SUP-${id.replace('TKT-', '')}` : `TK-SUP-${id.slice(-5).toUpperCase()}`));
+        const rawProt = String(raw.protocol || raw.id || id).trim();
+        const protocol = rawProt.startsWith('TK-SUP-')
+            ? rawProt
+            : rawProt.startsWith('TKT-')
+                ? `TK-SUP-${rawProt.replace('TKT-', '')}`
+                : rawProt.startsWith('TK-')
+                    ? rawProt
+                    : `TK-SUP-${rawProt.slice(-5).toUpperCase()}`;
 
         let status = (raw.status || 'ABERTO').toUpperCase();
         if (status === 'PENDENTE' || status === 'PENDING') status = 'ABERTO';
@@ -867,6 +878,31 @@
         };
     }
 
+    function ehAnexoImagem(nome, tipo, src) {
+        if (tipo && String(tipo).startsWith('image/')) return true;
+        if (src && String(src).startsWith('data:image/')) return true;
+        const ext = String(nome || '').toLowerCase();
+        return /\.(jpg|jpeg|png|webp|gif|jfif|svg|bmp|avif)$/.test(ext);
+    }
+
+    function obterUrlAnexo(anexo) {
+        if (!anexo) return null;
+        if (typeof anexo === 'string') {
+            if (anexo.startsWith('data:') || anexo.startsWith('http') || anexo.startsWith('blob:') || anexo.startsWith('/')) {
+                return anexo;
+            }
+            return null;
+        }
+        return anexo.dataUrl || anexo.url || anexo.conteudo || anexo.base64 || null;
+    }
+
+    function formatarTamanhoAnexo(bytes) {
+        if (!bytes || isNaN(bytes)) return '';
+        const kb = Number(bytes) / 1024;
+        if (kb < 1024) return `${kb.toFixed(1)} KB`;
+        return `${(kb / 1024).toFixed(2)} MB`;
+    }
+
     function renderizarFilaSuporte() {
         const listaEl = document.getElementById('lista-tickets-suporte-admin');
         if (!listaEl) return;
@@ -917,17 +953,26 @@
                 anexosHtml = `
                     <div class="ticket-attachments-row">
                         <span style="font-size: 0.76rem; font-weight: 700; color: var(--tk-text-muted);"><i class="fa-solid fa-paperclip"></i> Anexos (${t.anexos.length}):</span>
-                        ${t.anexos.map(a => {
-                            const nome = typeof a === 'string' ? a : (a.nome || a.name || 'Arquivo');
-                            return `<span class="ticket-attachment-tag"><i class="fa-solid fa-file"></i> ${escapeHtml(nome)}</span>`;
+                        ${t.anexos.map((a, idx) => {
+                            const nome = typeof a === 'string' ? a : (a.nome || a.name || `Anexo ${idx + 1}`);
+                            const tipo = typeof a === 'object' && a ? a.tipo : '';
+                            const src = obterUrlAnexo(a);
+                            const isImg = ehAnexoImagem(nome, tipo, src);
+                            const iconeOuThumb = (src && isImg)
+                                ? `<img src="${src}" alt="" class="ticket-attachment-thumb-mini">`
+                                : `<i class="fa-solid ${isImg ? 'fa-file-image' : 'fa-file-lines'}"></i>`;
+
+                            return `
+                                <button type="button" class="ticket-attachment-tag btn-ver-anexo" data-ticket-id="${t.id}" data-anexo-idx="${idx}" title="Clique para visualizar ${escapeHtml(nome)}">
+                                    ${iconeOuThumb}
+                                    <span>${escapeHtml(nome)}</span>
+                                    <i class="fa-solid fa-eye" style="opacity: 0.7; font-size: 0.7rem; margin-left: 2px;"></i>
+                                </button>
+                            `;
                         }).join('')}
                     </div>
                 `;
             }
-
-            const emailSubject = `[Itaim Vende - Suporte] Chamado #${t.protocol || t.id} - ${t.subject || 'Atendimento'}`;
-            const emailBody = `Olá, ${t.userName}!\n\nRecebemos seu chamado #${t.protocol || t.id} referente a "${t.subject}".\n\nA respeito do seu relato:\n"${t.description}"\n\nGostaríamos de informar que:\n\n\n\nCaso tenha novas dúvidas, basta responder a este e-mail.\n\nAtenciosamente,\nEquipe de Moderação e Atendimento\nItaim Vende • Paulistana - PI`;
-            const mailtoUrl = `mailto:${encodeURIComponent(t.userEmail)}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
 
             return `
                 <div class="ticket-card status-${statusClass}" id="card-suporte-${t.id}">
@@ -983,9 +1028,6 @@
                         </div>
 
                         <div class="ticket-actions-group">
-                            <a href="${mailtoUrl}" class="btn-mod-action btn-email" title="Abrir cliente de e-mail para responder ao usuário">
-                                <i class="fa-solid fa-envelope"></i> Responder por E-mail
-                            </a>
                             <button type="button" class="btn-mod-action btn-copy-email" data-email="${escapeHtml(t.userEmail)}" title="Copiar e-mail do usuário">
                                 <i class="fa-regular fa-copy"></i> Copiar E-mail
                             </button>
@@ -1023,6 +1065,15 @@
                         mostrarToast(`E-mail "${email}" copiado para a área de transferência!`);
                     });
                 }
+            });
+        });
+
+        // Visualização direta de anexo ao clicar na tag
+        document.querySelectorAll('#lista-tickets-suporte-admin .btn-ver-anexo').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const ticketId = btn.dataset.ticketId;
+                const anexoIdx = parseInt(btn.dataset.anexoIdx, 10);
+                abrirVisualizadorAnexo(ticketId, anexoIdx);
             });
         });
 
@@ -1252,19 +1303,49 @@
         if (iconeEl) iconeEl.className = 'fa-solid fa-headset';
         if (protEl) protEl.textContent = `#${ticket.protocol || ticket.id}`;
 
-        const emailSubject = `[Itaim Vende - Suporte] Chamado #${ticket.protocol || ticket.id} - ${ticket.subject}`;
-        const emailBody = `Olá, ${ticket.userName}!\n\nRecebemos seu chamado #${ticket.protocol || ticket.id} com o assunto "${ticket.subject}".\n\nReferente ao seu relato:\n"${ticket.description}"\n\nGostaríamos de esclarecer que:\n\n\n\nCaso tenha dúvidas adicionais, basta responder a este e-mail.\n\nAtenciosamente,\nEquipe de Suporte e Administração\nItaim Vende`;
-        const mailtoUrl = `mailto:${encodeURIComponent(ticket.userEmail)}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
-
         if (conteudoEl) {
             let anexosList = 'Nenhum anexo enviado neste chamado.';
             if (Array.isArray(ticket.anexos) && ticket.anexos.length > 0) {
-                anexosList = ticket.anexos.map(a => `
-                    <div style="padding: 4px 0; display: flex; align-items: center; gap: 6px;">
-                        <i class="fa-solid fa-file"></i>
-                        <span>${escapeHtml(typeof a === 'string' ? a : (a.nome || a.name || 'Arquivo'))}</span>
+                anexosList = `
+                    <div class="modal-anexos-grid">
+                        ${ticket.anexos.map((a, idx) => {
+                            const nome = typeof a === 'string' ? a : (a.nome || a.name || `Anexo ${idx + 1}`);
+                            const tipo = typeof a === 'object' && a ? (a.tipo || '') : '';
+                            const tamanhoFmt = typeof a === 'object' && a ? formatarTamanhoAnexo(a.tamanho) : '';
+                            const src = obterUrlAnexo(a);
+                            const isImg = ehAnexoImagem(nome, tipo, src);
+
+                            const previewInner = (src && isImg)
+                                ? `<img src="${src}" alt="${escapeHtml(nome)}">`
+                                : `<div style="display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--tk-text-muted);">
+                                       <i class="fa-solid ${isImg ? 'fa-file-image' : 'fa-file-lines'}" style="font-size:2rem;color:var(--tk-primary);"></i>
+                                       <span style="font-size:0.72rem;">Clique para abrir</span>
+                                   </div>`;
+
+                            return `
+                                <div class="modal-anexo-card">
+                                    <div class="modal-anexo-preview-box btn-modal-ver-anexo" data-ticket-id="${ticket.id}" data-anexo-idx="${idx}" title="Clique para ampliar ${escapeHtml(nome)}">
+                                        ${previewInner}
+                                    </div>
+                                    <div style="display:flex;flex-direction:column;gap:2px;min-width:0;">
+                                        <span style="font-weight:700;font-size:0.8rem;color:var(--tk-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${escapeHtml(nome)}">${escapeHtml(nome)}</span>
+                                        <span style="font-size:0.72rem;color:var(--tk-text-dim);">${tamanhoFmt || (isImg ? 'Imagem' : 'Documento')}</span>
+                                    </div>
+                                    <div style="display:flex;gap:6px;margin-top:auto;">
+                                        <button type="button" class="btn-mod-action btn-view btn-modal-ver-anexo" data-ticket-id="${ticket.id}" data-anexo-idx="${idx}" style="flex:1;justify-content:center;padding:5px 8px;font-size:0.76rem;">
+                                            <i class="fa-solid fa-eye"></i> Ver
+                                        </button>
+                                        ${src ? `
+                                            <a href="${src}" download="${escapeHtml(nome)}" class="btn-mod-action btn-view" style="padding:5px 8px;font-size:0.76rem;" title="Baixar arquivo">
+                                                <i class="fa-solid fa-download"></i>
+                                            </a>
+                                        ` : ''}
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
                     </div>
-                `).join('');
+                `;
             }
 
             conteudoEl.innerHTML = `
@@ -1281,14 +1362,12 @@
                         <span class="ticket-category-badge ${ticket.category || 'outro'}"><i class="fa-solid fa-tag"></i> ${ticket.categoryLabel}</span>
                         <span class="ticket-status-pill ${ticket.status.toLowerCase()}">${ticket.statusLabel}</span>
                     </div>
-                    <div style="font-size: 1.05rem; font-weight: 700; color: var(--tk-text);">${escapeHtml(ticket.subject)}</div>
+                    <div style="font-size: 1.05rem; font-weight: 700; color: var(--tk-text); overflow-wrap: anywhere; word-break: break-word;">${escapeHtml(ticket.subject)}</div>
                 </div>
 
                 <div style="background: var(--tk-surface-alt); padding: 14px; border-radius: var(--tk-radius-sm);">
                     <div style="font-weight: 800; margin-bottom: 6px;">Relato Completo do Chamado:</div>
-                    <div style="line-height: 1.55; color: var(--tk-text); white-space: pre-wrap;">
-                        ${escapeHtml(ticket.description)}
-                    </div>
+                    <div style="line-height: 1.55; color: var(--tk-text); white-space: pre-wrap; overflow-wrap: anywhere; word-break: break-word;">${escapeHtml(ticket.description)}</div>
                     <div style="margin-top: 10px; font-size: 0.78rem; color: var(--tk-text-dim);">
                         Registrado em: ${new Date(ticket.createdAt).toLocaleString('pt-BR')}
                     </div>
@@ -1301,13 +1380,16 @@
                     </div>
                 </div>
             `;
+
+            conteudoEl.querySelectorAll('.btn-modal-ver-anexo').forEach(el => {
+                el.addEventListener('click', () => {
+                    abrirVisualizadorAnexo(el.dataset.ticketId, parseInt(el.dataset.anexoIdx, 10));
+                });
+            });
         }
 
         if (rodapeAcoesEl) {
             rodapeAcoesEl.innerHTML = `
-                <a href="${mailtoUrl}" class="btn-mod-action btn-email" style="text-decoration: none;">
-                    <i class="fa-solid fa-envelope"></i> Responder por E-mail
-                </a>
                 <button type="button" class="btn-mod-action btn-copy-email" id="modal-btn-copiar-email" data-email="${escapeHtml(ticket.userEmail)}">
                     <i class="fa-regular fa-copy"></i> Copiar E-mail
                 </button>
@@ -1328,6 +1410,184 @@
         }
 
         if (modal) modal.style.display = 'flex';
+    }
+
+    function persistirDataUrlNoAnexo(ticket, anexoIdx, dataUrl) {
+        if (!ticket || !Array.isArray(ticket.anexos) || !ticket.anexos[anexoIdx]) return;
+        if (typeof ticket.anexos[anexoIdx] === 'string') {
+            ticket.anexos[anexoIdx] = { nome: ticket.anexos[anexoIdx], dataUrl };
+        } else {
+            ticket.anexos[anexoIdx].dataUrl = dataUrl;
+        }
+
+        // Atualiza em itaim_conversas_suporte
+        try {
+            const raw = localStorage.getItem('itaim_conversas_suporte');
+            if (raw) {
+                const list = JSON.parse(raw);
+                if (Array.isArray(list)) {
+                    const alvo = list.find(c => c.id === ticket.id || c.protocol === ticket.protocol || (`TK-SUP-${String(c.protocol || '').replace('TKT-', '')}`) === ticket.protocol);
+                    if (alvo) {
+                        alvo.anexos = ticket.anexos;
+                        localStorage.setItem('itaim_conversas_suporte', JSON.stringify(list));
+                    }
+                }
+            }
+        } catch (e) {}
+
+        // Atualiza nas chaves de usuário itaim_suporte_tickets_*
+        try {
+            for (let i = 0; i < localStorage.length; i++) {
+                const k = localStorage.key(i);
+                if (k && k.startsWith('itaim_suporte_tickets_')) {
+                    const raw = localStorage.getItem(k);
+                    if (raw) {
+                        const arr = JSON.parse(raw);
+                        if (Array.isArray(arr)) {
+                            let alterou = false;
+                            arr.forEach(uTkt => {
+                                const uProt = `TK-SUP-${String(uTkt.id || '').replace('TKT-', '')}`;
+                                if (uTkt.id === ticket.id || uTkt.id === ticket.protocol || uProt === ticket.protocol) {
+                                    uTkt.anexos = ticket.anexos;
+                                    alterou = true;
+                                }
+                            });
+                            if (alterou) {
+                                localStorage.setItem(k, JSON.stringify(arr));
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (e) {}
+
+        renderizarFilaSuporte();
+    }
+
+    function abrirVisualizadorAnexo(ticketId, anexoIdx) {
+        const ticket = todosTicketsSuporte.find(t => t.id === ticketId || t.protocol === ticketId);
+        if (!ticket || !Array.isArray(ticket.anexos) || !ticket.anexos[anexoIdx]) {
+            mostrarToast('Anexo não encontrado.');
+            return;
+        }
+
+        const anexo = ticket.anexos[anexoIdx];
+        const nome = typeof anexo === 'string' ? anexo : (anexo.nome || anexo.name || `Anexo ${anexoIdx + 1}`);
+        const tipo = typeof anexo === 'object' && anexo ? (anexo.tipo || '') : '';
+        const tamanhoFmt = typeof anexo === 'object' && anexo ? formatarTamanhoAnexo(anexo.tamanho) : '';
+        const src = obterUrlAnexo(anexo);
+        const isImg = ehAnexoImagem(nome, tipo, src);
+        const isPdf = (tipo === 'application/pdf') || String(nome).toLowerCase().endsWith('.pdf');
+
+        let viewerModal = document.getElementById('modal-visualizador-anexo');
+        if (!viewerModal) {
+            viewerModal = document.createElement('div');
+            viewerModal.id = 'modal-visualizador-anexo';
+            viewerModal.className = 'modal-investigacao-backdrop';
+            viewerModal.style.zIndex = '3200';
+            document.body.appendChild(viewerModal);
+
+            viewerModal.addEventListener('click', (e) => {
+                if (e.target === viewerModal) {
+                    viewerModal.style.display = 'none';
+                }
+            });
+        }
+
+        let corpoHtml = '';
+        if (src) {
+            if (isImg) {
+                corpoHtml = `
+                    <div style="background: rgba(0,0,0,0.35); border: 1px solid var(--tk-border); border-radius: var(--tk-radius-sm); padding: 12px; display: flex; align-items: center; justify-content: center; min-height: 260px; max-height: 68vh; overflow: auto;">
+                        <img src="${src}" alt="${escapeHtml(nome)}" style="max-width: 100%; max-height: 64vh; border-radius: 6px; object-fit: contain; display: block;">
+                    </div>
+                `;
+            } else if (isPdf) {
+                corpoHtml = `
+                    <iframe src="${src}" title="${escapeHtml(nome)}" style="width: 100%; height: 64vh; border: 1px solid var(--tk-border); border-radius: var(--tk-radius-sm); background: #fff;"></iframe>
+                `;
+            } else {
+                corpoHtml = `
+                    <div style="background: var(--tk-surface-alt); padding: 28px; border-radius: var(--tk-radius-sm); text-align: center;">
+                        <i class="fa-solid fa-file-arrow-down" style="font-size: 3rem; color: var(--tk-primary); margin-bottom: 12px;"></i>
+                        <div style="font-weight: 700; font-size: 1rem; color: var(--tk-text);">${escapeHtml(nome)}</div>
+                        <div style="font-size: 0.84rem; color: var(--tk-text-muted); margin-top: 4px;">${tamanhoFmt || tipo || 'Arquivo anexado'}</div>
+                    </div>
+                `;
+            }
+        } else {
+            corpoHtml = `
+                <div style="background: var(--tk-surface-alt); border: 1px dashed var(--tk-border); padding: 24px; border-radius: var(--tk-radius-sm); text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                    <i class="fa-solid ${isImg ? 'fa-file-image' : 'fa-file-lines'}" style="font-size: 2.8rem; color: var(--tk-primary);"></i>
+                    <div style="font-weight: 800; font-size: 1rem; color: var(--tk-text);">${escapeHtml(nome)}</div>
+                    <div style="font-size: 0.8rem; color: var(--tk-text-dim);">${[tipo, tamanhoFmt].filter(Boolean).join(' • ') || 'Anexo registrado'}</div>
+                    <p style="margin: 6px 0; font-size: 0.84rem; color: var(--tk-text-muted); max-width: 440px; line-height: 1.45;">
+                        Este ticket foi registrado antes da ativação do salvamento de mídia em Base64. Novos chamados enviados pelos usuários já exibem a imagem automaticamente.
+                    </p>
+                    <label class="btn-mod-action btn-view" style="cursor: pointer; margin-top: 4px;">
+                        <i class="fa-solid fa-upload"></i> Vincular arquivo "${escapeHtml(nome)}" para visualizar
+                        <input type="file" id="input-vincular-anexo-legado" accept="image/*,.pdf" style="display: none;">
+                    </label>
+                </div>
+            `;
+        }
+
+        viewerModal.innerHTML = `
+            <div class="modal-investigacao-card" style="max-width: 720px; width: 94%;">
+                <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--tk-border); padding-bottom: 12px; gap: 12px;">
+                    <h3 style="margin: 0; font-size: 1.05rem; font-weight: 800; display: flex; align-items: center; gap: 8px; min-width: 0;">
+                        <i class="fa-solid fa-paperclip" style="color: #44BD32;"></i>
+                        <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(nome)}</span>
+                        ${tamanhoFmt ? `<span style="font-size: 0.76rem; color: var(--tk-text-dim); font-weight: 600;">(${tamanhoFmt})</span>` : ''}
+                    </h3>
+                    <button type="button" class="btn-copy-protocol" id="btn-fechar-viewer-x" style="font-size: 1.4rem;">&times;</button>
+                </div>
+
+                <div style="margin: 14px 0;">
+                    ${corpoHtml}
+                </div>
+
+                <div style="display: flex; align-items: center; justify-content: flex-end; gap: 10px; border-top: 1px solid var(--tk-border); padding-top: 12px;">
+                    ${src ? `
+                        <a href="${src}" download="${escapeHtml(nome)}" class="btn-mod-action btn-email" style="text-decoration: none;">
+                            <i class="fa-solid fa-download"></i> Baixar Anexo
+                        </a>
+                    ` : ''}
+                    <button type="button" class="btn-tk-nav" id="btn-fechar-viewer-acao">Fechar</button>
+                </div>
+            </div>
+        `;
+
+        viewerModal.style.display = 'flex';
+
+        document.getElementById('btn-fechar-viewer-x')?.addEventListener('click', () => {
+            viewerModal.style.display = 'none';
+        });
+        document.getElementById('btn-fechar-viewer-acao')?.addEventListener('click', () => {
+            viewerModal.style.display = 'none';
+        });
+
+        const inputLegado = document.getElementById('input-vincular-anexo-legado');
+        if (inputLegado) {
+            inputLegado.addEventListener('change', function () {
+                const file = this.files && this.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    const dataUrl = ev.target?.result;
+                    if (dataUrl) {
+                        persistirDataUrlNoAnexo(ticket, anexoIdx, dataUrl);
+                        abrirVisualizadorAnexo(ticketId, anexoIdx);
+                        const dossieModal = document.getElementById('modal-detalhes-ticket');
+                        if (dossieModal && dossieModal.style.display === 'flex') {
+                            abrirModalDossieSuporte(ticket.id);
+                        }
+                        mostrarToast('Anexo carregado e vinculado ao chamado!');
+                    }
+                };
+                reader.readAsDataURL(file);
+            });
+        }
     }
 
     // =========================================================================

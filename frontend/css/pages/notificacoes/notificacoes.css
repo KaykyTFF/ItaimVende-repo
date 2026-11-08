@@ -409,6 +409,13 @@
     flex-shrink: 0;
 }
 
+/* Área Direita (Mídia, Divisor e Ações) */
+.notif-lado-direito {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
 /* Área Central (Mídia: Thumbnail ou Estrelas) */
 .notif-midia-preview {
     flex-shrink: 0;
@@ -566,37 +573,210 @@
 @media (max-width: 768px) {
     .notificacoes-container {
         padding: 0 16px;
-        margin-top: 16px;
+        margin-top: 14px;
+        margin-bottom: 30px;
     }
 
-    .notificacoes-card {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 16px;
-        gap: 14px;
-    }
 
-    .notif-corpo-principal {
-        width: 100%;
-        align-items: flex-start;
-    }
+        /* Cabeçalho no mobile: empilhado com título full-width e botões na linha de baixo */
+        .notificacoes-topo-header {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 14px;
+            margin-bottom: 18px;
+        }
 
-    .notif-midia-preview {
-        margin-left: 0;
-    }
+        .notificacoes-titulos-wrapper {
+            width: 100%;
+            gap: 12px;
+        }
 
-    .notif-divisor-vertical {
-        display: none;
-    }
+        .notificacoes-icone-sino-header {
+            width: 38px;
+            height: 38px;
+            margin-top: 0;
+        }
 
-    .notif-coluna-acao {
-        width: 100%;
-        justify-content: flex-end;
-        padding-top: 10px;
-        border-top: 1px solid #F1F5F9;
-    }
+        .notificacoes-icone-sino-header svg {
+            width: 28px;
+            height: 28px;
+        }
 
-    .btn-notif-acao-primaria {
-        width: 100%;
+        .notificacoes-titulos h1 {
+            font-size: 22px;
+            line-height: 1.2;
+        }
+
+        .notificacoes-titulos p {
+            font-size: 13.5px;
+            line-height: 1.45;
+            max-width: 100%;
+            margin-top: 4px;
+        }
+
+        .notificacoes-acoes-topo {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 2px;
+        }
+
+        .notificacoes-acoes-topo .btn-marcar-lidas {
+            flex: 1;
+            min-width: 0;
+            height: 36px;
+            padding: 0 10px;
+            font-size: 12px;
+            gap: 6px;
+            justify-content: center;
+        }
+
+        .notificacoes-acoes-topo .btn-marcar-lidas svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* Linha de filtros e ordenação */
+        .notificacoes-filtros-row {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .notificacoes-tabs-bar {
+            width: 100%;
+            padding-bottom: 4px;
+        }
+
+        .tab-notif-btn {
+            padding: 6px 14px;
+            font-size: 13px;
+            gap: 6px;
+        }
+
+        .notificacoes-ordenacao-box {
+            width: 100%;
+        }
+
+        .notificacoes-ordenacao-box .select-filtro {
+            width: 100%;
+        }
+
+        /* Cards de Notificação no Mobile */
+        .notificacao-card {
+            flex-direction: column;
+            align-items: stretch;
+            padding: 14px;
+            gap: 12px;
+            border-radius: 12px;
+        }
+
+        .notif-corpo-principal {
+            width: 100%;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .notif-avatar-wrapper {
+            width: 46px;
+            height: 46px;
+            flex-shrink: 0;
+        }
+
+        .notif-avatar-img {
+            width: 46px;
+            height: 46px;
+        }
+
+        .notif-conteudo-central {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .notif-titulo {
+            font-size: 14.5px;
+            line-height: 1.35;
+            margin-bottom: 4px;
+        }
+
+        .notif-descricao {
+            font-size: 13px;
+            line-height: 1.45;
+            margin-bottom: 6px;
+        }
+
+        .notif-tempo-meta {
+            font-size: 12px;
+        }
+
+        /* Rodapé do card: thumbnail/estrelas + botão de ação + excluir */
+        .notif-lado-direito {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #F1F5F9;
+        }
+
+        .notif-midia-preview {
+            width: auto;
+            min-width: 0;
+            max-width: none;
+            margin: 0;
+            flex-shrink: 0;
+            justify-content: flex-start;
+        }
+
+        .notif-thumb-produto {
+            width: 42px;
+            height: 42px;
+            border-radius: 8px;
+        }
+
+        .notif-estrelas-avaliacao {
+            gap: 2px;
+        }
+
+        .notif-estrelas-avaliacao svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .notif-divisor-vertical {
+            display: none;
+        }
+
+        .notif-coluna-acao {
+            flex: 1;
+            width: auto;
+            min-width: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+
+        .btn-notif-acao-primaria {
+            flex: 1;
+            width: auto;
+            min-width: 0;
+            max-width: none;
+            height: 36px;
+            padding: 0 12px;
+            font-size: 13px;
+            gap: 6px;
+            justify-content: center;
+        }
+
+        .btn-excluir-notif-card {
+            width: 28px;
+            height: 28px;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
     }
-}

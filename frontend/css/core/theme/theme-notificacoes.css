@@ -145,6 +145,10 @@
     border-color: #2C3946 !important;
 }
 
+[data-theme="dark"] .notif-lado-direito {
+    border-top-color: #2C3946 !important;
+}
+
 [data-theme="dark"] .notificacoes-vazio {
     background-color: #1F2831 !important;
     border-color: #2C3946 !important;

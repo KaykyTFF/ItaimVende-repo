@@ -67,7 +67,7 @@
     <!-- CSS -->
     <link rel="stylesheet" href="../../css/pages/home/home.css">
     <link rel="stylesheet" href="../../css/core/header-global.css?v=26">
-    <link rel="stylesheet" href="../../css/pages/vender/meus-anuncios.css?v=5">
+    <link rel="stylesheet" href="../../css/pages/vender/meus-anuncios.css?v=6">
 </head>
 
 <body>
@@ -444,13 +444,36 @@
         </div>
     </main>
 
+    <!-- ==========================================================
+         4. MODAL DE CONFIRMAÇÃO DE AÇÕES NOS ANÚNCIOS
+         ========================================================== -->
+    <div class="modal-anuncio-backdrop" id="modal-confirmar-acao-anuncio" role="dialog" aria-modal="true" aria-labelledby="modal-anuncio-titulo">
+        <div class="modal-anuncio-card">
+            <button type="button" class="modal-anuncio-fechar" id="btn-fechar-modal-anuncio" aria-label="Fechar">&times;</button>
+            <div class="modal-anuncio-icone" id="modal-anuncio-icone" aria-hidden="true"></div>
+            <h3 class="modal-anuncio-titulo" id="modal-anuncio-titulo">Confirmar ação</h3>
+            <p class="modal-anuncio-texto" id="modal-anuncio-texto"></p>
+            <div class="modal-anuncio-resumo" id="modal-anuncio-resumo" style="display: none;">
+                <img src="" alt="" class="modal-anuncio-resumo-foto" id="modal-anuncio-resumo-foto">
+                <div class="modal-anuncio-resumo-info">
+                    <span class="modal-anuncio-resumo-nome" id="modal-anuncio-resumo-nome"></span>
+                    <span class="modal-anuncio-resumo-preco" id="modal-anuncio-resumo-preco"></span>
+                </div>
+            </div>
+            <div class="modal-anuncio-acoes">
+                <button type="button" class="btn-modal-anuncio-cancelar" id="btn-cancelar-modal-anuncio">Cancelar</button>
+                <button type="button" class="btn-modal-anuncio-confirmar" id="btn-confirmar-modal-anuncio">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script src="../../js/core/produtos-dados/index.js"></script>
     <script src="../../js/core/rotas/index.js"></script>
     <script src="../../js/core/api/index.js"></script>
     <script src="../../js/core/sessao/index.js"></script>
     <script src="../../js/core/skeleton/index.js"></script>
-    <script src="../../js/pages/vender/meus-anuncios.js?v=2"></script>
+    <script src="../../js/pages/vender/meus-anuncios.js?v=3"></script>
 </body>
 
 </html>
