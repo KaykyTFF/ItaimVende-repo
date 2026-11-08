@@ -802,7 +802,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (modoEdicao) {
             if (window.ItaimApi && window.ItaimApi.auth?.obterToken()) {
                 try {
-                    if (spanTexto) spanTexto.textContent = 'Atualizando no banco...';
+                    if (spanTexto) spanTexto.textContent = 'Salvando alterações...';
                     const dadosPayload = {
                         title: titulo,
                         description: descricaoFinal,
@@ -850,7 +850,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // 2. Publica o anúncio na API central do Backend se autenticado
         if (window.ItaimApi && window.ItaimApi.auth?.obterToken()) {
             try {
-                if (spanTexto) spanTexto.textContent = 'Salvando no banco...';
+                if (spanTexto) spanTexto.textContent = 'Publicando...';
                 const dadosPayload = {
                     title: titulo,
                     description: descricaoFinal,
@@ -1109,7 +1109,7 @@ document.addEventListener('DOMContentLoaded', () => {
             textoLocalizacao.textContent = `${cid} - ${cepBairro}`;
         }
         if (selectCidade) selectCidade.value = cid;
-        if (inputCep) inputCep.value = cepBairro;
+        if (inputBairro) inputBairro.value = cepBairro;
 
         // Preenche fotos
         const rawFotos = Array.isArray(produto.images) && produto.images.length > 0
