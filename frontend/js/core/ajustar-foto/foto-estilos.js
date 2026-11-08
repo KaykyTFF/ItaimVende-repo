@@ -150,7 +150,7 @@
             }
             .modal-ajuste-slider {
                 flex: 1;
-                accent-color: #44BD32;
+                accent-color: #38A129;
                 cursor: pointer;
                 touch-action: pan-x;
             }
@@ -199,7 +199,7 @@
             }
             .modal-ajuste-btn-salvar {
                 padding: 9px 20px;
-                background: #44BD32;
+                background: #38A129;
                 border: none;
                 border-radius: 8px;
                 font-size: 14px;
@@ -209,12 +209,13 @@
                 display: flex;
                 align-items: center;
                 gap: 6px;
-                box-shadow: 0 2px 8px rgba(68, 189, 50, 0.35);
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
                 transition: all 0.2s;
             }
             .modal-ajuste-btn-salvar:hover {
-                background: #38a528;
+                background: #2E8B22;
                 transform: translateY(-1px);
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
             }
             /* Suporte ao Modo Escuro */
             [data-theme="dark"] .modal-ajuste-card {
@@ -271,6 +272,19 @@
             [data-theme="dark"] .modal-ajuste-btn-cancelar:hover {
                 background: #2D3945;
                 color: #FFFFFF;
+            }
+            [data-theme="dark"] .modal-ajuste-btn-salvar,
+            .dark-theme .modal-ajuste-btn-salvar {
+                background: #38A129 !important;
+                background-color: #38A129 !important;
+                color: #FFFFFF !important;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35) !important;
+            }
+            [data-theme="dark"] .modal-ajuste-btn-salvar:hover,
+            .dark-theme .modal-ajuste-btn-salvar:hover {
+                background: #2E8B22 !important;
+                background-color: #2E8B22 !important;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.45) !important;
             }
         `;
         document.head.appendChild(style);
