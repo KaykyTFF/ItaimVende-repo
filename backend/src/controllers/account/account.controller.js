@@ -68,6 +68,7 @@ export async function confirmEmailChange(req, res, next) {
     };
     const result = await confirmEmailChangeService({
       userId: req.user.id,
+      newEmail: req.body.newEmail,
       code: req.body.code,
       ...meta,
     });

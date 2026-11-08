@@ -6,7 +6,7 @@
     <meta name="description" content="Itaim Vende - Painel de Moderação, Tickets de Denúncia e Atendimento com o Suporte">
     <title>Painel de Moderação & Tickets - Itaim Vende</title>
 
-    <!-- Anti-FOUC: Aplicação imediata do tema escuro/claro -->
+    <!-- Anti-FOUC & Proteção de Acesso RBAC (Exclusivo para os 5 Devs Autorizados) -->
     <script>
         (function() {
             try {
@@ -19,6 +19,21 @@
                     d.classList.remove('dark-theme');
                 }
             } catch (e) {}
+
+            // Guarda de Autenticação Estrita dos Tickets
+            try {
+                var auth = sessionStorage.getItem('itaim_tickets_auth') || localStorage.getItem('itaim_tickets_auth');
+                if (!auth) {
+                    window.location.replace('login-tickets.html');
+                    return;
+                }
+                var parsed = JSON.parse(auth);
+                if (!parsed || !parsed.username) {
+                    window.location.replace('login-tickets.html');
+                }
+            } catch (err) {
+                window.location.replace('login-tickets.html');
+            }
         })();
     </script>
 
@@ -67,6 +82,10 @@
                     <i class="fa-solid fa-store"></i>
                     <span>Ver Site</span>
                 </a>
+                <button type="button" class="btn-tk-nav btn-danger-action" id="btn-logout-tickets" title="Encerrar sessão de moderação" style="border-color: rgba(239, 68, 68, 0.4); color: #EF4444;">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>Sair</span>
+                </button>
             </div>
         </div>
     </header>

@@ -5,7 +5,7 @@
     "version": "2.0.0",
     "description": "API RESTful completa e original do marketplace regional Itaim Vende, voltada para Paulistana - PI e municípios do Vale do Itaim no semiárido piauiense.\n\n### Eixos de Inovação Atendidos:\n1. **Dados e Domínio**: Atende uma microrregião do semiárido piauiense sem cobertura de APIs públicas ou marketplaces formais, suportando comércio e produtores locais.\n2. **Regra de Negócio e Consulta**: Busca fonética resiliente com PostgreSQL unaccent, filtros combinados (categoria, cidade, bairro, preço, condição) e cálculo de integridade financeira de pedidos no servidor.\n3. **Tempo Real e Eventos**: Negociação instantânea por WebSockets (Socket.IO) com mecanismo de fallback que dispara e-mails transacionais assíncronos quando o usuário está offline.\n4. **Moderação Automatizada**: Painel de moderação com purga atômica de mídias órfãs no bucket do Supabase Storage.",
     "contact": {
-      "name": "Equipe Itaim Vende - IFPI",
+      "name": "Equipe de Engenharia Itaim Vende",
       "email": "contato@itaimvende.com.br"
     },
     "license": {
