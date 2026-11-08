@@ -465,6 +465,10 @@ body.tickets-body {
 .ticket-card.status-under_review { border-left-color: var(--tk-info); }
 .ticket-card.status-resolved { border-left-color: var(--tk-success); opacity: 0.88; }
 .ticket-card.status-dismissed { border-left-color: var(--tk-text-dim); opacity: 0.75; }
+.ticket-card.status-aberto { border-left-color: var(--tk-warning); }
+.ticket-card.status-em_atendimento { border-left-color: var(--tk-info); }
+.ticket-card.status-concluido { border-left-color: var(--tk-success); opacity: 0.88; }
+.ticket-card.status-fechado { border-left-color: var(--tk-text-dim); opacity: 0.75; }
 
 .ticket-card-header {
     display: flex;
@@ -523,8 +527,13 @@ body.tickets-body {
 .ticket-status-pill.under_review { background: var(--tk-info-bg); color: var(--tk-info); }
 .ticket-status-pill.resolved { background: var(--tk-success-bg); color: var(--tk-success); }
 .ticket-status-pill.dismissed { background: var(--tk-surface-alt); color: var(--tk-text-muted); }
+.ticket-status-pill.aberto { background: var(--tk-warning-bg); color: var(--tk-warning); }
+.ticket-status-pill.em_atendimento { background: var(--tk-info-bg); color: var(--tk-info); }
+.ticket-status-pill.concluido { background: var(--tk-success-bg); color: var(--tk-success); }
+.ticket-status-pill.fechado { background: var(--tk-surface-alt); color: var(--tk-text-muted); }
 
-.ticket-reason-badge {
+.ticket-reason-badge,
+.ticket-category-badge {
     font-size: 0.76rem;
     font-weight: 700;
     padding: 4px 10px;
@@ -538,6 +547,13 @@ body.tickets-body {
 .ticket-reason-badge.illegal { background: rgba(168, 85, 247, 0.15); color: #A855F7; }
 .ticket-reason-badge.spam { background: var(--tk-warning-bg); color: var(--tk-warning); }
 .ticket-reason-badge.other { background: var(--tk-surface-alt); color: var(--tk-text-muted); }
+
+.ticket-category-badge.conta { background: rgba(59, 130, 246, 0.15); color: #3B82F6; }
+.ticket-category-badge.anuncio { background: rgba(16, 185, 129, 0.15); color: #10B981; }
+.ticket-category-badge.pagamento { background: rgba(245, 158, 11, 0.15); color: #F59E0B; }
+.ticket-category-badge.seguranca { background: rgba(239, 68, 68, 0.15); color: #EF4444; }
+.ticket-category-badge.bug { background: rgba(168, 85, 247, 0.15); color: #A855F7; }
+.ticket-category-badge.outro { background: var(--tk-surface-alt); color: var(--tk-text-muted); }
 
 .ticket-meta-right {
     display: flex;
@@ -694,6 +710,138 @@ body.tickets-body {
 }
 .btn-mod-action.btn-dismiss:hover {
     color: var(--tk-text);
+}
+
+.btn-mod-action.btn-email {
+    background: rgba(68, 189, 50, 0.14);
+    color: var(--tk-primary);
+    border-color: rgba(68, 189, 50, 0.35);
+}
+.btn-mod-action.btn-email:hover {
+    background: var(--tk-primary);
+    color: #FFFFFF;
+}
+
+.btn-mod-action.btn-copy-email {
+    background: var(--tk-surface-alt);
+    color: var(--tk-text-muted);
+    border-color: var(--tk-border);
+}
+.btn-mod-action.btn-copy-email:hover {
+    color: var(--tk-text);
+    border-color: var(--tk-text-dim);
+}
+
+/* ==========================================================================
+   ESTILOS DE CARDS DE SUPORTE
+   ========================================================================== */
+.ticket-card-body.support-card-body {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+@media (max-width: 900px) {
+    .ticket-card-body.support-card-body {
+        grid-template-columns: 1fr;
+    }
+}
+
+.ticket-user-summary {
+    background: var(--tk-surface-alt);
+    border: 1px solid var(--tk-border);
+    border-radius: var(--tk-radius-sm);
+    padding: 12px 14px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.ticket-user-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--tk-radius-full);
+    object-fit: cover;
+    background: var(--tk-surface);
+    border: 1px solid var(--tk-border);
+    flex-shrink: 0;
+}
+
+.ticket-user-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.ticket-user-name {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--tk-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ticket-user-email {
+    font-size: 0.8rem;
+    color: var(--tk-text-muted);
+    word-break: break-all;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.ticket-user-email code {
+    font-family: inherit;
+    color: var(--tk-primary);
+    background: transparent;
+    font-weight: 600;
+}
+
+.ticket-user-city {
+    font-size: 0.76rem;
+    color: var(--tk-text-dim);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.ticket-content-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+}
+
+.ticket-support-title {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--tk-text);
+    line-height: 1.35;
+}
+
+.ticket-attachments-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 6px;
+}
+
+.ticket-attachment-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    background: var(--tk-surface-alt);
+    border: 1px solid var(--tk-border);
+    padding: 4px 10px;
+    border-radius: var(--tk-radius-sm);
+    color: var(--tk-text-muted);
 }
 
 /* ==========================================================================
