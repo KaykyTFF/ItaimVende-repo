@@ -5,7 +5,7 @@
 **Product Owner:** Kayky  
 **Periodo de Consolidacao:** Sprint 0 (27/10 e 28/10/2026), com refinamentos nas Sprints 1 e 2  
 
-O Product Backlog foi concebido para atender integralmente aos requisitos funcionais, tecnicos e de inovacao exigidos no escopo da disciplina. Todas as historias de usuario foram especificadas variando os perfis de usuario, priorizadas atraves do metodo MoSCoW (*Must Have, Should Have, Could Have*) e estimadas em sessoes de Planning Poker com a escala de Fibonacci (1, 2, 3, 5, 8). Cada historia e complementada por cenarios formais em linguagem BDD (*Dado / Quando / Entao*), contemplando fluxos principais de sucesso e fluxos de excecao com codigos de erro HTTP padronizados.
+O nosso grupo montou o Product Backlog para cobrir todos os requisitos funcionais, tecnicos e de inovacao da disciplina de Engenharia de Software III. Especificamos as historias de usuario variando os perfis de quem usa a nossa plataforma (moradores que compram ou vendem, moderadores e administradores), priorizamos os itens com a tecnica MoSCoW e estimamos o esforco em sessoes de Planning Poker com a sequencia de Fibonacci (1, 2, 3, 5 e 8). Para deixar bem claro o que precisavamos fazer e como testar, detalhamos cada historia com cenarios de aceitacao no formato Dado, Quando e Entao, cobrindo os fluxos de sucesso e os casos de erro com respostas HTTP padronizadas.
 
 ---
 
@@ -278,14 +278,14 @@ Cenario 3 — Atualizacao de campos de perfil sem modificar o username
 
 ## 2. Matriz de Rastreabilidade dos Requisitos Obrigatorios do Projeto
 
-A tabela a seguir estabelece o vinculo direto e bidirecional entre os treze requisitos obrigatorios definidos na ementa da disciplina e as historias especificadas no Product Backlog:
+Relacionamos abaixo os treze requisitos obrigatorios da disciplina com as historias que desenvolvemos no nosso backlog:
 
 | # | Requisito Obrigatorio da Atividade | Historias Associadas (IDs) | Status de Cobertura |
-| :---: | :--- | :--- | :---: |
+| :---: | :--- | :--- | :--- |
 | **1** | No minimo 4 recursos | **H1, H3, H4, H6, H7, H8, H9, H10** (Total de 12 recursos implementados) | Cumprido |
 | **2** | Principios REST, com Cache-Control ou ETag em ao menos um endpoint | **H3** (`GET /categories` com `Cache-Control: public, max-age=300`) | Cumprido |
 | **3** | Nomenclatura: substantivos no plural, minusculas, hifens | **H1 a H13** (`/api/v1/products`, `/categories`, `/orders`, `/addresses`) | Cumprido |
-| **4** | Verbos HTTP e codigos de status corretos | **H1 a H13** (`GET`, `POST`, `PUT`, `PATCH`, `DELETE` / `200`, `201`, `204`, `400`, `401`, `403`, `404`, `409`) | Cumprido |
+| **4** | Verbos HTTP e codigos de status corretos | **H1 a H13** (`GET`, `POST`, `PUT`, `PATCH`, `DELETE` e status `200`, `201`, `204`, `400`, `401`, `403`, `404`, `409`) | Cumprido |
 | **5** | Paginacao, filtro e ordenacao em uma colecao | **H5** (`GET /products?page=1&limit=10&sort=price_asc&category=Eletronicos`) | Cumprido |
 | **6** | Versao na URI (`/api/v1/...`) | **H1 a H13** (Todos os endpoints sao versionados sob o prefixo `/api/v1/`) | Cumprido |
 | **7** | Endpoint inovador com regra de negocio | **H5** (Busca fonetica regional `unaccent`) e **H13** (Cooldown de 30 dias para `@`) | Cumprido |
