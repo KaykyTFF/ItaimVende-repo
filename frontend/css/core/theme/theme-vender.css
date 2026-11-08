@@ -464,26 +464,84 @@ body.dark-theme.pagina-vender {
 /* ==========================================================================
    9. MODAL DE LOCALIZAÇÃO NO MODO ESCURO
    ========================================================================== */
+[data-theme="dark"] .modal-localizacao-backdrop,
+.dark-theme .modal-localizacao-backdrop {
+    background: rgba(0, 0, 0, 0.75) !important;
+}
+
+[data-theme="dark"] .modal-localizacao-card,
+.dark-theme .modal-localizacao-card,
 [data-theme="dark"] .modal-loc-card,
 .dark-theme .modal-loc-card {
     background-color: #1F2831 !important;
     border: 1px solid #2C3946 !important;
     color: #F1F5F9 !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6) !important;
 }
 
-[data-theme="dark"] .modal-loc-topo,
-.dark-theme .modal-loc-topo {
-    border-bottom: 1px solid #2C3946 !important;
+[data-theme="dark"] .modal-localizacao-header h3,
+.dark-theme .modal-localizacao-header h3 {
     color: #F1F5F9 !important;
 }
 
+[data-theme="dark"] .btn-fechar-modal-loc,
+.dark-theme .btn-fechar-modal-loc,
 [data-theme="dark"] .modal-loc-fechar,
 .dark-theme .modal-loc-fechar {
     color: #94A3B8 !important;
 }
 
+[data-theme="dark"] .btn-fechar-modal-loc:hover,
+.dark-theme .btn-fechar-modal-loc:hover,
 [data-theme="dark"] .modal-loc-fechar:hover,
 .dark-theme .modal-loc-fechar:hover {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .form-grupo-modal label,
+.dark-theme .form-grupo-modal label {
+    color: #CBD5E1 !important;
+}
+
+[data-theme="dark"] .form-grupo-modal select,
+[data-theme="dark"] .form-grupo-modal input,
+.dark-theme .form-grupo-modal select,
+.dark-theme .form-grupo-modal input {
+    background-color: #161C22 !important;
+    border: 1px solid #2C3946 !important;
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .form-grupo-modal select:focus,
+[data-theme="dark"] .form-grupo-modal input:focus,
+.dark-theme .form-grupo-modal select:focus,
+.dark-theme .form-grupo-modal input:focus {
+    border-color: #38A129 !important;
+    box-shadow: none !important;
+}
+
+[data-theme="dark"] .form-grupo-modal select option,
+.dark-theme .form-grupo-modal select option {
+    background-color: #161C22 !important;
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .btn-salvar-localizacao,
+.dark-theme .btn-salvar-localizacao {
+    background-color: #38A129 !important;
+    color: #FFFFFF !important;
+    box-shadow: none !important;
+}
+
+[data-theme="dark"] .btn-salvar-localizacao:hover,
+.dark-theme .btn-salvar-localizacao:hover {
+    background-color: #2E8B22 !important;
+    box-shadow: none !important;
+}
+
+[data-theme="dark"] .modal-loc-topo,
+.dark-theme .modal-loc-topo {
+    border-bottom: 1px solid #2C3946 !important;
     color: #F1F5F9 !important;
 }
 
