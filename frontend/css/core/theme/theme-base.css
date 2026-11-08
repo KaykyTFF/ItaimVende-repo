@@ -577,9 +577,10 @@ body.dark-theme {
 }
 
 [data-theme="dark"] .btn-toggle-view.ativo {
-    background-color: #44BD32 !important;
-    border-color: #44BD32 !important;
+    background-color: #38A129 !important;
+    border-color: #38A129 !important;
     color: #FFFFFF !important;
+    box-shadow: none !important;
 }
 
 [data-theme="dark"] .sidebar-filtro-grupo {
