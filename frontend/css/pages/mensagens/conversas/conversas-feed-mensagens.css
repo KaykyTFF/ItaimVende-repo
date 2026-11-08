@@ -579,7 +579,10 @@
     flex-direction: column;
     gap: 8px;
     min-width: 240px;
-    padding: 4px 0;
+    padding: 2px 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
 }
 
 .msg-proposta-header {
