@@ -63,3 +63,28 @@ export async function rejectProposal(req, res, next) {
   }
 }
 
+/**
+ * Atualiza o status de uma proposta de preço (RESTful canônica)
+ * PATCH /api/chat/messages/:id/status
+ */
+export async function updateProposalStatus(req, res, next) {
+  try {
+    const status = (req.body?.status || '').toUpperCase();
+    if (status === 'ACCEPTED') {
+      const data = await acceptOfferProposal(req.user.id, req.user.role, req.params.id);
+      return res.status(200).json({ success: true, message: 'Proposta aceita com sucesso.', data });
+    } else if (status === 'REJECTED') {
+      const data = await rejectOfferProposal(req.user.id, req.user.role, req.params.id);
+      return res.status(200).json({ success: true, message: 'Proposta recusada.', data });
+    } else {
+      return res.status(400).json({
+        success: false,
+        code: 'VALIDATION_ERROR',
+        message: 'Status inválido. Use "ACCEPTED" ou "REJECTED".',
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+}
+

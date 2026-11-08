@@ -1,414 +1,605 @@
-# Itaim Vende API - Plataforma de Marketplace e Intermediação Comercial
+# Itaim Vende API - Plataforma de Marketplace e Intermediacao Comercial
 
-Versão da API: 2.0.0  
-Padrão de Especificação: OpenAPI 3.0.3  
+Versao da API: 2.0.0  
+Padrao de Especificacao: OpenAPI 3.0.3  
 Ambiente Base: Node.js (ES Modules) com Express.js e PostgreSQL  
 
 ---
 
-## 1. Apresentação
+## Sumario
 
-O **Itaim Vende API** é uma solução de backend RESTful projetada para viabilizar operações de comércio eletrônico, intermediação de compras e vendas locais, negociação em tempo real e gestão de catálogos de produtos em microrregiões geográficas.
-
-O projeto resolve o problema da ausência de infraestrutura digital direcionada a pequenos polos comerciais e produtores regionais, que habitualmente dependem de plataformas globais genéricas com elevados custos de intermediação e sem filtros contextualizados por cidades, bairros e hábitos locais.
-
-### Proposta de Valor e Diferenciais
-
-- **Arquitetura Orientada ao Domínio:** Modelagem de 12 recursos integrados com integridade relacional estrita e transações ACID.
-- **Busca Fonética e Resiliente:** Mecanismo de busca textual com PostgreSQL `unaccent` e `pg_trgm`, garantindo relevância de resultados mesmo com variações ortográficas e supressão de acentuação.
-- **Governança de Identidade e Segurança Ativa:** Regras de negócio restritivas para alteração de credenciais, incluindo cooldown de 30 dias para troca de nome de usuário, confirmação de contato via código OTP com limitação de tentativas e token criptografado para rollback emergencial.
-- **Integridade Transacional Financeira:** Recálculo e validação compulsória de preços, quantidades e frete no servidor durante a criação de ordens de pedido, prevenindo inconsistências originadas no cliente.
-- **Comunicação em Tempo Real:** Camada WebSocket bidirecional para negociações instantâneas de propostas de valor com mecanismo de contingência para envio assíncrono de notificações.
-
----
-
-## 2. Funcionalidades
-
-### Principais Recursos da API
-
-1. **Gestão de Identidade e Autenticação:**
-   - Registro de contas com validação estrita de campos e requisitos de complexidade de senha.
-   - Autenticação stateless com JSON Web Token (JWT) e proteção contra força bruta.
-   - Suporte a provedores de autenticação externa (Google OAuth2).
-   - Fluxo de recuperação de senha via código OTP temporário de 6 dígitos.
-
-2. **Segurança de Conta e Governança:**
-   - Alteração controlada de nome de usuário (`@username`) com verificação de unicidade, bloqueio de termos reservados e janela de retenção de 30 dias entre alterações.
-   - Atualização de e-mail e telefone/WhatsApp condicionada a desafio de senha e validação de código OTP.
-   - Mecanismo de reversão imediata de telefone via token assinado (`/account/phone/revert`) para mitigação de acessos indevidos.
-   - Histórico e auditoria de ações sensíveis na conta.
-
-3. **Catálogo de Produtos e Anúncios:**
-   - Criação, atualização, consulta e exclusão de anúncios com upload múltiplo de fotos.
-   - Categorização hierárquica por departamentos.
-   - Busca textual fonética e filtros combinados por cidade, bairro, faixa de preço, condição de uso e status.
-   - Paginação baseada em cursores/páginas e múltiplas opções de ordenação.
-
-4. **Intermediação de Pedidos e Checkout:**
-   - Criação de pedidos com verificação de disponibilidade de estoque e recálculo total no servidor.
-   - Acompanhamento de status de ordens (pendente, aprovado, entregue, cancelado).
-   - Associação de opções de entrega e endereços cadastrados.
-
-5. **Negociação e Mensagens em Tempo Real:**
-   - Abertura de conversas vinculadas a produtos específicos.
-   - Envio de mensagens de texto e envio formal de propostas de preço (ofertas).
-   - Aceitação ou rejeição de contrapropostas com atualização instantânea de estado.
-   - Fallback automatizado para notificação via e-mail quando o usuário destinatário estiver desconectado.
-
-6. **Avaliações, Favoritos e Moderação:**
-   - Registro de avaliações com notas numéricas (1 a 5) e comentários para vendedores.
-   - Marcação de anúncios favoritos por usuário.
-   - Sistema de denúncias de anúncios suspeitos com painel exclusivo para perfis administrativos e moderadores.
-   - Purga automatizada de imagens do armazenamento em nuvem no descarte de produtos ou anúncios penalizados.
-
-7. **Pipeline de Mídia:**
-   - Upload de imagens via formulário multipart com processamento automático em pipeline Sharp.
-   - Redimensionamento proporcional, rotação baseada em metadados EXIF e conversão para WebP de alta eficiência.
-   - Armazenamento em nuvem via Supabase Storage com fallback para sistema de arquivos local em desenvolvimento.
+- [1. Nome e Apresentacao do Projeto](#1-nome-e-apresentacao-do-projeto)
+- [2. Principais Funcionalidades](#2-principais-funcionalidades)
+- [3. Diferenciais Tecnicos](#3-diferenciais-tecnicos)
+- [4. Tecnologias Utilizadas](#4-tecnologias-utilizadas)
+- [5. Arquitetura do Sistema](#5-arquitetura-do-sistema)
+- [6. Estrutura de Diretorios](#6-estrutura-de-diretorios)
+- [7. Pre-requisitos](#7-pre-requisitos)
+- [8. Instalacao e Configuracao](#8-instalacao-e-configuracao)
+- [9. Variaveis de Ambiente](#9-variaveis-de-ambiente)
+- [10. Configuracao do Banco de Dados](#10-configuracao-do-banco-de-dados)
+- [11. Execucao da Aplicacao](#11-execucao-da-aplicacao)
+- [12. Autenticacao e Autorizacao](#12-autenticacao-e-autorizacao)
+- [13. Endpoints da API](#13-endpoints-da-api)
+- [14. Paginacao, Filtros e Ordenacao](#14-paginacao-filtros-e-ordenacao)
+- [15. Formato das Respostas e Tratamento de Erros](#15-formato-das-respostas-e-tratamento-de-erros)
+- [16. Documentacao Swagger/OpenAPI](#16-documentacao-swaggeropenapi)
+- [17. Testes Automatizados](#17-testes-automatizados)
+- [18. Colecao Postman](#18-colecao-postman)
+- [19. Declaracao de Uso de Inteligencia Artificial](#19-declaracao-de-uso-de-inteligencia-artificial)
 
 ---
 
-## 3. Tecnologias Utilizadas
+## 1. Nome e Apresentacao do Projeto
 
-- **Ambiente de Execução:** Node.js (versão 20.x LTS ou superior), utilizando módulos ECMAScript nativos (`"type": "module"`).
-- **Framework Web:** Express.js 5.
-- **Banco de Dados Relacional:** PostgreSQL 15+ (hospedado no Supabase).
-- **Mapeamento Objeto-Relacional (ORM):** Prisma ORM v6 com migrations e cliente fortemente tipado.
-- **Extensões de Banco de Dados:** `unaccent` e `pg_trgm` (PostgreSQL Trigram Search).
-- **Autenticação e Criptografia:**
-  - `jsonwebtoken`: Emissão e verificação de tokens Bearer JWT com algoritmo HS256.
-  - `bcryptjs`: Hash criptográfico de senhas com geração de salt (10 rounds).
-- **Validação de Dados:** `zod` para declaração de contratos de entrada e sanitização em tempo de execução.
-- **Comunicação em Tempo Real:** `socket.io` (WebSockets) integrado ao servidor HTTP Express.
-- **Processamento de Imagens:** `sharp` para redimensionamento e conversão WebP.
-- **Armazenamento de Objetos:** `@supabase/supabase-js` para persistência em bucket público de CDN.
-- **Envio de Notificações:** `resend` e `nodemailer` para mensagens transacionais.
-- **Segurança HTTP:**
-  - `helmet`: Aplicação de cabeçalhos de segurança (CSP, HSTS, X-Frame-Options).
-  - `cors`: Gerenciamento de políticas de compartilhamento de recursos entre origens.
-  - `express-rate-limit`: Limitação de requisições por endereço IP em endpoints sensíveis.
-- **Documentação de API:** `swagger-ui-express` servindo a especificação no padrão OpenAPI 3.0.3.
-- **Testes Automatizados:** Node.js Test Runner nativo (`node:test` e `node:assert/strict`).
+O **Itaim Vende API** e uma solucao de backend RESTful projetada para intermediacao comercial, compra e venda de mercadorias e negociacao direta em mercados regionais.
+
+### Proposito e Problema Resolvido
+
+A plataforma atende a polos comerciais interioranos e produtores locais que dependem de intermediarios genericos de grande porte, os quais cobram taxas elevadas e nao oferecem filtros contextuais para municipios vizinhos, localidades rurais e habitos de retirada presencial. O Itaim Vende conecta vendedores e compradores de forma direta, com baixa latencia, busca fonetica regional e integridade relacional.
+
+### Usuarios Principais
+
+- **Compradores (BUYER):** Moradores locais que buscam produtos, enviam propostas de preco, avaliam vendedores e gerenciam favoritos e enderecos.
+- **Vendedores e Produtores (SELLER):** Comerciantes e produtores rurais que cadastram anuncios, recebem propostas de negociacao e acompanham pedidos.
+- **Moderadores e Administradores (MODERATOR / ADMIN):** Equipe responsavel pela triagem de denuncias, remocao preventiva de anuncios fraudulentos, auditoria de contas e conformidade da plataforma.
+
+### Funcionalidades Centrais
+
+A plataforma engloba autenticacao com JWT e Google OAuth2, catalogo com busca fonetica unaccent, pedidos com validacao financeira estrita no servidor, chat em tempo real com WebSockets, avaliacoes com notas e comentarios, lista de favoritos, denuncias com purga de imagens e governanca de dados cadastrais.
 
 ---
 
-## 4. Arquitetura
+## 2. Principais Funcionalidades
 
-O sistema adota uma arquitetura em camadas desacopladas, seguindo os princípios de separação de responsabilidades (SoC) e inversão de controle.
+O sistema implementa 12 dominios funcionais estruturados:
+
+1. **Gestao de Identidade e Autenticacao:**
+   - Cadastro de contas com hash bcrypt e validacao de complexidade de senha.
+   - Autenticacao stateless via JSON Web Token (Bearer JWT).
+   - Suporte a autenticacao federada via Google OAuth2.
+   - Recuperacao de senha por e-mail com envio de codigo OTP de 6 digitos e protecao contra tentativas excessivas.
+   - Perfil de usuario com suporte a atualizacao cadastral, bio, telefone e foto de avatar.
+
+2. **Governanca e Seguranca de Conta:**
+   - Alteracao controlada do nome de usuario (`@username`) com verificacao de termos reservados e janela de retencao (cooldown) de 30 dias entre alteracoes.
+   - Verificacao de disponibilidade de nome de usuario em tempo real.
+   - Fluxo seguro de alteracao de e-mail com validacao de senha atual e codigo OTP enviado ao novo endereco.
+   - Fluxo seguro de alteracao de telefone/WhatsApp com confirmacao por codigo OTP e cooldown de 7 dias.
+   - Reversao emergencial de numero de telefone atraves de token assinado de seguranca (`POST /account/phone-reversals`).
+   - Preferencias de notificacao do usuario por canal (mensagens, avaliacoes, favoritos e novidades).
+
+3. **Catalogo de Produtos e Anuncios:**
+   - Publicacao de anuncios com titulo, descricao, preco, condicao de uso (NOVO, SEMINOVO, USADO, DEFEITO) e localizacao.
+   - Upload e vinculacao de multiplas imagens com ordenacao customizada.
+   - Consulta publica detalhada de anuncios por identificador ou slug semantico.
+   - Edicao e exclusao de anuncios com controle estrito de propriedade (somente o anunciante proprietario ou administradores).
+   - Busca textual com normalizacao fonetica e filtros combinados por categoria, cidade, bairro, preco e ordenacao.
+
+4. **Categorias de Mercado:**
+   - Consulta de departamentos e categorias ativas com cabecalho HTTP `Cache-Control: public, max-age=300`.
+
+5. **Intermediacao de Pedidos e Checkout:**
+   - Criacao de ordens com recalculado compulsorio de valores no servidor, garantindo integridade financeira e impedindo manipulacoes client-side.
+   - Consulta de historico de pedidos efetuados pelo comprador com detalhes de itens e endereco de entrega.
+   - Acompanhamento de status da ordem (pendente, aprovado, entregue, cancelado).
+
+6. **Chat e Negociacao em Tempo Real:**
+   - Abertura de conversas vinculadas a anuncios especificos entre comprador e vendedor.
+   - Troca de mensagens instantaneas via WebSockets (`socket.io`).
+   - Envio formal de contrapropostas de preco com atualizacao atomica de status (aceitar ou recusar via `PATCH /chat/messages/:id/status`).
+   - Contingencia automatica para envio de e-mail transacional caso o destinatario esteja offline no momento da mensagem.
+
+7. **Reputacao e Avaliacoes:**
+   - Publicacao de avaliacoes com notas numericas (1 a 5 estrelas) e comentarios descritivos sobre vendedores.
+   - Consulta publica da reputacao do vendedor com media ponderada e contagem total de avaliacoes.
+   - Exclusao de avaliacoes restrita ao autor da postagem ou moderadores.
+
+8. **Favoritos:**
+   - Gerenciamento idempotente de anuncios favoritados (`GET`, `PUT` e `DELETE` em `/favorites/:productId`).
+   - Listagem completa dos anuncios salvos pelo usuario logado.
+
+9. **Denuncias e Moderacao:**
+   - Registro de denuncias de irregularidades em anuncios por qualquer usuario, com geracao de protocolo de acompanhamento.
+   - Painel restrito a moderadores e administradores para triagem e revisao de ocorrencias pendentes.
+   - Remocao sumaria de anuncios fraudulentos (`DELETE /reports/:id/product`) com purga automatica de arquivos no armazenamento de nuvem.
+
+10. **Enderecos:**
+    - Cadastro, consulta e remocao de multiplos enderecos residenciais e de retirada para o usuario.
+
+11. **Notificacoes:**
+    - Central de notificacoes transacionais com listagem e marcacao de leitura em lote (`PATCH /notifications/read-all`).
+
+12. **Pipeline de Midia e Imagens:**
+    - Upload via `multipart/form-data` com auto-rotacao baseada em metadados EXIF de smartphones.
+    - Redimensionamento proporcional e compressao em formato WebP de alta densidade via biblioteca Sharp.
+    - Persistencia no Supabase Storage com fallback para disco local em desenvolvimento.
+
+---
+
+## 3. Diferenciais Tecnicos
+
+- **Busca Fonetica com Extensao PostgreSQL unaccent:** A busca textual da API normaliza caracteres acentuados diretamente na camada de banco de dados (`unaccent_text(lower(...))`), assegurando que termos informados sem diacriticos localizem conteudos cadastrados com acento (por exemplo, "eletronicos" encontra "Eletronicos").
+- **Calculo Financeiro Confinado ao Servidor:** Na emissao de pedidos (`POST /orders`), a API ignora precos enviados no corpo da requisicao e consulta os valores reais vigentes na tabela de produtos, prevenindo ataques de adulteracao de parametros financeiros.
+- **Governanca de Credenciais com Cooldown e Rollback Token:** Alteracoes no `@username` ativam um bloqueio transacional de 30 dias registrado em tabela historica de auditoria (`UsernameHistory`). Trocas de numero de telefone emitem um token de reversao criptografado com validade temporaria, permitindo desfazer alteracoes nao autorizadas de imediato.
+- **Negociacao em Tempo Real com Notificacao Hibrida:** O chat opera sobre conexao WebSocket com baixa latencia. Caso o destinatario nao esteja conectado ao socket no instante do envio, o backend enfileira e dispara um e-mail transacional via Resend ou Nodemailer.
+- **Conformidade RESTful Estrita com Aliases de Compatibilidade:** Todas as rotas canonicas utilizam substantivos no plural, verbos HTTP semanticos (`PUT` e `DELETE` para recursos idempotentes, `PATCH` para estados) e identificadores em path parameters, mantendo rotas legadas ativas como aliases para nao interromper clientes existentes.
+- **Verificacao de Permissoes em Tempo Real:** O middleware de autenticacao consulta a base de dados em cada requisicao autenticada para atestar se o usuario permanece ativo e com o papel informado, garantindo que suspensoes ou alteracoes de privileges (RBAC) surtam efeito imediato.
+
+---
+
+## 4. Tecnologias Utilizadas
+
+A selecao de tecnologias apoia-se em componentes consolidados do ecossistema Node.js:
+
+| Finalidade | Componente / Pacote | Versao | Descricao |
+| :--- | :--- | :---: | :--- |
+| **Ambiente de Execucao** | Node.js | >= 20.x | Interpretador JavaScript com modulos ECMAScript nativos (`"type": "module"`). |
+| **Framework HTTP** | Express.js | 5.2.1 | Roteamento e orquestracao da camada de controle RESTful. |
+| **Banco de Dados** | PostgreSQL | >= 15.x | Banco de dados relacional com suporte a extensoes e transacoes ACID. |
+| **Mapeamento ORM** | Prisma Client / CLI | 6.19.3 | Acesso fortemente tipado, definicao de modelos relacionais e migracoes. |
+| **Extensoes de Banco** | `unaccent` e `pg_trgm` | - | Extensoes PostgreSQL para busca fonetica e indices Trigram. |
+| **Autenticacao e Token** | `jsonwebtoken` | 9.0.3 | Assinatura e decodificacao de tokens Bearer JWT com algoritmo HS256. |
+| **Criptografia de Senha** | `bcryptjs` | 3.0.3 | Derivacao de chaves e calculo de hash de senhas (10 salt rounds). |
+| **Validacao de Contratos** | `zod` | 4.6.5 | Validacao declarativa de esquemas de entrada para body, params e query. |
+| **Tempo Real** | `socket.io` | 4.8.4 | Comunicacao bidirecional via WebSockets para negociacoes de chat. |
+| **Processamento de Fotos** | `sharp` | 0.35.5 | Conversao para WebP, redimensionamento proporcional e rotacao EXIF. |
+| **Armazenamento de Nuvem** | `@supabase/supabase-js` | 2.118.0 | Integracao com bucket de CDN para persistencia de imagens. |
+| **Upload de Arquivos** | `multer` | 2.4.0 | Recepcao de payloads multipart/form-data em memoria. |
+| **Notificacoes de E-mail** | `resend` e `nodemailer` | 6.34.1 / 10.2.1 | Despacho de mensagens transacionais e codigos de verificacao OTP. |
+| **Seguranca HTTP** | `helmet` | 8.3.0 | Definicao de cabecalhos de protecao (CSP, HSTS, X-Content-Type-Options). |
+| **Compartilhamento de Origem** | `cors` | 2.8.6 | Configuracao de politicas de acesso entre origens. |
+| **Limitacao de Taxa** | `express-rate-limit` | 8.7.1 | Protecao contra abusos e ataques de forca bruta em rotas criticas. |
+| **Documentacao OpenAPI** | `swagger-ui-express` | 5.0.1 | Renderizacao da interface interativa da especificacao OpenAPI 3.0.3. |
+| **Testes Automatizados** | Node.js Test Runner | Nativo | Runner de testes nativo (`node:test` e `node:assert/strict`). |
+
+---
+
+## 5. Arquitetura do Sistema
+
+O sistema e estruturado no padrao de arquitetura em camadas desacopladas:
 
 ```
-┌────────────────────────────────────────────────────────┐
-│                   Cliente HTTP / SPA                   │
-└───────────────────────────┬────────────────────────────┘
-                            │ Requisição HTTP / JSON
-                            ▼
-┌────────────────────────────────────────────────────────┐
-│                   Camada de Entrada                    │
-│   • Express Router (/api/v1)                           │
-│   • Middlewares Globais (Cors, Helmet, Rate Limit)     │
-└───────────────────────────┬────────────────────────────┘
-                            │
-                            ▼
-┌────────────────────────────────────────────────────────┐
-│                 Camada de Middlewares                  │
-│   • Autenticação (requireAuth - Bearer JWT)            │
-│   • Autorização RBAC (requireRole)                     │
-│   • Validação de Contrato (validateSchema - Zod)       │
-└───────────────────────────┬────────────────────────────┘
-                            │
-                            ▼
-┌────────────────────────────────────────────────────────┐
-│                  Camada de Controllers                 │
-│   • Extração e desestruturação de parâmetros           │
-│   • Orquestração do fluxo de resposta HTTP             │
-│   • Formatação de códigos de status (200, 201, 204)    │
-└───────────────────────────┬────────────────────────────┘
-                            │
-                            ▼
-┌────────────────────────────────────────────────────────┐
-│                   Camada de Services                   │
-│   • Lógica de negócio e regras de domínio              │
-│   • Validações de integridade e cálculos financeiros   │
-│   • Emissão de eventos e despachos assíncronos         │
-└───────────────────────────┬────────────────────────────┘
-                            │
-                            ▼
-┌────────────────────────────────────────────────────────┐
-│              Camada de Acesso a Dados / ORM            │
-│   • Prisma Client (Singleton)                          │
-│   • Transações ACID ($transaction)                     │
-└───────────────────────────┬────────────────────────────┘
-                            │
-                            ▼
-┌────────────────────────────────────────────────────────┐
-│               Banco de Dados PostgreSQL                │
-│   • Tabelas relacionais, Chaves estrangeiras           │
-│   • Extensões de texto fonético (unaccent, trigram)    │
-└────────────────────────────────────────────────────────┘
++-------------------------------------------------------------+
+|                     Cliente HTTP / SPA                      |
++------------------------------+------------------------------+
+                               | Requisicao HTTP / JSON
+                               v
++-------------------------------------------------------------+
+|                      Camada de Entrada                      |
+|   - Express Router (/api/v1)                                |
+|   - Middlewares Globais (CORS, Helmet, Rate Limit)          |
++------------------------------+------------------------------+
+                               |
+                               v
++-------------------------------------------------------------+
+|                    Camada de Middlewares                    |
+|   - Autenticacao (authenticateToken - Bearer JWT)           |
+|   - Autorizacao RBAC (requireRole)                          |
+|   - Validacao de Esquemas (validate - Zod)                  |
++------------------------------+------------------------------+
+                               |
+                               v
++-------------------------------------------------------------+
+|                    Camada de Controllers                    |
+|   - Extracao de parametros (body, params, query)            |
+|   - Invocacao dos servicos de dominio                       |
+|   - Formatacao de respostas e status HTTP (200, 201, 204)   |
++------------------------------+------------------------------+
+                               |
+                               v
++-------------------------------------------------------------+
+|                     Camada de Services                      |
+|   - Logica de negocio, regras de dominio e validacoes       |
+|   - Recalculo de precos e operacoes transacionais           |
+|   - Despacho de eventos (Sockets e E-mails)                 |
++------------------------------+------------------------------+
+                               |
+                               v
++-------------------------------------------------------------+
+|                Camada de Acesso a Dados / ORM               |
+|   - Prisma Client (Instancia Singleton)                     |
+|   - Transacoes atomicas ($transaction)                      |
++------------------------------+------------------------------+
+                               |
+                               v
++-------------------------------------------------------------+
+|                  Banco de Dados PostgreSQL                  |
+|   - 12 tabelas relacionais com chaves estrangeiras          |
+|   - Indices Trigram e extensao unaccent                     |
++-------------------------------------------------------------+
 ```
 
 ### Responsabilidade de Cada Camada
 
-- **Config (`src/config`):** Centraliza a validação das variáveis de ambiente na inicialização da aplicação e expõe instâncias singleton do banco de dados (Prisma) e serviços de nuvem.
-- **Middlewares (`src/middlewares`):** Realiza a interceptação de requisições para verificação de credenciais JWT, imposição de controle de acesso baseado em papéis (RBAC), validação sintática e semântica com Zod, e captura unificada de exceções através do handler central de erros.
-- **Routes (`src/routes`):** Define a estrutura declarativa de endpoints REST sob o prefixo `/api/v1`, associando cada rota aos seus respectivos middlewares de proteção e controladores.
-- **Controllers (`src/controllers`):** Recebe o payload validado da requisição, repassa os dados aos serviços correspondentes e retorna a resposta com o código de status HTTP e formato JSON padronizado.
-- **Services (`src/services`):** Encapsula todas as regras de negócio da aplicação. É a única camada com autorização para executar validações complexas, gerenciar transações no banco de dados e acionar integrações externas (e-mail, sockets e armazenamento).
-- **Schemas (`src/schemas`):** Define os contratos formais de entrada de dados utilizando Zod, garantindo tipagem em tempo de execução e mensagens de erro descritivas.
-- **Utils (`src/utils`):** Funções utilitárias e classes customizadas de erro, como a classe `AppError`, responsável por encapsular códigos de status HTTP e identificadores de erro de domínio.
+- **Routes (`backend/src/routes`):** Mapeia os endpoints REST sob `/api/v1`, associando middlewares de autenticacao, autorizacao e validacao aos controladores.
+- **Middlewares (`backend/src/middlewares`):** Valida tokens JWT, fiscaliza permissoes RBAC, checa contratos Zod e captura excecoes operacionais de forma unificada.
+- **Controllers (`backend/src/controllers`):** Extrai dados da requisicao HTTP, direciona a chamada para o servico competente e entrega a resposta padronizada com o status HTTP correto.
+- **Services (`backend/src/services`):** Centraliza a totalidade das regras de negocio, integridade de precos, validacao de cooldowns, transacoes no banco e integracoes com APIs de terceiros.
+- **Prisma Client (`backend/src/config/prisma.js`):** Gerencia o pool de conexoes com o PostgreSQL e provê consultas relacionais tipadas.
+- **Schemas (`backend/src/schemas`):** Define os contratos formais de entrada com Zod para sanitizacao de payloads.
+- **Utils (`backend/src/utils`):** Classes e funcoes auxiliares compartilhadas, destacando a classe `AppError`.
 
 ---
 
-## 5. Requisitos para Execução
+## 6. Estrutura de Diretorios
 
-Antes de executar o projeto, certifique-se de que os seguintes componentes estão instalados e configurados:
-
-- **Node.js:** Versão 20.0.0 ou superior (recomendado v20.x ou v22.x LTS).
-- **NPM:** Versão 9.0.0 ou superior.
-- **Instância PostgreSQL:** Versão 14 ou superior (localmente ou via serviço gerenciado como Supabase).
-- **Acesso à Internet:** Necessário para sincronização de pacotes e comunicação com os serviços de armazenamento e e-mail.
+```
+marketplace-frontend/
+├── backend/
+│   ├── prisma/
+│   │   ├── schema.prisma              # Modelos relacionais e configuracao do banco
+│   │   └── seed.js                    # Script de povoamento inicial de dados
+│   ├── scripts/
+│   │   └── setup-unaccent.js          # Criacao de extensoes unaccent e indices no PostgreSQL
+│   ├── src/
+│   │   ├── config/
+│   │   │   ├── env.js                 # Validacao de variaveis de ambiente
+│   │   │   ├── prisma.js              # Instancia singleton do Prisma Client
+│   │   │   └── supabase.js            # Cliente Supabase Storage
+│   │   ├── controllers/               # Controladores HTTP desacoplados por dominio
+│   │   │   ├── account/               # account.controller.js
+│   │   │   ├── auth/                  # identity, profile, password controllers
+│   │   │   ├── category/              # category.controller.js
+│   │   │   ├── chat/                  # conversation.controller.js, message.controller.js
+│   │   │   ├── favorite/              # favorite.controller.js
+│   │   │   ├── order/                 # order.controller.js
+│   │   │   ├── product/               # query, mutation, seller controllers
+│   │   │   ├── report/                # report.controller.js
+│   │   │   ├── review/                # review.controller.js
+│   │   │   └── upload/                # upload.controller.js
+│   │   ├── docs/
+│   │   │   ├── openapi.js             # Objeto de especificacao OpenAPI 3.0.3
+│   │   │   └── openapi.json           # Especificacao OpenAPI 3.0.3 serializada
+│   │   ├── middlewares/
+│   │   │   ├── auth.middleware.js     # Validacao de token Bearer JWT e RBAC
+│   │   │   ├── error.middleware.js    # Interceptador central e padronizador de erros
+│   │   │   ├── rateLimiter.js         # Limitador de requisicoes por IP
+│   │   │   └── validate.middleware.js # Validacao de contratos Zod
+│   │   ├── routes/                    # Roteadores Express organizados por recurso
+│   │   │   ├── account/
+│   │   │   ├── auth/
+│   │   │   ├── category/
+│   │   │   ├── chat/
+│   │   │   ├── favorite/
+│   │   │   ├── order/
+│   │   │   ├── product/
+│   │   │   ├── report/
+│   │   │   ├── review/
+│   │   │   ├── upload/
+│   │   │   ├── user/                  # user.routes.js (/users)
+│   │   │   └── index.js               # Agrupador do prefixo /api/v1
+│   │   ├── schemas/                   # Esquemas de validacao Zod por recurso
+│   │   ├── services/                  # Regras de negocio, transacoes e integracoes
+│   │   │   ├── account/               # email, phone, username, preferences services
+│   │   │   ├── auth/                  # identity, profile, recovery services
+│   │   │   ├── category/
+│   │   │   ├── chat/
+│   │   │   ├── favorite/
+│   │   │   ├── order/
+│   │   │   ├── product/
+│   │   │   ├── report/
+│   │   │   └── review/
+│   │   ├── utils/
+│   │   │   └── AppError.js            # Classe de erro operacional padronizada
+│   │   └── server.js                  # Ponto de entrada do servidor HTTP e WebSocket
+│   ├── tests/                         # Suite de 47 testes automatizados
+│   │   ├── account-email.test.js
+│   │   ├── account-phone.test.js
+│   │   ├── api.test.js
+│   │   ├── rest-conformance.test.js
+│   │   └── username-cooldown.test.js
+│   ├── .env.example                   # Modelo com definicao das variaveis locais
+│   └── package.json                   # Dependencias e scripts do modulo backend
+├── itaim-vende.postman_collection.json # Colecao Postman oficial de endpoints
+├── package.json                       # Scripts globais do monorepo
+└── README.md                          # Documentacao tecnica oficial da aplicacao
+```
 
 ---
 
-## 6. Instalação e Configuração
+## 7. Pre-requisitos
 
-### 1. Clonagem do Repositório
+Antes de instalar e inicializar a aplicacao, verifique a presenca dos componentes abaixo:
+
+- **Node.js:** Versao 20.0.0 LTS ou superior (recomendado 20.x ou 22.x).
+- **Gerenciador de Pacotes NPM:** Versao 9.0.0 ou superior.
+- **Banco de Dados PostgreSQL:** Versao 14 ou superior acessivel (local ou gerenciado no Supabase).
+- **Conexao com a Internet:** Para resolucao de pacotes npm e comunicacao com os servicos de armazenamento e envio de e-mails transacionais.
+
+---
+
+## 8. Instalacao e Configuracao
+
+### 1. Clonagem do Repositorio
 
 ```bash
 git clone https://github.com/KaykyTFF/ItaimVende-repo.git
 cd ItaimVende-repo
 ```
 
-### 2. Instalação de Dependências
+### 2. Instalacao das Dependencias
 
-Instale as dependências da raiz e do módulo de backend:
+Instale as dependencias na raiz do monorepo e no modulo backend:
 
 ```bash
 npm install
 npm --prefix backend install
 ```
 
-### 3. Configuração de Variáveis de Ambiente
+### 3. Configuracao do Arquivo de Ambiente
 
-Crie o arquivo `.env` dentro da pasta `backend/` tomando como referência o modelo `.env.example`:
+Gere o arquivo `.env` dentro da pasta `backend/` tomando o modelo `.env.example` como base:
 
 ```bash
 cp backend/.env.example backend/.env
 ```
 
-Edite o arquivo `backend/.env` informando as configurações do seu ambiente:
+---
 
-| Variável | Obrigatória | Descrição | Exemplo |
-| :--- | :---: | :--- | :--- |
-| `PORT` | Não | Porta do servidor HTTP Express (padrão: 3000) | `3000` |
-| `NODE_ENV` | Não | Modo de execução do ambiente | `development` ou `production` |
-| `DATABASE_URL` | Sim | URI de conexão com o PostgreSQL (porta com pooling) | `postgresql://user:pass@host:6543/postgres?pgbouncer=true` |
-| `DIRECT_URL` | Sim | URI de conexão direta com o PostgreSQL (para migrações) | `postgresql://user:pass@host:5432/postgres` |
-| `JWT_SECRET` | Sim | Chave criptográfica para assinatura de tokens JWT (mínimo 32 caracteres) | `c53f888f918fa9074d6c...` |
-| `SUPABASE_URL` | Não | URL do endpoint da API do Supabase | `https://xyzproject.supabase.co` |
-| `SUPABASE_KEY` | Não | Chave anon ou service_role para operações de bucket | `eyJhbGciOiJIUzI1NiIsInR5cCI...` |
-| `SUPABASE_BUCKET` | Não | Nome do bucket público de armazenamento de imagens | `marketplace` |
-| `STORAGE_PROVIDER` | Não | Estratégia de armazenamento (`supabase` ou `local`) | `supabase` |
-| `RESEND_API_KEY` | Não | Chave de autenticação da API Resend para e-mails | `re_123456789...` |
-| `EMAIL_FROM` | Não | Endereço do remetente exibido nas notificações | `contato@seudominio.com.br` |
+## 9. Variaveis de Ambiente
 
-### 4. Configuração e Sincronização do Banco de Dados
+As variaveis de ambiente devem ser informadas no arquivo `backend/.env`:
 
-Com o banco de dados PostgreSQL acessível, execute os comandos de sincronização do Prisma e criação dos índices textuais:
+| Variavel | Descricao | Obrigatoria |
+| :--- | :--- | :---: |
+| `PORT` | Porta na qual o servidor HTTP Express ira escutar (padrao: 3000). | Nao |
+| `NODE_ENV` | Modo de execucao (`development` ou `production`). | Nao |
+| `DATABASE_URL` | String de conexao com o PostgreSQL com suporte a pooling (PgBouncer). | Sim |
+| `DIRECT_URL` | String de conexao direta com o PostgreSQL sem pooling (usada para migracoes). | Sim |
+| `JWT_SECRET` | Chave criptografica privada utilizada na geracao dos tokens JWT (minimo 32 caracteres). | Sim |
+| `JWT_EXPIRES_IN` | Tempo limite de validade do token JWT emitido (ex: `2h`, `7d`). | Nao |
+| `CORS_ORIGIN` | Origens autorizadas para requisicoes de navegadores (padrao: `*`). | Nao |
+| `SUPABASE_URL` | Endpoint da API do projeto Supabase. | Nao |
+| `SUPABASE_KEY` | Chave anon ou service_role para manipulacao do Supabase Storage. | Nao |
+| `SUPABASE_BUCKET` | Nome do bucket publico para gravacao de fotos de produtos e avatares (padrao: `marketplace`). | Nao |
+| `STORAGE_PROVIDER` | Estrategia de gravacao de midias (`supabase` ou `local`). | Nao |
+| `IMAGE_OPTIMIZATION_ENABLED` | Habilita pipeline de otimizacao WebP com Sharp (`true` ou `false`). | Nao |
+| `IMAGE_MAX_WIDTH` | Largura maxima em pixels aplicada as imagens recebidas (padrao: 1600). | Nao |
+| `IMAGE_QUALITY` | Fator de qualidade de compressao WebP (1 a 100, padrao: 82). | Nao |
+| `RESEND_API_KEY` | Chave de autenticacao da API do Resend para envio de e-mails transacionais. | Nao |
+| `EMAIL_FROM` | Remetente padrao exibido nos e-mails transacionais. | Nao |
+| `APP_URL` | URL base da aplicacao utilizada na composicao de links enviados em e-mails. | Nao |
+
+---
+
+## 10. Configuracao do Banco de Dados
+
+Com o PostgreSQL acessivel e as strings de conexao preenchidas no `.env`, execute a sequencia de preparacao do banco:
 
 ```bash
-# 1. Gerar os artefatos do Prisma Client
+# 1. Gerar os artefatos tipados do Prisma Client
 npm --prefix backend run prisma:generate
 
-# 2. Aplicar o schema relacional diretamente ao banco
+# 2. Sincronizar os esquemas relacionais com o banco de dados
 npm --prefix backend run prisma:push
 
-# 3. Criar a extensão unaccent e índices Trigram no PostgreSQL
+# 3. Criar a extensao unaccent e os indices Trigram para busca fonetica
 npm --prefix backend run db:indexes
 
 # 4. Executar o script de seed para criar categorias e dados iniciais
 npm --prefix backend run seed
 ```
 
-### 5. Inicialização da Aplicação
+---
 
-Para iniciar o servidor em ambiente de desenvolvimento com reinicialização automática:
+## 11. Execucao da Aplicacao
+
+### Modo de Desenvolvimento
+
+Inicia o backend com reinicializacao automatica ao alterar arquivos (`nodemon`):
+
+```bash
+npm run dev
+```
+
+Ou diretamente a partir da pasta `backend/`:
 
 ```bash
 npm --prefix backend run dev
 ```
 
-Para inicialização em modo de produção:
+### Modo de Producao
+
+Executa a aplicacao em modo otimizado:
 
 ```bash
-npm --prefix backend run start
+npm run start
 ```
 
-Após a inicialização, a API estará acessível em: `http://localhost:3000/api/v1/health`
+### Frontend de Desenvolvimento (Opcional)
+
+Para servir a interface web localmente na porta 5500:
+
+```bash
+npm run dev:frontend
+```
+
+Apos iniciar o backend, verifique a operacionalidade acessando o endpoint de diagnostico:  
+`http://localhost:3000/api/v1/health`
 
 ---
 
-## 7. Autenticação e Autorização
+## 12. Autenticacao e Autorizacao
 
-A API utiliza o modelo de autenticação **stateless baseada em JSON Web Token (Bearer JWT)**.
+A API utiliza o modelo de autenticacao **stateless baseada em Bearer JWT** (JSON Web Token), assinado com o algoritmo **HS256**.
 
-### Estrutura e Ciclo de Vida do Token
+### Ciclo de Emissao e Envio do Token
 
-- **Geração:** O token é emitido nos endpoints `POST /api/v1/auth/login`, `POST /api/v1/auth/register` e `POST /api/v1/auth/google`.
-- **Payload:** Contém o identificador único do usuário (`id`), endereço de e-mail (`email`) e papel atribuído (`role`).
-- **Validade:** Tokens possuem expiração configurada para 7 dias em login padrão ou 24 horas para sessões de desenvolvimento.
-- **Envio:** Deve ser encaminhado pelo cliente em todas as rotas protegidas através do cabeçalho padrão:
-  ```http
-  Authorization: Bearer <seu_token_jwt>
-  ```
+1. **Emissao:** O token e emitido nos endpoints `POST /auth/login`, `POST /auth/register` e `POST /auth/google`.
+2. **Payload:** O token carrega o identificador do usuario (`id`), e-mail (`email`) e o papel atribuido (`role`).
+3. **Envio:** O cliente deve anexar o token no cabecalho HTTP `Authorization` em todas as rotas protegidas:
+
+```http
+Authorization: Bearer <seu_token_jwt>
+```
 
 ### Papéis do Sistema (RBAC)
 
-O controle de acesso baseado em papéis restringe as operações por nível de privilégio:
+O controle de acesso baseado em papéis define as permissoes de cada operacao:
 
-| Papel | Permissões e Acesso |
+| Papel | Permissoes e Acesso |
 | :--- | :--- |
-| `BUYER` | Perfil padrão de cliente. Permite consulta a catálogos, envio de pedidos, cadastro de endereços, adição de favoritos, participação em conversas e emissão de avaliações. |
-| `SELLER` | Produtor ou lojista. Possui todas as permissões de `BUYER` e autorização para cadastro, edição e exclusão de anúncios de produtos próprios. |
-| `MODERATOR` | Agente moderador. Permite visualização do painel de denúncias (`GET /reports`) e aplicação de medidas cautelares sobre anúncios em análise. |
-| `ADMIN` | Administrador pleno. Acesso irrestrito a todos os endpoints, incluindo auditoria do sistema, remoção definitiva de conteúdos e gestão de privilégios. |
+| `BUYER` | Perfil padrao. Permite consultar produtos, fazer pedidos, enviar mensagens e propostas no chat, avaliar vendedores, salvar favoritos e cadastrar enderecos. |
+| `SELLER` | Produtor ou vendedor comercial. Herda as permissoes de `BUYER` e possui autorizacao para criar, editar e excluir anuncios de produtos proprios. |
+| `MODERATOR` | Agente moderador. Acessa o painel de denuncias (`GET /reports`) e aplica acoes cautelares de revisao sobre anuncios sob suspeita. |
+| `ADMIN` | Administrador pleno. Possui acesso total ao sistema, incluindo remocao definitiva de anuncios fraudulentos (`DELETE /reports/:id/product`), purga de midias e auditoria de contas. |
+
+### Validacao Ativa em Cada Requisicao
+
+O middleware `authenticateToken` consulta o registro correspondente no banco de dados a cada chamada autenticada. Se a conta for suspensa (`SUSPENDED` ou `BANNED`) ou tiver seu papel alterado, o acesso e bloqueado de imediato, sem que seja necessario aguardar a expiracao temporal do token emitido.
 
 ---
 
-## 8. Endpoints da API
+## 13. Endpoints da API
 
-Todas as rotas estão versionadas sob o prefixo canônico `/api/v1`.
+Todas as rotas estao agrupadas sob o prefixo canônico `/api/v1`. A API segue convencoes RESTful com substantivos no plural, verbos HTTP semanticos e identificadores em path parameters.
 
-### Diagnóstico e Monitoramento
+### Diagnostico e Monitoramento
 
-| Método | Endpoint | Finalidade | Autenticação | Status |
-| :---: | :--- | :--- | :---: | :---: |
-| `GET` | `/health` | Retorna o status de operação da API, versão ativa, uptime e identificador de inicialização. | Pública | `200` |
+| Metodo | URI | Descricao | Autenticacao |
+| :---: | :--- | :--- | :---: |
+| `GET` | `/health` | Retorna o status operacional, versao ativa e tempo de execucao (uptime). | Publica |
 
-### Autenticação e Gestão de Sessão (`/auth`)
+### Autenticacao e Gestao de Sessao (`/auth`)
 
-| Método | Endpoint | Finalidade | Autenticação | Status |
-| :---: | :--- | :--- | :---: | :---: |
-| `POST` | `/auth/register` | Cadastra novo usuário no sistema com hash de senha. | Pública | `201`, `400`, `409` |
-| `POST` | `/auth/login` | Autentica o usuário mediante e-mail/senha e emite JWT. | Pública | `200`, `400`, `401`, `429` |
-| `POST` | `/auth/google` | Autentica ou cadastra usuário via token Google OAuth2. | Pública | `200`, `400`, `401` |
-| `POST` | `/auth/forgot-password` | Dispara e-mail com código OTP de 6 dígitos para recuperação. | Pública | `200`, `400`, `429` |
-| `POST` | `/auth/verify-reset-code` | Valida código de recuperação com proteção anti-força bruta. | Pública | `200`, `400`, `429` |
-| `POST` | `/auth/reset-password` | Conclui a redefinição de senha utilizando o código validado. | Pública | `200`, `400` |
-| `GET` | `/auth/me` | Obtém o perfil cadastral completo do usuário logado. | Bearer JWT | `200`, `401` |
-| `PUT` | `/auth/profile` | Atualiza informações cadastrais básicas (nome, bio, avatar). | Bearer JWT | `200`, `400`, `401` |
-| `PUT` | `/auth/password` | Altera a senha do usuário mediante validação da senha atual. | Bearer JWT | `200`, `400`, `401` |
-| `GET` | `/auth/user/:id` | Retorna dados públicos do perfil de um anunciante/vendedor. | Pública | `200`, `404` |
+| Metodo | URI | Descricao | Autenticacao |
+| :---: | :--- | :--- | :---: |
+| `POST` | `/auth/register` | Cadastra novo usuario no sistema e gera hash de senha. | Publica |
+| `POST` | `/auth/login` | Autentica usuario por e-mail e senha, retornando token JWT. | Publica |
+| `POST` | `/auth/google` | Autentica ou cadastra usuario a partir de credencial Google OAuth2. | Publica |
+| `POST` | `/auth/forgot-password` | Dispara e-mail com codigo OTP de 6 digitos para recuperacao de senha. | Publica |
+| `POST` | `/auth/verify-reset-code` | Valida codigo de recuperacao com protecao contra forca bruta. | Publica |
+| `POST` | `/auth/reset-password` | Conclui a redefinicao de senha utilizando codigo previamente validado. | Publica |
+| `GET` | `/auth/me` | Retorna o perfil completo do usuario logado. | Bearer JWT |
+| `PUT` | `/auth/profile` | Atualiza informacoes de perfil (nome, bio, avatar, localizacao). | Bearer JWT |
+| `PUT` | `/auth/password` | Altera a senha do usuario mediante confirmacao da senha atual. | Bearer JWT |
 
-### Governança e Segurança de Conta (`/account`)
+### Usuarios e Reputacao (`/users` e `/usernames`)
 
-| Método | Endpoint | Finalidade | Autenticação | Status |
-| :---: | :--- | :--- | :---: | :---: |
-| `PATCH` | `/account/username` | Altera o identificador `@username` aplicando cooldown de 30 dias. | Bearer JWT | `200`, `400`, `403`, `409` |
-| `GET` | `/account/username/check` | Verifica disponibilidade de um username em tempo real. | Pública | `200`, `400` |
-| `POST` | `/account/email/change-request` | Inicia solicitação de troca de e-mail enviando OTP ao novo endereço. | Bearer JWT | `200`, `400`, `401`, `409` |
-| `POST` | `/account/email/confirm` | Confirma alteração de e-mail validando código OTP de 6 dígitos. | Bearer JWT | `200`, `400`, `404`, `429` |
-| `POST` | `/account/phone/change-request` | Solicita alteração de telefone/WhatsApp com envio de código OTP. | Bearer JWT | `200`, `400`, `401`, `409` |
-| `POST` | `/account/phone/confirm` | Confirma novo número, valida OTP e emite token de reversão. | Bearer JWT | `200`, `400`, `429` |
-| `POST` | `/account/phone/revert` | Restaura imediatamente o número anterior via token criptografado. | Pública | `200`, `400`, `404` |
-| `DELETE` | `/account/phone` | Desvincula o número de telefone da conta do usuário. | Bearer JWT | `200`, `400`, `401` |
-| `GET` | `/account/preferences` | Consulta preferências de notificação do usuário. | Bearer JWT | `200`, `401` |
-| `PATCH` | `/account/preferences` | Atualiza opções de notificação por e-mail e push. | Bearer JWT | `200`, `400`, `401` |
+| Metodo | URI | Descricao | Autenticacao |
+| :---: | :--- | :--- | :---: |
+| `GET` | `/users/:id` | Retorna os dados publicos do perfil de um anunciante/vendedor. | Publica |
+| `GET` | `/users/:userId/reviews` | Lista avaliacoes recebidas e media de estrelas de um vendedor. | Publica |
+| `POST` | `/users/:userId/reviews` | Registra nova avaliacao com nota (1 a 5) e comentario para o vendedor. | Bearer JWT |
+| `GET` | `/usernames/availability` | Consulta a disponibilidade e o prazo de cooldown de um `@username`. | Publica |
 
-### Catálogo de Produtos e Anúncios (`/products`)
+### Governanca e Seguranca de Conta (`/account`)
 
-| Método | Endpoint | Finalidade | Autenticação | Status |
-| :---: | :--- | :--- | :---: | :---: |
-| `GET` | `/products` | Lista produtos com paginação, ordenação e filtros compostos. | Pública | `200` |
-| `GET` | `/products/:id` | Obtém dados detalhados de um produto por ID numérico ou slug. | Pública | `200`, `404` |
-| `POST` | `/products` | Registra novo anúncio no catálogo com upload de fotos. | Bearer JWT (`SELLER`+) | `201`, `400`, `401` |
-| `PUT` | `/products/:id` | Atualiza dados de anúncio existente (proprietário ou admin). | Bearer JWT | `200`, `400`, `403`, `404` |
-| `DELETE` | `/products/:id` | Remove anúncio e expurga mídias associadas no bucket. | Bearer JWT | `204`, `401`, `403`, `404` |
+| Metodo | URI | Descricao | Autenticacao |
+| :---: | :--- | :--- | :---: |
+| `PATCH` | `/account/username` | Altera o nome de usuario (`@username`) impondo cooldown de 30 dias. | Bearer JWT |
+| `POST` | `/account/email/change-request` | Inicia troca de e-mail enviando OTP ao novo endereco. | Bearer JWT |
+| `POST` | `/account/email/confirm` | Confirma novo e-mail validando codigo de 6 digitos. | Bearer JWT |
+| `POST` | `/account/phone/change-request` | Inicia alteracao de telefone celular com envio de codigo OTP. | Bearer JWT |
+| `POST` | `/account/phone/confirm` | Valida codigo OTP, confirma novo telefone e emite token de reversao. | Bearer JWT |
+| `POST` | `/account/phone-reversals` | Desfaz a troca de telefone via rollback token assinado. | Publica |
+| `DELETE` | `/account/phone` | Desvincula o telefone cadastrado da conta. | Bearer JWT |
+| `GET` | `/account/preferences` | Consulta preferencias de notificacao ativas do usuario. | Bearer JWT |
+| `PATCH` | `/account/preferences` | Atualiza opcoes e canais de notificacao. | Bearer JWT |
+
+### Catalogo de Produtos e Anuncios (`/products`)
+
+| Metodo | URI | Descricao | Autenticacao |
+| :---: | :--- | :--- | :---: |
+| `GET` | `/products` | Lista produtos com paginacao, filtros e busca fonetica unaccent. | Publica |
+| `GET` | `/products/:id` | Retorna informacoes detalhadas de um anuncio por ID ou slug. | Publica |
+| `POST` | `/products` | Publica novo anuncio no catalogo com fotos e localizacao. | Bearer JWT (`SELLER`+) |
+| `PUT` | `/products/:id` | Atualiza dados de anuncio existente (autor ou admin). | Bearer JWT |
+| `DELETE` | `/products/:id` | Remove anuncio e exclui imagens associadas no storage. | Bearer JWT |
 
 ### Categorias (`/categories`)
 
-| Método | Endpoint | Finalidade | Autenticação | Status |
-| :---: | :--- | :--- | :---: | :---: |
-| `GET` | `/categories` | Lista todos os departamentos ativos (com header `Cache-Control`). | Pública | `200` |
+| Metodo | URI | Descricao | Autenticacao |
+| :---: | :--- | :--- | :---: |
+| `GET` | `/categories` | Lista departamentos comerciais ativos (com `Cache-Control`). | Publica |
 
 ### Pedidos e Checkout (`/orders`)
 
-| Método | Endpoint | Finalidade | Autenticação | Status |
-| :---: | :--- | :--- | :---: | :---: |
-| `POST` | `/orders` | Cria nova ordem com cálculo financeiro garantido no servidor. | Bearer JWT | `201`, `400`, `401` |
-| `GET` | `/orders` | Lista histórico de pedidos efetuados pelo usuário autenticado. | Bearer JWT | `200`, `401` |
-| `GET` | `/orders/:id` | Consulta o detalhamento completo de uma ordem específica. | Bearer JWT | `200`, `401`, `404` |
-| `PATCH` | `/orders/:id/status` | Atualiza o estado da ordem (pendente, pago, enviado, entregue). | Bearer JWT | `200`, `400`, `403` |
+| Metodo | URI | Descricao | Autenticacao |
+| :---: | :--- | :--- | :---: |
+| `POST` | `/orders` | Cria ordem de compra com recalculado compulsorio de valores no servidor. | Bearer JWT |
+| `GET` | `/orders` | Lista os pedidos efetuados pelo usuario autenticado. | Bearer JWT |
+| `GET` | `/orders/:id` | Retorna o detalhamento completo de uma ordem especifica. | Bearer JWT |
+| `PATCH` | `/orders/:id/status` | Atualiza o estado da ordem de pedido. | Bearer JWT |
 
-### Comunicação e Negociação (`/chat`)
+### Negociacao e Mensagens em Tempo Real (`/chat`)
 
-| Método | Endpoint | Finalidade | Autenticação | Status |
-| :---: | :--- | :--- | :---: | :---: |
-| `GET` | `/chat/conversations` | Lista todas as negociações em andamento do usuário. | Bearer JWT | `200`, `401` |
-| `POST` | `/chat/conversations` | Abre nova conversa de negociação vinculada a um anúncio. | Bearer JWT | `201`, `400`, `401` |
-| `GET` | `/chat/conversations/:id/messages` | Recupera o histórico de mensagens de uma negociação. | Bearer JWT | `200`, `401`, `403` |
-| `POST` | `/chat/conversations/:id/messages` | Envia mensagem textual ou proposta formal de valor. | Bearer JWT | `201`, `400`, `401` |
-| `PATCH` | `/chat/messages/:id/accept` | Aceita formalmente uma oferta/proposta financeira recebida. | Bearer JWT | `200`, `401`, `403` |
-
-### Avaliações e Reputação (`/reviews`)
-
-| Método | Endpoint | Finalidade | Autenticação | Status |
-| :---: | :--- | :--- | :---: | :---: |
-| `GET` | `/reviews/user/:userId` | Consulta métricas de reputação e notas atribuídas a um vendedor. | Pública | `200`, `404` |
-| `POST` | `/reviews/user/:userId` | Registra avaliação com nota (1 a 5) e comentário descritivo. | Bearer JWT | `201`, `400`, `401` |
-| `DELETE` | `/reviews/:id` | Exclui uma avaliação previamente publicada pelo autor ou admin. | Bearer JWT | `204`, `401`, `403`, `404` |
+| Metodo | URI | Descricao | Autenticacao |
+| :---: | :--- | :--- | :---: |
+| `GET` | `/chat/conversations` | Lista todas as conversas ativas do usuario autenticado. | Bearer JWT |
+| `POST` | `/chat/conversations` | Inicia ou recupera uma conversa vinculada a um produto. | Bearer JWT |
+| `GET` | `/chat/conversations/:id/messages` | Recupera o historico de mensagens trocadas na conversa. | Bearer JWT |
+| `POST` | `/chat/conversations/:id/messages` | Envia mensagem textual ou proposta formal de valor. | Bearer JWT |
+| `PATCH` | `/chat/messages/:id/status` | Atualiza o status de uma contraproposta (`ACCEPTED` ou `REJECTED`). | Bearer JWT |
 
 ### Favoritos (`/favorites`)
 
-| Método | Endpoint | Finalidade | Autenticação | Status |
-| :---: | :--- | :--- | :---: | :---: |
-| `GET` | `/favorites` | Lista os produtos adicionados à lista de favoritos do usuário. | Bearer JWT | `200`, `401` |
-| `POST` | `/favorites/:productId/toggle` | Alterna a inclusão ou remoção de um anúncio dos favoritos. | Bearer JWT | `200`, `401`, `404` |
+| Metodo | URI | Descricao | Autenticacao |
+| :---: | :--- | :--- | :---: |
+| `GET` | `/favorites` | Lista todos os produtos favoritados pelo usuario autenticado. | Bearer JWT |
+| `GET` | `/favorites/:productId` | Verifica se um produto especifico esta favoritado. | Bearer JWT |
+| `PUT` | `/favorites/:productId` | Adiciona produto aos favoritos de forma idempotente. | Bearer JWT |
+| `DELETE` | `/favorites/:productId` | Remove produto dos favoritos de forma idempotente. | Bearer JWT |
 
-### Denúncias e Moderação (`/reports`)
+### Avaliacoes (`/reviews`)
 
-| Método | Endpoint | Finalidade | Autenticação | Status |
-| :---: | :--- | :--- | :---: | :---: |
-| `POST` | `/reports/:productId` | Registra denúncia de irregularidade contra anúncio publicado. | Pública / JWT | `201`, `400` |
-| `GET` | `/reports` | Painel de controle de denúncias pendentes para moderadores. | Bearer JWT (`MODERATOR`+) | `200`, `401`, `403` |
-| `POST` | `/reports/:id/remove-product` | Acata denúncia, cancela anúncio e expurga mídias do storage. | Bearer JWT (`ADMIN`) | `200`, `401`, `403` |
+| Metodo | URI | Descricao | Autenticacao |
+| :---: | :--- | :--- | :---: |
+| `DELETE` | `/reviews/:id` | Exclui avaliacao publicada (restrito ao autor ou moderador). | Bearer JWT |
 
-### Endereços (`/addresses`)
+### Denuncias e Moderacao (`/reports`)
 
-| Método | Endpoint | Finalidade | Autenticação | Status |
-| :---: | :--- | :--- | :---: | :---: |
-| `GET` | `/addresses` | Lista os endereços residenciais cadastrados pelo usuário. | Bearer JWT | `200`, `401` |
-| `POST` | `/addresses` | Cadastra novo endereço para recebimento e entregas. | Bearer JWT | `201`, `400`, `401` |
-| `DELETE` | `/addresses/:id` | Remove endereço previamente registrado pelo usuário. | Bearer JWT | `204`, `401`, `404` |
+| Metodo | URI | Descricao | Autenticacao |
+| :---: | :--- | :--- | :---: |
+| `POST` | `/reports/:productId` | Registra ocorrencia de denuncia contra um anuncio suspeito. | Publica / JWT |
+| `GET` | `/reports` | Painel de controle de denuncias pendentes para moderadores. | Bearer JWT (`MODERATOR`+) |
+| `DELETE` | `/reports/:id/product` | Remove anuncio denunciado e purga imagens no bucket CDN. | Bearer JWT (`ADMIN`+) |
 
-### Upload e Mídia (`/upload`)
+### Enderecos (`/addresses`)
 
-| Método | Endpoint | Finalidade | Autenticação | Status |
-| :---: | :--- | :--- | :---: | :---: |
-| `POST` | `/upload` | Recebe arquivo via `multipart/form-data`, otimiza e persiste em nuvem. | Bearer JWT | `201`, `400`, `401` |
+| Metodo | URI | Descricao | Autenticacao |
+| :---: | :--- | :--- | :---: |
+| `GET` | `/addresses` | Lista os enderecos cadastrados pelo usuario logado. | Bearer JWT |
+| `POST` | `/addresses` | Cadastra novo endereco de entrega ou retirada. | Bearer JWT |
+| `DELETE` | `/addresses/:id` | Remove endereco previamente registrado pelo usuario. | Bearer JWT |
+
+### Notificacoes (`/notifications`)
+
+| Metodo | URI | Descricao | Autenticacao |
+| :---: | :--- | :--- | :---: |
+| `GET` | `/notifications` | Lista as notificacoes recebidas pelo usuario. | Bearer JWT |
+| `PATCH` | `/notifications/read-all` | Marca todas as notificacoes como lidas. | Bearer JWT |
+
+### Pipeline de Midia (`/upload`)
+
+| Metodo | URI | Descricao | Autenticacao |
+| :---: | :--- | :--- | :---: |
+| `POST` | `/upload` | Recebe arquivo multipart, otimiza para WebP e envia ao storage. | Bearer JWT |
 
 ---
 
-## 9. Paginação, Filtros e Ordenação
+## 14. Paginacao, Filtros e Ordenacao
 
-O endpoint `GET /api/v1/products` implementa suporte completo a consultas com paginação estruturada, filtros combinados e ordenação por parâmetros de consulta (query parameters).
+O endpoint de consulta ao catalogo (`GET /api/v1/products`) implementa suporte estruturado a parametros de consulta (*query parameters*):
 
-### Parâmetros Disponíveis
+### Parametros Suportados
 
-| Parâmetro | Tipo | Descrição | Valores Suportados |
+| Parametro | Tipo | Descricao | Valores Aceitos |
 | :--- | :---: | :--- | :--- |
-| `page` | Inteiro | Número da página solicitada (padrão: 1) | `>= 1` |
-| `limit` | Inteiro | Quantidade máxima de itens por página (padrão: 12) | `1` a `50` |
-| `sort` | String | Critério de ordenação da coleção | `recent` (mais novos), `price_asc` (menor preço), `price_desc` (maior preço), `views` (mais visualizados) |
-| `search` | String | Termo textual para busca fonética e com unaccent | Ex: `eletronicos`, `queijo`, `artesanato` |
-| `categoryId` | String | Filtrar por identificador de categoria específica | Ex: `cat_eletronicos` |
-| `city` | String | Filtrar por cidade do anunciante | Ex: `Paulistana`, `Acauã`, `Jacobina` |
-| `neighborhood` | String | Filtrar por bairro específico | Ex: `Centro`, `Cohab`, `Correntezal` |
-| `minPrice` | Numérico | Filtro de preço mínimo | `>= 0` |
-| `maxPrice` | Numérico | Filtro de preço máximo | `>= minPrice` |
-| `condition` | String | Condição de uso do item | `NEW` (novo) ou `USED` (usado) |
+| `page` | Inteiro | Numero da pagina a retornar (padrao: 1). | `>= 1` |
+| `limit` | Inteiro | Quantidade de itens por pagina (padrao: 24, maximo: 50). | `1` a `50` |
+| `sort` | String | Criterio de ordenacao da listagem. | `newest`, `oldest`, `price_asc`, `price_desc`, `popular` |
+| `search` | String | Termo textual para busca fonetica unaccent em titulo, descricao e categoria. | Qualquer texto |
+| `categoryId` | Inteiro | Filtrar por identificador numerico da categoria. | ID numerico |
+| `category` | String | Filtrar por slug ou nome da categoria com tolerancia a acentos. | Ex: `eletronicos`, `artesanato` |
+| `city` / `cidade` | String | Filtrar por municipio polo ou circunvizinho no Vale do Itaim. | Ex: `Paulistana`, `Acaua`, `Jacobina` |
+| `neighborhood` / `bairro` | String | Filtrar por bairro especifico. | Ex: `Centro`, `Cohab`, `Correntezal` |
+| `minPrice` | Decimal | Filtro de preco minimo. | `>= 0` |
+| `maxPrice` | Decimal | Filtro de preco maximo. | `>= minPrice` |
+| `condition` | String | Estado de conservacao do item anunciado. | `NOVO`, `SEMINOVO`, `USADO`, `DEFEITO` |
 
-### Exemplo de Requisição
+### Exemplo de Requisicao
 
 ```http
 GET /api/v1/products?search=eletronicos&city=Paulistana&minPrice=100&maxPrice=1500&sort=price_asc&page=1&limit=10 HTTP/1.1
@@ -420,97 +611,105 @@ Accept: application/json
 
 ```json
 {
-  "products": [
+  "success": true,
+  "data": [
     {
       "id": "cmv1234567890",
       "title": "Smartphone 128GB",
-      "description": "Aparelho conservado com capa e carregador original.",
+      "description": "Aparelho conservado com carregador original.",
       "price": 650.00,
-      "condition": "USED",
+      "condition": "USADO",
       "city": "Paulistana",
       "neighborhood": "Centro",
       "images": [
         "https://xyz.supabase.co/storage/v1/object/public/marketplace/products/cmv1234.webp"
       ],
       "category": {
-        "id": "cat_eletronicos",
-        "name": "Eletrônicos"
+        "id": 1,
+        "name": "Eletronicos",
+        "slug": "eletronicos"
       },
       "createdAt": "2026-11-05T14:30:00.000Z"
     }
   ],
   "pagination": {
+    "total": 1,
     "page": 1,
     "limit": 10,
-    "total": 1,
-    "totalPages": 1,
-    "hasMore": false
+    "totalPages": 1
   }
 }
 ```
 
 ---
 
-## 10. Tratamento de Erros
+## 15. Formato das Respostas e Tratamento de Erros
 
-A API implementa tratamento unificado de erros através de middleware centralizado. Todas as respostas de erro seguem estritamente o formato padrão com indicação de status HTTP, código de erro interno e detalhes estruturados.
+A API adota respostas uniformes em JSON. Em cenarios de falha, o middleware interceptador global formata a saida com identificador legivel, mensagem explicativa e lista de detalhes.
 
-### Estrutura Padrão de Erro
+### Estrutura Padrao de Erro
 
 ```json
 {
   "success": false,
   "code": "CODIGO_DO_ERRO",
-  "message": "Descrição amigável e explicativa da falha.",
+  "message": "Descricao amigavel e explicativa da falha.",
   "details": []
 }
 ```
 
-### Exemplos Reais de Resposta
+### Codigos HTTP Empregados
 
-#### 1. Erro de Validação de Entrada (400 Bad Request)
+- `200 OK`: Consulta, atualizacao ou acao concluida com sucesso.
+- `201 Created`: Recurso criado no servidor (anuncio, usuario, ordem, avaliacao).
+- `204 No Content`: Exclusao concluida sem retorno de conteudo no corpo.
+- `400 Bad Request`: Falha de validacao de esquema Zod ou parametro invalido.
+- `401 Unauthorized`: Requisicao protegida sem token JWT ou com token expirado/invalido.
+- `403 Forbidden`: Usuario autenticado sem permissao de papel ou acao bloqueada por regra de dominio.
+- `404 Not Found`: Recurso solicitado nao localizado no banco de dados.
+- `409 Conflict`: Conflito de integridade relacional ou identificador exclusivo duplicado.
+- `429 Too Many Requests`: Limite de taxa excedido no rate limiter.
+- `503 Service Unavailable`: Falha de conexao com o banco de dados.
 
-Disparado automaticamente pelo validador Zod ao identificar violações nos campos enviados:
+### Exemplos de Resposta de Erro
+
+#### Erro de Validacao de Dados (400 Bad Request)
 
 ```json
 {
   "success": false,
   "code": "VALIDATION_ERROR",
-  "message": "Erro de validação nos dados fornecidos.",
+  "message": "Falha na validacao dos dados enviados.",
   "details": [
     {
       "field": "email",
-      "message": "Informe um endereço de e-mail válido."
+      "message": "Informe um endereco de e-mail valido."
     },
     {
       "field": "password",
-      "message": "A senha deve conter no mínimo 6 caracteres."
+      "message": "A senha deve conter no minimo 6 caracteres."
     }
   ]
 }
 ```
 
-#### 2. Falha de Autenticação (401 Unauthorized)
-
-Disparado em caso de ausência de credenciais, token expirado ou senha incorreta:
+#### Falha de Autenticacao (401 Unauthorized)
 
 ```json
 {
   "success": false,
   "code": "UNAUTHORIZED",
-  "message": "E-mail ou senha incorretos."
+  "message": "Acesso nao autorizado. Token nao informado."
 }
 ```
 
-#### 3. Violação de Regra de Negócio / Acesso Negado (403 Forbidden)
-
-Disparado quando a operação é bloqueada por controle de permissão RBAC ou regras de domínio (ex: cooldown de 30 dias para alteração de `@username`):
+#### Bloqueio por Regra de Negocio / Cooldown (403 Forbidden)
 
 ```json
 {
   "success": false,
   "code": "USERNAME_CHANGE_COOLDOWN",
-  "message": "Você só pode alterar seu nome de usuário a cada 30 dias. Próxima alteração disponível em 29 dias.",
+  "message": "Voce so pode alterar seu nome de usuario a cada 30 dias. Proxima alteracao disponivel em 29 dias.",
   "details": {
     "nextAllowedDate": "2026-12-07T15:00:00.000Z",
     "daysRemaining": 29
@@ -518,349 +717,172 @@ Disparado quando a operação é bloqueada por controle de permissão RBAC ou re
 }
 ```
 
-#### 4. Recurso Não Encontrado (404 Not Found)
-
-Disparado quando o identificador informado não corresponde a nenhum registro ativo:
+#### Recurso Nao Encontrado (404 Not Found)
 
 ```json
 {
   "success": false,
   "code": "NOT_FOUND",
-  "message": "O produto solicitado não foi encontrado ou já foi finalizado."
+  "message": "O registro solicitado nao foi encontrado no banco de dados."
 }
 ```
 
-#### 5. Conflito de Integridade (409 Conflict)
-
-Disparado na tentativa de registrar duplicidade de identificador exclusivo (e-mail ou nome de usuário):
+#### Conflito de Duplicidade (409 Conflict)
 
 ```json
 {
   "success": false,
-  "code": "USERNAME_ALREADY_EXISTS",
-  "message": "Este nome de usuário já está sendo utilizado por outra conta."
+  "code": "DUPLICATE_ENTRY",
+  "message": "Conflito de dados: ja existe um registro com o valor informado (username)."
 }
 ```
 
 ---
 
-## 11. Documentação Interativa (OpenAPI / Swagger)
+## 16. Documentacao Swagger/OpenAPI
 
-A especificação completa da API está documentada e disponível para consumo interativo via Swagger UI:
+A documentacao interativa gerada a partir da especificacao OpenAPI 3.0.3 esta disponivel nas seguintes URIs com o servidor ativo:
 
 - **Interface Swagger UI:** [`http://localhost:3000/api-docs`](http://localhost:3000/api-docs) ou [`http://localhost:3000/api/v1/docs`](http://localhost:3000/api/v1/docs)
-- **Arquivo de Especificação OpenAPI 3.0.3 (JSON):** [`http://localhost:3000/api/v1/docs/openapi.json`](http://localhost:3000/api/v1/docs/openapi.json)
-- **Arquivo Local no Repositório:** [`backend/src/docs/openapi.json`](backend/src/docs/openapi.json)
+- **Arquivo da Especificacao OpenAPI em JSON:** [`http://localhost:3000/api/v1/docs/openapi.json`](http://localhost:3000/api/v1/docs/openapi.json)
+- **Arquivo no Repositorio:** [`backend/src/docs/openapi.json`](backend/src/docs/openapi.json)
 
-A interface Swagger documenta integralmente esquemas de dados, parâmetros aceitos, exemplos de payloads, cabeçalhos de autenticação e códigos de resposta para todos os endpoints.
+A interface Swagger documenta integralmente esquemas de dados de entrada e saida, cabecalhos de autenticacao, codigos de status HTTP e exemplos de requisicao para os 37 caminhos mapeados.
 
 ---
 
-## 12. Testes Automatizados
+## 17. Testes Automatizados
 
-A API conta com suíte de testes de integração e conformidade REST executada através do runner nativo do Node.js (`node:test`), sem necessidade de dependências pesadas de terceiros.
+A API conta com uma suite de **47 testes automatizados de integracao e conformidade RESTful**, executados diretamente sobre o runner de testes nativo do Node.js (`node:test` e `node:assert/strict`), sem adicao de dependencias externas.
 
-### Execução dos Testes
+### Como Executar os Testes
 
-Certifique-se de que o servidor backend esteja em execução na porta 3000 e rode o comando na raiz do projeto:
+Com o servidor backend ativo na porta 3000:
 
 ```bash
 npm test
 ```
 
-Ou execute diretamente dentro da pasta `backend/`:
+Ou diretamente a partir da pasta `backend/`:
 
 ```bash
 npm --prefix backend run test
 ```
 
-### Quantidade Real de Testes e Cobertura
+### Distribuicao das 5 Suites de Teste
 
-A suíte contém **38 testes automatizados**, divididos em 4 blocos de cobertura:
+1. **Conformidade RESTful Canônica (`backend/tests/rest-conformance.test.js` - 9 testes):**
+   - Validacao de `GET /users/:id` com retorno 200 de perfil publico ou 404 para ID inexistente.
+   - Listagem (`GET /users/:userId/reviews`) e publicacao (`POST /users/:userId/reviews`) de avaliacoes.
+   - Checagem em tempo real de disponibilidade de username via `GET /usernames/availability`.
+   - Idempotencia na adicao de favoritos (`PUT /favorites/:productId`).
+   - Idempotencia na remocao de favoritos (`DELETE /favorites/:productId`).
+   - Verificacao de status favoritado (`GET /favorites/:productId`).
+   - Aceitacao e rejeicao de propostas via `PATCH /chat/messages/:id/status`.
+   - Modificacao de denuncias e protecao de remocao via `DELETE /reports/:id/product`.
+   - Validacao de payload no endpoint `POST /account/phone-reversals`.
 
-1. **Conformidade REST e Integridade da API (`api.test.js` - 14 testes):**
-   - Diagnóstico e integridade do endpoint `GET /health` (Status 200).
-   - Validação de cabeçalho `Cache-Control` no endpoint `GET /categories`.
-   - Consulta paginada e ordenação estruturada em `GET /products`.
-   - Busca fonética regional resiliente via extensão PostgreSQL `unaccent`.
-   - Bloqueio de autenticação incorreta com 401 Unauthorized em `POST /auth/login`.
-   - Rejeição de requisições privadas sem token JWT com 401 Unauthorized em `GET /auth/me`.
-   - Validação de payload via Zod com retorno 400 Bad Request detalhado.
-   - Validação de controle de acesso RBAC com retorno 403 Forbidden em `GET /reports`.
-   - Proteção de segurança anti-enumeração de usuários em `GET /auth/user/:id`.
-   - Proteção contra força bruta em códigos de verificação OTP com retorno 400/429.
-   - Tratamento de rotas inexistentes com 404 Not Found padronizado.
-   - Garantia de integridade financeira impedindo ordens não autorizadas com 401 em `POST /orders`.
-   - Fluxo completo de cadastro e login Google via `POST /auth/google`.
-   - Registro real de usuário válido com geração de hash e emissão de JWT em `POST /auth/register`.
+2. **Integridade da API e Seguranca (`backend/tests/api.test.js` - 14 testes):**
+   - Healthcheck operacional com 200 em `GET /health`.
+   - Presenca do cabecalho `Cache-Control` em `GET /categories`.
+   - Paginacao e ordenacao estruturada em `GET /products`.
+   - Busca fonetica regional via extensao PostgreSQL `unaccent`.
+   - Rejeicao de credenciais incorretas com 401 em `POST /auth/login`.
+   - Bloqueio de rotas privadas sem token com 401 em `GET /auth/me`.
+   - Validacao de esquemas Zod com 400 em `POST /auth/register`.
+   - Controle de acesso RBAC com 403 em `GET /reports` para perfil BUYER.
+   - Protecao contra enumeracao de compradores em `GET /users/:id`.
+   - Protecao contra forca bruta em codigos de verificacao OTP.
+   - Resposta uniforme 404 em rotas inexistentes.
+   - Bloqueio de pedidos nao autenticados com 401 em `POST /orders`.
+   - Autenticacao federada Google via `POST /auth/google`.
+   - Cadastro real com geracao de hash bcrypt e emissao de JWT em `POST /auth/register`.
 
-2. **Fluxo Seguro de Alteração de E-mail (`account-email.test.js` - 5 testes):**
-   - Rejeição de solicitação com senha incorreta (401).
-   - Bloqueio de solicitação informando o mesmo e-mail atual (400).
-   - Envio de código OTP de 6 dígitos mediante confirmação de senha (200).
-   - Rejeição de código incorreto com incremento de tentativas falhas (400).
-   - Validação de código correto, atualização atômica no banco e invalidação de pendências (200).
+3. **Fluxo Seguro de Alteracao de E-mail (`backend/tests/account-email.test.js` - 5 testes):**
+   - Rejeicao de solicitacao com senha incorreta (401).
+   - Bloqueio ao solicitar o mesmo e-mail atualmente ativo (400).
+   - Envio de codigo OTP de 6 digitos sob validacao de credenciais (200).
+   - Rejeicao de codigo incorreto com rastreamento de tentativas falhas (400).
+   - Confirmacao atômica de novo e-mail no banco e invalidacao de tokens pendentes (200).
 
-3. **Fluxo Seguro de WhatsApp / Celular (`account-phone.test.js` - 10 testes):**
-   - Rejeição com senha incorreta (401).
-   - Bloqueio preventivo sem vazamento de dados para número já em uso (409).
-   - Envio de código OTP criptografado (200).
-   - Rejeição de código incorreto e rastreamento de tentativas (400).
-   - Confirmação de código, ativação do status verificado e registro em banco (200).
-   - Bloqueio de novas solicitações dentro da janela de cooldown de 7 dias (403).
-   - Reversão emergencial de número através do token criptografado (200).
-   - Suporte a contas criadas via Google OAuth sem senha tradicional para envio de OTP (200).
-   - Desvinculação segura de telefone mediante confirmação de credenciais (200).
-   - Bloqueio de alteração indevida de telefone via endpoint geral de perfil (400).
+4. **Fluxo Seguro de Telefone / WhatsApp (`backend/tests/account-phone.test.js` - 10 testes):**
+   - Rejeicao com senha incorreta (401).
+   - Bloqueio preventivo sem vazamento de dados para numero em uso (409).
+   - Envio de codigo OTP criptografado (200).
+   - Bloqueio de codigo incorreto e controle de tentativas (400).
+   - Confirmacao de codigo, ativacao do status verificado e persistencia (200).
+   - Bloqueio de nova troca dentro da janela de cooldown de 7 dias (403).
+   - Reversao imediata de numero via token assinado (200).
+   - Suporte a contas originadas do Google OAuth para envio de OTP (200).
+   - Desvinculacao segura de telefone mediante confirmacao de credenciais (200).
+   - Bloqueio de alteracao indevida de telefone via endpoint geral de perfil (400).
 
-4. **Regra de Negócio de Cooldown de 30 Dias para Username (`username-cooldown.test.js` - 9 testes):**
-   - Alteração bem-sucedida de username e gravação de histórico de auditoria (200).
-   - Bloqueio imediato de segunda alteração com 403 Forbidden e dias restantes.
-   - Persistência do bloqueio após logout e novo login.
-   - Persistência do bloqueio em múltiplos dispositivos via consulta ao perfil.
-   - Bloqueio de bypass de username através do endpoint genérico `PUT /auth/profile` (400).
-   - Liberação automática de alteração após transcorridos os 30 dias.
-   - Tentativa com username duplicado retornando 409 sem consumir o prazo de alteração.
-   - Alteração de outros campos de perfil sem ativação indevida do cooldown de username.
-   - Precisão matemática do cálculo de dias restantes e data limite retornada pelo servidor.
+5. **Regra de Cooldown de 30 Dias para Username (`backend/tests/username-cooldown.test.js` - 9 testes):**
+   - Alteracao bem-sucedida de `@username` e gravacao em historico de auditoria (200).
+   - Bloqueio imediato de segunda tentativa com 403 e dias restantes.
+   - Persistencia do bloqueio apos encerramento e reinicio de sessao.
+   - Persistencia do bloqueio em multiplos dispositivos via consulta de perfil.
+   - Bloqueio de bypass de username via endpoint generico `PUT /auth/profile` (400).
+   - Liberacao automatica de alteracao apos transcorridos os 30 dias.
+   - Rejeicao com 409 em nome duplicado sem consumir o prazo de alteracao.
+   - Alteracao de outros campos de perfil sem ativacao indevida do cooldown.
+   - Precisao matematica no calculo de dias restantes e data limite.
 
-### Coleção Postman / Insomnia
+### Resultado Verificado da Suite
 
-O repositório inclui a coleção oficial pronta para importação no arquivo:
+```
+Suite de Testes do Fluxo de Alteracao Segura de E-mail (/account/email) (5/5)
+Suite de Testes do Fluxo Seguro de WhatsApp / Celular (/account/phone) (10/10)
+Suite de Testes de Conformidade REST e Integracao da API Itaim Vende (14/14)
+Suite de Testes de Conformidade REST Canonica (Novas Rotas e Metodos) (9/9)
+Suite de Testes da Regra de Cooldown de 30 Dias e Historico para Username (@) (9/9)
+
+Total de testes: 47
+Suites executadas: 5
+Aprovados: 47 (100%)
+Falhas: 0
+```
+
+---
+
+## 18. Colecao Postman
+
+A colecao oficial de endpoints para realizacao de testes manuais e integracoes encontra-se na raiz do projeto:
+
 [`itaim-vende.postman_collection.json`](itaim-vende.postman_collection.json)
 
-A coleção contempla requisições para os 12 recursos da API com exemplos de sucesso (`200`, `201`, `204`) e casos de erro controlados (`400`, `401`, `403`, `404`, `409`, `429`).
+### Pastas e Recursos Contemplados na Colecao
+
+- `01 - Diagnostico & Saude`: Testes do endpoint `GET /health`.
+- `02 - Autenticacao & Usuarios`: Registro, login, autenticacao Google, recuperacao de senha por OTP, consulta de perfil autenticado (`/auth/me`), perfil publico do vendedor (`/users/:id`), disponibilidade de username (`/usernames/availability`) e reversao de telefone (`/account/phone-reversals`).
+- `03 - Anuncios & Produtos`: Listagem paginada com busca fonetica unaccent, filtros compostos, publicacao de anuncios, consulta individual e exclusao.
+- `04 - Categorias`: Listagem de categorias com verificacao do cabecalho `Cache-Control`.
+- `05 - Chat & Negociacao`: Abertura de conversas, envio de mensagens e aceitacao/rejeicao de contrapropostas de valor (`PATCH /chat/messages/:id/status`).
+- `06 - Pedidos & Checkout`: Emissao de pedidos com calculo no servidor e listagem de ordens.
+- `07 - Favoritos`: Consulta de status, adicao idempotente (`PUT`), remocao idempotente (`DELETE`) e listagem de favoritos.
+- `08 - Avaliacoes (Reviews)`: Consulta e publicacao de avaliacoes vinculadas a vendedores (`/users/:userId/reviews`).
+- `09 - Denuncias & Moderacao`: Registro de denuncia, listagem no painel de moderadores e remocao cautelar de anuncios (`DELETE /reports/:id/product`).
+- `10 - Enderecos`: Listagem, cadastro e remocao de enderecos.
+- `11 - Notificacoes`: Listagem de avisos e marcacao de leitura em lote.
+
+### Como Utilizar
+
+1. Abra o Postman ou Insomnia.
+2. Selecione a opcao **Import** e escolha o arquivo `itaim-vende.postman_collection.json`.
+3. Configure a variavel de colecao `baseUrl` com o valor `http://localhost:3000/api/v1`.
+4. Ao efetuar login ou registro, o token retornado pode ser atribuido a variavel `token` para autenticar automaticamente as rotas privadas.
 
 ---
 
-## 13. Estrutura de Diretórios
+## 19. Declaracao de Uso de Inteligencia Artificial
 
-```
-marketplace-frontend/
-├── backend/
-│   ├── prisma/
-│   │   ├── schema.prisma              # Schema relacional de banco de dados
-│   │   └── seed.js                    # Script de povoamento inicial de dados
-│   ├── scripts/
-│   │   └── setup-unaccent.js          # Criação de extensões e índices Trigram no PostgreSQL
-│   ├── src/
-│   │   ├── config/
-│   │   │   ├── env.js                 # Validação estrita de variáveis de ambiente
-│   │   │   ├── prisma.js              # Instância singleton do Prisma Client
-│   │   │   └── supabase.js            # Cliente Supabase Storage
-│   │   ├── controllers/               # Controladores modulares organizados por domínio
-│   │   │   ├── account/               # account.controller.js
-│   │   │   ├── auth/                  # identity, profile, password controllers
-│   │   │   ├── category/              # category.controller.js
-│   │   │   ├── chat/                  # conversation.controller.js, message.controller.js
-│   │   │   ├── order/                 # order.controller.js
-│   │   │   ├── product/               # query, mutation, seller controllers
-│   │   │   ├── report/                # report.controller.js
-│   │   │   ├── review/                # review.controller.js
-│   │   │   └── upload/                # upload.controller.js
-│   │   ├── docs/
-│   │   │   ├── openapi.js             # Objeto de especificação OpenAPI 3.0.3
-│   │   │   └── openapi.json           # Arquivo exportado da especificação OpenAPI
-│   │   ├── middlewares/
-│   │   │   ├── auth.middleware.js     # Validador de token Bearer JWT e controle RBAC
-│   │   │   ├── error.middleware.js    # Interceptador global e padronizador de erros
-│   │   │   ├── rateLimiter.js         # Limitador de taxa contra abusos e força bruta
-│   │   │   └── validate.middleware.js # Validador de esquemas Zod
-│   │   ├── routes/                    # Roteadores Express divididos por recurso
-│   │   │   ├── account/
-│   │   │   ├── auth/
-│   │   │   ├── category/
-│   │   │   ├── chat/
-│   │   │   ├── order/
-│   │   │   ├── product/
-│   │   │   ├── report/
-│   │   │   ├── review/
-│   │   │   ├── upload/
-│   │   │   └── index.js               # Montagem do prefixo /api/v1
-│   │   ├── schemas/                   # Contratos de validação Zod por recurso
-│   │   ├── services/                  # Regras de negócio, transações e integrações
-│   │   │   ├── account/               # email, phone, username, preferences services
-│   │   │   ├── auth/                  # identity, profile, recovery services
-│   │   │   ├── category/
-│   │   │   ├── chat/
-│   │   │   ├── order/
-│   │   │   ├── product/
-│   │   │   ├── report/
-│   │   │   └── review/
-│   │   ├── utils/
-│   │   │   └── AppError.js            # Classe padronizada de exceção operacional
-│   │   └── server.js                  # Ponto de entrada HTTP e inicialização do Socket.IO
-│   ├── tests/                         # Suíte de testes automatizados com Node test runner
-│   │   ├── account-email.test.js
-│   │   ├── account-phone.test.js
-│   │   ├── api.test.js
-│   │   └── username-cooldown.test.js
-│   ├── .env.example                   # Modelo de configuração de ambiente
-│   └── package.json                   # Dependências e scripts do backend
-├── itaim-vende.postman_collection.json # Coleção Postman oficial da API
-├── package.json                       # Scripts globais do monorepo
-└── README.md                          # Documentação técnica oficial da aplicação
-```
+Ferramentas de Inteligencia Artificial Generativa baseadas em modelos de linguagem (LLMs) foram empregadas como instrumento de apoio ao desenvolvimento, revisao, documentacao e elaboracao de testes deste projeto.
 
----
+### Atividades em que a IA foi Utilizada como Apoio
 
-## 14. Uso de Inteligência Artificial
+1. **Refatoracao e Modularizacao Arquitetural:** Auxilio no desacoplamento de modulos monoliticos em camadas especializadas (*Controllers, Services, Middlewares e Schemas*), reduzindo acoplamento e reforcando o principio de responsabilidade unica.
+2. **Engenharia de Seguranca Defensiva:** Identificacao de vetores de vulnerabilidade em rotas HTTP, estruturacao de limitadores de taxa adaptativos (*rate limiting*) e validacao estrita de entradas contra injecao de parametros e manipulacao client-side de precos.
+3. **Pipeline de Imagens:** Parametrizacao dos comandos de manipulacao da biblioteca Sharp, aplicando auto-rotacao com base em flags EXIF de smartphones e compressao em WebP sem perda perceptual de qualidade.
+4. **Padronizacao de Contratos e Documentacao:** Apoio na estruturacao da especificacao formal OpenAPI 3.0.3 e consolidacao dos casos de teste para a suite de testes automatizados com o Node Test Runner nativo.
 
-Em consonância com as práticas contemporâneas de engenharia de software transparente, declara-se que ferramentas de Inteligência Artificial Generativa baseadas em modelos de linguagem (LLMs) foram empregadas como instrumento de suporte técnico durante fases específicas do desenvolvimento deste projeto.
-
-### Finalidades Específicas do Uso
-
-1. **Refatoração e Modularização Arquitetural:** Auxílio na decomposição de módulos legados em camadas especializadas (*Controllers, Services, Middlewares e Schemas*), promovendo coesão e eliminando acoplamentos indevidos.
-2. **Engenharia de Segurança Defensiva:** Identificação de vetores de ataque comuns em rotas HTTP, implementação de rate limiting adaptativo em fluxos de autenticação e validação rigorosa de entradas sintáticas contra injeção e travessia de diretórios.
-3. **Pipeline de Imagens e Tratamento de Mídia:** Suporte na parametrização dos pipelines de conversão de imagens da biblioteca `sharp`, garantindo rotação automática via flags EXIF de smartphones e compactação em WebP sem perda perceptual de qualidade.
-4. **Padronização de Contratos e Documentação:** Auxílio na estruturação formal dos schemas de dados no padrão OpenAPI 3.0.3 e consolidação dos casos de teste para a suíte de integração e conformidade REST.
-
-Toda a lógica de negócios, decisões de arquitetura de dados, modelos relacionais e código-fonte foram analisados, validados, testados e homologados diretamente pelos desenvolvedores responsáveis pelo projeto.
-Ou execute diretamente dentro da pasta `backend/`:
-
-```bash
-npm --prefix backend run test
-```
-
-### Quantidade Real de Testes e Cobertura
-
-A suíte contém **38 testes automatizados**, divididos em 4 blocos de cobertura:
-
-1. **Conformidade REST e Integridade da API (`api.test.js` - 14 testes):**
-   - Diagnóstico e integridade do endpoint `GET /health` (Status 200).
-   - Validação de cabeçalho `Cache-Control` no endpoint `GET /categories`.
-   - Consulta paginada e ordenação estruturada em `GET /products`.
-   - Busca fonética regional resiliente via extensão PostgreSQL `unaccent`.
-   - Bloqueio de autenticação incorreta com 401 Unauthorized em `POST /auth/login`.
-   - Rejeição de requisições privadas sem token JWT com 401 Unauthorized em `GET /auth/me`.
-   - Validação de payload via Zod com retorno 400 Bad Request detalhado.
-   - Validação de controle de acesso RBAC com retorno 403 Forbidden em `GET /reports`.
-   - Proteção de segurança anti-enumeração de usuários em `GET /auth/user/:id`.
-   - Proteção contra força bruta em códigos de verificação OTP com retorno 400/429.
-   - Tratamento de rotas inexistentes com 404 Not Found padronizado.
-   - Garantia de integridade financeira impedindo ordens não autorizadas com 401 em `POST /orders`.
-   - Fluxo completo de cadastro e login Google via `POST /auth/google`.
-   - Registro real de usuário válido com geração de hash e emissão de JWT em `POST /auth/register`.
-
-2. **Fluxo Seguro de Alteração de E-mail (`account-email.test.js` - 5 testes):**
-   - Rejeição de solicitação com senha incorreta (401).
-   - Bloqueio de solicitação informando o mesmo e-mail atual (400).
-   - Envio de código OTP de 6 dígitos mediante confirmação de senha (200).
-   - Rejeição de código incorreto com incremento de tentativas falhas (400).
-   - Validação de código correto, atualização atômica no banco e invalidação de pendências (200).
-
-3. **Fluxo Seguro de WhatsApp / Celular (`account-phone.test.js` - 10 testes):**
-   - Rejeição com senha incorreta (401).
-   - Bloqueio preventivo sem vazamento de dados para número já em uso (409).
-   - Envio de código OTP criptografado (200).
-   - Rejeição de código incorreto e rastreamento de tentativas (400).
-   - Confirmação de código, ativação do status verificado e registro em banco (200).
-   - Bloqueio de novas solicitações dentro da janela de cooldown de 7 dias (403).
-   - Reversão emergencial de número através do token criptografado (200).
-   - Suporte a contas criadas via Google OAuth sem senha tradicional para envio de OTP (200).
-   - Desvinculação segura de telefone mediante confirmação de credenciais (200).
-   - Bloqueio de alteração indevida de telefone via endpoint geral de perfil (400).
-
-4. **Regra de Negócio de Cooldown de 30 Dias para Username (`username-cooldown.test.js` - 9 testes):**
-   - Alteração bem-sucedida de username e gravação de histórico de auditoria (200).
-   - Bloqueio imediato de segunda alteração com 403 Forbidden e dias restantes.
-   - Persistência do bloqueio após logout e novo login.
-   - Persistência do bloqueio em múltiplos dispositivos via consulta ao perfil.
-   - Bloqueio de bypass de username através do endpoint genérico `PUT /auth/profile` (400).
-   - Liberação automática de alteração após transcorridos os 30 dias.
-   - Tentativa com username duplicado retornando 409 sem consumir o prazo de alteração.
-   - Alteração de outros campos de perfil sem ativação indevida do cooldown de username.
-   - Precisão matemática do cálculo de dias restantes e data limite retornada pelo servidor.
-
-### Coleção Postman / Insomnia
-
-O repositório inclui a coleção oficial pronta para importação no arquivo:
-[`itaim-vende.postman_collection.json`](itaim-vende.postman_collection.json)
-
-A coleção contempla requisições para os 12 recursos da API com exemplos de sucesso (`200`, `201`, `204`) e casos de erro controlados (`400`, `401`, `403`, `404`, `409`, `429`).
-
----
-
-## 13. Estrutura de Diretórios
-
-```
-marketplace-frontend/
-├── backend/
-│   ├── prisma/
-│   │   ├── schema.prisma              # Schema relacional de banco de dados
-│   │   └── seed.js                    # Script de povoamento inicial de dados
-│   ├── scripts/
-│   │   └── setup-unaccent.js          # Criação de extensões e índices Trigram no PostgreSQL
-│   ├── src/
-│   │   ├── config/
-│   │   │   ├── env.js                 # Validação estrita de variáveis de ambiente
-│   │   │   ├── prisma.js              # Instância singleton do Prisma Client
-│   │   │   └── supabase.js            # Cliente Supabase Storage
-│   │   ├── controllers/               # Controladores modulares organizados por domínio
-│   │   │   ├── account/               # account.controller.js
-│   │   │   ├── auth/                  # identity, profile, password controllers
-│   │   │   ├── category/              # category.controller.js
-│   │   │   ├── chat/                  # conversation.controller.js, message.controller.js
-│   │   │   ├── order/                 # order.controller.js
-│   │   │   ├── product/               # query, mutation, seller controllers
-│   │   │   ├── report/                # report.controller.js
-│   │   │   ├── review/                # review.controller.js
-│   │   │   └── upload/                # upload.controller.js
-│   │   ├── docs/
-│   │   │   ├── openapi.js             # Objeto de especificação OpenAPI 3.0.3
-│   │   │   └── openapi.json           # Arquivo exportado da especificação OpenAPI
-│   │   ├── middlewares/
-│   │   │   ├── auth.middleware.js     # Validador de token Bearer JWT e controle RBAC
-│   │   │   ├── error.middleware.js    # Interceptador global e padronizador de erros
-│   │   │   ├── rateLimiter.js         # Limitador de taxa contra abusos e força bruta
-│   │   │   └── validate.middleware.js # Validador de esquemas Zod
-│   │   ├── routes/                    # Roteadores Express divididos por recurso
-│   │   │   ├── account/
-│   │   │   ├── auth/
-│   │   │   ├── category/
-│   │   │   ├── chat/
-│   │   │   ├── order/
-│   │   │   ├── product/
-│   │   │   ├── report/
-│   │   │   ├── review/
-│   │   │   ├── upload/
-│   │   │   └── index.js               # Montagem do prefixo /api/v1
-│   │   ├── schemas/                   # Contratos de validação Zod por recurso
-│   │   ├── services/                  # Regras de negócio, transações e integrações
-│   │   │   ├── account/               # email, phone, username, preferences services
-│   │   │   ├── auth/                  # identity, profile, recovery services
-│   │   │   ├── category/
-│   │   │   ├── chat/
-│   │   │   ├── order/
-│   │   │   ├── product/
-│   │   │   ├── report/
-│   │   │   └── review/
-│   │   ├── utils/
-│   │   │   └── AppError.js            # Classe padronizada de exceção operacional
-│   │   └── server.js                  # Ponto de entrada HTTP e inicialização do Socket.IO
-│   ├── tests/                         # Suíte de testes automatizados com Node test runner
-│   │   ├── account-email.test.js
-│   │   ├── account-phone.test.js
-│   │   ├── api.test.js
-│   │   └── username-cooldown.test.js
-│   ├── .env.example                   # Modelo de configuração de ambiente
-│   └── package.json                   # Dependências e scripts do backend
-├── itaim-vende.postman_collection.json # Coleção Postman oficial da API
-├── package.json                       # Scripts globais do monorepo
-└── README.md                          # Documentação técnica oficial da aplicação
-```
-
----
-
-## 14. Uso de Inteligência Artificial
-
-Em consonância com as práticas contemporâneas de engenharia de software transparente, declara-se que ferramentas de Inteligência Artificial Generativa baseadas em modelos de linguagem (LLMs) foram empregadas como instrumento de suporte técnico durante fases específicas do desenvolvimento deste projeto.
-
-### Finalidades Específicas do Uso
-
-1. **Refatoração e Modularização Arquitetural:** Auxílio na decomposição de módulos legados em camadas especializadas (*Controllers, Services, Middlewares e Schemas*), promovendo coesão e eliminando acoplamentos indevidos.
-2. **Engenharia de Segurança Defensiva:** Identificação de vetores de ataque comuns em rotas HTTP, implementação de rate limiting adaptativo em fluxos de autenticação e validação rigorosa de entradas sintáticas contra injeção e travessia de diretórios.
-3. **Pipeline de Imagens e Tratamento de Mídia:** Suporte na parametrização dos pipelines de conversão de imagens da biblioteca `sharp`, garantindo rotação automática via flags EXIF de smartphones e compactação em WebP sem perda perceptual de qualidade.
-4. **Padronização de Contratos e Documentação:** Auxílio na estruturação formal dos schemas de dados no padrão OpenAPI 3.0.3 e consolidação dos casos de teste para a suíte de integração e conformidade REST.
-
-Toda a lógica de negócios, decisões de arquitetura de dados, modelos relacionais e código-fonte foram analisados, validados, testados e homologados diretamente pelos desenvolvedores responsáveis pelo projeto.
+Todas as regras de negocio, decisoes de modelagem de dados, algoritmos de calculo e codigos-fonte foram implementados, testados, validados e homologados diretamente pelos desenvolvedores responsaveis pela aplicacao.

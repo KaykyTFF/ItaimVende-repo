@@ -163,7 +163,7 @@
          * Consulta dados públicos de um usuário por ID
          */
         async obterUsuario(id) {
-            return getCore().requisicao(`/auth/user/${encodeURIComponent(id)}`, {
+            return getCore().requisicao(`/users/${encodeURIComponent(id)}`, {
                 method: 'GET',
                 headers: getCore().obterHeaders(true)
             });
@@ -217,7 +217,7 @@
          */
         async verificarDisponibilidadeUsername(username) {
             const clean = encodeURIComponent((username || '').trim().toLowerCase());
-            return getCore().requisicao('/account/username/check?username=' + clean, {
+            return getCore().requisicao('/usernames/availability?username=' + clean, {
                 method: 'GET',
                 headers: getCore().obterHeaders(true)
             });
@@ -343,7 +343,7 @@
           * Reverte a alteração de telefone via link de segurança "Não fui eu"
           */
         async reverterAlteracaoTelefone(token) {
-            return getCore().requisicao('/account/phone/revert', {
+            return getCore().requisicao('/account/phone-reversals', {
                 method: 'POST',
                 headers: getCore().obterHeaders(false),
                 body: JSON.stringify({ token })

@@ -88,9 +88,10 @@
          * Aceita uma proposta de preço recebida
          */
         async aceitarProposta(messageId) {
-            return getCore().requisicao(`/chat/messages/${encodeURIComponent(messageId)}/accept`, {
+            return getCore().requisicao(`/chat/messages/${encodeURIComponent(messageId)}/status`, {
                 method: 'PATCH',
-                headers: getCore().obterHeaders(true)
+                headers: getCore().obterHeaders(true),
+                body: JSON.stringify({ status: 'ACCEPTED' })
             });
         },
 
@@ -98,9 +99,10 @@
          * Recusa uma proposta de preço recebida
          */
         async recusarProposta(messageId) {
-            return getCore().requisicao(`/chat/messages/${encodeURIComponent(messageId)}/reject`, {
+            return getCore().requisicao(`/chat/messages/${encodeURIComponent(messageId)}/status`, {
                 method: 'PATCH',
-                headers: getCore().obterHeaders(true)
+                headers: getCore().obterHeaders(true),
+                body: JSON.stringify({ status: 'REJECTED' })
             });
         },
 

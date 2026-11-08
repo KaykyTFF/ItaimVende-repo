@@ -74,7 +74,9 @@
 }
 
 .vendedor-select-ordem:focus {
-    border-color: #44BD32;
+    border-color: #38A129;
+    box-shadow: none;
+    outline: none;
 }
 
 /* Grade de Produtos */
