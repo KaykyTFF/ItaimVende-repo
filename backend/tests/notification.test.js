@@ -29,7 +29,7 @@ describe('Suite de Testes Automatizados - Sistema de Notificações Itaim Vende'
         data: {
           name: 'Usuario Notif A',
           email: 'notif_test_a@itaimvende.local',
-          passwordHash: 'hash_placeholder',
+          password: 'hash_placeholder',
           role: 'BUYER',
         },
       });
@@ -47,7 +47,7 @@ describe('Suite de Testes Automatizados - Sistema de Notificações Itaim Vende'
         data: {
           name: 'Usuario Notif B',
           email: 'notif_test_b@itaimvende.local',
-          passwordHash: 'hash_placeholder',
+          password: 'hash_placeholder',
           role: 'SELLER',
         },
       });
