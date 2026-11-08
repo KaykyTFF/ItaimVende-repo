@@ -498,6 +498,158 @@ export const openapiSpec = {
       },
     },
 
+    // -------------------------------------------------------------------------
+    // USUÁRIOS & NOMES DE USUÁRIO (CANÔNICA REST)
+    // -------------------------------------------------------------------------
+    '/account/phone-reversals': {
+      post: {
+        tags: ['Autenticação & Contas'],
+        summary: 'Reverte número de telefone para o anterior utilizando rollback token de segurança',
+        description: 'Permite ao proprietário legítimo desfazer troca não autorizada de número telefônico.',
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                required: ['token'],
+                properties: {
+                  token: { type: 'string', example: 'tok_rev_abc123xyz' },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: 'Telefone revertido com sucesso.',
+            content: {
+              'application/json': {
+                example: { success: true, message: 'Número de telefone restaurado com sucesso.' },
+              },
+            },
+          },
+          400: { description: 'Token de reversão inválido ou expirado.' },
+          404: { description: 'Solicitação ou registro de reversão não encontrado.' },
+        },
+      },
+    },
+
+    '/users/{id}': {
+      get: {
+        tags: ['Usuários'],
+        summary: 'Consulta perfil público de vendedor por ID',
+        description: 'Exibe dados públicos do vendedor (nome, cidade, avaliações, anúncios). Protegido contra enumeração de compradores e e-mails.',
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            description: 'ID do usuário vendedor',
+            schema: { type: 'string' },
+          },
+        ],
+        responses: {
+          200: {
+            description: 'Perfil público retornado.',
+            content: { 'application/json': { schema: { $ref: '#/components/schemas/User' } } },
+          },
+          404: {
+            description: 'Vendedor não encontrado.',
+            content: { 'application/json': { schema: { $ref: '#/components/schemas/StandardError' } } },
+          },
+        },
+      },
+    },
+
+    '/users/{userId}/reviews': {
+      get: {
+        tags: ['Usuários', 'Avaliações (Reviews)'],
+        summary: 'Lista avaliações e média de estrelas de um vendedor',
+        parameters: [{ name: 'userId', in: 'path', required: true, schema: { type: 'string' } }],
+        responses: {
+          200: {
+            description: 'Média de avaliação e comentários retornados.',
+            content: {
+              'application/json': {
+                example: {
+                  success: true,
+                  averageRating: 4.8,
+                  totalReviews: 12,
+                  reviews: [
+                    {
+                      id: 'rev_1',
+                      rating: 5,
+                      comment: 'Vendedor atencioso e confiável.',
+                      author: { name: 'Maria Santos' },
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        },
+      },
+      post: {
+        tags: ['Usuários', 'Avaliações (Reviews)'],
+        summary: 'Envia avaliação e nota para um vendedor',
+        security: [{ bearerAuth: [] }],
+        parameters: [{ name: 'userId', in: 'path', required: true, schema: { type: 'string' } }],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                required: ['rating'],
+                properties: {
+                  rating: { type: 'integer', minimum: 1, maximum: 5, example: 5 },
+                  comment: { type: 'string', example: 'Excelente produto!' },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          201: { description: 'Avaliação registrada com sucesso.' },
+          400: { description: 'Dados inválidos ou autoavaliação.' },
+          401: { description: 'Não autenticado.' },
+        },
+      },
+    },
+
+    '/usernames/availability': {
+      get: {
+        tags: ['Autenticação & Contas'],
+        summary: 'Verifica disponibilidade e status de cooldown de um nome de usuário (@)',
+        parameters: [
+          {
+            name: 'username',
+            in: 'query',
+            required: true,
+            description: 'Nome de usuário a consultar',
+            schema: { type: 'string' },
+          },
+        ],
+        responses: {
+          200: {
+            description: 'Resultado da disponibilidade retornado.',
+            content: {
+              'application/json': {
+                example: {
+                  success: true,
+                  available: true,
+                  valid: true,
+                  canChangeUsername: true,
+                  message: 'Nome de usuário disponível!',
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+
     '/auth/user/{id}': {
       get: {
         tags: ['Autenticação & Contas'],
@@ -883,6 +1035,39 @@ export const openapiSpec = {
       },
     },
 
+    '/chat/messages/{id}/status': {
+      patch: {
+        tags: ['Chat & Negociação'],
+        summary: 'Atualiza o status de proposta de negociação (aceitar ou recusar)',
+        security: [{ bearerAuth: [] }],
+        parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string' } }],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                required: ['status'],
+                properties: {
+                  status: { type: 'string', enum: ['ACCEPTED', 'REJECTED'], example: 'ACCEPTED' },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: 'Status da proposta atualizado com sucesso.',
+            content: { 'application/json': { schema: { $ref: '#/components/schemas/Message' } } },
+          },
+          400: { description: 'Status inválido ou mensagem não é do tipo PROPOSAL.' },
+          401: { description: 'Não autenticado.' },
+          403: { description: 'Apenas o destinatário da proposta pode alterar seu status.' },
+          404: { description: 'Mensagem não encontrada.' },
+        },
+      },
+    },
+
     '/chat/messages/{id}/accept': {
       patch: {
         tags: ['Chat & Negociação'],
@@ -1012,6 +1197,62 @@ export const openapiSpec = {
             },
           },
           401: { description: 'Não autenticado.' },
+        },
+      },
+    },
+
+    '/favorites/{productId}': {
+      get: {
+        tags: ['Favoritos'],
+        summary: 'Consulta se produto específico está favoritado pelo usuário autenticado',
+        security: [{ bearerAuth: [] }],
+        parameters: [{ name: 'productId', in: 'path', required: true, schema: { type: 'string' } }],
+        responses: {
+          200: {
+            description: 'Status de favorito retornado com sucesso.',
+            content: {
+              'application/json': {
+                example: { success: true, favorited: true, isFavorited: true },
+              },
+            },
+          },
+          401: { description: 'Não autenticado.' },
+        },
+      },
+      put: {
+        tags: ['Favoritos'],
+        summary: 'Adiciona produto aos favoritos de forma idempotente',
+        security: [{ bearerAuth: [] }],
+        parameters: [{ name: 'productId', in: 'path', required: true, schema: { type: 'string' } }],
+        responses: {
+          200: {
+            description: 'Produto adicionado aos favoritos com sucesso.',
+            content: {
+              'application/json': {
+                example: { success: true, favorited: true, message: 'Produto adicionado aos favoritos.' },
+              },
+            },
+          },
+          401: { description: 'Não autenticado.' },
+          404: { description: 'Produto não encontrado.' },
+        },
+      },
+      delete: {
+        tags: ['Favoritos'],
+        summary: 'Remove produto dos favoritos de forma idempotente',
+        security: [{ bearerAuth: [] }],
+        parameters: [{ name: 'productId', in: 'path', required: true, schema: { type: 'string' } }],
+        responses: {
+          200: {
+            description: 'Produto removido dos favoritos com sucesso.',
+            content: {
+              'application/json': {
+                example: { success: true, favorited: false, message: 'Produto removido dos favoritos.' },
+              },
+            },
+          },
+          401: { description: 'Não autenticado.' },
+          404: { description: 'Produto não encontrado.' },
         },
       },
     },
@@ -1173,6 +1414,40 @@ export const openapiSpec = {
           },
           401: { description: 'Não autenticado.' },
           403: { description: 'Acesso restrito a Moderadores e Administradores.' },
+        },
+      },
+    },
+
+    '/reports/{id}/product': {
+      delete: {
+        tags: ['Denúncias & Moderação'],
+        summary: 'Ação canônica de moderação: Remove produto denunciado e purga mídias',
+        security: [{ bearerAuth: [] }],
+        parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string' } }],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  reasonNote: { type: 'string', example: 'Produto comprovadamente falso.' },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: 'Anúncio removido e mídias deletadas com sucesso.',
+            content: {
+              'application/json': {
+                example: { success: true, message: 'Anúncio removido e mídias deletadas com sucesso.' },
+              },
+            },
+          },
+          401: { description: 'Não autenticado.' },
+          403: { description: 'Apenas moderadores autorizados.' },
+          404: { description: 'Denúncia ou anúncio não encontrado.' },
         },
       },
     },
