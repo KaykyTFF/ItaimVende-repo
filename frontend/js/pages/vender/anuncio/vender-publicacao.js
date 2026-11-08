@@ -18,6 +18,8 @@
         PADROES_SUSPEITOS
     } = window.ItaimVenderEstado;
 
+    let inicializado = false;
+
     let previewFotoCapa = null;
     let previewFotosMiniaturas = null;
     let previewTitulo = null;
@@ -76,7 +78,7 @@
         }
 
         // Categoria
-        const labelCategoria = document.getElementById('label-cat-selecionada');
+        const labelCategoria = document.getElementById('label-categoria-texto') || document.getElementById('label-cat-selecionada');
         let catTexto = 'GERAL';
         if (labelCategoria && labelCategoria.textContent.trim().toUpperCase() !== 'SELECIONAR CATEGORIA') {
             catTexto = labelCategoria.textContent.trim();
@@ -86,7 +88,7 @@
         }
 
         // Condição
-        const labelCondicao = document.getElementById('label-cond-selecionada');
+        const labelCondicao = document.getElementById('label-condicao-texto') || document.getElementById('label-cond-selecionada');
         let condTexto = 'USADO';
         if (labelCondicao && labelCondicao.textContent.trim().toUpperCase() !== 'SELECIONAR CONDIÇÃO') {
             condTexto = labelCondicao.textContent.trim();
@@ -102,7 +104,7 @@
         }
 
         // Descrição
-        const textareaDesc = document.getElementById('textarea-desc');
+        const textareaDesc = document.getElementById('textarea-descricao') || document.getElementById('textarea-desc');
         if (previewDescricao) {
             const desc = textareaDesc?.value.trim();
             previewDescricao.textContent = desc || 'Nenhuma descrição adicionada.';
@@ -133,9 +135,9 @@
 
         const inputTitulo = document.getElementById('input-titulo');
         const inputPreco = document.getElementById('input-preco');
-        const labelCategoria = document.getElementById('label-cat-selecionada');
-        const labelCondicao = document.getElementById('label-cond-selecionada');
-        const textareaDesc = document.getElementById('textarea-desc');
+        const labelCategoria = document.getElementById('label-categoria-texto') || document.getElementById('label-cat-selecionada');
+        const labelCondicao = document.getElementById('label-condicao-texto') || document.getElementById('label-cond-selecionada');
+        const textareaDesc = document.getElementById('textarea-descricao') || document.getElementById('textarea-desc');
         const textoLocalizacao = document.getElementById('texto-localizacao');
 
         const titulo = inputTitulo?.value.trim();
@@ -405,12 +407,12 @@
         // Preenche formulário
         const inputTitulo = document.getElementById('input-titulo');
         const inputPreco = document.getElementById('input-preco');
-        const textareaDesc = document.getElementById('textarea-desc');
-        const contadorCaracteres = document.getElementById('contador-caracteres');
-        const labelCategoria = document.getElementById('label-cat-selecionada');
-        const menuCategoriaOpcoes = document.getElementById('menu-cat-opcoes');
-        const labelCondicao = document.getElementById('label-cond-selecionada');
-        const menuCondicaoOpcoes = document.getElementById('menu-cond-opcoes');
+        const textareaDesc = document.getElementById('textarea-descricao') || document.getElementById('textarea-desc');
+        const contadorCaracteres = document.getElementById('contador-desc') || document.getElementById('contador-caracteres');
+        const labelCategoria = document.getElementById('label-categoria-texto') || document.getElementById('label-cat-selecionada');
+        const menuCategoriaOpcoes = document.getElementById('menu-categoria-opcoes') || document.getElementById('menu-cat-opcoes');
+        const labelCondicao = document.getElementById('label-condicao-texto') || document.getElementById('label-cond-selecionada');
+        const menuCondicaoOpcoes = document.getElementById('menu-condicao-opcoes') || document.getElementById('menu-cond-opcoes');
         const textoLocalizacao = document.getElementById('texto-localizacao');
         const selectCidade = document.getElementById('select-cidade-modal');
         const inputBairro = document.getElementById('input-bairro-modal') || document.getElementById('input-cep-modal');
@@ -422,7 +424,8 @@
         if (textareaDesc) {
             textareaDesc.value = produto.descricao || produto.description || '';
             if (contadorCaracteres) {
-                contadorCaracteres.textContent = `${textareaDesc.value.length}/500 caracteres`;
+                const maxChars = parseInt(textareaDesc.getAttribute('maxlength'), 10) || 1000;
+                contadorCaracteres.textContent = `${textareaDesc.value.length} / ${maxChars}`;
             }
         }
 
@@ -440,9 +443,10 @@
         if (labelCategoria) {
             labelCategoria.textContent = catNome;
             if (menuCategoriaOpcoes) {
-                menuCategoriaOpcoes.querySelectorAll('.dropdown-item').forEach(item => {
+                menuCategoriaOpcoes.querySelectorAll('.item-opcao-dropdown, .dropdown-item').forEach(item => {
                     const val = item.textContent.trim().toLowerCase();
-                    const match = val === catNome.toLowerCase() || catNome.toLowerCase().includes(val) || val.includes(catNome.toLowerCase());
+                    const dataVal = (item.getAttribute('data-valor') || '').trim().toLowerCase();
+                    const match = val === catNome.toLowerCase() || dataVal === catNome.toLowerCase() || catNome.toLowerCase().includes(val) || val.includes(catNome.toLowerCase());
                     item.classList.toggle('selecionado', match);
                 });
             }
@@ -452,9 +456,10 @@
         if (labelCondicao) {
             labelCondicao.textContent = condNome;
             if (menuCondicaoOpcoes) {
-                menuCondicaoOpcoes.querySelectorAll('.dropdown-item').forEach(item => {
+                menuCondicaoOpcoes.querySelectorAll('.item-opcao-dropdown, .dropdown-item').forEach(item => {
                     const val = item.textContent.trim().toLowerCase();
-                    const match = val === condNome.toLowerCase() || condNome.toLowerCase().includes(val);
+                    const dataVal = (item.getAttribute('data-valor') || '').trim().toLowerCase();
+                    const match = val === condNome.toLowerCase() || dataVal === condNome.toLowerCase() || condNome.toLowerCase().includes(val);
                     item.classList.toggle('selecionado', match);
                 });
             }
@@ -480,6 +485,9 @@
     }
 
     function inicializar() {
+        if (inicializado) return;
+        inicializado = true;
+
         previewFotoCapa = document.getElementById('preview-foto-capa');
         previewFotosMiniaturas = document.getElementById('preview-fotos-miniaturas');
         previewTitulo = document.getElementById('preview-titulo');
@@ -510,11 +518,31 @@
         btnCriarOutro?.addEventListener('click', () => {
             const inputTitulo = document.getElementById('input-titulo');
             const inputPreco = document.getElementById('input-preco');
-            const textareaDesc = document.getElementById('textarea-desc');
+            const textareaDesc = document.getElementById('textarea-descricao') || document.getElementById('textarea-desc');
+            const contadorCaracteres = document.getElementById('contador-desc') || document.getElementById('contador-caracteres');
+            const labelCategoria = document.getElementById('label-categoria-texto') || document.getElementById('label-cat-selecionada');
+            const labelCondicao = document.getElementById('label-condicao-texto') || document.getElementById('label-cond-selecionada');
+            const menuCategoriaOpcoes = document.getElementById('menu-categoria-opcoes') || document.getElementById('menu-cat-opcoes');
+            const menuCondicaoOpcoes = document.getElementById('menu-condicao-opcoes') || document.getElementById('menu-cond-opcoes');
 
             if (inputTitulo) inputTitulo.value = '';
             if (inputPreco) inputPreco.value = '';
-            if (textareaDesc) textareaDesc.value = '';
+            if (textareaDesc) {
+                textareaDesc.value = '';
+                if (contadorCaracteres) {
+                    const maxChars = parseInt(textareaDesc.getAttribute('maxlength'), 10) || 1000;
+                    contadorCaracteres.textContent = `0 / ${maxChars}`;
+                }
+            }
+
+            if (labelCategoria) labelCategoria.textContent = 'Selecionar Categoria';
+            if (labelCondicao) labelCondicao.textContent = 'Selecionar Condição';
+            if (menuCategoriaOpcoes) {
+                menuCategoriaOpcoes.querySelectorAll('.item-opcao-dropdown, .dropdown-item').forEach(i => i.classList.remove('selecionado'));
+            }
+            if (menuCondicaoOpcoes) {
+                menuCondicaoOpcoes.querySelectorAll('.item-opcao-dropdown, .dropdown-item').forEach(i => i.classList.remove('selecionado'));
+            }
 
             getEstado().fotosLista = [];
             window.ItaimVenderFotos.renderizarGaleriaFotos();
