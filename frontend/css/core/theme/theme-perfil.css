@@ -181,6 +181,13 @@ body[data-theme="dark"].pagina-vendedor {
     border: 1px solid #2C3946 !important;
 }
 
+[data-theme="dark"] .vendedor-select-ordem:focus,
+[data-theme="dark"] #select-ordem-vendedor:focus {
+    border-color: #38A129 !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
 /* Seções Principais (Anúncios, Avaliações, Dados Pessoais e Dicas de Segurança) */
 [data-theme="dark"] .perfil-secao-card,
 [data-theme="dark"] .card-secao-vendedor {
@@ -410,6 +417,8 @@ body[data-theme="dark"].pagina-vendedor {
 
 /* Botões do Vendedor e Avaliação */
 [data-theme="dark"] .btn-vendedor-wpp,
+[data-theme="dark"] .btn-banner-wpp,
+[data-theme="dark"] #btn-vendedor-wpp,
 [data-theme="dark"] #btn-vendedor-whatsapp {
     background-color: #38A129 !important;
     color: #FFFFFF !important;
@@ -417,6 +426,8 @@ body[data-theme="dark"].pagina-vendedor {
 }
 
 [data-theme="dark"] .btn-vendedor-wpp:hover,
+[data-theme="dark"] .btn-banner-wpp:hover,
+[data-theme="dark"] #btn-vendedor-wpp:hover,
 [data-theme="dark"] #btn-vendedor-whatsapp:hover {
     background-color: #2E8B22 !important;
     box-shadow: none !important;
@@ -446,4 +457,10 @@ body[data-theme="dark"].pagina-vendedor {
     background: #38A129 !important;
     border-color: #1F2831 !important;
     box-shadow: none !important;
+}
+
+/* Ícone de Dicas de Segurança Verde */
+.card-secao-vendedor h3 svg,
+[data-theme="dark"] .card-secao-vendedor h3 svg {
+    stroke: #38A129 !important;
 }

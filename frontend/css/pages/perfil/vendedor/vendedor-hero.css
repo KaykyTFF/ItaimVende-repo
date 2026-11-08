@@ -179,7 +179,9 @@
     padding-top: 14px;
 }
 
-.btn-vendedor-wpp {
+.btn-vendedor-wpp,
+.btn-banner-wpp,
+#btn-vendedor-wpp {
     background: #38A129;
     color: #FFFFFF;
     font-weight: 700;
@@ -197,7 +199,9 @@
     cursor: pointer;
 }
 
-.btn-vendedor-wpp:hover {
+.btn-vendedor-wpp:hover,
+.btn-banner-wpp:hover,
+#btn-vendedor-wpp:hover {
     background: #2E8B22;
     transform: translateY(-2px);
     box-shadow: none;
