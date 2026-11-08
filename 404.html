@@ -116,19 +116,19 @@
         }
 
         .pagina-404-container {
-            max-width: 1140px;
+            max-width: 1040px;
             width: 100%;
             margin: 0 auto;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            gap: 48px;
+            justify-content: center;
+            gap: 40px;
         }
 
         /* Coluna Esquerda: Textos e Botões */
         .pagina-404-conteudo {
-            flex: 1.1;
-            max-width: 540px;
+            flex: 1;
+            max-width: 500px;
         }
 
         .codigo-404 {
@@ -139,6 +139,7 @@
             letter-spacing: -3px;
             margin: 0 0 16px 0;
             user-select: none;
+            text-align: center;
         }
 
         .titulo-404 {
@@ -218,7 +219,7 @@
         /* Coluna Direita: Mascote Tatu com Mapa */
         .pagina-404-ilustracao {
             flex: 1;
-            max-width: 480px;
+            max-width: 460px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -231,7 +232,7 @@
             width: 82%;
             height: 82%;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(254, 236, 177, 0.8) 0%, rgba(254, 243, 199, 0.45) 52%, rgba(254, 249, 195, 0) 72%);
+            background: radial-gradient(circle, rgba(254, 236, 177, 0.85) 0%, rgba(254, 243, 199, 0.5) 50%, rgba(254, 249, 195, 0) 72%);
             z-index: 1;
             filter: blur(16px);
             pointer-events: none;
@@ -239,7 +240,14 @@
 
         [data-theme="dark"] .halo-mascote,
         body.dark-mode .halo-mascote {
-            background: radial-gradient(circle, rgba(217, 119, 6, 0.25) 0%, rgba(180, 83, 9, 0.12) 50%, rgba(15, 23, 42, 0) 72%);
+            position: absolute;
+            width: 86%;
+            height: 86%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(254, 236, 177, 0.85) 0%, rgba(254, 243, 199, 0.5) 50%, rgba(254, 249, 195, 0) 72%);
+            z-index: 1;
+            filter: blur(14px);
+            pointer-events: none;
         }
 
         .img-mascote-404 {
@@ -250,7 +258,7 @@
             height: auto;
             object-fit: contain;
             user-select: none;
-            filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.08));
+            filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.1));
             transition: transform 0.3s ease;
         }
 
@@ -310,12 +318,12 @@
             }
 
             .img-mascote-404 {
-                max-width: 290px;
+                max-width: 280px;
             }
 
             .halo-mascote {
-                width: 260px;
-                height: 260px;
+                width: 250px;
+                height: 250px;
             }
         }
 
@@ -625,10 +633,10 @@
             <div class="pagina-404-ilustracao">
                 <div class="halo-mascote" aria-hidden="true"></div>
                 <img 
-                    src="/assets/logos/mascote-404.png" 
+                    src="/assets/logos/mascote-404.png?v=4" 
                     alt="Mascote Itaim Vende confuso lendo o mapa" 
                     class="img-mascote-404"
-                    onerror="this.onerror=null; this.src='assets/logos/mascote-404.png';"
+                    onerror="this.onerror=null; this.src='assets/logos/mascote-404.png?v=4';"
                 >
             </div>
         </div>

@@ -184,7 +184,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         atualizarBadgesAbas();
 
         const prefs = (() => {
-            try { return JSON.parse(localStorage.getItem('itaim_configuracoes') || '{}'); } catch(e) { return {}; }
+            try { return JSON.parse(localStorage.getItem('itaim_configuracoes') || '{}'); } catch (e) { return {}; }
         })();
 
         let filtradas = todasNotifs.filter(n => {
@@ -358,30 +358,31 @@ document.addEventListener('DOMContentLoaded', async () => {
                     </div>
                 </div>
 
-                ${midiaHtml ? `<div class="notif-midia-preview">${midiaHtml}</div>` : ''}
-                <div class="notif-divisor-vertical"></div>
-
-                <div class="notif-coluna-acao">
-                    <a href="${linkDestino}" class="btn-notif-acao-primaria">
-                        ${iconeBotao}
-                        <span>${textoBotao}</span>
-                        ${setaBotao}
-                    </a>
-                    <button type="button" class="btn-excluir-notif-card" data-id="${item.id}" title="Excluir notificação">&times;</button>
+                <div class="notif-lado-direito">
+                    ${midiaHtml ? `<div class="notif-midia-preview">${midiaHtml}</div>` : ''}
+                    <div class="notif-divisor-vertical"></div>
+                    <div class="notif-coluna-acao">
+                        <a href="${linkDestino}" class="btn-notif-acao-primaria">
+                            ${iconeBotao}
+                            <span>${textoBotao}</span>
+                            ${setaBotao}
+                        </a>
+                        <button type="button" class="btn-excluir-notif-card" data-id="${item.id}" title="Excluir notificação">&times;</button>
+                    </div>
                 </div>
             `;
 
             // Clique no corpo do card para marcar como lida e redirecionar
             card.addEventListener('click', async (e) => {
                 if (e.target.closest('.btn-excluir-notif-card')) return;
-                
+
                 item.lida = true;
                 item.isRead = true;
 
                 if (estaAutenticado() && window.ItaimApi.notificacoes) {
                     try {
                         await window.ItaimApi.notificacoes.marcarComoLida(item.id);
-                    } catch (err) {}
+                    } catch (err) { }
                 }
 
                 if (window.ItaimNotificacoes) {
@@ -408,7 +409,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (estaAutenticado() && window.ItaimApi.notificacoes) {
                     try {
                         await window.ItaimApi.notificacoes.remover(id);
-                    } catch (err) {}
+                    } catch (err) { }
                 }
 
                 if (window.ItaimNotificacoes) {
@@ -451,7 +452,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (estaAutenticado() && window.ItaimApi.notificacoes) {
                 try {
                     await window.ItaimApi.notificacoes.marcarTodasComoLidas();
-                } catch (err) {}
+                } catch (err) { }
             }
 
             if (window.ItaimNotificacoes) {
@@ -470,7 +471,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (estaAutenticado() && window.ItaimApi.notificacoes) {
                     try {
                         await window.ItaimApi.notificacoes.limparTodas();
-                    } catch (err) {}
+                    } catch (err) { }
                 }
 
                 if (window.ItaimNotificacoes) {
