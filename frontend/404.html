@@ -245,22 +245,24 @@
             width: 82%;
             height: 82%;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(254, 236, 177, 0.85) 0%, rgba(254, 243, 199, 0.5) 50%, rgba(254, 249, 195, 0) 72%);
+            background: radial-gradient(circle, rgba(254, 236, 177, 0.4) 0%, rgba(254, 243, 199, 0.18) 48%, rgba(254, 249, 195, 0) 70%);
             z-index: 1;
-            filter: blur(16px);
+            filter: blur(20px);
             pointer-events: none;
         }
 
+        /* Iluminação traseira sutil e ambiente no Modo Escuro (sem foco esbranquiçado intenso) */
         [data-theme="dark"] .halo-mascote,
         body.dark-mode .halo-mascote {
             position: absolute;
             width: 86%;
             height: 86%;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(254, 236, 177, 0.85) 0%, rgba(254, 243, 199, 0.5) 50%, rgba(254, 249, 195, 0) 72%);
+            background: radial-gradient(circle, rgba(254, 243, 199, 0.10) 0%, rgba(254, 236, 177, 0.04) 45%, rgba(15, 23, 42, 0) 70%);
             z-index: 1;
-            filter: blur(14px);
+            filter: blur(28px);
             pointer-events: none;
+            opacity: 0.75;
         }
 
         .img-mascote-404 {
@@ -273,6 +275,11 @@
             user-select: none;
             filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.1));
             transition: transform 0.3s ease;
+        }
+
+        [data-theme="dark"] .img-mascote-404,
+        body.dark-mode .img-mascote-404 {
+            filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.35));
         }
 
         .img-mascote-404:hover {
@@ -702,8 +709,8 @@
             <!-- Coluna da Direita: Mascote com Mapa Dobrado e Halo -->
             <div class="pagina-404-ilustracao">
                 <div class="halo-mascote" aria-hidden="true"></div>
-                <img src="/assets/logos/mascote-404.png?v=5" alt="Mascote Itaim Vende confuso lendo o mapa"
-                    class="img-mascote-404" onerror="this.onerror=null; this.src='assets/logos/mascote-404.png?v=5';">
+                <img src="/assets/logos/mascote-404.png?v=7" alt="Mascote Itaim Vende confuso lendo o mapa"
+                    class="img-mascote-404" onerror="this.onerror=null; this.src='assets/logos/mascote-404.png?v=7';">
             </div>
         </div>
     </main>
@@ -757,7 +764,7 @@
                 const linksConfig = document.querySelectorAll('a[href="/configuracoes"]');
                 linksConfig.forEach(a => a.href = 'pages/perfil/configuracoes.html');
             }
-       </script>
+    </script>
 </body>
 
 </html>
