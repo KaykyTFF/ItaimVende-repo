@@ -59,10 +59,22 @@ body[data-theme="dark"].pagina-categoria,
 }
 
 [data-theme="dark"] .categoria-hero-badge,
-[data-theme="dark"] #categoria-contador-badge {
-    background-color: rgba(56, 161, 41, 0.12) !important;
-    border: 1px solid rgba(56, 161, 41, 0.25) !important;
-    color: #38A129 !important;
+[data-theme="dark"] #categoria-contador-badge,
+.dark-theme .categoria-hero-badge,
+.dark-theme #categoria-contador-badge {
+    background-color: #38A129 !important;
+    background: #38A129 !important;
+    border: none !important;
+    color: #FFFFFF !important;
+    box-shadow: none !important;
+}
+
+[data-theme="dark"] .categoria-hero-badge::before,
+[data-theme="dark"] #categoria-contador-badge::before,
+.dark-theme .categoria-hero-badge::before,
+.dark-theme #categoria-contador-badge::before {
+    background-color: #FFFFFF !important;
+    background: #FFFFFF !important;
     box-shadow: none !important;
 }
 
