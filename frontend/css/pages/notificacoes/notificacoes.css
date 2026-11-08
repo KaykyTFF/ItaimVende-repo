@@ -861,10 +861,12 @@
 
     .notif-lado-direito {
         width: 100%;
-        display: block;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         padding-top: 0;
         border-top: none;
-        margin-top: 2px;
+        margin-top: 4px;
     }
 
     .notif-divisor-vertical {
@@ -873,8 +875,11 @@
 
     .notif-coluna-acao {
         width: 100%;
-        min-width: 0;
-        display: block;
+        max-width: none !important;
+        min-width: 0 !important;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .btn-notif-acao-primaria {
@@ -883,9 +888,10 @@
         min-width: 0 !important;
         height: 42px;
         border-radius: 12px;
-        display: flex;
+        display: flex !important;
         align-items: center;
         justify-content: center;
+        margin: 0 auto;
         background-color: #16A34A !important;
         color: #FFFFFF !important;
         font-size: 14px;
