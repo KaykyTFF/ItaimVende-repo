@@ -132,6 +132,10 @@
         .pagina-404-conteudo {
             flex: 1;
             max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
         }
 
         .codigo-404 {
@@ -139,10 +143,11 @@
             font-weight: 800;
             color: var(--cor-404);
             line-height: 0.95;
-            letter-spacing: -3px;
-            margin: 0 0 16px 0;
+            letter-spacing: -2px;
+            margin: 0 auto 16px auto;
             user-select: none;
             text-align: center;
+            width: 100%;
         }
 
         .titulo-404 {
@@ -150,24 +155,29 @@
             font-weight: 800;
             color: var(--titulo-cor);
             line-height: 1.2;
-            margin: 0 0 16px 0;
+            margin: 0 auto 16px auto;
             letter-spacing: -0.5px;
+            text-align: center;
+            width: 100%;
         }
 
         .descricao-404 {
             font-size: clamp(0.95rem, 1.8vw, 1.05rem);
             color: var(--texto-sub);
             line-height: 1.6;
-            margin: 0 0 32px 0;
+            margin: 0 auto 32px auto;
             max-width: 470px;
             font-weight: 400;
+            text-align: center;
         }
 
         .botoes-404 {
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 14px;
             flex-wrap: wrap;
+            width: 100%;
         }
 
         .btn-404 {
@@ -692,8 +702,8 @@
             <!-- Coluna da Direita: Mascote com Mapa Dobrado e Halo -->
             <div class="pagina-404-ilustracao">
                 <div class="halo-mascote" aria-hidden="true"></div>
-                    alt="Mascote Itaim Vende confuso lendo o mapa" class="img-mascote-404"
-                    onerror="this.onerror=null; this.src='assets/logos/mascote-404.png?v=5';">
+                <img src="/assets/logos/mascote-404.png?v=5" alt="Mascote Itaim Vende confuso lendo o mapa"
+                    class="img-mascote-404" onerror="this.onerror=null; this.src='assets/logos/mascote-404.png?v=5';">
             </div>
         </div>
     </main>
@@ -747,8 +757,7 @@
                 const linksConfig = document.querySelectorAll('a[href="/configuracoes"]');
                 linksConfig.forEach(a => a.href = 'pages/perfil/configuracoes.html');
             }
-        })();
-    </script>
+       </script>
 </body>
 
 </html>
