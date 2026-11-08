@@ -166,25 +166,22 @@
             const usuario = obterUsuarioAtual();
 
             const novaConversa = {
-                id: 'sup_conv_' + Date.now(),
+                id: 'sup_tkt_' + Date.now(),
                 protocol: ticket.id,
                 userId: ticket.userId || usuario?.id || null,
                 userName: usuario?.name || usuario?.nome || ticket.userName || 'Você (Usuário)',
                 userEmail: usuario?.email || ticket.userEmail || 'usuario@itaimvende.com.br',
                 userCity: usuario?.cidade || usuario?.city || 'Paulistana - PI',
                 userAvatar: usuario?.avatar || usuario?.foto || 'assets/icons/icon-user.png',
+                category: ticket.categoria || 'outro',
                 subject: ticket.titulo,
+                description: ticket.descricao,
+                anexos: ticket.anexos || [],
                 status: 'ABERTO',
                 lastMessage: ticket.descricao,
                 lastMessageAt: ticket.criadoEm,
-                unread: true,
-                messages: [
-                    {
-                        sender: 'user',
-                        text: ticket.descricao,
-                        time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
-                    }
-                ]
+                createdAt: ticket.criadoEm || new Date().toISOString(),
+                unread: true
             };
 
             const idx = conversas.findIndex(c => c.protocol === ticket.id);

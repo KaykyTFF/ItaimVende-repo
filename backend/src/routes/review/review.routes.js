@@ -23,6 +23,7 @@ router.put('/:id', authenticateToken, editReview);
 router.delete('/:id', authenticateToken, removeReview);
 
 // 5. Vendedor responde a uma avaliação recebida (Requer autenticação)
+router.post('/:id/replies', authenticateToken, replyReview);
 router.patch('/:id/reply', authenticateToken, replyReview);
 
 export default router;

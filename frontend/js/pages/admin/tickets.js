@@ -20,9 +20,10 @@
     let todosTicketsDenuncias = [];
     let ticketSelecionadoModal = null;
 
-    // Estado do chat de suporte
-    let todasConversasSuporte = [];
-    let conversaSuporteAtivaId = null;
+    // Estado dos tickets de suporte
+    let todosTicketsSuporte = [];
+    let filtroStatusSuporte = 'ALL';
+    let filtroCategoriaSuporte = '';
     let termoBuscaSuporte = '';
 
     // =========================================================================
@@ -87,7 +88,7 @@
         try {
             await Promise.allSettled([
                 carregarTicketsDenuncias(),
-                carregarConversasSuporte()
+                carregarTicketsSuporte()
             ]);
         } catch (err) {
             console.error('[Tickets] Erro na carga inicial assíncrona:', err);
@@ -100,7 +101,7 @@
                 mostrarToast('Atualizando dados...');
                 await Promise.allSettled([
                     carregarTicketsDenuncias(),
-                    carregarConversasSuporte()
+                    carregarTicketsSuporte()
                 ]);
             });
         }
@@ -650,259 +651,481 @@
     }
 
     // =========================================================================
-    // 6. ABA 2: TICKETS E CONVERSAS COM O SUPORTE
+    // 6. ABA 2: TICKETS DE SUPORTE AO USUÁRIO (ATENDIMENTO POR E-MAIL)
     // =========================================================================
-    async function carregarConversasSuporte() {
-        const listaThreadsEl = document.getElementById('lista-threads-suporte');
-        if (!listaThreadsEl) return;
+    const CATEGORIAS_SUPORTE_LABEL = {
+        'conta': 'Conta e Acesso',
+        'anuncio': 'Anúncio / Publicação',
+        'pagamento': 'Pagamento / Transação',
+        'seguranca': 'Segurança / Denúncia',
+        'bug': 'Erro Técnico / Bug',
+        'outro': 'Outros Assuntos'
+    };
 
-        let conversas = [];
+    async function carregarTicketsSuporte() {
+        const listaEl = document.getElementById('lista-tickets-suporte-admin');
+        if (!listaEl) return;
 
-        // 1. Busca conversas do usuário ou mock de atendimento
+        // 1. Coleta tickets locais de suporte unificados
+        const tickets = obterTodosTicketsSuporteLocais();
+        todosTicketsSuporte = tickets;
+
+        // 2. Calcula resumo de estatísticas
+        const total = tickets.length;
+        const abertos = tickets.filter(t => t.status === 'ABERTO').length;
+        const emAtendimento = tickets.filter(t => t.status === 'EM_ATENDIMENTO').length;
+        const concluidos = tickets.filter(t => t.status === 'CONCLUIDO').length;
+
+        // 3. Atualiza contadores visuais
+        setText('stat-support-conversations', total);
+        setText('tab-count-suporte', abertos + emAtendimento);
+        setText('count-sup-all', total);
+        setText('count-sup-open', abertos);
+        setText('count-sup-progress', emAtendimento);
+        setText('count-sup-resolved', concluidos);
+
+        // 4. Renderiza a grade de tickets de suporte
+        renderizarFilaSuporte();
+    }
+
+    function obterTodosTicketsSuporteLocais() {
+        const mapa = new Map();
+
+        // A. Carrega de itaim_conversas_suporte
         try {
-            const rawSuporte = localStorage.getItem('itaim_conversas_suporte');
-            if (rawSuporte) {
-                conversas = JSON.parse(rawSuporte);
+            const rawConv = localStorage.getItem('itaim_conversas_suporte');
+            if (rawConv) {
+                const parsed = JSON.parse(rawConv);
+                if (Array.isArray(parsed)) {
+                    parsed.forEach(c => {
+                        const t = normalizarTicketSuporte(c, 'itaim_conversas_suporte');
+                        if (t && !mapa.has(t.protocol || t.id)) {
+                            mapa.set(t.protocol || t.id, t);
+                        }
+                    });
+                }
             }
-        } catch (e) {}
+        } catch (e) {
+            console.warn('[Tickets] Erro ao ler itaim_conversas_suporte:', e);
+        }
 
-        if (!Array.isArray(conversas) || conversas.length === 0) {
-            conversas = [
+        // B. Varre todas as chaves de usuários itaim_suporte_tickets_*
+        try {
+            for (let i = 0; i < localStorage.length; i++) {
+                const k = localStorage.key(i);
+                if (k && k.startsWith('itaim_suporte_tickets_')) {
+                    try {
+                        const raw = localStorage.getItem(k);
+                        if (raw) {
+                            const arr = JSON.parse(raw);
+                            if (Array.isArray(arr)) {
+                                arr.forEach(item => {
+                                    const t = normalizarTicketSuporte(item, k);
+                                    if (t) {
+                                        const chave = t.protocol || t.id;
+                                        if (!mapa.has(chave)) {
+                                            mapa.set(chave, t);
+                                        } else {
+                                            const exist = mapa.get(chave);
+                                            if (item.descricao && !exist.description) exist.description = item.descricao;
+                                            if (item.categoria && !exist.category) {
+                                                exist.category = item.categoria;
+                                                exist.categoryLabel = CATEGORIAS_SUPORTE_LABEL[item.categoria] || item.categoria;
+                                            }
+                                            if (Array.isArray(item.anexos) && item.anexos.length > 0) {
+                                                exist.anexos = item.anexos;
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    } catch (errKey) {}
+                }
+            }
+        } catch (e) {
+            console.warn('[Tickets] Erro ao varrer chaves de suporte:', e);
+        }
+
+        // C. Caso não exista nenhum ticket registrado, provê dados iniciais padrão
+        if (mapa.size === 0) {
+            const suportePadrao = [
                 {
-                    id: 'sup_conv_1',
+                    id: 'sup_tkt_101',
                     protocol: 'TK-SUP-101',
                     userName: 'Cláudio Ferreira',
                     userEmail: 'claudio.ferreira@gmail.com',
                     userCity: 'Paulistana - PI',
                     userAvatar: 'assets/icons/icon-user.png',
+                    category: 'pagamento',
+                    categoryLabel: 'Pagamento / Transação',
                     subject: 'Dúvida sobre taxa de entrega para Acauã',
+                    description: 'Gostaria de saber se a taxa de entrega e o frete para a cidade de Acauã podem ser combinados diretamente com o anunciante no momento da retirada ou pela plataforma.',
+                    anexos: [],
                     status: 'EM_ATENDIMENTO',
-                    lastMessage: 'Gostaria de saber se o frete é negociável diretamente com o vendedor ou pela plataforma.',
-                    lastMessageAt: new Date(Date.now() - 25 * 60 * 1000).toISOString(),
-                    unread: true,
-                    messages: [
-                        { sender: 'user', text: 'Olá, bom dia! Estou negociando um sofá e queria tirar uma dúvida.', time: '10:15' },
-                        { sender: 'user', text: 'Gostaria de saber se o frete é negociável diretamente com o vendedor ou pela plataforma.', time: '10:16' }
-                    ]
+                    statusLabel: 'Em Atendimento',
+                    createdAt: new Date(Date.now() - 25 * 60 * 1000).toISOString()
                 },
                 {
-                    id: 'sup_conv_2',
+                    id: 'sup_tkt_102',
                     protocol: 'TK-SUP-102',
                     userName: 'Ana Paula Santos',
                     userEmail: 'anapaula.santos@hotmail.com',
                     userCity: 'Betânia do Piauí',
                     userAvatar: 'assets/icons/icon-user.png',
+                    category: 'anuncio',
+                    categoryLabel: 'Anúncio / Publicação',
                     subject: 'Meu anúncio foi pausado indevidamente',
+                    description: 'Vocês poderiam verificar porque as fotos da minha moto não estão carregando e o anúncio acabou sendo pausado pelo sistema?',
+                    anexos: [],
                     status: 'ABERTO',
-                    lastMessage: 'Vocês poderiam verificar porque as fotos da minha moto não estão carregando?',
-                    lastMessageAt: new Date(Date.now() - 4 * 3600 * 1000).toISOString(),
-                    unread: false,
-                    messages: [
-                        { sender: 'user', text: 'Vocês poderiam verificar porque as fotos da minha moto não estão carregando?', time: '08:30' }
-                    ]
+                    statusLabel: 'Aberto',
+                    createdAt: new Date(Date.now() - 4 * 3600 * 1000).toISOString()
                 },
                 {
-                    id: 'sup_conv_3',
+                    id: 'sup_tkt_103',
                     protocol: 'TK-SUP-103',
                     userName: 'Raimundo Nonato',
                     userEmail: 'raimundo.agro@bol.com.br',
                     userCity: 'Jacobina do Piauí',
                     userAvatar: 'assets/icons/icon-user.png',
+                    category: 'conta',
+                    categoryLabel: 'Conta e Acesso',
                     subject: 'Ajuda com cadastro de caprinos e animais',
+                    description: 'Muito obrigado pelo suporte! Consegui cadastrar o lote com sucesso e já está ativo.',
+                    anexos: [],
                     status: 'CONCLUIDO',
-                    lastMessage: 'Muito obrigado pelo suporte! Consegui cadastrar o lote com sucesso.',
-                    lastMessageAt: new Date(Date.now() - 2 * 24 * 3600 * 1000).toISOString(),
-                    unread: false,
-                    messages: [
-                        { sender: 'user', text: 'Não estou encontrando a categoria de ovinos e caprinos.', time: 'Ontem' },
-                        { sender: 'support', text: 'Olá Raimundo! A categoria oficial é Agro & Pecuária. Já está disponível na vitrine.', time: 'Ontem' },
-                        { sender: 'user', text: 'Muito obrigado pelo suporte! Consegui cadastrar o lote com sucesso.', time: 'Ontem' }
-                    ]
+                    statusLabel: 'Concluído',
+                    createdAt: new Date(Date.now() - 2 * 24 * 3600 * 1000).toISOString()
                 }
             ];
-            localStorage.setItem('itaim_conversas_suporte', JSON.stringify(conversas));
+            try {
+                localStorage.setItem('itaim_conversas_suporte', JSON.stringify(suportePadrao));
+            } catch (e) {}
+            return suportePadrao;
         }
 
-        todasConversasSuporte = conversas;
-        setText('stat-support-conversations', conversas.length);
-        setText('tab-count-suporte', conversas.filter(c => c.status !== 'CONCLUIDO').length);
-        setText('badge-total-suporte', `${conversas.filter(c => c.status !== 'CONCLUIDO').length} abertos`);
-
-        renderizarThreadsSuporte();
+        return Array.from(mapa.values()).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     }
 
-    function renderizarThreadsSuporte() {
-        const listaThreadsEl = document.getElementById('lista-threads-suporte');
-        if (!listaThreadsEl) return;
+    function normalizarTicketSuporte(raw, storageKey) {
+        if (!raw) return null;
 
-        const filtradas = todasConversasSuporte.filter(c => {
+        const id = raw.id || raw.protocol || ('TKT-' + Math.random().toString(36).substring(2, 7).toUpperCase());
+        const protocol = raw.protocol || (id.startsWith('TK-') ? id : (id.startsWith('TKT-') ? `TK-SUP-${id.replace('TKT-', '')}` : `TK-SUP-${id.slice(-5).toUpperCase()}`));
+
+        let status = (raw.status || 'ABERTO').toUpperCase();
+        if (status === 'PENDENTE' || status === 'PENDING') status = 'ABERTO';
+        if (status === 'EM_ANDAMENTO' || status === 'IN_PROGRESS') status = 'EM_ATENDIMENTO';
+        if (status === 'RESOLVIDO' || status === 'RESOLVED' || status === 'FECHADO') status = 'CONCLUIDO';
+
+        const statusLabel = status === 'ABERTO' ? 'Aberto' :
+                            status === 'EM_ATENDIMENTO' ? 'Em Atendimento' : 'Concluído';
+
+        let category = (raw.category || raw.categoria || '').toLowerCase().trim();
+        if (!category) {
+            const sub = (raw.subject || raw.titulo || '').toLowerCase();
+            if (sub.includes('conta') || sub.includes('login') || sub.includes('senha') || sub.includes('acesso')) category = 'conta';
+            else if (sub.includes('anúncio') || sub.includes('anuncio') || sub.includes('foto') || sub.includes('produto')) category = 'anuncio';
+            else if (sub.includes('pagamento') || sub.includes('pix') || sub.includes('taxa') || sub.includes('entrega') || sub.includes('frete')) category = 'pagamento';
+            else if (sub.includes('denúncia') || sub.includes('denuncia') || sub.includes('golpe') || sub.includes('segurança')) category = 'seguranca';
+            else if (sub.includes('erro') || sub.includes('bug') || sub.includes('travou')) category = 'bug';
+            else category = 'outro';
+        }
+        const categoryLabel = CATEGORIAS_SUPORTE_LABEL[category] || 'Geral / Outros';
+
+        let description = raw.description || raw.descricao || '';
+        if (!description && raw.lastMessage) {
+            description = raw.lastMessage;
+        } else if (!description && Array.isArray(raw.messages) && raw.messages.length > 0) {
+            const firstUserMsg = raw.messages.find(m => m.sender === 'user') || raw.messages[0];
+            description = firstUserMsg.text || '';
+        }
+        if (!description) {
+            description = 'Solicitação de suporte registrada por usuário.';
+        }
+
+        const createdAt = raw.createdAt || raw.criadoEm || raw.lastMessageAt || new Date().toISOString();
+
+        return {
+            id,
+            protocol,
+            userId: raw.userId || null,
+            userName: raw.userName || raw.nome || raw.name || 'Usuário da Plataforma',
+            userEmail: raw.userEmail || raw.email || 'usuario@itaimvende.com.br',
+            userCity: raw.userCity || raw.cidade || raw.city || 'Paulistana - PI',
+            userAvatar: raw.userAvatar || raw.avatar || raw.foto || 'assets/icons/icon-user.png',
+            category,
+            categoryLabel,
+            subject: raw.subject || raw.titulo || 'Atendimento ao Usuário',
+            description,
+            anexos: Array.isArray(raw.anexos) ? raw.anexos : [],
+            status,
+            statusLabel,
+            createdAt,
+            storageKey: storageKey || 'itaim_conversas_suporte'
+        };
+    }
+
+    function renderizarFilaSuporte() {
+        const listaEl = document.getElementById('lista-tickets-suporte-admin');
+        if (!listaEl) return;
+
+        const filtrados = todosTicketsSuporte.filter(item => {
+            if (filtroStatusSuporte !== 'ALL' && item.status !== filtroStatusSuporte) {
+                return false;
+            }
+
+            if (filtroCategoriaSuporte && item.category !== filtroCategoriaSuporte) {
+                return false;
+            }
+
             if (termoBuscaSuporte) {
                 const q = termoBuscaSuporte.toLowerCase();
-                const mUser = (c.userName || '').toLowerCase().includes(q);
-                const mSub = (c.subject || '').toLowerCase().includes(q);
-                const mMsg = (c.lastMessage || '').toLowerCase().includes(q);
-                if (!mUser && !mSub && !mMsg) return false;
+                const matchProt = (item.protocol || '').toLowerCase().includes(q);
+                const matchName = (item.userName || '').toLowerCase().includes(q);
+                const matchEmail = (item.userEmail || '').toLowerCase().includes(q);
+                const matchSub = (item.subject || '').toLowerCase().includes(q);
+                const matchDesc = (item.description || '').toLowerCase().includes(q);
+                if (!matchProt && !matchName && !matchEmail && !matchSub && !matchDesc) {
+                    return false;
+                }
             }
+
             return true;
         });
 
-        if (filtradas.length === 0) {
-            listaThreadsEl.innerHTML = `
-                <div style="padding: 30px 20px; text-align: center; color: var(--tk-text-dim);">
-                    Nenhum ticket de atendimento encontrado.
+        if (filtrados.length === 0) {
+            listaEl.innerHTML = `
+                <div class="tickets-empty-box">
+                    <i class="fa-solid fa-headset tickets-empty-icon" style="color: #64748B;"></i>
+                    <h3>Nenhum ticket de suporte encontrado</h3>
+                    <p>Nenhum chamado corresponde aos filtros aplicados no momento.</p>
                 </div>
             `;
             return;
         }
 
-        listaThreadsEl.innerHTML = filtradas.map(c => {
-            const isAtivo = c.id === conversaSuporteAtivaId;
-            const tempoFmt = formatarTempoRelativo(c.lastMessageAt);
-            const avatarUrl = resolverUrlImagem(c.userAvatar);
+        listaEl.innerHTML = filtrados.map(t => {
+            const statusClass = t.status.toLowerCase();
+            const tempoFmt = formatarTempoRelativo(t.createdAt);
+            const avatarUrl = resolverUrlImagem(t.userAvatar);
+            const catBadgeClass = t.category || 'outro';
+
+            let anexosHtml = '';
+            if (Array.isArray(t.anexos) && t.anexos.length > 0) {
+                anexosHtml = `
+                    <div class="ticket-attachments-row">
+                        <span style="font-size: 0.76rem; font-weight: 700; color: var(--tk-text-muted);"><i class="fa-solid fa-paperclip"></i> Anexos (${t.anexos.length}):</span>
+                        ${t.anexos.map(a => {
+                            const nome = typeof a === 'string' ? a : (a.nome || a.name || 'Arquivo');
+                            return `<span class="ticket-attachment-tag"><i class="fa-solid fa-file"></i> ${escapeHtml(nome)}</span>`;
+                        }).join('')}
+                    </div>
+                `;
+            }
+
+            const emailSubject = `[Itaim Vende - Suporte] Chamado #${t.protocol || t.id} - ${t.subject || 'Atendimento'}`;
+            const emailBody = `Olá, ${t.userName}!\n\nRecebemos seu chamado #${t.protocol || t.id} referente a "${t.subject}".\n\nA respeito do seu relato:\n"${t.description}"\n\nGostaríamos de informar que:\n\n\n\nCaso tenha novas dúvidas, basta responder a este e-mail.\n\nAtenciosamente,\nEquipe de Moderação e Atendimento\nItaim Vende • Paulistana - PI`;
+            const mailtoUrl = `mailto:${encodeURIComponent(t.userEmail)}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
 
             return `
-                <div class="support-thread-item ${isAtivo ? 'ativo' : ''}" data-id="${c.id}">
-                    <img src="${avatarUrl}" alt="Avatar" class="thread-avatar" onerror="this.src='../../assets/icons/icon-user.png'">
-                    <div class="thread-info">
-                        <div class="thread-top-row">
-                            <span class="thread-user-name">${c.userName}</span>
-                            <span class="thread-time">${tempoFmt}</span>
+                <div class="ticket-card status-${statusClass}" id="card-suporte-${t.id}">
+                    <div class="ticket-card-header">
+                        <div class="ticket-protocol-row">
+                            <span class="ticket-protocol-badge">
+                                <i class="fa-solid fa-hashtag"></i> ${t.protocol || t.id}
+                                <button type="button" class="btn-copy-protocol" data-copy="${t.protocol || t.id}" title="Copiar protocolo">
+                                    <i class="fa-regular fa-copy"></i>
+                                </button>
+                            </span>
+                            <span class="ticket-category-badge ${catBadgeClass}">
+                                <i class="fa-solid fa-tag"></i> ${t.categoryLabel}
+                            </span>
+                            <span class="ticket-status-pill ${statusClass}">
+                                ${t.statusLabel}
+                            </span>
                         </div>
-                        <div class="thread-subject">${c.subject || 'Atendimento'}</div>
-                        <div class="thread-snippet">${c.lastMessage || 'Sem mensagens recentes'}</div>
+                        <div class="ticket-meta-right">
+                            <span><i class="fa-regular fa-clock"></i> ${tempoFmt}</span>
+                        </div>
                     </div>
-                    ${c.unread ? '<span class="thread-unread-badge" title="Mensagem não lida"></span>' : ''}
+
+                    <div class="ticket-card-body support-card-body">
+                        <div class="ticket-user-summary">
+                            <img src="${avatarUrl}" alt="Avatar" class="ticket-user-avatar" onerror="this.src='../../assets/icons/icon-user.png'">
+                            <div class="ticket-user-meta">
+                                <span class="ticket-user-name">${escapeHtml(t.userName)}</span>
+                                <span class="ticket-user-email">
+                                    <i class="fa-regular fa-envelope"></i> <code>${escapeHtml(t.userEmail)}</code>
+                                </span>
+                                ${t.userCity ? `<span class="ticket-user-city"><i class="fa-solid fa-location-dot"></i> ${escapeHtml(t.userCity)}</span>` : ''}
+                            </div>
+                        </div>
+
+                        <div class="ticket-content-summary">
+                            <h3 class="ticket-support-title">${escapeHtml(t.subject)}</h3>
+                            <div class="ticket-description-quote">
+                                <strong>Relato do Usuário:</strong> "${escapeHtml(t.description)}"
+                            </div>
+                            ${anexosHtml}
+                        </div>
+                    </div>
+
+                    <div class="ticket-card-footer">
+                        <div class="ticket-status-select-wrap">
+                            <label for="select-status-sup-${t.id}">Alterar Status:</label>
+                            <select class="select-tk-custom select-alterar-status-suporte" data-id="${t.id}" id="select-status-sup-${t.id}">
+                                <option value="ABERTO" ${t.status === 'ABERTO' ? 'selected' : ''}>🟡 Aberto</option>
+                                <option value="EM_ATENDIMENTO" ${t.status === 'EM_ATENDIMENTO' ? 'selected' : ''}>🔵 Em Atendimento</option>
+                                <option value="CONCLUIDO" ${t.status === 'CONCLUIDO' ? 'selected' : ''}>🟢 Concluído</option>
+                            </select>
+                        </div>
+
+                        <div class="ticket-actions-group">
+                            <a href="${mailtoUrl}" class="btn-mod-action btn-email" title="Abrir cliente de e-mail para responder ao usuário">
+                                <i class="fa-solid fa-envelope"></i> Responder por E-mail
+                            </a>
+                            <button type="button" class="btn-mod-action btn-copy-email" data-email="${escapeHtml(t.userEmail)}" title="Copiar e-mail do usuário">
+                                <i class="fa-regular fa-copy"></i> Copiar E-mail
+                            </button>
+                            <button type="button" class="btn-mod-action btn-view" data-action="detalhes-suporte" data-id="${t.id}" title="Ver dossiê do chamado">
+                                <i class="fa-solid fa-circle-info"></i> Detalhes
+                            </button>
+                        </div>
+                    </div>
                 </div>
             `;
         }).join('');
 
-        listaThreadsEl.querySelectorAll('.support-thread-item').forEach(item => {
-            item.addEventListener('click', () => {
-                abrirConversaSuporte(item.dataset.id);
-            });
-        });
+        vincularEventosCardsSuporte();
     }
 
-    function abrirConversaSuporte(convId) {
-        conversaSuporteAtivaId = convId;
-        const conv = todasConversasSuporte.find(c => c.id === convId);
-        if (!conv) return;
-
-        conv.unread = false;
-        renderizarThreadsSuporte();
-
-        // Atualiza cabeçalho do chat
-        const avatarEl = document.getElementById('chat-suporte-avatar');
-        const nomeEl = document.getElementById('chat-suporte-nome');
-        const detalhesEl = document.getElementById('chat-suporte-detalhes');
-        const acoesEl = document.getElementById('chat-status-acoes');
-        const selectStatus = document.getElementById('select-status-suporte');
-        const quickReplies = document.getElementById('suporte-quick-replies');
-        const composer = document.getElementById('suporte-composer');
-
-        if (avatarEl) avatarEl.src = resolverUrlImagem(conv.userAvatar);
-        if (nomeEl) nomeEl.textContent = `${conv.userName} • ${conv.subject}`;
-        if (detalhesEl) detalhesEl.textContent = `${conv.userEmail} | ${conv.userCity || 'Paulistana - PI'} | Protocolo: ${conv.protocol || conv.id}`;
-        if (acoesEl) acoesEl.style.display = 'flex';
-        if (selectStatus) selectStatus.value = conv.status || 'ABERTO';
-        if (quickReplies) quickReplies.style.display = 'flex';
-        if (composer) composer.style.display = 'flex';
-
-        renderizarMensagensFeed(conv);
-    }
-
-    function renderizarMensagensFeed(conv) {
-        const feedEl = document.getElementById('feed-mensagens-suporte');
-        if (!feedEl) return;
-
-        const msgs = conv.messages || [];
-        feedEl.innerHTML = msgs.map(m => {
-            const isSupport = m.sender === 'support';
-            return `
-                <div class="chat-bubble ${isSupport ? 'from-support' : 'from-user'}">
-                    <div class="chat-bubble-author">
-                        ${isSupport ? '<i class="fa-solid fa-headset"></i> Suporte Oficial' : '<i class="fa-solid fa-user"></i> ' + conv.userName}
-                    </div>
-                    <div>${m.text}</div>
-                    <div class="chat-bubble-time">${m.time || 'Agora'}</div>
-                </div>
-            `;
-        }).join('');
-
-        feedEl.scrollTop = feedEl.scrollHeight;
-    }
-
-    function configurarEventosSuporte() {
-        const inputMsg = document.getElementById('input-mensagem-suporte');
-        const btnEnviar = document.getElementById('btn-enviar-suporte');
-        const selectStatus = document.getElementById('select-status-suporte');
-        const inputBusca = document.getElementById('input-busca-suporte');
-
-        async function enviarResposta() {
-            if (!conversaSuporteAtivaId) return;
-            const texto = inputMsg?.value.trim();
-            if (!texto) return;
-
-            const conv = todasConversasSuporte.find(c => c.id === conversaSuporteAtivaId);
-            if (!conv) return;
-
-            conv.messages = conv.messages || [];
-            conv.messages.push({
-                sender: 'support',
-                text: texto,
-                time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
-            });
-
-            conv.lastMessage = texto;
-            conv.lastMessageAt = new Date().toISOString();
-            if (conv.status === 'ABERTO') {
-                conv.status = 'EM_ATENDIMENTO';
-                if (selectStatus) selectStatus.value = 'EM_ATENDIMENTO';
-            }
-
-            localStorage.setItem('itaim_conversas_suporte', JSON.stringify(todasConversasSuporte));
-            if (inputMsg) inputMsg.value = '';
-            renderizarMensagensFeed(conv);
-            renderizarThreadsSuporte();
-            mostrarToast('Resposta enviada ao usuário com sucesso!');
-        }
-
-        btnEnviar?.addEventListener('click', enviarResposta);
-        inputMsg?.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                enviarResposta();
-            }
-        });
-
-        // Respostas Rápidas
-        document.querySelectorAll('.quick-reply-btn').forEach(btn => {
+    function vincularEventosCardsSuporte() {
+        // Cópia de protocolo
+        document.querySelectorAll('#lista-tickets-suporte-admin .btn-copy-protocol').forEach(btn => {
             btn.addEventListener('click', () => {
-                const texto = btn.dataset.texto;
-                if (inputMsg && texto) {
-                    inputMsg.value = texto;
-                    inputMsg.focus();
+                const cod = btn.dataset.copy;
+                if (cod && navigator.clipboard) {
+                    navigator.clipboard.writeText(cod).then(() => {
+                        mostrarToast(`Protocolo #${cod} copiado para a área de transferência!`);
+                    });
                 }
             });
         });
 
-        // Mudança de status da conversa de suporte
-        selectStatus?.addEventListener('change', () => {
-            if (!conversaSuporteAtivaId) return;
-            const conv = todasConversasSuporte.find(c => c.id === conversaSuporteAtivaId);
-            if (conv) {
-                conv.status = selectStatus.value;
-                localStorage.setItem('itaim_conversas_suporte', JSON.stringify(todasConversasSuporte));
-                mostrarToast(`Status do atendimento alterado para ${selectStatus.value}.`);
-                renderizarThreadsSuporte();
-            }
+        // Cópia de e-mail do usuário
+        document.querySelectorAll('#lista-tickets-suporte-admin .btn-copy-email').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const email = btn.dataset.email;
+                if (email && navigator.clipboard) {
+                    navigator.clipboard.writeText(email).then(() => {
+                        mostrarToast(`E-mail "${email}" copiado para a área de transferência!`);
+                    });
+                }
+            });
         });
 
-        // Busca de suporte
-        inputBusca?.addEventListener('input', (e) => {
-            termoBuscaSuporte = e.target.value.trim();
-            renderizarThreadsSuporte();
+        // Alteração de status do ticket de suporte
+        document.querySelectorAll('.select-alterar-status-suporte').forEach(sel => {
+            sel.addEventListener('change', async () => {
+                const id = sel.dataset.id;
+                const novoStatus = sel.value;
+                await executarMudancaStatusSuporte(id, novoStatus);
+            });
         });
+
+        // Detalhes do ticket de suporte
+        document.querySelectorAll('#lista-tickets-suporte-admin .btn-mod-action[data-action="detalhes-suporte"]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                abrirModalDossieSuporte(btn.dataset.id);
+            });
+        });
+    }
+
+    async function executarMudancaStatusSuporte(id, novoStatus) {
+        const ticket = todosTicketsSuporte.find(t => t.id === id || t.protocol === id);
+        if (!ticket) return;
+
+        ticket.status = novoStatus;
+        ticket.statusLabel = novoStatus === 'ABERTO' ? 'Aberto' :
+                             novoStatus === 'EM_ATENDIMENTO' ? 'Em Atendimento' : 'Concluído';
+
+        // 1. Atualiza na lista de conversas de suporte
+        try {
+            const raw = localStorage.getItem('itaim_conversas_suporte');
+            if (raw) {
+                const list = JSON.parse(raw);
+                if (Array.isArray(list)) {
+                    const idx = list.findIndex(c => c.id === id || c.protocol === ticket.protocol || c.protocol === id);
+                    if (idx >= 0) {
+                        list[idx].status = novoStatus;
+                        localStorage.setItem('itaim_conversas_suporte', JSON.stringify(list));
+                    }
+                }
+            }
+        } catch (e) {}
+
+        // 2. Mapeamento para status do perfil do usuário: 'aberto' | 'em_andamento' | 'resolvido'
+        const statusPerfilUsuario = novoStatus === 'ABERTO' ? 'aberto' :
+                                   novoStatus === 'EM_ATENDIMENTO' ? 'em_andamento' : 'resolvido';
+
+        try {
+            for (let i = 0; i < localStorage.length; i++) {
+                const k = localStorage.key(i);
+                if (k && k.startsWith('itaim_suporte_tickets_')) {
+                    const raw = localStorage.getItem(k);
+                    if (raw) {
+                        const arr = JSON.parse(raw);
+                        if (Array.isArray(arr)) {
+                            let alterou = false;
+                            arr.forEach(uTkt => {
+                                if (uTkt.id === ticket.id || uTkt.id === ticket.protocol || (ticket.protocol && ticket.protocol.includes(uTkt.id))) {
+                                    uTkt.status = statusPerfilUsuario;
+                                    alterou = true;
+                                }
+                            });
+                            if (alterou) {
+                                localStorage.setItem(k, JSON.stringify(arr));
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (e) {}
+
+        mostrarToast(`Status do chamado atualizado para "${ticket.statusLabel}".`);
+        await carregarTicketsSuporte();
+    }
+
+    function configurarEventosSuporte() {
+        // Filtro por Status (Pills de Suporte)
+        document.querySelectorAll('#filtro-status-suporte-pills .filter-pill').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('#filtro-status-suporte-pills .filter-pill').forEach(b => b.classList.remove('ativo'));
+                btn.classList.add('ativo');
+                filtroStatusSuporte = btn.dataset.status;
+                renderizarFilaSuporte();
+            });
+        });
+
+        // Busca Textual de Suporte
+        const inputBusca = document.getElementById('input-busca-suporte');
+        if (inputBusca) {
+            inputBusca.addEventListener('input', (e) => {
+                termoBuscaSuporte = e.target.value.trim();
+                renderizarFilaSuporte();
+            });
+        }
+
+        // Filtro por Categoria de Suporte
+        const selectCategoria = document.getElementById('select-categoria-suporte-filtro');
+        if (selectCategoria) {
+            selectCategoria.addEventListener('change', (e) => {
+                filtroCategoriaSuporte = e.target.value;
+                renderizarFilaSuporte();
+            });
+        }
     }
 
     // =========================================================================
@@ -963,15 +1186,20 @@
 
         const modal = document.getElementById('modal-detalhes-ticket');
         const protEl = document.getElementById('modal-ticket-protocol');
+        const tituloEl = document.getElementById('modal-titulo-tipo');
+        const iconeEl = document.getElementById('modal-icone-tipo');
         const conteudoEl = document.getElementById('modal-ticket-conteudo');
+        const rodapeAcoesEl = document.getElementById('modal-ticket-rodape-acoes');
 
+        if (tituloEl) tituloEl.textContent = 'Dossiê do Ticket de Denúncia';
+        if (iconeEl) iconeEl.className = 'fa-solid fa-file-shield';
         if (protEl) protEl.textContent = `#${ticket.protocol || ticket.id}`;
 
         if (conteudoEl) {
             conteudoEl.innerHTML = `
                 <div style="background: var(--tk-surface-alt); padding: 14px; border-radius: var(--tk-radius-sm);">
                     <div style="font-weight: 800; margin-bottom: 6px;">Anúncio Sob Investigação:</div>
-                    <div style="font-size: 1rem; color: var(--tk-text);">${ticket.productTitle || 'Anúncio'}</div>
+                    <div style="font-size: 1rem; color: var(--tk-text);">${escapeHtml(ticket.productTitle || 'Anúncio')}</div>
                     <div style="color: var(--tk-primary); font-weight: 700; margin-top: 4px;">
                         ${ticket.productPrice != null ? Number(ticket.productPrice).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '--'}
                     </div>
@@ -979,22 +1207,124 @@
 
                 <div style="background: var(--tk-surface-alt); padding: 14px; border-radius: var(--tk-radius-sm);">
                     <div style="font-weight: 800; margin-bottom: 6px;">Dados do Vendedor Denunciado:</div>
-                    <div>Nome: <strong>${ticket.sellerName || 'Anônimo'}</strong></div>
-                    <div>E-mail: <code>${ticket.sellerEmail || '--'}</code></div>
-                    <div>Status da Conta: <span style="font-weight: 700;">${ticket.sellerStatus || 'Ativo'}</span></div>
+                    <div>Nome: <strong>${escapeHtml(ticket.sellerName || 'Anônimo')}</strong></div>
+                    <div>E-mail: <code>${escapeHtml(ticket.sellerEmail || '--')}</code></div>
+                    <div>Status da Conta: <span style="font-weight: 700;">${escapeHtml(ticket.sellerStatus || 'Ativo')}</span></div>
                 </div>
 
                 <div style="background: var(--tk-surface-alt); padding: 14px; border-radius: var(--tk-radius-sm);">
                     <div style="font-weight: 800; margin-bottom: 6px;">Motivo e Evidências da Denúncia:</div>
-                    <div>Classificação: <span class="ticket-reason-badge other">${ticket.reasonLabel || ticket.reason}</span></div>
+                    <div>Classificação: <span class="ticket-reason-badge other">${escapeHtml(ticket.reasonLabel || ticket.reason)}</span></div>
                     <div style="margin-top: 8px; line-height: 1.5; color: var(--tk-text);">
-                        "${ticket.description || 'Nenhum detalhe adicional informado pelo denunciante.'}"
+                        "${escapeHtml(ticket.description || 'Nenhum detalhe adicional informado pelo denunciante.')}"
                     </div>
                     <div style="margin-top: 8px; font-size: 0.78rem; color: var(--tk-text-dim);">
                         Registrado em: ${new Date(ticket.createdAt).toLocaleString('pt-BR')}
                     </div>
                 </div>
             `;
+        }
+
+        if (rodapeAcoesEl) {
+            rodapeAcoesEl.innerHTML = `
+                <button type="button" class="btn-tk-nav" id="btn-fechar-modal-acao">Fechar</button>
+            `;
+            document.getElementById('btn-fechar-modal-acao')?.addEventListener('click', () => {
+                if (modal) modal.style.display = 'none';
+            });
+        }
+
+        if (modal) modal.style.display = 'flex';
+    }
+
+    function abrirModalDossieSuporte(id) {
+        const ticket = todosTicketsSuporte.find(t => t.id === id || t.protocol === id);
+        if (!ticket) return;
+
+        const modal = document.getElementById('modal-detalhes-ticket');
+        const protEl = document.getElementById('modal-ticket-protocol');
+        const tituloEl = document.getElementById('modal-titulo-tipo');
+        const iconeEl = document.getElementById('modal-icone-tipo');
+        const conteudoEl = document.getElementById('modal-ticket-conteudo');
+        const rodapeAcoesEl = document.getElementById('modal-ticket-rodape-acoes');
+
+        if (tituloEl) tituloEl.textContent = 'Dossiê do Chamado de Suporte';
+        if (iconeEl) iconeEl.className = 'fa-solid fa-headset';
+        if (protEl) protEl.textContent = `#${ticket.protocol || ticket.id}`;
+
+        const emailSubject = `[Itaim Vende - Suporte] Chamado #${ticket.protocol || ticket.id} - ${ticket.subject}`;
+        const emailBody = `Olá, ${ticket.userName}!\n\nRecebemos seu chamado #${ticket.protocol || ticket.id} com o assunto "${ticket.subject}".\n\nReferente ao seu relato:\n"${ticket.description}"\n\nGostaríamos de esclarecer que:\n\n\n\nCaso tenha dúvidas adicionais, basta responder a este e-mail.\n\nAtenciosamente,\nEquipe de Suporte e Administração\nItaim Vende`;
+        const mailtoUrl = `mailto:${encodeURIComponent(ticket.userEmail)}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+
+        if (conteudoEl) {
+            let anexosList = 'Nenhum anexo enviado neste chamado.';
+            if (Array.isArray(ticket.anexos) && ticket.anexos.length > 0) {
+                anexosList = ticket.anexos.map(a => `
+                    <div style="padding: 4px 0; display: flex; align-items: center; gap: 6px;">
+                        <i class="fa-solid fa-file"></i>
+                        <span>${escapeHtml(typeof a === 'string' ? a : (a.nome || a.name || 'Arquivo'))}</span>
+                    </div>
+                `).join('');
+            }
+
+            conteudoEl.innerHTML = `
+                <div style="background: var(--tk-surface-alt); padding: 14px; border-radius: var(--tk-radius-sm);">
+                    <div style="font-weight: 800; margin-bottom: 6px;">Dados do Usuário Solicitante:</div>
+                    <div>Nome: <strong>${escapeHtml(ticket.userName)}</strong></div>
+                    <div>E-mail de Contato: <code>${escapeHtml(ticket.userEmail)}</code></div>
+                    <div>Localidade / Cidade: <span>${escapeHtml(ticket.userCity)}</span></div>
+                </div>
+
+                <div style="background: var(--tk-surface-alt); padding: 14px; border-radius: var(--tk-radius-sm);">
+                    <div style="font-weight: 800; margin-bottom: 6px;">Classificação & Assunto:</div>
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap;">
+                        <span class="ticket-category-badge ${ticket.category || 'outro'}"><i class="fa-solid fa-tag"></i> ${ticket.categoryLabel}</span>
+                        <span class="ticket-status-pill ${ticket.status.toLowerCase()}">${ticket.statusLabel}</span>
+                    </div>
+                    <div style="font-size: 1.05rem; font-weight: 700; color: var(--tk-text);">${escapeHtml(ticket.subject)}</div>
+                </div>
+
+                <div style="background: var(--tk-surface-alt); padding: 14px; border-radius: var(--tk-radius-sm);">
+                    <div style="font-weight: 800; margin-bottom: 6px;">Relato Completo do Chamado:</div>
+                    <div style="line-height: 1.55; color: var(--tk-text); white-space: pre-wrap;">
+                        ${escapeHtml(ticket.description)}
+                    </div>
+                    <div style="margin-top: 10px; font-size: 0.78rem; color: var(--tk-text-dim);">
+                        Registrado em: ${new Date(ticket.createdAt).toLocaleString('pt-BR')}
+                    </div>
+                </div>
+
+                <div style="background: var(--tk-surface-alt); padding: 14px; border-radius: var(--tk-radius-sm);">
+                    <div style="font-weight: 800; margin-bottom: 6px;">Anexos do Usuário:</div>
+                    <div style="font-size: 0.85rem; color: var(--tk-text-muted);">
+                        ${anexosList}
+                    </div>
+                </div>
+            `;
+        }
+
+        if (rodapeAcoesEl) {
+            rodapeAcoesEl.innerHTML = `
+                <a href="${mailtoUrl}" class="btn-mod-action btn-email" style="text-decoration: none;">
+                    <i class="fa-solid fa-envelope"></i> Responder por E-mail
+                </a>
+                <button type="button" class="btn-mod-action btn-copy-email" id="modal-btn-copiar-email" data-email="${escapeHtml(ticket.userEmail)}">
+                    <i class="fa-regular fa-copy"></i> Copiar E-mail
+                </button>
+                <button type="button" class="btn-tk-nav" id="btn-fechar-modal-acao">Fechar</button>
+            `;
+
+            document.getElementById('modal-btn-copiar-email')?.addEventListener('click', () => {
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(ticket.userEmail).then(() => {
+                        mostrarToast(`E-mail "${ticket.userEmail}" copiado para a área de transferência!`);
+                    });
+                }
+            });
+
+            document.getElementById('btn-fechar-modal-acao')?.addEventListener('click', () => {
+                if (modal) modal.style.display = 'none';
+            });
         }
 
         if (modal) modal.style.display = 'flex';
@@ -1046,6 +1376,16 @@
             return `/${url.replace(/^\/+/, '')}`;
         }
         return `../../${url.replace(/^\/+/, '')}`;
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
     }
 
     function mostrarToast(mensagem) {

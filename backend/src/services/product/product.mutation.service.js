@@ -64,13 +64,28 @@ export async function createProduct(sellerId, productData) {
     images = [],
   } = productData;
 
-  const category = await prisma.category.findUnique({
+  let category = await prisma.category.findUnique({
     where: { id: categoryId },
   });
 
   if (!category) {
-    throw new AppError('Categoria selecionada não existe.', 404);
+    category = await prisma.category.findFirst({
+      where: {
+        OR: [
+          { orderIndex: categoryId },
+          { id: categoryId },
+        ],
+      },
+    });
   }
+
+  if (!category) {
+    category = await prisma.category.findFirst({
+      where: { OR: [{ slug: 'outros' }, { id: 10 }] },
+    }) || await prisma.category.findFirst();
+  }
+
+  const categoryIdFinal = category ? category.id : categoryId;
 
   const slug = gerarSlug(title);
 
@@ -81,7 +96,7 @@ export async function createProduct(sellerId, productData) {
       description: description.trim(),
       price: parseFloat(price),
       originalPrice: originalPrice ? parseFloat(originalPrice) : null,
-      categoryId,
+      categoryId: categoryIdFinal,
       condition: condition || 'USADO',
       listingType: listingType || 'VENDA',
       city: city || 'Paulistana',

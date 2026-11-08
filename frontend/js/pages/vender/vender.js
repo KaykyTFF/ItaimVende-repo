@@ -859,7 +859,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     categoryId: obterCategoriaId(categoria),
                     condition: normalizarCondicao(condicao),
                     city: cidadeAnuncio,
-                    neighborhood: cepAnuncio,
+                    neighborhood: bairroAnuncio,
                     images: fotosUrlsBackend.length > 0 ? fotosUrlsBackend : ['assets/placeholders/produto-placeholder.svg']
                 };
 
@@ -885,7 +885,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     condicao: condicao,
                     descricao: descricaoFinal,
                     cidade: cidadeAnuncio,
-                    bairro: cepAnuncio,
+                    bairro: bairroAnuncio,
                     imagens: fotosUrlsBackend.length > 0 
                         ? fotosUrlsBackend 
                         : (fotosColetadas.length > 0 ? fotosColetadas : ['assets/placeholders/produto-placeholder.svg'])
