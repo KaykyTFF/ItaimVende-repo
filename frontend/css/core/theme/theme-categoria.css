@@ -90,7 +90,7 @@ body[data-theme="dark"].pagina-categoria,
 }
 
 /* Checkbox Marcado no Tema Escuro */
-[data-theme="dark"] .filtro-sidebar-check:checked + .custom-checkbox {
+[data-theme="dark"] .filtro-sidebar-check:checked+.custom-checkbox {
     background-color: #38A129 !important;
     border-color: #38A129 !important;
     box-shadow: none !important;
