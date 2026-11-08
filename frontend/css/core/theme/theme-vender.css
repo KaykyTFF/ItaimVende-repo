@@ -33,8 +33,8 @@ body.dark-theme.pagina-vender {
 [data-theme="dark"] .btn-voltar-vender:hover,
 .dark-theme .btn-voltar-vender:hover {
     background-color: #242E38 !important;
-    color: #4ADE80 !important;
-    border-color: #4ADE80 !important;
+    color: #38A129 !important;
+    border-color: #38A129 !important;
 }
 
 /* ==========================================================================
@@ -49,8 +49,8 @@ body.dark-theme.pagina-vender {
 
 [data-theme="dark"] .wizard-etapa-badge,
 .dark-theme .wizard-etapa-badge {
-    background: rgba(74, 222, 128, 0.15) !important;
-    color: #4ADE80 !important;
+    background: rgba(56, 161, 41, 0.12) !important;
+    color: #38A129 !important;
 }
 
 [data-theme="dark"] .wizard-etapa-nome,
@@ -61,6 +61,12 @@ body.dark-theme.pagina-vender {
 [data-theme="dark"] .wizard-barra-trilha,
 .dark-theme .wizard-barra-trilha {
     background: #2C3946 !important;
+}
+
+[data-theme="dark"] .wizard-barra-progresso,
+.dark-theme .wizard-barra-progresso {
+    background: #38A129 !important;
+    box-shadow: none !important;
 }
 
 /* ==========================================================================
@@ -93,21 +99,21 @@ body.dark-theme.pagina-vender {
 [data-theme="dark"] .badge-contador-etapa,
 .dark-theme .badge-contador-etapa {
     background: #161C22 !important;
-    border-color: #4ADE80 !important;
-    color: #4ADE80 !important;
+    border-color: rgba(56, 161, 41, 0.4) !important;
+    color: #38A129 !important;
 }
 
 /* Caixa de Dica ao Vendedor */
 [data-theme="dark"] .dica-vendedor-box,
 .dark-theme .dica-vendedor-box {
-    background: rgba(74, 222, 128, 0.08) !important;
-    border: 1px solid rgba(74, 222, 128, 0.22) !important;
-    color: #86EFAC !important;
+    background: rgba(56, 161, 41, 0.08) !important;
+    border: 1px solid rgba(56, 161, 41, 0.22) !important;
+    color: #CBD5E1 !important;
 }
 
 [data-theme="dark"] .dica-vendedor-box strong,
 .dark-theme .dica-vendedor-box strong {
-    color: #4ADE80 !important;
+    color: #38A129 !important;
 }
 
 /* ==========================================================================
@@ -124,32 +130,37 @@ body.dark-theme.pagina-vender {
 [data-theme="dark"] .quadrado-add-foto:focus-visible,
 .dark-theme .quadrado-add-foto:hover,
 .dark-theme .quadrado-add-foto:focus-visible {
-    border-color: #4ADE80 !important;
-    color: #4ADE80 !important;
-    background-color: rgba(74, 222, 128, 0.08) !important;
+    border-color: #38A129 !important;
+    color: #38A129 !important;
+    background-color: rgba(56, 161, 41, 0.08) !important;
+    box-shadow: none !important;
 }
 
 [data-theme="dark"] .quadrado-add-foto.drag-over,
 .dark-theme .quadrado-add-foto.drag-over {
-    border-color: #4ADE80 !important;
-    background-color: rgba(74, 222, 128, 0.16) !important;
+    border-color: #38A129 !important;
+    background-color: rgba(56, 161, 41, 0.16) !important;
+    color: #38A129 !important;
 }
 
 [data-theme="dark"] .item-foto-preview,
 .dark-theme .item-foto-preview {
     border-color: #2C3946 !important;
     background-color: #161C22 !important;
+    box-shadow: none !important;
 }
 
 [data-theme="dark"] .item-foto-preview.item-foto-capa,
 .dark-theme .item-foto-preview.item-foto-capa {
-    border-color: #4ADE80 !important;
+    border-color: #38A129 !important;
+    box-shadow: none !important;
 }
 
 [data-theme="dark"] .tag-foto-capa,
 .dark-theme .tag-foto-capa {
-    background-color: #22C55E !important;
+    background-color: #38A129 !important;
     color: #FFFFFF !important;
+    box-shadow: none !important;
 }
 
 /* ==========================================================================
@@ -170,17 +181,17 @@ body.dark-theme.pagina-vender {
 
 [data-theme="dark"] .chip-opcao:hover,
 .dark-theme .chip-opcao:hover {
-    border-color: #4ADE80 !important;
-    color: #4ADE80 !important;
+    border-color: #38A129 !important;
+    color: #38A129 !important;
     background: #1F2831 !important;
 }
 
 [data-theme="dark"] .chip-opcao.ativo,
 .dark-theme .chip-opcao.ativo {
-    background: #22C55E !important;
-    border-color: #22C55E !important;
+    background: #38A129 !important;
+    border-color: #38A129 !important;
     color: #FFFFFF !important;
-    box-shadow: 0 4px 14px rgba(34, 197, 94, 0.35) !important;
+    box-shadow: none !important;
 }
 
 /* Inputs e Textarea */
@@ -213,8 +224,8 @@ body.dark-theme.pagina-vender {
 .dark-theme .input-vender-padrao:focus,
 .dark-theme .textarea-vender-padrao:focus {
     background-color: #161C22 !important;
-    border-color: #4ADE80 !important;
-    box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.2) !important;
+    border-color: #38A129 !important;
+    box-shadow: none !important;
 }
 
 [data-theme="dark"] .contador-caracteres,
@@ -225,28 +236,22 @@ body.dark-theme.pagina-vender {
 /* Botões de Dropdown do Vender (Categoria / Condição) */
 [data-theme="dark"] .btn-dropdown-pill,
 .dark-theme .btn-dropdown-pill {
-    background: linear-gradient(135deg, #44BD32 0%, #3CA92C 100%) !important;
-    background: linear-gradient(135deg, #38A129 0%, #2E8B22 100%) !important;
+    background: #38A129 !important;
     color: #FFFFFF !important;
     border: 1px solid rgba(255, 255, 255, 0.16) !important;
-    box-shadow: 0 4px 16px rgba(68, 189, 50, 0.35) !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35) !important;
+    box-shadow: none !important;
 }
 
 [data-theme="dark"] .btn-dropdown-pill:hover,
 .dark-theme .btn-dropdown-pill:hover {
-    background: linear-gradient(135deg, #48C735 0%, #3CA92C 100%) !important;
-    box-shadow: 0 6px 22px rgba(68, 189, 50, 0.45) !important;
-    background: linear-gradient(135deg, #44BD32 0%, #38A129 100%) !important;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45) !important;
+    background: #2E8B22 !important;
+    box-shadow: none !important;
 }
 
 [data-theme="dark"] .dropdown-pill-container.aberto .btn-dropdown-pill,
 .dark-theme .dropdown-pill-container.aberto .btn-dropdown-pill {
-    background: linear-gradient(135deg, #3CA92C 0%, #359826 100%) !important;
-    box-shadow: 0 2px 10px rgba(68, 189, 50, 0.4), 0 0 0 3px rgba(68, 189, 50, 0.3) !important;
-    background: linear-gradient(135deg, #2E8B22 0%, #25731B 100%) !important;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4), 0 0 0 2px rgba(56, 161, 41, 0.3) !important;
+    background: #25731B !important;
+    box-shadow: none !important;
 }
 
 /* Menus de Dropdown do Vender (Categoria / Condição) */
@@ -269,13 +274,13 @@ body.dark-theme.pagina-vender {
 .dark-theme .item-opcao-dropdown:hover,
 .dark-theme .item-dropdown-opcao:hover {
     background-color: #242E38 !important;
-    color: #4ADE80 !important;
+    color: #38A129 !important;
 }
 
 [data-theme="dark"] .item-opcao-dropdown.selecionado,
 .dark-theme .item-opcao-dropdown.selecionado {
-    background-color: rgba(74, 222, 128, 0.15) !important;
-    color: #4ADE80 !important;
+    background-color: rgba(56, 161, 41, 0.12) !important;
+    color: #38A129 !important;
 }
 
 /* ==========================================================================
@@ -289,7 +294,7 @@ body.dark-theme.pagina-vender {
 
 [data-theme="dark"] .cifrao-destaque,
 .dark-theme .cifrao-destaque {
-    color: #4ADE80 !important;
+    color: #38A129 !important;
 }
 
 [data-theme="dark"] .input-preco-destacado,
@@ -306,8 +311,8 @@ body.dark-theme.pagina-vender {
 
 [data-theme="dark"] .icone-pin-grande,
 .dark-theme .icone-pin-grande {
-    background: rgba(74, 222, 128, 0.15) !important;
-    color: #4ADE80 !important;
+    background: rgba(56, 161, 41, 0.12) !important;
+    color: #38A129 !important;
 }
 
 [data-theme="dark"] .localizacao-texto-detalhe strong,
@@ -324,13 +329,13 @@ body.dark-theme.pagina-vender {
 .dark-theme .btn-editar-localizacao {
     background-color: #242E38 !important;
     border: 1px solid #2C3946 !important;
-    color: #4ADE80 !important;
+    color: #38A129 !important;
 }
 
 [data-theme="dark"] .btn-editar-localizacao:hover,
 .dark-theme .btn-editar-localizacao:hover {
     background-color: #2C3946 !important;
-    color: #86EFAC !important;
+    color: #2E8B22 !important;
 }
 
 /* ==========================================================================
@@ -363,7 +368,8 @@ body.dark-theme.pagina-vender {
 [data-theme="dark"] .preview-thumb-item:hover,
 .dark-theme .preview-thumb-item.ativo,
 .dark-theme .preview-thumb-item:hover {
-    border-color: #4ADE80 !important;
+    border-color: #38A129 !important;
+    box-shadow: none !important;
 }
 
 [data-theme="dark"] .preview-titulo-anuncio,
@@ -373,7 +379,7 @@ body.dark-theme.pagina-vender {
 
 [data-theme="dark"] .preview-preco-anuncio,
 .dark-theme .preview-preco-anuncio {
-    color: #4ADE80 !important;
+    color: #38A129 !important;
 }
 
 [data-theme="dark"] .preview-local-linha,
@@ -398,18 +404,18 @@ body.dark-theme.pagina-vender {
 
 [data-theme="dark"] .btn-editar-etapa-link,
 .dark-theme .btn-editar-etapa-link {
-    color: #4ADE80 !important;
+    color: #38A129 !important;
 }
 
 [data-theme="dark"] .btn-editar-etapa-link:hover,
 .dark-theme .btn-editar-etapa-link:hover {
-    color: #86EFAC !important;
+    color: #2E8B22 !important;
 }
 
 [data-theme="dark"] .preview-tag-badge,
 .dark-theme .preview-tag-badge {
-    background: rgba(74, 222, 128, 0.15) !important;
-    color: #4ADE80 !important;
+    background: rgba(56, 161, 41, 0.12) !important;
+    color: #38A129 !important;
 }
 
 [data-theme="dark"] .preview-tag-condicao,
@@ -439,14 +445,14 @@ body.dark-theme.pagina-vender {
     background-color: #38A129 !important;
     background: #38A129 !important;
     color: #FFFFFF !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35) !important;
+    box-shadow: none !important;
 }
 
 [data-theme="dark"] .btn-wizard-proximo:hover,
 .dark-theme .btn-wizard-proximo:hover {
     background-color: #2E8B22 !important;
     background: #2E8B22 !important;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45) !important;
+    box-shadow: none !important;
 }
 
 [data-theme="dark"] .btn-anunciar-destaque,
@@ -454,14 +460,14 @@ body.dark-theme.pagina-vender {
     background-color: #38A129 !important;
     background: #38A129 !important;
     color: #FFFFFF !important;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4) !important;
+    box-shadow: none !important;
 }
 
 [data-theme="dark"] .btn-anunciar-destaque:hover,
 .dark-theme .btn-anunciar-destaque:hover {
     background-color: #2E8B22 !important;
     background: #2E8B22 !important;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5) !important;
+    box-shadow: none !important;
 }
 
 /* ==========================================================================
@@ -499,7 +505,7 @@ body.dark-theme.pagina-vender {
 [data-theme="dark"] .modal-loc-item:hover,
 .dark-theme .modal-loc-item:hover {
     background-color: #242E38 !important;
-    color: #4ADE80 !important;
+    color: #38A129 !important;
 }
 
 /* ==========================================================================
@@ -512,7 +518,7 @@ body.dark-theme.pagina-vender {
 
 [data-theme="dark"] .link-ver-anuncio-sucesso,
 .dark-theme .link-ver-anuncio-sucesso {
-    color: #4ADE80 !important;
+    color: #38A129 !important;
 }
 
 [data-theme="dark"] .btn-sucesso-secundario,

@@ -52,7 +52,7 @@
 
 .wizard-barra-progresso {
     height: 100%;
-    background: #44BD32;
+    background: #38A129;
     border-radius: 10px;
     box-shadow: none;
     transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
@@ -298,7 +298,7 @@
 }
 
 .campo-preco-grande.modo-doacao .input-preco-destacado {
-    color: #44BD32 !important;
+    color: #38A129 !important;
     background: #F0FDF4;
     border-color: #86EFAC;
     font-size: 22px !important;
@@ -321,14 +321,14 @@
 }
 
 [data-theme="dark"] .btn-toggle-doacao.ativo {
-    background: #44BD32 !important;
-    border-color: #44BD32 !important;
+    background: #38A129 !important;
+    border-color: #38A129 !important;
     color: #FFFFFF !important;
 }
 
 [data-theme="dark"] .campo-preco-grande.modo-doacao .input-preco-destacado {
-    background: rgba(68, 189, 50, 0.12);
-    border-color: rgba(68, 189, 50, 0.4);
+    background: rgba(56, 161, 41, 0.12);
+    border-color: rgba(56, 161, 41, 0.4);
     color: #38A129 !important;
 }
 
@@ -373,8 +373,8 @@
     width: 44px;
     height: 44px;
     border-radius: 12px;
-    background: #E8F5E9;
-    color: #59AA59;
+    background: rgba(56, 161, 41, 0.12);
+    color: #38A129;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -506,7 +506,7 @@
 .preview-preco-anuncio {
     font-size: 28px;
     font-weight: 900;
-    color: #59AA59;
+    color: #38A129;
     margin: 0;
 }
 
@@ -548,7 +548,7 @@
 }
 
 .btn-editar-etapa-link {
-    color: #59AA59;
+    color: #38A129;
     background: none;
     border: none;
     cursor: pointer;
@@ -561,7 +561,7 @@
 }
 
 .btn-editar-etapa-link:hover {
-    color: #3F833F;
+    color: #2E8B22;
 }
 
 /* ==========================================================================

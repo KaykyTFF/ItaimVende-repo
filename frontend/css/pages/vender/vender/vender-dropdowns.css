@@ -68,7 +68,7 @@
     left: 0;
     width: 100%;
     background-color: #FFFFFF;
-    border: 1px solid rgba(68, 189, 50, 0.18);
+    border: 1px solid rgba(56, 161, 41, 0.18);
     border-radius: 14px;
     box-shadow: 0 14px 34px rgba(0, 0, 0, 0.14), 0 2px 8px rgba(0, 0, 0, 0.05);
     padding: 8px;
@@ -80,7 +80,7 @@
     transform: translateY(-8px) scale(0.98);
     transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
     scrollbar-width: thin;
-    scrollbar-color: rgba(68, 189, 50, 0.4) #F1F5F9;
+    scrollbar-color: rgba(56, 161, 41, 0.4) #F1F5F9;
 }
 
 .menu-dropdown-opcoes::-webkit-scrollbar {
@@ -93,12 +93,12 @@
 }
 
 .menu-dropdown-opcoes::-webkit-scrollbar-thumb {
-    background: rgba(68, 189, 50, 0.35);
+    background: rgba(56, 161, 41, 0.35);
     border-radius: 4px;
 }
 
 .menu-dropdown-opcoes::-webkit-scrollbar-thumb:hover {
-    background: rgba(68, 189, 50, 0.65);
+    background: rgba(56, 161, 41, 0.65);
 }
 
 .dropdown-pill-container.aberto .menu-dropdown-opcoes {
@@ -122,12 +122,12 @@
 }
 
 .item-opcao-dropdown:hover {
-    background-color: rgba(68, 189, 50, 0.08);
-    color: var(--primary-hover, #3CA92C);
+    background-color: rgba(56, 161, 41, 0.08);
+    color: var(--primary-hover, #2E8B22);
 }
 
 .item-opcao-dropdown.selecionado {
-    background-color: rgba(68, 189, 50, 0.14);
+    background-color: rgba(56, 161, 41, 0.14);
     color: #2E8B22;
     font-weight: 600;
 }
@@ -135,5 +135,5 @@
 .item-opcao-dropdown.selecionado::after {
     content: "✓";
     font-weight: 700;
-    color: var(--primary, #44BD32);
+    color: var(--primary, #38A129);
 }

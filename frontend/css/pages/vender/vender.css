@@ -4,28 +4,28 @@
  */
 
 /* 1. Base, Variáveis e Layout Principal */
-@import url('./vender/vender-base.css');
+@import url('./vender/vender-base.css?v=16');
 
 /* 2. Fotos e Localização */
-@import url('./vender/vender-fotos.css');
+@import url('./vender/vender-fotos.css?v=16');
 
 /* 3. Formulário de Dados e Descrição */
-@import url('./vender/vender-form.css');
+@import url('./vender/vender-form.css?v=16');
 
 /* 4. Dropdowns em Pílula (Categoria e Condição) */
-@import url('./vender/vender-dropdowns.css');
+@import url('./vender/vender-dropdowns.css?v=16');
 
 /* 5. Ação Principal e Validação */
-@import url('./vender/vender-acoes.css');
+@import url('./vender/vender-acoes.css?v=16');
 
 /* 6. Tela de Sucesso e Confirmação */
-@import url('./vender/vender-sucesso.css');
+@import url('./vender/vender-sucesso.css?v=16');
 
 /* 7. Modal de Seleção de Localização */
-@import url('./vender/vender-modal-localizacao.css');
+@import url('./vender/vender-modal-localizacao.css?v=16');
 
 /* 8. Processo Interativo por Etapas (Wizard) */
-@import url('./vender/vender-wizard.css');
+@import url('./vender/vender-wizard.css?v=16');
 
 /* 9. Responsividade (Mobile e Tablet) */
-@import url('./vender/vender-responsive.css');
+@import url('./vender/vender-responsive.css?v=16');

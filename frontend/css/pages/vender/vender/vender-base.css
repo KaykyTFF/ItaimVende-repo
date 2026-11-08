@@ -10,16 +10,16 @@
     --vender-card-surface: #F5F6F7;
     --vender-input-bg: #D9DDE0;
     --vender-input-hover: #D0D5D9;
-    --vender-green: #44BD32;
-    --vender-green-hover: #3CA92C;
-    --vender-green-dark: #359826;
-    --vender-green-glow: rgba(68, 189, 50, 0.35);
+    --vender-green: #38A129;
+    --vender-green-hover: #2E8B22;
+    --vender-green-dark: #25731B;
+    --vender-green-glow: none;
     --vender-text-dark: #1F2937;
     --vender-text-sub: #4B5563;
     --vender-text-placeholder: #88929D;
     --vender-border-dashed: #B2BCC5;
     --vender-shadow-card: 0 14px 36px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.06);
-    --vender-shadow-btn: 0 8px 24px var(--vender-green-glow);
+    --vender-shadow-btn: none;
 }
 
 /* Fundo geral da página vender */
