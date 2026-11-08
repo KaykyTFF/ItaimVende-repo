@@ -1109,7 +1109,7 @@ document.addEventListener('DOMContentLoaded', () => {
             textoLocalizacao.textContent = `${cid} - ${cepBairro}`;
         }
         if (selectCidade) selectCidade.value = cid;
-        if (inputCep) inputCep.value = cepBairro;
+        if (inputBairro) inputBairro.value = cepBairro;
 
         // Preenche fotos
         const rawFotos = Array.isArray(produto.images) && produto.images.length > 0
