@@ -13,6 +13,10 @@
     width: 100%;
 }
 
+.dropdown-pill-container.aberto {
+    z-index: 60;
+}
+
 .btn-dropdown-pill {
     width: 100%;
     min-height: 48px;
@@ -42,6 +46,11 @@
 .btn-dropdown-pill:active {
     transform: translateY(1px);
     box-shadow: none;
+}
+
+.btn-dropdown-pill:focus-visible {
+    outline: 2px solid #2E8B22;
+    outline-offset: 2px;
 }
 
 .btn-dropdown-pill .chevron-icon {
@@ -77,6 +86,7 @@
     overflow-y: auto;
     opacity: 0;
     visibility: hidden;
+    pointer-events: none;
     transform: translateY(-8px) scale(0.98);
     transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
     scrollbar-width: thin;
@@ -104,6 +114,7 @@
 .dropdown-pill-container.aberto .menu-dropdown-opcoes {
     opacity: 1;
     visibility: visible;
+    pointer-events: auto;
     transform: translateY(0) scale(1);
 }
 
@@ -119,11 +130,14 @@
     color: #374151;
     cursor: pointer;
     transition: background 0.15s, color 0.15s;
+    user-select: none;
 }
 
-.item-opcao-dropdown:hover {
+.item-opcao-dropdown:hover,
+.item-opcao-dropdown:focus {
     background-color: rgba(56, 161, 41, 0.08);
     color: var(--primary-hover, #2E8B22);
+    outline: none;
 }
 
 .item-opcao-dropdown.selecionado {

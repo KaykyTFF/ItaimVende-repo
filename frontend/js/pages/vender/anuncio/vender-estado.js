@@ -75,7 +75,11 @@
     function obterCategoriaId(nome) {
         if (!nome) return 10;
         const norm = nome.toLowerCase().trim();
-        return CATEGORIA_MAPA[norm] || 10;
+        if (CATEGORIA_MAPA[norm]) return CATEGORIA_MAPA[norm];
+        for (const [key, id] of Object.entries(CATEGORIA_MAPA)) {
+            if (norm.includes(key) || key.includes(norm)) return id;
+        }
+        return 10;
     }
 
     function normalizarCondicao(cond) {

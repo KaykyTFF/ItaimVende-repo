@@ -18,6 +18,8 @@
         validarFotos
     } = window.ItaimVenderEstado;
 
+    let inicializado = false;
+
     let inputTitulo = null;
     let textareaDesc = null;
     let contadorCaracteres = null;
@@ -39,23 +41,66 @@
     let wizardEtapaNome = null;
     let wizardBarraProgresso = null;
 
+    function fecharTodosDropdowns() {
+        document.querySelectorAll('.dropdown-pill-container').forEach(d => {
+            d.classList.remove('aberto');
+            const b = d.querySelector('.btn-dropdown-pill');
+            if (b) b.setAttribute('aria-expanded', 'false');
+        });
+    }
+
     function configurarDropdownPill(container, btn, label, menu) {
         if (!container || !btn || !label || !menu) return;
 
+        btn.setAttribute('aria-haspopup', 'listbox');
+        btn.setAttribute('aria-expanded', 'false');
+
+        // Toggle ao clicar no botão em pílula
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
             const jaAberto = container.classList.contains('aberto');
-            document.querySelectorAll('.dropdown-pill-container').forEach(d => d.classList.remove('aberto'));
-            if (!jaAberto) container.classList.add('aberto');
+            fecharTodosDropdowns();
+            if (!jaAberto) {
+                container.classList.add('aberto');
+                btn.setAttribute('aria-expanded', 'true');
+            }
         });
 
-        menu.querySelectorAll('.dropdown-item').forEach(item => {
-            item.addEventListener('click', (e) => {
-                e.stopPropagation();
-                menu.querySelectorAll('.dropdown-item').forEach(it => it.classList.remove('selecionado'));
+        // Evita fechar o dropdown ao interagir com o menu (ex.: barra de rolagem)
+        menu.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+
+        // Configuração de cada item de opção
+        const itens = menu.querySelectorAll('.item-opcao-dropdown, .dropdown-item');
+        itens.forEach(item => {
+            item.setAttribute('role', 'option');
+            item.setAttribute('tabindex', '0');
+
+            const selecionarOpcao = (e) => {
+                if (e) e.stopPropagation();
+                itens.forEach(it => it.classList.remove('selecionado'));
                 item.classList.add('selecionado');
-                label.textContent = item.textContent.trim();
+
+                const valorTexto = item.getAttribute('data-valor') || item.textContent.trim();
+                label.textContent = valorTexto;
+
                 container.classList.remove('aberto');
+                btn.setAttribute('aria-expanded', 'false');
+                btn.focus();
+
+                // Sincroniza em tempo real com o preview da Revisão (Etapa 4)
+                if (window.ItaimVenderPublicacao && typeof window.ItaimVenderPublicacao.atualizarPreviewRevisao === 'function') {
+                    window.ItaimVenderPublicacao.atualizarPreviewRevisao();
+                }
+            };
+
+            item.addEventListener('click', selecionarOpcao);
+            item.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    selecionarOpcao(e);
+                }
             });
         });
     }
@@ -64,6 +109,7 @@
         getEstado().isModoDoacao = ativar;
         if (btnToggleDoacao) {
             btnToggleDoacao.classList.toggle('ativo', ativar);
+            btnToggleDoacao.setAttribute('aria-pressed', String(ativar));
         }
         if (campoPrecoWrapper) {
             campoPrecoWrapper.classList.toggle('modo-doacao', ativar);
@@ -79,6 +125,10 @@
                 }
                 inputPreco.focus();
             }
+        }
+
+        if (window.ItaimVenderPublicacao && typeof window.ItaimVenderPublicacao.atualizarPreviewRevisao === 'function') {
+            window.ItaimVenderPublicacao.atualizarPreviewRevisao();
         }
     }
 
@@ -99,7 +149,7 @@
         // Validação progressiva ao avançar
         if (novaEtapa > est.etapaAtual) {
             // Validação obrigatória da Etapa 1 (Fotos)
-            if (est.etapaAtual === 1 || (novaEtapa > 1 && est.fotosLista.length === 0)) {
+            if (est.etapaAtual === 1 || (novaEtapa > 1 && (!est.fotosLista || est.fotosLista.length === 0))) {
                 if (!validarFotos()) {
                     if (est.etapaAtual !== 1) irParaEtapa(1);
                     return false;
@@ -119,7 +169,7 @@
                 }
 
                 const catSelecionada = (labelCategoria?.textContent || '').trim().toUpperCase();
-                if (!catSelecionada || catSelecionada === 'SELECIONAR CATEGORIA') {
+                if (!catSelecionada || catSelecionada === 'SELECIONAR CATEGORIA' || catSelecionada === 'CATEGORIA') {
                     exibirFeedback('Por favor, selecione uma categoria para o seu anúncio.');
                     if (est.etapaAtual !== 2) irParaEtapa(2);
                     btnDropdownCategoria?.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -128,7 +178,7 @@
                 }
 
                 const condSelecionada = (labelCondicao?.textContent || '').trim().toUpperCase();
-                if (!condSelecionada || condSelecionada === 'SELECIONAR CONDIÇÃO') {
+                if (!condSelecionada || condSelecionada === 'SELECIONAR CONDIÇÃO' || condSelecionada === 'CONDIÇÃO') {
                     exibirFeedback('Por favor, selecione a condição do produto.');
                     if (est.etapaAtual !== 2) irParaEtapa(2);
                     btnDropdownCondicao?.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -168,6 +218,9 @@
 
         est.etapaAtual = novaEtapa;
 
+        // Fecha eventuais dropdowns abertos ao mudar de etapa
+        fecharTodosDropdowns();
+
         // Atualiza painéis visíveis
         for (let i = 1; i <= 4; i++) {
             const painel = document.getElementById(`painel-etapa-${i}`);
@@ -201,22 +254,25 @@
     }
 
     function inicializar() {
+        if (inicializado) return;
+        inicializado = true;
+
         inputTitulo = document.getElementById('input-titulo');
-        textareaDesc = document.getElementById('textarea-desc');
-        contadorCaracteres = document.getElementById('contador-caracteres');
+        textareaDesc = document.getElementById('textarea-descricao') || document.getElementById('textarea-desc');
+        contadorCaracteres = document.getElementById('contador-desc') || document.getElementById('contador-caracteres');
         inputPreco = document.getElementById('input-preco');
         btnToggleDoacao = document.getElementById('btn-toggle-doacao');
         campoPrecoWrapper = document.getElementById('campo-preco-wrapper');
 
-        dropdownCategoria = document.getElementById('dropdown-categoria-pill');
-        btnDropdownCategoria = document.getElementById('btn-dropdown-cat-pill');
-        labelCategoria = document.getElementById('label-cat-selecionada');
-        menuCategoriaOpcoes = document.getElementById('menu-cat-opcoes');
+        dropdownCategoria = document.getElementById('dropdown-categoria') || document.getElementById('dropdown-categoria-pill');
+        btnDropdownCategoria = document.getElementById('btn-dropdown-categoria') || document.getElementById('btn-dropdown-cat-pill');
+        labelCategoria = document.getElementById('label-categoria-texto') || document.getElementById('label-cat-selecionada');
+        menuCategoriaOpcoes = document.getElementById('menu-categoria-opcoes') || document.getElementById('menu-cat-opcoes');
 
-        dropdownCondicao = document.getElementById('dropdown-condicao-pill');
-        btnDropdownCondicao = document.getElementById('btn-dropdown-cond-pill');
-        labelCondicao = document.getElementById('label-cond-selecionada');
-        menuCondicaoOpcoes = document.getElementById('menu-cond-opcoes');
+        dropdownCondicao = document.getElementById('dropdown-condicao') || document.getElementById('dropdown-condicao-pill');
+        btnDropdownCondicao = document.getElementById('btn-dropdown-condicao') || document.getElementById('btn-dropdown-cond-pill');
+        labelCondicao = document.getElementById('label-condicao-texto') || document.getElementById('label-cond-selecionada');
+        menuCondicaoOpcoes = document.getElementById('menu-condicao-opcoes') || document.getElementById('menu-cond-opcoes');
 
         wizardEtapaBadge = document.getElementById('wizard-etapa-badge');
         wizardEtapaNome = document.getElementById('wizard-etapa-nome');
@@ -250,9 +306,10 @@
 
         // Contador de caracteres da descrição
         if (textareaDesc && contadorCaracteres) {
+            const maxChars = parseInt(textareaDesc.getAttribute('maxlength'), 10) || 1000;
             textareaDesc.addEventListener('input', () => {
                 const total = textareaDesc.value.length;
-                contadorCaracteres.textContent = `${total}/500 caracteres`;
+                contadorCaracteres.textContent = `${total} / ${maxChars}`;
             });
         }
 
@@ -260,8 +317,14 @@
         configurarDropdownPill(dropdownCategoria, btnDropdownCategoria, labelCategoria, menuCategoriaOpcoes);
         configurarDropdownPill(dropdownCondicao, btnDropdownCondicao, labelCondicao, menuCondicaoOpcoes);
 
-        document.addEventListener('click', () => {
-            document.querySelectorAll('.dropdown-pill-container').forEach(d => d.classList.remove('aberto'));
+        // Fechar dropdowns ao clicar fora
+        document.addEventListener('click', fecharTodosDropdowns);
+
+        // Fechar dropdowns ao pressionar Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                fecharTodosDropdowns();
+            }
         });
 
         // Botões de Avançar e Voltar
@@ -299,7 +362,7 @@
     window.ItaimVenderWizard = {
         inicializar,
         irParaEtapa,
-        definirModoDoacao
+        definirModoDoacao,
+        fecharTodosDropdowns
     };
 })();
-
