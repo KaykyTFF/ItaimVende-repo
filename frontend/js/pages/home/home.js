@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const cadastrados = JSON.parse(localStorage.getItem('itaim_produtos_cadastrados') || '[]');
                 if (Array.isArray(cadastrados)) locais = [...cadastrados, ...locais];
-            } catch(e) {}
+            } catch (e) { }
         }
         return locais;
     }
@@ -128,11 +128,11 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const salvos = JSON.parse(localStorage.getItem('itaim_favoritos') || '[]');
             favoritosSet = new Set(salvos.map(String));
-        } catch (e) {}
+        } catch (e) { }
     } else {
         try {
             localStorage.removeItem('itaim_favoritos');
-        } catch (e) {}
+        } catch (e) { }
     }
 
     function atualizarContadorFavoritos() {
@@ -219,9 +219,9 @@ document.addEventListener('DOMContentLoaded', () => {
             ? produtos.filter(p => {
                 const q = termoBusca.toLowerCase();
                 return (p.titulo && p.titulo.toLowerCase().includes(q)) ||
-                       (p.categoria && p.categoria.toLowerCase().includes(q)) ||
-                       (p.cidade && p.cidade.toLowerCase().includes(q)) ||
-                       (p.bairro && p.bairro.toLowerCase().includes(q));
+                    (p.categoria && p.categoria.toLowerCase().includes(q)) ||
+                    (p.cidade && p.cidade.toLowerCase().includes(q)) ||
+                    (p.bairro && p.bairro.toLowerCase().includes(q));
             })
             : produtos;
 
@@ -375,14 +375,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderizarVitrine() {
-    function formatarLocalCard(cidade, bairro) {
-        const c = (cidade || 'Paulistana').trim();
-        let b = (bairro || 'Centro').trim();
-        if (!b || /^\d/.test(b) || /\d{5}/.test(b) || b.toLowerCase().includes('cep')) {
-            b = 'Centro';
+        function formatarLocalCard(cidade, bairro) {
+            const c = (cidade || 'Paulistana').trim();
+            let b = (bairro || 'Centro').trim();
+            if (!b || /^\d/.test(b) || /\d{5}/.test(b) || b.toLowerCase().includes('cep')) {
+                b = 'Centro';
+            }
+            return `${c} - ${b}`;
         }
-        return `${c} - ${b}`;
-    }
 
         if (!gradeProdutos) return;
 
@@ -519,9 +519,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         ${produtos.length === 0 ? 'Nenhum produto anunciado no momento' : 'Nenhum anúncio encontrado'}
                     </h3>
                     <p style="color: #64748B; font-size: 14.5px; margin-bottom: 22px; line-height: 1.5;">
-                        ${produtos.length === 0 
-                            ? 'Ainda não há produtos à venda. Desapegue do que você não usa mais ou seja o primeiro a anunciar!' 
-                            : 'Tente buscar por outro termo ou remova os filtros selecionados na barra lateral.'}
+                        ${produtos.length === 0
+                    ? 'Ainda não há produtos à venda. Desapegue do que você não usa mais ou seja o primeiro a anunciar!'
+                    : 'Tente buscar por outro termo ou remova os filtros selecionados na barra lateral.'}
                     </p>
                     <a href="${window.ItaimRotas ? window.ItaimRotas.obterUrl('vender') : '../vender/vender.html'}" style="background: #44BD32; color: #FFFFFF; font-weight: 700; padding: 12px 24px; border-radius: 30px; text-decoration: none; font-size: 15px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(68,189,50,0.25);">
                         + Anunciar Produto Agora
@@ -621,7 +621,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (userEmail) {
                         localStorage.setItem('itaim_favoritos_' + userEmail.toLowerCase().trim(), JSON.stringify(favArr));
                     }
-                } catch (err) {}
+                } catch (err) { }
                 atualizarContadorFavoritos();
 
                 // Sincroniza com a API se usuário autenticado
@@ -653,10 +653,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const res = await window.ItaimApi.produtos.listar(apiFiltros);
                 if (res && res.success && Array.isArray(res.data)) {
                     const mapaExcluidos = (() => {
-                        try { return new Set(JSON.parse(localStorage.getItem('itaim_produtos_excluidos') || '[]').map(String)); } catch(e) { return new Set(); }
+                        try { return new Set(JSON.parse(localStorage.getItem('itaim_produtos_excluidos') || '[]').map(String)); } catch (e) { return new Set(); }
                     })();
                     const mapaStatus = (() => {
-                        try { return JSON.parse(localStorage.getItem('itaim_produtos_status_map') || '{}'); } catch(e) { return {}; }
+                        try { return JSON.parse(localStorage.getItem('itaim_produtos_status_map') || '{}'); } catch (e) { return {}; }
                     })();
 
                     const apiProdutos = res.data
@@ -672,9 +672,9 @@ document.addEventListener('DOMContentLoaded', () => {
                                 categoria: p.categoria || (p.category ? p.category.name : 'Geral'),
                                 cidade: p.cidade || p.city || 'Paulistana',
                                 bairro: (() => {
-            const b = (p.bairro || p.neighborhood || 'Centro').trim();
-            return (!b || /^\d/.test(b) || /\d{5}/.test(b) || b.toLowerCase().includes('cep')) ? 'Centro' : b;
-        })(),
+                                    const b = (p.bairro || p.neighborhood || 'Centro').trim();
+                                    return (!b || /^\d/.test(b) || /\d{5}/.test(b) || b.toLowerCase().includes('cep')) ? 'Centro' : b;
+                                })(),
                                 imagem: (window.ItaimApi && window.ItaimApi.resolverUrlImagem)
                                     ? window.ItaimApi.resolverUrlImagem(p.imagem || (p.images && p.images[0]) || '')
                                     : (window.ItaimRotas ? window.ItaimRotas.obterAsset('assets/produtos/anuncio_13.jpg') : '../../assets/produtos/anuncio_13.jpg')
@@ -719,7 +719,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 url.searchParams.delete('q');
                 url.searchParams.delete('busca');
                 window.history.pushState({}, '', url.toString());
-            } catch (err) {}
+            } catch (err) { }
             atualizarSidebarFiltros();
             renderizarVitrine();
         }
@@ -730,7 +730,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const valorDigitado = campoBusca ? campoBusca.value.trim() : '';
         if (valorDigitado.length > 0) {
             e.preventDefault();
-            const urlDestino = window.ItaimRotas 
+            const urlDestino = window.ItaimRotas
                 ? window.ItaimRotas.obterUrl('categoria', `q=${encodeURIComponent(valorDigitado)}`) : `../produtos/categoria.html?q=${encodeURIComponent(valorDigitado)}`;
             window.location.href = urlDestino;
         }
@@ -911,7 +911,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    window.filtrarPorCategoria = function(catNome) {
+    window.filtrarPorCategoria = function (catNome) {
         botoesCategorias.forEach(b => {
             const matches = b.getAttribute('data-categoria') === catNome;
             b.classList.toggle('categoria-selecionada', matches);
@@ -1051,5 +1051,5 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.filtrarPorCategoria(catParam);
             }, 100);
         }
-    } catch (err) {}
+    } catch (err) { }
 });
