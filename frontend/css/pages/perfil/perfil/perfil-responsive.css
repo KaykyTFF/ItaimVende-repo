@@ -157,8 +157,7 @@
         line-height: 1.2;
         letter-spacing: -0.3px;
         word-break: break-word;
-        padding-right: 0;
-        /* Removido o padding desnecessário já que o botão sair fica acima do card */
+        padding-right: 0; /* Removido o padding desnecessário já que o botão sair fica acima do card */
     }
 
     #perfil-selo-verificado,

@@ -41,9 +41,9 @@
 .stat-icone-verde,
 .stat-icone-azul,
 .stat-icone-amarelo,
-.stat-icone-roxo {
-    background-color: rgba(68, 189, 50, 0.12);
-    color: #44BD32;
+.stat-icone-roxo { 
+    background-color: rgba(68, 189, 50, 0.12); 
+    color: #44BD32; 
 }
 
 .stat-icone-wrapper svg {
