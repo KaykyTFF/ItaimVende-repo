@@ -1,6 +1,44 @@
 import prisma from '../../config/prisma.js';
 import { AppError } from '../../utils/errors.js';
 
+async function dispararNotificacaoFavorito(userId, product) {
+  if (!product.sellerId || product.sellerId === userId) return;
+
+  try {
+    const umaHoraAtras = new Date(Date.now() - 60 * 60 * 1000);
+    const notifExistente = await prisma.notification.findFirst({
+      where: {
+        userId: product.sellerId,
+        type: 'favorito',
+        link: { contains: product.id },
+        createdAt: { gte: umaHoraAtras },
+      },
+    });
+
+    if (notifExistente) return;
+
+    const [user, { createNotification }] = await Promise.all([
+      prisma.user.findUnique({ where: { id: userId }, select: { name: true, avatar: true } }),
+      import('../notification/index.js'),
+    ]);
+
+    const nomeUsuario = user?.name || 'Um usuário';
+    const firstImage = Array.isArray(product.images) && product.images.length > 0 ? product.images[0] : '';
+    const avatarParam = user?.avatar ? `&avatar=${encodeURIComponent(user.avatar)}` : '';
+    const imgParam = firstImage ? `&img=${encodeURIComponent(firstImage)}` : '';
+
+    await createNotification({
+      userId: product.sellerId,
+      title: 'Anúncio salvo nos favoritos',
+      message: `${nomeUsuario} salvou seu anúncio "${product.title}" nos favoritos.`,
+      type: 'favorito',
+      link: `/pages/produtos/produto.html?id=${product.id}${imgParam}${avatarParam}`,
+    });
+  } catch {
+    // Falha silenciosa para não quebrar a transação principal
+  }
+}
+
 /**
  * Alterna favorito (adiciona se não existir, remove se já existir) de forma atômica
  */
@@ -45,19 +83,9 @@ export async function toggleFavorite(userId, productId) {
       }),
     ]);
 
-    if (product.sellerId && product.sellerId !== userId) {
-      import('../notification/index.js').then(({ createNotification }) => {
-        createNotification({
-          userId: product.sellerId,
-          title: 'Anúncio salvo por outro usuário',
-          message: `Um usuário salvou seu anúncio "${product.title}" nos favoritos.`,
-          type: 'favorito',
-          link: `/pages/produtos/produto.html?id=${productId}`,
-        }).catch(() => {});
-      }).catch(() => {});
-    }
+    dispararNotificacaoFavorito(userId, product).catch(() => {});
 
-    return { favorited: true, message: 'Anúncio salvo nos favoritos!' };
+    return { favorited: true, message: 'Anúncio salvo nos favoritos.' };
   }
 }
 
@@ -96,19 +124,9 @@ export async function addFavorite(userId, productId) {
     }),
   ]);
 
-  if (product.sellerId && product.sellerId !== userId) {
-    import('../notification/index.js').then(({ createNotification }) => {
-      createNotification({
-        userId: product.sellerId,
-        title: 'Anúncio salvo por outro usuário',
-        message: `Um usuário salvou seu anúncio "${product.title}" nos favoritos.`,
-        type: 'favorito',
-        link: `/pages/produtos/produto.html?id=${productId}`,
-      }).catch(() => {});
-    }).catch(() => {});
-  }
+  dispararNotificacaoFavorito(userId, product).catch(() => {});
 
-  return { favorited: true, message: 'Anúncio salvo nos favoritos!' };
+  return { favorited: true, message: 'Anúncio salvo nos favoritos.' };
 }
 
 /**

@@ -9,7 +9,7 @@
 
     <!-- Anti-FOUC: Aplicação imediata do tema escuro/claro para eliminar qualquer flash visual -->
     <script>
-        (function() {
+        (function () {
             try {
                 var p = (window.location.pathname || '').toLowerCase();
                 var isAuth = p.endsWith('index.html') || p.includes('/auth/') || p.includes('/login') || p.includes('/cadastro');
@@ -22,7 +22,7 @@
                     d.classList.remove('dark-theme');
                 }
                 d.classList.add('tema-sem-transicao');
-                var o = new MutationObserver(function() {
+                var o = new MutationObserver(function () {
                     if (document.body) {
                         document.body.setAttribute('data-theme', tema);
                         if (tema === 'dark') {
@@ -34,7 +34,7 @@
                     }
                 });
                 o.observe(d, { childList: true, subtree: true });
-                window.addEventListener('DOMContentLoaded', function() {
+                window.addEventListener('DOMContentLoaded', function () {
                     o.disconnect();
                     if (document.body) {
                         document.body.setAttribute('data-theme', tema);
@@ -44,13 +44,13 @@
                             document.body.classList.remove('dark-theme');
                         }
                     }
-                    requestAnimationFrame(function() {
-                        requestAnimationFrame(function() {
+                    requestAnimationFrame(function () {
+                        requestAnimationFrame(function () {
                             d.classList.remove('tema-sem-transicao');
                         });
                     });
                 });
-            } catch (e) {}
+            } catch (e) { }
         })();
     </script>
 
@@ -66,7 +66,7 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="../../css/pages/home/home.css?v=24">
-    <link rel="stylesheet" href="../../css/core/header-global.css?v=20">
+    <link rel="stylesheet" href="../../css/core/header-global.css?v=26">
     <link rel="stylesheet" href="../../css/pages/produtos/categoria.css?v=24">
 </head>
 
@@ -131,8 +131,7 @@
                 </a>
 
                 <!-- Ícone Conversas -->
-                <a href="/conversas" class="btn-icone-header" id="btn-chat" aria-label="Conversas"
-                    title="Conversas">
+                <a href="/conversas" class="btn-icone-header" id="btn-chat" aria-label="Conversas" title="Conversas">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
@@ -140,8 +139,8 @@
                 </a>
 
                 <!-- Ícone Notificações -->
-                <a href="/notificacoes" class="btn-icone-header" id="btn-notificacoes"
-                    aria-label="Notificações" title="Notificações">
+                <a href="/notificacoes" class="btn-icone-header" id="btn-notificacoes" aria-label="Notificações"
+                    title="Notificações">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
                         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
@@ -150,8 +149,8 @@
                 </a>
 
                 <!-- Mobile: Ícone Meus Anúncios (substitui o coração no celular) -->
-                <a href="/meus-anuncios" class="btn-icone-header btn-meus-anuncios-mobile"
-                    id="btn-meus-anuncios-mobile" aria-label="Meus Anúncios" title="Meus Anúncios">
+                <a href="/meus-anuncios" class="btn-icone-header btn-meus-anuncios-mobile" id="btn-meus-anuncios-mobile"
+                    aria-label="Meus Anúncios" title="Meus Anúncios">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
                         <path d="M3 11l19-9-9 19-2-8-8-2z"></path>
@@ -332,7 +331,8 @@
                     <a href="categoria.html?cat=Servi%C3%A7os" class="drawer-sublink">Serviços</a>
                     <a href="categoria.html?cat=M%C3%BAsica" class="drawer-sublink">Música</a>
                     <a href="categoria.html?cat=Hobbies" class="drawer-sublink">Hobbies</a>
-                    <a href="categoria.html?cat=Animais%20de%20Estima%C3%A7%C3%A3o" class="drawer-sublink">Animais de Estimação</a>
+                    <a href="categoria.html?cat=Animais%20de%20Estima%C3%A7%C3%A3o" class="drawer-sublink">Animais de
+                        Estimação</a>
                     <a href="categoria.html?cat=Pet%20Shop" class="drawer-sublink">Pet Shop</a>
                     <a href="categoria.html?cat=Doa%C3%A7%C3%B5es" class="drawer-sublink">Doações</a>
                     <a href="categoria.html?cat=Trocas" class="drawer-sublink">Trocas</a>

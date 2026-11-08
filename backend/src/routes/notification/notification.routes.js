@@ -2,6 +2,7 @@ import { Router } from 'express';
 import {
   getNotifications,
   getUnreadCount,
+  getCategoryCounts,
   markRead,
   markAllRead,
   deleteSingle,
@@ -18,6 +19,7 @@ router.use(authenticateToken);
 
 router.get('/', validate(listNotificationsQuerySchema, 'query'), getNotifications);
 router.get('/unread-count', getUnreadCount);
+router.get('/counts', getCategoryCounts);
 router.patch('/read-all', markAllRead);
 router.patch('/:id/read', markRead);
 router.delete('/:id', deleteSingle);

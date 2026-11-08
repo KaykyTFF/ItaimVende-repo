@@ -155,7 +155,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.15);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
     transition: all 0.2s ease;
     -fx-background-color: white;
     -fx-background-radius: 100;
@@ -164,7 +164,7 @@
     -fx-max-width: 70px;
     -fx-max-height: 70px;
     -fx-alignment: center;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 10, 0, 0, 5);
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.15), 10, 0, 0, 5);
 }
 
 /* Efeito extra no círculo ao passar o mouse */
@@ -412,4 +412,3 @@ body[data-theme="dark"].pagina-categoria,
 [data-theme="dark"] .estado-vazio p {
     color: #94A3B8 !important;
 }
-

@@ -204,7 +204,9 @@ body[data-theme="dark"].pagina-vendedor {
 }
 
 [data-theme="dark"] .perfil-cabecalho-texto h2,
-[data-theme="dark"] .card-secao-vendedor h3 {
+[data-theme="dark"] .card-secao-vendedor h3,
+[data-theme="dark"] .secao-avaliacoes-cabecalho h3,
+.dark-theme .secao-avaliacoes-cabecalho h3 {
     color: #F1F5F9 !important;
 }
 

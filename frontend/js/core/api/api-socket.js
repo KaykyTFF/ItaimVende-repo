@@ -301,6 +301,7 @@
             socket.on('badge_update', (dados) => {
                 aplicarBadgesAoVivo(dados);
                 ItaimSocket._emitirLocal('badge_update', dados);
+                window.dispatchEvent(new CustomEvent('itaim:badge_update', { detail: dados }));
             });
 
             // 2. Nova Notificação Push Recebida

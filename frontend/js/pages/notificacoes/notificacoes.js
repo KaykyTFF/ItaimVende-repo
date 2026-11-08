@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (estaAutenticado() && window.ItaimApi.notificacoes) {
             try {
-                const res = await window.ItaimApi.notificacoes.listar();
+                const res = await window.ItaimApi.notificacoes.listar({ sort: ordemAtiva });
                 if (res && res.success && Array.isArray(res.notifications) && res.notifications.length > 0) {
                     todasNotifs = res.notifications;
                     if (window.ItaimNotificacoes && typeof window.ItaimNotificacoes.salvarNotificacoes === 'function') {

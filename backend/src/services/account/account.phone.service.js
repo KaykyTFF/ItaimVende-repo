@@ -429,6 +429,16 @@ export async function confirmPhoneChange({ userId, newPhone, code, ipAddress, us
     text: `Olá ${user.name}! Seu número de WhatsApp no Itaim Vende foi atualizado para ${phoneMasked}. Se não foi você, acesse imediatamente: ${revertUrl}`,
   }).catch((err) => console.warn('[PhoneService] Falha ao enviar e-mail de alerta:', err.message));
 
+  import('../notification/index.js').then(({ createNotification }) => {
+    createNotification({
+      userId,
+      title: 'WhatsApp atualizado',
+      message: `O número de WhatsApp da sua conta foi atualizado para ${phoneMasked}.`,
+      type: 'aviso',
+      link: '/pages/perfil/configuracoes.html',
+    }).catch(() => {});
+  }).catch(() => {});
+
   return {
     success: true,
     message: 'Número de WhatsApp alterado e verificado com sucesso!',

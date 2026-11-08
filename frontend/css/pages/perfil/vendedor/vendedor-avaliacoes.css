@@ -27,7 +27,8 @@
 }
 
 /* Lista de Avaliações */
-.lista-avaliacoes-vendedor {
+.lista-avaliacoes-vendedor,
+.lista-avaliacoes-perfil {
     display: flex;
     flex-direction: column;
     gap: 16px;

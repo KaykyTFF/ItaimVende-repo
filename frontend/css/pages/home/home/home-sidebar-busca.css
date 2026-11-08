@@ -56,6 +56,7 @@
         opacity: 0;
         transform: translateX(-12px);
     }
+
     to {
         opacity: 1;
         transform: translateX(0);
@@ -67,6 +68,7 @@
         opacity: 0;
         transform: translateY(-8px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -143,9 +145,11 @@
 .sidebar-grupo-opcoes::-webkit-scrollbar {
     width: 4px;
 }
+
 .sidebar-grupo-opcoes::-webkit-scrollbar-track {
     background: transparent;
 }
+
 .sidebar-grupo-opcoes::-webkit-scrollbar-thumb {
     background: #CBD5E1;
     border-radius: 4px;
@@ -220,12 +224,12 @@
     border-color: #64748B;
 }
 
-.filtro-sidebar-check:checked + .custom-checkbox {
+.filtro-sidebar-check:checked+.custom-checkbox {
     background-color: var(--primary, #38A129);
     border-color: var(--primary, #38A129);
 }
 
-.filtro-sidebar-check:checked + .custom-checkbox::after {
+.filtro-sidebar-check:checked+.custom-checkbox::after {
     content: '';
     width: 5px;
     height: 9px;
@@ -251,11 +255,11 @@
     position: relative;
 }
 
-.filtro-sidebar-radio:checked + .custom-radio {
+.filtro-sidebar-radio:checked+.custom-radio {
     border-color: var(--primary, #44BD32);
 }
 
-.filtro-sidebar-radio:checked + .custom-radio::after {
+.filtro-sidebar-radio:checked+.custom-radio::after {
     content: '';
     width: 8px;
     height: 8px;
