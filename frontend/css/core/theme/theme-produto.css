@@ -112,10 +112,6 @@ body[data-theme="dark"].pagina-produto,
 }
 
 /* Informações do Anúncio (Centro) */
-[data-theme="dark"] .selo-anuncio-verificado {
-    color: #38A129 !important;
-}
-
 [data-theme="dark"] .produto-titulo-destaque,
 [data-theme="dark"] #produto-titulo {
     color: #F1F5F9 !important;
