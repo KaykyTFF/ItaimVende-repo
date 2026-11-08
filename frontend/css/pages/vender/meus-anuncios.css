@@ -14,7 +14,7 @@
 @import url('./meus-anuncios/meus-anuncios-lista.css');
 
 /* 4. Ações de Gerenciamento e Estado Vazio */
-@import url('./meus-anuncios/meus-anuncios-acoes-vazio.css');
+@import url('./meus-anuncios/meus-anuncios-acoes-vazio.css?v=2');
 
 /* 5. Responsividade (Mobile e Tablet) */
 @import url('./meus-anuncios/meus-anuncios-responsive.css');
