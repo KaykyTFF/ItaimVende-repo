@@ -60,28 +60,27 @@
             });
         }
 
-        // Verifica autenticação com tolerância a falhas e prioridade para a sessão dos tickets
+        // Verifica autenticação exclusiva e isolada da moderação (independente da loja)
         try {
             let usuario = null;
             const ticketsAuthStr = sessionStorage.getItem('itaim_tickets_auth') || localStorage.getItem('itaim_tickets_auth');
             if (ticketsAuthStr) {
                 usuario = JSON.parse(ticketsAuthStr);
-            } else if (window.ItaimSessao && typeof window.ItaimSessao.obterUsuarioLogado === 'function') {
-                usuario = window.ItaimSessao.obterUsuarioLogado();
-            } else if (window.ItaimApi && typeof window.ItaimApi.auth?.obterUsuarioLogado === 'function') {
-                usuario = window.ItaimApi.auth.obterUsuarioLogado();
-            } else {
-                usuario = JSON.parse(localStorage.getItem('itaim_usuario_logado') || 'null');
+            }
+
+            if (!usuario || !usuario.username) {
+                window.location.href = 'login-tickets.html';
+                return;
             }
 
             const modBadge = document.getElementById('mod-user-name');
             if (modBadge && usuario) {
                 const nomeExibicao = usuario.nome || usuario.name || usuario.username || 'Moderador';
-                const roleExibicao = usuario.role || 'Desenvolvedor & Moderador';
+                const roleExibicao = usuario.cargo || usuario.role || 'Desenvolvedor & Moderador';
                 modBadge.textContent = `${nomeExibicao} (${roleExibicao})`;
             }
         } catch (e) {
-            console.warn('[Tickets] Aviso ao verificar usuário moderador:', e);
+            console.warn('[Tickets] Aviso ao verificar sessão de moderação:', e);
         }
 
         // Carrega dados iniciais de forma assíncrona garantida
