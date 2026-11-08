@@ -407,3 +407,43 @@ body[data-theme="dark"].pagina-vendedor {
     background-color: #2E8B22 !important;
     box-shadow: none !important;
 }
+
+/* Botões do Vendedor e Avaliação */
+[data-theme="dark"] .btn-vendedor-wpp,
+[data-theme="dark"] #btn-vendedor-whatsapp {
+    background-color: #38A129 !important;
+    color: #FFFFFF !important;
+    box-shadow: none !important;
+}
+
+[data-theme="dark"] .btn-vendedor-wpp:hover,
+[data-theme="dark"] #btn-vendedor-whatsapp:hover {
+    background-color: #2E8B22 !important;
+    box-shadow: none !important;
+}
+
+[data-theme="dark"] #btn-enviar-avaliacao,
+[data-theme="dark"] .btn-enviar-avaliacao {
+    background-color: #38A129 !important;
+    color: #FFFFFF !important;
+    box-shadow: none !important;
+}
+
+[data-theme="dark"] #btn-enviar-avaliacao:hover,
+[data-theme="dark"] .btn-enviar-avaliacao:hover {
+    background-color: #2E8B22 !important;
+    box-shadow: none !important;
+}
+
+/* Borda do Avatar e Selo no Modo Escuro */
+[data-theme="dark"] .perfil-avatar-img,
+[data-theme="dark"] .vendedor-avatar-img {
+    border-color: #2C3946 !important;
+    box-shadow: none !important;
+}
+
+[data-theme="dark"] .vendedor-selo-verificado-badge {
+    background: #38A129 !important;
+    border-color: #1F2831 !important;
+    box-shadow: none !important;
+}

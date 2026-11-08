@@ -66,14 +66,14 @@
     right: 4px;
     width: 28px;
     height: 28px;
-    background: #44BD32;
+    background: #38A129;
     color: #FFFFFF;
     border: 3px solid #FFFFFF;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 6px rgba(68, 189, 50, 0.4);
+    box-shadow: none;
 }
 
 .vendedor-selo-verificado-badge svg {
@@ -180,7 +180,7 @@
 }
 
 .btn-vendedor-wpp {
-    background: #44BD32;
+    background: #38A129;
     color: #FFFFFF;
     font-weight: 700;
     font-size: 15px;
@@ -191,16 +191,16 @@
     align-items: center;
     justify-content: center;
     gap: 10px;
-    box-shadow: 0 4px 16px rgba(68, 189, 50, 0.3);
+    box-shadow: none;
     transition: all 0.25s ease;
     border: none;
     cursor: pointer;
 }
 
 .btn-vendedor-wpp:hover {
-    background: #38a529;
+    background: #2E8B22;
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(68, 189, 50, 0.4);
+    box-shadow: none;
     color: #FFFFFF;
 }
 

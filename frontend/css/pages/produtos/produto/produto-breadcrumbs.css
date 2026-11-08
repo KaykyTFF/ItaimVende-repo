@@ -26,7 +26,8 @@ body {
     height: 38px;
     min-width: 38px;
     border-radius: 50%;
-    background-color: #44BD32; /* Tom exato da divisória verde abaixo do cabeçalho */
+    background-color: #44BD32;
+    /* Tom exato da divisória verde abaixo do cabeçalho */
     color: #FFFFFF;
     display: inline-flex;
     align-items: center;
