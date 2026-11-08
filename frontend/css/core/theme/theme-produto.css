@@ -51,7 +51,7 @@ body[data-theme="dark"].pagina-produto,
 [data-theme="dark"] .card-anuncio-topo {
     background-color: #1F2831 !important;
     border: 1px solid #2C3946 !important;
-    border-bottom: 2.5px solid #44BD32 !important;
+    border-bottom: 1px solid #2C3946 !important;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
 }
 
@@ -143,7 +143,7 @@ body[data-theme="dark"].pagina-produto,
 [data-theme="dark"] .card-sobre-anuncio {
     background-color: #1F2831 !important;
     border: 1px solid #2C3946 !important;
-    border-bottom: 2.5px solid #44BD32 !important;
+    border-bottom: 1px solid #2C3946 !important;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
 }
 
@@ -167,7 +167,7 @@ body[data-theme="dark"].pagina-produto,
 [data-theme="dark"] .card-sidebar-acoes {
     background-color: #1F2831 !important;
     border: 1px solid #2C3946 !important;
-    border-bottom: 2.5px solid #44BD32 !important;
+    border-bottom: 1px solid #2C3946 !important;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
 }
 
@@ -395,11 +395,30 @@ body[data-theme="dark"].pagina-produto,
     background-color: rgba(68, 189, 50, 0.14) !important;
 }
 
-[data-theme="dark"] .icone-box-red { background: rgba(239, 68, 68, 0.2) !important; color: #F87171 !important; }
-[data-theme="dark"] .icone-box-blue { background: rgba(59, 130, 246, 0.2) !important; color: #60A5FA !important; }
-[data-theme="dark"] .icone-box-purple { background: rgba(168, 85, 247, 0.2) !important; color: #C084FC !important; }
-[data-theme="dark"] .icone-box-orange { background: rgba(249, 115, 22, 0.2) !important; color: #FB923C !important; }
-[data-theme="dark"] .icone-box-violet { background: rgba(139, 92, 246, 0.2) !important; color: #A78BFA !important; }
+[data-theme="dark"] .icone-box-red {
+    background: rgba(239, 68, 68, 0.2) !important;
+    color: #F87171 !important;
+}
+
+[data-theme="dark"] .icone-box-blue {
+    background: rgba(59, 130, 246, 0.2) !important;
+    color: #60A5FA !important;
+}
+
+[data-theme="dark"] .icone-box-purple {
+    background: rgba(168, 85, 247, 0.2) !important;
+    color: #C084FC !important;
+}
+
+[data-theme="dark"] .icone-box-orange {
+    background: rgba(249, 115, 22, 0.2) !important;
+    color: #FB923C !important;
+}
+
+[data-theme="dark"] .icone-box-violet {
+    background: rgba(139, 92, 246, 0.2) !important;
+    color: #A78BFA !important;
+}
 
 [data-theme="dark"] .motivo-card-item.ativo .motivo-icone-quadrado {
     filter: brightness(1.15);

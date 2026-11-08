@@ -28,14 +28,14 @@ body[data-theme="dark"].pagina-vendedor {
 
 [data-theme="dark"] .perfil-breadcrumb a:hover,
 [data-theme="dark"] .perfil-breadcrumb-current {
-    color: #4ADE80 !important;
+    color: #38A129 !important;
 }
 
 /* Banner Superior do Perfil */
 [data-theme="dark"] .perfil-banner-card {
     background-color: #1F2831 !important;
     border: 1px solid #2C3946 !important;
-    border-bottom: 2.5px solid #44BD32 !important;
+    border-bottom: 1px solid #2C3946 !important;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
 }
 
@@ -63,25 +63,25 @@ body[data-theme="dark"].pagina-vendedor {
 [data-theme="dark"] .badge-verificado,
 [data-theme="dark"] #perfil-selo-verificado,
 [data-theme="dark"] #vendedor-selo-verificado {
-    background-color: rgba(74, 222, 128, 0.16) !important;
-    color: #4ADE80 !important;
+    background-color: rgba(56, 161, 41, 0.16) !important;
+    color: #38A129 !important;
 }
 
 [data-theme="dark"] #perfil-selo-verificado svg,
 [data-theme="dark"] #vendedor-selo-verificado svg {
-    fill: #4ADE80 !important;
+    fill: #38A129 !important;
 }
 
 [data-theme="dark"] .btn-banner-sair {
     background-color: #242E38 !important;
-    border: 1.5px solid #4ADE80 !important;
-    color: #4ADE80 !important;
+    border: 1.5px solid #2C3946 !important;
+    color: #F1F5F9 !important;
 }
 
 [data-theme="dark"] .btn-banner-sair:hover {
     background-color: #2D3945 !important;
-    color: #FFFFFF !important;
-    border-color: #4ADE80 !important;
+    color: #38A129 !important;
+    border-color: #38A129 !important;
 }
 
 [data-theme="dark"] .btn-avatar-camera {
@@ -93,15 +93,15 @@ body[data-theme="dark"].pagina-vendedor {
 [data-theme="dark"] .stat-vendedor-card {
     background-color: #1F2831 !important;
     border: 1px solid #2C3946 !important;
-    border-bottom: 2.5px solid #44BD32 !important;
+    border-bottom: 1px solid #2C3946 !important;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25) !important;
 }
 
 [data-theme="dark"] .stat-circulo-icone,
 [data-theme="dark"] .stat-icone-wrapper,
 [data-theme="dark"] .stat-icone-verde {
-    background-color: rgba(74, 222, 128, 0.14) !important;
-    color: #4ADE80 !important;
+    background-color: rgba(56, 161, 41, 0.12) !important;
+    color: #38A129 !important;
 }
 
 [data-theme="dark"] .stat-numero-destaque,
@@ -125,8 +125,8 @@ body[data-theme="dark"].pagina-vendedor {
 [data-theme="dark"] .btn-banner-compartilhar:hover,
 [data-theme="dark"] #btn-vendedor-compartilhar:hover {
     background-color: #2D3945 !important;
-    color: #4ADE80 !important;
-    border-color: #4ADE80 !important;
+    color: #38A129 !important;
+    border-color: #38A129 !important;
 }
 
 /* Botão Denunciar Vendedor Dark Mode */
@@ -147,7 +147,7 @@ body[data-theme="dark"].pagina-vendedor {
 
 [data-theme="dark"] .vendedor-breadcrumb a:hover,
 [data-theme="dark"] .vendedor-breadcrumb-current {
-    color: #4ADE80 !important;
+    color: #38A129 !important;
 }
 
 [data-theme="dark"] .vendedor-breadcrumb-sep {
@@ -186,14 +186,14 @@ body[data-theme="dark"].pagina-vendedor {
 [data-theme="dark"] .card-secao-vendedor {
     background-color: #1F2831 !important;
     border: 1px solid #2C3946 !important;
-    border-bottom: 2.5px solid #44BD32 !important;
+    border-bottom: 1px solid #2C3946 !important;
     box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25) !important;
     color: #F1F5F9 !important;
 }
 
 [data-theme="dark"] .perfil-cabecalho-icone {
-    background-color: rgba(74, 222, 128, 0.14) !important;
-    color: #4ADE80 !important;
+    background-color: rgba(56, 161, 41, 0.12) !important;
+    color: #38A129 !important;
 }
 
 [data-theme="dark"] .perfil-cabecalho-texto h2,
@@ -209,8 +209,8 @@ body[data-theme="dark"].pagina-vendedor {
 [data-theme="dark"] #perfil-badge-avaliacoes,
 [data-theme="dark"] #vendedor-badge-avaliacoes,
 [data-theme="dark"] #badge-contador-avaliacoes {
-    background-color: rgba(74, 222, 128, 0.16) !important;
-    color: #4ADE80 !important;
+    background-color: rgba(56, 161, 41, 0.14) !important;
+    color: #38A129 !important;
 }
 
 [data-theme="dark"] .avaliacoes-vazio {
@@ -249,9 +249,9 @@ body[data-theme="dark"].pagina-vendedor {
 }
 
 [data-theme="dark"] .avaliacao-avatar-mini {
-    background-color: rgba(74, 222, 128, 0.16) !important;
-    color: #4ADE80 !important;
-    border-color: rgba(74, 222, 128, 0.3) !important;
+    background-color: rgba(56, 161, 41, 0.14) !important;
+    color: #38A129 !important;
+    border-color: rgba(56, 161, 41, 0.25) !important;
 }
 
 [data-theme="dark"] .avaliacao-comentario-txt,
@@ -318,8 +318,8 @@ body[data-theme="dark"].pagina-vendedor {
 }
 
 [data-theme="dark"] .dica-linha-icone {
-    background-color: rgba(74, 222, 128, 0.14) !important;
-    color: #4ADE80 !important;
+    background-color: rgba(56, 161, 41, 0.12) !important;
+    color: #38A129 !important;
 }
 
 [data-theme="dark"] .dica-linha-texto strong {
@@ -339,8 +339,8 @@ body[data-theme="dark"].pagina-vendedor {
 
 [data-theme="dark"] .btn-editar-config:hover {
     background-color: #2D3945 !important;
-    color: #4ADE80 !important;
-    border-color: #4ADE80 !important;
+    color: #38A129 !important;
+    border-color: #38A129 !important;
 }
 
 [data-theme="dark"] .campo-label-perfil {
@@ -348,7 +348,7 @@ body[data-theme="dark"].pagina-vendedor {
 }
 
 [data-theme="dark"] .campo-label-perfil svg {
-    color: #4ADE80 !important;
+    color: #38A129 !important;
 }
 
 [data-theme="dark"] .campo-input-perfil {
@@ -380,7 +380,30 @@ body[data-theme="dark"].pagina-vendedor {
 
 /* Toast de Sucesso no Perfil */
 [data-theme="dark"] .toast-sucesso {
-    background-color: rgba(74, 222, 128, 0.16) !important;
-    border-color: rgba(74, 222, 128, 0.3) !important;
-    color: #4ADE80 !important;
+    background-color: rgba(56, 161, 41, 0.16) !important;
+    border-color: rgba(56, 161, 41, 0.3) !important;
+    color: #38A129 !important;
+}
+
+/* Estado Vazio de Anúncios e Botão Anunciar */
+[data-theme="dark"] .estado-vazio,
+[data-theme="dark"] .vendedor-anuncios-vazio {
+    border-color: #2C3946 !important;
+    background-color: #161C22 !important;
+}
+
+[data-theme="dark"] .anuncios-vazio-icone {
+    background: rgba(56, 161, 41, 0.12) !important;
+    color: #38A129 !important;
+}
+
+[data-theme="dark"] .btn-anunciar-vazio-perfil {
+    background-color: #38A129 !important;
+    color: #FFFFFF !important;
+    box-shadow: none !important;
+}
+
+[data-theme="dark"] .btn-anunciar-vazio-perfil:hover {
+    background-color: #2E8B22 !important;
+    box-shadow: none !important;
 }

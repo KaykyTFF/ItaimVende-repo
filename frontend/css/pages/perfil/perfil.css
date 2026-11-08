@@ -5,16 +5,16 @@
 
 /* 1. Base, Transições e Notificações */
 @import url('../../core/transicoes.css');
-@import url('./perfil/perfil-base.css');
+@import url('./perfil/perfil-base.css?v=20');
 
 /* 2. Banner Superior e Foto de Perfil */
-@import url('./perfil/perfil-banner.css');
+@import url('./perfil/perfil-banner.css?v=20');
 
 /* 3. Estatísticas e Resumo */
-@import url('./perfil/perfil-stats.css');
+@import url('./perfil/perfil-stats.css?v=20');
 
 /* 4. Dados Pessoais, Formulários e Segurança */
-@import url('./perfil/perfil-forms.css');
+@import url('./perfil/perfil-forms.css?v=20');
 
 /* 5. Responsividade (Tablets e Mobile) */
-@import url('./perfil/perfil-responsive.css');
+@import url('./perfil/perfil-responsive.css?v=20');

@@ -7,7 +7,6 @@
     padding: 34px 38px;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.02);
     border: 1px solid #edf2ee;
-    border-bottom: 2.5px solid #44BD32;
     margin-bottom: 22px;
 }
 
@@ -92,7 +91,7 @@
 .campo-input-perfil:focus {
     background-color: #ffffff;
     border-color: #44BD32;
-    box-shadow: 0 0 0 3px rgba(68, 189, 50, 0.18);
+    box-shadow: none;
 }
 
 .campo-input-perfil::placeholder {
@@ -114,14 +113,14 @@
     align-items: center;
     gap: 10px;
     transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
-    box-shadow: 0 4px 14px rgba(68, 189, 50, 0.28);
+    box-shadow: none;
     font-family: inherit;
 }
 
 .btn-salvar-dados:hover {
     background-color: #3ca82b;
     transform: translateY(-1px);
-    box-shadow: 0 6px 18px rgba(68, 189, 50, 0.35);
+    box-shadow: none;
 }
 
 .btn-salvar-dados:active {
@@ -183,7 +182,7 @@
     color: #44BD32;
     background: #F0FDF4;
     transform: translateY(-1px);
-    box-shadow: 0 3px 8px rgba(68, 189, 50, 0.15);
+    box-shadow: none;
 }
 
 .modal-editar-perfil-fundo {
@@ -288,7 +287,7 @@ body.modal-perfil-aberto {
     border-radius: 50%;
     overflow: hidden;
     border: 3px solid #44BD32;
-    box-shadow: 0 4px 12px rgba(68, 189, 50, 0.2);
+    box-shadow: none;
     flex-shrink: 0;
     background: #1E293B;
 }
@@ -402,7 +401,7 @@ body.modal-perfil-aberto {
 .modal-perfil-input:focus {
     background: #FFFFFF;
     border-color: #44BD32;
-    box-shadow: 0 0 0 3px rgba(68, 189, 50, 0.15);
+    box-shadow: none;
 }
 
 .modal-perfil-input.com-erro {
@@ -476,7 +475,7 @@ body.modal-perfil-aberto {
     font-size: 14px;
     font-weight: 700;
     cursor: pointer;
-    box-shadow: 0 4px 14px rgba(68, 189, 50, 0.28);
+    box-shadow: none;
     transition: all 0.2s ease;
     font-family: inherit;
 }
@@ -484,7 +483,7 @@ body.modal-perfil-aberto {
 .modal-btn-salvar:hover {
     background: #3ca82b;
     transform: translateY(-1px);
-    box-shadow: 0 6px 18px rgba(68, 189, 50, 0.35);
+    box-shadow: none;
 }
 
 .modal-btn-salvar:disabled {
@@ -505,7 +504,7 @@ body.modal-perfil-aberto {
 .dark-theme .btn-editar-perfil-tag:hover {
     background: rgba(68, 189, 50, 0.15);
     border-color: #44BD32;
-    color: #4ADE80;
+    color: #38A129;
 }
 
 [data-theme="dark"] .modal-editar-perfil-card,
@@ -561,7 +560,7 @@ body.modal-perfil-aberto {
 [data-theme="dark"] .modal-btn-avatar-upload:hover,
 .dark-theme .modal-btn-avatar-upload:hover {
     border-color: #44BD32;
-    color: #4ADE80;
+    color: #38A129;
     background: rgba(68, 189, 50, 0.12);
 }
 

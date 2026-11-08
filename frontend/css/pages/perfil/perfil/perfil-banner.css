@@ -6,7 +6,6 @@
     overflow: hidden;
     background-color: #ffffff;
     border: 1px solid #e5e9eb;
-    border-bottom: 2.5px solid #44BD32;
     border-radius: 22px;
     padding: 34px 40px;
     display: flex;
@@ -187,7 +186,7 @@
     border-color: #3ca82b;
     color: #3ca82b;
     transform: translateY(-1px);
-    box-shadow: 0 4px 10px rgba(68, 189, 50, 0.18);
+    box-shadow: none;
 }
 
 
@@ -273,7 +272,7 @@
     border-color: #44BD32;
     color: #44BD32;
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(68, 189, 50, 0.2);
+    box-shadow: none;
 }
 
 .btn-editar-perfil-banner:active {

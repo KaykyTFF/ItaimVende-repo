@@ -52,7 +52,6 @@
         min-height: 82px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
         border: 1px solid #edf2ee;
-        border-bottom: 2.5px solid #44BD32;
         transition: transform 0.2s ease, box-shadow 0.2s ease;
         box-sizing: border-box;
     }
@@ -175,4 +174,3 @@
 .perfil-banner-stripes-mobile {
     display: none !important;
 }
-
