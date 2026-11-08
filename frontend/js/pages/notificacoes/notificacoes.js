@@ -468,25 +468,79 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
+    // Modal de Confirmação (Limpar todas as notificações no estilo do site)
+    const modalLimpar = document.getElementById('modal-confirmar-limpar');
+    const btnFecharModalLimpar = document.getElementById('btn-fechar-modal-limpar');
+    const btnCancelarLimpar = document.getElementById('btn-cancelar-limpar');
+    const btnConfirmarLimpar = document.getElementById('btn-confirmar-limpar');
+
+    function abrirModalLimpar() {
+        if (!modalLimpar) {
+            if (confirm('Deseja limpar todas as notificações?')) {
+                executarLimpezaNotificacoes();
+            }
+            return;
+        }
+        modalLimpar.classList.add('aberto');
+        document.body.style.overflow = 'hidden';
+        if (btnCancelarLimpar) {
+            btnCancelarLimpar.focus();
+        }
+    }
+
+    function fecharModalLimpar() {
+        if (!modalLimpar) return;
+        modalLimpar.classList.remove('aberto');
+        document.body.style.overflow = '';
+    }
+
+    if (modalLimpar) {
+        if (btnFecharModalLimpar) {
+            btnFecharModalLimpar.addEventListener('click', fecharModalLimpar);
+        }
+        if (btnCancelarLimpar) {
+            btnCancelarLimpar.addEventListener('click', fecharModalLimpar);
+        }
+        modalLimpar.addEventListener('click', (e) => {
+            if (e.target === modalLimpar) {
+                fecharModalLimpar();
+            }
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modalLimpar.classList.contains('aberto')) {
+                fecharModalLimpar();
+            }
+        });
+    }
+
+    async function executarLimpezaNotificacoes() {
+        todasNotifs = [];
+
+        if (estaAutenticado() && window.ItaimApi && window.ItaimApi.notificacoes) {
+            try {
+                await window.ItaimApi.notificacoes.limparTodas();
+            } catch (err) { }
+        }
+
+        if (window.ItaimNotificacoes) {
+            window.ItaimNotificacoes.salvarNotificacoes([]);
+        } else {
+            localStorage.setItem('itaim_notificacoes', JSON.stringify([]));
+        }
+        renderizar();
+    }
+
     // Limpar todas as notificações
     if (btnLimparTodas) {
-        btnLimparTodas.addEventListener('click', async () => {
-            if (confirm('Deseja limpar todas as notificações?')) {
-                todasNotifs = [];
+        btnLimparTodas.addEventListener('click', () => {
+            abrirModalLimpar();
+        });
+    }
 
-                if (estaAutenticado() && window.ItaimApi.notificacoes) {
-                    try {
-                        await window.ItaimApi.notificacoes.limparTodas();
-                    } catch (err) { }
-                }
-
-                if (window.ItaimNotificacoes) {
-                    window.ItaimNotificacoes.salvarNotificacoes([]);
-                } else {
-                    localStorage.setItem('itaim_notificacoes', JSON.stringify([]));
-                }
-                renderizar();
-            }
+    if (btnConfirmarLimpar) {
+        btnConfirmarLimpar.addEventListener('click', async () => {
+            fecharModalLimpar();
+            await executarLimpezaNotificacoes();
         });
     }
 
