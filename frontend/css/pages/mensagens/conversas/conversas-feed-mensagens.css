@@ -159,13 +159,13 @@
     border-radius: 999px;
     text-decoration: none;
     transition: all 0.2s ease;
-    box-shadow: 0 4px 14px rgba(68, 189, 50, 0.35);
+    box-shadow: none;
 }
 
 .btn-centro-explorar:hover {
     background-color: var(--chat-primary-hover);
     transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(68, 189, 50, 0.45);
+    box-shadow: none;
 }
 
 /* Mini Resumo do Produto no Topo (Mobile) */
@@ -447,7 +447,7 @@
 .chat-input-texto:focus {
     border-color: var(--chat-primary);
     background-color: #233446;
-    box-shadow: 0 0 0 3px rgba(68, 189, 50, 0.25);
+    box-shadow: none;
 }
 
 .btn-enviar-mensagem {
@@ -463,7 +463,7 @@
     justify-content: center;
     transition: all 0.2s ease;
     flex-shrink: 0;
-    box-shadow: 0 3px 10px rgba(68, 189, 50, 0.35);
+    box-shadow: none;
 }
 
 .btn-enviar-mensagem:hover {
@@ -871,7 +871,7 @@
 
 .chat-input-moeda:focus {
     border-color: var(--chat-primary);
-    box-shadow: 0 0 0 3px rgba(68, 189, 50, 0.15);
+    box-shadow: none;
 }
 
 .chat-modal-textarea {
@@ -949,7 +949,7 @@
     background-color: var(--chat-primary);
     color: #FFFFFF;
     cursor: pointer;
-    box-shadow: 0 2px 8px rgba(68, 189, 50, 0.3);
+    box-shadow: none;
     transition: all 0.2s ease;
 }
 

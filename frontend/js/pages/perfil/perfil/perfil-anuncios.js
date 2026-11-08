@@ -101,8 +101,8 @@
                         ? window.ItaimApi.resolverUrlImagem(fotoSrc)
                         : (fotoSrc || placeholderSrc);
 
-                    const linkProduto = window.ItaimRotas 
-                        ? window.ItaimRotas.obterUrl('produto', `id=${item.id}`) 
+                    const linkProduto = window.ItaimRotas
+                        ? window.ItaimRotas.obterUrl('produto', `id=${item.id}`)
                         : `../produtos/produto.html?id=${item.id}`;
 
                     return `
