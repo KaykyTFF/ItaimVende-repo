@@ -347,20 +347,9 @@
                         autenticadoEm: Date.now()
                     };
 
+                    // Salva a sessão estritamente isolada da moderação (NÃO afeta o login da loja)
                     sessionStorage.setItem(STORAGE_KEY_AUTH, JSON.stringify(sessaoDev));
                     localStorage.setItem(STORAGE_KEY_AUTH, JSON.stringify(sessaoDev));
-
-                    // Garante compatibilidade universal com o guardião de rotas do site (sessao-ui.js)
-                    try {
-                        const tokenDev = 'dev_mod_token_' + Date.now();
-                        localStorage.setItem('itaim_token', tokenDev);
-                        localStorage.setItem('itaim_usuario_logado_email', emailDev);
-                        localStorage.setItem('itaim_usuario_logado', JSON.stringify(sessaoDev));
-
-                        if (window.ItaimSessao && typeof window.ItaimSessao.definirUsuarioLogado === 'function') {
-                            window.ItaimSessao.definirUsuarioLogado(emailDev, sessaoDev);
-                        }
-                    } catch (e) {}
 
                     exibirFeedback(`Bem-vindo(a), ${resultado.dev.nome}! Redirecionando para moderação...`, 'sucesso');
 
