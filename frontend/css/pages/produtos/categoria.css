@@ -34,9 +34,9 @@
 }
 
 .categoria-hero-badge {
-    background: rgba(56, 161, 41, 0.1);
-    border: 1px solid rgba(56, 161, 41, 0.28);
-    color: #38A129;
+    background: #38A129;
+    border: none;
+    color: #FFFFFF;
     padding: 8px 18px;
     border-radius: var(--radius-full);
     font-weight: 700;
@@ -47,6 +47,7 @@
     white-space: nowrap;
     position: relative;
     z-index: 1;
+    box-shadow: none;
 }
 
 .categoria-hero-badge::before {
@@ -54,7 +55,7 @@
     width: 7px;
     height: 7px;
     border-radius: 50%;
-    background: var(--primary);
+    background: #FFFFFF;
     display: inline-block;
 }
 
