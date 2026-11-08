@@ -22,6 +22,11 @@
 
     let previewFotoCapa = null;
     let previewFotosMiniaturas = null;
+    let previewBtnPrev = null;
+    let previewBtnNext = null;
+    let previewBadgeContador = null;
+    let fotoRevisaoAtualIndex = 0;
+
     let previewTitulo = null;
     let previewPreco = null;
     let previewTagCat = null;
@@ -35,31 +40,81 @@
     let linkVerAnuncio = null;
     let btnCriarOutro = null;
 
-    function atualizarPreviewRevisao() {
+    /**
+     * Alterna a imagem principal do preview da revisão sincronizando contador e miniaturas
+     */
+    function exibirFotoRevisao(idx) {
         const est = getEstado();
-        const fotos = est.fotosLista;
+        const fotos = est.fotosLista || [];
 
-        // Fotos
-        if (previewFotoCapa) {
-            previewFotoCapa.src = fotos.length > 0 ? fotos[0] : '../../assets/placeholders/produto-placeholder.svg';
+        if (!fotos || fotos.length === 0) {
+            if (previewFotoCapa) previewFotoCapa.src = '../../assets/placeholders/produto-placeholder.svg';
+            if (previewBtnPrev) previewBtnPrev.style.display = 'none';
+            if (previewBtnNext) previewBtnNext.style.display = 'none';
+            if (previewBadgeContador) previewBadgeContador.style.display = 'none';
+            if (previewFotosMiniaturas) previewFotosMiniaturas.style.display = 'none';
+            return;
         }
 
+        fotoRevisaoAtualIndex = (idx + fotos.length) % fotos.length;
+
+        if (previewFotoCapa) {
+            previewFotoCapa.src = fotos[fotoRevisaoAtualIndex];
+        }
+
+        if (fotos.length > 1) {
+            if (previewBtnPrev) previewBtnPrev.style.display = 'flex';
+            if (previewBtnNext) previewBtnNext.style.display = 'flex';
+            if (previewBadgeContador) {
+                previewBadgeContador.textContent = `${fotoRevisaoAtualIndex + 1} / ${fotos.length}`;
+                previewBadgeContador.style.display = 'inline-flex';
+            }
+            if (previewFotosMiniaturas) previewFotosMiniaturas.style.display = 'flex';
+        } else {
+            if (previewBtnPrev) previewBtnPrev.style.display = 'none';
+            if (previewBtnNext) previewBtnNext.style.display = 'none';
+            if (previewBadgeContador) previewBadgeContador.style.display = 'none';
+            if (previewFotosMiniaturas) previewFotosMiniaturas.style.display = 'none';
+        }
+
+        // Sincroniza destaque nas miniaturas
+        if (previewFotosMiniaturas) {
+            const thumbs = previewFotosMiniaturas.querySelectorAll('.preview-thumb-item, .preview-miniatura-item');
+            thumbs.forEach((t, i) => {
+                if (i === fotoRevisaoAtualIndex) {
+                    t.classList.add('ativa');
+                } else {
+                    t.classList.remove('ativa');
+                }
+            });
+        }
+    }
+
+    function atualizarPreviewRevisao() {
+        const est = getEstado();
+        const fotos = est.fotosLista || [];
+
+        // Inicializa ou limpa miniaturas
         if (previewFotosMiniaturas) {
             previewFotosMiniaturas.innerHTML = '';
             if (fotos.length > 1) {
+                previewFotosMiniaturas.style.display = 'flex';
                 fotos.forEach((fotoSrc, idx) => {
                     const thumb = document.createElement('div');
-                    thumb.className = 'preview-miniatura-item' + (idx === 0 ? ' ativa' : '');
+                    thumb.className = 'preview-thumb-item' + (idx === 0 ? ' ativa' : '');
                     thumb.innerHTML = `<img src="${fotoSrc}" alt="Miniatura ${idx + 1}">`;
-                    thumb.addEventListener('click', () => {
-                        previewFotosMiniaturas.querySelectorAll('.preview-miniatura-item').forEach(m => m.classList.remove('ativa'));
-                        thumb.classList.add('ativa');
-                        if (previewFotoCapa) previewFotoCapa.src = fotoSrc;
+                    thumb.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        exibirFotoRevisao(idx);
                     });
                     previewFotosMiniaturas.appendChild(thumb);
                 });
+            } else {
+                previewFotosMiniaturas.style.display = 'none';
             }
         }
+
+        exibirFotoRevisao(0);
 
         // Título
         const inputTitulo = document.getElementById('input-titulo');
@@ -490,6 +545,64 @@
 
         previewFotoCapa = document.getElementById('preview-foto-capa');
         previewFotosMiniaturas = document.getElementById('preview-fotos-miniaturas');
+        previewBtnPrev = document.getElementById('preview-btn-prev');
+        previewBtnNext = document.getElementById('preview-btn-next');
+        previewBadgeContador = document.getElementById('preview-badge-contador');
+
+        // Se por ventura os controles não estiverem pré-renderizados no DOM, injeta dinamicamente
+        const wrapperFoto = previewFotoCapa?.parentElement;
+        if (wrapperFoto) {
+            if (!previewBtnPrev) {
+                previewBtnPrev = document.createElement('button');
+                previewBtnPrev.type = 'button';
+                previewBtnPrev.className = 'preview-seta-nav preview-seta-prev';
+                previewBtnPrev.id = 'preview-btn-prev';
+                previewBtnPrev.setAttribute('aria-label', 'Foto anterior');
+                previewBtnPrev.style.display = 'none';
+                previewBtnPrev.innerHTML = `
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                `;
+                wrapperFoto.appendChild(previewBtnPrev);
+            }
+
+            if (!previewBtnNext) {
+                previewBtnNext = document.createElement('button');
+                previewBtnNext.type = 'button';
+                previewBtnNext.className = 'preview-seta-nav preview-seta-next';
+                previewBtnNext.id = 'preview-btn-next';
+                previewBtnNext.setAttribute('aria-label', 'Próxima foto');
+                previewBtnNext.style.display = 'none';
+                previewBtnNext.innerHTML = `
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                `;
+                wrapperFoto.appendChild(previewBtnNext);
+            }
+
+            if (!previewBadgeContador) {
+                previewBadgeContador = document.createElement('span');
+                previewBadgeContador.className = 'preview-badge-contador';
+                previewBadgeContador.id = 'preview-badge-contador';
+                previewBadgeContador.style.display = 'none';
+                wrapperFoto.appendChild(previewBadgeContador);
+            }
+        }
+
+        previewBtnPrev?.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            exibirFotoRevisao(fotoRevisaoAtualIndex - 1);
+        });
+
+        previewBtnNext?.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            exibirFotoRevisao(fotoRevisaoAtualIndex + 1);
+        });
+
         previewTitulo = document.getElementById('preview-titulo');
         previewPreco = document.getElementById('preview-preco');
         previewTagCat = document.getElementById('preview-tag-cat');
@@ -544,6 +657,7 @@
                 menuCondicaoOpcoes.querySelectorAll('.item-opcao-dropdown, .dropdown-item').forEach(i => i.classList.remove('selecionado'));
             }
 
+            fotoRevisaoAtualIndex = 0;
             getEstado().fotosLista = [];
             window.ItaimVenderFotos.renderizarGaleriaFotos();
             window.ItaimVenderWizard.definirModoDoacao(false);
