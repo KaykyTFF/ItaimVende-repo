@@ -1,7 +1,5 @@
-import { PrismaClient } from '@prisma/client';
+import prisma from '../src/config/prisma.js';
 import bcrypt from 'bcryptjs';
-
-const prisma = new PrismaClient();
 
 function gerarSlug(texto) {
   return texto

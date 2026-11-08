@@ -202,11 +202,13 @@
             ? window.ItaimSessaoAuth.obterUsuarioLogado()
             : ((window.ItaimSessao && typeof window.ItaimSessao.obterUsuarioLogado === 'function') ? window.ItaimSessao.obterUsuarioLogado() : {});
 
-        const novoId = Date.now();
+        const novoId = dados.id || Date.now();
         const novoAnuncio = {
             id: novoId,
             titulo: dados.titulo,
             preco: Number(dados.preco) || 0,
+            listingType: dados.listingType || (dados.isDoacao ? 'DOACAO' : 'VENDA'),
+            isDoacao: Boolean(dados.isDoacao || dados.listingType === 'DOACAO'),
             categoria: dados.categoria || 'Geral',
             condicao: dados.condicao || 'Usado',
             cidade: dados.cidade || user.cidade || 'Paulistana',
