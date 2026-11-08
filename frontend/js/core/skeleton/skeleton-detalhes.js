@@ -26,7 +26,6 @@
                                 </div>
                             </div>
                             <div class="skeleton-detalhes-info">
-                                <div class="skeleton-selo-topo"></div>
                                 <div class="skeleton-titulo-grande-1"></div>
                                 <div class="skeleton-titulo-grande-2"></div>
                                 <div class="skeleton-localizacao-bar"></div>
