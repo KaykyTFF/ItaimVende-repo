@@ -1,165 +1,84 @@
-# ☀️ Daily Scrums e Burndown — Sprint 1 (Baseado nos Commits Reais)
+# Daily Scrums, Impedimentos e Burndown — Sprint 1
 
-> **Scrum Master:** Josimar  
-> **Canal de Comunicação:** Discord (`#daily-scrum`) & WhatsApp  
-> **Horário Regular:** 19h30  
-> **Rastreabilidade Técnica:** Cada entrega diária está vinculada diretamente aos hashes de commit registrados no repositório Git do projeto.
-
----
-
-## 📅 Registro 1 — 20/10/2026 (Segunda-feira)
-
-### Raili (Frontend)
-* **O que fiz:** Implementei o tema escuro global no marketplace, estruturei as melhorias na barra de navegação lateral e realizei as primeiras correções de contraste visual.  
-  *(Git Commit: `91f7b86` — "feat: implementa tema escuro global, melhorias no menu lateral e correcoes visuais")*
-* **O que farei:** Identificar páginas onde o texto ainda fica com baixo contraste e padronizar os botões de ação de login.
-* **O que me impede:** Arquivos CSS continham mais de duas mil linhas com estilos sobrepostos.
-
-### Josimar (Frontend / SM)
-* **O que fiz:** Criei as animações de transição de tela e iniciei a estruturação do wizard de criação de anúncios dividido em etapas sequenciais.  
-  *(Git Commit: `706dd01` — "feat: adicionar animacoes de transicao e criacao de anuncios em etapas")*
-* **O que farei:** Integrar o envio de dados do wizard com a API e planejar os componentes de Skeleton Loading.
-* **O que me impede:** Nenhum impedimento no momento.
-
-### Kayky (Backend / PO)
-* **O que fiz:** Refatorei o arquivo monolítico de temas centralizando regras essenciais; implementei o suporte a múltiplos endereços por usuário e permiti que visitantes não autenticados naveguem pelo catálogo sem quebras.  
-  *(Git Commits: `bfde56e` — "refatorei o arquivo theme.css com mais de 2 mil linhas", `8889b22` — "funcionando adicionar mais de um endereço pro usuario", `c81e193` — "ajuste para usuarios não cadastrados poderem acessar o site")*
-* **O que farei:** Conectar o servidor WebSocket para chat em tempo real e estruturar a autenticação segura com JWT.
-* **O que me impede:** Nenhum impedimento.
-
-### Pedro Ravy (Backend)
-* **O que fiz:** Estruturei as queries iniciais no Prisma ORM para filtros de localização no catálogo regional do Vale do Itaim.
-* **O que farei:** Conectar as rotas com busca por cidades vizinhas (Paulistana, Acauã, Betânia, Jacobina) e criar a tabela de avaliações.
-* **O que me impede:** Nenhum impedimento.
-
-### Giselly (Frontend)
-* **O que fiz:** Iniciei o levantamento das telas de autenticação e navegação para padronizar botões e modais de login.
-* **O que farei:** Desenvolver o pop-up de login para ações restritas e o botão Entrar no cabeçalho.
-* **O que me impede:** Nenhum impedimento.
+**Periodo da Sprint 1:** 29/10/2026 a 03/11/2026  
+**Scrum Master:** Josimar  
+**Canal de Comunicacao:** Discord (`#daily-scrum`) e WhatsApp, com alinhamento presencial no IFPI  
+**Horario Regular:** 19h30  
+**Rastreabilidade Tecnica:** Todos os relatos diarios estao fundamentados nos registros de commits do repositorio Git.  
 
 ---
 
-## 📅 Registro 2 — 21/10/2026 (Terça-feira)
+## 1. Registros das Reunioes Diarias (Daily Scrum)
 
-### Giselly (Frontend)
-* **O que fiz:** Concluí um grande pacote de melhorias visuais e usabilidade na Home, produto e perfil:
-  * Implementei o pop-up de login/cadastro exibido quando visitantes tentam executar ações restritas. *(Git Commits: `9572216`, `77c872b` — "pop up adicionado", "ajuste pop up")*
-  * Adicionei o botão "Entrar" no cabeçalho para usuários desconectados. *(Git Commit: `7923cbf` — "botao de entrar para quem nao esta cadastrado")*
-  * Padronizei o botão "Vender" e corrigi o salto de tela com `scrollbar-gutter`. *(Git Commit: `1325fb6` — "ajuste no botão de vender e scrollbas")*
-  * Reposicionei as tags de "categoria" e "condição" imediatamente acima da descrição do anúncio. *(Git Commit: `5e5a4f2` — "mudança de posição 'categoria' e 'condição'")*
-  * Discretizei o botão Denunciar e removi a menção de ticket abaixo. *(Git Commits: `bfab504`, `abc7318` — "ajuste no botão denunciar", "remoçao do botao ticket")*
-  * Adicionei o botão para denunciar vendedor diretamente pelo perfil. *(Git Commit: `f5c5db3` — "adicionado o botão de denunciar vendedor")*
-  * Removi elementos desnecessários da barra lateral e ajustei botões da Home. *(Git Commits: `bf6e5a8`, `e7073d4` — "retirada de elementos da barra lateral", "ajuste nos botões da home")*
-* **O que farei:** Padronizar todos os menus dropdown do site e criar a barra lateral de filtros avançados.
-* **O que me impede:** O surgimento da barra de rolagem causava deslocamento horizontal indesejado no layout *(Resolvido com `scrollbar-gutter: stable`)*.
+### Registro 1 — 29/10/2026 (Quarta-feira)
 
-### Pedro Ravy (Backend)
-* **O que fiz:** Implementei o filtro avançado por cidades e bairros do Vale do Itaim direto no Prisma e criei a estrutura de avaliações de vendedores com limite de uma avaliação por usuário.  
-  *(Git Commits: `60d3359` — "feat(catalog): adicionar filtro avancado por cidades e bairros do Vale do Itaim", `77a4290` — "fix(home): tornar filtro de bairros dinamico", `88b8d40`, `c0b6e1e` — "Ajeitar o back para poder avaliar vendedores", "ajuste de detalhes na parte de avaliações")*
-* **O que farei:** Modelar a integridade financeira no checkout de pedidos (`Order`).
-* **O que me impede:** Nenhum impedimento.
-
-### Kayky (Backend / PO)
-* **O que fiz:** Concluí a nova camada de cadastro de usuários com hashing e autenticação funcional; refatorei os arquivos JavaScript que estavam com excesso de linhas, separando regras de domínio.  
-  *(Git Commits: `7230a8f`, `2f3b4f5` — "cadastro funcionando com o novo cadastro", `044ab9d`, `00910f7`, `1c32a34` — "Ajustei os arquivos js pois estavam com muitas linhas", "refatoração do js")*
-* **O que farei:** Padronizar as rotas do Express e conectar os eventos do chat com o WebSocket.
-* **O que me impede:** Bloqueio de CORS ao tentar consumir a API pelo frontend local *(Registrado como Impedimento #1)*.
-
-### Josimar (Frontend / SM)
-* **O que fiz:** Ajustei as transições de tela e apoiei a equipe na revisão dos formulários de login e cadastro.
-* **O que farei:** Simplificar a sincronização das etapas e fotos no cadastro de produtos.
-* **O que me impede:** Nenhum impedimento.
-
-### Raili (Frontend)
-* **O que fiz:** Apliquei as correções de contraste no tema escuro sobre os novos cards criados pela Giselly e pelo Josimar.
-* **O que farei:** Substituir o emoji de engrenagem por um ícone adequado na barra lateral.
-* **O que me impede:** Nenhum impedimento.
+| Integrante | O que fiz desde a ultima Daily | O que farei ate a proxima Daily | Impedimento identificado |
+| :--- | :--- | :--- | :--- |
+| **Raili** | Implementei o tema escuro global, iniciei a reestruturacao do menu lateral e fiz correcoes de contraste visual. *(Commit: `91f7b86`)* | Mapear telas com textos de baixo contraste e padronizar botoes de login. | Arquivos CSS legados continham estilizacoes sobrepostas dificeis de isolar. |
+| **Josimar** | Configurei animacoes de transicao de tela e estruturei o wizard de publicacao de anuncios em etapas. *(Commit: `706dd01`)* | Integrar envio do formulario wizard com a API e planejar os cards de Skeleton Loading. | Nenhum impedimento. |
+| **Kayky** | Refatorei o CSS de temas centralizando regras essenciais; implementei suporte a multiplos enderecos e liberei navegacao publica do catalogo para visitantes. *(Commits: `bfde56e`, `8889b22`, `c81e193`)* | Conectar servidor WebSocket para mensagens instantaneas e estruturar autenticacao segura JWT. | Nenhum impedimento. |
+| **Pedro Ravy** | Modelei as queries iniciais no Prisma ORM para filtros de localizacao no catalogo regional. | Conectar rotas com cidades vizinhas do Vale do Itaim e desenhar a tabela de avaliacoes. | Nenhum impedimento. |
+| **Giselly** | Iniciei o levantamento das telas de autenticacao e navegacao para padronizar botoes e modais. | Implementar modal interativo de login para acoes restritas e botao "Entrar" no cabecalho. | Nenhum impedimento. |
 
 ---
 
-## 📅 Registro 3 — 22/10 e 23/10/2026 (Quarta e Quinta-feira)
+### Registro 2 — 30/10/2026 (Quinta-feira)
 
-### Josimar (Frontend / SM)
-* **O que fiz:** Simplifiquei o wizard de criação de anúncios, corrigindo a sincronização das etapas de preenchimento e o preview de fotos.  
-  *(Git Commit: `b28683d` — "simplifica wizard de criacao de anuncio e corrige sincronizacao de etapas e fotos")*
-* **O que farei:** Implementar a padronização do Skeleton Loading universal em todo o marketplace.
-* **O que me impede:** Nenhum impedimento.
-
-### Giselly (Frontend)
-* **O que fiz:** Padronizei todos os menus dropdown do site com estilo único; adicionei a barra lateral de filtros avançados e os botões de login rápido; refatorei a interface de denúncias para um formato limpo e intuitivo; e atualizei o ícone de avaliações.  
-  *(Git Commits: `ddb1ef1` — "dropdowns padronizados", `dd5f3b0` — "adicionado barra de filtros e icones para login", `9d10cc8` — "interface denuncia", `6a01c6a` — "icone de avaliação")*
-* **O que farei:** Redesenhar os balões de propostas de valor no chat para manter simetria entre comprador e vendedor.
-* **O que me impede:** Nenhum impedimento.
-
-### Kayky (Backend / PO)
-* **O que fiz:** Padronizei as rotas REST do backend; implementei a comunicação assíncrona do chat em tempo real via Socket.IO; e corrigi o tratamento de arquivos estáticos apagados.  
-  *(Git Commits: `c4a922c` — "AJUSTEI UMAS ROTAS", `a23bd60` — "começando a fazer funcionar de forma assincrona o chat", `0381915` — "chat funcionando em tempo real", `2cf3299` — "corrigido problema de arquivos que ja foram apagados")*
-* **O que farei:** Escrever endpoints de recuperação de senha e reforçar a segurança de rotas protegidas.
-* **O que me impede:** Nenhum impedimento.
-
-### Pedro Ravy (Backend)
-* **O que fiz:** Finalizei o cálculo financeiro seguro em `POST /orders`, garantindo que o preço seja validado no banco de dados.
-* **O que farei:** Integrar a coleção Postman e documentar os schemas no OpenAPI.
-* **O que me impede:** Nenhum impedimento.
-
-### Raili (Frontend)
-* **O que fiz:** Ajustei o ícone de configurações da sidebar e revisei o contraste do chat e inputs de formulário no tema escuro.
-* **O que farei:** Validar a persistência do token de sessão no `localStorage`.
-* **O que me impede:** Nenhum impedimento.
+| Integrante | O que fiz desde a ultima Daily | O que farei ate a proxima Daily | Impedimento identificado |
+| :--- | :--- | :--- | :--- |
+| **Giselly** | Implementei modal de login para visitantes *(Commits: `9572216`, `77c872b`)*; adicionei botao Entrar no header *(Commit: `7923cbf`)*; padronizei botao Vender com `scrollbar-gutter` *(Commit: `1325fb6`)*; reposicionei tags de categoria/condicao *(Commit: `5e5a4f2`)*; discretizei denuncias *(Commits: `bfab504`, `abc7318`)*; adicionei denuncia no perfil *(Commit: `f5c5db3`)*. | Padronizar menus dropdown em todo o site e implementar a barra lateral de filtros avancados. | A barra de rolagem causava deslocamento horizontal indesejado no layout *(Solucionado com `scrollbar-gutter: stable`)*. |
+| **Pedro Ravy** | Implementei filtro avancado por cidades e bairros do Vale do Itaim no Prisma e criei estrutura de avaliacoes de vendedores com limite de uma avaliacao por comprador. *(Commits: `60d3359`, `77a4290`, `88b8d40`, `c0b6e1e`)* | Modelar integridade financeira no checkout de pedidos (`Order`). | Nenhum impedimento. |
+| **Kayky** | Conclui a camada de cadastro de usuarios com hashing Bcrypt e emissao de JWT; refatorei os arquivos JavaScript separando regras de negocio e rotas. *(Commits: `7230a8f`, `2f3b4f5`, `044ab9d`, `00910f7`, `1c32a34`)* | Padronizar rotas Express e conectar eventos do chat com WebSocket. | Bloqueio de CORS ao consumir a API a partir da aplicacao web local *(Registrado como Impedimento 1)*. |
+| **Josimar** | Ajustei as transicoes de tela e auxiliei na revisao dos formularios de login e cadastro. | Simplificar sincronizacao das etapas e fotos no cadastro de produtos. | Nenhum impedimento. |
+| **Raili** | Apliquei correcoes de contraste no modo escuro nos novos modais criados pela equipe. | Substituir o emoji de engrenagem por icone SVG no menu lateral. | Nenhum impedimento. |
 
 ---
 
-## 📅 Registro 4 — 26/10 e 27/10/2026 (Segunda e Terça-feira)
+### Registro 3 — 31/10 e 01/11/2026 (Sexta e Sabado)
 
-### Josimar (Frontend / SM)
-* **O que fiz:** Implementei a **padronização do Skeleton Loading** em todas as páginas do site e solucionei o bug onde o nome do avaliador ficava invisível no modo escuro.  
-  *(Git Commits: `14ba64a` — "feat(ui): padronizar skeleton loading e corrigir modo escuro", `5e59cdc` — "fix(skeleton): corrigir animacao shimmer no modo escuro")*
-* **O que farei:** Organizar os dados da Sprint 1 e preparar a facilitação da Review e Retrospectiva.
-* **O que me impede:** O texto do avaliador não recebia a variável semântica de cor no dark theme *(Resolvido no CSS de avaliações)*.
-
-### Kayky (Backend / PO)
-* **O que fiz:** Implementei a recuperação de senha por e-mail; corrigi vulnerabilidades de segurança; configurei a v2 do site com novas rotas e realizei o ajuste para o app funcionar fora da rede Wi-Fi do campus do IFPI.  
-  *(Git Commits: `39bbdb5` — "funcionalidade de recuperar a senha com o email funcionando", `c170c74` — "Ajustado uns erros de segurança", `f9721d0` — "v2 do site", `5ceeb9a` — "Ajuste para funcionar quando n estiver no wifi do ifpi")*
-* **O que farei:** Validar a Definition of Done e liderar a Sprint Review com a equipe.
-* **O que me impede:** Nenhum impedimento.
-
-### Raili (Frontend)
-* **O que fiz:** Configurei o modo claro como padrão do sistema e ajustei as cores dos botões de autenticação no modo escuro.  
-  *(Git Commit: `7fef6a3` — "modo claro como padrão e ajuste no modo escuro mudar a cor dos botões de login")*
-* **O que farei:** Testes manuais integrados de ponta a ponta na interface.
-* **O que me impede:** Nenhum impedimento.
-
-### Pedro Ravy (Backend)
-* **O que fiz:** Concluí os testes de integração das rotas de pedidos, catálogo e autenticação, garantindo respostas 200/201 e 400/401/403.
-* **O que farei:** Apoiar o PO na demonstração técnica no Swagger e Postman.
-* **O que me impede:** Nenhum impedimento.
-
-### Giselly (Frontend)
-* **O que fiz:** Concluí a validação visual dos modais de login, dropdowns e botões de denúncia.
-* **O que farei:** Consolidar as métricas de entrega e participar da dinâmica da Retrospectiva.
-* **O que me impede:** Nenhum impedimento.
+| Integrante | O que fiz desde a ultima Daily | O que farei ate a proxima Daily | Impedimento identificado |
+| :--- | :--- | :--- | :--- |
+| **Josimar** | Simplifiquei o wizard de criacao de anuncios, corrigindo sincronizacao de etapas e preview de fotos. *(Commit: `b28683d`)* | Implementar a padronizacao do Skeleton Shimmer universal no marketplace. | Nenhum impedimento. |
+| **Giselly** | Padronizei os menus suspensos com estilo visual unico *(Commit: `ddb1ef1`)*; inseri barra de filtros e botoes de login rapido *(Commit: `dd5f3b0`)*; refatorei tela de denuncias *(Commit: `9d10cc8`)*; e atualizei icone de avaliacao *(Commit: `6a01c6a`)*. | Redesenhar os baloes de propostas financeiras no chat para manter simetria entre as partes. | Nenhum impedimento. |
+| **Kayky** | Padronizei rotas REST da aplicacao; ativei comunicacao bidirecional assincrona no chat via Socket.IO; e tratei excecoes de midias apagadas. *(Commits: `c4a922c`, `a23bd60`, `0381915`, `2cf3299`)* | Desenvolver endpoints de recuperacao de senha por e-mail e reforcar controle de rotas privadas. | Nenhum impedimento. |
+| **Pedro Ravy** | Finalizei a validacao financeira no servidor em `POST /orders`, recalculando valores no banco. | Documentar schemas de pedidos no OpenAPI e preparar colecao Postman. | Nenhum impedimento. |
+| **Raili** | Ajustei o icone de configuracoes da barra lateral e revisei o contraste das janelas de conversa no modo escuro. | Validar persistencia do token JWT na sessao do navegador. | Nenhum impedimento. |
 
 ---
 
-## 🚧 Registro de Impedimentos (Facilitado pelo Scrum Master Josimar)
+### Registro 4 — 02/11 e 03/11/2026 (Domingo e Segunda-feira)
 
-| # | Impedimento Relatado | Impacto | Resolução Técnica e Commit | Quem Ajudou |
-| :-: | :--- | :--- | :--- | :--- |
-| **1** | Erro de CORS no localhost ao comunicar cliente e API | Bloqueava requisições do frontend | Configurado middleware `cors()` no servidor Express (`c4a922c`) | **Kayky** |
-| **2** | Deslocamento horizontal (*layout shift*) pelo scroll do navegador | Layout pulava ao carregar páginas longas | Implementado `scrollbar-gutter: stable` no CSS raiz (`1325fb6`) | **Giselly** |
-| **3** | Nome do avaliador invisível no modo escuro | Comprador não conseguia ler quem avaliou | Corrigida a variável semântica de cor no tema escuro (`5e59cdc`) | **Josimar** |
-| **4** | Bloqueio de IP fixo do Wi-Fi do campus do IFPI | App falhava fora do laboratório | Ajustado bind de host e variáveis de rede (`5ceeb9a`) | **Kayky** |
+| Integrante | O que fiz desde a ultima Daily | O que farei ate a proxima Daily | Impedimento identificado |
+| :--- | :--- | :--- | :--- |
+| **Josimar** | Implementei a padronizacao do Skeleton Loading em todas as listagens do site e corrigi bug onde o nome do avaliador ficava ilegivel no tema escuro. *(Commits: `14ba64a`, `5e59cdc`)* | Consolidar dados e métricas da sprint para conduzir a Review e a Retrospectiva. | O texto do avaliador nao utilizava as variaveis de cor do tema escuro *(Corrigido no CSS)*. |
+| **Kayky** | Implementei fluxo de recuperacao de senha por e-mail com codigo OTP; corrigi vulnerabilidades de seguranca em rotas; e ajustei configuracoes de rede para funcionamento fora do campus. *(Commits: `39bbdb5`, `c170c74`, `f9721d0`, `5ceeb9a`)* | Validar criterios da Definition of Done e conduzir a sessao de Sprint Review com a equipe. | Nenhum impedimento. |
+| **Raili** | Defini o modo claro como padrao visual inicial da plataforma e ajustei as cores dos botoes de login sob o modo escuro. *(Commit: `7fef6a3`)* | Conduzir testes manuais exploratorios integrados em todos os navegadores. | Nenhum impedimento. |
+| **Pedro Ravy** | Conclui testes de integracao das rotas de pedidos, catalogo de categorias e autenticacao de sessao. | Apoiar o PO na demonstracao tecnica ao vivo via Swagger UI e Postman. | Nenhum impedimento. |
+| **Giselly** | Validei a usabilidade dos modais de login, caixas de selecao e botões de denuncia em telas mobile. | Estruturar a dinamica da Retrospectiva da Sprint 1 e tabular as melhorias propostas. | Nenhum impedimento. |
 
 ---
 
-## 📉 Burndown da Sprint 1
+## 2. Registro e Tratamento de Impedimentos
 
-* **Meta Inicial:** 24 pontos de trabalho  
-* **Duração:** 8 dias corridos (20/10 a 27/10/2026)  
+Os impedimentos foram gerenciados ativamente pelo Scrum Master Josimar em conjunto com a equipe tecnica:
 
-| Dia da Sprint | 20/10 | 21/10 | 22/10 | 23/10 | 26/10 | 27/10 |
+| # | Descricao do Impedimento | Impacto no Projeto | Acao de Resolucao e Commit | Responsavel pelo Apoio | Data de Resolucao |
+| :---: | :--- | :--- | :--- | :--- | :---: |
+| **1** | Bloqueio de CORS ao consumir a API localmente pelo frontend | Impedia chamadas HTTP assincronas | Configuracao do middleware `cors()` no Express com whitelist de origens (`c4a922c`) | Kayky | 30/10/2026 |
+| **2** | Deslocamento horizontal (*layout shift*) provocado pela barra de rolagem | Trepidacao visual ao carregar telas longas | Aplicacao da regra CSS `scrollbar-gutter: stable` no seletor `:root` (`1325fb6`) | Giselly | 30/10/2026 |
+| **3** | Inconsistencia na leitura do nome do avaliador no modo escuro | Dificultava a identificacao de quem avaliou | Vinculacao de variavel semantica de contraste no tema escuro (`5e59cdc`) | Josimar | 02/11/2026 |
+| **4** | Falha de comunicacao de rede ao executar fora da Wi-Fi do campus | Backend recusava conexoes externas | Ajuste de bind de endereco IP e variaveis de ambiente de rede (`5ceeb9a`) | Kayky | 03/11/2026 |
+
+---
+
+## 3. Burndown da Sprint 1
+
+* **Meta Inicial Planejada:** 24 pontos de trabalho  
+* **Periodo:** 29/10/2026 a 03/11/2026 (6 dias uteis de sprint)  
+
+| Dia da Sprint | Dia 1 (29/10) | Dia 2 (30/10) | Dia 3 (31/10) | Dia 4 (01/11) | Dia 5 (02/11) | Dia 6 (03/11) |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Pontos Ideais** | 24.0 | 19.2 | 14.4 | 9.6 | 4.8 | 0.0 |
+| **Linha Ideal (Pontos)** | 24.0 | 19.2 | 14.4 | 9.6 | 4.8 | 0.0 |
 | **Pontos Restantes Reais** | 24 | 18 | 11 | 7 | 2 | 0 |
 
-> **Resultado do Burndown:** A equipe concluiu com êxito os **24 pontos planejados**, comprovados pelos 22 commits registrados no repositório ao longo da primeira sprint.
+A equipe completou a totalidade dos **24 pontos planejados**, conforme inspecionado e homologado na sessao de Sprint Review em 03/11/2026.
