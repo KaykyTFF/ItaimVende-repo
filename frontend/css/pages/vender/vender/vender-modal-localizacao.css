@@ -1,19 +1,29 @@
 /* ==========================================================================
    MODAL DE EDIÇÃO DE LOCALIZAÇÃO
    ========================================================================== */
+body.modal-aberto-bloquear-scroll {
+    overflow: hidden !important;
+    touch-action: none;
+    -webkit-overflow-scrolling: auto;
+}
+
 .modal-localizacao-backdrop {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px);
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
     display: none;
     align-items: center;
     justify-content: center;
-    z-index: 1000;
+    z-index: 99999;
     padding: 20px;
+    overscroll-behavior: contain;
 }
 
 .modal-localizacao-backdrop.ativo {
@@ -32,8 +42,9 @@
 
 .modal-localizacao-card.loc-modal-ampliado {
     max-width: 530px;
-    max-height: 90vh;
+    max-height: 88vh;
     overflow-y: auto;
+    overscroll-behavior: contain;
     scrollbar-width: thin;
     scrollbar-color: #D1D5DB transparent;
 }
@@ -206,12 +217,104 @@
     padding: 0 10px;
 }
 
-/* Seção 2: Adicionar Endereço (Estilo Configurações) */
-.loc-secao-adicionar h4 {
-    font-size: 15px;
-    font-weight: 800;
-    color: #1F2937;
-    margin: 0 0 12px 0;
+/* Seção 2: Adicionar Endereço (Gatilho em Botão + Gaveta Desdobrável) */
+.loc-secao-adicionar {
+    margin-top: 4px;
+}
+
+.btn-toggle-novo-endereco {
+    width: 100%;
+    min-height: 48px;
+    background: #F8FAFC;
+    border: 1.5px dashed #CBD5E1;
+    border-radius: 12px;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: inherit;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #334155;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-toggle-novo-endereco:hover {
+    background: #F0FDF4;
+    border-color: #38A129;
+    color: #2E8B22;
+}
+
+.btn-toggle-novo-endereco.ativo {
+    background: #F0FDF4;
+    border-color: #38A129;
+    border-style: solid;
+    color: #2E8B22;
+}
+
+.toggle-novo-end-conteudo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.toggle-novo-end-icone {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    background: rgba(56, 161, 41, 0.12);
+    color: #38A129;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.btn-toggle-novo-endereco:hover .toggle-novo-end-icone,
+.btn-toggle-novo-endereco.ativo .toggle-novo-end-icone {
+    background: #38A129;
+    color: #FFFFFF;
+}
+
+.chevron-toggle-end {
+    width: 18px;
+    height: 18px;
+    stroke-width: 2.2;
+    color: #64748B;
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s ease;
+}
+
+.btn-toggle-novo-endereco:hover .chevron-toggle-end {
+    color: #2E8B22;
+}
+
+.btn-toggle-novo-endereco.ativo .chevron-toggle-end {
+    transform: rotate(180deg);
+    color: #2E8B22;
+}
+
+/* Gaveta Expansível do Formulário */
+.loc-gaveta-novo-endereco {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
+                opacity 0.25s ease, 
+                transform 0.25s ease,
+                margin 0.25s ease;
+    margin-top: 0;
+    pointer-events: none;
+}
+
+.loc-gaveta-novo-endereco.aberto {
+    max-height: 600px;
+    opacity: 1;
+    transform: translateY(0);
+    margin-top: 14px;
+    pointer-events: auto;
 }
 
 .loc-grid {
@@ -268,11 +371,13 @@
 }
 
 .loc-form-acoes {
+    display: flex;
+    gap: 10px;
     margin-top: 14px;
 }
 
 .btn-adicionar-end-loc {
-    width: 100%;
+    flex: 1;
     height: 44px;
     background-color: #38A129;
     color: #FFFFFF;
@@ -296,6 +401,25 @@
 .btn-adicionar-end-loc:disabled {
     opacity: 0.65;
     cursor: not-allowed;
+}
+
+.btn-cancelar-end-loc {
+    height: 44px;
+    padding: 0 18px;
+    background-color: #F1F5F9;
+    color: #475569;
+    border: 1px solid #CBD5E1;
+    border-radius: 10px;
+    font-size: 13.5px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-cancelar-end-loc:hover {
+    background-color: #E2E8F0;
+    color: #1E293B;
 }
 
 /* Shake de Validação para Fotos */
@@ -367,6 +491,30 @@
     background: #0F172A;
     border-color: #334155;
     color: #94A3B8;
+}
+
+[data-theme="dark"] .btn-toggle-novo-endereco {
+    background: #0F172A;
+    border-color: #334155;
+    color: #E2E8F0;
+}
+
+[data-theme="dark"] .btn-toggle-novo-endereco:hover,
+[data-theme="dark"] .btn-toggle-novo-endereco.ativo {
+    background: #1E293B;
+    border-color: #38A129;
+    color: #4ADE80;
+}
+
+[data-theme="dark"] .btn-cancelar-end-loc {
+    background: #0F172A;
+    border-color: #334155;
+    color: #94A3B8;
+}
+
+[data-theme="dark"] .btn-cancelar-end-loc:hover {
+    background: #1E293B;
+    color: #F8FAFC;
 }
 
 @keyframes modalScaleIn {

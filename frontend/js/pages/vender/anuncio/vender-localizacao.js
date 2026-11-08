@@ -8,6 +8,8 @@
 
     const { mostrarToast } = window.ItaimVenderEstado;
 
+    let inicializado = false;
+
     let modalLoc = null;
     let btnEditarLoc = null;
     let btnFecharModalLoc = null;
@@ -17,12 +19,15 @@
 
     let locListaEnderecos = null;
     let locBadgeQtd = null;
+    let btnToggleNovoEnd = null;
+    let gavetaNovoEnd = null;
     let locFormNovo = null;
     let inputLocApelido = null;
     let inputLocCep = null;
     let inputLocBairro = null;
     let inputLocCidade = null;
     let btnAddEndLoc = null;
+    let btnCancelarEndLoc = null;
 
     let erroLocApelido = null;
     let erroLocCep = null;
@@ -79,6 +84,52 @@
         } catch (e) {}
     }
 
+    function abrirModalLocalizacao() {
+        limparErrosNovoEndereco();
+        renderizarEnderecosModal();
+        fecharGavetaEndereco();
+        modalLoc?.classList.add('ativo');
+        document.body.classList.add('modal-aberto-bloquear-scroll');
+    }
+
+    function fecharModalLocalizacao() {
+        modalLoc?.classList.remove('ativo');
+        document.body.classList.remove('modal-aberto-bloquear-scroll');
+        fecharGavetaEndereco();
+        limparErrosNovoEndereco();
+    }
+
+    function alternarGavetaEndereco() {
+        if (!gavetaNovoEnd || !btnToggleNovoEnd) return;
+        const estaAberto = gavetaNovoEnd.classList.contains('aberto');
+        if (estaAberto) {
+            fecharGavetaEndereco();
+        } else {
+            abrirGavetaEndereco();
+        }
+    }
+
+    function abrirGavetaEndereco() {
+        if (!gavetaNovoEnd || !btnToggleNovoEnd) return;
+        gavetaNovoEnd.classList.add('aberto');
+        btnToggleNovoEnd.classList.add('ativo');
+        btnToggleNovoEnd.setAttribute('aria-expanded', 'true');
+
+        setTimeout(() => {
+            gavetaNovoEnd.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            inputLocApelido?.focus();
+        }, 80);
+    }
+
+    function fecharGavetaEndereco() {
+        if (!gavetaNovoEnd || !btnToggleNovoEnd) return;
+        gavetaNovoEnd.classList.remove('aberto');
+        btnToggleNovoEnd.classList.remove('ativo');
+        btnToggleNovoEnd.setAttribute('aria-expanded', 'false');
+        limparErrosNovoEndereco();
+        if (locFormNovo) locFormNovo.reset();
+    }
+
     function aplicarLocalizacaoSelecionada(cidade, bairro) {
         const cid = (cidade || 'Paulistana').trim();
         let bar = (bairro || 'Centro').trim();
@@ -93,7 +144,7 @@
         const previewLocal = document.getElementById('preview-local');
         if (previewLocal) previewLocal.textContent = `${cid} - ${bar}`;
 
-        modalLoc?.classList.remove('ativo');
+        fecharModalLocalizacao();
         mostrarToast(`Localização definida: ${cid} - ${bar}`);
     }
 
@@ -124,7 +175,7 @@
         if (enderecos.length === 0) {
             locListaEnderecos.innerHTML = `
                 <div class="loc-vazio">
-                    Você ainda não possui endereços cadastrados. Adicione um novo no formulário abaixo para selecioná-lo.
+                    Você ainda não possui endereços cadastrados. Clique no botão abaixo para adicionar.
                 </div>
             `;
             return;
@@ -166,6 +217,13 @@
                 aplicarLocalizacaoSelecionada(cidade, bairro);
             });
 
+            item.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    aplicarLocalizacaoSelecionada(cidade, bairro);
+                }
+            });
+
             locListaEnderecos.appendChild(item);
         });
     }
@@ -183,6 +241,9 @@
     }
 
     function inicializar() {
+        if (inicializado) return;
+        inicializado = true;
+
         modalLoc = document.getElementById('modal-localizacao');
         btnEditarLoc = document.getElementById('btn-editar-localizacao');
         btnFecharModalLoc = document.getElementById('btn-fechar-modal-loc');
@@ -192,31 +253,47 @@
 
         locListaEnderecos = document.getElementById('loc-lista-enderecos');
         locBadgeQtd = document.getElementById('loc-badge-qtd');
+
+        btnToggleNovoEnd = document.getElementById('btn-toggle-novo-endereco');
+        gavetaNovoEnd = document.getElementById('loc-gaveta-novo-endereco');
         locFormNovo = document.getElementById('loc-form-novo-endereco');
         inputLocApelido = document.getElementById('loc-end-apelido');
         inputLocCep = document.getElementById('loc-end-cep');
         inputLocBairro = document.getElementById('loc-end-bairro');
         inputLocCidade = document.getElementById('loc-end-cidade');
         btnAddEndLoc = document.getElementById('btn-adicionar-end-loc');
+        btnCancelarEndLoc = document.getElementById('btn-cancelar-end-loc');
 
         erroLocApelido = document.getElementById('erro-loc-end-apelido');
         erroLocCep = document.getElementById('erro-loc-end-cep');
         erroLocBairro = document.getElementById('erro-loc-end-bairro');
         erroLocCidade = document.getElementById('erro-loc-end-cidade');
 
-        btnEditarLoc?.addEventListener('click', () => {
-            limparErrosNovoEndereco();
-            renderizarEnderecosModal();
-            modalLoc?.classList.add('ativo');
-        });
-
-        btnFecharModalLoc?.addEventListener('click', () => {
-            modalLoc?.classList.remove('ativo');
-        });
+        // Abertura e fechamento do modal
+        btnEditarLoc?.addEventListener('click', abrirModalLocalizacao);
+        btnFecharModalLoc?.addEventListener('click', fecharModalLocalizacao);
 
         modalLoc?.addEventListener('click', (e) => {
-            if (e.target === modalLoc) modalLoc.classList.remove('ativo');
+            if (e.target === modalLoc) fecharModalLocalizacao();
         });
+
+        // Bloqueio de scroll por gestos de toque no backdrop
+        modalLoc?.addEventListener('touchmove', (e) => {
+            if (e.target === modalLoc) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        // Fechamento via tecla Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modalLoc?.classList.contains('ativo')) {
+                fecharModalLocalizacao();
+            }
+        });
+
+        // Abertura / Fechamento da gaveta de novo endereço
+        btnToggleNovoEnd?.addEventListener('click', alternarGavetaEndereco);
+        btnCancelarEndLoc?.addEventListener('click', fecharGavetaEndereco);
 
         const btnSalvarLocLegado = document.getElementById('btn-salvar-loc');
         btnSalvarLocLegado?.addEventListener('click', () => {
@@ -305,7 +382,7 @@
 
             if (btnAddEndLoc) {
                 btnAddEndLoc.disabled = true;
-                btnAddEndLoc.textContent = 'Adicionando endereço...';
+                btnAddEndLoc.textContent = 'Salvando endereço...';
             }
 
             const dadosNovoEnd = {
@@ -348,7 +425,7 @@
 
             if (btnAddEndLoc) {
                 btnAddEndLoc.disabled = false;
-                btnAddEndLoc.textContent = 'Adicionar endereço';
+                btnAddEndLoc.textContent = 'Salvar endereço';
             }
 
             aplicarLocalizacaoSelecionada(cidade, bairro);
@@ -358,9 +435,11 @@
 
     window.ItaimVenderLocalizacao = {
         inicializar,
+        abrirModalLocalizacao,
+        fecharModalLocalizacao,
+        alternarGavetaEndereco,
         aplicarLocalizacaoSelecionada,
         renderizarEnderecosModal,
         obterEnderecosLocais
     };
 })();
-

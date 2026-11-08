@@ -857,7 +857,6 @@
             <div class="loc-secao-enderecos">
                 <div class="loc-secao-header">
                     <h4>Meus endereços</h4>
-                    <span class="loc-badge-qtd" id="loc-badge-qtd">Carregando...</span>
                 </div>
                 <p class="loc-secao-desc">Locais de retirada ou entrega que você usa nos anúncios e negociações.</p>
                 
@@ -868,41 +867,61 @@
 
             <!-- Divisor -->
             <div class="loc-divisor">
-                <span>ou adicione um novo</span>
+                <span>ou</span>
             </div>
 
-            <!-- Seção 2: Adicionar Endereço (Estilo Idêntico às Configurações) -->
+            <!-- Seção 2: Adicionar Endereço (Gatilho em Botão + Gaveta Desdobrável) -->
             <div class="loc-secao-adicionar">
-                <h4>Adicionar endereço</h4>
-                <form class="loc-form-novo" id="loc-form-novo-endereco" novalidate>
-                    <div class="loc-grid">
-                        <div class="loc-campo">
-                            <label for="loc-end-apelido">Apelido</label>
-                            <input class="loc-input" type="text" id="loc-end-apelido" maxlength="30" placeholder="Casa, Trabalho...">
-                            <span class="loc-erro" id="erro-loc-end-apelido"></span>
-                        </div>
-                        <div class="loc-campo">
-                            <label for="loc-end-cep">CEP</label>
-                            <input class="loc-input" type="text" id="loc-end-cep" maxlength="9" placeholder="00000-000" inputmode="numeric">
-                            <span class="loc-erro" id="erro-loc-end-cep"></span>
-                        </div>
-                        <div class="loc-campo">
-                            <label for="loc-end-bairro">Bairro</label>
-                            <input class="loc-input" type="text" id="loc-end-bairro" maxlength="60" placeholder="Centro, Cohab...">
-                            <span class="loc-erro" id="erro-loc-end-bairro"></span>
-                        </div>
-                        <div class="loc-campo">
-                            <label for="loc-end-cidade">Cidade</label>
-                            <input class="loc-input" type="text" id="loc-end-cidade" maxlength="60" placeholder="Patos, Paulistana...">
-                            <span class="loc-erro" id="erro-loc-end-cidade"></span>
-                        </div>
+                <button type="button" class="btn-toggle-novo-endereco" id="btn-toggle-novo-endereco" aria-expanded="false">
+                    <div class="toggle-novo-end-conteudo">
+                        <span class="toggle-novo-end-icone">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                        </span>
+                        <span class="toggle-novo-end-texto">Adicionar endereço</span>
                     </div>
-                    <div class="loc-form-acoes">
-                        <button type="submit" class="btn-salvar-localizacao btn-adicionar-end-loc" id="btn-adicionar-end-loc">
-                            Adicionar endereço
-                        </button>
-                    </div>
-                </form>
+                    <svg class="chevron-toggle-end" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+
+                <!-- Gaveta Deslizante com os Itens do Formulário -->
+                <div class="loc-gaveta-novo-endereco" id="loc-gaveta-novo-endereco">
+                    <form class="loc-form-novo" id="loc-form-novo-endereco" novalidate>
+                        <div class="loc-grid">
+                            <div class="loc-campo">
+                                <label for="loc-end-apelido">Apelido</label>
+                                <input class="loc-input" type="text" id="loc-end-apelido" maxlength="30" placeholder="Casa, Trabalho...">
+                                <span class="loc-erro" id="erro-loc-end-apelido"></span>
+                            </div>
+                            <div class="loc-campo">
+                                <label for="loc-end-cep">CEP</label>
+                                <input class="loc-input" type="text" id="loc-end-cep" maxlength="9" placeholder="00000-000" inputmode="numeric">
+                                <span class="loc-erro" id="erro-loc-end-cep"></span>
+                            </div>
+                            <div class="loc-campo">
+                                <label for="loc-end-bairro">Bairro</label>
+                                <input class="loc-input" type="text" id="loc-end-bairro" maxlength="60" placeholder="Centro, Cohab...">
+                                <span class="loc-erro" id="erro-loc-end-bairro"></span>
+                            </div>
+                            <div class="loc-campo">
+                                <label for="loc-end-cidade">Cidade</label>
+                                <input class="loc-input" type="text" id="loc-end-cidade" maxlength="60" placeholder="Patos, Paulistana...">
+                                <span class="loc-erro" id="erro-loc-end-cidade"></span>
+                            </div>
+                        </div>
+                        <div class="loc-form-acoes">
+                            <button type="submit" class="btn-salvar-localizacao btn-adicionar-end-loc" id="btn-adicionar-end-loc">
+                                Salvar endereço
+                            </button>
+                            <button type="button" class="btn-cancelar-end-loc" id="btn-cancelar-end-loc">
+                                Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
 
             <!-- Elementos auxiliares para retrocompatibilidade -->
