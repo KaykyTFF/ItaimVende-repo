@@ -193,14 +193,14 @@
     border-radius: 20px;
     border: none;
     cursor: pointer;
-    box-shadow: 0 3px 8px rgba(89, 170, 89, 0.3);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     transition: all 0.2s ease;
 }
 
 .btn-editar-localizacao:hover {
     background-color: var(--vender-green-hover);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(89, 170, 89, 0.45);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .btn-editar-localizacao:active {

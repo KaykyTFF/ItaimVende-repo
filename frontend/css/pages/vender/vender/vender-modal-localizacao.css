@@ -86,13 +86,13 @@
 
 .form-grupo-modal select:focus,
 .form-grupo-modal input:focus {
-    border-color: var(--vender-green);
-    box-shadow: 0 0 0 3px rgba(89, 170, 89, 0.2);
+    border-color: #38A129;
+    box-shadow: none;
 }
 
 .btn-salvar-localizacao {
     width: 100%;
-    background-color: var(--vender-green);
+    background-color: #38A129;
     color: #FFFFFF;
     border: none;
     border-radius: 12px;
@@ -100,10 +100,12 @@
     font-size: 15px;
     font-weight: 700;
     cursor: pointer;
+    box-shadow: none;
     transition: background 0.2s ease;
 }
 
 .btn-salvar-localizacao:hover {
-    background-color: var(--vender-green-hover);
+    background-color: #2E8B22;
+    box-shadow: none;
 }
 

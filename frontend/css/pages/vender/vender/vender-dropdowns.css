@@ -16,9 +16,9 @@
 .btn-dropdown-pill {
     width: 100%;
     min-height: 48px;
-    background: linear-gradient(135deg, #44BD32 0%, #3CA92C 100%);
+    background: #38A129;
     color: #FFFFFF;
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.14);
     border-radius: 14px;
     padding: 0 20px;
     display: flex;
@@ -29,19 +29,19 @@
     font-weight: 600;
     letter-spacing: 0.3px;
     cursor: pointer;
-    box-shadow: 0 4px 14px rgba(68, 189, 50, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    box-shadow: none;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .btn-dropdown-pill:hover {
-    background: linear-gradient(135deg, #48C735 0%, #3CA92C 100%);
-    box-shadow: 0 6px 20px rgba(68, 189, 50, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    background: #2E8B22;
+    box-shadow: none;
     transform: translateY(-1px);
 }
 
 .btn-dropdown-pill:active {
     transform: translateY(1px);
-    box-shadow: 0 2px 8px rgba(68, 189, 50, 0.3);
+    box-shadow: none;
 }
 
 .btn-dropdown-pill .chevron-icon {
@@ -57,8 +57,8 @@
 }
 
 .dropdown-pill-container.aberto .btn-dropdown-pill {
-    background: linear-gradient(135deg, #3CA92C 0%, #359826 100%);
-    box-shadow: 0 2px 10px rgba(68, 189, 50, 0.35), 0 0 0 3px rgba(68, 189, 50, 0.25);
+    background: #25731B;
+    box-shadow: none;
 }
 
 /* Menu Flutuante de Opções */

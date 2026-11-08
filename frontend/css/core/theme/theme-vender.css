@@ -226,21 +226,27 @@ body.dark-theme.pagina-vender {
 [data-theme="dark"] .btn-dropdown-pill,
 .dark-theme .btn-dropdown-pill {
     background: linear-gradient(135deg, #44BD32 0%, #3CA92C 100%) !important;
+    background: linear-gradient(135deg, #38A129 0%, #2E8B22 100%) !important;
     color: #FFFFFF !important;
     border: 1px solid rgba(255, 255, 255, 0.16) !important;
     box-shadow: 0 4px 16px rgba(68, 189, 50, 0.35) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35) !important;
 }
 
 [data-theme="dark"] .btn-dropdown-pill:hover,
 .dark-theme .btn-dropdown-pill:hover {
     background: linear-gradient(135deg, #48C735 0%, #3CA92C 100%) !important;
     box-shadow: 0 6px 22px rgba(68, 189, 50, 0.45) !important;
+    background: linear-gradient(135deg, #44BD32 0%, #38A129 100%) !important;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45) !important;
 }
 
 [data-theme="dark"] .dropdown-pill-container.aberto .btn-dropdown-pill,
 .dark-theme .dropdown-pill-container.aberto .btn-dropdown-pill {
     background: linear-gradient(135deg, #3CA92C 0%, #359826 100%) !important;
     box-shadow: 0 2px 10px rgba(68, 189, 50, 0.4), 0 0 0 3px rgba(68, 189, 50, 0.3) !important;
+    background: linear-gradient(135deg, #2E8B22 0%, #25731B 100%) !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4), 0 0 0 2px rgba(56, 161, 41, 0.3) !important;
 }
 
 /* Menus de Dropdown do Vender (Categoria / Condição) */
@@ -426,6 +432,36 @@ body.dark-theme.pagina-vender {
 .dark-theme .btn-wizard-anterior:hover {
     background-color: #2C3946 !important;
     color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .btn-wizard-proximo,
+.dark-theme .btn-wizard-proximo {
+    background-color: #38A129 !important;
+    background: #38A129 !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35) !important;
+}
+
+[data-theme="dark"] .btn-wizard-proximo:hover,
+.dark-theme .btn-wizard-proximo:hover {
+    background-color: #2E8B22 !important;
+    background: #2E8B22 !important;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45) !important;
+}
+
+[data-theme="dark"] .btn-anunciar-destaque,
+.dark-theme .btn-anunciar-destaque {
+    background-color: #38A129 !important;
+    background: #38A129 !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="dark"] .btn-anunciar-destaque:hover,
+.dark-theme .btn-anunciar-destaque:hover {
+    background-color: #2E8B22 !important;
+    background: #2E8B22 !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5) !important;
 }
 
 /* ==========================================================================

@@ -45,22 +45,42 @@
             });
         }
 
-        // Verifica autenticação com tolerância a falhas
+        // Configuração do botão Sair (Logout dos Tickets)
+        const btnLogout = document.getElementById('btn-logout-tickets');
+        if (btnLogout) {
+            btnLogout.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (confirm('Deseja encerrar a sessão de moderação?')) {
+                    try {
+                        sessionStorage.removeItem('itaim_tickets_auth');
+                        localStorage.removeItem('itaim_tickets_auth');
+                    } catch (err) {}
+                    window.location.href = 'login-tickets.html';
+                }
+            });
+        }
+
+        // Verifica autenticação exclusiva e isolada da moderação (independente da loja)
         try {
             let usuario = null;
-            if (window.ItaimSessao && typeof window.ItaimSessao.obterUsuarioLogado === 'function') {
-                usuario = window.ItaimSessao.obterUsuarioLogado();
-            } else if (window.ItaimApi && typeof window.ItaimApi.auth?.obterUsuarioLogado === 'function') {
-                usuario = window.ItaimApi.auth.obterUsuarioLogado();
-            } else {
-                usuario = JSON.parse(localStorage.getItem('itaim_usuario_logado') || 'null');
+            const ticketsAuthStr = sessionStorage.getItem('itaim_tickets_auth') || localStorage.getItem('itaim_tickets_auth');
+            if (ticketsAuthStr) {
+                usuario = JSON.parse(ticketsAuthStr);
             }
+
+            if (!usuario || !usuario.username) {
+                window.location.href = 'login-tickets.html';
+                return;
+            }
+
             const modBadge = document.getElementById('mod-user-name');
             if (modBadge && usuario) {
-                modBadge.textContent = `${usuario.name || usuario.nome || 'Moderador'} (${usuario.role || 'MODERATOR'})`;
+                const nomeExibicao = usuario.nome || usuario.name || usuario.username || 'Moderador';
+                const roleExibicao = usuario.cargo || usuario.role || 'Desenvolvedor & Moderador';
+                modBadge.textContent = `${nomeExibicao} (${roleExibicao})`;
             }
         } catch (e) {
-            console.warn('[Tickets] Aviso ao verificar usuário moderador:', e);
+            console.warn('[Tickets] Aviso ao verificar sessão de moderação:', e);
         }
 
         // Carrega dados iniciais de forma assíncrona garantida
