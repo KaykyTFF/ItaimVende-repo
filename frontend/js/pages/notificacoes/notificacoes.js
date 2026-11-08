@@ -342,6 +342,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             const linkDestino = item.link && item.link !== 'notificacoes.html' ? item.link : '#';
 
             card.innerHTML = `
+                <button type="button" class="btn-excluir-notif-card" data-id="${item.id}" title="Excluir notificação" aria-label="Excluir notificação">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+
                 <div class="notif-corpo-principal">
                     <div class="notif-avatar-wrapper ${avatarRingClass}">
                         <img src="${avatarUrl}" alt="Avatar" class="notif-avatar-img">
@@ -356,10 +363,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                             <span>${tempo}</span>
                         </div>
                     </div>
+                    ${midiaHtml ? `<div class="notif-midia-preview">${midiaHtml}</div>` : ''}
                 </div>
 
                 <div class="notif-lado-direito">
-                    ${midiaHtml ? `<div class="notif-midia-preview">${midiaHtml}</div>` : ''}
                     <div class="notif-divisor-vertical"></div>
                     <div class="notif-coluna-acao">
                         <a href="${linkDestino}" class="btn-notif-acao-primaria">
@@ -367,7 +374,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                             <span>${textoBotao}</span>
                             ${setaBotao}
                         </a>
-                        <button type="button" class="btn-excluir-notif-card" data-id="${item.id}" title="Excluir notificação">&times;</button>
                     </div>
                 </div>
             `;
