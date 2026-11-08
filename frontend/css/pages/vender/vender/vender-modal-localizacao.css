@@ -23,11 +23,350 @@
 .modal-localizacao-card {
     background: #FFFFFF;
     border-radius: 20px;
-    padding: 28px;
+    padding: 26px 28px;
     width: 100%;
     max-width: 440px;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
     animation: modalScaleIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-localizacao-card.loc-modal-ampliado {
+    max-width: 530px;
+    max-height: 90vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #D1D5DB transparent;
+}
+
+.modal-localizacao-card.loc-modal-ampliado::-webkit-scrollbar {
+    width: 6px;
+}
+.modal-localizacao-card.loc-modal-ampliado::-webkit-scrollbar-thumb {
+    background-color: #D1D5DB;
+    border-radius: 10px;
+}
+
+.modal-loc-subtitulo {
+    font-size: 13px;
+    color: #6B7280;
+    margin: 3px 0 0 0;
+}
+
+/* Seção 1: Meus Endereços */
+.loc-secao-enderecos {
+    margin-bottom: 8px;
+}
+
+.loc-secao-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+.loc-secao-header h4 {
+    font-size: 15px;
+    font-weight: 800;
+    color: #1F2937;
+    margin: 0;
+}
+
+.loc-badge-qtd {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #38A129;
+    background: rgba(56, 161, 41, 0.12);
+    padding: 2px 8px;
+    border-radius: 9999px;
+}
+
+.loc-secao-desc {
+    font-size: 12.5px;
+    color: #6B7280;
+    margin: 0 0 12px 0;
+}
+
+.loc-lista-enderecos {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 190px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.loc-endereco-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border: 1.5px solid #E5E7EB;
+    border-radius: 14px;
+    padding: 12px 14px;
+    background: #FAFAFA;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.loc-endereco-item:hover {
+    border-color: #38A129;
+    background: #F4FBF3;
+    transform: translateY(-1px);
+}
+
+.loc-endereco-item.selecionado {
+    border-color: #38A129;
+    background: #EEF9ED;
+    box-shadow: 0 0 0 2px rgba(56, 161, 41, 0.2);
+}
+
+.loc-endereco-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.loc-endereco-titulo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14.5px;
+    color: #111827;
+}
+
+.loc-endereco-detalhes {
+    font-size: 13px;
+    color: #4B5563;
+    margin: 3px 0 0 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.loc-selo-principal {
+    background: #38A129;
+    color: #FFFFFF;
+    font-size: 10.5px;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    letter-spacing: 0.3px;
+}
+
+.btn-selecionar-loc-tag {
+    background: #FFFFFF;
+    border: 1px solid #D1D5DB;
+    color: #374151;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.loc-endereco-item.selecionado .btn-selecionar-loc-tag {
+    background: #38A129;
+    border-color: #38A129;
+    color: #FFFFFF;
+}
+
+.loc-vazio {
+    padding: 16px;
+    text-align: center;
+    font-size: 13px;
+    color: #6B7280;
+    background: #F9FAFB;
+    border: 1px dashed #D1D5DB;
+    border-radius: 12px;
+}
+
+/* Divisor elegante */
+.loc-divisor {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 16px 0;
+    color: #9CA3AF;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.loc-divisor::before,
+.loc-divisor::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #E5E7EB;
+}
+
+.loc-divisor span {
+    padding: 0 10px;
+}
+
+/* Seção 2: Adicionar Endereço (Estilo Configurações) */
+.loc-secao-adicionar h4 {
+    font-size: 15px;
+    font-weight: 800;
+    color: #1F2937;
+    margin: 0 0 12px 0;
+}
+
+.loc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.loc-campo {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.loc-campo label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #374151;
+}
+
+.loc-input {
+    height: 42px;
+    border: 1px solid #D1D5DB;
+    border-radius: 10px;
+    padding: 0 12px;
+    font-size: 13.5px;
+    font-family: inherit;
+    outline: none;
+    background: #FFFFFF;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.loc-input:focus {
+    border-color: #38A129;
+    box-shadow: 0 0 0 3px rgba(56, 161, 41, 0.15);
+}
+
+.loc-input.invalido {
+    border-color: #DC2626 !important;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12) !important;
+}
+
+.loc-erro {
+    color: #DC2626;
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 2px;
+    display: block;
+    min-height: 16px;
+}
+
+.loc-erro:empty {
+    display: none;
+}
+
+.loc-form-acoes {
+    margin-top: 14px;
+}
+
+.btn-adicionar-end-loc {
+    width: 100%;
+    height: 44px;
+    background-color: #38A129;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.btn-adicionar-end-loc:hover {
+    background-color: #2E8B22;
+}
+
+.btn-adicionar-end-loc:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+/* Shake de Validação para Fotos */
+@keyframes shakeSuave {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-6px); }
+    40%, 80% { transform: translateX(6px); }
+}
+
+.quadrado-add-foto.com-erro-shake {
+    animation: shakeSuave 0.4s ease-in-out;
+    border-color: #DC2626 !important;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.18) !important;
+}
+
+/* Modo Escuro */
+[data-theme="dark"] .modal-localizacao-card {
+    background: #1E293B;
+    color: #F1F5F9;
+}
+
+[data-theme="dark"] .modal-localizacao-header h3,
+[data-theme="dark"] .loc-secao-header h4,
+[data-theme="dark"] .loc-secao-adicionar h4,
+[data-theme="dark"] .loc-endereco-titulo {
+    color: #F8FAFC;
+}
+
+[data-theme="dark"] .modal-loc-subtitulo,
+[data-theme="dark"] .loc-secao-desc,
+[data-theme="dark"] .loc-endereco-detalhes,
+[data-theme="dark"] .loc-campo label {
+    color: #94A3B8;
+}
+
+[data-theme="dark"] .loc-endereco-item {
+    background: #0F172A;
+    border-color: #334155;
+}
+
+[data-theme="dark"] .loc-endereco-item:hover {
+    background: #1E293B;
+    border-color: #38A129;
+}
+
+[data-theme="dark"] .loc-endereco-item.selecionado {
+    background: rgba(56, 161, 41, 0.18);
+    border-color: #38A129;
+}
+
+[data-theme="dark"] .btn-selecionar-loc-tag {
+    background: #1E293B;
+    border-color: #475569;
+    color: #E2E8F0;
+}
+
+[data-theme="dark"] .loc-divisor::before,
+[data-theme="dark"] .loc-divisor::after {
+    border-color: #334155;
+}
+
+[data-theme="dark"] .loc-input {
+    background: #0F172A;
+    border-color: #334155;
+    color: #F8FAFC;
+}
+
+[data-theme="dark"] .loc-vazio {
+    background: #0F172A;
+    border-color: #334155;
+    color: #94A3B8;
 }
 
 @keyframes modalScaleIn {
@@ -107,5 +446,28 @@
 .btn-salvar-localizacao:hover {
     background-color: #2E8B22;
     box-shadow: none;
+}
+
+@media (max-width: 520px) {
+    .modal-localizacao-card.loc-modal-ampliado {
+        padding: 20px 16px;
+        border-radius: 16px;
+    }
+
+    .loc-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .loc-endereco-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .btn-selecionar-loc-tag {
+        width: 100%;
+        justify-content: center;
+    }
 }
 
