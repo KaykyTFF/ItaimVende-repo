@@ -183,10 +183,57 @@ document.addEventListener('DOMContentLoaded', () => {
         if (elP500) elP500.textContent = `(${countPreco500})`;
         if (elP500m) elP500m.textContent = `(${countPreco500mais})`;
 
-        // Renderizar Categorias na Barra Lateral
+        // Renderizar Categorias na Barra Lateral (inclui todas as categorias oficiais que existem no app)
         if (opcoesCategoriasEl) {
-            const catsOrdenadas = Object.keys(contagemCat).sort((a, b) => contagemCat[b] - contagemCat[a]);
-            opcoesCategoriasEl.innerHTML = catsOrdenadas.map(cat => {
+            const listaOficial = (window.ItaimCategoriasUtils && typeof window.ItaimCategoriasUtils.obterTodasCategorias === 'function')
+                ? window.ItaimCategoriasUtils.obterTodasCategorias()
+                : ((typeof CATEGORIAS !== 'undefined' && Array.isArray(CATEGORIAS)) ? CATEGORIAS : []);
+
+            const chavesOficiais = listaOficial.map(c => c.chave || c.nome);
+            const contagemCatTotal = {};
+            chavesOficiais.forEach(cat => {
+                contagemCatTotal[cat] = 0;
+            });
+
+            // Contabiliza cada anúncio na respectiva categoria oficial
+            baseCalculo.forEach(p => {
+                let casou = false;
+                for (const catObj of listaOficial) {
+                    const pertence = (window.ItaimCategoriasUtils && typeof window.ItaimCategoriasUtils.produtoPertenceCategoria === 'function')
+                        ? window.ItaimCategoriasUtils.produtoPertenceCategoria(p, catObj)
+                        : ((typeof produtoPertenceCategoria === 'function')
+                            ? produtoPertenceCategoria(p, catObj)
+                            : ((p.categoria || '').toLowerCase() === (catObj.chave || '').toLowerCase()));
+
+                    if (pertence) {
+                        contagemCatTotal[catObj.chave] = (contagemCatTotal[catObj.chave] || 0) + 1;
+                        casou = true;
+                        break;
+                    }
+                }
+                if (!casou) {
+                    const pCat = p.categoria || 'Outros';
+                    contagemCatTotal[pCat] = (contagemCatTotal[pCat] || 0) + 1;
+                }
+            });
+
+            // Ordenação: selecionadas primeiro, depois categorias com anúncios (decrescente), depois todas as outras em ordem alfabética
+            const todasCategorias = Object.keys(contagemCatTotal);
+            todasCategorias.sort((a, b) => {
+                const aSel = categoriasSelecionadas.has(a) ? 1 : 0;
+                const bSel = categoriasSelecionadas.has(b) ? 1 : 0;
+                if (aSel !== bSel) return bSel - aSel;
+
+                const aCount = contagemCatTotal[a] || 0;
+                const bCount = contagemCatTotal[b] || 0;
+                if (aCount > 0 || bCount > 0) {
+                    if (aCount !== bCount) return bCount - aCount;
+                }
+
+                return a.localeCompare(b, 'pt-BR');
+            });
+
+            opcoesCategoriasEl.innerHTML = todasCategorias.map(cat => {
                 const checked = categoriasSelecionadas.has(cat) ? 'checked' : '';
                 return `
                     <label class="filtro-checkbox-item">
@@ -195,7 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <span class="custom-checkbox"></span>
                             <span class="filtro-label-texto" title="${cat}">${cat.toLowerCase()}</span>
                         </div>
-                        <span class="filtro-contador">(${contagemCat[cat]})</span>
+                        <span class="filtro-contador">(${contagemCatTotal[cat] || 0})</span>
                     </label>
                 `;
             }).join('');
@@ -265,9 +312,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Filtro por categorias da barra lateral
         if (categoriasSelecionadas.size > 0) {
-            lista = lista.filter(p => p.categoria && categoriasSelecionadas.has(p.categoria));
+            lista = lista.filter(p => {
+                return Array.from(categoriasSelecionadas).some(catSel => {
+                    const cObj = (window.ItaimCategoriasUtils && typeof window.ItaimCategoriasUtils.buscarCategoria === 'function')
+                        ? window.ItaimCategoriasUtils.buscarCategoria(catSel)
+                        : ((typeof buscarCategoria === 'function') ? buscarCategoria(catSel) : null);
+                    if (cObj && window.ItaimCategoriasUtils && typeof window.ItaimCategoriasUtils.produtoPertenceCategoria === 'function') {
+                        return window.ItaimCategoriasUtils.produtoPertenceCategoria(p, cObj);
+                    }
+                    if (cObj && typeof produtoPertenceCategoria === 'function') {
+                        return produtoPertenceCategoria(p, cObj);
+                    }
+                    const pCat = (p.categoria || '').toLowerCase();
+                    const sCat = catSel.toLowerCase();
+                    return pCat === sCat || pCat.includes(sCat) || sCat.includes(pCat);
+                });
+            });
         } else if (categoriaParam.toLowerCase() !== 'todas' && !termoBusca) {
-            if (catObj && typeof produtoPertenceCategoria === 'function') {
+            if (catObj && window.ItaimCategoriasUtils && typeof window.ItaimCategoriasUtils.produtoPertenceCategoria === 'function') {
+                lista = lista.filter(p => window.ItaimCategoriasUtils.produtoPertenceCategoria(p, catObj));
+            } else if (catObj && typeof produtoPertenceCategoria === 'function') {
                 lista = lista.filter(p => produtoPertenceCategoria(p, catObj));
             } else {
                 lista = lista.filter(p => (p.categoria || '').toLowerCase() === categoriaParam.toLowerCase());

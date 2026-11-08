@@ -33,6 +33,7 @@
             if (!containerGrade) return;
             containerGrade.innerHTML = '';
 
+
             let lista = [...anunciosVendedor];
 
             // Ordenação
@@ -46,7 +47,7 @@
             if (lista.length === 0) {
                 containerGrade.innerHTML = `
                     <div class="vendedor-anuncios-vazio" style="grid-column: 1 / -1; text-align: center; padding: 48px 20px; border-radius: 14px; border: 1px dashed #CBD5E1;">
-                        <div class="anuncios-vazio-icone" style="width: 60px; height: 60px; margin: 0 auto 14px; border-radius: 50%; background: rgba(68, 189, 50, 0.12); display: inline-flex; align-items: center; justify-content: center; color: #44BD32;">
+                        <div class="anuncios-vazio-icone" style="width: 60px; height: 60px; margin: 0 auto 14px; border-radius: 50%; background: rgba(56, 161, 41, 0.12); display: inline-flex; align-items: center; justify-content: center; color: #38A129;">
                             <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
                                 <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
@@ -66,8 +67,8 @@
 
             lista.forEach(item => {
                 const card = document.createElement('a');
-                const linkUrl = window.ItaimRotas 
-                    ? window.ItaimRotas.obterUrl('produto', `id=${item.id}`) 
+                const linkUrl = window.ItaimRotas
+                    ? window.ItaimRotas.obterUrl('produto', `id=${item.id}`)
                     : `../produtos/produto.html?id=${item.id}`;
                 card.href = linkUrl;
                 card.className = 'card-produto-vendedor fade-in-content';
@@ -95,7 +96,6 @@
                                 <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                                 ${cidadeItem} - ${(() => { const b = (item.bairro || item.neighborhood || 'Centro').trim(); return (!b || /^\d/.test(b) || /\d{5}/.test(b)) ? 'Centro' : b; })()}
                             </span>
-                            <span style="color: #44BD32; font-weight: 700; font-size: 12px;">Ver anúncio &rarr;</span>
                         </div>
                     </div>
                 `;

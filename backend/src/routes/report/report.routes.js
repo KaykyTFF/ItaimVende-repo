@@ -36,7 +36,10 @@ router.get('/:id', authenticateToken, requireRole('ADMIN', 'MODERATOR'), getRepo
 // Atualizar status do ticket de denúncia
 router.patch('/:id/status', authenticateToken, requireRole('ADMIN', 'MODERATOR'), updateTicketStatus);
 
-// Ação de Moderação 1: Aprovar remoção de anúncio fraudulento e limpar imagens do bucket
+// Resolução de Denúncia (RESTful canônica): Remover produto fraudulento associado
+router.delete('/:id/product', authenticateToken, requireRole('ADMIN', 'MODERATOR'), actionRemoveProduct);
+
+// Ação de Moderação 1: Aprovar remoção de anúncio fraudulento e limpar imagens do bucket (retrocompatibilidade)
 router.post('/:id/remove-product', authenticateToken, requireRole('ADMIN', 'MODERATOR'), actionRemoveProduct);
 
 // Ação de Moderação 2: Suspender ou banir a conta do usuário denunciado e arquivar seus anúncios
@@ -44,6 +47,7 @@ router.post('/:id/suspend-account', authenticateToken, requireRole('ADMIN', 'MOD
 
 // Ação de Moderação 3: Descartar denúncia improcedente
 router.post('/:id/dismiss', authenticateToken, requireRole('ADMIN', 'MODERATOR'), actionDismissReport);
+router.delete('/:id', authenticateToken, requireRole('ADMIN', 'MODERATOR'), actionDismissReport);
 
 export default router;
 

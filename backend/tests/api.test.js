@@ -8,7 +8,7 @@ const BASE_URL = process.env.TEST_API_URL || 'http://localhost:3000/api/v1';
 
 let buyerToken = '';
 
-describe('Suite de Testes Automatizados da API Itaim Vende (IFPI - Prof. Me. Julian Rodrigues Valério)', () => {
+describe('Suite de Testes de Conformidade REST e Integração da API Itaim Vende', () => {
 
   before(async () => {
     // Localiza um usuário real com papel BUYER para os testes de controle de acesso (RBAC)

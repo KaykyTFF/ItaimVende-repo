@@ -10,6 +10,8 @@ backend/node_modules/
 .env.txt
 backend/.env
 backend/.env.txt
+!.env.example
+!backend/.env.example
 
 # Banco de dados local SQLite
 *.db
@@ -42,3 +44,39 @@ desktop.ini
 
 # Backups e arquivos temporários
 *.bak
+
+# IA, Agentes e Skills (Antigravity, Claude, Cursor, Copilot, etc.)
+.agent
+.agent/**
+.agents
+.agents/**
+.skills
+.skills/**
+skills
+skills/**
+.gemini
+.gemini/**
+.claude
+.claude/**
+.cursor
+.cursor/**
+**/.agent
+**/.agent/**
+**/.agents
+**/.agents/**
+**/.skills
+**/.skills/**
+**/skills
+**/skills/**
+backend/.agents
+backend/.agents/**
+
+# Arquivos e pastas legados / descartados
+legacy
+legacy/**
+**/legacy
+**/legacy/**
+
+# Diretórios e arquivos temporários de IA / IDE
+.system_generated/
+scratch/

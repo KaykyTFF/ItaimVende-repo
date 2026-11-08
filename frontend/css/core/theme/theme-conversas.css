@@ -4,534 +4,859 @@
  */
 
 /* ==========================================================================
-   PÁGINA DE MENSAGENS / CHAT (CONVERSAS.HTML) - MODO ESCURO
+   1. ESTRUTURA BASE E COLUNA CENTRAL DE MENSAGENS (MODO ESCURO)
    ========================================================================== */
+[data-theme="dark"] body.pagina-chat,
+.dark-theme body.pagina-chat,
+[data-theme="dark"] .chat-app-root,
+.dark-theme .chat-app-root {
+    background-color: #111C24 !important;
+}
 
-/* 1. Estrutura Base e Coluna Central de Mensagens */
 [data-theme="dark"] .chat-col-mensagens,
 .dark-theme .chat-col-mensagens,
 [data-theme="dark"] .chat-feed-mensagens,
-[data-theme="dark"] .chat-centro-vazio {
+.dark-theme .chat-feed-mensagens,
+[data-theme="dark"] .chat-centro-vazio,
+.dark-theme .chat-centro-vazio,
+[data-theme="dark"] .chat-feed-vazio-central,
+.dark-theme .chat-feed-vazio-central {
+    background-color: #141A20 !important;
+}
 
-    .dark-theme .chat-feed-mensagens,
-    [data-theme="dark"] .chat-centro-vazio,
-    .dark-theme .chat-centro-vazio {
-        background-color: #141A20 !important;
-    }
+[data-theme="dark"] .chat-centro-vazio h3,
+.dark-theme .chat-centro-vazio h3,
+[data-theme="dark"] #chat-centro-vazio-titulo,
+.dark-theme #chat-centro-vazio-titulo,
+[data-theme="dark"] .chat-feed-vazio-central h3,
+.dark-theme .chat-feed-vazio-central h3 {
+    color: #F1F5F9 !important;
+}
 
-    [data-theme="dark"] .chat-centro-vazio h3,
-    .dark-theme .chat-centro-vazio h3,
-    [data-theme="dark"] #chat-centro-vazio-titulo,
-    [data-theme="dark"] .chat-feed-vazio-central h3 {
+[data-theme="dark"] .chat-centro-vazio p,
+.dark-theme .chat-centro-vazio p,
+[data-theme="dark"] #chat-centro-vazio-desc,
+.dark-theme #chat-centro-vazio-desc,
+[data-theme="dark"] .chat-feed-vazio-central p,
+.dark-theme .chat-feed-vazio-central p {
+    color: #94A3B8 !important;
+}
 
-        .dark-theme #chat-centro-vazio-titulo,
-        [data-theme="dark"] .chat-feed-vazio-central h3,
-        .dark-theme .chat-feed-vazio-central h3 {
-            color: #F1F5F9 !important;
-        }
+[data-theme="dark"] .chat-centro-vazio-icone,
+.dark-theme .chat-centro-vazio-icone,
+[data-theme="dark"] .chat-feed-vazio-icone,
+.dark-theme .chat-feed-vazio-icone {
+    background-color: rgba(56, 161, 41, 0.12) !important;
+    color: #38A129 !important;
+    box-shadow: none !important;
+}
 
-        [data-theme="dark"] .chat-centro-vazio p,
-        .dark-theme .chat-centro-vazio p,
-        [data-theme="dark"] #chat-centro-vazio-desc,
-        [data-theme="dark"] .chat-feed-vazio-central p {
+[data-theme="dark"] .btn-centro-explorar,
+.dark-theme .btn-centro-explorar {
+    background-color: #38A129 !important;
+    color: #FFFFFF !important;
+    box-shadow: none !important;
+}
 
-            .dark-theme #chat-centro-vazio-desc,
-            [data-theme="dark"] .chat-feed-vazio-central p,
-            .dark-theme .chat-feed-vazio-central p {
-                color: #94A3B8 !important;
-            }
+[data-theme="dark"] .btn-centro-explorar:hover,
+.dark-theme .btn-centro-explorar:hover {
+    background-color: #2E8B22 !important;
+    box-shadow: none !important;
+}
 
-            [data-theme="dark"] .chat-centro-vazio-icone,
-            [data-theme="dark"] .chat-feed-vazio-icone {
-
-                .dark-theme .chat-centro-vazio-icone,
-                [data-theme="dark"] .chat-feed-vazio-icone,
-                .dark-theme .chat-feed-vazio-icone {
-                    background-color: rgba(74, 222, 128, 0.14) !important;
-                    color: #4ADE80 !important;
-                }
-
-                [data-theme="dark"] .chat-barra-input {
-
-                    /* ==========================================================================
-   2. CABEÇALHO DO CHAT ATIVO (NOME DO VENDEDOR, STATUS E AÇÕES)
+/* ==========================================================================
+   2. CABEÇALHO DO CHAT ATIVO (NOME, STATUS E AÇÕES)
    ========================================================================== */
-                    [data-theme="dark"] .chat-topo-ativo,
-                    .dark-theme .chat-topo-ativo {
-                        background-color: #1A222A !important;
-                        border-top: 1px solid #24303C !important;
-                        border-bottom: 1px solid #283440 !important;
-                        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.28) !important;
-                    }
+[data-theme="dark"] .chat-topo-ativo,
+.dark-theme .chat-topo-ativo {
+    background-color: #1A222A !important;
+    border-bottom: 1px solid #283440 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.28) !important;
+}
 
-                    [data-theme="dark"] .chat-input-texto {
-                        background-color: #141A20 !important;
+[data-theme="dark"] .chat-perfil-conversa:hover,
+.dark-theme .chat-perfil-conversa:hover {
+    background-color: rgba(255, 255, 255, 0.06) !important;
+}
 
-                        [data-theme="dark"] .chat-perfil-conversa:hover,
-                        .dark-theme .chat-perfil-conversa:hover {
-                            background-color: rgba(255, 255, 255, 0.06) !important;
-                        }
+[data-theme="dark"] #chat-header-nome,
+.dark-theme #chat-header-nome,
+[data-theme="dark"] .chat-nome-status strong,
+.dark-theme .chat-nome-status strong {
+    color: #F1F5F9 !important;
+}
 
-                        [data-theme="dark"] #chat-header-nome,
-                        .dark-theme #chat-header-nome,
-                        [data-theme="dark"] .chat-nome-status strong,
-                        .dark-theme .chat-nome-status strong {
-                            color: #F1F5F9 !important;
-                            border-color: #24303C !important;
-                        }
+[data-theme="dark"] #chat-header-status-txt,
+.dark-theme #chat-header-status-txt,
+[data-theme="dark"] .chat-header-status-txt,
+.dark-theme .chat-header-status-txt {
+    color: #94A3B8 !important;
+}
 
-                        [data-theme="dark"] .chat-input-texto::placeholder {
-                            color: #64748B !important;
+[data-theme="dark"] .btn-voltar-mobile-chat,
+.dark-theme .btn-voltar-mobile-chat {
+    color: #F1F5F9 !important;
+}
 
-                            [data-theme="dark"] #chat-header-status-txt,
-                            .dark-theme #chat-header-status-txt,
-                            [data-theme="dark"] .chat-header-status-txt,
-                            .dark-theme .chat-header-status-txt {
-                                color: #94A3B8 !important;
-                            }
+[data-theme="dark"] .btn-voltar-mobile-chat:hover,
+.dark-theme .btn-voltar-mobile-chat:hover {
+    background-color: #24303C !important;
+    color: #38A129 !important;
+}
 
-                            [data-theme="dark"] .chat-input-texto:focus {
+[data-theme="dark"] .chat-header-avatar,
+.dark-theme .chat-header-avatar {
+    border-color: #283440 !important;
+}
 
-                                [data-theme="dark"] .btn-voltar-mobile-chat,
-                                .dark-theme .btn-voltar-mobile-chat {
-                                    color: #F1F5F9 !important;
-                                }
+[data-theme="dark"] .btn-chat-acao-topo,
+.dark-theme .btn-chat-acao-topo {
+    background-color: #1F2831 !important;
+    border: 1px solid #2C3946 !important;
+    color: #F1F5F9 !important;
+    box-shadow: none !important;
+}
 
-                                [data-theme="dark"] .btn-voltar-mobile-chat:hover,
-                                .dark-theme .btn-voltar-mobile-chat:hover {
-                                    background-color: #24303C !important;
-                                    color: #4ADE80 !important;
-                                }
+[data-theme="dark"] .btn-chat-acao-topo:hover,
+.dark-theme .btn-chat-acao-topo:hover {
+    background-color: #273440 !important;
+    border-color: #38A129 !important;
+    color: #FFFFFF !important;
+}
 
-                                [data-theme="dark"] .chat-header-avatar,
-                                .dark-theme .chat-header-avatar {
-                                    border-color: #283440 !important;
-                                }
+[data-theme="dark"] .btn-chat-proposta-topo,
+.dark-theme .btn-chat-proposta-topo {
+    background-color: rgba(56, 161, 41, 0.16) !important;
+    border: 1px solid rgba(56, 161, 41, 0.38) !important;
+    color: #38A129 !important;
+    box-shadow: none !important;
+}
 
-                                /* Ações Rápidas no Cabeçalho */
-                                [data-theme="dark"] .btn-chat-acao-topo,
-                                .dark-theme .btn-chat-acao-topo {
-                                    background-color: #1F2831 !important;
-                                    border: 1px solid #2C3946 !important;
-                                    color: #F1F5F9 !important;
-                                }
+[data-theme="dark"] .btn-chat-proposta-topo:hover,
+.dark-theme .btn-chat-proposta-topo:hover {
+    background-color: rgba(56, 161, 41, 0.28) !important;
+    border-color: #38A129 !important;
+    color: #FFFFFF !important;
+}
 
-                                [data-theme="dark"] .btn-chat-acao-topo:hover,
-                                .dark-theme .btn-chat-acao-topo:hover {
-                                    background-color: #273440 !important;
-                                    border-color: #3B4B5A !important;
-                                    color: #FFFFFF !important;
-                                }
+[data-theme="dark"] .btn-chat-bloquear-topo,
+.dark-theme .btn-chat-bloquear-topo {
+    color: #94A3B8 !important;
+}
 
-                                [data-theme="dark"] .btn-chat-proposta-topo,
-                                .dark-theme .btn-chat-proposta-topo {
-                                    background-color: rgba(68, 189, 50, 0.16) !important;
-                                    border-color: rgba(68, 189, 50, 0.38) !important;
-                                    color: #4ADE80 !important;
-                                }
+[data-theme="dark"] .btn-chat-bloquear-topo:hover,
+.dark-theme .btn-chat-bloquear-topo:hover {
+    background-color: rgba(239, 68, 68, 0.12) !important;
+    border-color: rgba(239, 68, 68, 0.35) !important;
+    color: #F87171 !important;
+}
 
-                                [data-theme="dark"] .btn-chat-proposta-topo:hover,
-                                .dark-theme .btn-chat-proposta-topo:hover {
-                                    background-color: rgba(68, 189, 50, 0.28) !important;
-                                    border-color: #4ADE80 !important;
-                                    color: #FFFFFF !important;
-                                }
+[data-theme="dark"] .btn-chat-bloquear-topo.bloqueado,
+.dark-theme .btn-chat-bloquear-topo.bloqueado {
+    background-color: rgba(239, 68, 68, 0.18) !important;
+    border-color: rgba(239, 68, 68, 0.45) !important;
+    color: #F87171 !important;
+}
 
-                                [data-theme="dark"] .chat-msg-item.recebida .chat-msg-bolha {
-
-                                    [data-theme="dark"] .btn-chat-bloquear-topo,
-                                    .dark-theme .btn-chat-bloquear-topo {
-                                        color: #94A3B8 !important;
-                                    }
-
-                                    [data-theme="dark"] .btn-chat-bloquear-topo:hover,
-                                    .dark-theme .btn-chat-bloquear-topo:hover {
-                                        background-color: rgba(239, 68, 68, 0.12) !important;
-                                        border-color: rgba(239, 68, 68, 0.35) !important;
-                                        color: #F87171 !important;
-                                    }
-
-                                    [data-theme="dark"] .btn-chat-bloquear-topo.bloqueado,
-                                    .dark-theme .btn-chat-bloquear-topo.bloqueado {
-                                        background-color: rgba(239, 68, 68, 0.18) !important;
-                                        border-color: rgba(239, 68, 68, 0.45) !important;
-                                        color: #F87171 !important;
-                                    }
-
-                                    /* ==========================================================================
-   3. MINI RESUMO DO PRODUTO (PRÓXIMO AO NOME DO VENDEDOR NO TOPO)
+/* ==========================================================================
+   3. MINI RESUMO DO PRODUTO NO TOPO (MOBILE)
    ========================================================================== */
-                                    [data-theme="dark"] .mobile-resumo-produto-topo,
-                                    .dark-theme .mobile-resumo-produto-topo {
-                                        background-color: #171F27 !important;
-                                        border-bottom: 1px solid #283440 !important;
-                                    }
+[data-theme="dark"] .mobile-resumo-produto-topo,
+.dark-theme .mobile-resumo-produto-topo {
+    background-color: #171F27 !important;
+    border-bottom: 1px solid #283440 !important;
+}
 
-                                    [data-theme="dark"] .mobile-mini-foto,
-                                    .dark-theme .mobile-mini-foto {
-                                        background-color: #10151A !important;
-                                        border-color: #283440 !important;
-                                    }
+[data-theme="dark"] .mobile-mini-foto,
+.dark-theme .mobile-mini-foto {
+    background-color: #10151A !important;
+    border-color: #283440 !important;
+}
 
-                                    [data-theme="dark"] .mobile-mini-titulo,
-                                    .dark-theme .mobile-mini-titulo {
-                                        color: #F1F5F9 !important;
-                                    }
+[data-theme="dark"] .mobile-mini-titulo,
+.dark-theme .mobile-mini-titulo {
+    color: #F1F5F9 !important;
+}
 
-                                    [data-theme="dark"] .mobile-mini-preco,
-                                    .dark-theme .mobile-mini-preco {
-                                        color: #4ADE80 !important;
-                                    }
+[data-theme="dark"] .mobile-mini-preco,
+.dark-theme .mobile-mini-preco {
+    color: #38A129 !important;
+}
 
-                                    [data-theme="dark"] .btn-mobile-ver-anuncio-topo,
-                                    .dark-theme .btn-mobile-ver-anuncio-topo {
-                                        background-color: #1F2831 !important;
-                                        border: 1px solid #2C3946 !important;
-                                        color: #F1F5F9 !important;
-                                    }
+[data-theme="dark"] .btn-mobile-ver-anuncio-topo,
+.dark-theme .btn-mobile-ver-anuncio-topo {
+    background-color: #1F2831 !important;
+    border: 1px solid #2C3946 !important;
+    color: #F1F5F9 !important;
+    box-shadow: none !important;
+}
 
-                                    [data-theme="dark"] .btn-mobile-ver-anuncio-topo:hover,
-                                    .dark-theme .btn-mobile-ver-anuncio-topo:hover {
-                                        background-color: #273440 !important;
-                                        border-color: #4ADE80 !important;
-                                        color: #4ADE80 !important;
-                                    }
+[data-theme="dark"] .btn-mobile-ver-anuncio-topo:hover,
+.dark-theme .btn-mobile-ver-anuncio-topo:hover {
+    background-color: #273440 !important;
+    border-color: #38A129 !important;
+    color: #38A129 !important;
+}
 
-                                    /* ==========================================================================
-   4. COLUNA DIREITA - PAINEL DE DETALHES DO ANÚNCIO (COMPUTADOR)
+/* ==========================================================================
+   4. COLUNA 1: SIDEBAR DE CONVERSAS (LISTA E BUSCA)
    ========================================================================== */
-                                    [data-theme="dark"] .chat-col-produto,
-                                    .dark-theme .chat-col-produto {
-                                        background-color: #161D24 !important;
-                                        border-left: 1px solid #283440 !important;
-                                    }
+[data-theme="dark"] .chat-col-conversas,
+.dark-theme .chat-col-conversas {
+    background-color: #16222F !important;
+    border-right: 1px solid #24303C !important;
+}
 
-                                    [data-theme="dark"] .chat-produto-card-header h3,
-                                    .dark-theme .chat-produto-card-header h3 {
-                                        color: #F1F5F9 !important;
-                                    }
+[data-theme="dark"] .chat-sidebar-header,
+.dark-theme .chat-sidebar-header {
+    background-color: #16222F !important;
+    border-bottom: 1px solid #24303C !important;
+}
 
-                                    [data-theme="dark"] .chat-produto-foto-box,
-                                    .dark-theme .chat-produto-foto-box {
-                                        background-color: #10151A !important;
-                                        border-color: #283440 !important;
-                                    }
+[data-theme="dark"] .chat-sidebar-titulo,
+.dark-theme .chat-sidebar-titulo {
+    color: #F1F5F9 !important;
+}
 
-                                    [data-theme="dark"] .chat-produto-nome,
-                                    .dark-theme .chat-produto-nome {
-                                        color: #F1F5F9 !important;
-                                    }
+[data-theme="dark"] .chat-busca-box,
+.dark-theme .chat-busca-box {
+    background-color: transparent !important;
+}
 
-                                    [data-theme="dark"] .chat-produto-preco-destaque,
-                                    .dark-theme .chat-produto-preco-destaque {
-                                        color: #4ADE80 !important;
-                                    }
+[data-theme="dark"] .chat-busca-input,
+.dark-theme .chat-busca-input {
+    background-color: #111C24 !important;
+    border: 1px solid #283440 !important;
+    color: #F1F5F9 !important;
+    box-shadow: none !important;
+}
 
-                                    [data-theme="dark"] .chat-produto-cidade-linha,
-                                    .dark-theme .chat-produto-cidade-linha {
-                                        color: #94A3B8 !important;
-                                    }
+[data-theme="dark"] .chat-busca-input::placeholder,
+.dark-theme .chat-busca-input::placeholder {
+    color: #8E9AA7 !important;
+}
 
-                                    [data-theme="dark"] .chat-produto-especs-bloco,
-                                    .dark-theme .chat-produto-especs-bloco {
-                                        border-top: 1px solid #283440 !important;
-                                        border-bottom: 1px solid #283440 !important;
-                                    }
+[data-theme="dark"] .chat-busca-input:focus,
+.dark-theme .chat-busca-input:focus {
+    border-color: #38A129 !important;
+    background-color: #16222F !important;
+    box-shadow: none !important;
+}
 
-                                    [data-theme="dark"] .espec-tag-label,
-                                    .dark-theme .espec-tag-label {
-                                        color: #94A3B8 !important;
-                                    }
+[data-theme="dark"] .chat-busca-icone,
+.dark-theme .chat-busca-icone {
+    color: #64748B !important;
+}
 
-                                    [data-theme="dark"] .espec-tag-val,
-                                    .dark-theme .espec-tag-val {
-                                        color: #F1F5F9 !important;
-                                    }
+[data-theme="dark"] .chat-filtros-conversas,
+.dark-theme .chat-filtros-conversas {
+    border-bottom: 1px solid #24303C !important;
+}
 
-                                    [data-theme="dark"] .desc-bloco-titulo,
-                                    .dark-theme .desc-bloco-titulo {
-                                        color: #94A3B8 !important;
-                                    }
+[data-theme="dark"] .chat-filtro-btn,
+.dark-theme .chat-filtro-btn {
+    color: #94A3B8 !important;
+    border-color: #283440 !important;
+}
 
-                                    [data-theme="dark"] .desc-bloco-paragrafo,
-                                    .dark-theme .desc-bloco-paragrafo {
-                                        color: #CBD5E1 !important;
-                                    }
+[data-theme="dark"] .chat-filtro-btn.ativo,
+.dark-theme .chat-filtro-btn.ativo {
+    background-color: #1F2E3E !important;
+    color: #38A129 !important;
+    border-color: #38A129 !important;
+    box-shadow: none !important;
+}
 
-                                    [data-theme="dark"] .btn-painel-ver-anuncio,
-                                    .dark-theme .btn-painel-ver-anuncio {
-                                        background-color: #1F2831 !important;
-                                        border: 1px solid #2C3946 !important;
-                                        color: #F1F5F9 !important;
-                                    }
+[data-theme="dark"] .item-conversa,
+.dark-theme .item-conversa {
+    border-bottom: 1px solid #1E2833 !important;
+}
 
-                                    [data-theme="dark"] .chat-msg-item.recebida .chat-msg-hora {
+[data-theme="dark"] .item-conversa:hover,
+.dark-theme .item-conversa:hover {
+    background-color: #1D2A38 !important;
+}
 
-                                        [data-theme="dark"] .btn-painel-ver-anuncio:hover,
-                                        .dark-theme .btn-painel-ver-anuncio:hover {
-                                            background-color: #273440 !important;
-                                            border-color: #4ADE80 !important;
-                                            color: #4ADE80 !important;
-                                        }
+[data-theme="dark"] .item-conversa.ativo,
+.dark-theme .item-conversa.ativo {
+    background-color: #202F40 !important;
+    border-left: 3px solid #38A129 !important;
+    box-shadow: none !important;
+}
 
-                                        [data-theme="dark"] .btn-painel-denunciar-anuncio,
-                                        .dark-theme .btn-painel-denunciar-anuncio {
-                                            background-color: rgba(239, 68, 68, 0.12) !important;
-                                            border: 1px solid rgba(239, 68, 68, 0.3) !important;
-                                            color: #F87171 !important;
-                                        }
+[data-theme="dark"] .item-conversa-nome,
+.dark-theme .item-conversa-nome {
+    color: #F1F5F9 !important;
+}
 
-                                        [data-theme="dark"] .btn-painel-denunciar-anuncio:hover,
-                                        .dark-theme .btn-painel-denunciar-anuncio:hover {
-                                            background-color: #EF4444 !important;
-                                            color: #FFFFFF !important;
-                                            border-color: #EF4444 !important;
-                                        }
+[data-theme="dark"] .item-conversa-preview,
+.dark-theme .item-conversa-preview {
+    color: #94A3B8 !important;
+}
 
-                                        [data-theme="dark"] .chat-produto-vazio-estado,
-                                        .dark-theme .chat-produto-vazio-estado {
-                                            background: rgba(255, 255, 255, 0.02) !important;
-                                            border-color: #283440 !important;
-                                        }
+[data-theme="dark"] .item-conversa-hora,
+.dark-theme .item-conversa-hora {
+    color: #64748B !important;
+}
 
-                                        [data-theme="dark"] .chat-produto-vazio-titulo,
-                                        .dark-theme .chat-produto-vazio-titulo {
-                                            color: #F1F5F9 !important;
-                                        }
+[data-theme="dark"] .chat-badge-nao-lida,
+.dark-theme .chat-badge-nao-lida {
+    background-color: #38A129 !important;
+    color: #FFFFFF !important;
+    box-shadow: none !important;
+}
 
-                                        [data-theme="dark"] .chat-produto-vazio-desc,
-                                        .dark-theme .chat-produto-vazio-desc {
-                                            color: #94A3B8 !important;
-                                        }
+[data-theme="dark"] .chat-vazio-icone,
+.dark-theme .chat-vazio-icone,
+[data-theme="dark"] .chat-vazio-icone-2d,
+.dark-theme .chat-vazio-icone-2d {
+    background-color: rgba(56, 161, 41, 0.12) !important;
+    color: #38A129 !important;
+}
 
-                                        [data-theme="dark"] .chat-msg-item.enviada .chat-msg-bolha {
+[data-theme="dark"] .btn-chat-tentar-novamente,
+.dark-theme .btn-chat-tentar-novamente {
+    background-color: #1F2831 !important;
+    border: 1px solid #2C3946 !important;
+    color: #F1F5F9 !important;
+    box-shadow: none !important;
+}
 
-                                            [data-theme="dark"] .chat-produto-vazio-desc strong,
-                                            .dark-theme .chat-produto-vazio-desc strong {
-                                                color: #F1F5F9 !important;
-                                            }
-
-                                            /* ==========================================================================
-   5. MENSAGENS, BOLHAS E FEED
+/* ==========================================================================
+   5. MENSAGENS, BOLHAS E FEED DE CONVERSA
    ========================================================================== */
-                                            [data-theme="dark"] .chat-msg-item.recebida .chat-msg-bolha,
-                                            .dark-theme .chat-msg-item.recebida .chat-msg-bolha {
-                                                background-color: #1F2831 !important;
-                                                color: #F1F5F9 !important;
-                                                border: 1px solid #2C3946 !important;
-                                            }
+[data-theme="dark"] .chat-data-divisor,
+.dark-theme .chat-data-divisor {
+    background-color: #1F2831 !important;
+    color: #94A3B8 !important;
+    border: 1px solid #2C3946 !important;
+}
 
-                                            [data-theme="dark"] .chat-msg-item.recebida .chat-msg-hora,
-                                            .dark-theme .chat-msg-item.recebida .chat-msg-hora {
-                                                color: #94A3B8 !important;
-                                            }
+[data-theme="dark"] .msg-balao.sistema,
+.dark-theme .msg-balao.sistema {
+    background-color: #1F2831 !important;
+    color: #94A3B8 !important;
+    border: 1px solid #2C3946 !important;
+    box-shadow: none !important;
+}
 
-                                            [data-theme="dark"] .chat-msg-item.enviada .chat-msg-bolha,
-                                            .dark-theme .chat-msg-item.enviada .chat-msg-bolha {
-                                                background-color: rgba(68, 189, 50, 0.22) !important;
-                                                color: #F1F5F9 !important;
-                                                border: 1px solid rgba(68, 189, 50, 0.4) !important;
-                                            }
+/* Aviso de Início de Conversa (Boas-Vindas no Feed) */
+[data-theme="dark"] .chat-aviso-inicio,
+.dark-theme .chat-aviso-inicio {
+    background-color: #1A222A !important;
+    border: 1px solid #283440 !important;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.3) !important;
+}
 
-                                            [data-theme="dark"] .chat-data-divisor {
+[data-theme="dark"] .chat-aviso-inicio-icone,
+.dark-theme .chat-aviso-inicio-icone {
+    background-color: rgba(56, 161, 41, 0.12) !important;
+    color: #38A129 !important;
+}
 
-                                                [data-theme="dark"] .chat-data-divisor,
-                                                .dark-theme .chat-data-divisor {
-                                                    background-color: #1F2831 !important;
-                                                    color: #94A3B8 !important;
-                                                    border: 1px solid #2C3946 !important;
-                                                }
+[data-theme="dark"] .chat-aviso-inicio p,
+.dark-theme .chat-aviso-inicio p {
+    color: #CBD5E1 !important;
+}
 
-                                                /* Badge de Propostas no tom verde do design */
-                                                /* Indicador de Digitando */
-                                                [data-theme="dark"] .chat-digitando-container,
-                                                .dark-theme .chat-digitando-container {
-                                                    background-color: #141A20 !important;
-                                                }
+[data-theme="dark"] .chat-aviso-inicio p strong,
+.dark-theme .chat-aviso-inicio p strong {
+    color: #F8FAFC !important;
+}
 
-                                                [data-theme="dark"] .chat-digitando-indicador,
-                                                .dark-theme .chat-digitando-indicador {
-                                                    background-color: #1E2732 !important;
-                                                    color: #38BDF8 !important;
-                                                }
+[data-theme="dark"] .chat-aviso-inicio .chat-aviso-sub,
+.dark-theme .chat-aviso-inicio .chat-aviso-sub {
+    color: #94A3B8 !important;
+}
 
-                                                /* ==========================================================================
+/* Mensagens Recebidas */
+[data-theme="dark"] .msg-balao.recebida,
+.dark-theme .msg-balao.recebida,
+[data-theme="dark"] .chat-msg-item.recebida .chat-msg-bolha,
+.dark-theme .chat-msg-item.recebida .chat-msg-bolha {
+    background-color: #242E38 !important;
+    color: #F1F5F9 !important;
+    border: 1px solid #2C3946 !important;
+    box-shadow: none !important;
+}
+
+[data-theme="dark"] .msg-balao.recebida .msg-texto,
+.dark-theme .msg-balao.recebida .msg-texto,
+[data-theme="dark"] .chat-msg-item.recebida .chat-msg-texto,
+.dark-theme .chat-msg-item.recebida .chat-msg-texto {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .msg-balao.recebida .msg-hora,
+.dark-theme .msg-balao.recebida .msg-hora,
+[data-theme="dark"] .chat-msg-item.recebida .chat-msg-hora,
+.dark-theme .chat-msg-item.recebida .chat-msg-hora {
+    color: #94A3B8 !important;
+}
+
+/* Mensagens Enviadas */
+[data-theme="dark"] .msg-balao.enviada,
+.dark-theme .msg-balao.enviada,
+[data-theme="dark"] .chat-msg-item.enviada .chat-msg-bolha,
+.dark-theme .chat-msg-item.enviada .chat-msg-bolha {
+    background-color: #1F4E2E !important;
+    color: #FFFFFF !important;
+    border: 1px solid #2E7D32 !important;
+    box-shadow: none !important;
+}
+
+[data-theme="dark"] .msg-balao.enviada .msg-texto,
+.dark-theme .msg-balao.enviada .msg-texto,
+[data-theme="dark"] .chat-msg-item.enviada .chat-msg-texto,
+.dark-theme .chat-msg-item.enviada .chat-msg-texto {
+    color: #FFFFFF !important;
+}
+
+[data-theme="dark"] .msg-balao.enviada .msg-hora,
+.dark-theme .msg-balao.enviada .msg-hora,
+[data-theme="dark"] .chat-msg-item.enviada .chat-msg-hora,
+.dark-theme .chat-msg-item.enviada .chat-msg-hora {
+    color: rgba(255, 255, 255, 0.75) !important;
+}
+
+/* Cards de Proposta no Feed */
+[data-theme="dark"] .msg-proposta-card,
+.dark-theme .msg-proposta-card {
+    background-color: #1A222A !important;
+    border: 1px solid #283440 !important;
+    box-shadow: none !important;
+}
+
+[data-theme="dark"] .msg-proposta-header,
+.dark-theme .msg-proposta-header {
+    color: #38A129 !important;
+}
+
+[data-theme="dark"] .msg-proposta-valor,
+.dark-theme .msg-proposta-valor {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .btn-proposta-aceitar,
+.dark-theme .btn-proposta-aceitar {
+    background-color: #38A129 !important;
+    color: #FFFFFF !important;
+    box-shadow: none !important;
+}
+
+[data-theme="dark"] .btn-proposta-aceitar:hover,
+.dark-theme .btn-proposta-aceitar:hover {
+    background-color: #2E8B22 !important;
+    box-shadow: none !important;
+}
+
+[data-theme="dark"] .btn-proposta-recusar,
+.dark-theme .btn-proposta-recusar {
+    background-color: #273440 !important;
+    color: #F87171 !important;
+    border: 1px solid #3B4B5A !important;
+    box-shadow: none !important;
+}
+
+[data-theme="dark"] .btn-proposta-recusar:hover,
+.dark-theme .btn-proposta-recusar:hover {
+    background-color: rgba(239, 68, 68, 0.2) !important;
+    border-color: #EF4444 !important;
+}
+
+[data-theme="dark"] .msg-proposta-status-badge.aceita,
+.dark-theme .msg-proposta-status-badge.aceita {
+    background-color: rgba(56, 161, 41, 0.20) !important;
+    color: #38A129 !important;
+    border: 1px solid rgba(56, 161, 41, 0.35) !important;
+}
+
+[data-theme="dark"] .msg-proposta-status-badge.pendente,
+.dark-theme .msg-proposta-status-badge.pendente {
+    background-color: rgba(245, 158, 11, 0.16) !important;
+    color: #FBBF24 !important;
+    border: 1px solid rgba(245, 158, 11, 0.35) !important;
+}
+
+[data-theme="dark"] .msg-proposta-status-badge.recusada,
+.dark-theme .msg-proposta-status-badge.recusada {
+    background-color: rgba(239, 68, 68, 0.16) !important;
+    color: #F87171 !important;
+    border: 1px solid rgba(239, 68, 68, 0.35) !important;
+}
+
+/* Indicador de Digitando */
+[data-theme="dark"] .chat-digitando-container,
+.dark-theme .chat-digitando-container {
+    background-color: #141A20 !important;
+}
+
+[data-theme="dark"] .chat-digitando-indicador,
+.dark-theme .chat-digitando-indicador {
+    background-color: #1E2732 !important;
+    color: #38A129 !important;
+}
+
+/* ==========================================================================
    6. BARRA DE DIGITAÇÃO E ENVIO
    ========================================================================== */
-                                                [data-theme="dark"] .chat-envio-form,
-                                                .dark-theme .chat-envio-form,
-                                                [data-theme="dark"] .chat-barra-input,
-                                                .dark-theme .chat-barra-input {
-                                                    background-color: #1A222A !important;
-                                                    border-top: 1px solid #283440 !important;
-                                                }
+[data-theme="dark"] .chat-envio-form,
+.dark-theme .chat-envio-form,
+[data-theme="dark"] .chat-barra-input,
+.dark-theme .chat-barra-input {
+    background-color: #1A222A !important;
+    border-top: 1px solid #283440 !important;
+}
 
-                                                [data-theme="dark"] .chat-input-wrapper,
-                                                .dark-theme .chat-input-wrapper {
-                                                    background-color: transparent !important;
-                                                }
+[data-theme="dark"] .chat-input-wrapper,
+.dark-theme .chat-input-wrapper {
+    background-color: transparent !important;
+}
 
-                                                [data-theme="dark"] .chat-input-texto,
-                                                .dark-theme .chat-input-texto {
-                                                    background-color: #141A20 !important;
-                                                    color: #F1F5F9 !important;
-                                                    border: 1px solid #283440 !important;
-                                                }
+[data-theme="dark"] .chat-input-texto,
+.dark-theme .chat-input-texto {
+    background-color: #141A20 !important;
+    color: #F1F5F9 !important;
+    border: 1px solid #283440 !important;
+}
 
-                                                [data-theme="dark"] .chat-input-texto::placeholder,
-                                                .dark-theme .chat-input-texto::placeholder {
-                                                    color: #64748B !important;
-                                                }
+[data-theme="dark"] .chat-input-texto::placeholder,
+.dark-theme .chat-input-texto::placeholder {
+    color: #64748B !important;
+}
 
-                                                [data-theme="dark"] .chat-input-texto:focus,
-                                                .dark-theme .chat-input-texto:focus {
-                                                    border-color: #4ADE80 !important;
-                                                    box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.22) !important;
-                                                }
+[data-theme="dark"] .chat-input-texto:focus,
+.dark-theme .chat-input-texto:focus {
+    border-color: #38A129 !important;
+    background-color: #161F28 !important;
+    box-shadow: none !important;
+}
 
-                                                [data-theme="dark"] .btn-anexo-chat,
-                                                .dark-theme .btn-anexo-chat {
-                                                    background-color: #141A20 !important;
-                                                    border: 1px solid #283440 !important;
-                                                    color: #94A3B8 !important;
-                                                }
+[data-theme="dark"] .btn-enviar-mensagem,
+.dark-theme .btn-enviar-mensagem {
+    background-color: #38A129 !important;
+    color: #FFFFFF !important;
+    box-shadow: none !important;
+}
 
-                                                [data-theme="dark"] .btn-anexo-chat:hover,
-                                                .dark-theme .btn-anexo-chat:hover {
-                                                    border-color: #4ADE80 !important;
-                                                    color: #4ADE80 !important;
-                                                    background-color: #1F2831 !important;
-                                                }
+[data-theme="dark"] .btn-enviar-mensagem:hover,
+.dark-theme .btn-enviar-mensagem:hover {
+    background-color: #2E8B22 !important;
+    box-shadow: none !important;
+}
 
-                                                [data-theme="dark"] .chat-aviso-bloqueio,
-                                                .dark-theme .chat-aviso-bloqueio {
-                                                    background-color: rgba(239, 68, 68, 0.15) !important;
-                                                    border-color: rgba(239, 68, 68, 0.35) !important;
-                                                    color: #F87171 !important;
-                                                }
+[data-theme="dark"] .btn-anexo-chat,
+.dark-theme .btn-anexo-chat {
+    background-color: #141A20 !important;
+    border: 1px solid #283440 !important;
+    color: #94A3B8 !important;
+    box-shadow: none !important;
+}
 
-                                                [data-theme="dark"] .btn-desbloquear-banner,
-                                                .dark-theme .btn-desbloquear-banner {
-                                                    background-color: #EF4444 !important;
-                                                    color: #FFFFFF !important;
-                                                }
+[data-theme="dark"] .btn-anexo-chat:hover,
+.dark-theme .btn-anexo-chat:hover {
+    border-color: #38A129 !important;
+    color: #38A129 !important;
+    background-color: #1F2831 !important;
+}
 
-                                                /* ==========================================================================
-   7. MODAIS DE PROPOSTA E CONFIRMAÇÃO NO CHAT
+[data-theme="dark"] .chat-aviso-bloqueio,
+.dark-theme .chat-aviso-bloqueio {
+    background-color: rgba(239, 68, 68, 0.15) !important;
+    border-color: rgba(239, 68, 68, 0.35) !important;
+    color: #F87171 !important;
+}
+
+[data-theme="dark"] .btn-desbloquear-banner,
+.dark-theme .btn-desbloquear-banner {
+    background-color: #EF4444 !important;
+    color: #FFFFFF !important;
+    box-shadow: none !important;
+}
+
+/* ==========================================================================
+   7. COLUNA 3: DIREITA NO COMPUTADOR - PAINEL DO PRODUTO
    ========================================================================== */
-                                                [data-theme="dark"] .chat-modal-card,
-                                                .dark-theme .chat-modal-card {
-                                                    background-color: #1F2831 !important;
-                                                    border: 1px solid #2C3946 !important;
-                                                    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6) !important;
-                                                }
+[data-theme="dark"] .chat-col-produto,
+.dark-theme .chat-col-produto {
+    background-color: #16222F !important;
+    border-left: 1px solid #24303C !important;
+}
 
-                                                [data-theme="dark"] .chat-modal-header,
-                                                .dark-theme .chat-modal-header {
-                                                    border-bottom: 1px solid #283440 !important;
-                                                }
+[data-theme="dark"] .chat-produto-vazio-estado,
+.dark-theme .chat-produto-vazio-estado {
+    background: rgba(255, 255, 255, 0.02) !important;
+    border-color: #283440 !important;
+}
 
-                                                [data-theme="dark"] .chat-modal-header h3,
-                                                .dark-theme .chat-modal-header h3 {
-                                                    color: #F1F5F9 !important;
-                                                }
+[data-theme="dark"] .chat-produto-vazio-icone,
+.dark-theme .chat-produto-vazio-icone {
+    background-color: rgba(56, 161, 41, 0.12) !important;
+    color: #38A129 !important;
+    box-shadow: none !important;
+}
 
-                                                [data-theme="dark"] .btn-fechar-modal-chat,
-                                                .dark-theme .btn-fechar-modal-chat {
-                                                    color: #94A3B8 !important;
-                                                }
+[data-theme="dark"] .chat-produto-vazio-titulo,
+.dark-theme .chat-produto-vazio-titulo {
+    color: #F1F5F9 !important;
+}
 
-                                                [data-theme="dark"] .btn-fechar-modal-chat:hover,
-                                                .dark-theme .btn-fechar-modal-chat:hover {
-                                                    color: #F1F5F9 !important;
-                                                    background-color: #273440 !important;
-                                                }
+[data-theme="dark"] .chat-produto-vazio-desc,
+.dark-theme .chat-produto-vazio-desc {
+    color: #94A3B8 !important;
+}
 
-                                                [data-theme="dark"] .chat-modal-produto-mini,
-                                                .dark-theme .chat-modal-produto-mini {
-                                                    background-color: #141A20 !important;
-                                                    border: 1px solid #283440 !important;
-                                                }
+[data-theme="dark"] .chat-produto-vazio-desc strong,
+.dark-theme .chat-produto-vazio-desc strong {
+    color: #F1F5F9 !important;
+}
 
-                                                [data-theme="dark"] .chat-modal-produto-mini strong,
-                                                .dark-theme .chat-modal-produto-mini strong {
-                                                    color: #F1F5F9 !important;
-                                                }
+[data-theme="dark"] .btn-chat-explorar-anuncios,
+.dark-theme .btn-chat-explorar-anuncios {
+    background-color: #38A129 !important;
+    color: #FFFFFF !important;
+    box-shadow: none !important;
+}
 
-                                                [data-theme="dark"] .chat-modal-produto-mini span,
-                                                .dark-theme .chat-modal-produto-mini span {
-                                                    color: #94A3B8 !important;
-                                                }
+[data-theme="dark"] .btn-chat-explorar-anuncios:hover,
+.dark-theme .btn-chat-explorar-anuncios:hover {
+    background-color: #2E8B22 !important;
+    box-shadow: none !important;
+}
 
-                                                [data-theme="dark"] .chat-modal-campo label,
-                                                .dark-theme .chat-modal-campo label {
-                                                    color: #CBD5E1 !important;
-                                                }
+[data-theme="dark"] .chat-produto-card,
+.dark-theme .chat-produto-card {
+    background-color: #1F2831 !important;
+    border: 1px solid #2C3946 !important;
+}
 
-                                                [data-theme="dark"] .chat-input-moeda-prefix,
-                                                .dark-theme .chat-input-moeda-prefix {
-                                                    color: #4ADE80 !important;
-                                                }
+[data-theme="dark"] .chat-produto-card-header h3,
+.dark-theme .chat-produto-card-header h3 {
+    color: #F1F5F9 !important;
+}
 
-                                                [data-theme="dark"] .campo-proposta-input,
-                                                .dark-theme .campo-proposta-input {
-                                                    background-color: #141A20 !important;
-                                                    border: 1px solid #2C3946 !important;
-                                                    color: #F1F5F9 !important;
-                                                }
+[data-theme="dark"] .chat-produto-foto-box,
+.dark-theme .chat-produto-foto-box {
+    background-color: #10151A !important;
+    border-color: #283440 !important;
+}
 
-                                                [data-theme="dark"] .campo-proposta-input:focus,
-                                                .dark-theme .campo-proposta-input:focus {
-                                                    border-color: #4ADE80 !important;
-                                                    box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.22) !important;
-                                                }
+[data-theme="dark"] .chat-produto-nome,
+.dark-theme .chat-produto-nome {
+    color: #F1F5F9 !important;
+}
 
-                                                [data-theme="dark"] .btn-sugestao-valor,
-                                                .dark-theme .btn-sugestao-valor {
-                                                    background-color: #141A20 !important;
-                                                    border: 1px solid #2C3946 !important;
-                                                    color: #94A3B8 !important;
-                                                }
+[data-theme="dark"] .chat-produto-preco-destaque,
+.dark-theme .chat-produto-preco-destaque {
+    color: #38A129 !important;
+}
 
-                                                [data-theme="dark"] .btn-sugestao-valor:hover,
-                                                .dark-theme .btn-sugestao-valor:hover {
-                                                    background-color: #273440 !important;
-                                                    border-color: #4ADE80 !important;
-                                                    color: #4ADE80 !important;
-                                                }
+[data-theme="dark"] .chat-produto-cidade-linha,
+.dark-theme .chat-produto-cidade-linha {
+    color: #94A3B8 !important;
+}
 
-                                                [data-theme="dark"] .chat-modal-rodape,
-                                                .dark-theme .chat-modal-rodape {
-                                                    background-color: #1A222A !important;
-                                                    border-top: 1px solid #283440 !important;
-                                                }
+[data-theme="dark"] .chat-produto-especs-bloco,
+.dark-theme .chat-produto-especs-bloco {
+    border-top: 1px solid #283440 !important;
+    border-bottom: 1px solid #283440 !important;
+}
 
-                                                [data-theme="dark"] .btn-modal-cancelar,
-                                                .dark-theme .btn-modal-cancelar {
-                                                    background-color: #1F2831 !important;
-                                                    border: 1px solid #2C3946 !important;
-                                                    color: #94A3B8 !important;
-                                                }
+[data-theme="dark"] .espec-tag-label,
+.dark-theme .espec-tag-label {
+    color: #94A3B8 !important;
+}
 
-                                                [data-theme="dark"] .btn-modal-cancelar:hover,
-                                                .dark-theme .btn-modal-cancelar:hover {
-                                                    background-color: #273440 !important;
-                                                    color: #F1F5F9 !important;
-                                                }
+[data-theme="dark"] .espec-tag-val,
+.dark-theme .espec-tag-val {
+    color: #F1F5F9 !important;
+}
 
-                                                /* ==========================================================================
-   8. BADGES DE STATUS DE PROPOSTAS
+[data-theme="dark"] .desc-bloco-titulo,
+.dark-theme .desc-bloco-titulo {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .desc-bloco-paragrafo,
+.dark-theme .desc-bloco-paragrafo {
+    color: #CBD5E1 !important;
+}
+
+[data-theme="dark"] .btn-painel-ver-anuncio,
+.dark-theme .btn-painel-ver-anuncio {
+    background-color: #1F2831 !important;
+    border: 1px solid #2C3946 !important;
+    color: #F1F5F9 !important;
+    box-shadow: none !important;
+}
+
+[data-theme="dark"] .btn-painel-ver-anuncio:hover,
+.dark-theme .btn-painel-ver-anuncio:hover {
+    background-color: #273440 !important;
+    border-color: #38A129 !important;
+    color: #38A129 !important;
+    box-shadow: none !important;
+}
+
+[data-theme="dark"] .btn-painel-fazer-proposta,
+.dark-theme .btn-painel-fazer-proposta {
+    background-color: #38A129 !important;
+    color: #FFFFFF !important;
+    box-shadow: none !important;
+}
+
+[data-theme="dark"] .btn-painel-fazer-proposta:hover,
+.dark-theme .btn-painel-fazer-proposta:hover {
+    background-color: #2E8B22 !important;
+    box-shadow: none !important;
+}
+
+[data-theme="dark"] .btn-chat-denunciar-link,
+.dark-theme .btn-chat-denunciar-link {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .btn-chat-denunciar-link:hover,
+.dark-theme .btn-chat-denunciar-link:hover {
+    color: #F87171 !important;
+}
+
+[data-theme="dark"] .btn-painel-denunciar-anuncio,
+.dark-theme .btn-painel-denunciar-anuncio {
+    background-color: rgba(239, 68, 68, 0.12) !important;
+    border: 1px solid rgba(239, 68, 68, 0.3) !important;
+    color: #F87171 !important;
+    box-shadow: none !important;
+}
+
+[data-theme="dark"] .btn-painel-denunciar-anuncio:hover,
+.dark-theme .btn-painel-denunciar-anuncio:hover {
+    background-color: #EF4444 !important;
+    color: #FFFFFF !important;
+    border-color: #EF4444 !important;
+}
+
+/* ==========================================================================
+   8. MODAIS DE PROPOSTA E CONFIRMAÇÃO NO CHAT
    ========================================================================== */
-                                                [data-theme="dark"] .msg-proposta-status-badge.pendente,
-                                                .dark-theme .msg-proposta-status-badge.pendente,
-                                                [data-theme="dark"] .msg-proposta-status-badge.enviada,
-                                                .dark-theme .msg-proposta-status-badge.enviada,
-                                                [data-theme="dark"] .msg-proposta-status-badge.recebida,
-                                                [data-theme="dark"] .msg-proposta-status-badge.aceita {
+[data-theme="dark"] .chat-modal-card,
+.dark-theme .chat-modal-card {
+    background-color: #1F2831 !important;
+    border: 1px solid #2C3946 !important;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6) !important;
+}
 
-                                                    .dark-theme .msg-proposta-status-badge.recebida,
-                                                    [data-theme="dark"] .msg-proposta-status-badge.aceita,
-                                                    .dark-theme .msg-proposta-status-badge.aceita {
-                                                        background-color: rgba(16, 185, 129, 0.20) !important;
-                                                        color: #34D399 !important;
-                                                    }
+[data-theme="dark"] .chat-modal-header,
+.dark-theme .chat-modal-header {
+    border-bottom: 1px solid #283440 !important;
+}
+
+[data-theme="dark"] .chat-modal-header h3,
+.dark-theme .chat-modal-header h3 {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .btn-fechar-modal-chat,
+.dark-theme .btn-fechar-modal-chat {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .btn-fechar-modal-chat:hover,
+.dark-theme .btn-fechar-modal-chat:hover {
+    color: #F1F5F9 !important;
+    background-color: #273440 !important;
+}
+
+[data-theme="dark"] .chat-modal-produto-mini,
+.dark-theme .chat-modal-produto-mini {
+    background-color: #141A20 !important;
+    border: 1px solid #283440 !important;
+}
+
+[data-theme="dark"] .chat-modal-produto-mini strong,
+.dark-theme .chat-modal-produto-mini strong {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .chat-modal-produto-mini span,
+.dark-theme .chat-modal-produto-mini span {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .chat-modal-campo label,
+.dark-theme .chat-modal-campo label {
+    color: #CBD5E1 !important;
+}
+
+[data-theme="dark"] .chat-input-moeda-prefix,
+.dark-theme .chat-input-moeda-prefix {
+    color: #38A129 !important;
+}
+
+[data-theme="dark"] .campo-proposta-input,
+.dark-theme .campo-proposta-input,
+[data-theme="dark"] .chat-input-moeda,
+.dark-theme .chat-input-moeda,
+[data-theme="dark"] .chat-modal-textarea,
+.dark-theme .chat-modal-textarea {
+    background-color: #141A20 !important;
+    border: 1px solid #2C3946 !important;
+    color: #F1F5F9 !important;
+    box-shadow: none !important;
+}
+
+[data-theme="dark"] .campo-proposta-input:focus,
+.dark-theme .campo-proposta-input:focus,
+[data-theme="dark"] .chat-input-moeda:focus,
+.dark-theme .chat-input-moeda:focus,
+[data-theme="dark"] .chat-modal-textarea:focus,
+.dark-theme .chat-modal-textarea:focus {
+    border-color: #38A129 !important;
+    box-shadow: none !important;
+}
+
+[data-theme="dark"] .btn-sugestao-valor,
+.dark-theme .btn-sugestao-valor {
+    background-color: #141A20 !important;
+    border: 1px solid #2C3946 !important;
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .btn-sugestao-valor:hover,
+.dark-theme .btn-sugestao-valor:hover {
+    background-color: #273440 !important;
+    border-color: #38A129 !important;
+    color: #38A129 !important;
+}
+
+[data-theme="dark"] .chat-modal-rodape,
+.dark-theme .chat-modal-rodape {
+    background-color: #1A222A !important;
+    border-top: 1px solid #283440 !important;
+}
+
+[data-theme="dark"] .btn-modal-cancelar,
+.dark-theme .btn-modal-cancelar {
+    background-color: #1F2831 !important;
+    border: 1px solid #2C3946 !important;
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .btn-modal-cancelar:hover,
+.dark-theme .btn-modal-cancelar:hover {
+    background-color: #273440 !important;
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .btn-modal-confirmar-proposta,
+.dark-theme .btn-modal-confirmar-proposta {
+    background-color: #38A129 !important;
+    color: #FFFFFF !important;
+    box-shadow: none !important;
+}
+
+[data-theme="dark"] .btn-modal-confirmar-proposta:hover,
+.dark-theme .btn-modal-confirmar-proposta:hover {
+    background-color: #2E8B22 !important;
+    box-shadow: none !important;
+}

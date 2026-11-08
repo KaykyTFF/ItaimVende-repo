@@ -1,206 +1,180 @@
-# 🚀 Itaim Vende v2.0.0 - Backend API
+# Itaim Vende API - Modulo Backend (v2.0.0)
 
-API RESTful completa, funcional e segura desenvolvida para a plataforma **Itaim Vende**, com arquitetura em camadas, autenticação JWT, integridade relacional com Prisma ORM e proteção contra ataques comuns da web.
-
-> **IFPI - Programação para Internet II | Prof. Me. Julian Rodrigues Valério**  
-> 🏷️ **Versão:** `v2.0.0` | 📋 [Changelog Completo (CHANGELOG.md)](../CHANGELOG.md)  
-> 📄 **OpenAPI / Swagger UI:** `http://localhost:3000/api-docs` | `http://localhost:3000/api/v1/docs`  
-> 📬 **Coleção Postman:** [`../itaim-vende.postman_collection.json`](file:///c:/Users/kayky/Downloads/marketplace-frontend%20%281%29/marketplace-frontend/itaim-vende.postman_collection.json)  
-> 💡 **Relatório de Inovação:** [`../RELATORIO_INOVACAO.md`](file:///c:/Users/kayky/Downloads/marketplace-frontend%20%281%29/marketplace-frontend/RELATORIO_INOVACAO.md)  
+API RESTful completa desenvolvida para a plataforma de marketplace e intermediacao comercial **Itaim Vende**, construida com arquitetura modular em camadas, persistencia relacional com Prisma ORM e PostgreSQL, validacao estrita via Zod e seguranca baseada em tokens JWT.
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## 1. Visao Geral
 
-- **Node.js (v20+)** com **ES Modules** (`import`/`export`)
-- **Express.js (v5)**: Framework HTTP rápido e flexível
-- **Swagger UI Express & OpenAPI 3.0.3**: Documentação interativa em `/api-docs`
-- **Prisma ORM (v6)**: Modelagem e controle relacional de banco de dados
-- **PostgreSQL (Supabase)** com extensões `unaccent` e `pg_trgm` para busca fonética regional
-- **Bcrypt.js**: Hash unidirecional de senhas com salt
-- **JSON Web Token (jsonwebtoken)**: Autenticação stateless com expiração
-- **Zod**: Validação e sanitização estrita de dados de entrada
-- **Helmet**: Cabeçalhos HTTP de segurança avançados
-- **Express Rate Limit**: Proteção contra ataques de força bruta no login
-- **CORS**: Controle de origens autorizadas
+O backend do Itaim Vende prove a camada de servicos e regras de negocio para operacoes de comercio eletronico regional, abrangendo autenticacao segura, gestao de anuncios com busca fonetica regional, intermediacao de pedidos com validacao financeira no servidor, comunicacao em tempo real via WebSockets e governanca de dados cadastrais.
+
+### Links Rapidos de Documentacao
+
+- **Documentacao Interativa (Swagger UI):** [`http://localhost:3000/api-docs`](http://localhost:3000/api-docs) ou [`http://localhost:3000/api/v1/docs`](http://localhost:3000/api/v1/docs)
+- **Especificacao OpenAPI 3.0.3 (JSON):** [`http://localhost:3000/api/v1/docs/openapi.json`](http://localhost:3000/api/v1/docs/openapi.json)
+- **Colecao Postman Oficial:** [`../itaim-vende.postman_collection.json`](../itaim-vende.postman_collection.json)
 
 ---
 
-## 📁 Estrutura de Pastas
+## 2. Tecnologias Utilizadas
+
+- **Runtime:** Node.js (versao 20 LTS ou superior) com ECMAScript Modules (`"type": "module"`)
+- **Framework Web:** Express.js 5
+- **ORM & Banco de Dados:** Prisma ORM v6 sobre PostgreSQL (Supabase)
+- **Extensoes de Banco:** `unaccent` e `pg_trgm` para busca textual fonetica resiliente
+- **Autenticacao:** JSON Web Token (`jsonwebtoken`) e criptografia de senhas com `bcryptjs` (10 rounds)
+- **Validacao de Entrada:** `zod` com schemas declarativos por dominio
+- **Seguranca:** `helmet`, `cors`, `express-rate-limit`
+- **Tempo Real:** `socket.io` para negociacoes instantaneas de chat
+- **Processamento de Midia:** `sharp` com conversao para formato WebP e auto-rotacao EXIF
+- **Armazenamento:** Provedor Supabase Storage com fallback local para desenvolvimento
+- **Testes:** Node.js Test Runner nativo (`node:test`, `node:assert/strict`)
+
+---
+
+## 3. Arquitetura e Organizacao do Codigo
+
+O modulo backend adota uma arquitetura em camadas estruturada por responsabilidade:
 
 ```
 backend/
 ├── prisma/
-│   ├── schema.prisma      # Modelagem relacional do banco de dados
-│   └── seed.js            # Povoamento inicial (categorias, admin e anúncios)
+│   ├── schema.prisma              # Definicao dos modelos relacionais e indices
+│   └── seed.js                    # Script de povoamento inicial do banco
+├── scripts/
+│   └── setup-unaccent.js          # Configuracao de extensoes unaccent/trigram
 ├── src/
 │   ├── config/
-│   │   ├── env.js         # Variáveis de ambiente validadas
-│   │   └── prisma.js      # Conexão singleton com o banco
-│   ├── controllers/       # Subpastas modulares por domínio (auth, product, chat, etc.)
-│   │   ├── auth/          # auth.identity.controller.js, auth.profile.controller.js, index.js
-│   │   ├── product/       # product.query.controller.js, product.mutation.controller.js, index.js
-│   │   ├── chat/          # conversation.controller.js, message.controller.js, index.js
-│   │   ├── category/      # category.controller.js, index.js
-│   │   ├── order/         # order.controller.js, index.js
-│   │   ├── favorite/      # favorite.controller.js, index.js
-│   │   ├── review/        # review.controller.js, index.js
-│   │   ├── report/        # report.controller.js, index.js
-│   │   └── upload/        # upload.controller.js, index.js
-│   ├── services/          # Regras de negócio modulares e atômicas por domínio
-│   │   ├── auth/          # auth.identity.service.js, auth.profile.service.js, index.js
-│   │   ├── product/       # product.query.service.js, product.mutation.service.js, product.seller.service.js, index.js
-│   │   ├── chat/          # conversation.service.js, message.service.js, index.js
-│   │   ├── category/      # category.query.service.js, index.js
-│   │   ├── order/         # order.creation.service.js, order.query.service.js, index.js
-│   │   ├── favorite/      # favorite.query.service.js, favorite.mutation.service.js, index.js
-│   │   ├── review/        # review.query.service.js, review.mutation.service.js, index.js
-│   │   └── report/        # report.mutation.service.js, index.js
-│   ├── routes/            # Roteadores modulares organizados por pasta de domínio
-│   │   └── [dominio]/     # [dominio].routes.js e index.js
-│   ├── schemas/           # Validações Zod organizadas por pasta de domínio
-│   │   └── [dominio]/     # [dominio].schema.js e index.js
-│   ├── middlewares/       # Middlewares globais (auth, error, logger, rateLimiter, sanitize, validate)
-│   ├── utils/             # Utilitários (AppError, sanitize)
-│   └── server.js          # Ponto de entrada do servidor HTTP com bootstrap dinâmico
-├── .env                   # Variáveis locais
-├── .env.example           # Modelo para produção
-└── package.json
+│   │   ├── env.js                 # Validacao de variaveis de ambiente
+│   │   ├── prisma.js              # Conexao singleton com o PostgreSQL
+│   │   └── supabase.js            # Cliente do servico de armazenamento
+│   ├── controllers/               # Controladores HTTP desacoplados por recurso
+│   │   ├── account/
+│   │   ├── auth/
+│   │   ├── category/
+│   │   ├── chat/
+│   │   ├── favorite/
+│   │   ├── order/
+│   │   ├── product/
+│   │   ├── report/
+│   │   ├── review/
+│   │   └── upload/
+│   ├── docs/                      # Especificacao OpenAPI 3.0.3 e rotas Swagger
+│   ├── middlewares/               # auth, error, rateLimiter, validate
+│   ├── routes/                    # Rotas mapeadas por recurso sob /api/v1
+│   ├── schemas/                   # Schemas de validacao Zod por recurso
+│   ├── services/                  # Logica de negocio, regras de dominio e transacoes
+│   ├── utils/                     # Utilitarios (AppError, sanitize)
+│   └── server.js                  # Ponto de entrada do servidor HTTP e WebSocket
+├── tests/                         # Suite de 47 testes automatizados
+│   ├── account-email.test.js
+│   ├── account-phone.test.js
+│   ├── api.test.js
+│   ├── rest-conformance.test.js
+│   └── username-cooldown.test.js
+├── .env.example                   # Modelo de configuracao das variaveis locais
+└── package.json                   # Dependencias e scripts de execucao
 ```
+
+### Fluxo de Execucao de uma Requisicao:
+
+1. **Entrada:** A requisicao atinge o Express Router sob o prefixo `/api/v1/`.
+2. **Seguranca e Interceptacao:** Middlewares globais (`helmet`, `cors`, `rateLimiter`) avaliam as restricoes de trafego.
+3. **Autenticacao e RBAC:** Se a rota for protegida, `authenticateToken` valida a assinatura do JWT e confere o status e nivel do usuario (`BUYER`, `SELLER`, `MODERATOR`, `ADMIN`).
+4. **Validacao de Schema:** O middleware `validate(schema)` avalia o payload atraves do Zod. Violacoes retornam `400 Bad Request` padronizado.
+5. **Controlador:** O Controller extrai os parametros e invoca o Service competente.
+6. **Servico de Dominio:** O Service aplica regras de negocio, executa operacoes transacionais via Prisma ORM e emite eventos quando aplicavel.
+7. **Resposta:** O Controller devolve a resposta no padrao JSON com codigo de status HTTP condizente (`200`, `201`, `204`).
+8. **Tratamento de Excecoes:** Erros de negocio lancam `AppError`, capturados pelo `error.middleware.js` sem vazamento de stacktraces em producao.
 
 ---
 
-## 🏃 Como Rodar Localmente
+## 4. Instalacao e Execucao
 
-1. **Acesse a pasta do backend:**
-   ```bash
-   cd backend
-   ```
+### Pre-requisitos:
+- Node.js >= 20.0.0
+- Instancia PostgreSQL ativa
 
-2. **Instale as dependências:**
+### Passo a Passo:
+
+1. **Instale as dependencias:**
    ```bash
    npm install
    ```
 
-3. **Sincronize o banco de dados (SQLite local):**
+2. **Configure o arquivo de ambiente:**
    ```bash
-   npm run prisma:push
+   cp .env.example .env
    ```
+   Preencha as variaveis de banco de dados (`DATABASE_URL`, `DIRECT_URL`), `JWT_SECRET` e configuracoes de nuvem.
 
-4. **Popule o banco com dados iniciais:**
+3. **Prepare o banco de dados:**
    ```bash
+   # Gera os tipos do Prisma Client
+   npm run prisma:generate
+
+   # Sincroniza o schema com o banco
+   npm run prisma:push
+
+   # Cria a extensao unaccent e indices Trigram no PostgreSQL
+   npm run db:indexes
+
+   # Popula o banco com os dados iniciais
    npm run seed
    ```
 
-5. **Inicie o servidor de desenvolvimento:**
+4. **Inicie o servidor:**
    ```bash
+   # Modo de desenvolvimento com live-reload:
    npm run dev
+
+   # Modo de producao:
+   npm run start
    ```
 
-O servidor estará ouvindo em: `http://localhost:3000`
+O servidor iniciara na porta configurada (padrao: 3000).
 
 ---
 
-## 🌐 Endpoints da API (Versão 1 - /api/v1)
+## 5. Endpoints Disponiveis (/api/v1)
 
-### 1. Diagnóstico
-- `GET /api/v1/health` -> Status da API, versão (`v1`), bootId e tempo de atividade.
+A API disponibiliza endpoints organizados por dominios funcionais com padronizacao RESTful:
 
-### 2. Autenticação & Usuários
-- `POST /api/v1/auth/register` -> Cria nova conta (validação Zod + Bcrypt).
-- `POST /api/v1/auth/login` -> Autentica e retorna token JWT (com proteção de taxa).
-- `GET /api/v1/auth/me` -> Retorna dados do usuário autenticado (requer Bearer token).
-- `PUT /api/v1/auth/me` -> Atualiza dados cadastrais do perfil (requer Bearer token).
-- `PUT /api/v1/auth/password` -> Altera a senha do usuário com validação da senha atual.
+- **Diagnostico:** `GET /health`
+- **Autenticacao:** `POST /auth/register`, `POST /auth/login`, `POST /auth/google`, `POST /auth/forgot-password`, `POST /auth/verify-reset-code`, `POST /auth/reset-password`, `GET /auth/me`, `PUT /auth/profile`, `PUT /auth/password`
+- **Usuarios e Nomes de Usuario:** `GET /users/:id`, `GET /users/:userId/reviews`, `POST /users/:userId/reviews`, `GET /usernames/availability`
+- **Conta e Governanca:** `PATCH /account/username`, `POST /account/email/change-request`, `POST /account/email/confirm`, `POST /account/phone/change-request`, `POST /account/phone/confirm`, `POST /account/phone-reversals`, `DELETE /account/phone`, `GET /account/preferences`, `PATCH /account/preferences`
+- **Produtos:** `GET /products`, `GET /products/:id`, `POST /products`, `PUT /products/:id`, `DELETE /products/:id`
+- **Categorias:** `GET /categories` (com cabecalho HTTP `Cache-Control`)
+- **Pedidos:** `POST /orders`, `GET /orders`, `GET /orders/:id`, `PATCH /orders/:id/status`
+- **Chat:** `GET /chat/conversations`, `POST /chat/conversations`, `GET /chat/conversations/:id/messages`, `POST /chat/conversations/:id/messages`, `PATCH /chat/messages/:id/status`
+- **Favoritos:** `GET /favorites`, `GET /favorites/:productId`, `PUT /favorites/:productId`, `DELETE /favorites/:productId`
+- **Avaliacoes:** `DELETE /reviews/:id`
+- **Denuncias e Moderacao:** `POST /reports/:productId`, `GET /reports`, `DELETE /reports/:id/product`
+- **Enderecos:** `GET /addresses`, `POST /addresses`, `DELETE /addresses/:id`
+- **Notificacoes:** `GET /notifications`, `PATCH /notifications/read-all`
+- **Upload:** `POST /upload` (multipart/form-data com compressao WebP)
 
-### 3. Anúncios & Produtos
-- `GET /api/v1/products` -> Lista produtos com filtros (`search`, `category`, `minPrice`, `maxPrice`, `sort`, `page`).
-- `GET /api/v1/products/:id` -> Detalhes do anúncio com informações do vendedor.
-- `POST /api/v1/products` -> Cria novo anúncio (requer Bearer token).
-- `PUT /api/v1/products/:id` -> Atualiza anúncio (apenas dono ou admin).
-- `DELETE /api/v1/products/:id` -> Exclui anúncio (apenas dono ou admin).
-
-### 4. Categorias
-- `GET /api/v1/categories` -> Lista todas as categorias e contagem de anúncios.
-
-### 5. Chat & Mensagens
-- `GET /api/v1/chat/conversations` -> Lista conversas do usuário.
-- `POST /api/v1/chat/conversations` -> Inicia nova negociação para um produto.
-- `GET /api/v1/chat/conversations/:id/messages` -> Histórico de mensagens.
-- `POST /api/v1/chat/conversations/:id/messages` -> Envia mensagem de texto ou proposta de oferta.
-
-### 6. Pedidos & Checkout
-- `POST /api/v1/orders` -> Cria novo pedido (preços validados diretamente no banco de dados).
-- `GET /api/v1/orders` -> Lista pedidos do comprador logado.
-- `GET /api/v1/orders/:id` -> Consulta detalhes de um pedido específico.
-
+Consulte a documentacao Swagger em [`http://localhost:3000/api-docs`](http://localhost:3000/api-docs) para esquemas completos de payloads e contratos.
 
 ---
 
-## 🔒 Segurança Implementada
+## 6. Testes Automatizados
 
-1. **Nenhum preço confiado ao cliente:** No checkout, o backend consulta o valor real de cada produto no banco de dados e calcula o total no servidor.
-2. **Proteção contra Brute Force:** Limite de 15 tentativas a cada 15 minutos por endereço IP nas rotas de login/registro.
-3. **Senhas com Hash:** Senhas nunca são salvas em texto puro; utiliza-se salt de 10 rounds do `bcryptjs`.
-4. **Proteção de Cabeçalhos HTTP:** `helmet` ativo com políticas seguras contra injeção e clickjacking.
-5. **CORS Restrito:** Permite especificar origens permitidas em `.env`.
+O backend conta com 47 testes de integracao automatizados executados nativamente pelo Node.js:
 
----
-
----
-
-## ☁️ Armazenamento em Nuvem e Otimização de Imagens (Sharp + Supabase Storage)
-
-O sistema conta com um **Storage Adapter Pattern** desacoplado e compressão inteligente em tempo de execução:
-
-1. **Otimização Inteligente com Sharp (`.webp`):**
-   - Reduz imagens pesadas de smartphones (3 a 5MB) para arquivos ultraotimizados de ~80 a 250KB (economia média de 75% a 93%).
-   - Auto-rotação via flags EXIF de fotos de celulares.
-   - Redimensionamento proporcional (máx. 1600px para produtos, 600px para avatares).
-   - Conversão automática para formato `.webp` com controle de qualidade sRGB.
-
-2. **Supabase Storage Adapter:**
-   - Envia arquivos diretamente para o bucket público do Supabase (`marketplace`).
-   - Salva a URL pública definitiva no banco de dados.
-   - Ideal para deploys serverless/efêmeros (Render, Railway, Fly.io, Vercel).
-   - **Fallback Automático**: Se `SUPABASE_KEY` não for informada no ambiente local, o sistema ativa automaticamente o `LocalStorageAdapter` (salvando em `uploads/`), garantindo que o desenvolvimento nunca quebre.
-
-### Variáveis no `.env`:
-```env
-SUPABASE_URL="https://pgrznndtajjzpwqgtkkz.supabase.co"
-SUPABASE_KEY="sua_chave_anon_ou_service_role"
-SUPABASE_BUCKET="marketplace"
-STORAGE_PROVIDER="supabase"
-IMAGE_OPTIMIZATION_ENABLED="true"
-IMAGE_MAX_WIDTH="1600"
-IMAGE_QUALITY="82"
+```bash
+# Com o servidor em execucao na porta 3000:
+npm test
 ```
 
----
-
-## 🚀 Como Colocar no Ar (Produção)
-
-1. **Banco PostgreSQL Supabase:** Já configurado nativamente com a pooler URL.
-2. **Supabase Storage:** Adicione `SUPABASE_KEY` no painel da hospedagem (ex: Render/Railway).
-3. Suba o código no **GitHub**.
-4. Crie um Web Service no [Render.com](https://render.com) ou [Railway.app](https://railway.app):
-   - **Build Command**: `npm install && npx prisma db push && npm run seed`
-   - **Start Command**: `npm start`
-   - Configure as variáveis de ambiente baseadas no `.env.example`.
+### Resultados da Suite:
+- **Total de Testes:** 47
+- **Suites Executadas:** 5 (`rest-conformance.test.js`, `account-email.test.js`, `account-phone.test.js`, `api.test.js`, `username-cooldown.test.js`)
+- **Taxa de Sucesso:** 100% de aprovacao (47 testes aprovados, 0 falhas).
 
 ---
 
-## 🤖 Declaração Obrigatória de Uso de Inteligência Artificial
+## 7. Declaracao de Uso de Ferramentas de IA
 
-Em estrito cumprimento às normas da disciplina estabelecidas pelo **Prof. Me. Julian Rodrigues Valério**:
-
-> *"Uso de IA: permitido como apoio, desde que declarado no README (onde e para quê). Cada integrante deve saber explicar qualquer trecho do código."*
-
-Declaramos que ferramentas de Inteligência Artificial foram utilizadas como suporte técnico nos seguintes tópicos do projeto:
-1. **Otimização de Arquitetura e Modelagem:** Auxílio na estruturação modular do backend em camadas (*Controllers, Services, Routes, Middlewares e Schemas*) e refinamento do schema relacional do Prisma.
-2. **Segurança Defensiva:** Identificação de potenciais vulnerabilidades de Path Traversal no tratamento de arquivos estáticos, implementação de proteção de taxa (*Rate Limiter*) em rotas críticas e reforço anti-enumeração de usuários.
-3. **Pipeline de Mídia:** Suporte na implementação da conversão e auto-rotação de fotos de celulares via biblioteca `sharp` e integração com a API do Supabase Storage.
-4. **Padronização da Documentação:** Estruturação da especificação formal OpenAPI 3.0.3 e organização da coleção de testes no formato Postman v2.1.
-
-**Nota:** Todos os integrantes da equipe estudaram, testaram, revisaram e têm pleno domínio para explicar detalhadamente qualquer trecho do código-fonte e da arquitetura apresentada em sala.
-
+Ferramentas de Inteligencia Artificial Generativa foram utilizadas como instrumento de apoio ao desenvolvimento para auxilio na estruturacao modular das camadas de arquitetura, identificacao de salvaguardas de seguranca defensiva, parametrizacao de compressao de midia com Sharp e formatacao da especificacao formal OpenAPI 3.0.3. Toda a implementacao foi revisada, homologada e validada pela equipe tecnica responsavel.

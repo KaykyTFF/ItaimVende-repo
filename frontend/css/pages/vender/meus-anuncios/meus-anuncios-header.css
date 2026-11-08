@@ -39,20 +39,20 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: var(--primary);
+    background: #38A129;
     color: #FFFFFF;
     font-weight: 700;
     font-size: 14.5px;
     padding: 12px 22px;
     border-radius: var(--radius-full);
     text-decoration: none;
-    box-shadow: 0 4px 12px rgba(68, 189, 50, 0.28);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     transition: all var(--transition);
 }
 
 .btn-novo-anuncio:hover {
-    background: var(--primary-hover);
+    background: #2E8B22;
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(68, 189, 50, 0.38);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
 }
 

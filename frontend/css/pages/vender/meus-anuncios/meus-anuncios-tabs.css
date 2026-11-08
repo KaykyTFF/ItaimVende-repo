@@ -34,7 +34,7 @@
 }
 
 .tab-btn.ativo {
-    color: var(--primary);
+    color: #2E8B22;
     font-weight: 700;
 }
 
@@ -45,7 +45,7 @@
     left: 0;
     width: 100%;
     height: 3px;
-    background: var(--primary);
+    background: #38A129;
     border-radius: 3px 3px 0 0;
 }
 
@@ -60,7 +60,7 @@
 }
 
 .tab-btn.ativo .tab-badge {
-    background: rgba(68, 189, 50, 0.16);
-    color: var(--primary-dark);
+    background: rgba(56, 161, 41, 0.14);
+    color: #2E8B22;
 }
 

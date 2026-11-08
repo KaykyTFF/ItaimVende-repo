@@ -64,13 +64,28 @@ export async function createProduct(sellerId, productData) {
     images = [],
   } = productData;
 
-  const category = await prisma.category.findUnique({
+  let category = await prisma.category.findUnique({
     where: { id: categoryId },
   });
 
   if (!category) {
-    throw new AppError('Categoria selecionada não existe.', 404);
+    category = await prisma.category.findFirst({
+      where: {
+        OR: [
+          { orderIndex: categoryId },
+          { id: categoryId },
+        ],
+      },
+    });
   }
+
+  if (!category) {
+    category = await prisma.category.findFirst({
+      where: { OR: [{ slug: 'outros' }, { id: 10 }] },
+    }) || await prisma.category.findFirst();
+  }
+
+  const categoryIdFinal = category ? category.id : categoryId;
 
   const slug = gerarSlug(title);
 
@@ -81,7 +96,7 @@ export async function createProduct(sellerId, productData) {
       description: description.trim(),
       price: parseFloat(price),
       originalPrice: originalPrice ? parseFloat(originalPrice) : null,
-      categoryId,
+      categoryId: categoryIdFinal,
       condition: condition || 'USADO',
       listingType: listingType || 'VENDA',
       city: city || 'Paulistana',
@@ -146,8 +161,26 @@ export async function updateProduct(userId, userRole, productId, updateData) {
   }
 
   // 2. Proteção contra "Metamorfose de Anúncio" (Bait-and-Switch)
+  let targetCategoryId = updateData.categoryId;
+  if (targetCategoryId !== undefined) {
+    let resolvedCategory = await prisma.category.findUnique({ where: { id: targetCategoryId } });
+    if (!resolvedCategory) {
+      resolvedCategory = await prisma.category.findFirst({
+        where: {
+          OR: [
+            { orderIndex: targetCategoryId },
+            { id: targetCategoryId },
+          ],
+        },
+      });
+    }
+    if (resolvedCategory) {
+      targetCategoryId = resolvedCategory.id;
+    }
+  }
+
   // Impede que um vendedor troque a categoria de um produto já ativo para introduzir itens proibidos
-  if (updateData.categoryId !== undefined && updateData.categoryId !== existing.categoryId && userRole !== 'ADMIN') {
+  if (targetCategoryId !== undefined && targetCategoryId !== existing.categoryId && userRole !== 'ADMIN') {
     throw new AppError('Por segurança e prevenção a fraudes, a categoria do anúncio não pode ser alterada após a publicação.', 400);
   }
 
@@ -168,9 +201,10 @@ export async function updateProduct(userId, userRole, productId, updateData) {
     }
   }
 
-  const { images, price, originalPrice, ...otherData } = updateData;
+  const { images, price, originalPrice, categoryId, ...otherData } = updateData;
   const dataToUpdate = { ...otherData };
 
+  if (targetCategoryId !== undefined) dataToUpdate.categoryId = targetCategoryId;
   if (price !== undefined) dataToUpdate.price = parseFloat(price);
   if (originalPrice !== undefined) dataToUpdate.originalPrice = originalPrice ? parseFloat(originalPrice) : null;
 

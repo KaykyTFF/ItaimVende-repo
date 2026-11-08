@@ -26,7 +26,7 @@
          * @returns {{ vendedor, avaliacoes }}
          */
         async listar(userId) {
-            return getCore().requisicao(`/reviews/user/${encodeURIComponent(userId)}`, {
+            return getCore().requisicao(`/users/${encodeURIComponent(userId)}/reviews`, {
                 method: 'GET',
                 headers: getCore().obterHeaders(false)
             });
@@ -34,13 +34,13 @@
 
         /**
          * Envia uma nova avaliação para um vendedor.
-         * Rota: POST /api/v1/reviews/user/:userId
+         * Rota: POST /api/v1/users/:userId/reviews
          * Requer autenticação (token JWT).
          * @param {string} userId - ID do vendedor alvo
          * @param {{ rating: number, comment: string }} dados
          */
         async enviar(userId, dados) {
-            return getCore().requisicao(`/reviews/user/${encodeURIComponent(userId)}`, {
+            return getCore().requisicao(`/users/${encodeURIComponent(userId)}/reviews`, {
                 method: 'POST',
                 headers: getCore().obterHeaders(true),
                 body: JSON.stringify(dados)

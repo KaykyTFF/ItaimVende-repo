@@ -106,7 +106,7 @@
 .chat-busca-input:focus {
     border-color: var(--chat-primary);
     background-color: #233446;
-    box-shadow: 0 0 0 3px rgba(68, 189, 50, 0.25);
+    box-shadow: none;
 }
 
 /* Lista de Conversas com Scroll Suave */
@@ -255,7 +255,7 @@
     padding: 2px 7px;
     border-radius: 999px;
     flex-shrink: 0;
-    box-shadow: 0 2px 6px rgba(68, 189, 50, 0.4);
+    box-shadow: none;
 }
 
 /* Estado Vazio de Conversas */
@@ -298,4 +298,3 @@
     color: #8E9AA7;
     margin-bottom: 18px;
 }
-

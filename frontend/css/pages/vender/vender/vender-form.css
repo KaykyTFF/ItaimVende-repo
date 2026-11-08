@@ -38,8 +38,8 @@
 
 .input-vender-padrao:focus {
     background-color: #FFFFFF;
-    border-color: var(--vender-green);
-    box-shadow: 0 0 0 4px rgba(89, 170, 89, 0.18);
+    border-color: #38A129;
+    box-shadow: none;
 }
 
 /* Textarea de Descrição */
@@ -69,8 +69,8 @@
 
 .textarea-vender-padrao:focus {
     background-color: #FFFFFF;
-    border-color: var(--vender-green);
-    box-shadow: 0 0 0 4px rgba(89, 170, 89, 0.18);
+    border-color: #38A129;
+    box-shadow: none;
 }
 
 .contador-caracteres {

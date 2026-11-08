@@ -6,7 +6,7 @@
     <meta name="description" content="Itaim Vende - Painel de Moderação, Tickets de Denúncia e Atendimento com o Suporte">
     <title>Painel de Moderação & Tickets - Itaim Vende</title>
 
-    <!-- Anti-FOUC: Aplicação imediata do tema escuro/claro -->
+    <!-- Anti-FOUC & Proteção de Acesso RBAC (Exclusivo para os 5 Devs Autorizados) -->
     <script>
         (function() {
             try {
@@ -19,6 +19,21 @@
                     d.classList.remove('dark-theme');
                 }
             } catch (e) {}
+
+            // Guarda de Autenticação Estrita dos Tickets
+            try {
+                var auth = sessionStorage.getItem('itaim_tickets_auth') || localStorage.getItem('itaim_tickets_auth');
+                if (!auth) {
+                    window.location.replace('login-tickets.html');
+                    return;
+                }
+                var parsed = JSON.parse(auth);
+                if (!parsed || !parsed.username) {
+                    window.location.replace('login-tickets.html');
+                }
+            } catch (err) {
+                window.location.replace('login-tickets.html');
+            }
         })();
     </script>
 
@@ -67,6 +82,10 @@
                     <i class="fa-solid fa-store"></i>
                     <span>Ver Site</span>
                 </a>
+                <button type="button" class="btn-tk-nav btn-danger-action" id="btn-logout-tickets" title="Encerrar sessão de moderação" style="border-color: rgba(239, 68, 68, 0.4); color: #EF4444;">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>Sair</span>
+                </button>
             </div>
         </div>
     </header>
@@ -80,7 +99,7 @@
         <section class="tickets-hero">
             <div class="tickets-hero-text">
                 <h2>Fila de Atendimento & Moderação de Segurança</h2>
-                <p>Gerencie denúncias de fraudes, anúncios suspeitos relatados pela comunidade e converse diretamente com usuários que solicitaram suporte oficial.</p>
+                <p>Gerencie denúncias de fraudes, anúncios suspeitos relatados pela comunidade e visualize tickets de suporte para contato direto com os usuários por e-mail.</p>
             </div>
             <div class="tickets-hero-badges">
                 <span class="hero-pill" id="mod-user-badge">
@@ -145,7 +164,7 @@
                 </div>
                 <div class="stat-content">
                     <span class="stat-val" id="stat-support-conversations" style="color: #44BD32;">0</span>
-                    <span class="stat-label">Chats com Suporte</span>
+                    <span class="stat-label">Tickets de Suporte</span>
                 </div>
             </div>
         </section>
@@ -158,8 +177,8 @@
                 <span class="tab-count-badge" id="tab-count-denuncias">0</span>
             </button>
             <button type="button" class="tab-btn" id="tab-btn-suporte" role="tab" aria-selected="false" data-tab="suporte">
-                <i class="fa-solid fa-comments"></i>
-                Conversas com o Suporte
+                <i class="fa-solid fa-headset"></i>
+                Tickets de Suporte
                 <span class="tab-count-badge" id="tab-count-suporte">0</span>
             </button>
         </nav>
@@ -209,82 +228,44 @@
         </section>
 
         <!-- ==========================================================
-             ABA 2: CONVERSAS COM O SUPORTE
+             ABA 2: TICKETS DE SUPORTE AO USUÁRIO
              ========================================================== -->
         <section id="aba-conteudo-suporte" class="tab-content-section" style="display: none;">
             
-            <div class="support-inbox-grid">
-                
-                <!-- Coluna Esquerda: Lista de Conversas com o Suporte -->
-                <div class="support-threads-col">
-                    <div class="support-threads-header">
-                        <h3>
-                            <span>Tickets de Atendimento</span>
-                            <span class="badge-count" id="badge-total-suporte">0 abertos</span>
-                        </h3>
-                        <div class="toolbar-search-box" style="max-width: 100%;">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                            <input type="text" class="toolbar-search-input" id="input-busca-suporte" placeholder="Buscar por usuário ou assunto...">
-                        </div>
-                    </div>
-
-                    <div class="support-threads-list" id="lista-threads-suporte">
-                        <!-- Itens inseridos dinamicamente pelo JS -->
-                    </div>
+            <!-- Toolbar de Filtros e Busca de Suporte -->
+            <div class="tickets-toolbar">
+                <div class="toolbar-pills" id="filtro-status-suporte-pills">
+                    <button type="button" class="filter-pill ativo" data-status="ALL">Todos (<span id="count-sup-all">0</span>)</button>
+                    <button type="button" class="filter-pill" data-status="ABERTO">Abertos (<span id="count-sup-open">0</span>)</button>
+                    <button type="button" class="filter-pill" data-status="EM_ATENDIMENTO">Em Atendimento (<span id="count-sup-progress">0</span>)</button>
+                    <button type="button" class="filter-pill" data-status="CONCLUIDO">Concluídos (<span id="count-sup-resolved">0</span>)</button>
                 </div>
 
-                <!-- Coluna Direita: Conversa Ativa com o Usuário -->
-                <div class="support-chat-col" id="coluna-chat-suporte">
-                    
-                    <!-- Cabeçalho do Chat Selecionado -->
-                    <div class="support-chat-header" id="chat-suporte-header">
-                        <div class="support-user-meta">
-                            <img src="../../assets/icons/icon-user.png" alt="Foto do Usuário" class="thread-avatar" id="chat-suporte-avatar">
-                            <div>
-                                <h3 class="support-user-name" id="chat-suporte-nome">Selecione uma conversa</h3>
-                                <div class="support-user-details" id="chat-suporte-detalhes">Clique em um ticket na coluna ao lado para iniciar o atendimento.</div>
-                            </div>
-                        </div>
-
-                        <div class="ticket-status-select-wrap" id="chat-status-acoes" style="display: none;">
-                            <label for="select-status-suporte">Status:</label>
-                            <select class="select-tk-custom" id="select-status-suporte">
-                                <option value="ABERTO">🟡 Aberto</option>
-                                <option value="EM_ATENDIMENTO">🔵 Em Atendimento</option>
-                                <option value="CONCLUIDO">🟢 Concluído</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Mensagens do Feed -->
-                    <div class="support-messages-feed" id="feed-mensagens-suporte">
-                        <div class="tickets-empty-box" style="border: none; background: transparent;">
-                            <i class="fa-solid fa-headset tickets-empty-icon" style="opacity: 0.6;"></i>
-                            <h3>Nenhuma conversa selecionada</h3>
-                            <p>Escolha um ticket de suporte à esquerda para ler e responder mensagens.</p>
-                        </div>
-                    </div>
-
-                    <!-- Respostas Rápidas Sugeridas -->
-                    <div class="support-quick-replies" id="suporte-quick-replies" style="display: none;">
-                        <span style="font-size: 0.75rem; color: var(--tk-text-dim); font-weight: 700;">RESPOSTAS RÁPIDAS:</span>
-                        <button type="button" class="quick-reply-btn" data-texto="Olá! Já estamos analisando seu caso. Em instantes retornaremos com uma solução.">Analisando caso</button>
-                        <button type="button" class="quick-reply-btn" data-texto="Identificamos a situação e tomamos as providências de moderação cabíveis.">Providência tomada</button>
-                        <button type="button" class="quick-reply-btn" data-texto="Seu anúncio foi revisado e já se encontra ativo na plataforma.">Anúncio aprovado</button>
-                        <button type="button" class="quick-reply-btn" data-texto="Obrigado por entrar em contato com o suporte do Itaim Vende! Tenha um ótimo dia.">Encerramento</button>
-                    </div>
-
-                    <!-- Input de Envio de Mensagem pelo Suporte -->
-                    <div class="support-composer" id="suporte-composer" style="display: none;">
-                        <input type="text" class="composer-input" id="input-mensagem-suporte" placeholder="Escreva uma resposta oficial como Suporte Itaim Vende..." autocomplete="off">
-                        <button type="button" class="btn-send-support" id="btn-enviar-suporte">
-                            <i class="fa-solid fa-paper-plane"></i>
-                            <span>Enviar</span>
-                        </button>
-                    </div>
-
+                <div class="toolbar-search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" class="toolbar-search-input" id="input-busca-suporte" placeholder="Buscar por protocolo (TK-SUP-...), usuário, e-mail ou assunto...">
                 </div>
 
+                <div class="toolbar-actions-right">
+                    <select class="select-tk-custom" id="select-categoria-suporte-filtro" aria-label="Filtrar por categoria">
+                        <option value="">Todas as Categorias</option>
+                        <option value="conta">Conta e Acesso</option>
+                        <option value="anuncio">Anúncio / Publicação</option>
+                        <option value="pagamento">Pagamento / Transação</option>
+                        <option value="seguranca">Segurança / Denúncia</option>
+                        <option value="bug">Erro Técnico / Bug</option>
+                        <option value="outro">Outros Assuntos</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Fila Dinâmica de Tickets de Suporte -->
+            <div class="tickets-grid" id="lista-tickets-suporte-admin">
+                <div class="tickets-empty-box">
+                    <i class="fa-solid fa-spinner fa-spin tickets-empty-icon"></i>
+                    <h3>Carregando tickets de suporte...</h3>
+                    <p>Buscando chamados na central de atendimento.</p>
+                </div>
             </div>
 
         </section>
@@ -292,14 +273,14 @@
     </main>
 
     <!-- ==========================================================
-         MODAL DE DETALHES COMPLETOS DA DENÚNCIA
+         MODAL DE DETALHES COMPLETOS DA DENÚNCIA OU TICKET DE SUPORTE
          ========================================================== -->
     <div class="modal-investigacao-backdrop" id="modal-detalhes-ticket" style="display: none;" role="dialog" aria-modal="true">
         <div class="modal-investigacao-card">
             <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--tk-border); padding-bottom: 12px;">
                 <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; display: flex; align-items: center; gap: 8px;">
-                    <i class="fa-solid fa-file-shield" style="color: #44BD32;"></i>
-                    Dossiê do Ticket <span id="modal-ticket-protocol" style="font-family: 'JetBrains Mono', monospace; color: #44BD32;"></span>
+                    <i class="fa-solid fa-file-shield" id="modal-icone-tipo" style="color: #44BD32;"></i>
+                    <span id="modal-titulo-tipo">Dossiê do Ticket</span> <span id="modal-ticket-protocol" style="font-family: 'JetBrains Mono', monospace; color: #44BD32;"></span>
                 </h3>
                 <button type="button" class="btn-copy-protocol" id="btn-fechar-modal-detalhes" style="font-size: 1.3rem;">&times;</button>
             </div>
@@ -308,7 +289,7 @@
                 <!-- Preenchido dinamicamente -->
             </div>
 
-            <div style="display: flex; align-items: center; justify-content: flex-end; gap: 10px; border-top: 1px solid var(--tk-border); padding-top: 12px;">
+            <div id="modal-ticket-rodape-acoes" style="display: flex; align-items: center; justify-content: flex-end; gap: 10px; border-top: 1px solid var(--tk-border); padding-top: 12px;">
                 <button type="button" class="btn-tk-nav" id="btn-fechar-modal-acao">Fechar</button>
             </div>
         </div>
@@ -323,7 +304,7 @@
     <script src="../../js/core/api/index.js"></script>
     <script src="../../js/core/sessao/index.js"></script>
     <script src="../../js/core/categorias/index.js"></script>
-    <script src="../../js/pages/admin/tickets.js?v=15"></script>
+    <script src="../../js/pages/admin/tickets.js?v=16"></script>
 </body>
 </html>
 

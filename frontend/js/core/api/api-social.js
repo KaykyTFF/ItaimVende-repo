@@ -44,8 +44,22 @@
             });
         },
 
+        async adicionar(productId) {
+            return getCore().requisicao(`/favorites/${encodeURIComponent(productId)}`, {
+                method: 'PUT',
+                headers: getCore().obterHeaders(true)
+            });
+        },
+
+        async remover(productId) {
+            return getCore().requisicao(`/favorites/${encodeURIComponent(productId)}`, {
+                method: 'DELETE',
+                headers: getCore().obterHeaders(true)
+            });
+        },
+
         async status(productId) {
-            return getCore().requisicao(`/favorites/${encodeURIComponent(productId)}/status`, {
+            return getCore().requisicao(`/favorites/${encodeURIComponent(productId)}`, {
                 method: 'GET',
                 headers: getCore().obterHeaders(true)
             });
@@ -102,11 +116,11 @@
         },
 
         /**
-         * Ação de Moderação: Remove anúncio fraudulento e limpa o bucket
+         * Ação de Moderação: Remove anúncio fraudulento e limpa o bucket (RESTful DELETE)
          */
         async removerAnuncioFraudulento(id, reasonNote = '') {
-            return getCore().requisicao(`/reports/${encodeURIComponent(id)}/remove-product`, {
-                method: 'POST',
+            return getCore().requisicao(`/reports/${encodeURIComponent(id)}/product`, {
+                method: 'DELETE',
                 headers: getCore().obterHeaders(true),
                 body: JSON.stringify({ reasonNote })
             });

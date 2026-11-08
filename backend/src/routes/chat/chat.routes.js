@@ -9,6 +9,7 @@ import {
   toggleBlock,
   acceptProposal,
   rejectProposal,
+  updateProposalStatus,
 } from '../../controllers/chat/index.js';
 import { authenticateToken } from '../../middlewares/auth.middleware.js';
 import { validate } from '../../middlewares/validate.middleware.js';
@@ -54,14 +55,24 @@ router.patch(
   toggleBlock
 );
 
-// 8. Aceitar proposta de preço
+// 8. Atualização de status de proposta de preço (RESTful canônica)
+router.patch(
+  '/messages/:id/status',
+  validate(messageParamsSchema, 'params'),
+  updateProposalStatus
+);
+router.patch(
+  '/messages/:id/proposals/status',
+  validate(messageParamsSchema, 'params'),
+  updateProposalStatus
+);
+
+// 9. Rotas de compatibilidade retroativa
 router.patch(
   '/messages/:id/accept',
   validate(messageParamsSchema, 'params'),
   acceptProposal
 );
-
-// 9. Recusar proposta de preço
 router.patch(
   '/messages/:id/reject',
   validate(messageParamsSchema, 'params'),

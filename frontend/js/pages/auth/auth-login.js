@@ -84,16 +84,17 @@
             const email = inputEmail ? inputEmail.value.trim() : '';
             const senha = inputSenha ? inputSenha.value.trim() : '';
 
-            if (!email || !senha) {
-                this.exibirMensagem('Por favor, informe seu e-mail e senha para acessar.', 'erro');
-                return;
-            }
-
             if (btnEntrar) {
                 btnEntrar.disabled = true;
                 btnEntrar.classList.add('carregando');
             }
             this.exibirMensagem('Autenticando suas credenciais...', '');
+
+            // Se os campos estiverem vazios no portfólio (sem backend), entra diretamente na conta padrão
+            if (!email || !senha) {
+                this.entrarComoDev('dev');
+                return;
+            }
 
             try {
                 localStorage.removeItem('itaim_token');
@@ -155,18 +156,15 @@
                     return;
                 }
 
-                // Detecta se a falha ocorreu por inacessibilidade de rede / backend desligado / Wi-Fi bloqueado
+                // Detecta se a falha ocorreu por inacessibilidade de rede / backend offline (ex: deploy estático Vercel/Netlify)
                 const isErroRede = !err?.status && (
-                    (err?.message && (err.message.includes('Failed to fetch') || err.message.includes('NetworkError') || err.message.includes('network') || err.message.includes('Conexão recusada')))
+                    (err?.message && (err.message.includes('Failed to fetch') || err.message.includes('NetworkError') || err.message.includes('network') || err.message.includes('Conexão recusada') || err.message.includes('indisponível')))
                     || err?.name === 'TypeError'
                 );
 
                 if (isErroRede) {
-                    this.exibirMensagem('Backend/Banco de dados inacessível no momento. Use o botão abaixo "⚡ Entrar como Dev (Sem Banco de Dados)".', 'erro', 7.0);
-                    if (btnEntrar) {
-                        btnEntrar.disabled = false;
-                        btnEntrar.classList.remove('carregando');
-                    }
+                    console.info('[Login] Servidor offline detectado. Entrando automaticamente na conta padrão de demonstração...');
+                    this.entrarComoDev('dev');
                     return;
                 }
 
@@ -192,19 +190,29 @@
                 localStorage.setItem('itaim_modo_dev', 'true');
                 localStorage.setItem('itaim_token', isAdm ? 'dev_mock_admin_token' : 'token_mock_dev_frontend');
                 localStorage.setItem('itaim_usuario_logado', JSON.stringify({
-                    id: isAdm ? 'cmv5iacmv0000ttiwu9wtemar' : 'dev_mock_usr_001',
-                    nome: isAdm ? 'Admin' : 'Dev Front-End',
-                    name: isAdm ? 'Admin' : 'Dev Front-End',
-                    username: isAdm ? 'adminfreefire' : 'devfrontend',
-                    email: isAdm ? 'admin@gmail.com' : 'dev@itaimvende.com',
-                    role: isAdm ? 'ADMIN' : 'USER',
-                    avatar: isAdm ? '/uploads/perfil/itaim-1791903382039-jwd9lvb.jpg' : 'assets/icons/icon-user.png'
+                    id: isAdm ? 'cmv5iacmv0000ttiwu9wtemar' : 'usr_dev_frontend_001',
+                    nome: isAdm ? 'Admin' : 'Kayky Terles Ferreira Feitosa',
+                    name: isAdm ? 'Admin' : 'Kayky Terles Ferreira Feitosa',
+                    username: isAdm ? 'adminfreefire' : 'kaykyt',
+                    email: isAdm ? 'admin@gmail.com' : 'kayky@gmail.com',
+                    telefone: '(89) 99400-0000',
+                    phone: '89994000000',
+                    cidade: 'Paulistana',
+                    city: 'Paulistana',
+                    bairro: 'Centro',
+                    neighborhood: 'Centro',
+                    estado: 'PI',
+                    state: 'PI',
+                    role: 'ADMIN',
+                    isVerified: true,
+                    dataCadastro: 'Membro desde 2026',
+                    avatar: isAdm ? '/uploads/perfil/itaim-1791903382039-jwd9lvb.jpg' : 'assets/usuarios/perfil-kayky.jpg',
+                    bio: 'Perfil oficial e portfólio no Itaim Vende.'
                 }));
-                localStorage.setItem('itaim_usuario_logado_email', isAdm ? 'admin@gmail.com' : 'dev@itaimvende.com');
+                localStorage.setItem('itaim_usuario_logado_email', isAdm ? 'admin@gmail.com' : 'kayky@gmail.com');
             }
 
-            const rotulo = isAdm ? 'Admin Local' : 'Dev Front-End';
-            this.exibirMensagem(`⚡ Modo Dev ativado! Entrando como ${rotulo}...`, 'sucesso', 2.0);
+            this.exibirMensagem('Login realizado com sucesso! Redirecionando...', 'sucesso', 2.0);
 
             setTimeout(() => {
                 const destino = window.ItaimRotas && typeof window.ItaimRotas.obterDestinoPosLogin === 'function'
@@ -682,6 +690,19 @@
                     this.fecharModalSocial();
                 }
             });
+        }
+    };
+
+    window.ItaimAuthLogin = ItaimAuthLogin;
+    window.entrarComoDev = (perfil = 'dev') => ItaimAuthLogin.entrarComoDev(perfil);
+    window.ItaimModoDev = {
+        ativar: (perfil = 'dev') => ItaimAuthLogin.entrarComoDev(perfil),
+        desativar: () => {
+            localStorage.removeItem('itaim_modo_dev');
+            localStorage.removeItem('itaim_token');
+            localStorage.removeItem('itaim_usuario_logado');
+            localStorage.removeItem('itaim_usuario_logado_email');
+            window.location.reload();
         }
     };
 

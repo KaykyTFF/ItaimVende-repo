@@ -14,7 +14,7 @@
 (function() {
     'use strict';
 
-    // Helper interno para verificar se o usuário está autenticado
+    // Helper interno para verificar se o usuário está autenticado na loja comum
     function usuarioEstaAutenticado() {
         if (window.ItaimSessaoAuth && typeof window.ItaimSessaoAuth.usuarioEstaAutenticado === 'function') {
             return window.ItaimSessaoAuth.usuarioEstaAutenticado();
@@ -349,22 +349,10 @@
             };
         });
 
-        // Badge e identificador de Modo Dev no Header
-        const isModoDev = localStorage.getItem('itaim_modo_dev') === 'true';
-        let badgeDev = document.getElementById('badge-modo-dev-header');
-        if (isModoDev) {
-            if (!badgeDev) {
-                badgeDev = document.createElement('div');
-                badgeDev.id = 'badge-modo-dev-header';
-                badgeDev.className = 'badge-modo-dev-header';
-                badgeDev.title = 'Modo Desenvolvedor Front-End Ativo (Sem conexão com banco de dados)';
-                badgeDev.innerHTML = '<span>⚡ MODO DEV (SEM BD)</span>';
-                const headerLeft = document.querySelector('.header-left');
-                if (headerLeft) headerLeft.appendChild(badgeDev);
-            }
-            badgeDev.style.display = 'inline-flex';
-        } else if (badgeDev) {
-            badgeDev.style.display = 'none';
+        // Garante que o cabeçalho permaneça limpo sem badges intrusivas
+        const badgeDev = document.getElementById('badge-modo-dev-header');
+        if (badgeDev) {
+            badgeDev.remove();
         }
 
         // Nome no dropdown e no drawer
@@ -486,8 +474,32 @@
             'status'
         ];
 
+        // 0. Rota pública de login dos tickets
+        if (rotaAtual === 'login-tickets' || path.includes('login-tickets')) {
+            return true;
+        }
+
         // 1. Verificação de rotas administrativas (RBAC)
         if (rotasAdmin.includes(rotaAtual)) {
+            // Tratamento especial para Tickets & Moderação:
+            if (rotaAtual === 'tickets' || rotaAtual === 'moderacao' || path.includes('tickets.html')) {
+                try {
+                    const ticketsAuth = sessionStorage.getItem('itaim_tickets_auth') || localStorage.getItem('itaim_tickets_auth');
+                    if (ticketsAuth) {
+                        const parsed = JSON.parse(ticketsAuth);
+                        if (parsed && (parsed.username || parsed.nome)) {
+                            return true; // Autenticado com sucesso no painel de tickets!
+                        }
+                    }
+                } catch (e) {}
+
+                // Se não está autenticado na moderação, redireciona estritamente para o login dos tickets
+                const isEmPages = path.includes('/pages/');
+                const urlLoginTickets = window.ItaimRotas ? window.ItaimRotas.obterUrl('login-tickets') : (isEmPages ? 'login-tickets.html' : 'pages/admin/login-tickets.html');
+                window.location.replace(urlLoginTickets);
+                return false;
+            }
+
             if (!usuarioEstaAutenticado()) {
                 redirecionarParaLogin('Acesso restrito. Faça login com uma conta administrativa.', true);
                 return false;

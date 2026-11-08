@@ -60,26 +60,22 @@
             : `<div style="width:34px;height:34px;border-radius:50%;background:#DCFCE7;color:#166534;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:14px;border:1px solid #BBF7D0;">${inicial}</div>`;
 
         const respostaHtml = item.resposta
-            ? `<div style="margin:8px 0 0 44px;padding:10px 14px;background:#F0FDF4;border-left:3px solid #22C55E;border-radius:0 8px 8px 0;">
-                   <div style="font-size:12px;font-weight:700;color:#166534;margin-bottom:4px;">💬 Resposta do Vendedor</div>
-                   <p style="font-size:13px;color:#334155;margin:0;line-height:1.5;">${item.resposta}</p>
+            ? `<div class="avaliacao-resposta">
+                   <div class="avaliacao-resposta-titulo">💬 Resposta do Vendedor</div>
+                   <p class="avaliacao-resposta-texto">${item.resposta}</p>
                </div>`
             : (isProprioUsuario
-                ? `<div style="margin:6px 0 0 44px;">
-                       <button type="button" class="btn-responder-avaliacao" data-id="${item.id}"
-                           style="font-size:12px;padding:5px 12px;border-radius:6px;border:1px solid #22C55E;background:transparent;color:#16A34A;cursor:pointer;font-weight:600;">
+                ? `<div class="avaliacao-responder-container" style="margin:6px 0 0 44px;">
+                       <button type="button" class="btn-responder-avaliacao" data-id="${item.id}">
                            Responder
                        </button>
                        <form class="form-resposta-inline" data-id="${item.id}" style="display:none;margin-top:8px;">
-                           <textarea placeholder="Escreva sua resposta..." rows="2"
-                               style="width:100%;padding:8px 12px;border-radius:8px;border:1px solid #BBF7D0;font-family:inherit;font-size:13px;resize:vertical;box-sizing:border-box;outline:none;"></textarea>
+                           <textarea placeholder="Escreva sua resposta..." rows="2"></textarea>
                            <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:6px;">
-                               <button type="button" class="btn-cancelar-resposta" data-id="${item.id}"
-                                   style="font-size:12px;padding:5px 12px;border-radius:6px;border:1px solid #CBD5E1;background:transparent;color:#64748B;cursor:pointer;">
+                               <button type="button" class="btn-cancelar-resposta" data-id="${item.id}">
                                    Cancelar
                                </button>
-                               <button type="submit"
-                                   style="font-size:12px;padding:5px 14px;border-radius:6px;border:none;background:#22C55E;color:#fff;font-weight:700;cursor:pointer;">
+                               <button type="submit" class="btn-publicar-resposta">
                                    Publicar
                                </button>
                            </div>
@@ -111,27 +107,27 @@
         ` : '';
 
         return `
-            <div class="item-avaliacao-card" data-review-id="${item.id}" style="padding:14px 0;border-bottom:1px solid #F1F5F9;">
+            <div class="item-avaliacao-card" data-review-id="${item.id}">
                 <div class="avaliacao-conteudo-normal">
-                    <div class="avaliacao-topo-row" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:8px;">
-                        <div style="display:flex;align-items:center;gap:10px;">
-                            <div style="display:flex;align-items:center;">${avatarHtml}</div>
-                            <div>
-                                <div class="avaliacao-autor-nome" style="font-weight:700;font-size:13.5px;display:flex;align-items:center;gap:6px;">
+                    <div class="avaliacao-topo-row">
+                        <div class="avaliacao-autor-box">
+                            <div class="avaliacao-avatar-wrap">${avatarHtml}</div>
+                            <div class="avaliacao-autor-info">
+                                <div class="avaliacao-autor-nome">
                                     <span>${nomeAutor}</span>
-                                    ${isMinha ? '<span class="avaliacao-badge-voce" style="font-size:10.5px;padding:2px 6px;border-radius:4px;font-weight:700;">Você</span>' : ''}
+                                    ${isMinha ? '<span class="avaliacao-badge-voce">Você</span>' : ''}
                                 </div>
-                                <div style="font-size:11.5px;color:#94A3B8;">${formatarData(item.data)}</div>
+                                <div class="avaliacao-data-item">${formatarData(item.data)}</div>
                             </div>
                         </div>
-                        <div style="display:flex;align-items:center;gap:10px;">
-                            <div style="color:#F59E0B;font-size:14px;letter-spacing:2px;">
-                                ${estrelasTxt} <span style="font-size:12px;font-weight:700;color:#64748B;">(${Number(item.nota).toFixed(1)})</span>
+                        <div class="avaliacao-acoes-estrelas">
+                            <div class="avaliacao-estrelas">
+                                ${estrelasTxt} <span class="avaliacao-nota-numero">(${Number(item.nota).toFixed(1)})</span>
                             </div>
                             ${menuDropdownHtml}
                         </div>
                     </div>
-                    ${item.comentario ? `<p class="avaliacao-comentario-txt" style="font-size:13.5px;line-height:1.5;margin:4px 0 0 44px;">${item.comentario}</p>` : ''}
+                    ${item.comentario ? `<p class="avaliacao-comentario-txt">${item.comentario}</p>` : ''}
                     ${respostaHtml}
                 </div>
                 <div class="avaliacao-container-edicao" style="display:none;"></div>
@@ -367,9 +363,9 @@
             boxNormal.style.display = 'none';
             boxEdicao.style.display = 'block';
             boxEdicao.innerHTML = `
-                <div class="box-edicao-inline-avaliacao" style="padding:14px;border-radius:12px;border:1px solid #BBF7D0;background:#F0FDF4;">
+                <div class="box-edicao-inline-avaliacao" style="padding:14px;border-radius:12px;">
                     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-                        <span style="font-size:13px;font-weight:700;color:#166534;display:flex;align-items:center;gap:6px;">
+                        <span class="titulo-edicao-avaliacao" style="font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px;">
                             <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                             Editar sua avaliação
                         </span>
@@ -379,15 +375,15 @@
                         </div>
                     </div>
                     <textarea class="textarea-edit-comentario" rows="3"
-                        style="width:100%;padding:10px 12px;border-radius:8px;border:1px solid #86EFAC;font-family:inherit;font-size:13px;resize:vertical;box-sizing:border-box;outline:none;"
+                        style="width:100%;padding:10px 12px;border-radius:8px;font-family:inherit;font-size:13px;resize:vertical;box-sizing:border-box;outline:none;"
                         placeholder="Edite seu comentário...">${item.comentario || ''}</textarea>
                     <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:10px;">
                         <button type="button" class="btn-cancelar-edicao"
-                            style="font-size:12px;padding:6px 14px;border-radius:6px;border:1px solid #CBD5E1;background:transparent;color:#64748B;cursor:pointer;font-weight:600;">
+                            style="font-size:12px;padding:6px 14px;border-radius:6px;cursor:pointer;font-weight:600;">
                             Cancelar
                         </button>
                         <button type="button" class="btn-salvar-edicao"
-                            style="font-size:12px;padding:6px 16px;border-radius:6px;border:none;background:#22C55E;color:#fff;font-weight:700;cursor:pointer;">
+                            style="font-size:12px;padding:6px 16px;border-radius:6px;border:none;background:#38A129;color:#fff;font-weight:700;cursor:pointer;">
                             Salvar Alterações
                         </button>
                     </div>

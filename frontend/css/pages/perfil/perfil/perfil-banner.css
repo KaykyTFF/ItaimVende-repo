@@ -6,7 +6,6 @@
     overflow: hidden;
     background-color: #ffffff;
     border: 1px solid #e5e9eb;
-    border-bottom: 2.5px solid #44BD32;
     border-radius: 22px;
     padding: 34px 40px;
     display: flex;
@@ -187,7 +186,7 @@
     border-color: #3ca82b;
     color: #3ca82b;
     transform: translateY(-1px);
-    box-shadow: 0 4px 10px rgba(68, 189, 50, 0.18);
+    box-shadow: none;
 }
 
 
@@ -273,7 +272,7 @@
     border-color: #44BD32;
     color: #44BD32;
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(68, 189, 50, 0.2);
+    box-shadow: none;
 }
 
 .btn-editar-perfil-banner:active {
@@ -319,10 +318,18 @@
 
 @media (max-width: 680px) {
     .btn-editar-perfil-banner {
-        top: 14px;
-        right: 14px;
-        padding: 6px 13px;
-        font-size: 12.5px;
-        gap: 6px;
+        top: clamp(8px, 2.2vw, 14px);
+        right: clamp(8px, 2.2vw, 14px);
+        padding: clamp(3.5px, 1.2vw, 5.5px) clamp(6.5px, 2vw, 12px);
+        font-size: clamp(9px, 2.8vw, 12px);
+        gap: clamp(3px, 1vw, 5px);
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    .btn-editar-perfil-banner svg {
+        width: clamp(10px, 2.8vw, 13px);
+        height: clamp(10px, 2.8vw, 13px);
+        flex-shrink: 0;
     }
 }

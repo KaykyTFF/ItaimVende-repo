@@ -4,16 +4,16 @@
  */
 
 /* 1. Base, Variáveis e Grid das 3 Colunas */
-@import url('./conversas/conversas-base.css');
+@import url('./conversas/conversas-base.css?v=20');
 
 /* 2. Coluna 1: Lista e Busca de Conversas */
-@import url('./conversas/conversas-sidebar-lista.css');
+@import url('./conversas/conversas-sidebar-lista.css?v=20');
 
 /* 3. Coluna 2: Feed de Mensagens e Digitação */
-@import url('./conversas/conversas-feed-mensagens.css?v=3');
+@import url('./conversas/conversas-feed-mensagens.css?v=21');
 
 /* 4. Coluna 3: Detalhes do Produto e Estados Vazios */
-@import url('./conversas/conversas-produto-detalhes.css');
+@import url('./conversas/conversas-produto-detalhes.css?v=20');
 
 /* 5. Responsividade (Tablets e Mobile) */
-@import url('./conversas/conversas-responsive.css');
+@import url('./conversas/conversas-responsive.css?v=20');

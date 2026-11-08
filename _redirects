@@ -14,6 +14,7 @@
 /configuracoes           /frontend/pages/perfil/configuracoes.html 200
 /tickets                 /frontend/pages/admin/tickets.html       200
 /moderacao               /frontend/pages/admin/tickets.html       200
+/login-tickets           /frontend/pages/admin/login-tickets.html 200
 /favoritos               /frontend/pages/favoritos/favoritos.html 200
 /notificacoes            /frontend/pages/notificacoes/notificacoes.html 200
 

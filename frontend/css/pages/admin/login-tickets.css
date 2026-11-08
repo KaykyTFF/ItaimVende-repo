@@ -1,0 +1,209 @@
+/**
+ * ITAIM VENDE - LOGIN DA CENTRAL DE TICKETS & MODERAÇÃO (CSS)
+ * Arquivo: frontend/css/pages/admin/login-tickets.css
+ * 
+ * Estilos específicos e complementares para a tela de autenticação
+ * exclusiva dos 5 desenvolvedores no painel de moderação de tickets.
+ */
+
+/* ==========================================================================
+   PERSONALIZAÇÕES ESPECÍFICAS DA ÁREA DE TICKETS
+   ========================================================================== */
+
+.auth-tickets-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(68, 189, 50, 0.16);
+    border: 1px solid rgba(68, 189, 50, 0.45);
+    color: #44BD32;
+    padding: 7px 16px;
+    border-radius: 9999px;
+    font-size: 0.82rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 24px;
+    backdrop-filter: blur(8px);
+}
+
+/* Indicador de Tentativas Restantes */
+.box-tentativas-status {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #F1F5F9;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin-bottom: 16px;
+    font-size: 0.8rem;
+    color: #475569;
+    transition: all 0.3s ease;
+}
+
+[data-theme="dark"] .box-tentativas-status,
+.dark-theme .box-tentativas-status {
+    background: rgba(30, 41, 59, 0.7);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #CBD5E1;
+}
+
+.badge-tentativas-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: rgba(16, 185, 129, 0.15);
+    color: #10B981;
+    font-size: 0.78rem;
+    transition: all 0.3s ease;
+}
+
+.badge-tentativas-pill.atencao {
+    background: rgba(245, 158, 11, 0.18);
+    color: #F59E0B;
+}
+
+.badge-tentativas-pill.perigo {
+    background: rgba(239, 68, 68, 0.18);
+    color: #EF4444;
+    animation: pulsePerigo 1.2s infinite ease-in-out;
+}
+
+@keyframes pulsePerigo {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(1.04); }
+}
+
+/* Animação de Tremor (Shake) no Erro */
+.shake-anim {
+    animation: shakeEffect 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes shakeEffect {
+    10%, 90% { transform: translate3d(-2px, 0, 0); }
+    20%, 80% { transform: translate3d(4px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
+    40%, 60% { transform: translate3d(6px, 0, 0); }
+}
+
+/* Card de Bloqueio por Excesso de Tentativas */
+.card-bloqueio-alerta {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 18px;
+    color: #DC2626;
+    font-size: 0.85rem;
+}
+
+[data-theme="dark"] .card-bloqueio-alerta,
+.dark-theme .card-bloqueio-alerta {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.4);
+    color: #F87171;
+}
+
+.card-bloqueio-alerta.ativo {
+    display: flex;
+}
+
+.card-bloqueio-timer {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #DC2626;
+    letter-spacing: 0.05em;
+}
+
+[data-theme="dark"] .card-bloqueio-timer,
+.dark-theme .card-bloqueio-timer {
+    color: #F87171;
+}
+
+/* ==========================================================================
+   BOTÃO VOLTAR PARA A LOJA PÚBLICA (ALTO CONTRASTE E SEM OFUSCAMENTO)
+   ========================================================================== */
+.btn-voltar-tickets-site {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 12px 18px;
+    border-radius: 8px;
+    border: 1.5px solid #CBD5E1;
+    background: #F8FAFC;
+    color: #334155 !important;
+    font-weight: 700;
+    font-size: 0.88rem;
+    text-decoration: none;
+    margin-top: 14px;
+    transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.btn-voltar-tickets-site i {
+    color: #44BD32;
+    font-size: 0.95rem;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+[data-theme="dark"] .btn-voltar-tickets-site,
+.dark-theme .btn-voltar-tickets-site {
+    background: rgba(30, 41, 59, 0.85);
+    border-color: rgba(255, 255, 255, 0.18);
+    color: #E2E8F0 !important;
+}
+
+/* Hover Nítido e Destacado */
+.btn-voltar-tickets-site:hover {
+    background: #FFFFFF !important;
+    color: #44BD32 !important;
+    border-color: #44BD32 !important;
+    box-shadow: 0 4px 14px rgba(68, 189, 50, 0.2);
+    transform: translateY(-1px);
+}
+
+.btn-voltar-tickets-site:hover i {
+    transform: translateX(-3px);
+    color: #44BD32 !important;
+}
+
+[data-theme="dark"] .btn-voltar-tickets-site:hover,
+.dark-theme .btn-voltar-tickets-site:hover {
+    background: #0F172A !important;
+    color: #44BD32 !important;
+    border-color: #44BD32 !important;
+    box-shadow: 0 4px 14px rgba(68, 189, 50, 0.3);
+}
+
+/* Responsividade */
+@media (max-width: 900px) {
+    .auth-brand-block {
+        display: none !important;
+    }
+
+    .auth-form-block {
+        width: 100% !important;
+        max-width: 480px !important;
+        padding: 24px 20px !important;
+    }
+
+    .auth-floating-card {
+        height: auto !important;
+        min-height: auto !important;
+        max-height: none !important;
+    }
+}

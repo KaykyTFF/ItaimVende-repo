@@ -93,7 +93,9 @@ const phoneConfirmLimiter = rateLimit({
   legacyHeaders: false,
 });
 
-// 1. Rota de checagem prévia de disponibilidade do @
+// 1. Rota de checagem de disponibilidade do username (RESTful canônica e retrocompatibilidade)
+router.get('/usernames/availability', optionalAuth, checkUsername);
+router.get('/username/availability', optionalAuth, checkUsername);
 router.get('/username/check', optionalAuth, checkUsername);
 
 // 2. Rota de alteração exclusiva do nome de usuário (@)
@@ -107,6 +109,10 @@ router.post('/email/confirm', authenticateToken, emailConfirmLimiter, validate(c
 router.post('/phone/change-request', authenticateToken, phoneRequestLimiter, validate(requestPhoneChangeSchema), requestPhoneChange);
 router.post('/phone/confirm', authenticateToken, phoneConfirmLimiter, validate(confirmPhoneChangeSchema), confirmPhoneChange);
 router.delete('/phone', authenticateToken, validate(deletePhoneSchema), deletePhone);
+
+// Reversão de telefone via rollback token (RESTful canônica e retrocompatibilidade)
+router.post('/phone-reversals', optionalAuth, validate(revertPhoneSchema), revertPhoneChange);
+router.post('/phone/reversals', optionalAuth, validate(revertPhoneSchema), revertPhoneChange);
 router.post('/phone/revert', optionalAuth, validate(revertPhoneSchema), revertPhoneChange);
 
 // 5. Rota legada de atualização de telefone

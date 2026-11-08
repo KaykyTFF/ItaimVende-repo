@@ -36,7 +36,10 @@ export async function checkUsername(req, res, next) {
     const username = req.query.username || req.body?.username || '';
     const userId = req.user?.id || null;
     const result = await checkUsernameService(userId, username);
-    res.status(200).json(result);
+    res.status(200).json({
+      success: true,
+      ...result,
+    });
   } catch (error) {
     next(error);
   }
@@ -68,6 +71,7 @@ export async function confirmEmailChange(req, res, next) {
     };
     const result = await confirmEmailChangeService({
       userId: req.user.id,
+      newEmail: req.body.newEmail,
       code: req.body.code,
       ...meta,
     });

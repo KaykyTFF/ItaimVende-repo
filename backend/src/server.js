@@ -27,6 +27,9 @@ import systemRoutes from './routes/system/index.js';
 import addressRoutes from './routes/address/index.js';
 import notificationRoutes from './routes/notification/index.js';
 import accountRoutes from './routes/account/account.routes.js';
+import userRoutes from './routes/user/index.js';
+import { checkUsername } from './controllers/account/account.controller.js';
+import { optionalAuth } from './middlewares/auth.middleware.js';
 import { UPLOAD_DIR, UPLOAD_PERFIL_DIR, UPLOAD_VENDAS_DIR } from './config/upload.js';
 import { storageAdapter } from './adapters/storage/index.js';
 import swaggerUi from 'swagger-ui-express';
@@ -263,6 +266,8 @@ v1Router.use('/reports', reportRoutes);
 v1Router.use('/system', systemRoutes);
 v1Router.use('/addresses', addressRoutes);
 v1Router.use('/notifications', notificationRoutes);
+v1Router.use('/users', userRoutes);
+v1Router.get('/usernames/availability', optionalAuth, checkUsername);
 
 // Registra versão oficial /api/v1 e mantém /api para retrocompatibilidade
 app.use('/api/v1', v1Router);

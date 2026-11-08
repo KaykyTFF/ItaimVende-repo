@@ -266,6 +266,8 @@
                 // Icons
                 'icon-user.png': 'assets/icons/icon-user.png',
                 'icon-user-backup.png': 'assets/icons/icon-user-backup.png',
+                'perfil-kayky.jpg': 'assets/usuarios/perfil-kayky.jpg',
+                'perfil-giselly.jpg': 'assets/usuarios/perfil-giselly.jpg',
                 'icon-chat.png': 'assets/icons/icon-chat.png',
                 'icon-sino.png': 'assets/icons/icon-sino.png',
                 'icon-carrinho.png': 'assets/icons/icon-carrinho.png',
