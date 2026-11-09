@@ -226,39 +226,42 @@ O sistema e estruturado no padrao de arquitetura em camadas desacopladas:
 
 ## 6. Estrutura de Diretorios
 
-```
-marketplace-frontend/
-├── backend/
+O projeto e estruturado como um monorepo contendo os modulos desacoplados de **Backend** (API RESTful), **Frontend** (Interface Web Modular), documentacao do processo agil (**Scrum**) e artefatos de engenharia de software (**Docs**):
+
+```text
+marketplace-frontend/ (Itaim Vende Monorepo)
+├── backend/                           # Modulo da API RESTful (Node.js, Express, Prisma, PostgreSQL)
 │   ├── prisma/
-│   │   ├── schema.prisma              # Modelos relacionais e configuracao do banco
+│   │   ├── schema.prisma              # Modelos relacionais, enums e indices de banco
 │   │   └── seed.js                    # Script de povoamento inicial de dados
 │   ├── scripts/
-│   │   └── setup-unaccent.js          # Criacao de extensoes unaccent e indices no PostgreSQL
+│   │   └── setup-unaccent.js          # Criacao de extensoes unaccent e indices Trigram no PostgreSQL
 │   ├── src/
+│   │   ├── adapters/                  # Adaptadores de comunicacao externa
 │   │   ├── config/
-│   │   │   ├── env.js                 # Validacao de variaveis de ambiente
+│   │   │   ├── env.js                 # Validacao rigorosa de variaveis de ambiente
 │   │   │   ├── prisma.js              # Instancia singleton do Prisma Client
 │   │   │   └── supabase.js            # Cliente Supabase Storage
 │   │   ├── controllers/               # Controladores HTTP desacoplados por dominio
-│   │   │   ├── account/               # account.controller.js
-│   │   │   ├── auth/                  # identity, profile, password controllers
-│   │   │   ├── category/              # category.controller.js
-│   │   │   ├── chat/                  # conversation.controller.js, message.controller.js
-│   │   │   ├── favorite/              # favorite.controller.js
-│   │   │   ├── order/                 # order.controller.js
-│   │   │   ├── product/               # query, mutation, seller controllers
-│   │   │   ├── report/                # report.controller.js
-│   │   │   ├── review/                # review.controller.js
-│   │   │   └── upload/                # upload.controller.js
+│   │   │   ├── account/               # Gestao de credenciais, email, phone e username
+│   │   │   ├── auth/                  # Identidade, login, registro, Google OAuth e perfil
+│   │   │   ├── category/              # Catalogo de categorias e departamentos
+│   │   │   ├── chat/                  # Conversas, mensagens e propostas de negociacao
+│   │   │   ├── favorite/              # Gestao idempotente de favoritos
+│   │   │   ├── order/                 # Emissao e historico de pedidos com calculo no servidor
+│   │   │   ├── product/               # Anuncios, consultas com busca fonetica e mutacoes
+│   │   │   ├── report/                # Registro e triagem de denuncias
+│   │   │   ├── review/                # Avaliacoes e reputacao de vendedores
+│   │   │   └── upload/                # Pipeline de processamento de fotos (Sharp WebP)
 │   │   ├── docs/
 │   │   │   ├── openapi.js             # Objeto de especificacao OpenAPI 3.0.3
 │   │   │   └── openapi.json           # Especificacao OpenAPI 3.0.3 serializada
 │   │   ├── middlewares/
-│   │   │   ├── auth.middleware.js     # Validacao de token Bearer JWT e RBAC
-│   │   │   ├── error.middleware.js    # Interceptador central e padronizador de erros
-│   │   │   ├── rateLimiter.js         # Limitador de requisicoes por IP
-│   │   │   └── validate.middleware.js # Validacao de contratos Zod
-│   │   ├── routes/                    # Roteadores Express organizados por recurso
+│   │   │   ├── auth.middleware.js     # Validacao de token Bearer JWT e RBAC em tempo real
+│   │   │   ├── error.middleware.js    # Interceptador central e padronizador de erros (RFC 7807)
+│   │   │   ├── rateLimiter.js         # Limitador de requisicoes por IP contra forca bruta
+│   │   │   └── validate.middleware.js # Validacao de contratos e schemas Zod
+│   │   ├── routes/                    # Roteadores Express organizados por recurso (/api/v1)
 │   │   │   ├── account/
 │   │   │   ├── auth/
 │   │   │   ├── category/
@@ -269,9 +272,9 @@ marketplace-frontend/
 │   │   │   ├── report/
 │   │   │   ├── review/
 │   │   │   ├── upload/
-│   │   │   ├── user/                  # user.routes.js (/users)
-│   │   │   └── index.js               # Agrupador do prefixo /api/v1
-│   │   ├── schemas/                   # Esquemas de validacao Zod por recurso
+│   │   │   ├── user/                  # Rotas publicas de vendedores (/users)
+│   │   │   └── index.js               # Agrupador oficial do prefixo /api/v1
+│   │   ├── schemas/                   # Esquemas de validacao Zod declarativos por recurso
 │   │   ├── services/                  # Regras de negocio, transacoes e integracoes
 │   │   │   ├── account/               # email, phone, username, preferences services
 │   │   │   ├── auth/                  # identity, profile, recovery services
@@ -282,20 +285,98 @@ marketplace-frontend/
 │   │   │   ├── product/
 │   │   │   ├── report/
 │   │   │   └── review/
+│   │   ├── sockets/                   # Servidor WebSocket (Socket.io) para chat em tempo real
 │   │   ├── utils/
 │   │   │   └── AppError.js            # Classe de erro operacional padronizada
 │   │   └── server.js                  # Ponto de entrada do servidor HTTP e WebSocket
-│   ├── tests/                         # Suite de 47 testes automatizados
-│   │   ├── account-email.test.js
-│   │   ├── account-phone.test.js
-│   │   ├── api.test.js
-│   │   ├── rest-conformance.test.js
-│   │   └── username-cooldown.test.js
-│   ├── .env.example                   # Modelo com definicao das variaveis locais
+│   ├── tests/                         # Suite completa de 88 testes automatizados
+│   │   ├── unit/                      # Testes unitarios puros (schemas Zod e regras de negocio)
+│   │   │   ├── formatters-and-rules.test.js
+│   │   │   └── schemas.test.js
+│   │   ├── account-email.test.js      # Testes de alteracao segura de e-mail e OTP
+│   │   ├── account-phone.test.js      # Testes de alteracao segura de telefone e cooldown
+│   │   ├── api.test.js                # Testes de integracao da API
+│   │   ├── notification.test.js       # Testes da central de notificacoes
+│   │   ├── rest-conformance.test.js   # Testes de conformidade REST e verbos HTTP
+│   │   └── username-cooldown.test.js  # Testes de regra de 30 dias para @
+│   ├── .env.example                   # Modelo de configuracao das variaveis locais
 │   └── package.json                   # Dependencias e scripts do modulo backend
-├── itaim-vende.postman_collection.json # Colecao Postman oficial de endpoints
-├── package.json                       # Scripts globais do monorepo
-└── README.md                          # Documentacao tecnica oficial da aplicacao
+│
+├── frontend/                          # Modulo da Interface Web (HTML5, CSS3 Modular, Vanilla JS)
+│   ├── assets/                        # Imagens, logotipos, icones e banners
+│   ├── css/                           # Folhas de estilo modularizadas por contexto
+│   │   ├── header-global.css          # Cabecalho global e drawer responsivo
+│   │   ├── home.css                   # Vitrine inicial e banners
+│   │   ├── categoria.css              # Catalogo de departamentos e filtros
+│   │   ├── produto.css                # Detalhes do anuncio, galeria e contato
+│   │   ├── perfil.css                 # Painel do usuario e reputacao
+│   │   ├── vendedor.css               # Perfil publico de outros anunciantes
+│   │   ├── vender.css                 # Formulario de publicacao em etapas
+│   │   ├── meus-anuncios.css          # Gestao de anuncios do vendedor
+│   │   ├── favoritos.css              # Grid de anuncios favoritados
+│   │   ├── conversas.css              # Inbox de negociacao e chat
+│   │   ├── notificacoes.css           # Central de alertas e avisos
+│   │   ├── configuracoes.css          # Seguranca, @username, email e telefone
+│   │   ├── style.css                  # Folha de estilo base e autenticacao
+│   │   └── pages/                     # Modulos especializados (ex: admin/painel/)
+│   ├── js/                            # Camada de comportamento logico client-side
+│   │   ├── core/                      # Modulos centrais e utilitarios globais
+│   │   │   ├── api/                   # Cliente HTTP modular (auth, produtos, chat, upload)
+│   │   │   ├── rotas/                 # Resolvedor canonico de rotas e assets
+│   │   │   ├── sessao/                # Gestao de estado, token JWT e persistencia
+│   │   │   ├── componentes-globais/   # Navbar, drawer e cards unificados
+│   │   │   ├── produtos-dados/        # Formato e utilitarios de produtos
+│   │   │   ├── categorias/            # Mapeamento oficial de categorias
+│   │   │   ├── skeleton/              # Sistema unificado de carregamento shimmer
+│   │   │   └── ajustar-foto/          # Utilitario de recorte 1:1 de fotos
+│   │   └── pages/                     # Controladores especificos espelhados por pagina
+│   │       ├── auth/                  # Logica de login e cadastro
+│   │       ├── admin/                 # Painel de controle e observabilidade
+│   │       ├── home/                  # Feed principal e ordenacao
+│   │       ├── produtos/              # Visualizacao de anuncio e categorias
+│   │       ├── vender/                # Formulario e upload de fotos
+│   │       ├── mensagens/             # Negociacao, WebSockets e propostas
+│   │       ├── perfil/                # Perfil e configuracoes de conta
+│   │       ├── favoritos/             # Itens favoritados
+│   │       └── notificacoes/          # Gestao de notificacoes
+│   ├── pages/                         # Telas HTML organizadas por dominio de negocio
+│   │   ├── admin/                     # painel.html (Painel de Saude e Observabilidade)
+│   │   ├── auth/                      # cadastro.html
+│   │   ├── favoritos/                 # favoritos.html
+│   │   ├── home/                      # home.html
+│   │   ├── mensagens/                 # conversas.html e chat.html
+│   │   ├── notificacoes/              # notificacoes.html
+│   │   ├── perfil/                    # perfil.html, vendedor.html e configuracoes.html
+│   │   ├── produtos/                  # produto.html e categoria.html
+│   │   └── vender/                    # vender.html e meus-anuncios.html
+│   ├── 404.html                       # Pagina de erro 404 com arte regional
+│   ├── index.html                     # Portal de entrada e autenticacao
+│   └── reverter-telefone.html         # Tela de reversao emergencial de telefone
+│
+├── scrum/                             # Documentacao do Processo Agil (IFPI Campus Paulistana)
+│   ├── acordos.md                     # Product Goal, Papeis da Equipe, DoD (10 itens) e Acordos
+│   ├── product-backlog.md             # 13 Historias de Usuario (BDD), MoSCoW e Planning Poker
+│   ├── sprint-1/
+│   │   ├── planning.md                # Sprint Goal, Capacidade (24 pts), Fatias e Quadrantes Q1-Q4
+│   │   ├── dailies.md                 # 4 Registros de Daily Scrum e tratamento de impedimentos
+│   │   └── review-retro.md            # Demonstracao, Aceite do PO (V1 = 24 pts) e Acao MELH-1
+│   └── sprint-2/
+│       ├── planning.md                # Sprint Goal, Capacidade (28 pts), Inclusao de MELH-1
+│       ├── dailies.md                 # 3 Registros de Daily Scrum e tratamento de impedimentos
+│       └── review-retro.md            # Demonstracao, Aceite do PO (V2 = 28 pts) e Questoes Obrigatorias
+│
+├── docs/                              # Artefatos Formais de Engenharia de Testes
+│   └── testes/                        # Processo formal de testes em 5 fases
+│       ├── 01-plano-de-testes.md
+│       ├── 02-casos-de-teste-e-rastreabilidade.md
+│       ├── 03-execucao-e-relatorios-de-defeitos.md
+│       ├── 04-painel-de-metricas.md
+│       └── 05-relatorio-final-de-testes.md
+│
+├── itaim-vende.postman_collection.json # Colecao Postman oficial com 11 recursos
+├── package.json                       # Scripts orquestradores da raiz do monorepo
+├── CHANGELOG.md                       # Historico cronologico de versoes
+└── README.md                          # Documentacao tecnica central da aplicacao
 ```
 
 ---
@@ -916,41 +997,91 @@ Todas as regras de negocio, decisoes de modelagem de dados, algoritmos de calcul
 
 ## 20. Processo de Gestao Agil (Scrum)
 
-O gerenciamento do ciclo de desenvolvimento do Itaim Vende foi conduzido integralmente sob o framework Scrum, adaptado ao contexto academico da disciplina de Engenharia de Software III no IFPI Campus Paulistana.
+O gerenciamento do ciclo de desenvolvimento do Itaim Vende foi conduzido integralmente sob o framework Scrum, adaptado ao contexto academico da disciplina de Engenharia de Software III no IFPI Campus Paulistana sob orientacao do Prof. Me. Julian Rodrigues Valerio.
 
-### Quadro Kanban Oficial no GitHub Projects
+### 20.1. Quadro Kanban Oficial no GitHub Projects
 
-O fluxo de trabalho foi gerenciado atraves de quadro Kanban integrado ao GitHub Projects, estruturado com as colunas *Backlog, Sprint Backlog, Em andamento, Em revisao e Pronto*:
+O fluxo visual de trabalho foi gerenciado atraves de quadro Kanban integrado ao GitHub Projects, estruturado com as colunas *Backlog, Sprint Backlog, Em andamento, Em revisao e Pronto*:
 
-* **Quadro Kanban do Projeto:** [Quadro de Gestao Agil — Itaim Vende (GitHub Projects)](https://github.com/users/KaykyTFF/projects/4)
+* **Quadro Kanban do Projeto:** [Quadro de Gestao Agil — Itaim Vende (GitHub Projects #4)](https://github.com/users/KaykyTFF/projects/4)
 * **Repositorio de Origem:** [KaykyTFF/ItaimVende-repo](https://github.com/KaykyTFF/ItaimVende-repo)
 
-### Estrutura de Artefatos na Pasta `/scrum`
+### 20.2. Equipe, Divisao de Papeis e Contribuicoes Reais (Baseadas em Commits)
 
-Todos os registros de planejamento, execucao diaria, inspecao e adaptacao estao organizados na raiz do projeto dentro do diretorio [`/scrum`](scrum/):
+Seguindo as diretrizes da disciplina, a equipe estruturou a divisao de papeis mantendo todos os integrantes participando ativamente do desenvolvimento e da homologacao de testes. As atribuicoes refletem com exatidao os commits registrados no historico do Git:
 
-```text
-scrum/
-  acordos.md                  # Product Goal, Papeis, Definition of Done (10 itens) e Acordos de Trabalho
-  product-backlog.md          # 13 Historias de Usuario (BDD), MoSCoW, Planning Poker e Matriz de Rastreabilidade
-  sprint-1/
-    planning.md               # Sprint Goal, Capacidade (24 pts), Fatias Verticais e Quadrantes Ageis (Q1-Q4)
-    dailies.md                # 4 Registros de Daily Scrum baseados em commits, 4 Impedimentos e Burndown
-    review-retro.md           # Demonstracao ao vivo, Aceite do PO (V1 = 24 pts), Retrospectiva e Acao MELH-1
-  sprint-2/
-    planning.md               # Sprint Goal, Capacidade (28 pts), Inclusao de MELH-1 e Mapa de Testes
-    dailies.md                # 3 Registros de Daily Scrum baseados em commits, 5 Impedimentos e Burndown
-    review-retro.md           # Demonstracao ao vivo, Aceite do PO (V2 = 28 pts) e Respostas as 3 Questoes Obrigatorias
-  relatos/                    # Relatos individuais de autoavaliacao dos integrantes (elaborados pela equipe)
-```
+| Integrante | Foco Principal | Papel Sprint 1 | Papel Sprint 2 | Contribuicoes Efetivas Comprovadas por Commits no Git |
+| :--- | :--- | :--- | :--- | :--- |
+| **Kayky Terles** | Lider Tecnico e Backend | Product Owner | Product Owner | Arquitetura REST em camadas, autenticacao JWT, criptografia Bcrypt, Google OAuth, regras de integridade e calculo financeiro compulsorio de pedidos no servidor (`/orders`), regra de cooldown de 30 dias para username (`@`), extensao PostgreSQL `unaccent` para busca fonetica, pipeline Sharp WebP, integracao Supabase Storage, esteira de 88 testes automatizados e suite unitaria Zod. |
+| **Pedro Ravy** | Backend e Usabilidade | Desenvolvedor | Desenvolvedor | Filtros de busca regional no Prisma (cidades e bairros do Vale do Itaim), regra de avaliacoes com trava de uma nota por comprador (EVAL-01), persistencia da central de tickets e suporte em banco (`MOD-1`), inclusao do campo Biografia e fundo neutro no perfil (`PRF-2` e `PRF-3`), botoes solidos em Meus Anuncios (`UI-1`) e trava de rolagem e zoom no recorte mobile de fotos (`MOB-1`). |
+| **Josimar** | Frontend | Scrum Master | Desenvolvedor | Padronizacao do Skeleton Shimmer universal em todo o frontend (`UI-S1-04`), correcao de contraste no tema escuro (`UI-S1-05`), suporte do formulario de anuncio ao tema escuro (`UI-S1-06`), integracao da tela administrativa de tickets (`tickets.html` e controle de sessao `MOD-1`), e organizacao do catalogo de 19 categorias (`CAT-1`). |
+| **Giselly** | Frontend | Desenvolvedora | Scrum Master | Redesenho das telas de login, modal de aviso para visitantes (`UI-S1-07`), botao Entrar e proporcoes do botao Vender (`UI-S1-08` e `UI-S1-09`), estabilidade visual com `scrollbar-gutter` (`UI-S1-10`), redesign de denuncias (`UI-S1-14`, `UI-S1-15` e `UI-S1-16`), baloes de proposta de negociacao no chat (`UI-S1-17`), implementacao do debounce de 400ms com feedback em tempo real (`MELH-1`), nova pagina 404 regional com arte do tatu (`UI-2`), pagina de busca com slider de preco (`UI-6` e `UI-7`), integracao do botao WhatsApp (`UI-8` e `UI-9`) e bloqueio visual do cooldown de 30 dias para username (`H13`). |
+| **Raili** | Frontend | Desenvolvedora | Desenvolvedora | Revisao profunda do modo escuro em todas as paginas do marketplace (`UI-S1-01`), eliminacao de tela piscando no carregamento do tema escuro (`THM-1`), estilizacao de icones SVG na barra lateral (`UI-S1-02`), botoes solidos na aba Meus Anuncios (`UI-S1-03`), harmonizacao visual do chat e notificacoes no tema escuro (`THM-2`), e estilizacao das 19 categorias no catalogo (`CAT-1`). |
 
-### Resumo das Sprints e Metricas de Velocidade
+* **Product Owner Continuo:** O Kayky atuou como PO em ambas as sprints para assegurar consistencia na visao arquitetural, manutencao da Definition of Done e aceite rigoroso dos criterios BDD.
+* **Alternancia do Scrum Master:** Conforme preconizado na disciplina, a facilitacao alternou entre sprints: Josimar atuou como Scrum Master na Sprint 1 e Giselly assumiu a funcao na Sprint 2.
+* **Qualidade Coletiva:** A equipe nao adotou o papel isolado de testador; cada desenvolvedor foi compulsoriamente responsavel por criar e executar testes automatizados e manuais para suas respectivas entregas.
+
+### 20.3. Product Goal — Visao do Produto
+
+Definido formalmente na Sprint 0:
+
+> **Nossa API e plataforma ajudam** pequenos produtores rurais, comerciantes locais, prestadores de servicos e moradores de Paulistana e regiao do Vale do Itaim **a** negociar, anunciar, comprar e vender produtos e servicos de maneira direta, confiavel e sem intermediarios, **porque** disponibiliza uma plataforma regional com busca que tolera erros de digitacao e acentos (`unaccent`), chat em tempo real com envio de contrapropostas de preco, regras de seguranca cadastral e calculo financeiro travado compulsoriamente no servidor.  
+>  
+> **Diferente de** plataformas genericas como OLX e Mercado Livre, **a nossa solucao** foi concebida para a realidade do semiarido piauiense, trazendo busca fonetica regional, filtros por bairros e municipios circunvizinhos, moderacao com expurgo automatico de arquivos na nuvem (Supabase Storage) e protecao contra fraudes com intervalo de 30 dias para alteracao do nome de usuario (`@username`).
+
+### 20.4. Definition of Done (DoD) — Criterios de Conclusao
+
+Uma historia so foi declarada pronta mediante atendimento integral a dez criterios estabelecidos na Sprint 0:
+
+1. **Revisao por Colega:** Codigo integrado a branch principal exclusivamente via Pull Request revisado e aprovado por outro integrante.
+2. **Testes Automatizados Aprovados:** 100% dos testes unitarios e de integracao da funcionalidade executando com sucesso no pipeline (mantendo 88 testes aprovados).
+3. **Criterios de Aceitacao BDD:** Validacao de todos os cenarios Dado/Quando/Entao junto ao Product Owner.
+4. **Documentacao OpenAPI 3.0.3:** Endpoints, schemas e respostas descritos no Swagger UI e serializados no `openapi.json`.
+5. **Colecao Postman:** Exemplos de sucesso e casos de erro atualizados na colecao oficial `itaim-vende.postman_collection.json`.
+6. **Seguranca de Credenciais:** Nenhuma chave, segredo ou token exposto no repositorio; tudo isolado em `.env`.
+7. **Instrucoes do README Funcionais:** Procedimentos de instalacao e inicializacao testados e reproduziveis.
+8. **Item da Equipe 1 — Validacao Rigorosa com Zod:** Sanitizacao estrita de todas as entradas de requisicao devolvendo respostas no formato padronizado RFC 7807.
+9. **Item da Equipe 2 — Integracao Visual sem Erros no Console:** Interfaces com carregamento Skeleton Shimmer universal e zero excecoes no console do navegador.
+10. **Item da Equipe 3 — Limpeza de Fotos na Nuvem:** Exclusao automatica de arquivos no bucket do Supabase Storage na exclusao ou moderacao de anuncios.
+
+### 20.5. Resumo das Sprints e Metricas de Velocidade
 
 | Fase | Periodo | Foco Tecnico | Metas e Incremento | Pontos Planejados | Pontos Entregues | Velocidade Efetiva |
 | :---: | :---: | :--- | :--- | :---: | :---: | :---: |
 | **Sprint 0** | 27/10 e 28/10 | Planejamento Inicial | Definicao do Product Goal, papeis no time, 10 criterios de DoD, 13 historias no Backlog e acordos operacionais. | — | — | — |
 | **Sprint 1** | 29/10 a 03/11 | Nucleo Arquitetural e UI | Esqueleto funcional completo (Auth JWT, Bcrypt, Cache HTTP, Sharp WebP, Orders seguro, Skeleton Shimmer e Dark Mode). | 24 | 24 | **$V_1 = 24$ pts** |
 | **Sprint 2** | 04/11 a 08/11 | Inovacao e Estabilidade | Cooldown de 30 dias para username (@), busca unaccent sem acentos, painel de moderacao, estilizacao 404 e MELH-1. | 28 | 28 | **$V_2 = 28$ pts** |
+
+### 20.6. Destaques da Retrospectiva e Respostas Obrigatorias
+
+Conforme deliberado nas sessoes de inspecao e adaptacao:
+
+1. **Aumento de Velocidade ($V_2 = 28 > V_1 = 24$):**
+   - Fundacao arquitetural pronta (PostgreSQL, Prisma, Express, Middlewares e CORS estabilizados na Sprint 1).
+   - Eficacia da melhoria MELH-1, reduzindo retrabalho de requisicoes invalidas.
+   - Divisao equilibrada com trabalho em paralelo entre backend e frontend.
+   - Comunicacao continua via WhatsApp e resolucao imediata de impedimentos nos encontros no laboratorio do IFPI.
+
+2. **Historia Devolvida no Primeiro Ciclo de Aceite:**
+   - **H13 (Cooldown de 30 dias para alteracao de username):** No primeiro ciclo, o formulario enviava todos os dados em lote. Caso o usuario editasse apenas nome ou biografia, o backend interpretava o username inalterado como tentativa de troca do `@`, bloqueando indevidamente a operacao com HTTP 403.
+   - **Correcao Efetuada:** O PO/Lider Tecnico refatorou o servico de perfil (`auth.profile.service.js`) para validar cooldown exclusivamente quando o username informado diferir do cadastrado no banco (`cleanUsername !== currentUser.username.toLowerCase()`), acompanhado da criacao do caso de teste CTM-8 na suite `username-cooldown.test.js`. Apos a correcao, a historia foi homologada com 100% de conformidade.
+
+3. **Eficacia da Acao de Melhoria Continua (MELH-1):**
+   - Implementacao de validacao assincrona previa com debounce de 400ms no frontend (`frontend/js/pages/perfil/configuracoes/config-conta.js`), consumindo o endpoint `/api/v1/auth/check-username`. O usuario recebe confirmacao de disponibilidade ou alerta de bloqueio antes do clique de envio, eliminando erros genericos de formulario.
+
+### 20.7. Estrutura de Artefatos na Pasta `/scrum`
+
+A totalidade dos registros documentais do processo agil encontra-se versionada no diretorio [`scrum/`](scrum/):
+
+* [`scrum/acordos.md`](scrum/acordos.md): Product Goal formal, Divisao de Papeis, Definition of Done (10 itens) e Acordos de Trabalho.
+* [`scrum/product-backlog.md`](scrum/product-backlog.md): 13 Historias de Usuario em formato BDD (Dado/Quando/Entao), Priorizacao MoSCoW, Estimativas em Story Points (Planning Poker) e Matriz de Rastreabilidade.
+* [`scrum/sprint-1/planning.md`](scrum/sprint-1/planning.md): Sprint Goal da Sprint 1, Capacidade (24 pts), Fatias Verticais e Quadrantes Ageis (Q1 a Q4).
+* [`scrum/sprint-1/dailies.md`](scrum/sprint-1/dailies.md): 4 Registros de Daily Scrum baseados em commits, tratamento de 4 impedimentos e Grafico de Burndown.
+* [`scrum/sprint-1/review-retro.md`](scrum/sprint-1/review-retro.md): Demonstracao ao vivo de 10 incrementos, Homologacao do PO (24 pts aceitos), Retrospectiva Comecar/Parar/Continuar e definicao da acao MELH-1.
+* [`scrum/sprint-2/planning.md`](scrum/sprint-2/planning.md): Sprint Goal da Sprint 2, Capacidade (28 pts), Inclusao da melhoria MELH-1 e Mapa de Testes.
+* [`scrum/sprint-2/dailies.md`](scrum/sprint-2/dailies.md): 3 Registros de Daily Scrum baseados em commits, tratamento de 5 impedimentos e Grafico de Burndown.
+* [`scrum/sprint-2/review-retro.md`](scrum/sprint-2/review-retro.md): Demonstracao de 9 incrementos, Homologacao do PO (28 pts aceitos) e Respostas formais as tres questoes obrigatorias da atividade.
 
 ---
 
