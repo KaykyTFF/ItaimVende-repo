@@ -21,7 +21,7 @@
         'conversas-utils.js',
         'conversas-estado.js',
         'conversas-lista.js',
-        'conversas-feed.js?v=2',
+        'conversas-feed.js?v=3',
         'conversas-envio.js',
         'conversas-acoes.js'
     ];
