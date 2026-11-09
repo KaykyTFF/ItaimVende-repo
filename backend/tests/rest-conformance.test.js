@@ -1,4 +1,4 @@
-import { describe, it, before } from 'node:test';
+import { describe, it, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import jwt from 'jsonwebtoken';
 import { ENV } from '../src/config/env.js';
@@ -9,23 +9,26 @@ const BASE_URL = process.env.TEST_API_URL || 'http://localhost:3000/api/v1';
 let testUser = null;
 let testToken = '';
 let testProduct = null;
+let createdSeller = null;
+let createdProduct = null;
 
 describe('Suite de Testes de Conformidade REST Canônica (Novas Rotas e Métodos)', () => {
   before(async () => {
-    // Localiza ou garante um usuário para testes
-    testUser = await prisma.user.findFirst({ where: { role: 'BUYER' } });
-    if (!testUser) {
-      testUser = await prisma.user.create({
-        data: {
-          name: 'Comprador Teste REST',
-          email: `buyer_rest_${Date.now()}@test.com`,
-          password: 'HashPassword123',
-          role: 'BUYER',
-          city: 'Paulistana',
-          state: 'PI',
-        },
-      });
-    }
+    const uid = `${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
+
+    // Cria usuário exclusivo e isolado para a suíte de conformidade REST
+    testUser = await prisma.user.create({
+      data: {
+        name: 'Comprador Teste REST',
+        username: `buyer_rest_${uid}`,
+        email: `buyer_rest_${uid}@itaimvende.test`,
+        password: 'HashPassword123',
+        role: 'BUYER',
+        status: 'ACTIVE',
+        city: 'Paulistana',
+        state: 'PI',
+      },
+    });
 
     testToken = jwt.sign(
       { id: testUser.id, email: testUser.email, role: testUser.role },
@@ -33,11 +36,67 @@ describe('Suite de Testes de Conformidade REST Canônica (Novas Rotas e Métodos
       { expiresIn: '1h' }
     );
 
-    // Localiza um produto para os testes de favoritos e denúncia
+    // Localiza ou instancia produto para os testes de favoritos
     testProduct = await prisma.product.findFirst({
-      where: { deletedAt: null },
+      where: { deletedAt: null, status: 'ATIVO' },
       select: { id: true, sellerId: true },
     });
+
+    if (!testProduct) {
+      let seller = await prisma.user.findFirst({ where: { role: 'SELLER' } });
+      if (!seller) {
+        seller = await prisma.user.create({
+          data: {
+            name: 'Vendedor Teste REST',
+            email: `seller_rest_${uid}@itaimvende.test`,
+            password: 'HashPassword123',
+            role: 'SELLER',
+            status: 'ACTIVE',
+            city: 'Paulistana',
+            state: 'PI',
+          },
+        });
+        createdSeller = seller;
+      }
+
+      let category = await prisma.category.findFirst();
+      if (!category) {
+        category = await prisma.category.create({
+          data: {
+            name: `Categoria REST ${uid}`,
+            slug: `cat-rest-${uid}`,
+          },
+        });
+      }
+
+      testProduct = await prisma.product.create({
+        data: {
+          title: 'Produto Teste REST',
+          slug: `prod-rest-${uid}`,
+          description: 'Descrição de teste para testes de conformidade REST',
+          price: 99.90,
+          sellerId: seller.id,
+          categoryId: category.id,
+          status: 'ATIVO',
+          city: 'Paulistana',
+          state: 'PI',
+        },
+        select: { id: true, sellerId: true },
+      });
+      createdProduct = testProduct;
+    }
+  });
+
+  after(async () => {
+    if (createdProduct?.id) {
+      await prisma.product.delete({ where: { id: createdProduct.id } }).catch(() => {});
+    }
+    if (createdSeller?.id) {
+      await prisma.user.delete({ where: { id: createdSeller.id } }).catch(() => {});
+    }
+    if (testUser?.id) {
+      await prisma.user.delete({ where: { id: testUser.id } }).catch(() => {});
+    }
   });
 
   // Teste 1: Rota canônica GET /users/:id (perfil público)
