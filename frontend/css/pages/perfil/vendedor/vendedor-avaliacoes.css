@@ -3,7 +3,7 @@
    ========================================================================== */
 .vendedor-duas-colunas {
     display: grid;
-    grid-template-columns: 1.4fr 1fr;
+    grid-template-columns: 1fr;
     gap: 24px;
     margin-bottom: 48px;
 }
