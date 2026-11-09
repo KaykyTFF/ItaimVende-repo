@@ -1,0 +1,67 @@
+
+:root {
+    --primary: #44BD32;
+    --primary-hover: #3ca82b;
+    --primary-light: rgba(68, 189, 50, 0.12);
+    --primary-glow: rgba(0, 0, 0, 0.08);
+    --dark-bg: #1E272E;
+    --dark-surface: #24282B;
+    --dark-elevated: #353B40;
+    --light-bg: #F4F6F8;
+    --card-bg: #FFFFFF;
+    --text-primary: #1E272E;
+    --text-secondary: #57606F;
+    --text-muted: #808E9B;
+    --text-white: #FFFFFF;
+    --border-color: #E4E7EB;
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --radius-full: 9999px;
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.09);
+    --shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.14);
+    --shadow-hover: 0 12px 28px rgba(0, 0, 0, 0.09);
+    --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    --font: 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif;
+}
+
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    overflow-y: auto;
+    overflow-y: overlay;
+}
+
+body {
+    font-family: var(--font);
+    background-color: var(--light-bg);
+    color: var(--text-primary);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+
+
+/* ==========================================================================
+   PREVENÇÃO DE ZOOM INDESEJADO NO CELULAR (iOS / Android)
+   ========================================================================== */
+html, body, button, input, select, textarea, a {
+    touch-action: manipulation;
+}
+
+@media screen and (max-width: 768px) {
+    input,
+    select,
+    textarea,
+    .campo-busca,
+    .cfg-input,
+    .campo-input-perfil,
+    .input-auth {
+        font-size: 16px !important;
+    }
+}

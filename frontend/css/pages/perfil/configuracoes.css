@@ -1,0 +1,1413 @@
+/* ITAIM VENDE - PÁGINA DE CONFIGURAÇÕES (configuracoes.html)
+   Reaproveita as variáveis e o cabeçalho do home.css */
+
+.cfg-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px 16px 60px;
+}
+
+.cfg-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    margin-bottom: 14px;
+}
+.cfg-breadcrumb a { color: var(--text-secondary); text-decoration: none; transition: color var(--transition); }
+.cfg-breadcrumb a:hover { color: var(--primary); }
+.cfg-breadcrumb .ativo { color: var(--primary); font-weight: 700; }
+
+.cfg-titulo-pagina { font-size: 26px; font-weight: 800; letter-spacing: -0.4px; }
+.cfg-subtitulo-pagina { color: var(--text-secondary); font-size: 14.5px; margin: 4px 0 22px; }
+
+.cfg-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+/* Menu das seções */
+.cfg-nav {
+    position: sticky;
+    top: 96px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 10px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.cfg-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 12px 14px;
+    border: none;
+    background: none;
+    border-radius: var(--radius-md);
+    font-family: inherit;
+    font-size: 14.5px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    text-align: left;
+    transition: all var(--transition);
+}
+.cfg-nav-item:hover { background: var(--light-bg); color: var(--text-primary); }
+.cfg-nav-item.ativo { background: var(--primary-light); color: var(--primary-hover); font-weight: 800; }
+.cfg-nav-item svg { flex-shrink: 0; }
+
+/* Painéis */
+.cfg-painel { display: none; }
+.cfg-painel.ativo { display: block; animation: cfgFade 0.25s ease; }
+@keyframes cfgFade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+.cfg-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 20px;
+}
+.cfg-card h2 { font-size: 18px; font-weight: 800; margin-bottom: 4px; }
+.cfg-card > .cfg-desc { color: var(--text-secondary); font-size: 14px; margin-bottom: 20px; }
+
+/* Formulários */
+.cfg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.cfg-campo { display: flex; flex-direction: column; gap: 6px; }
+.cfg-campo.cheio { grid-column: 1 / -1; }
+.cfg-campo label { font-size: 13.5px; font-weight: 700; }
+.cfg-campo small { color: var(--text-muted); font-size: 12.5px; }
+.cfg-input, .cfg-select {
+    height: 46px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 0 14px;
+    font-size: 14.5px;
+    font-family: inherit;
+    color: var(--text-primary);
+    background: #F8FAFC;
+    outline: none;
+    transition: all var(--transition);
+    width: 100%;
+}
+.cfg-input:focus, .cfg-select:focus {
+    background: #FFFFFF;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-glow);
+}
+.cfg-input.invalido { border-color: #DC2626; box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15); }
+.cfg-erro { color: #DC2626; font-size: 12.5px; font-weight: 600; }
+.cfg-erro:empty { display: none; }
+
+.cfg-senha-wrap { position: relative; }
+.cfg-senha-wrap .cfg-input { padding-right: 76px; }
+.cfg-ver-senha {
+    position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; cursor: pointer;
+    font-family: inherit; font-size: 12.5px; font-weight: 700; color: var(--primary-hover);
+    padding: 6px 8px; border-radius: var(--radius-sm);
+}
+.cfg-ver-senha:hover { background: var(--primary-light); }
+
+.cfg-forca { height: 6px; background: var(--border-color); border-radius: var(--radius-full); overflow: hidden; margin-top: 6px; }
+.cfg-forca-barra { height: 100%; width: 0; background: #DC2626; transition: width var(--transition), background var(--transition); }
+.cfg-forca-texto { font-size: 12.5px; color: var(--text-secondary); font-weight: 600; margin-top: 4px; }
+
+/* Botões */
+.cfg-acoes { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 22px; }
+.cfg-btn[hidden] { display: none !important; }
+.cfg-btn {
+    font-family: inherit; font-weight: 700; font-size: 14.5px;
+    padding: 12px 24px; border-radius: var(--radius-md);
+    border: 1px solid transparent; cursor: pointer; transition: all var(--transition);
+    display: inline-flex; align-items: center; gap: 8px;
+}
+.cfg-btn-primario { background: var(--primary); color: #fff; box-shadow: 0 4px 12px rgba(68, 189, 50, 0.28); }
+.cfg-btn-primario:hover { background: var(--primary-hover); transform: translateY(-2px); }
+.cfg-btn-neutro { background: #fff; color: var(--text-primary); border-color: var(--border-color); }
+.cfg-btn-neutro:hover { border-color: var(--primary); color: var(--primary-hover); }
+.cfg-btn-perigo { background: #FEE2E2; color: #DC2626; border-color: #FECACA; }
+.cfg-btn-perigo:hover { background: #FCA5A5; color: #991B1B; }
+.cfg-btn-suspender { background: #FEF3C7; color: #92400E; border-color: #FCD34D; }
+.cfg-btn-suspender:hover { background: #FDE68A; color: #78350F; }
+
+/* Linhas com interruptor */
+.cfg-linha {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 16px 0; border-bottom: 1px solid var(--border-color);
+}
+.cfg-linha:last-of-type { border-bottom: none; }
+.cfg-linha-texto strong { display: block; font-size: 14.5px; font-weight: 700; }
+.cfg-linha-texto span { color: var(--text-secondary); font-size: 13.5px; }
+
+.cfg-switch { position: relative; width: 48px; height: 28px; flex-shrink: 0; }
+.cfg-switch input { opacity: 0; width: 100%; height: 100%; position: absolute; inset: 0; margin: 0; cursor: pointer; z-index: 2; }
+.cfg-switch-trilho {
+    position: absolute; inset: 0; background: #CBD5E1; border-radius: var(--radius-full);
+    transition: background var(--transition);
+}
+.cfg-switch-trilho::after {
+    content: ''; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px;
+    background: #fff; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+    transition: transform var(--transition);
+}
+.cfg-switch input:checked + .cfg-switch-trilho { background: var(--primary); }
+.cfg-switch input:checked + .cfg-switch-trilho::after { transform: translateX(20px); }
+.cfg-switch input:focus-visible + .cfg-switch-trilho { box-shadow: 0 0 0 3px var(--primary-glow); }
+
+/* Endereços */
+.cfg-enderecos { display: flex; flex-direction: column; gap: 12px; margin-bottom: 18px; }
+.cfg-endereco {
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+    border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px 16px;
+    background: #F8FAFC;
+}
+.cfg-endereco.principal { border-color: var(--primary); background: var(--primary-light); }
+.cfg-endereco strong { display: flex; align-items: center; gap: 8px; font-size: 14.5px; flex-wrap: wrap; }
+.cfg-endereco p { color: var(--text-secondary); font-size: 13.5px; margin-top: 2px; }
+.cfg-selo { background: var(--primary); color: #fff; font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: var(--radius-full); }
+.cfg-endereco-acoes { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.cfg-link-acao {
+    background: none; border: none; font-family: inherit; font-size: 13px; font-weight: 700;
+    color: var(--primary-hover); cursor: pointer; padding: 4px 8px; border-radius: var(--radius-sm);
+}
+.cfg-link-acao:hover { background: var(--primary-light); }
+.cfg-link-acao.perigo { color: #DC2626; }
+.cfg-link-acao.perigo:hover { background: #FEE2E2; }
+.cfg-vazio { text-align: center; color: var(--text-secondary); padding: 24px 12px; font-size: 14px; border: 1px dashed var(--border-color); border-radius: var(--radius-md); }
+
+/* Skeleton para endereços */
+.cfg-endereco-skeleton {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    background: #F8FAFC;
+    pointer-events: none;
+}
+
+[data-theme="dark"] .cfg-endereco-skeleton,
+.dark-theme .cfg-endereco-skeleton {
+    background: #1F2831;
+    border-color: #2C3946;
+}
+
+.cfg-form-endereco { border-top: 1px solid var(--border-color); padding-top: 20px; margin-top: 6px; }
+.cfg-form-endereco h3 { font-size: 15px; font-weight: 800; margin-bottom: 14px; }
+
+.cfg-zona-perigo { border-color: #FECACA; }
+.cfg-zona-perigo h2 { color: #DC2626; }
+
+/* Aviso de sucesso */
+.cfg-toast {
+    position: fixed; right: 20px; bottom: 20px; z-index: 2000;
+    background: #166534; color: #fff; padding: 14px 20px; border-radius: var(--radius-md);
+    font-weight: 700; font-size: 14px; box-shadow: var(--shadow-lg);
+    opacity: 0; transform: translateY(12px); pointer-events: none;
+    transition: all var(--transition); max-width: calc(100vw - 40px);
+}
+.cfg-toast.visivel { opacity: 1; transform: none; }
+.cfg-toast.erro { background: #B91C1C; }
+
+/* Modal de confirmação */
+.cfg-modal-fundo {
+    position: fixed; inset: 0; background: rgba(15, 23, 42, 0.55); z-index: 3000;
+    display: none; align-items: center; justify-content: center; padding: 16px;
+}
+.cfg-modal-fundo.aberto { display: flex; }
+.cfg-modal { background: #fff; border-radius: var(--radius-lg); padding: 26px; max-width: 420px; width: 100%; box-shadow: var(--shadow-lg); }
+.cfg-modal h3 { font-size: 18px; font-weight: 800; margin-bottom: 8px; }
+.cfg-modal p { color: var(--text-secondary); font-size: 14.5px; }
+
+@media (max-width: 860px) {
+    .cfg-layout { grid-template-columns: 1fr; gap: 16px; }
+    .cfg-nav {
+        position: static;
+        flex-direction: row;
+        overflow-x: auto;
+        padding: 6px;
+        gap: 8px;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        -webkit-overflow-scrolling: touch;
+    }
+    .cfg-nav::-webkit-scrollbar { display: none; width: 0; height: 0; }
+    .cfg-nav-item { width: auto; white-space: nowrap; padding: 10px 14px; flex-shrink: 0; }
+}
+@media (max-width: 600px) {
+    .cfg-layout { padding: 0 12px; margin: 14px auto 40px; }
+    .cfg-grid { grid-template-columns: 1fr; }
+    .cfg-card { padding: 16px 14px; border-radius: 14px; }
+    .cfg-titulo-pagina { font-size: 20px; }
+    .cfg-endereco, .cfg-endereco-skeleton { flex-direction: column; }
+    .cfg-endereco-acoes { justify-content: flex-start; }
+    .cfg-acoes .cfg-btn { width: 100%; justify-content: center; }
+}
+
+/* Foto do Perfil nas Configurações */
+.cfg-avatar-box {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 18px;
+    background: #F8FAFC;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    margin-bottom: 22px;
+}
+.cfg-avatar-preview-wrap {
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid var(--primary);
+    box-shadow: 0 4px 12px rgba(68, 189, 50, 0.2);
+    flex-shrink: 0;
+    background: #1E293B;
+}
+.cfg-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.cfg-avatar-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.cfg-avatar-titulo {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+.cfg-avatar-sub {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+}
+.cfg-avatar-botoes {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.cfg-btn-avatar-upload {
+    background: #FFFFFF;
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 8px 15px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all var(--transition);
+}
+.cfg-btn-avatar-upload:hover {
+    border-color: var(--primary);
+    color: var(--primary-hover);
+    background: var(--primary-light);
+}
+.cfg-btn-avatar-remover {
+    background: #FEF2F2;
+    border: 1px solid #FECACA;
+    color: #DC2626;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 8px 14px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--transition);
+}
+.cfg-btn-avatar-remover:hover {
+    background: #FEE2E2;
+    border-color: #F87171;
+}
+
+/* ==========================================================================
+   MODO ESCURO - BOTÕES DE CONFIGURAÇÕES (REMOVER, SUSPENDER E EXCLUIR CONTA)
+   ========================================================================== */
+[data-theme="dark"] .cfg-btn-avatar-remover,
+[data-theme="dark"] #cfg-btn-remover-foto {
+    background-color: rgba(239, 68, 68, 0.14) !important;
+    border: 1px solid rgba(239, 68, 68, 0.35) !important;
+    color: #F87171 !important;
+}
+
+[data-theme="dark"] .cfg-btn-avatar-remover:hover,
+[data-theme="dark"] #cfg-btn-remover-foto:hover {
+    background-color: #EF4444 !important;
+    border-color: #EF4444 !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35) !important;
+}
+
+[data-theme="dark"] .cfg-btn-suspender,
+[data-theme="dark"] #btn-suspender-conta,
+[data-theme="dark"] #cfg-modal-confirmar.cfg-btn-suspender {
+    background-color: rgba(245, 158, 11, 0.14) !important;
+    border: 1px solid rgba(245, 158, 11, 0.35) !important;
+    color: #FBBF24 !important;
+}
+
+[data-theme="dark"] .cfg-btn-suspender:hover,
+[data-theme="dark"] #btn-suspender-conta:hover,
+[data-theme="dark"] #cfg-modal-confirmar.cfg-btn-suspender:hover {
+    background-color: #F59E0B !important;
+    border-color: #F59E0B !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35) !important;
+}
+
+[data-theme="dark"] .cfg-btn-perigo,
+[data-theme="dark"] #btn-excluir-conta,
+[data-theme="dark"] #cfg-modal-confirmar.cfg-btn-perigo {
+    background-color: rgba(239, 68, 68, 0.14) !important;
+    border: 1px solid rgba(239, 68, 68, 0.35) !important;
+    color: #F87171 !important;
+}
+
+[data-theme="dark"] .cfg-btn-perigo:hover,
+[data-theme="dark"] #btn-excluir-conta:hover,
+[data-theme="dark"] #cfg-modal-confirmar.cfg-btn-perigo:hover {
+    background-color: #EF4444 !important;
+    border-color: #EF4444 !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35) !important;
+}
+
+[data-theme="dark"] .cfg-link-acao.perigo {
+    color: #F87171 !important;
+}
+
+[data-theme="dark"] .cfg-link-acao.perigo:hover {
+    background-color: rgba(239, 68, 68, 0.15) !important;
+    color: #EF4444 !important;
+}
+
+/* Modal de Confirmação em Modo Escuro */
+[data-theme="dark"] .cfg-modal {
+    background-color: #1F2831 !important;
+    border: 1px solid #2C3946 !important;
+    color: #F1F5F9 !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6) !important;
+}
+
+[data-theme="dark"] .cfg-modal h3 {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .cfg-modal p {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .cfg-modal .cfg-btn-neutro,
+[data-theme="dark"] #cfg-modal-cancelar {
+    background-color: #242E38 !important;
+    border: 1px solid #2C3946 !important;
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .cfg-modal .cfg-btn-neutro:hover,
+[data-theme="dark"] #cfg-modal-cancelar:hover {
+    background-color: #2D3945 !important;
+    color: #FFFFFF !important;
+}
+
+
+.cfg-textarea {
+    min-height: 85px;
+    padding: 12px 14px;
+    resize: vertical;
+    font-family: inherit;
+    line-height: 1.5;
+}
+
+
+/* Modal Estilizado de Confirmação de Username (@) */
+.cfg-modal-username {
+    position: relative;
+    max-width: 440px;
+    padding: 30px 24px 24px;
+    text-align: center;
+    border-radius: 20px;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.22);
+    animation: cfgModalSlideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes cfgModalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.cfg-modal-close {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    background: transparent;
+    border: none;
+    font-size: 26px;
+    line-height: 1;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.cfg-modal-close:hover {
+    background: rgba(0, 0, 0, 0.06);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .cfg-modal-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #FFF;
+}
+
+.cfg-modal-icon-badge {
+    width: 58px;
+    height: 58px;
+    margin: 0 auto 16px;
+    border-radius: 50%;
+    background: rgba(245, 158, 11, 0.14);
+    color: #D97706;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+[data-theme="dark"] .cfg-modal-icon-badge {
+    background: rgba(245, 158, 11, 0.22);
+    color: #FBBF24;
+}
+
+.cfg-modal-username h3 {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    color: var(--text-primary);
+}
+
+.cfg-modal-destaque-texto {
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+}
+
+.cfg-modal-destaque-texto strong#modal-username-alvo {
+    color: var(--primary);
+    font-family: inherit;
+    font-weight: 800;
+    background: rgba(68, 189, 50, 0.1);
+    padding: 2px 7px;
+    border-radius: 6px;
+}
+
+.cfg-modal-info-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: rgba(245, 158, 11, 0.08);
+    border: 1px solid rgba(245, 158, 11, 0.25);
+    border-radius: 10px;
+    padding: 12px 14px;
+    text-align: left;
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+}
+
+.cfg-modal-info-box svg {
+    color: #D97706;
+    margin-top: 1px;
+}
+
+[data-theme="dark"] .cfg-modal-info-box {
+    background: rgba(245, 158, 11, 0.12);
+    border-color: rgba(245, 158, 11, 0.35);
+    color: #CBD5E1;
+}
+
+[data-theme="dark"] .cfg-modal-info-box svg {
+    color: #FBBF24;
+}
+
+.cfg-modal-pergunta {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 22px;
+}
+
+.cfg-modal-username .cfg-acoes {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 0;
+}
+
+.cfg-modal-username .cfg-acoes .cfg-btn {
+    flex: 1;
+    height: 44px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* ==========================================================================
+   CARDS EXCLUSIVOS E MODAIS: NOME DE USUÁRIO E E-MAIL SEGURO
+   ========================================================================== */
+
+.cfg-card-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 18px;
+}
+
+/* Layout de Campos com Ação Exclusiva (Username, Telefone, E-mail) */
+.cfg-campo-label {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+    display: block;
+}
+
+.cfg-input-acao-linha {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    width: 100%;
+}
+
+.cfg-input-display {
+    height: 46px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 0 14px;
+    font-size: 14.5px;
+    font-weight: 600;
+    color: var(--text-primary);
+    background: #F8FAFC;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+    transition: all var(--transition);
+}
+
+.cfg-input-display:hover {
+    border-color: #CBD5E1;
+}
+
+[data-theme="dark"] .cfg-input-display {
+    background: #1F2831;
+    border-color: #2C3946;
+    color: #E2E8F0;
+}
+
+[data-theme="dark"] .cfg-input-display:hover {
+    border-color: #3B4B5B;
+}
+
+.cfg-username-arroba {
+    color: var(--primary);
+    font-size: 16px;
+    font-weight: 800;
+    user-select: none;
+}
+
+.cfg-username-valor,
+.cfg-telefone-valor,
+.cfg-email-valor {
+    color: var(--text-primary);
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cfg-telefone-valor.vazio {
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-style: italic;
+}
+
+.cfg-icone-whatsapp {
+    color: #22C55E;
+    flex-shrink: 0;
+}
+
+.cfg-botoes-acao-wrap {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+/* Botão Secundário Padronizado (Design System Itaim Vende) */
+.cfg-btn-secundario {
+    background: #FFFFFF;
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    font-size: 13.5px;
+    font-weight: 700;
+    height: 46px;
+    padding: 0 18px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: all var(--transition);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.cfg-btn-secundario svg {
+    color: var(--text-secondary);
+    transition: color var(--transition);
+    flex-shrink: 0;
+}
+
+.cfg-btn-secundario:hover {
+    border-color: var(--primary);
+    color: var(--primary-hover);
+    background: var(--primary-light);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(68, 189, 50, 0.15);
+}
+
+.cfg-btn-secundario:hover svg {
+    color: var(--primary-hover);
+}
+
+[data-theme="dark"] .cfg-btn-secundario {
+    background: #1F2831;
+    border-color: #2C3946;
+    color: #E2E8F0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .cfg-btn-secundario svg {
+    color: #94A3B8;
+}
+
+[data-theme="dark"] .cfg-btn-secundario:hover {
+    background: rgba(68, 189, 50, 0.15);
+    border-color: var(--primary);
+    color: #4ADE80;
+}
+
+[data-theme="dark"] .cfg-btn-secundario:hover svg {
+    color: #4ADE80;
+}
+
+/* Botão Remover (Vermelho no Padrão do Avatar/Site) */
+.cfg-btn-remover-link {
+    background: #FEF2F2;
+    border: 1px solid #FECACA;
+    color: #DC2626;
+    font-size: 13px;
+    font-weight: 700;
+    height: 46px;
+    padding: 0 16px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: all var(--transition);
+}
+
+.cfg-btn-remover-link:hover {
+    background: #FEE2E2;
+    border-color: #F87171;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(220, 38, 38, 0.15);
+}
+
+[data-theme="dark"] .cfg-btn-remover-link {
+    background: rgba(239, 68, 68, 0.14);
+    border-color: rgba(239, 68, 68, 0.35);
+    color: #F87171;
+}
+
+[data-theme="dark"] .cfg-btn-remover-link:hover {
+    background: #EF4444;
+    border-color: #EF4444;
+    color: #FFFFFF;
+}
+
+/* Dica / Informação de Ajuda (Discreta, no Padrão da Config) */
+.cfg-dica-campo {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    margin-top: 8px;
+    line-height: 1.4;
+}
+
+.cfg-dica-campo svg {
+    color: var(--text-secondary);
+    flex-shrink: 0;
+}
+
+.cfg-dica-campo.bloqueado {
+    color: #D97706;
+    font-weight: 600;
+}
+
+.cfg-dica-campo.bloqueado svg {
+    color: #D97706;
+}
+
+[data-theme="dark"] .cfg-dica-campo.bloqueado {
+    color: #FBBF24;
+}
+
+[data-theme="dark"] .cfg-dica-campo.bloqueado svg {
+    color: #FBBF24;
+}
+
+@media (max-width: 600px) {
+    .cfg-input-acao-linha {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .cfg-botoes-acao-wrap {
+        flex-direction: column;
+        width: 100%;
+    }
+    .cfg-btn-secundario,
+    .cfg-btn-remover-link {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Modais Específicos */
+.cfg-modal-lg {
+    max-width: 480px;
+    padding: 30px 26px 26px;
+    border-radius: 22px;
+    text-align: left;
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+    animation: cfgModalSlideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.cfg-modal-header-icone {
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+.cfg-modal-header-icone h3 {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 6px;
+    color: var(--text-primary);
+}
+
+.cfg-modal-subdesc {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    line-height: 1.45;
+    margin: 0;
+}
+
+.cfg-modal-icon-badge.neutro {
+    background: rgba(68, 189, 50, 0.12);
+    color: var(--primary);
+}
+
+.cfg-modal-icon-badge.aviso {
+    background: rgba(245, 158, 11, 0.14);
+    color: #D97706;
+}
+
+.cfg-modal-icon-badge.sucesso {
+    background: rgba(34, 197, 94, 0.14);
+    color: #15803D;
+}
+
+[data-theme="dark"] .cfg-modal-icon-badge.sucesso {
+    background: rgba(34, 197, 94, 0.22);
+    color: #4ADE80;
+}
+
+/* Input com Prefixo (@) */
+.cfg-input-com-prefixo {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.cfg-prefixo-arroba {
+    position: absolute;
+    left: 14px;
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--primary);
+    pointer-events: none;
+    user-select: none;
+}
+
+.cfg-input-arroba {
+    padding-left: 32px !important;
+    padding-right: 40px !important;
+    font-weight: 600;
+}
+
+.cfg-status-indicador {
+    position: absolute;
+    right: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.cfg-regras-lista {
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 12.5px;
+    color: var(--text-secondary);
+}
+
+.cfg-regra-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color var(--transition);
+}
+
+.cfg-regra-dot {
+    font-size: 14px;
+    line-height: 1;
+}
+
+.cfg-regra-item.valido {
+    color: #16A34A;
+    font-weight: 600;
+}
+
+.cfg-regra-item.valido .cfg-regra-dot {
+    color: #16A34A;
+}
+
+.cfg-regra-item.invalido {
+    color: #DC2626;
+}
+
+.cfg-modal-alerta-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: rgba(245, 158, 11, 0.08);
+    border: 1px solid rgba(245, 158, 11, 0.25);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 12.5px;
+    line-height: 1.45;
+    color: var(--text-secondary);
+    margin-top: 16px;
+}
+
+.cfg-modal-alerta-box svg {
+    color: #D97706;
+    margin-top: 1px;
+}
+
+[data-theme="dark"] .cfg-modal-alerta-box {
+    background: rgba(245, 158, 11, 0.12);
+    border-color: rgba(245, 158, 11, 0.35);
+    color: #CBD5E1;
+}
+
+[data-theme="dark"] .cfg-modal-alerta-box svg {
+    color: #FBBF24;
+}
+
+/* Stepper de E-mail */
+.cfg-stepper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    margin-bottom: 22px;
+}
+
+.cfg-step-item {
+    flex: 1;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 6px 4px;
+    border-bottom: 3px solid var(--border-color);
+    color: var(--text-secondary);
+    transition: all var(--transition);
+}
+
+.cfg-step-item.ativo {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.cfg-step-item.completo {
+    border-color: #16A34A;
+    color: #16A34A;
+}
+
+/* Campo OTP de 6 Dígitos */
+.cfg-input-otp {
+    font-family: monospace, inherit !important;
+    font-size: 26px !important;
+    font-weight: 800 !important;
+    letter-spacing: 12px !important;
+    text-align: center !important;
+    padding: 12px 16px !important;
+    border-radius: 12px !important;
+}
+
+/* Modal de Telefone: Input com Badge de País */
+.cfg-input-prefix-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.cfg-prefix-badge {
+    position: absolute;
+    left: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    background: var(--border-color);
+    padding: 4px 8px;
+    border-radius: 6px;
+    pointer-events: none;
+    user-select: none;
+}
+
+[data-theme="dark"] .cfg-prefix-badge {
+    background: rgba(255, 255, 255, 0.1);
+    color: #94A3B8;
+}
+
+.cfg-input-com-badge {
+    padding-left: 78px !important;
+    font-weight: 600;
+}
+
+/* Selos de Status de Verificação (WhatsApp, etc.) */
+.cfg-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: var(--radius-full);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.cfg-status-badge.verificado {
+    background: rgba(34, 197, 94, 0.14);
+    color: #15803d;
+    border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+[data-theme="dark"] .cfg-status-badge.verificado {
+    background: rgba(34, 197, 94, 0.22);
+    color: #4ade80;
+    border-color: rgba(34, 197, 94, 0.4);
+}
+
+.cfg-status-badge.nao-verificado {
+    background: rgba(245, 158, 11, 0.14);
+    color: #d97706;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+[data-theme="dark"] .cfg-status-badge.nao-verificado {
+    background: rgba(245, 158, 11, 0.22);
+    color: #fbbf24;
+    border-color: rgba(245, 158, 11, 0.4);
+}
+
+.cfg-btn-verificar {
+    background: #16a34a;
+    color: #ffffff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: var(--radius-md);
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all var(--transition);
+}
+
+.cfg-btn-verificar:hover {
+    background: #15803d;
+    transform: translateY(-1px);
+}
+
+.cfg-box-google-note {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(66, 133, 244, 0.08);
+    border: 1px solid rgba(66, 133, 244, 0.25);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: #1d4ed8;
+    margin-bottom: 16px;
+}
+
+[data-theme="dark"] .cfg-box-google-note {
+    background: rgba(66, 133, 244, 0.15);
+    border-color: rgba(66, 133, 244, 0.35);
+    color: #93c5fd;
+}
+
+
+/* ==========================================================
+   SUPORTE — TICKETS
+   ========================================================== */
+
+/* Formulário de abertura */
+.cfg-suporte-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.cfg-suporte-categorias {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.cfg-suporte-textarea {
+    height: auto;
+    resize: vertical;
+    min-height: 120px;
+    padding: 12px 14px;
+    line-height: 1.6;
+}
+
+/* Área de upload */
+.cfg-suporte-upload-area {
+    margin-top: 16px;
+    border: 1.5px dashed var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    transition: border-color var(--transition), background var(--transition);
+}
+
+.cfg-suporte-upload-area.dragover {
+    border-color: var(--primary);
+    background: var(--primary-light);
+}
+
+.cfg-suporte-upload-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    transition: color var(--transition);
+}
+
+.cfg-suporte-upload-label:hover {
+    color: var(--primary-hover);
+}
+
+.cfg-suporte-upload-label svg {
+    flex-shrink: 0;
+    color: var(--text-secondary);
+    transition: color var(--transition);
+}
+
+.cfg-suporte-upload-label:hover svg {
+    color: var(--primary-hover);
+}
+
+/* Lista de anexos */
+.cfg-suporte-anexos-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.cfg-suporte-anexo-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--light-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 6px 10px;
+    font-size: 13px;
+}
+
+.cfg-suporte-anexo-nome {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.cfg-suporte-anexo-remover {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #DC2626;
+    font-size: 18px;
+    line-height: 1;
+    padding: 0 4px;
+    border-radius: var(--radius-sm);
+    transition: background var(--transition);
+}
+
+.cfg-suporte-anexo-remover:hover {
+    background: #FEE2E2;
+}
+
+/* Filtros de status */
+.cfg-suporte-filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 16px 0 14px;
+}
+
+.cfg-suporte-filtro-btn {
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: var(--radius-full);
+    border: 1.5px solid var(--border-color);
+    background: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.cfg-suporte-filtro-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary-hover);
+    background: var(--primary-light);
+}
+
+.cfg-suporte-filtro-btn.ativo {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #fff;
+}
+
+/* Lista de tickets */
+.cfg-suporte-tickets-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Ticket item */
+.cfg-suporte-ticket-item {
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    background: #F8FAFC;
+    transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.cfg-suporte-ticket-item:hover {
+    border-color: var(--primary);
+    box-shadow: 0 2px 10px rgba(68, 189, 50, 0.1);
+}
+
+.cfg-suporte-ticket-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.cfg-suporte-ticket-id {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    font-family: monospace;
+    letter-spacing: 0.5px;
+}
+
+.cfg-suporte-ticket-titulo {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 4px;
+    line-height: 1.4;
+}
+
+.cfg-suporte-ticket-desc {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    margin: 0 0 10px;
+    line-height: 1.5;
+}
+
+.cfg-suporte-ticket-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    flex-wrap: wrap;
+}
+
+/* Badges de status */
+.cfg-suporte-badge {
+    font-size: 11.5px;
+    font-weight: 800;
+    padding: 3px 10px;
+    border-radius: var(--radius-full);
+    white-space: nowrap;
+}
+
+.cfg-suporte-badge-azul   { background: #DBEAFE; color: #1D4ED8; }
+.cfg-suporte-badge-amarelo{ background: #FEF3C7; color: #92400E; }
+.cfg-suporte-badge-verde  { background: #DCFCE7; color: #15803D; }
+.cfg-suporte-badge-cinza  { background: #F1F5F9; color: #64748B; }
+
+/* Skeleton de ticket */
+.cfg-suporte-ticket-skeleton {
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    background: #F8FAFC;
+    pointer-events: none;
+}
+
+/* Spinner de carregamento */
+.cfg-spin {
+    animation: cfgSpin 0.8s linear infinite;
+}
+
+@keyframes cfgSpin {
+    to { transform: rotate(360deg); }
+}
+
+/* Dark mode */
+[data-theme="dark"] .cfg-suporte-ticket-item,
+[data-theme="dark"] .cfg-suporte-ticket-skeleton {
+    background: #1A2232;
+    border-color: #2C3946;
+}
+
+[data-theme="dark"] .cfg-suporte-upload-area {
+    border-color: #2C3946;
+}
+
+[data-theme="dark"] .cfg-suporte-upload-area.dragover {
+    background: rgba(68, 189, 50, 0.08);
+}
+
+[data-theme="dark"] .cfg-suporte-anexo-item {
+    background: #1F2831;
+    border-color: #2C3946;
+}
+
+[data-theme="dark"] .cfg-suporte-filtro-btn {
+    border-color: #2C3946;
+    color: #E2E8F0;
+}
+
+[data-theme="dark"] .cfg-suporte-filtro-btn:hover {
+    background: rgba(68, 189, 50, 0.12);
+    border-color: var(--primary);
+    color: #4ADE80;
+}
+
+[data-theme="dark"] .cfg-suporte-badge-azul   { background: rgba(29, 78, 216, 0.2); color: #93C5FD; }
+[data-theme="dark"] .cfg-suporte-badge-amarelo{ background: rgba(146, 64, 14, 0.2); color: #FCD34D; }
+[data-theme="dark"] .cfg-suporte-badge-verde  { background: rgba(21, 128, 61, 0.2); color: #4ADE80; }
+[data-theme="dark"] .cfg-suporte-badge-cinza  { background: rgba(100, 116, 139, 0.15); color: #94A3B8; }
+
+[data-theme="dark"] .cfg-suporte-ticket-item:hover {
+    border-color: var(--primary);
+    box-shadow: 0 2px 10px rgba(68, 189, 50, 0.08);
+}
+
+/* Responsivo */
+@media (max-width: 600px) {
+    .cfg-suporte-filtros {
+        gap: 4px;
+    }
+    .cfg-suporte-filtro-btn {
+        font-size: 11.5px;
+        padding: 5px 10px;
+    }
+    .cfg-suporte-ticket-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+    }
+}

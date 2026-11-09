@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description"
+        content="Itaim Vende - Acesso Restrito à Central de Tickets & Moderação (Desenvolvedores)">
+    <title>Acesso à Moderação & Tickets - Itaim Vende</title>
+
+    <!-- Anti-FOUC: Aplicação imediata do tema escuro/claro -->
+    <script>
+        (function() {
+            try {
+                var tema = localStorage.getItem('itaim_tema') === 'dark' ? 'dark' : 'light';
+                var d = document.documentElement;
+                d.setAttribute('data-theme', tema);
+                if (tema === 'dark') {
+                    d.classList.add('dark-theme');
+                } else {
+                    d.classList.remove('dark-theme');
+                }
+            } catch (e) {}
+        })();
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../assets/logos/header-logo.png">
+
+    <!-- CSS Core do Sistema de Autenticação + Estilos Exclusivos dos Tickets -->
+    <link rel="stylesheet" href="../../css/core/style.css">
+    <link rel="stylesheet" href="../../css/pages/admin/login-tickets.css?v=2">
+</head>
+
+<body>
+    <main class="auth-wrapper auth-floating-wrapper">
+        <!-- ==============================================================
+             CARTÃO FLUTUANTE CENTRALIZADO (LAYOUT MODERNO DIVIDIDO)
+             ============================================================== -->
+        <div class="auth-floating-card" role="region" aria-label="Painel de Acesso à Moderação">
+
+            <!-- ==============================================================
+                 BLOCO ESQUERDO: IDENTIDADE VISUAL & CENTRAL DE MODERAÇÃO
+                 ============================================================== -->
+            <aside class="auth-brand-block" id="painel-marca" aria-label="Marca Itaim Vende">
+                <div class="brand-logo-centered-box">
+                    <a href="/" class="brand-logo-link" title="Itaim Vende - Início">
+                        <img src="../../assets/logos/logo-itaimvende-contorno-branco.png"
+                            alt="Itaim Vende - Compra, Venda e Trocas" class="brand-logo-center-img" id="img-logo">
+                    </a>
+
+                    <div class="brand-slogan-box">
+                        <span class="brand-slogan-text">O MELHOR DA NOSSA REGIÃO</span>
+                        <div class="brand-slogan-line" aria-hidden="true"></div>
+                    </div>
+
+                    <!-- Badge da Área de Moderação -->
+                    <div class="auth-tickets-badge">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <span>Central de Tickets & Moderação</span>
+                    </div>
+
+                </div>
+            </aside>
+
+            <!-- ==============================================================
+                 BLOCO DIREITO: FORMULÁRIO DE LOGIN EXCLUSIVO
+                 ============================================================== -->
+            <section class="auth-form-block" id="painel-principal" aria-label="Painel de Autenticação de Moderação">
+                <div class="auth-card-inner">
+
+                    <div class="view-secao secao-ativa container-login" id="secao-login-tickets" style="width: 100%;">
+                        <div style="text-align: center; margin-bottom: 20px;">
+                            <h1 class="titulo-login" style="margin-bottom: 6px;">LOGIN MODERAÇÃO</h1>
+                            <p style="font-size: 0.85rem; color: #64748B; margin: 0; line-height: 1.4;">
+                                Acesso restrito aos desenvolvedores para triagem de denúncias e suporte oficial.
+                            </p>
+                        </div>
+
+                        <!-- Card de Bloqueio por Excesso de Tentativas (Ativado quando > 5 falhas) -->
+                        <div class="card-bloqueio-alerta" id="card-bloqueio-alerta" role="alert">
+                            <i class="fa-solid fa-lock" style="font-size: 1.8rem; color: #EF4444;"></i>
+                            <strong>Acesso Temporariamente Bloqueado</strong>
+                            <span>Você excedeu o limite máximo de 5 tentativas de login. Aguarde o tempo restante:</span>
+                            <div class="card-bloqueio-timer" id="card-bloqueio-timer">15:00</div>
+                        </div>
+
+                        <!-- Formulário de Autenticação -->
+                        <form id="form-login-tickets" class="form-auth" novalidate>
+                            
+                            <!-- Indicador Visual de Tentativas Restantes -->
+                            <div class="box-tentativas-status">
+                                <span><i class="fa-solid fa-shield-cat"></i> Tentativas seguras:</span>
+                                <span class="badge-tentativas-pill" id="badge-tentativas-pill">
+                                    <i class="fa-solid fa-fingerprint"></i>
+                                    <span id="num-tentativas">5</span>/5 restantes
+                                </span>
+                            </div>
+
+                            <!-- Campo Usuário ou E-mail -->
+                            <div class="grupo-campo">
+                                <label for="input-usuario-mod" class="label-campo">Usuário ou E-mail Dev:</label>
+                                <div class="input-wrapper">
+                                    <input type="text" id="input-usuario-mod" name="usuario" class="campo-texto"
+                                        placeholder="Ex: josimar ou josimar@itaimvende.com.br" autocomplete="username" required>
+                                </div>
+                            </div>
+
+                            <!-- Campo Senha -->
+                            <div class="grupo-campo">
+                                <label for="input-senha-mod" class="label-campo">Senha de Acesso:</label>
+                                <div class="input-wrapper">
+                                    <input type="password" id="input-senha-mod" name="senha" class="campo-texto"
+                                        placeholder="Digite sua senha de moderador" autocomplete="current-password" required>
+                                    <button type="button" class="btn-toggle-senha" id="btn-toggle-senha-mod"
+                                        aria-label="Mostrar ou ocultar senha">
+                                        <svg class="icone-olho icone-aberto icone-oculto" viewBox="0 0 24 24" width="20" height="20"
+                                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                            <circle cx="12" cy="12" r="3"></circle>
+                                        </svg>
+                                        <svg class="icone-olho icone-fechado" viewBox="0 0 24 24"
+                                            width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path
+                                                d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+                                            </path>
+                                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Botões de Ação -->
+                            <div class="box-botoes" style="margin-top: 18px;">
+                                <button type="submit" class="btn-entrar" id="btn-entrar-mod">
+                                    <span class="btn-texto">
+                                        <i class="fa-solid fa-unlock-keyhole" style="margin-right: 6px;"></i>
+                                        ACESSAR PAINEL DE TICKETS
+                                    </span>
+                                    <span class="btn-spinner" aria-hidden="true"></span>
+                                </button>
+
+                                <a href="/" class="btn-voltar-tickets-site" id="btn-voltar-tickets-site">
+                                    <i class="fa-solid fa-arrow-left"></i>
+                                    <span>Voltar para a Loja Pública</span>
+                                </a>
+                            </div>
+                        </form>
+
+                        <!-- Mensagem de Feedback de Status (Sucesso / Erro / Alerta) -->
+                        <div class="status-msg" id="status-msg-login" role="alert" aria-live="polite" style="display: none; margin-top: 16px;"></div>
+
+                    </div>
+
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Script de Autenticação e Segurança dos Tickets -->
+    <script src="../../js/pages/admin/login-tickets.js?v=2"></script>
+</body>
+
+</html>
+

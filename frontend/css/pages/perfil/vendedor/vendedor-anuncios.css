@@ -1,0 +1,217 @@
+/* ==========================================================================
+   3. SEÇÃO PRINCIPAL: VITRINE DE ANÚNCIOS DO VENDEDOR
+   ========================================================================== */
+.vendedor-secao-anuncios {
+    margin-bottom: 48px;
+}
+
+.vendedor-anuncios-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 22px;
+    border-bottom: 1.5px solid #E2E8F0;
+    padding-bottom: 16px;
+}
+
+.vendedor-anuncios-titulos {
+    display: flex;
+    flex-direction: column;
+}
+
+.vendedor-anuncios-titulos h2 {
+    font-size: 22px;
+    font-weight: 800;
+    color: #0F172A;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+}
+
+.vendedor-badge-qtd {
+    background: #E2E8F0;
+    color: #334155;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+
+.vendedor-anuncios-titulos p {
+    font-size: 14px;
+    color: #64748B;
+    margin: 4px 0 0;
+}
+
+/* Barra de Filtro / Ordenação */
+.vendedor-filtro-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.vendedor-filtro-label {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #64748B;
+}
+
+.vendedor-select-ordem {
+    background: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    border-radius: 10px;
+    padding: 8px 14px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #334155;
+    outline: none;
+    cursor: pointer;
+    font-family: inherit;
+    transition: border-color 0.2s;
+}
+
+.vendedor-select-ordem:focus {
+    border-color: #38A129;
+    box-shadow: none;
+    outline: none;
+}
+
+/* Grade de Produtos */
+.grade-produtos-vendedor {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 20px;
+}
+
+/* Card Individual de Produto */
+.card-produto-vendedor {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.03);
+    transition: all 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+}
+
+.card-produto-vendedor:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+    border-color: #CBD5E1;
+}
+
+.card-prod-foto-box {
+    width: 100%;
+    height: 180px;
+    background: #F1F5F9;
+    position: relative;
+    overflow: hidden;
+}
+
+.card-prod-foto-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.card-produto-vendedor:hover .card-prod-foto-box img {
+    transform: scale(1.05);
+}
+
+.card-prod-badge-cat {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(4px);
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.card-prod-conteudo {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.card-prod-preco {
+    font-size: 19px;
+    font-weight: 800;
+    color: #44BD32;
+    margin-bottom: 6px;
+}
+
+.card-prod-titulo {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #1E293B;
+    line-height: 1.4;
+    margin-bottom: 12px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    flex: 1;
+}
+
+.card-prod-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #64748B;
+    border-top: 1px solid #F1F5F9;
+    padding-top: 10px;
+    margin-top: auto;
+}
+
+.card-prod-loc {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Estado Vazio */
+.vendedor-anuncios-vazio {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 56px 20px;
+    background: #FFFFFF;
+    border-radius: 20px;
+    border: 1px dashed #CBD5E1;
+}
+
+.vendedor-anuncios-vazio-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+}
+
+.vendedor-anuncios-vazio h3 {
+    font-size: 18px;
+    font-weight: 800;
+    color: #0F172A;
+    margin-bottom: 6px;
+}
+
+.vendedor-anuncios-vazio p {
+    font-size: 14px;
+    color: #64748B;
+    max-width: 440px;
+    margin: 0 auto;
+}
+

@@ -1,0 +1,144 @@
+/* ==========================================================================
+   TELA DE SUCESSO ("ANUNCIO CRIADO COM SUCESSO!")
+   Fiel ao modelo da imagem fornecida
+   ========================================================================== */
+.tela-sucesso-container {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 70px 20px 90px;
+    animation: surgimentoSucesso 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.tela-sucesso-container.ativo {
+    display: flex;
+}
+
+@keyframes surgimentoSucesso {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.94);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Círculo verde com checkmark */
+.circulo-sucesso-grande {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background-color: var(--vender-green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 12px 36px rgba(89, 170, 89, 0.45);
+    margin-bottom: 30px;
+    position: relative;
+    animation: pulseCirculo 2s infinite alternate;
+}
+
+@keyframes pulseCirculo {
+    0% {
+        box-shadow: 0 10px 30px rgba(89, 170, 89, 0.4);
+        transform: scale(1);
+    }
+    100% {
+        box-shadow: 0 16px 45px rgba(89, 170, 89, 0.65);
+        transform: scale(1.03);
+    }
+}
+
+.icone-check-svg {
+    width: 76px;
+    height: 76px;
+    stroke: #FFFFFF;
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    animation: desenharCheck 0.7s 0.2s ease-out forwards;
+}
+
+@keyframes desenharCheck {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+/* Título de Sucesso */
+.titulo-sucesso {
+    font-size: 32px;
+    font-weight: 800;
+    color: #111827;
+    margin-bottom: 12px;
+    letter-spacing: -0.3px;
+}
+
+/* Link "clique aqui para ver anuncio" */
+.link-ver-anuncio-sucesso {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--vender-green);
+    text-decoration: none;
+    position: relative;
+    transition: color 0.2s ease;
+    padding-bottom: 4px;
+}
+
+.link-ver-anuncio-sucesso::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--vender-green);
+    transform: scaleX(0.9);
+    transition: transform 0.2s ease;
+}
+
+.link-ver-anuncio-sucesso:hover {
+    color: var(--vender-green-dark);
+}
+
+.link-ver-anuncio-sucesso:hover::after {
+    transform: scaleX(1);
+}
+
+/* Botões extras da tela de sucesso */
+.acoes-sucesso-secundarias {
+    display: flex;
+    gap: 14px;
+    margin-top: 36px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.btn-sucesso-secundario {
+    background-color: #FFFFFF;
+    color: #374151;
+    border: 1px solid #D1D5DB;
+    padding: 10px 24px;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.btn-sucesso-secundario:hover {
+    background-color: #F9FAFB;
+    border-color: #9CA3AF;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+

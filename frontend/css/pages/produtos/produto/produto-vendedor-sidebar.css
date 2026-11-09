@@ -1,0 +1,357 @@
+/* Coluna Direita (Ações e Vendedor) */
+.card-sidebar-acoes {
+    background: #FFFFFF;
+    border-radius: 20px;
+    border: 1px solid #E2E8F0;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    position: sticky;
+    top: 90px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.tag-otimo-preco {
+    background: #38A129;
+    color: #FFFFFF;
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    width: fit-content;
+}
+
+.valor-preco-grande {
+    font-size: 42px;
+    font-weight: 900;
+    color: #1E293B;
+    letter-spacing: -0.5px;
+    line-height: 1;
+    margin: 2px 0 6px;
+}
+
+.legenda-negociavel {
+    color: #38A129;
+    font-size: 12.5px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-chat-vendedor {
+    background: #38A129;
+    color: #FFFFFF;
+    width: 100%;
+    height: 48px;
+    border-radius: 24px;
+    border: none;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    box-shadow: none;
+    text-decoration: none;
+}
+
+.btn-chat-vendedor:hover {
+    background: #2E8B22;
+    transform: translateY(-2px);
+    box-shadow: none;
+}
+
+.btn-whatsapp-vendedor {
+    background: #FFFFFF;
+    color: #38A129;
+    border: 2px solid #38A129;
+    width: 100%;
+    height: 48px;
+    border-radius: 24px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.btn-whatsapp-vendedor:hover {
+    background: rgba(68, 189, 50, 0.08);
+    transform: translateY(-2px);
+}
+
+/* Box do Vendedor */
+.box-vendedor-sidebar {
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 14px;
+    padding: 13px 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.vendedor-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+}
+
+.vendedor-topo-row,
+.vendedor-topo-row-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 0;
+}
+
+.vendedor-topo-row-link:hover {
+    opacity: 0.92;
+}
+
+.vendedor-topo-row-link:hover .vendedor-avatar-circulo {
+    border-color: #38A129;
+    box-shadow: none;
+}
+
+.vendedor-avatar-circulo {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    border: 2px solid #44BD32;
+    overflow: hidden;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+    transition: all 0.2s ease;
+}
+
+.vendedor-avatar-circulo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.vendedor-textos {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    line-height: 1.2;
+}
+
+.vendedor-nome-selo {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.vendedor-nome-selo strong {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1E293B;
+    letter-spacing: -0.2px;
+    line-height: 1.2;
+}
+
+.vendedor-cidade-txt {
+    font-size: 13px;
+    color: #64748B;
+    font-weight: 500;
+    margin-top: 2px;
+    line-height: 1.2;
+}
+
+/* Nota das avaliações no canto superior direito do card - Bem menor, tom exato (#44BD32), no canto direito e mais para cima */
+.vendedor-card-avaliacao-topo {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+    align-self: flex-start;
+    margin-top: 1px;
+    flex-shrink: 0;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+}
+
+.vendedor-card-avaliacao-topo:hover {
+    transform: translateY(-1px);
+}
+
+.stat-icone-wrapper-mini {
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: rgba(56, 161, 41, 0.12) !important;
+    color: #38A129 !important;
+}
+
+.stat-dados-textos-mini {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+}
+
+.stat-valor-num-mini {
+    font-size: 11.5px;
+    font-weight: 800;
+    color: #0F172A;
+    letter-spacing: -0.2px;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    line-height: 1;
+}
+
+.stat-rotulo-txt-mini {
+    font-size: 8.5px;
+    color: #64748B;
+    font-weight: 500;
+    white-space: nowrap;
+    margin-top: 1px;
+    line-height: 1;
+}
+
+.vendedor-topo-row-link:hover {
+    opacity: 0.9;
+}
+
+.vendedor-topo-row-link:hover .vendedor-avatar-circulo {
+    border-color: #38A129;
+    box-shadow: none;
+    transform: scale(1.05);
+}
+
+.vendedor-topo-row-link:hover .vendedor-nome-selo strong {
+    color: #44BD32;
+}
+
+.vendedor-avatar-circulo {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    border: 2px solid #44BD32;
+    overflow: hidden;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.25s ease;
+}
+
+.vendedor-avatar-circulo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.vendedor-textos {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.vendedor-nome-selo {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: #1E293B;
+}
+
+.selo-check-mini {
+    background: #44BD32;
+    color: #FFFFFF;
+    font-size: 10px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.vendedor-cidade-txt {
+    font-size: 12.5px;
+    color: #64748B;
+}
+
+.link-perfil-vendedor {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid #E2E8F0;
+    font-size: 13px;
+    font-weight: 700;
+    color: #1E293B;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.link-perfil-vendedor:hover {
+    color: #44BD32;
+}
+
+/* Compra Segura */
+.box-compra-segura {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 4px 0;
+}
+
+.icone-escudo-verde {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: rgba(68, 189, 50, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.textos-compra-segura {
+    display: flex;
+    flex-direction: column;
+}
+
+.textos-compra-segura strong {
+    font-size: 13.5px;
+    color: #1E293B;
+}
+
+.textos-compra-segura span {
+    font-size: 12px;
+    color: #64748B;
+}

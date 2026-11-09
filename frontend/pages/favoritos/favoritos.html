@@ -2,9 +2,56 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="Seus produtos favoritos salvos no Itaim Vende.">
     <title>Meus Favoritos - Itaim Vende</title>
+
+    <!-- Anti-FOUC: Aplicação imediata do tema escuro/claro para eliminar qualquer flash visual -->
+    <script>
+        (function() {
+            try {
+                var p = (window.location.pathname || '').toLowerCase();
+                var isAuth = p.endsWith('index.html') || p.includes('/auth/') || p.includes('/login') || p.includes('/cadastro');
+                var tema = (!isAuth && localStorage.getItem('itaim_tema') === 'dark') ? 'dark' : 'light';
+                var d = document.documentElement;
+                d.setAttribute('data-theme', tema);
+                if (tema === 'dark') {
+                    d.classList.add('dark-theme');
+                } else {
+                    d.classList.remove('dark-theme');
+                }
+                d.classList.add('tema-sem-transicao');
+                var o = new MutationObserver(function() {
+                    if (document.body) {
+                        document.body.setAttribute('data-theme', tema);
+                        if (tema === 'dark') {
+                            document.body.classList.add('dark-theme');
+                        } else {
+                            document.body.classList.remove('dark-theme');
+                        }
+                        o.disconnect();
+                    }
+                });
+                o.observe(d, { childList: true, subtree: true });
+                window.addEventListener('DOMContentLoaded', function() {
+                    o.disconnect();
+                    if (document.body) {
+                        document.body.setAttribute('data-theme', tema);
+                        if (tema === 'dark') {
+                            document.body.classList.add('dark-theme');
+                        } else {
+                            document.body.classList.remove('dark-theme');
+                        }
+                    }
+                    requestAnimationFrame(function() {
+                        requestAnimationFrame(function() {
+                            d.classList.remove('tema-sem-transicao');
+                        });
+                    });
+                });
+            } catch (e) {}
+        })();
+    </script>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,12 +59,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Segoe+UI&display=swap" rel="stylesheet">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="../../assets/header-logo.png">
+    <link rel="icon" type="image/png" href="../../assets/logos/header-logo.png">
     
     <!-- CSS -->
-    <link rel="stylesheet" href="../../css/home.css">
-    <link rel="stylesheet" href="../../css/header-global.css?v=7">
-    <link rel="stylesheet" href="../../css/favoritos.css?v=2">
+    <link rel="stylesheet" href="../../css/pages/home/home.css">
+    <link rel="stylesheet" href="../../css/core/header-global.css?v=20">
+    <link rel="stylesheet" href="../../css/pages/favoritos/favoritos.css?v=2">
 </head>
 <body>
 
@@ -35,8 +82,8 @@
                         <line x1="3" y1="18" x2="21" y2="18"></line>
                     </svg>
                 </button>
-                <a href="../home/home.html" class="header-logo-link" title="Itaim Vende - Página Inicial">
-                    <img src="../../assets/header1-logo.png" alt="Itaim Vende" class="header-logo-img">
+                <a href="/" class="header-logo-link" title="Itaim Vende - Página Inicial">
+                    <img src="../../assets/logos/header1-logo.png" alt="Itaim Vende" class="header-logo-img">
                 </a>
             </div>
 
@@ -63,26 +110,26 @@
 
             <!-- Direita: Meus Anúncios, Vender e Ícones -->
             <div class="header-right">
-                <a href="../vender/meus-anuncios.html" class="btn-nav-texto" id="link-meus-anuncios">
+                <a href="/meus-anuncios" class="btn-nav-texto" id="link-meus-anuncios">
                     <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M3 11l19-9-9 19-2-8-8-2z"></path>
                     </svg>
                     <span>Meus Anúncios</span>
                 </a>
 
-                <a href="../vender/vender.html" class="btn-vender-destaque" id="btn-abrir-modal-vender">
+                <a href="/vender" class="btn-vender-destaque" id="btn-abrir-modal-vender">
                     <span>Vender</span>
                 </a>
 
                 <!-- Ícone Conversas -->
-                <a href="../mensagens/conversas.html" class="btn-icone-header" id="btn-chat" aria-label="Conversas" title="Conversas">
+                <a href="/conversas" class="btn-icone-header" id="btn-chat" aria-label="Conversas" title="Conversas">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                     </svg>
                 </a>
 
                 <!-- Ícone Notificações -->
-                <a href="../notificacoes/notificacoes.html" class="btn-icone-header" id="btn-notificacoes" aria-label="Notificações" title="Notificações">
+                <a href="/notificacoes" class="btn-icone-header" id="btn-notificacoes" aria-label="Notificações" title="Notificações">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
                         <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
@@ -90,7 +137,7 @@
                 </a>
 
                 <!-- Mobile: Ícone Meus Anúncios (substitui o coração no celular) -->
-                <a href="../vender/meus-anuncios.html" class="btn-icone-header btn-meus-anuncios-mobile" id="btn-meus-anuncios-mobile" aria-label="Meus Anúncios" title="Meus Anúncios">
+                <a href="/meus-anuncios" class="btn-icone-header btn-meus-anuncios-mobile" id="btn-meus-anuncios-mobile" aria-label="Meus Anúncios" title="Meus Anúncios">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M3 11l19-9-9 19-2-8-8-2z"></path>
                     </svg>
@@ -99,19 +146,19 @@
                 <!-- Perfil do Usuário com Dropdown -->
                 <div class="perfil-wrapper">
                     <button type="button" class="btn-avatar-header" id="btn-avatar-dropdown" aria-label="Abrir menu de perfil">
-                        <img src="../../assets/icon-user.png" alt="Foto de perfil" class="avatar-img" id="img-avatar-user">
+                        <img src="../../assets/icons/icon-user.png" alt="Foto de perfil" class="avatar-img" id="img-avatar-user">
                     </button>
 
                     <div class="dropdown-perfil" id="dropdown-perfil">
-                        <a href="../perfil/perfil.html" class="dropdown-header-user" title="Ir para Meu Perfil">
-                            <strong id="dropdown-user-name">Raili</strong>
+                        <a href="/perfil" class="dropdown-header-user" title="Ir para Meu Perfil">
+                            <strong id="dropdown-user-name">Admin</strong>
                             <span id="dropdown-user-email">admin@gmail.com</span>
                         </a>
-                        <a href="../perfil/perfil.html" class="dropdown-item" id="link-menu-perfil">
+                        <a href="/perfil" class="dropdown-item" id="link-menu-perfil">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                             Meu Perfil
                         </a>
-                        <a href="../vender/meus-anuncios.html" class="dropdown-item" id="link-menu-anuncios">
+                        <a href="/meus-anuncios" class="dropdown-item" id="link-menu-anuncios">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l19-9-9 19-2-8-8-2z"></path></svg>
                             Meus Anúncios
                         </a>
@@ -119,14 +166,14 @@
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
                             Favoritos (<span id="favoritos-contador-badge">0</span>)
                         </a>
-                        <a href="../perfil/configuracoes.html" class="dropdown-item" id="link-menu-configuracoes">
+                        <a href="/configuracoes" class="dropdown-item" id="link-menu-configuracoes">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="3"></circle>
                                 <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0 1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
                             </svg>
                             Configurações
                         </a>
-                        <a href="../../index.html" class="dropdown-item item-sair">
+                        <a href="/login" class="dropdown-item item-sair">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                                 <polyline points="16 17 21 12 16 7"></polyline>
@@ -146,31 +193,20 @@
     <div class="drawer-backdrop" id="drawer-backdrop" aria-hidden="true">
         <aside class="drawer-menu" aria-label="Menu principal">
             <div class="drawer-header">
-                <img src="../../assets/header1-logo.png" alt="Itaim Vende" class="drawer-logo">
+                <img src="../../assets/logos/header1-logo.png" alt="Itaim Vende" class="drawer-logo">
                 <button type="button" class="drawer-close" id="btn-fechar-drawer" aria-label="Fechar menu">&times;</button>
             </div>
 
-            <!-- Perfil do Usuário no Drawer (Acesso rápido ao Perfil) -->
-            <a href="../perfil/perfil.html" class="drawer-user-card" id="drawer-user-card" title="Acessar Meu Perfil">
-                <div class="drawer-user-avatar-wrap">
-                    <img src="../../assets/icon-user.png" alt="Foto de perfil" class="drawer-user-avatar" id="drawer-user-avatar">
-                </div>
-                <div class="drawer-user-info">
-                    <span class="drawer-user-nome" id="drawer-user-name">Raili</span>
-                    <span class="drawer-user-sub">Ver meu perfil &rarr;</span>
-                </div>
-            </a>
-
             <nav class="drawer-nav">
-                <a href="../home/home.html" class="drawer-link" id="drawer-link-home">
+                <a href="/" class="drawer-link" id="drawer-link-home">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
                     Início
                 </a>
-                <a href="../perfil/perfil.html" class="drawer-link" id="drawer-link-perfil">
+                <a href="/perfil" class="drawer-link" id="drawer-link-perfil">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                     Meu Perfil
                 </a>
-                <a href="../vender/meus-anuncios.html" class="drawer-link" id="drawer-link-anuncios">
+                <a href="/meus-anuncios" class="drawer-link" id="drawer-link-anuncios">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l19-9-9 19-2-8-8-2z"></path></svg>
                     Meus Anúncios
                 </a>
@@ -178,17 +214,17 @@
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
                     Meus Favoritos
                 </a>
-                <a href="../mensagens/conversas.html" class="drawer-link" id="drawer-link-chat">
+                <a href="/conversas" class="drawer-link" id="drawer-link-chat">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                     </svg>
                     Conversas
                 </a>
-                <a href="../vender/vender.html" class="drawer-link" id="drawer-link-vender">
+                <a href="/vender" class="drawer-link" id="drawer-link-vender">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                     Vender Produto
                 </a>
-                <a href="../notificacoes/notificacoes.html" class="drawer-link" id="drawer-link-notificacoes">
+                <a href="/notificacoes" class="drawer-link" id="drawer-link-notificacoes">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
                     Notificações
                 </a>
@@ -210,25 +246,76 @@
                     </svg>
                 </button>
                 <div class="drawer-categorias-conteudo" id="drawer-categorias-conteudo">
-                    <a href="../produtos/categoria.html?cat=Eletrônicos" class="drawer-sublink">Eletrônicos</a>
-                    <a href="../produtos/categoria.html?cat=Decoração" class="drawer-sublink">Decoração</a>
-                    <a href="../produtos/categoria.html?cat=Móveis" class="drawer-sublink">Móveis</a>
-                    <a href="../produtos/categoria.html?cat=Moda" class="drawer-sublink">Moda & Vestuário</a>
-                    <a href="../produtos/categoria.html?cat=Infantil" class="drawer-sublink">Infantil & Bebês</a>
-                    <a href="../produtos/categoria.html?cat=Esportes" class="drawer-sublink">Esportes & Lazer</a>
-                    <a href="../produtos/categoria.html?cat=Hobbies" class="drawer-sublink">Hobbies & Games</a>
-                    <a href="../produtos/categoria.html?cat=Serviços" class="drawer-sublink">Serviços</a>
+                    <a href="/categoria?cat=Ve%C3%ADculos" class="drawer-sublink">Veículos</a>
+                    <a href="/categoria?cat=Autope%C3%A7as" class="drawer-sublink">Autopeças</a>
+                    <a href="/categoria?cat=Im%C3%B3veis" class="drawer-sublink">Imóveis</a>
+                    <a href="/categoria?cat=Terrenos" class="drawer-sublink">Terrenos</a>
+                    <a href="/categoria?cat=Agro" class="drawer-sublink">Agro</a>
+                    <a href="/categoria?cat=Pecu%C3%A1ria" class="drawer-sublink">Pecuária</a>
+                    <a href="/categoria?cat=Celulares" class="drawer-sublink">Celulares</a>
+                    <a href="/categoria?cat=Telefonia" class="drawer-sublink">Telefonia</a>
+                    <a href="/categoria?cat=Eletr%C3%B4nicos" class="drawer-sublink">Eletrônicos</a>
+                    <a href="/categoria?cat=%C3%81udio%20%26%20V%C3%ADdeo" class="drawer-sublink">Áudio & Vídeo</a>
+                    <a href="/categoria?cat=Inform%C3%A1tica" class="drawer-sublink">Informática</a>
+                    <a href="/categoria?cat=Games" class="drawer-sublink">Games</a>
+                    <a href="/categoria?cat=M%C3%B3veis" class="drawer-sublink">Móveis</a>
+                    <a href="/categoria?cat=Decora%C3%A7%C3%A3o" class="drawer-sublink">Decoração</a>
+                    <a href="/categoria?cat=Eletrodom%C3%A9sticos" class="drawer-sublink">Eletrodomésticos</a>
+                    <a href="/categoria?cat=Moda" class="drawer-sublink">Moda</a>
+                    <a href="/categoria?cat=Cal%C3%A7ados" class="drawer-sublink">Calçados</a>
+                    <a href="/categoria?cat=Acess%C3%B3rios" class="drawer-sublink">Acessórios</a>
+                    <a href="/categoria?cat=Beleza" class="drawer-sublink">Beleza</a>
+                    <a href="/categoria?cat=Cuidado%20Pessoal" class="drawer-sublink">Cuidado Pessoal</a>
+                    <a href="/categoria?cat=Infantil" class="drawer-sublink">Infantil</a>
+                    <a href="/categoria?cat=Beb%C3%AAs" class="drawer-sublink">Bebês</a>
+                    <a href="/categoria?cat=Esportes" class="drawer-sublink">Esportes</a>
+                    <a href="/categoria?cat=Fitness" class="drawer-sublink">Fitness</a>
+                    <a href="/categoria?cat=Lazer" class="drawer-sublink">Lazer</a>
+                    <a href="/categoria?cat=Constru%C3%A7%C3%A3o" class="drawer-sublink">Construção</a>
+                    <a href="/categoria?cat=Ferramentas" class="drawer-sublink">Ferramentas</a>
+                    <a href="/categoria?cat=Com%C3%A9rcio" class="drawer-sublink">Comércio</a>
+                    <a href="/categoria?cat=Escrit%C3%B3rio" class="drawer-sublink">Escritório</a>
+                    <a href="/categoria?cat=Servi%C3%A7os" class="drawer-sublink">Serviços</a>
+                    <a href="/categoria?cat=M%C3%BAsica" class="drawer-sublink">Música</a>
+                    <a href="/categoria?cat=Hobbies" class="drawer-sublink">Hobbies</a>
+                    <a href="/categoria?cat=Animais%20de%20Estima%C3%A7%C3%A3o" class="drawer-sublink">Animais de Estimação</a>
+                    <a href="/categoria?cat=Pet%20Shop" class="drawer-sublink">Pet Shop</a>
+                    <a href="/categoria?cat=Doa%C3%A7%C3%B5es" class="drawer-sublink">Doações</a>
+                    <a href="/categoria?cat=Trocas" class="drawer-sublink">Trocas</a>
+                    <a href="/categoria?cat=Outros" class="drawer-sublink">Outros</a>
                 </div>
 
                 <div class="drawer-secao-divisor"></div>
-                <a href="../perfil/configuracoes.html" class="drawer-link" id="drawer-link-configuracoes">
+                <button type="button" class="drawer-link btn-alternar-tema" id="btn-tema-drawer" aria-label="Alternar tema do site">
+                    <svg class="icone-tema-lua" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg class="icone-tema-sol" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <span class="drawer-tema-texto">Modo Escuro</span>
+                    <span class="drawer-tema-switch" aria-hidden="true">
+                        <span class="drawer-tema-trilho">
+                            <span class="drawer-tema-bolinha"></span>
+                        </span>
+                    </span>
+                </button>
+                <a href="/configuracoes" class="drawer-link" id="drawer-link-configuracoes">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="3"></circle>
                         <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0 1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
                     </svg>
                     Configurações
                 </a>
-                <a href="../../index.html" class="drawer-link item-sair">
+                <a href="/login" class="drawer-link item-sair">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                         <polyline points="16 17 21 12 16 7"></polyline>
@@ -252,7 +339,7 @@
 
         <!-- Breadcrumbs -->
         <nav class="breadcrumb-container" aria-label="Navegação estrutural">
-            <a href="../home/home.html">Início</a>
+            <a href="/">Início</a>
             <span class="breadcrumb-separador">/</span>
             <span class="breadcrumb-atual">Meus Favoritos</span>
         </nav>
@@ -274,11 +361,11 @@
     </main>
 
     <!-- Scripts -->
-    <script src="../../js/core/produtos-dados.js"></script>
-    <script src="../../js/core/rotas.js"></script>
-    <script src="../../js/core/api.js"></script>
-    <script src="../../js/core/sessao.js"></script>
-    <script src="../../js/core/skeleton.js"></script>
-    <script src="../../js/pages/favoritos/favoritos.js"></script>
+    <script src="../../js/core/produtos-dados/index.js"></script>
+    <script src="../../js/core/rotas/index.js"></script>
+    <script src="../../js/core/api/index.js"></script>
+    <script src="../../js/core/sessao/index.js"></script>
+    <script src="../../js/core/skeleton/index.js"></script>
+    <script src="../../js/pages/favoritos/favoritos.js?v=15"></script>
 </body>
 </html>

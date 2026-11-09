@@ -1,0 +1,335 @@
+/* ==========================================================================
+   1. BANNER SUPERIOR (CABEÇALHO DO PERFIL)
+   ========================================================================== */
+.perfil-banner-card {
+    position: relative;
+    overflow: hidden;
+    background-color: #ffffff;
+    border: 1px solid #e5e9eb;
+    border-radius: 22px;
+    padding: 34px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    margin-bottom: 22px;
+    min-height: 195px;
+}
+
+/* Nova estampa geométrica com listras diagonais verdes e cinza escuro no lado direito */
+.perfil-banner-stripes {
+    position: absolute;
+    right: -40px;
+    top: 0;
+    bottom: 0;
+    width: 380px;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.perfil-banner-stripes-desktop {
+    display: block;
+}
+
+.perfil-banner-stripes-mobile {
+    display: none;
+}
+
+.perfil-banner-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+/* Foto de Perfil com borda circular verde clara oficial */
+.perfil-avatar-wrapper {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.perfil-avatar-img {
+    width: 122px;
+    height: 122px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    border: 3.5px solid #44BD32;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+    background-color: #1E293B;
+}
+
+.btn-avatar-camera {
+    position: absolute;
+    bottom: 3px;
+    right: 3px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background-color: #44BD32;
+    color: #ffffff;
+    border: 2.5px solid #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    padding: 0;
+}
+
+.btn-avatar-camera:hover {
+    transform: scale(1.1);
+    background-color: #3ca82b;
+}
+
+/* Informações do Usuário no Banner */
+.perfil-banner-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.perfil-nome-linha {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: nowrap;
+}
+
+.perfil-nome-titulo {
+    font-size: 26px;
+    font-weight: 800;
+    color: #1E272E;
+    margin: 0;
+    line-height: 1.2;
+    letter-spacing: -0.3px;
+}
+
+#perfil-selo-verificado,
+#vendedor-selo-verificado {
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.badge-verificado {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: rgba(68, 189, 50, 0.12);
+    color: #237817;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 9999px;
+}
+
+.badge-check-icon {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: #44BD32;
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.perfil-banner-detalhes {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 2px;
+}
+
+.perfil-detalhe-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13.5px;
+    color: #1E272E;
+    font-weight: 500;
+}
+
+.perfil-detalhe-item svg {
+    color: #1E272E;
+    flex-shrink: 0;
+}
+
+/* Botão Sair no Banner (Fundo branco vazado, borda e texto/ícone verdes vibrantes) */
+.btn-banner-sair {
+    position: absolute;
+    top: 28px;
+    right: 28px;
+    z-index: 3;
+    background-color: #ffffff;
+    border: 1.5px solid #44BD32;
+    color: #44BD32;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 8px 18px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.btn-banner-sair:hover {
+    background-color: #f0fdf4;
+    border-color: #3ca82b;
+    color: #3ca82b;
+    transform: translateY(-1px);
+    box-shadow: none;
+}
+
+
+/* ==========================================================================
+   DARK MODE — BANNER DO PERFIL
+   ========================================================================== */
+
+/* Fundo do card no modo escuro */
+[data-theme="dark"] .perfil-banner-card,
+.dark-theme .perfil-banner-card {
+    background-color: #1A2332;
+    border-color: #2D3748;
+    border-bottom-color: #44BD32;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* Textos do banner no modo escuro */
+[data-theme="dark"] .perfil-nome-titulo,
+.dark-theme .perfil-nome-titulo {
+    color: #F1F5F9;
+}
+
+[data-theme="dark"] .perfil-detalhe-item,
+.dark-theme .perfil-detalhe-item {
+    color: #CBD5E1;
+}
+
+[data-theme="dark"] .perfil-detalhe-item svg,
+.dark-theme .perfil-detalhe-item svg {
+    color: #CBD5E1;
+}
+
+/*
+ * Polígonos do SVG decorativo (listras diagonais) no modo escuro.
+ *
+ * Layout de polígonos (desktop e mobile, mesma ordem):
+ *   1º polygon → linha fina cinza  (#cbd5e1 → troca para branco/cinza claro)
+ *   2º polygon → faixa verde       (#44BD32 → mantém)
+ *   3º polygon → bloco escuro      (#1E272E → troca para contraste visível no dark)
+ *   4º polygon → canto verde       (#44BD32 → mantém)
+ */
+
+/* Linha fina cinza: torna branca semi-transparente no dark mode */
+[data-theme="dark"] .perfil-banner-stripes polygon:nth-child(1),
+.dark-theme .perfil-banner-stripes polygon:nth-child(1) {
+    fill: rgba(255, 255, 255, 0.55);
+}
+
+/* Bloco escuro central: troca para um cinza azulado visível no dark */
+[data-theme="dark"] .perfil-banner-stripes polygon:nth-child(3),
+.dark-theme .perfil-banner-stripes polygon:nth-child(3) {
+    fill: #0F172A;
+}
+
+/* Botão Editar Perfil no Canto Superior Direito do Banner */
+.btn-editar-perfil-banner {
+    position: absolute;
+    top: 24px;
+    right: 28px;
+    z-index: 4;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #ffffff;
+    border: 1.5px solid #CBD5E1;
+    color: #1E293B;
+    font-size: 13.5px;
+    font-weight: 700;
+    padding: 8px 18px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    font-family: inherit;
+    text-decoration: none;
+}
+
+.btn-editar-perfil-banner:hover,
+.btn-editar-perfil-banner:active,
+.btn-editar-perfil-banner:focus,
+.btn-editar-perfil-banner:focus-visible {
+    background-color: #ffffff;
+    border-color: #44BD32;
+    color: #44BD32;
+    transform: translateY(-1px);
+    box-shadow: none;
+}
+
+.btn-editar-perfil-banner:active {
+    transform: translateY(0);
+}
+
+.btn-editar-perfil-banner:hover svg,
+.btn-editar-perfil-banner:active svg,
+.btn-editar-perfil-banner:focus svg {
+    stroke: #44BD32;
+}
+
+[data-theme="dark"] .btn-editar-perfil-banner,
+.dark-theme .btn-editar-perfil-banner {
+    background-color: #1F2831;
+    border-color: #334155;
+    color: #F1F5F9;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="dark"] .btn-editar-perfil-banner:hover,
+.dark-theme .btn-editar-perfil-banner:hover,
+[data-theme="dark"] .btn-editar-perfil-banner:active,
+.dark-theme .btn-editar-perfil-banner:active,
+[data-theme="dark"] .btn-editar-perfil-banner:focus,
+.dark-theme .btn-editar-perfil-banner:focus,
+[data-theme="dark"] .btn-editar-perfil-banner:focus-visible,
+.dark-theme .btn-editar-perfil-banner:focus-visible {
+    background-color: #1F2831 !important;
+    border-color: #44BD32 !important;
+    color: #44BD32 !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
+}
+
+[data-theme="dark"] .btn-editar-perfil-banner:hover svg,
+.dark-theme .btn-editar-perfil-banner:hover svg,
+[data-theme="dark"] .btn-editar-perfil-banner:active svg,
+.dark-theme .btn-editar-perfil-banner:active svg,
+[data-theme="dark"] .btn-editar-perfil-banner:focus svg,
+.dark-theme .btn-editar-perfil-banner:focus svg {
+    stroke: #44BD32 !important;
+}
+
+@media (max-width: 680px) {
+    .btn-editar-perfil-banner {
+        top: clamp(8px, 2.2vw, 14px);
+        right: clamp(8px, 2.2vw, 14px);
+        padding: clamp(3.5px, 1.2vw, 5.5px) clamp(6.5px, 2vw, 12px);
+        font-size: clamp(9px, 2.8vw, 12px);
+        gap: clamp(3px, 1vw, 5px);
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    .btn-editar-perfil-banner svg {
+        width: clamp(10px, 2.8vw, 13px);
+        height: clamp(10px, 2.8vw, 13px);
+        flex-shrink: 0;
+    }
+}

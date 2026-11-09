@@ -1,0 +1,69 @@
+/**
+ * ITAIM VENDE - VARIÁVEIS DE TEMA (CLARO & ESCURO)
+ * Arquivo: frontend/css/core/theme/theme-variables.css
+ */
+
+/* ==========================================================================
+   1. VARIÁVEIS CSS DE TEMA
+   ========================================================================== */
+
+/* Modo Claro (Padrão) */
+:root {
+    --theme-mode: light;
+    --light-bg: #F4F6F8;
+    --transition-theme: background-color 0.28s ease, border-color 0.28s ease, color 0.2s ease, box-shadow 0.28s ease;
+}
+
+/* Modo Escuro - Aplicado via data-theme="dark" no <html> ou <body> e classe .dark-theme */
+:root[data-theme="dark"],
+html[data-theme="dark"],
+html.dark-theme,
+body[data-theme="dark"],
+body.dark-theme {
+    --theme-mode: dark;
+    --primary: #44BD32;
+    --primary-hover: #3ca92c;
+    --primary-light: rgba(68, 189, 50, 0.16);
+    --primary-glow: rgba(0, 0, 0, 0.2);
+
+    /* Fundo suavemente mais escuro que o cabeçalho (#1E272E) */
+    --light-bg: #141A20;
+    --dark-bg: #10151A;
+    --dark-surface: #1B232B;
+    --dark-elevated: #242E38;
+    --card-bg: #1F2831;
+
+    --text-primary: #F1F5F9;
+    --text-secondary: #94A3B8;
+    --text-muted: #8091A4;
+    --text-white: #FFFFFF;
+
+    --border-color: #2C3946;
+    --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.35);
+    --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.45);
+    --shadow-lg: 0 14px 36px rgba(0, 0, 0, 0.55);
+    --shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.5);
+}
+
+/* Fundo escuro/claro imediato na raiz (html) e no corpo (body) */
+html {
+    background-color: var(--light-bg);
+}
+
+body {
+    background-color: var(--light-bg);
+    transition: var(--transition-theme);
+}
+
+/* Prevenção total de FOUC / flash de cor durante o carregamento inicial da página */
+html.tema-sem-transicao,
+html.tema-sem-transicao *,
+html.tema-sem-transicao *::before,
+html.tema-sem-transicao *::after,
+html.tema-sem-transicao body {
+    -webkit-transition: none !important;
+    -moz-transition: none !important;
+    -o-transition: none !important;
+    -ms-transition: none !important;
+    transition: none !important;
+}

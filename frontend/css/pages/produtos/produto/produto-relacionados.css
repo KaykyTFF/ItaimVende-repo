@@ -1,0 +1,356 @@
+/* ==========================================================
+   PRODUTOS RELACIONADOS - LINHA ÚNICA COM ROLAGEM HORIZONTAL
+   ========================================================== */
+.secao-relacionados {
+    margin-top: 40px;
+    width: 100%;
+}
+
+.secao-relacionados-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.secao-relacionados-topo h2 {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text-primary, #1E293B);
+}
+
+.secao-relacionados-acoes {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.link-ver-mais-categoria {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--primary, #44BD32);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: color 0.2s;
+    white-space: nowrap;
+}
+
+.link-ver-mais-categoria:hover {
+    text-decoration: underline;
+    color: #2e8b20;
+}
+
+/* Botões de navegação lateral (< e >) */
+.relacionados-nav-botoes {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-nav-relacionados {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    color: #475569;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+}
+
+.btn-nav-relacionados:hover {
+    background: #F8FAFC;
+    color: #44BD32;
+    border-color: #44BD32;
+    transform: scale(1.08);
+    box-shadow: 0 4px 12px rgba(68, 189, 50, 0.2);
+}
+
+.btn-nav-relacionados:active {
+    transform: scale(0.95);
+}
+
+/* Wrapper e Carrossel em Linha Única com Rolagem Lateral */
+.relacionados-carrossel-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.secao-relacionados .grade-produtos,
+#grade-relacionados {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    gap: 18px !important;
+    padding: 6px 4px 18px 4px !important;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    width: 100% !important;
+    cursor: grab;
+}
+
+.secao-relacionados .grade-produtos:active,
+#grade-relacionados:active {
+    cursor: grabbing;
+}
+
+/* Cards em Linha Única com largura fixa */
+.secao-relacionados .grade-produtos .card-produto,
+#grade-relacionados .card-produto,
+.secao-relacionados .grade-produtos .skeleton-card-produto,
+#grade-relacionados .skeleton-card-produto {
+    flex: 0 0 235px !important;
+    min-width: 235px !important;
+    max-width: 235px !important;
+    scroll-snap-align: start;
+    scroll-snap-stop: normal;
+}
+
+/* Barra de rolagem suave e moderna */
+.secao-relacionados .grade-produtos::-webkit-scrollbar,
+#grade-relacionados::-webkit-scrollbar {
+    height: 6px;
+}
+
+.secao-relacionados .grade-produtos::-webkit-scrollbar-track,
+#grade-relacionados::-webkit-scrollbar-track {
+    background: #F1F5F9;
+    border-radius: 999px;
+}
+
+.secao-relacionados .grade-produtos::-webkit-scrollbar-thumb,
+#grade-relacionados::-webkit-scrollbar-thumb {
+    background: #CBD5E1;
+    border-radius: 999px;
+    transition: background 0.2s ease;
+}
+
+.secao-relacionados .grade-produtos::-webkit-scrollbar-thumb:hover,
+#grade-relacionados::-webkit-scrollbar-thumb:hover {
+    background: #94A3B8;
+}
+
+.secao-relacionados .grade-produtos,
+#grade-relacionados {
+    scrollbar-width: thin;
+    scrollbar-color: #CBD5E1 #F1F5F9;
+}
+
+/* Toast de Compartilhamento */
+.toast-notificacao {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: #2D3236;
+    color: #FFFFFF;
+    padding: 12px 24px;
+    border-radius: var(--radius-full);
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.toast-notificacao.toast-visivel {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+/* ==========================================================
+   RESPONSIVIDADE MOBILE DA PÁGINA DO PRODUTO (<= 768px, <= 480px)
+   ========================================================== */
+@media (max-width: 768px) {
+    .breadcrumb-section {
+        padding: 10px 14px;
+    }
+
+    .breadcrumb-container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .breadcrumb-links {
+        font-size: 12.5px;
+        flex-wrap: wrap;
+    }
+
+    .breadcrumb-links .ativo {
+        max-width: 220px;
+    }
+
+    .btn-voltar-home {
+        padding: 6px 12px;
+        font-size: 12.5px;
+    }
+
+    .detalhe-produto-main {
+        margin: 14px auto 36px;
+        padding: 0 12px;
+    }
+
+    .produto-grid-topo {
+        padding: 18px 14px;
+        gap: 20px;
+        border-radius: 14px;
+        margin-bottom: 24px;
+    }
+
+    .foto-principal-wrapper {
+        aspect-ratio: 4 / 3;
+        max-height: 320px;
+    }
+
+    .thumb-item {
+        width: 60px;
+        height: 60px;
+    }
+
+    .produto-titulo-principal {
+        font-size: 20px;
+        line-height: 1.3;
+        margin-bottom: 12px;
+    }
+
+    .box-preco-produto {
+        padding: 12px 14px;
+        margin-bottom: 16px;
+    }
+
+    .preco-valor-grande {
+        font-size: 28px;
+    }
+
+    .grid-chips-detalhes {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+
+    .chip-detalhe {
+        padding: 8px 10px;
+        gap: 8px;
+    }
+
+    .chip-label {
+        font-size: 10px;
+    }
+
+    .chip-valor {
+        font-size: 12px;
+    }
+
+    .btn-acao-wpp {
+        height: 48px;
+        font-size: 15px;
+    }
+
+    .btn-acao-chat-interno {
+        height: 44px;
+        font-size: 14px;
+    }
+
+    .linha-acoes-secundarias {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .btn-secundario-acao {
+        padding: 10px 8px;
+        font-size: 12.5px;
+        justify-content: center;
+    }
+
+    .card-vendedor-destaque {
+        padding: 14px;
+        gap: 12px;
+    }
+
+    .vendedor-avatar-img {
+        width: 44px;
+        height: 44px;
+    }
+
+    .secao-descricao-detalhada {
+        padding: 20px 14px;
+        border-radius: 14px;
+        margin-bottom: 24px;
+    }
+
+    .secao-titulo-bloco {
+        font-size: 17px;
+        margin-bottom: 12px;
+    }
+
+    .descricao-texto-conteudo {
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    /* Relacionados em Linha Única Mobile */
+    .secao-relacionados {
+        margin-top: 28px;
+    }
+
+    .secao-relacionados-topo h2 {
+        font-size: 18px;
+    }
+
+    .secao-relacionados .grade-produtos,
+    #grade-relacionados {
+        gap: 12px !important;
+        padding: 4px 2px 14px 2px !important;
+    }
+
+    .secao-relacionados .grade-produtos .card-produto,
+    #grade-relacionados .card-produto,
+    .secao-relacionados .grade-produtos .skeleton-card-produto,
+    #grade-relacionados .skeleton-card-produto {
+        flex: 0 0 195px !important;
+        min-width: 195px !important;
+        max-width: 195px !important;
+    }
+
+    .relacionados-nav-botoes {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .foto-principal-wrapper {
+        max-height: 260px;
+    }
+
+    .thumb-item {
+        width: 52px;
+        height: 52px;
+    }
+
+    .preco-valor-grande {
+        font-size: 25px;
+    }
+
+    .breadcrumb-links .ativo {
+        max-width: 160px;
+    }
+}
+

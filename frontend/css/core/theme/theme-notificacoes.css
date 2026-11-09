@@ -1,0 +1,164 @@
+/**
+ * ITAIM VENDE - NOTIFICAÇÕES NO MODO ESCURO
+ * Arquivo: frontend/css/core/theme/theme-notificacoes.css
+ */
+
+/* ==========================================================================
+   PÁGINA DE NOTIFICAÇÕES (NOTIFICACOES.HTML) - MODO ESCURO
+   ========================================================================== */
+[data-theme="dark"] .notificacoes-container {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .notificacoes-icone-sino-header {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .notificacoes-titulos h1 {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .notificacoes-titulos p {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .btn-marcar-lidas {
+    background-color: #1F2831 !important;
+    color: #F1F5F9 !important;
+    border-color: #2C3946 !important;
+}
+
+[data-theme="dark"] .btn-marcar-lidas:hover {
+    background-color: #242E38 !important;
+    color: #4ADE80 !important;
+    border-color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .btn-marcar-lidas.btn-limpar-topo {
+    background-color: #1F2831 !important;
+    color: #F1F5F9 !important;
+    border-color: #2C3946 !important;
+}
+
+[data-theme="dark"] .btn-marcar-lidas.btn-limpar-topo:hover,
+[data-theme="dark"] .btn-marcar-lidas.btn-limpar-topo:active {
+    background-color: rgba(239, 68, 68, 0.16) !important;
+    color: #EF4444 !important;
+    border-color: #EF4444 !important;
+}
+
+[data-theme="dark"] .tab-notif-btn {
+    background-color: #1F2831 !important;
+    color: #94A3B8 !important;
+    border-color: #2C3946 !important;
+}
+
+[data-theme="dark"] .tab-notif-btn:hover {
+    background-color: #242E38 !important;
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .tab-notif-btn.ativo {
+    background-color: #0E8F1A !important;
+    color: #FFFFFF !important;
+    border-color: #0E8F1A !important;
+}
+
+[data-theme="dark"] .tab-badge-contador {
+    background-color: #2C3946 !important;
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .tab-notif-btn.ativo .tab-badge-contador {
+    background-color: #FFFFFF !important;
+    color: #0E8F1A !important;
+}
+
+[data-theme="dark"] .notificacoes-ordenacao-box .select-filtro {
+    background-color: #1F2831 !important;
+    border-color: #2C3946 !important;
+    color: #F1F5F9 !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") !important;
+}
+
+[data-theme="dark"] .notificacoes-ordenacao-box .select-filtro:hover {
+    border-color: #3D4D5E !important;
+    color: #FFFFFF !important;
+}
+
+[data-theme="dark"] .notificacao-card {
+    background-color: #1F2831 !important;
+    border-color: #2C3946 !important;
+}
+
+[data-theme="dark"] .notificacao-card:hover {
+    border-color: #3D4D5E !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme="dark"] .notificacao-card.nao-lida {
+    border-left-color: #4ADE80 !important;
+    background-color: rgba(74, 222, 128, 0.04) !important;
+}
+
+[data-theme="dark"] .avatar-badge-ponto {
+    background-color: #1A222A !important;
+    border-color: #1F2831 !important;
+    color: #E2E8F0 !important;
+    box-shadow: 0 1.5px 5px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .avatar-badge-ponto.badge-tipo-mensagem,
+[data-theme="dark"] .avatar-badge-ponto.badge-tipo-avaliacao,
+[data-theme="dark"] .avatar-badge-ponto.badge-tipo-favorito,
+[data-theme="dark"] .avatar-badge-ponto.badge-tipo-outline,
+[data-theme="dark"] .avatar-badge-ponto.laranja,
+[data-theme="dark"] .avatar-badge-ponto.roxa,
+[data-theme="dark"] .avatar-badge-ponto.vermelha {
+    background-color: #1A222A !important;
+    color: #E2E8F0 !important;
+}
+
+[data-theme="dark"] .notif-tag-nova {
+    background-color: rgba(74, 222, 128, 0.18) !important;
+    color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .notif-titulo {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .notif-descricao {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .notif-tempo-meta {
+    color: #64748B !important;
+}
+
+[data-theme="dark"] .notif-divisor-vertical {
+    background-color: #2C3946 !important;
+}
+
+[data-theme="dark"] .notif-thumb-produto {
+    background-color: #1A222A !important;
+    border-color: #2C3946 !important;
+}
+
+[data-theme="dark"] .notificacoes-vazio {
+    background-color: #1F2831 !important;
+    border-color: #2C3946 !important;
+}
+
+[data-theme="dark"] .notificacoes-vazio-icone {
+    background-color: rgba(74, 222, 128, 0.14) !important;
+    color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .notificacoes-vazio h2 {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .notificacoes-vazio p {
+    color: #94A3B8 !important;
+}

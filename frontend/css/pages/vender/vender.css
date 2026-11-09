@@ -1,0 +1,31 @@
+/**
+ * ITAIM VENDE - ESTILOS DA PÁGINA "CRIAR ANÚNCIO / VENDER"
+ * Arquivo orquestrador / modular
+ */
+
+/* 1. Base, Variáveis e Layout Principal */
+@import url('./vender/vender-base.css');
+
+/* 2. Fotos e Localização */
+@import url('./vender/vender-fotos.css');
+
+/* 3. Formulário de Dados e Descrição */
+@import url('./vender/vender-form.css');
+
+/* 4. Dropdowns em Pílula (Categoria e Condição) */
+@import url('./vender/vender-dropdowns.css');
+
+/* 5. Ação Principal e Validação */
+@import url('./vender/vender-acoes.css');
+
+/* 6. Tela de Sucesso e Confirmação */
+@import url('./vender/vender-sucesso.css');
+
+/* 7. Modal de Seleção de Localização */
+@import url('./vender/vender-modal-localizacao.css');
+
+/* 8. Processo Interativo por Etapas (Wizard) */
+@import url('./vender/vender-wizard.css');
+
+/* 9. Responsividade (Mobile e Tablet) */
+@import url('./vender/vender-responsive.css');

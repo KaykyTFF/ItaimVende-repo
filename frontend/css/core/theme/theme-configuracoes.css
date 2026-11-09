@@ -1,0 +1,210 @@
+/**
+ * ITAIM VENDE - MÓDULO DE TEMA NAS CONFIGURAÇÕES
+ * Arquivo: frontend/css/core/theme/theme-configuracoes.css
+ */
+
+/* ==========================================================================
+   4. ESTILIZAÇÃO DO MÓDULO DE TEMA NAS CONFIGURAÇÕES (configuracoes.html)
+   ========================================================================== */
+
+.cfg-tema-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    margin-top: 12px;
+    margin-bottom: 24px;
+}
+
+.cfg-tema-card {
+    background-color: var(--card-bg);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    cursor: pointer;
+    transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    text-align: left;
+    outline: none;
+}
+
+.cfg-tema-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.cfg-tema-card.ativo {
+    border-color: var(--primary);
+    background-color: rgba(68, 189, 50, 0.04);
+    box-shadow: 0 0 0 1px var(--primary), var(--shadow-sm);
+}
+
+[data-theme="dark"] .cfg-tema-card.ativo {
+    background-color: rgba(68, 189, 50, 0.08);
+}
+
+/* Mockup Ilustrativo do Tema */
+.cfg-tema-mockup {
+    width: 100%;
+    height: 110px;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    pointer-events: none;
+}
+
+.mockup-claro {
+    background-color: #F4F6F8;
+    border-color: #E2E8F0;
+}
+
+.mockup-escuro {
+    background-color: #0B0F17;
+    border-color: #243042;
+}
+
+.mockup-header {
+    height: 22px;
+    background-color: #1E272E;
+    border-bottom: 2px solid var(--primary);
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    gap: 8px;
+}
+
+.mockup-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--primary);
+}
+
+.mockup-bar {
+    width: 40px;
+    height: 5px;
+    border-radius: 3px;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.mockup-body {
+    flex: 1;
+    display: flex;
+    padding: 8px;
+    gap: 8px;
+}
+
+.mockup-side {
+    width: 32px;
+    border-radius: 4px;
+}
+
+.mockup-claro .mockup-side {
+    background-color: #FFFFFF;
+    border: 1px solid #E2E8F0;
+}
+
+.mockup-escuro .mockup-side {
+    background-color: #141B26;
+    border: 1px solid #243042;
+}
+
+.mockup-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.mockup-card-item {
+    height: 30px;
+    border-radius: 4px;
+}
+
+.mockup-claro .mockup-card-item {
+    background-color: #FFFFFF;
+    border: 1px solid #E2E8F0;
+}
+
+.mockup-escuro .mockup-card-item {
+    background-color: #141B26;
+    border: 1px solid #243042;
+}
+
+/* Cabeçalho do Cartão */
+.cfg-tema-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.cfg-tema-card-titulo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.cfg-tema-card-titulo svg {
+    color: var(--primary);
+}
+
+.cfg-tema-badge-check {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #E2E8F0;
+    color: #64748B;
+    transition: all 0.2s ease;
+}
+
+[data-theme="dark"] .cfg-tema-badge-check {
+    background-color: #243042;
+    color: #64748B;
+}
+
+.cfg-tema-card.ativo .cfg-tema-badge-check {
+    background-color: var(--primary);
+    color: #FFFFFF;
+}
+
+.cfg-tema-card-desc {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    line-height: 1.45;
+    margin: 0;
+    flex: 1;
+}
+
+.btn-ativar-tema {
+    margin-top: 6px;
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    font-weight: 700;
+    font-size: 13.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    border: none;
+    transition: all var(--transition);
+}
+
+.cfg-tema-card.ativo .btn-ativar-tema {
+    background-color: var(--primary);
+    color: #FFFFFF;
+    pointer-events: none;
+}

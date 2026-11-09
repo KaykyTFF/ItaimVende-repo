@@ -1,0 +1,131 @@
+/* ==========================================================================
+   3. SEÇÃO PRINCIPAL (CONTEÚDO)
+   ========================================================================== */
+.main-conteudo {
+    max-width: 1560px;
+    margin: 0 auto;
+    padding: 24px 24px 60px 24px;
+}
+
+/* --- BANNER CARROSSEL HERO --- */
+.secao-carrossel-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto 20px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.carrossel-container {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.10);
+    background-color: #2F3640;
+    aspect-ratio: 1300 / 300;
+}
+
+.carrossel-slides {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.slide-item {
+    min-width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.slide-item picture {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.slide-item img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* Botões do Carrossel (< e >) */
+.btn-carrossel {
+    position: absolute;
+    top: calc(50% - 8px);
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.95);
+    border: none;
+    color: #2D3236;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+    z-index: 10;
+    transition: all var(--transition);
+}
+
+.btn-carrossel svg {
+    width: 20px;
+    height: 20px;
+}
+
+.btn-carrossel:hover {
+    background-color: #FFFFFF;
+    color: var(--primary);
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 6px 20px rgba(68, 189, 50, 0.35);
+}
+
+.btn-carrossel.prev {
+    left: -48px;
+}
+
+.btn-carrossel.next {
+    right: -48px;
+}
+
+@media (max-width: 1320px) {
+    .btn-carrossel.prev {
+        left: 14px;
+    }
+    .btn-carrossel.next {
+        right: 14px;
+    }
+}
+
+/* Indicadores do Carrossel */
+.carrossel-indicadores {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.indicador-ponto {
+    width: 24px;
+    height: 6px;
+    border-radius: 4px;
+    background-color: #D2D7DF;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.indicador-ponto.ativo {
+    background-color: var(--primary);
+    width: 36px;
+}
+

@@ -1,0 +1,25 @@
+/**
+ * ITAIM VENDE - PÁGINA DE DETALHES DO PRODUTO (PRODUTO.HTML)
+ * Arquivo orquestrador / modular
+ */
+
+/* 1. Base e Estrutura Legada / Compatibilidade */
+@import url('./produto/produto-legado-galeria.css');
+@import url('./produto/produto-legado-info.css');
+@import url('./produto/produto-relacionados.css?v=20');
+
+/* 2. Design Moderno: Topo, Navegação e Carrossel */
+@import url('./produto/produto-breadcrumbs.css?v=20');
+@import url('./produto/produto-carrossel-galeria.css?v=20');
+
+/* 3. Detalhes, Vendedor e Ações */
+@import url('./produto/produto-detalhes-info.css?v=20');
+@import url('./produto/produto-vendedor-sidebar.css?v=20');
+
+/* 4. Responsividade Moderna */
+@import url('./produto/produto-responsive.css?v=20');
+
+/* 5. Sistema de Denúncia e Tickets de Moderação */
+@import url('./produto/produto-denuncia-modal.css?v=20');
+@import url('./produto/produto-ticket-sucesso.css?v=20');
+@import url('./produto/produto-tickets-historico.css?v=20');

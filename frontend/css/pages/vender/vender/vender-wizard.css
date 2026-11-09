@@ -1,0 +1,655 @@
+/**
+ * ITAIM VENDE - ESTILOS DO PROCESSO INTERATIVO POR ETAPAS (WIZARD DE ANÚNCIO)
+ * Arquivo: frontend/css/pages/vender/vender/vender-wizard.css
+ */
+
+/* ==========================================================================
+   1. BARRA DE PROGRESSO LIMPA (ESTILO CADASTRAR)
+   ========================================================================== */
+.vender-progresso-box {
+    width: 100%;
+    margin-bottom: 24px;
+    background: #FFFFFF;
+    border-radius: 16px;
+    padding: 16px 20px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.wizard-info-linha {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.wizard-etapa-badge {
+    font-size: 11px;
+    font-weight: 800;
+    color: #489636;
+    background: rgba(72, 150, 54, 0.12);
+    padding: 4px 12px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.wizard-etapa-nome {
+    font-size: 13.5px;
+    color: #64748B;
+    font-weight: 600;
+}
+
+.wizard-barra-trilha {
+    width: 100%;
+    height: 6px;
+    background: #E2E8F0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.wizard-barra-progresso {
+    height: 100%;
+    background: #44BD32;
+    border-radius: 10px;
+    box-shadow: none;
+    transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==========================================================================
+   2. PAINÉIS DE CADA ETAPA DO WIZARD
+   ========================================================================== */
+.wizard-paineis-wrapper {
+    position: relative;
+    width: 100%;
+    min-height: 480px;
+}
+
+.etapa-painel {
+    display: none;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.etapa-painel.etapa-ativa {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+    animation: slideEtapaEntrar 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideEtapaEntrar {
+    from {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Card unificado de cada etapa */
+.card-etapa-wizard {
+    background-color: var(--vender-card-bg);
+    border-radius: 24px;
+    padding: 28px;
+    box-shadow: var(--vender-shadow-card);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    position: relative;
+}
+
+/* Cabeçalho da Etapa */
+.etapa-cabecalho {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 22px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.05);
+}
+
+.etapa-cabecalho-texto h2 {
+    font-size: 20px;
+    font-weight: 800;
+    color: #1E293B;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.etapa-cabecalho-texto p {
+    font-size: 13.5px;
+    color: #64748B;
+    margin-top: 4px;
+}
+
+.badge-contador-etapa {
+    background: #FFFFFF;
+    color: #59AA59;
+    border: 1.5px solid #59AA59;
+    font-size: 12.5px;
+    font-weight: 800;
+    padding: 4px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+
+/* Card de Dicas Úteis */
+.dica-vendedor-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: #E8F5E9;
+    border: 1px solid #C8E6C9;
+    border-radius: 14px;
+    padding: 12px 16px;
+    margin-top: 20px;
+    color: #2E7D32;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.dica-vendedor-box strong {
+    color: #1B5E20;
+}
+
+.dica-vendedor-icone {
+    font-size: 20px;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+/* ==========================================================================
+   3. SELETORES RÁPIDOS DE CATEGORIA E CONDIÇÃO (CHIPS)
+   ========================================================================== */
+.rotulo-secao-campo {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: #475569;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.chips-selecao-rapida {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.chip-opcao {
+    background: #FFFFFF;
+    border: 1.5px solid #CBD5E1;
+    color: #334155;
+    padding: 8px 14px;
+    border-radius: 24px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    user-select: none;
+}
+
+.chip-opcao:hover {
+    border-color: #38A129;
+    color: #38A129;
+    transform: translateY(-1px);
+    box-shadow: none;
+}
+
+.chip-opcao.ativo {
+    background: #38A129;
+    border-color: #38A129;
+    color: #FFFFFF;
+    box-shadow: none;
+}
+
+/* ==========================================================================
+   4. ETAPA 3: PREÇO E LOCALIZAÇÃO DESTACADOS
+   ========================================================================== */
+.bloco-preco-destacado {
+    background: #FFFFFF;
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.header-preco-linha {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.btn-toggle-doacao {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    height: 34px;
+    padding: 0 16px;
+    border-radius: 999px;
+    background: #FFFFFF;
+    color: #475569;
+    border: 1.5px solid #CBD5E1;
+    font-size: 13.5px;
+    font-weight: 700;
+    line-height: normal;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: inherit;
+    box-sizing: border-box;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.btn-toggle-doacao:hover {
+    background: #F8FAFC;
+    border-color: #38A129;
+    color: #38A129;
+    transform: translateY(-1px);
+    box-shadow: none;
+}
+
+.btn-toggle-doacao svg {
+    width: 16px !important;
+    height: 16px !important;
+    min-width: 16px !important;
+    min-height: 16px !important;
+    max-width: 16px !important;
+    max-height: 16px !important;
+    flex-shrink: 0 !important;
+    display: block !important;
+    stroke: currentColor;
+    transition: transform 0.2s ease;
+}
+
+.btn-toggle-doacao span {
+    display: inline-block;
+    line-height: 1;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: inherit;
+}
+
+.btn-toggle-doacao.ativo {
+    background: #38A129 !important;
+    border-color: #38A129 !important;
+    color: #FFFFFF !important;
+    box-shadow: none;
+}
+
+.btn-toggle-doacao.ativo svg {
+    stroke: #FFFFFF !important;
+}
+
+.campo-preco-grande.modo-doacao .cifrao-destaque {
+    display: none;
+}
+
+.campo-preco-grande.modo-doacao .input-preco-destacado {
+    color: #44BD32 !important;
+    background: #F0FDF4;
+    border-color: #86EFAC;
+    font-size: 22px !important;
+    font-weight: 800 !important;
+    text-align: center;
+    cursor: default;
+}
+
+[data-theme="dark"] .btn-toggle-doacao {
+    background: #1E293B;
+    border-color: #334155;
+    color: #94A3B8;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .btn-toggle-doacao:hover {
+    background: #334155;
+    border-color: #38A129;
+    color: #38A129;
+}
+
+[data-theme="dark"] .btn-toggle-doacao.ativo {
+    background: #44BD32 !important;
+    border-color: #44BD32 !important;
+    color: #FFFFFF !important;
+}
+
+[data-theme="dark"] .campo-preco-grande.modo-doacao .input-preco-destacado {
+    background: rgba(68, 189, 50, 0.12);
+    border-color: rgba(68, 189, 50, 0.4);
+    color: #38A129 !important;
+}
+
+.campo-preco-grande {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.cifrao-destaque {
+    font-size: 24px;
+    font-weight: 800;
+    color: #38A129;
+}
+
+.input-preco-destacado {
+    font-size: 26px !important;
+    font-weight: 800 !important;
+    color: #1E293B !important;
+    height: 56px;
+}
+
+.card-localizacao-etapa {
+    background: #FFFFFF;
+    border-radius: 18px;
+    padding: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.localizacao-info-box {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.icone-pin-grande {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: #E8F5E9;
+    color: #59AA59;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.icone-pin-grande svg {
+    width: 24px;
+    height: 24px;
+}
+
+.localizacao-texto-detalhe strong {
+    display: block;
+    font-size: 15px;
+    color: #1E293B;
+}
+
+.localizacao-texto-detalhe span {
+    font-size: 13px;
+    color: #64748B;
+}
+
+/* ==========================================================================
+   5. ETAPA 4: REVISÃO INTERATIVA DO ANÚNCIO (LIVE PREVIEW)
+   ========================================================================== */
+.preview-anuncio-card {
+    background: #FFFFFF;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 0;
+    margin-bottom: 20px;
+}
+
+.preview-col-foto {
+    background: #F1F5F9;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.preview-foto-principal-wrapper {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #E2E8F0;
+    position: relative;
+}
+
+.preview-foto-principal-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.preview-fotos-miniaturas {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+}
+
+.preview-thumb-item {
+    width: 52px;
+    height: 52px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 2px solid transparent;
+    cursor: pointer;
+    background: #E2E8F0;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+}
+
+.preview-thumb-item.ativo,
+.preview-thumb-item:hover {
+    border-color: #59AA59;
+    transform: scale(1.05);
+}
+
+.preview-col-dados {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.preview-dados-topo {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.preview-tags-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.preview-tag-badge {
+    background: #E8F5E9;
+    color: #2E7D32;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.preview-tag-condicao {
+    background: #EFF6FF;
+    color: #1D4ED8;
+}
+
+.preview-titulo-anuncio {
+    font-size: 22px;
+    font-weight: 800;
+    color: #0F172A;
+    line-height: 1.3;
+    margin: 0;
+}
+
+.preview-preco-anuncio {
+    font-size: 28px;
+    font-weight: 900;
+    color: #59AA59;
+    margin: 0;
+}
+
+.preview-local-linha {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #64748B;
+    font-size: 13.5px;
+}
+
+.preview-descricao-box {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid #E2E8F0;
+}
+
+.preview-descricao-box strong {
+    display: block;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #94A3B8;
+    margin-bottom: 6px;
+}
+
+.preview-descricao-texto {
+    font-size: 13.5px;
+    color: #334155;
+    line-height: 1.5;
+    max-height: 90px;
+    overflow-y: auto;
+}
+
+.preview-editar-atalho {
+    margin-top: 14px;
+    display: flex;
+    gap: 12px;
+    font-size: 12px;
+}
+
+.btn-editar-etapa-link {
+    color: #59AA59;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    text-decoration: underline;
+}
+
+.btn-editar-etapa-link:hover {
+    color: #3F833F;
+}
+
+/* ==========================================================================
+   6. BOTÕES DE NAVEGAÇÃO DO WIZARD (AVANÇAR / VOLTAR)
+   ========================================================================== */
+.wizard-botoes-navegacao {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 24px;
+    gap: 16px;
+}
+
+.btn-wizard-nav {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 30px;
+    padding: 12px 28px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border: none;
+    outline: none;
+}
+
+.btn-wizard-anterior {
+    background-color: #E2E8F0;
+    color: #475569;
+}
+
+.btn-wizard-anterior:hover {
+    background-color: #CBD5E1;
+    color: #1E293B;
+    transform: translateX(-2px);
+}
+
+.btn-wizard-proximo {
+    background-color: #38A129;
+    color: #FFFFFF;
+    margin-left: auto;
+    box-shadow: none;
+}
+
+.btn-wizard-proximo:hover {
+    background-color: #2E8B22;
+    transform: translateX(2px) scale(1.02);
+    box-shadow: none;
+}
+
+/* ==========================================================================
+   7. RESPONSIVIDADE DO WIZARD (MOBILE E TABLETS)
+   ========================================================================== */
+@media (max-width: 768px) {
+    .vender-progresso-box {
+        padding: 12px 16px;
+        margin-bottom: 20px;
+    }
+
+    .card-etapa-wizard {
+        padding: 18px;
+    }
+
+    .preview-anuncio-card {
+        grid-template-columns: 1fr;
+    }
+
+    .preview-col-foto {
+        padding: 12px;
+    }
+
+    .preview-col-dados {
+        padding: 16px;
+    }
+
+    .btn-wizard-nav {
+        padding: 10px 18px;
+        font-size: 13.5px;
+    }
+
+    .card-localizacao-etapa {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn-editar-localizacao {
+        align-self: flex-start;
+    }
+}

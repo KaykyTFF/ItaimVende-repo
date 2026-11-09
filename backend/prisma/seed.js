@@ -1,7 +1,5 @@
-import { PrismaClient } from '@prisma/client';
+import prisma from '../src/config/prisma.js';
 import bcrypt from 'bcryptjs';
-
-const prisma = new PrismaClient();
 
 function gerarSlug(texto) {
   return texto
@@ -18,16 +16,43 @@ async function main() {
 
   // 1. Categorias Oficiais do Itaim Vende
   const categoriasData = [
-    { name: 'Veículos & Peças', slug: 'veiculos', icon: 'fa-car', orderIndex: 1 },
-    { name: 'Imóveis & Terrenos', slug: 'imoveis', icon: 'fa-home', orderIndex: 2 },
-    { name: 'Eletrônicos & Celulares', slug: 'eletronicos', icon: 'fa-mobile-screen', orderIndex: 3 },
-    { name: 'Moda & Vestuário', slug: 'moda', icon: 'fa-shirt', orderIndex: 4 },
-    { name: 'Móveis & Casa', slug: 'moveis', icon: 'fa-couch', orderIndex: 5 },
-    { name: 'Agro & Animais', slug: 'agro', icon: 'fa-tractor', orderIndex: 6 },
-    { name: 'Esportes & Lazer', slug: 'esportes', icon: 'fa-bicycle', orderIndex: 7 },
-    { name: 'Infantil & Brinquedos', slug: 'infantil', icon: 'fa-baby', orderIndex: 8 },
-    { name: 'Serviços & Negócios', slug: 'servicos', icon: 'fa-briefcase', orderIndex: 9 },
-    { name: 'Outros & Geral', slug: 'outros', icon: 'fa-boxes-stacked', orderIndex: 10 },
+    { name: 'Veículos', slug: 'veiculos', icon: 'fa-car', orderIndex: 1 },
+    { name: 'Autopeças', slug: 'autopecas', icon: 'fa-gears', orderIndex: 2 },
+    { name: 'Imóveis', slug: 'imoveis', icon: 'fa-house', orderIndex: 3 },
+    { name: 'Terrenos', slug: 'terrenos', icon: 'fa-map-location-dot', orderIndex: 4 },
+    { name: 'Agro', slug: 'agro', icon: 'fa-tractor', orderIndex: 5 },
+    { name: 'Pecuária', slug: 'pecuaria', icon: 'fa-cow', orderIndex: 6 },
+    { name: 'Celulares', slug: 'celulares', icon: 'fa-mobile-screen', orderIndex: 7 },
+    { name: 'Telefonia', slug: 'telefonia', icon: 'fa-phone', orderIndex: 8 },
+    { name: 'Eletrônicos', slug: 'eletronicos', icon: 'fa-tv', orderIndex: 9 },
+    { name: 'Áudio & Vídeo', slug: 'audio-video', icon: 'fa-headphones', orderIndex: 10 },
+    { name: 'Informática', slug: 'informatica', icon: 'fa-laptop', orderIndex: 11 },
+    { name: 'Games', slug: 'games', icon: 'fa-gamepad', orderIndex: 12 },
+    { name: 'Móveis', slug: 'moveis', icon: 'fa-couch', orderIndex: 13 },
+    { name: 'Decoração', slug: 'decoracao', icon: 'fa-palette', orderIndex: 14 },
+    { name: 'Eletrodomésticos', slug: 'eletrodomesticos', icon: 'fa-blender', orderIndex: 15 },
+    { name: 'Moda', slug: 'moda', icon: 'fa-shirt', orderIndex: 16 },
+    { name: 'Calçados', slug: 'calcados', icon: 'fa-shoe-prints', orderIndex: 17 },
+    { name: 'Acessórios', slug: 'acessorios', icon: 'fa-gem', orderIndex: 18 },
+    { name: 'Beleza', slug: 'beleza', icon: 'fa-spray-can-sparkles', orderIndex: 19 },
+    { name: 'Cuidado Pessoal', slug: 'cuidado-pessoal', icon: 'fa-pump-soap', orderIndex: 20 },
+    { name: 'Infantil', slug: 'infantil', icon: 'fa-shapes', orderIndex: 21 },
+    { name: 'Bebês', slug: 'bebes', icon: 'fa-baby', orderIndex: 22 },
+    { name: 'Esportes', slug: 'esportes', icon: 'fa-futbol', orderIndex: 23 },
+    { name: 'Fitness', slug: 'fitness', icon: 'fa-dumbbell', orderIndex: 24 },
+    { name: 'Lazer', slug: 'lazer', icon: 'fa-campground', orderIndex: 25 },
+    { name: 'Construção', slug: 'construcao', icon: 'fa-trowel-bricks', orderIndex: 26 },
+    { name: 'Ferramentas', slug: 'ferramentas', icon: 'fa-hammer', orderIndex: 27 },
+    { name: 'Comércio', slug: 'comercio', icon: 'fa-store', orderIndex: 28 },
+    { name: 'Escritório', slug: 'escritorio', icon: 'fa-building', orderIndex: 29 },
+    { name: 'Serviços', slug: 'servicos', icon: 'fa-briefcase', orderIndex: 30 },
+    { name: 'Música', slug: 'musica', icon: 'fa-guitar', orderIndex: 31 },
+    { name: 'Hobbies', slug: 'hobbies', icon: 'fa-brush', orderIndex: 32 },
+    { name: 'Animais de Estimação', slug: 'pets', icon: 'fa-paw', orderIndex: 33 },
+    { name: 'Pet Shop', slug: 'pet-shop', icon: 'fa-bone', orderIndex: 34 },
+    { name: 'Doações', slug: 'doacoes', icon: 'fa-hand-holding-heart', orderIndex: 35 },
+    { name: 'Trocas', slug: 'trocas', icon: 'fa-repeat', orderIndex: 36 },
+    { name: 'Outros', slug: 'outros', icon: 'fa-boxes-stacked', orderIndex: 37 },
   ];
 
   const categoryMap = {};
@@ -48,15 +73,15 @@ async function main() {
     where: { email: 'admin@gmail.com' },
     update: {},
     create: {
-      name: 'Raili',
-      username: 'rsstore',
+      name: 'Admin',
+      username: 'adminfreefire',
       email: 'admin@gmail.com',
       password: adminPasswordHash,
       phone: '89999858585',
       city: 'Paulistana',
       state: 'PI',
       neighborhood: 'Centro',
-      avatar: 'assets/icon-user.png',
+      avatar: '/uploads/perfil/itaim-1791903382039-jwd9lvb.jpg',
       bio: 'Perfil oficial e verificado da administração do Itaim Vende.',
       role: 'ADMIN',
       status: 'ACTIVE',
@@ -88,7 +113,7 @@ async function main() {
       salesCount: 5,
     },
   });
-  console.log('✅ Usuários Raili (Admin) e Kayky (Vendedor) configurados.');
+  console.log('✅ Usuários Admin e Kayky (Vendedor) configurados.');
 
   // 3. Produtos Reais Iniciais de Exemplo para Paulistana/PI
   const produtosIniciais = [
@@ -99,7 +124,7 @@ async function main() {
       originalPrice: 15200.00,
       condition: 'SEMINOVO',
       categorySlug: 'veiculos',
-      images: ['assets/produtos/anuncio_15.jpg'],
+      images: ['assets/produtos/anuncio_14.jpg'],
       isFeatured: true,
       neighborhood: 'Centro',
     },
@@ -142,9 +167,57 @@ async function main() {
       originalPrice: 1350.00,
       condition: 'USADO',
       categorySlug: 'esportes',
-      images: ['assets/produtos/anuncio_15.jpg'],
+      images: ['assets/produtos/anuncio_11.jpg'],
       isFeatured: false,
       neighborhood: 'Triângulo',
+    },
+    {
+      title: 'Smartphone Galaxy S22 128GB Verde',
+      description: 'Galaxy S22 em excelente estado, câmeras profissionais e tela Dynamic AMOLED 120Hz. Entrego em Acauã ou Paulistana.',
+      price: 1950.00,
+      originalPrice: 2200.00,
+      condition: 'SEMINOVO',
+      categorySlug: 'eletronicos',
+      images: ['assets/produtos/anuncio_13.jpg'],
+      isFeatured: true,
+      city: 'Acauã',
+      neighborhood: 'Centro',
+    },
+    {
+      title: 'Fone Bluetooth ANC Over-Ear Premium',
+      description: 'Fone com cancelamento ativo de ruído, som de alta fidelidade e bateria para 35 horas. Retirada em Betânia.',
+      price: 320.00,
+      originalPrice: 380.00,
+      condition: 'NOVO',
+      categorySlug: 'eletronicos',
+      images: ['assets/produtos/anuncio_10.jpg'],
+      isFeatured: false,
+      city: 'Betânia do Piauí',
+      neighborhood: 'Centro',
+    },
+    {
+      title: 'Bicicleta Mountain Bike Aro 29 Freio Hidráulico',
+      description: 'Mountain bike com suspensão dianteira com trava e transmissão Shimano. Ideal para trilhas em Jacobina.',
+      price: 1400.00,
+      originalPrice: 1650.00,
+      condition: 'USADO',
+      categorySlug: 'esportes',
+      images: ['assets/produtos/anuncio_12.jpg'],
+      isFeatured: false,
+      city: 'Jacobina do Piauí',
+      neighborhood: 'Centro',
+    },
+    {
+      title: 'Smartwatch Esportivo GPS Pro',
+      description: 'Monitoramento cardíaco contínuo, oxigenação sanguínea e bateria para até 14 dias. Disponível em Queimada Nova.',
+      price: 290.00,
+      originalPrice: 350.00,
+      condition: 'NOVO',
+      categorySlug: 'eletronicos',
+      images: ['assets/produtos/anuncio_13.jpg'],
+      isFeatured: true,
+      city: 'Queimada Nova',
+      neighborhood: 'Centro',
     },
   ];
 
@@ -167,7 +240,7 @@ async function main() {
           status: 'ATIVO',
           listingType: 'VENDA',
           isFeatured: p.isFeatured,
-          city: 'Paulistana',
+          city: p.city || 'Paulistana',
           state: 'PI',
           neighborhood: p.neighborhood || 'Centro',
           categoryId: catId,

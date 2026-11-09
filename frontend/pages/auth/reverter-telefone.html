@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Itaim Vende - Reversão de Segurança de WhatsApp / Celular.">
+    <title>Segurança da Conta - Itaim Vende</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../assets/logos/header-logo.png">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/core/style.css">
+    <link rel="stylesheet" href="../../css/core/theme.css">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-primary, #f8fafc);
+            color: var(--text-primary, #1e293b);
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 24px;
+            box-sizing: border-box;
+        }
+
+        .reverter-container {
+            width: 100%;
+            max-width: 480px;
+            background: var(--bg-card, #ffffff);
+            border: 1px solid var(--border-color, #e2e8f0);
+            border-radius: 20px;
+            padding: 36px 32px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .reverter-logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 24px;
+            text-decoration: none;
+        }
+
+        .reverter-logo img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+
+        .reverter-logo span {
+            font-size: 22px;
+            font-weight: 800;
+            color: #16A34A;
+            letter-spacing: -0.5px;
+        }
+
+        .reverter-icon-box {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px auto;
+        }
+
+        .reverter-icon-box.processando {
+            background-color: #f1f5f9;
+            color: #64748b;
+        }
+
+        .reverter-icon-box.sucesso {
+            background-color: #dcfce7;
+            color: #16a34a;
+        }
+
+        .reverter-icon-box.erro {
+            background-color: #fee2e2;
+            color: #dc2626;
+        }
+
+        .spinner {
+            width: 32px;
+            height: 32px;
+            border: 3.5px solid #e2e8f0;
+            border-top-color: #16a34a;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .reverter-titulo {
+            font-size: 20px;
+            font-weight: 800;
+            margin: 0 0 10px 0;
+            color: var(--text-primary, #1e293b);
+        }
+
+        .reverter-desc {
+            font-size: 14.5px;
+            color: var(--text-secondary, #64748b);
+            line-height: 1.55;
+            margin: 0 0 24px 0;
+        }
+
+        .reverter-card-detalhes {
+            background-color: var(--bg-secondary, #f8fafc);
+            border: 1px solid var(--border-color, #e2e8f0);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: left;
+            margin-bottom: 24px;
+            font-size: 13.5px;
+        }
+
+        .reverter-card-detalhes strong {
+            color: var(--text-primary, #1e293b);
+        }
+
+        .reverter-acoes {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn-acao {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 13px 20px;
+            border-radius: 12px;
+            font-size: 14.5px;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+            border: none;
+        }
+
+        .btn-primario {
+            background-color: #16A34A;
+            color: #ffffff;
+        }
+
+        .btn-primario:hover {
+            background-color: #15803D;
+            transform: translateY(-1px);
+        }
+
+        .btn-secundario {
+            background-color: var(--bg-secondary, #f1f5f9);
+            color: var(--text-primary, #334155);
+            border: 1px solid var(--border-color, #e2e8f0);
+        }
+
+        .btn-secundario:hover {
+            background-color: #e2e8f0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="reverter-container">
+        <a href="../../index.html" class="reverter-logo">
+            <img src="../../assets/logos/header-logo.png" alt="Itaim Vende Logo">
+            <span>Itaim Vende</span>
+        </a>
+
+        <!-- ESTADO 1: PROCESSANDO -->
+        <div id="estado-processando">
+            <div class="reverter-icon-box processando">
+                <div class="spinner"></div>
+            </div>
+            <h1 class="reverter-titulo">Verificando solicitação...</h1>
+            <p class="reverter-desc">Aguarde um instante enquanto cancelamos a alteração e restauramos a segurança da sua conta.</p>
+        </div>
+
+        <!-- ESTADO 2: SUCESSO -->
+        <div id="estado-sucesso" style="display: none;">
+            <div class="reverter-icon-box sucesso">
+                <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    <polyline points="9 12 11 14 15 10"></polyline>
+                </svg>
+            </div>
+            <h1 class="reverter-titulo">Alteração revertida com sucesso!</h1>
+            <p class="reverter-desc">A troca de telefone não autorizada foi cancelada imediatamente e sua conta foi protegida.</p>
+
+            <div class="reverter-card-detalhes">
+                <div style="margin-bottom: 6px;">
+                    <strong>Número restaurado:</strong> <span id="txt-telefone-restaurado" style="color: #16A34A; font-weight: 700;">--</span>
+                </div>
+                <div>
+                    <strong>Status:</strong> <span style="color: #16A34A; font-weight: 600;">Conta protegida e sinalizada para auditoria</span>
+                </div>
+            </div>
+
+            <div class="reverter-acoes">
+                <a href="../perfil/configuracoes.html" class="btn-acao btn-primario">Ir para Configurações da Conta</a>
+                <a href="../../index.html" class="btn-acao btn-secundario">Voltar para o Início</a>
+            </div>
+        </div>
+
+        <!-- ESTADO 3: ERRO -->
+        <div id="estado-erro" style="display: none;">
+            <div class="reverter-icon-box erro">
+                <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+            </div>
+            <h1 class="reverter-titulo">Não foi possível reverter</h1>
+            <p class="reverter-desc" id="txt-msg-erro">O link de reversão é inválido, expirou (válido por 48h) ou já foi utilizado anteriormente.</p>
+
+            <div class="reverter-acoes">
+                <a href="../perfil/configuracoes.html" class="btn-acao btn-primario">Acessar Minha Conta</a>
+                <a href="../../index.html" class="btn-acao btn-secundario">Voltar para o Início</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts Core e API -->
+    <script src="../../js/core/api/api-core.js"></script>
+    <script src="../../js/core/api/api-auth.js"></script>
+
+    <script>
+        (async function() {
+            const elProcessando = document.getElementById('estado-processando');
+            const elSucesso = document.getElementById('estado-sucesso');
+            const elErro = document.getElementById('estado-erro');
+            const txtRestaurado = document.getElementById('txt-telefone-restaurado');
+            const txtMsgErro = document.getElementById('txt-msg-erro');
+
+            const params = new URLSearchParams(window.location.search);
+            const token = params.get('token');
+
+            if (!token) {
+                elProcessando.style.display = 'none';
+                elErro.style.display = 'block';
+                txtMsgErro.textContent = 'Token de reversão não encontrado na URL. Verifique o link enviado para o seu e-mail.';
+                return;
+            }
+
+            try {
+                let res = null;
+                if (window.ItaimApi && window.ItaimApi.auth && typeof window.ItaimApi.auth.reverterAlteracaoTelefone === 'function') {
+                    res = await window.ItaimApi.auth.reverterAlteracaoTelefone(token);
+                } else {
+                    const resp = await fetch('/account/phone/revert', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ token })
+                    });
+                    res = await resp.json();
+                    if (!resp.ok) throw res;
+                }
+
+                elProcessando.style.display = 'none';
+                elSucesso.style.display = 'block';
+
+                const telRestaurado = res.restoredPhone || 'Nenhum (removido)';
+                txtRestaurado.textContent = telRestaurado;
+
+                // Atualiza sessão local se o usuário estiver logado nesta máquina
+                try {
+                    const userRaw = localStorage.getItem('itaim_usuario_logado');
+                    if (userRaw) {
+                        const user = JSON.parse(userRaw);
+                        user.phone = res.restoredPhone ? res.restoredPhone.replace(/\D/g, '') : null;
+                        user.telefone = res.restoredPhone || null;
+                        user.isPhoneVerified = Boolean(res.restoredPhone);
+                        localStorage.setItem('itaim_usuario_logado', JSON.stringify(user));
+                    }
+                } catch (e) {}
+
+            } catch (err) {
+                elProcessando.style.display = 'none';
+                elErro.style.display = 'block';
+                const msg = err.message || (err.error && err.error.message) || 'O link de cancelamento expirou, é inválido ou já foi utilizado.';
+                txtMsgErro.textContent = msg;
+            }
+        })();
+    </script>
+</body>
+</html>
+

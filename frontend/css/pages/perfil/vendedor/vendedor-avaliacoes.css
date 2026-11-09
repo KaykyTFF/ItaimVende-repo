@@ -1,0 +1,295 @@
+/* ==========================================================================
+   4. AVALIAÇÕES DA COMUNIDADE & DICAS DE SEGURANÇA
+   ========================================================================== */
+.vendedor-duas-colunas {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 24px;
+    margin-bottom: 48px;
+}
+
+.card-secao-vendedor {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 20px;
+    padding: 28px;
+    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.02);
+}
+
+.card-secao-vendedor h3 {
+    font-size: 18px;
+    font-weight: 800;
+    color: #0F172A;
+    margin: 0 0 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Lista de Avaliações */
+.lista-avaliacoes-vendedor {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.avaliacoes-vazio {
+    text-align: center;
+    padding: 34px 18px;
+    background: #F8FAFC;
+    border-radius: 14px;
+    border: 1px dashed #CBD5E1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.avaliacoes-vazio-icone {
+    font-size: 32px;
+    color: #94A3B8;
+    margin-bottom: 2px;
+}
+
+.avaliacoes-vazio-titulo {
+    font-size: 15px;
+    font-weight: 700;
+    color: #334155;
+    margin: 0;
+}
+
+.avaliacoes-vazio-desc {
+    font-size: 13.5px;
+    color: #64748B;
+    margin: 0;
+    max-width: 320px;
+    line-height: 1.4;
+}
+
+.item-avaliacao-card {
+    border-bottom: 1px solid #F1F5F9;
+    padding-bottom: 16px;
+}
+
+.item-avaliacao-card:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.avaliacao-topo-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.avaliacao-autor-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.avaliacao-avatar-mini {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #E2E8F0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 12px;
+    color: #334155;
+}
+
+.avaliacao-autor-nome {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #1E293B;
+}
+
+.avaliacao-estrelas {
+    color: #F59E0B;
+    font-size: 13px;
+    letter-spacing: 2px;
+}
+
+.avaliacao-comentario-txt {
+    font-size: 13.5px;
+    color: #475569;
+    line-height: 1.5;
+    margin: 0 0 6px;
+}
+
+.avaliacao-data-item {
+    font-size: 12px;
+    color: #94A3B8;
+}
+
+/* Card Dicas de Segurança */
+.box-dicas-seguranca {
+    background: #F8FAFC;
+    border-radius: 14px;
+    padding: 18px;
+    border: 1px solid #E2E8F0;
+}
+
+.dica-linha {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.dica-linha:last-child {
+    margin-bottom: 0;
+}
+
+.dica-linha-icone {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: #E8F5E9;
+    color: #2E7D32;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.dica-linha-icone svg {
+    width: 15px;
+    height: 15px;
+}
+
+.dica-linha-texto strong {
+    display: block;
+    font-size: 13.5px;
+    color: #1E293B;
+    margin-bottom: 2px;
+}
+
+.dica-linha-texto span {
+    font-size: 12.5px;
+    color: #64748B;
+    line-height: 1.4;
+}
+
+/* ==========================================================================
+   MENU DE AÇÕES DA AVALIAÇÃO (3 PONTINHOS - EDITAR / EXCLUIR)
+   ========================================================================== */
+.avaliacao-menu-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.btn-review-menu {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 8px;
+    color: #94A3B8;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.btn-review-menu:hover,
+.btn-review-menu.ativo {
+    background: rgba(148, 163, 184, 0.15);
+    color: #44BD32;
+}
+
+.dropdown-review-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    margin-top: 6px;
+    background: #1E293B;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.45), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+    min-width: 135px;
+    z-index: 100;
+    overflow: hidden;
+}
+
+.dropdown-review-menu.aberto {
+    display: block;
+}
+
+.dropdown-review-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: transparent;
+    border: none;
+    color: #F8FAFC;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.dropdown-review-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.dropdown-review-item.excluir {
+    color: #EF4444;
+    border-top: 1px solid #334155;
+}
+
+.dropdown-review-item.excluir:hover {
+    background: rgba(239, 68, 68, 0.12);
+}
+
+/* Modo Edição Inline da Avaliação */
+.box-edicao-inline-avaliacao {
+    background: rgba(15, 23, 42, 0.04);
+    border: 1px solid #CBD5E1;
+    border-radius: 12px;
+    padding: 14px;
+    margin-top: 8px;
+}
+
+.box-edicao-inline-avaliacao textarea {
+    background: #FFFFFF;
+    color: #1E293B;
+    border: 1px solid #CBD5E1;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.box-edicao-inline-avaliacao textarea:focus {
+    border-color: #38A129;
+    box-shadow: none;
+}
+
+[data-theme="dark"] .box-edicao-inline-avaliacao {
+    background: rgba(15, 23, 42, 0.7);
+    border-color: #334155;
+}
+
+[data-theme="dark"] .box-edicao-inline-avaliacao textarea {
+    background: #0F172A;
+    color: #F8FAFC;
+    border-color: #334155;
+}
+
+[data-theme="dark"] .box-edicao-inline-avaliacao textarea:focus {
+    border-color: #38A129;
+    box-shadow: none;
+}
+
+[data-theme="dark"] .dropdown-review-menu {
+    background: #0F172A;
+    border-color: #1E293B;
+}
+

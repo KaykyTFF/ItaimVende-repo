@@ -1,23 +1,75 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Itaim Vende - A maior plataforma de compra, venda e trocas da região de Paulistana e Piauí.">
+    <meta name="description"
+        content="Itaim Vende - A maior plataforma de compra, venda e trocas da região de Paulistana e Piauí.">
     <title>ItaimVende - Compra, Venda e Trocas</title>
-    
+
+    <!-- Anti-FOUC: Aplicação imediata do tema escuro/claro para eliminar qualquer flash visual -->
+    <script>
+        (function() {
+            try {
+                var p = (window.location.pathname || '').toLowerCase();
+                var isAuth = p.endsWith('index.html') || p.includes('/auth/') || p.includes('/login') || p.includes('/cadastro');
+                var tema = (!isAuth && localStorage.getItem('itaim_tema') === 'dark') ? 'dark' : 'light';
+                var d = document.documentElement;
+                d.setAttribute('data-theme', tema);
+                if (tema === 'dark') {
+                    d.classList.add('dark-theme');
+                } else {
+                    d.classList.remove('dark-theme');
+                }
+                d.classList.add('tema-sem-transicao');
+                var o = new MutationObserver(function() {
+                    if (document.body) {
+                        document.body.setAttribute('data-theme', tema);
+                        if (tema === 'dark') {
+                            document.body.classList.add('dark-theme');
+                        } else {
+                            document.body.classList.remove('dark-theme');
+                        }
+                        o.disconnect();
+                    }
+                });
+                o.observe(d, { childList: true, subtree: true });
+                window.addEventListener('DOMContentLoaded', function() {
+                    o.disconnect();
+                    if (document.body) {
+                        document.body.setAttribute('data-theme', tema);
+                        if (tema === 'dark') {
+                            document.body.classList.add('dark-theme');
+                        } else {
+                            document.body.classList.remove('dark-theme');
+                        }
+                    }
+                    requestAnimationFrame(function() {
+                        requestAnimationFrame(function() {
+                            d.classList.remove('tema-sem-transicao');
+                        });
+                    });
+                });
+            } catch (e) {}
+        })();
+    </script>
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Segoe+UI&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Segoe+UI&display=swap"
+        rel="stylesheet">
+
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="../../assets/header-logo.png">
-    
+    <link rel="icon" type="image/png" href="../../assets/logos/header-logo.png">
+
     <!-- CSS -->
-    <link rel="stylesheet" href="../../css/home.css?v=2">
-    <link rel="stylesheet" href="../../css/header-global.css?v=7">
+    <link rel="stylesheet" href="../../css/pages/home/home.css?v=8">
+    <link rel="stylesheet" href="../../css/core/header-global.css?v=20">
 </head>
+
 <body>
 
     <!-- ==========================================================
@@ -27,32 +79,29 @@
         <div class="header-container">
             <!-- Esquerda: Menu Hambúrguer e Logo -->
             <div class="header-left">
-                <button type="button" class="btn-menu-hamburguer" id="btn-abrir-drawer" aria-label="Abrir menu de navegação">
-                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <button type="button" class="btn-menu-hamburguer" id="btn-abrir-drawer"
+                    aria-label="Abrir menu de navegação">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2"
+                        stroke-linecap="round" stroke-linejoin="round">
                         <line x1="3" y1="12" x2="21" y2="12"></line>
                         <line x1="3" y1="6" x2="21" y2="6"></line>
                         <line x1="3" y1="18" x2="21" y2="18"></line>
                     </svg>
                 </button>
-                <a href="home.html" class="header-logo-link" title="Itaim Vende - Página Inicial">
-                    <img src="../../assets/header1-logo.png" alt="Itaim Vende" class="header-logo-img">
+                <a href="/" class="header-logo-link" title="Itaim Vende - Página Inicial">
+                    <img src="../../assets/logos/header1-logo.png" alt="Itaim Vende" class="header-logo-img">
                 </a>
             </div>
 
             <!-- Centro: Barra de Pesquisa Estilo Pílula -->
             <div class="header-center">
-                <form class="busca-form" id="form-busca" role="search" action="categoria.html" method="GET">
-                    <input 
-                        type="search" 
-                        class="campo-busca" 
-                        id="campo-busca" 
-                        name="q"
-                        placeholder="Buscar produtos, marcas e muito mais..." 
-                        autocomplete="off"
-                        aria-label="Buscar produtos"
-                    >
+                <form class="busca-form" id="form-busca" role="search" action="/categoria" method="GET">
+                    <input type="search" class="campo-busca" id="campo-busca" name="q"
+                        placeholder="Buscar produtos, marcas e muito mais..." autocomplete="off"
+                        aria-label="Buscar produtos">
                     <button type="submit" class="btn-busca-submit" id="btn-submit-busca" aria-label="Pesquisar">
-                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                            stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="11" cy="11" r="8"></circle>
                             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                         </svg>
@@ -62,73 +111,103 @@
 
             <!-- Direita: Ações do Cabeçalho -->
             <div class="header-right">
+                <!-- Botão Entrar (exibido para visitantes deslogados) -->
+                <a href="/login" class="btn-vender-destaque" id="btn-header-entrar">
+                    <span>Entrar</span>
+                </a>
+
                 <!-- Desktop: Meus Anúncios (Ícone + Texto) -->
-                <a href="../vender/meus-anuncios.html" class="btn-nav-texto" id="link-meus-anuncios">
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <a href="/meus-anuncios" class="btn-nav-texto" id="link-meus-anuncios">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
                         <path d="M3 11l19-9-9 19-2-8-8-2z"></path>
                     </svg>
                     <span>Meus Anúncios</span>
                 </a>
 
                 <!-- Botão Vender -->
-                <a href="../vender/vender.html" class="btn-vender-destaque" id="btn-abrir-modal-vender">
+                <a href="/vender" class="btn-vender-destaque" id="btn-abrir-modal-vender">
                     <span>Vender</span>
                 </a>
 
                 <!-- Ícone Conversas -->
-                <a href="../mensagens/conversas.html" class="btn-icone-header" id="btn-chat" aria-label="Conversas" title="Conversas">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <a href="/conversas" class="btn-icone-header" id="btn-chat" aria-label="Conversas"
+                    title="Conversas">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                     </svg>
                 </a>
 
                 <!-- Ícone Notificações -->
-                <a href="../notificacoes/notificacoes.html" class="btn-icone-header" id="btn-notificacoes" aria-label="Notificações" title="Notificações">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <a href="/notificacoes" class="btn-icone-header" id="btn-notificacoes"
+                    aria-label="Notificações" title="Notificações">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
                         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
                         <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
                     </svg>
                 </a>
 
                 <!-- Mobile: Ícone Meus Anúncios (substitui o coração no celular) -->
-                <a href="../vender/meus-anuncios.html" class="btn-icone-header btn-meus-anuncios-mobile" id="btn-meus-anuncios-mobile" aria-label="Meus Anúncios" title="Meus Anúncios">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <a href="/meus-anuncios" class="btn-icone-header btn-meus-anuncios-mobile"
+                    id="btn-meus-anuncios-mobile" aria-label="Meus Anúncios" title="Meus Anúncios">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
                         <path d="M3 11l19-9-9 19-2-8-8-2z"></path>
                     </svg>
                 </a>
 
                 <!-- Perfil do Usuário com Dropdown -->
                 <div class="perfil-wrapper">
-                    <button type="button" class="btn-avatar-header" id="btn-avatar-dropdown" aria-label="Abrir menu de perfil">
-                        <img src="../../assets/icon-user.png" alt="Foto de perfil" class="avatar-img" id="img-avatar-user">
+                    <button type="button" class="btn-avatar-header" id="btn-avatar-dropdown"
+                        aria-label="Abrir menu de perfil">
+                        <img src="../../assets/icons/icon-user.png" alt="Foto de perfil" class="avatar-img"
+                            id="img-avatar-user">
                     </button>
 
                     <div class="dropdown-perfil" id="dropdown-perfil">
-                        <a href="../perfil/perfil.html" class="dropdown-header-user" title="Ir para Meu Perfil">
-                            <strong id="dropdown-user-name">Raili</strong>
+                        <a href="/perfil" class="dropdown-header-user" title="Ir para Meu Perfil">
+                            <strong id="dropdown-user-name">Admin</strong>
                             <span id="dropdown-user-email">admin@gmail.com</span>
                         </a>
-                        <a href="../perfil/perfil.html" class="dropdown-item" id="link-menu-perfil">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                        <a href="/perfil" class="dropdown-item" id="link-menu-perfil">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
                             Meu Perfil
                         </a>
-                        <a href="../vender/meus-anuncios.html" class="dropdown-item" id="link-menu-anuncios">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l19-9-9 19-2-8-8-2z"></path></svg>
+                        <a href="/meus-anuncios" class="dropdown-item" id="link-menu-anuncios">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M3 11l19-9-9 19-2-8-8-2z"></path>
+                            </svg>
                             Meus Anúncios
                         </a>
-                        <a href="../favoritos/favoritos.html" class="dropdown-item" id="link-menu-favoritos">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                        <a href="/favoritos" class="dropdown-item" id="link-menu-favoritos">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path
+                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                                </path>
+                            </svg>
                             Favoritos (<span id="favoritos-contador-badge">0</span>)
                         </a>
-                        <a href="../perfil/configuracoes.html" class="dropdown-item" id="link-menu-configuracoes">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <a href="/configuracoes" class="dropdown-item" id="link-menu-configuracoes">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="3"></circle>
-                                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0 1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                                <path
+                                    d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0 1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                                </path>
                             </svg>
                             Configurações
                         </a>
-                        <a href="../../index.html" class="dropdown-item item-sair">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <a href="/login" class="dropdown-item item-sair">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                                 <polyline points="16 17 21 12 16 7"></polyline>
                                 <line x1="21" y1="12" x2="9" y2="12"></line>
@@ -147,50 +226,58 @@
     <div class="drawer-backdrop" id="drawer-backdrop">
         <aside class="drawer-menu" aria-label="Menu principal">
             <div class="drawer-header">
-                <img src="../../assets/header1-logo.png" alt="Itaim Vende" class="drawer-logo">
-                <button type="button" class="drawer-close" id="btn-fechar-drawer" aria-label="Fechar menu">&times;</button>
+                <img src="../../assets/logos/header1-logo.png" alt="Itaim Vende" class="drawer-logo">
+                <button type="button" class="drawer-close" id="btn-fechar-drawer"
+                    aria-label="Fechar menu">&times;</button>
             </div>
 
-            <!-- Perfil do Usuário no Drawer (Acesso rápido ao Perfil) -->
-            <a href="../perfil/perfil.html" class="drawer-user-card" id="drawer-user-card" title="Acessar Meu Perfil">
-                <div class="drawer-user-avatar-wrap">
-                    <img src="../../assets/icon-user.png" alt="Foto de perfil" class="drawer-user-avatar" id="drawer-user-avatar">
-                </div>
-                <div class="drawer-user-info">
-                    <span class="drawer-user-nome" id="drawer-user-name">Raili</span>
-                    <span class="drawer-user-sub">Ver meu perfil &rarr;</span>
-                </div>
-            </a>
-
             <nav class="drawer-nav">
-                <a href="home.html" class="drawer-link ativo" id="drawer-link-home">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+                <a href="/" class="drawer-link ativo" id="drawer-link-home">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    </svg>
                     Início
                 </a>
-                <a href="../perfil/perfil.html" class="drawer-link" id="drawer-link-perfil">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                <a href="/perfil" class="drawer-link" id="drawer-link-perfil">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
                     Meu Perfil
                 </a>
-                <a href="../vender/meus-anuncios.html" class="drawer-link" id="drawer-link-anuncios">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l19-9-9 19-2-8-8-2z"></path></svg>
+                <a href="/meus-anuncios" class="drawer-link" id="drawer-link-anuncios">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 11l19-9-9 19-2-8-8-2z"></path>
+                    </svg>
                     Meus Anúncios
                 </a>
-                <a href="../favoritos/favoritos.html" class="drawer-link" id="drawer-link-favoritos">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                <a href="/favoritos" class="drawer-link" id="drawer-link-favoritos">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                        </path>
+                    </svg>
                     Meus Favoritos
                 </a>
-                <a href="../mensagens/conversas.html" class="drawer-link" id="drawer-link-chat">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <a href="/conversas" class="drawer-link" id="drawer-link-chat">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                     </svg>
                     Conversas
                 </a>
-                <a href="../vender/vender.html" class="drawer-link" id="drawer-link-vender">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                <a href="/vender" class="drawer-link" id="drawer-link-vender">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
                     Vender Produto
                 </a>
-                <a href="../notificacoes/notificacoes.html" class="drawer-link" id="drawer-link-notificacoes">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                <a href="/notificacoes" class="drawer-link" id="drawer-link-notificacoes">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
                     Notificações
                 </a>
 
@@ -198,7 +285,8 @@
                 <div class="drawer-secao-divisor"></div>
                 <button type="button" class="drawer-accordion-btn" id="btn-toggle-categorias" aria-expanded="false">
                     <span class="drawer-accordion-label">
-                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+                            stroke-width="2">
                             <rect x="3" y="3" width="7" height="7"></rect>
                             <rect x="14" y="3" width="7" height="7"></rect>
                             <rect x="14" y="14" width="7" height="7"></rect>
@@ -206,31 +294,91 @@
                         </svg>
                         <span>Categorias</span>
                     </span>
-                    <svg class="chevron-accordion" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg class="chevron-accordion" viewBox="0 0 24 24" width="16" height="16" fill="none"
+                        stroke="currentColor" stroke-width="2">
                         <polyline points="6 9 12 15 18 9"></polyline>
                     </svg>
                 </button>
                 <div class="drawer-categorias-conteudo" id="drawer-categorias-conteudo">
-                    <a href="../produtos/categoria.html?cat=Eletrônicos" class="drawer-sublink">Eletrônicos</a>
-                    <a href="../produtos/categoria.html?cat=Decoração" class="drawer-sublink">Decoração</a>
-                    <a href="../produtos/categoria.html?cat=Móveis" class="drawer-sublink">Móveis</a>
-                    <a href="../produtos/categoria.html?cat=Moda" class="drawer-sublink">Moda & Vestuário</a>
-                    <a href="../produtos/categoria.html?cat=Infantil" class="drawer-sublink">Infantil & Bebês</a>
-                    <a href="../produtos/categoria.html?cat=Esportes" class="drawer-sublink">Esportes & Lazer</a>
-                    <a href="../produtos/categoria.html?cat=Hobbies" class="drawer-sublink">Hobbies & Games</a>
-                    <a href="../produtos/categoria.html?cat=Serviços" class="drawer-sublink">Serviços</a>
+                    <a href="/categoria?cat=Ve%C3%ADculos" class="drawer-sublink">Veículos</a>
+                    <a href="/categoria?cat=Autope%C3%A7as" class="drawer-sublink">Autopeças</a>
+                    <a href="/categoria?cat=Im%C3%B3veis" class="drawer-sublink">Imóveis</a>
+                    <a href="/categoria?cat=Terrenos" class="drawer-sublink">Terrenos</a>
+                    <a href="/categoria?cat=Agro" class="drawer-sublink">Agro</a>
+                    <a href="/categoria?cat=Pecu%C3%A1ria" class="drawer-sublink">Pecuária</a>
+                    <a href="/categoria?cat=Celulares" class="drawer-sublink">Celulares</a>
+                    <a href="/categoria?cat=Telefonia" class="drawer-sublink">Telefonia</a>
+                    <a href="/categoria?cat=Eletr%C3%B4nicos" class="drawer-sublink">Eletrônicos</a>
+                    <a href="/categoria?cat=%C3%81udio%20%26%20V%C3%ADdeo" class="drawer-sublink">Áudio & Vídeo</a>
+                    <a href="/categoria?cat=Inform%C3%A1tica" class="drawer-sublink">Informática</a>
+                    <a href="/categoria?cat=Games" class="drawer-sublink">Games</a>
+                    <a href="/categoria?cat=M%C3%B3veis" class="drawer-sublink">Móveis</a>
+                    <a href="/categoria?cat=Decora%C3%A7%C3%A3o" class="drawer-sublink">Decoração</a>
+                    <a href="/categoria?cat=Eletrodom%C3%A9sticos" class="drawer-sublink">Eletrodomésticos</a>
+                    <a href="/categoria?cat=Moda" class="drawer-sublink">Moda</a>
+                    <a href="/categoria?cat=Cal%C3%A7ados" class="drawer-sublink">Calçados</a>
+                    <a href="/categoria?cat=Acess%C3%B3rios" class="drawer-sublink">Acessórios</a>
+                    <a href="/categoria?cat=Beleza" class="drawer-sublink">Beleza</a>
+                    <a href="/categoria?cat=Cuidado%20Pessoal" class="drawer-sublink">Cuidado Pessoal</a>
+                    <a href="/categoria?cat=Infantil" class="drawer-sublink">Infantil</a>
+                    <a href="/categoria?cat=Beb%C3%AAs" class="drawer-sublink">Bebês</a>
+                    <a href="/categoria?cat=Esportes" class="drawer-sublink">Esportes</a>
+                    <a href="/categoria?cat=Fitness" class="drawer-sublink">Fitness</a>
+                    <a href="/categoria?cat=Lazer" class="drawer-sublink">Lazer</a>
+                    <a href="/categoria?cat=Constru%C3%A7%C3%A3o" class="drawer-sublink">Construção</a>
+                    <a href="/categoria?cat=Ferramentas" class="drawer-sublink">Ferramentas</a>
+                    <a href="/categoria?cat=Com%C3%A9rcio" class="drawer-sublink">Comércio</a>
+                    <a href="/categoria?cat=Escrit%C3%B3rio" class="drawer-sublink">Escritório</a>
+                    <a href="/categoria?cat=Servi%C3%A7os" class="drawer-sublink">Serviços</a>
+                    <a href="/categoria?cat=M%C3%BAsica" class="drawer-sublink">Música</a>
+                    <a href="/categoria?cat=Hobbies" class="drawer-sublink">Hobbies</a>
+                    <a href="/categoria?cat=Animais%20de%20Estima%C3%A7%C3%A3o" class="drawer-sublink">Animais de Estimação</a>
+                    <a href="/categoria?cat=Pet%20Shop" class="drawer-sublink">Pet Shop</a>
+                    <a href="/categoria?cat=Doa%C3%A7%C3%B5es" class="drawer-sublink">Doações</a>
+                    <a href="/categoria?cat=Trocas" class="drawer-sublink">Trocas</a>
+                    <a href="/categoria?cat=Outros" class="drawer-sublink">Outros</a>
                 </div>
 
                 <div class="drawer-secao-divisor"></div>
-                <a href="../perfil/configuracoes.html" class="drawer-link" id="drawer-link-configuracoes">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <button type="button" class="drawer-link btn-alternar-tema" id="btn-tema-drawer"
+                    aria-label="Alternar tema do site">
+                    <svg class="icone-tema-lua" viewBox="0 0 24 24" width="20" height="20" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg class="icone-tema-sol" viewBox="0 0 24 24" width="20" height="20" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        style="display: none;">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <span class="drawer-tema-texto">Modo Escuro</span>
+                    <span class="drawer-tema-switch" aria-hidden="true">
+                        <span class="drawer-tema-trilho">
+                            <span class="drawer-tema-bolinha"></span>
+                        </span>
+                    </span>
+                </button>
+                <a href="/configuracoes" class="drawer-link" id="drawer-link-configuracoes">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="3"></circle>
-                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0 1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                        <path
+                            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0 1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                        </path>
                     </svg>
                     Configurações
                 </a>
-                <a href="../../index.html" class="drawer-link item-sair">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <a href="/login" class="drawer-link item-sair">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                         <polyline points="16 17 21 12 16 7"></polyline>
                         <line x1="21" y1="12" x2="9" y2="12"></line>
@@ -245,29 +393,42 @@
          3. CONTEÚDO PRINCIPAL (BANNER, CATEGORIAS E VITRINE)
          ========================================================== -->
     <main class="main-conteudo">
-        
+
         <!-- CARROSSEL DE BANNERS OFICIAIS -->
         <section class="secao-carrossel-wrapper" aria-label="Banners Promocionais">
             <button type="button" class="btn-carrossel prev" id="btn-banner-prev" aria-label="Banner anterior">
-                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
             </button>
 
             <div class="carrossel-container" id="carrossel-container">
                 <div class="carrossel-slides" id="carrossel-slides">
                     <div class="slide-item">
-                        <img src="../../assets/Banner1.png" alt="Desapegue e Lucre no Itaim Vende">
+                        <picture>
+                            <source media="(max-width: 768px)" srcset="../../assets/banners/Banner1-mobile.png">
+                            <img src="../../assets/banners/Banner1.png" alt="Desapegue e Lucre no Itaim Vende">
+                        </picture>
                     </div>
                     <div class="slide-item">
-                        <img src="../../assets/Banner2.png" alt="Encontre as melhores ofertas da região">
+                        <picture>
+                            <source media="(max-width: 768px)" srcset="../../assets/banners/Banner2-mobile.png">
+                            <img src="../../assets/banners/Banner2.png" alt="Encontre as melhores ofertas da região">
+                        </picture>
                     </div>
                     <div class="slide-item">
-                        <img src="../../assets/Banner3.png" alt="Compre, venda e troque com facilidade">
+                        <picture>
+                            <source media="(max-width: 768px)" srcset="../../assets/banners/Banner3-mobile.png">
+                            <img src="../../assets/banners/Banner3.png" alt="Compre, venda e troque com facilidade">
+                        </picture>
                     </div>
                 </div>
             </div>
 
             <button type="button" class="btn-carrossel next" id="btn-banner-next" aria-label="Próximo banner">
-                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
             </button>
 
             <!-- Indicadores do Banner -->
@@ -281,107 +442,281 @@
         <!-- BARRA DE CATEGORIAS OFICIAIS (CÍRCULOS COMO LINKS PARA A PÁGINA DE CADA CATEGORIA) -->
         <section class="secao-categorias" aria-label="Categorias de Produtos">
             <div class="categorias-lista" id="categorias-lista">
-                <a href="../produtos/categoria.html?cat=todas" class="item-categoria" title="Ver todos os produtos">
+                <a href="/categoria?cat=todas" class="item-categoria" title="Ver todos os produtos">
                     <div class="circulo-categoria">
-                        <img src="../../assets/header-logo.png" alt="Todas as Categorias">
+                        <img src="../../assets/logos/header-logo.png" alt="Todas as Categorias">
                     </div>
                     <span class="label-categoria">Todas</span>
                 </a>
 
-                <a href="../produtos/categoria.html?cat=Eletrônicos" class="item-categoria" title="Ver Eletrônicos">
+                <a href="/categoria?cat=Eletrônicos" class="item-categoria" title="Ver Eletrônicos">
                     <div class="circulo-categoria">
-                        <img src="../../assets/cat-eletronicos.png" alt="Eletrônicos">
+                        <img src="../../assets/categorias/cat-eletronicos.png" alt="Eletrônicos">
                     </div>
                     <span class="label-categoria">Eletrônicos</span>
                 </a>
 
-                <a href="../produtos/categoria.html?cat=Decoração" class="item-categoria" title="Ver Decoração">
+                <a href="/categoria?cat=Decoração" class="item-categoria" title="Ver Decoração">
                     <div class="circulo-categoria">
-                        <img src="../../assets/cat-decoracao.png" alt="Decoração">
+                        <img src="../../assets/categorias/cat-decoracao.png" alt="Decoração">
                     </div>
                     <span class="label-categoria">Decoração</span>
                 </a>
 
-                <a href="../produtos/categoria.html?cat=Móveis" class="item-categoria" title="Ver Móveis">
+                <a href="/categoria?cat=Móveis" class="item-categoria" title="Ver Móveis">
                     <div class="circulo-categoria">
-                        <img src="../../assets/cat-moveis.png" alt="Móveis">
+                        <img src="../../assets/categorias/cat-moveis.png" alt="Móveis">
                     </div>
                     <span class="label-categoria">Móveis</span>
                 </a>
 
-                <a href="../produtos/categoria.html?cat=Moda" class="item-categoria" title="Ver Moda">
+                <a href="/categoria?cat=Moda" class="item-categoria" title="Ver Moda">
                     <div class="circulo-categoria">
-                        <img src="../../assets/cat-moda.png" alt="Moda">
+                        <img src="../../assets/categorias/cat-moda.png" alt="Moda">
                     </div>
                     <span class="label-categoria">Moda</span>
                 </a>
 
-                <a href="../produtos/categoria.html?cat=Infantil" class="item-categoria" title="Ver Infantil">
+                <a href="/categoria?cat=Infantil" class="item-categoria" title="Ver Infantil">
                     <div class="circulo-categoria">
-                        <img src="../../assets/cat-infantil.png" alt="Infantil">
+                        <img src="../../assets/categorias/cat-infantil.png" alt="Infantil">
                     </div>
                     <span class="label-categoria">Infantil</span>
                 </a>
 
-                <a href="../produtos/categoria.html?cat=Esportes" class="item-categoria" title="Ver Esportes">
+                <a href="/categoria?cat=Esportes" class="item-categoria" title="Ver Esportes">
                     <div class="circulo-categoria">
-                        <img src="../../assets/cat-esportes.png" alt="Esportes">
+                        <img src="../../assets/categorias/cat-esportes.png" alt="Esportes">
                     </div>
                     <span class="label-categoria">Esportes</span>
                 </a>
 
-                <a href="../produtos/categoria.html?cat=Hobbies" class="item-categoria" title="Ver Hobbies">
+                <a href="/categoria?cat=Hobbies" class="item-categoria" title="Ver Hobbies">
                     <div class="circulo-categoria">
-                        <img src="../../assets/cat-hobbies.png" alt="Hobbies">
+                        <img src="../../assets/categorias/cat-hobbies.png" alt="Hobbies">
                     </div>
                     <span class="label-categoria">Hobbies</span>
                 </a>
 
-                <a href="../produtos/categoria.html?cat=Serviços" class="item-categoria" title="Ver Serviços">
+                <a href="/categoria?cat=Serviços" class="item-categoria" title="Ver Serviços">
                     <div class="circulo-categoria">
-                        <img src="../../assets/cat-servicos.png" alt="Serviços">
+                        <img src="../../assets/categorias/cat-servicos.png" alt="Serviços">
                     </div>
                     <span class="label-categoria">Serviços</span>
                 </a>
             </div>
         </section>
 
-        <!-- BARRA DE CONTROLE E FILTROS DA VITRINE -->
-        <section class="barra-filtros-vitrine">
-            <div class="titulo-vitrine-grupo">
-                <h2 class="titulo-vitrine" id="titulo-secao-produtos">Anúncios Recentes</h2>
-                <span class="contador-produtos" id="contador-produtos">(9 produtos)</span>
+        <!-- BACKDROP PARA FILTROS MOBILE -->
+        <div class="sidebar-filtros-backdrop" id="sidebar-filtros-backdrop"></div>
+
+        <!-- CONTAINER PRINCIPAL DA VITRINE COM SIDEBAR DINÂMICA DE FILTROS -->
+        <div class="layout-vitrine-com-sidebar" id="layout-vitrine-com-sidebar">
+
+            <!-- BARRA LATERAL DE FILTROS (ESTILO E-COMMERCE MODERNO: "FILTRAR POR") -->
+            <aside class="sidebar-filtros-pesquisa" id="sidebar-filtros-pesquisa" aria-label="Filtrar por">
+                <div class="sidebar-filtros-header">
+                    <h3 class="sidebar-filtros-titulo">filtrar por</h3>
+                    <button type="button" class="btn-limpar-filtros-sidebar" id="btn-limpar-filtros-sidebar"
+                        title="Limpar todos os filtros">
+                        limpar
+                    </button>
+                </div>
+
+                <div class="sidebar-filtros-conteudo" id="sidebar-filtros-conteudo">
+                    <!-- Grupo 1: Departamento (Categorias Principais) -->
+                    <div class="sidebar-filtro-grupo" data-grupo="categoria">
+                        <h4 class="sidebar-grupo-titulo">Departamento</h4>
+                        <div class="sidebar-grupo-opcoes" id="sidebar-opcoes-categorias">
+                            <!-- Injetado dinamicamente via JS com contagem real -->
+                        </div>
+                    </div>
+
+                    <!-- Grupo 2: Condição -->
+                    <div class="sidebar-filtro-grupo" data-grupo="condicao">
+                        <h4 class="sidebar-grupo-titulo">Condição</h4>
+                        <div class="sidebar-grupo-opcoes" id="sidebar-opcoes-condicao">
+                            <label class="filtro-checkbox-item">
+                                <div class="filtro-check-conteudo">
+                                    <input type="checkbox" class="filtro-sidebar-check" name="filtro_condicao"
+                                        value="Novo">
+                                    <span class="custom-checkbox"></span>
+                                    <span class="filtro-label-texto">novo</span>
+                                </div>
+                                <span class="filtro-contador" id="count-condicao-novo">(0)</span>
+                            </label>
+                            <label class="filtro-checkbox-item">
+                                <div class="filtro-check-conteudo">
+                                    <input type="checkbox" class="filtro-sidebar-check" name="filtro_condicao"
+                                        value="Usado">
+                                    <span class="custom-checkbox"></span>
+                                    <span class="filtro-label-texto">usado</span>
+                                </div>
+                                <span class="filtro-contador" id="count-condicao-usado">(0)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Grupo 3: Cidades / Região -->
+                    <div class="sidebar-filtro-grupo" data-grupo="cidade">
+                        <h4 class="sidebar-grupo-titulo">Cidade</h4>
+                        <div class="sidebar-grupo-opcoes" id="sidebar-opcoes-cidades">
+                            <!-- Injetado dinamicamente via JS com contagem real -->
+                        </div>
+                    </div>
+
+                    <!-- Grupo 4: Faixa de Preço (Slider Interativo) -->
+                    <div class="sidebar-filtro-grupo" data-grupo="preco">
+                        <div class="sidebar-grupo-header-preco">
+                            <h4 class="sidebar-grupo-titulo" style="margin-bottom: 0;">Faixa de Preço</h4>
+                            <button type="button" class="btn-reset-preco-slider" id="btn-reset-preco-slider"
+                                title="Redefinir faixa de preço">Redefinir</button>
+                        </div>
+
+                        <div class="sidebar-preco-slider-box">
+                            <div class="sidebar-preco-valores-row">
+                                <span class="preco-tag-display" id="preco-min-display">R$ 0</span>
+                                <span class="preco-sep-txt">até</span>
+                                <span class="preco-tag-display" id="preco-max-display">R$ 5.000+</span>
+                            </div>
+
+                            <div class="preco-slider-container">
+                                <div class="preco-slider-track-bg"></div>
+                                <div class="preco-slider-track-fill" id="preco-slider-track-fill"></div>
+                                <input type="range" class="preco-slider-input input-min" id="filtro-preco-min" min="0"
+                                    max="5000" step="25" value="0" aria-label="Preço mínimo">
+                                <input type="range" class="preco-slider-input input-max" id="filtro-preco-max" min="0"
+                                    max="5000" step="25" value="5000" aria-label="Preço máximo">
+                            </div>
+
+                            <div class="preco-slider-escala-marcas">
+                                <span>R$ 0</span>
+                                <span>R$ 2.500</span>
+                                <span>R$ 5.000+</span>
+                            </div>
+                        </div>
+
+                        <div class="preco-atalhos-chips" id="preco-atalhos-chips">
+                            <button type="button" class="chip-preco ativo" data-min="0" data-max="5000">Todos</button>
+                            <button type="button" class="chip-preco" data-min="0" data-max="50">Até R$ 50</button>
+                            <button type="button" class="chip-preco" data-min="50" data-max="200">R$ 50 - 200</button>
+                            <button type="button" class="chip-preco" data-min="200" data-max="500">R$ 200 - 500</button>
+                            <button type="button" class="chip-preco" data-min="500" data-max="5000">R$ 500+</button>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- ÁREA DE PRODUTOS E RESULTADOS (COLUNA PRINCIPAL) -->
+            <div class="area-produtos-conteudo" id="area-produtos-conteudo">
+
+                <!-- HEADER EXCLUSIVO QUANDO UMA PESQUISA É FEITA (ESTILO SCREENSHOT) -->
+                <div class="header-pesquisa-resultados" id="header-pesquisa-resultados" style="display: none;">
+                    <div class="header-pesquisa-titulos">
+                        <h2 class="pesquisa-titulo-principal" id="pesquisa-titulo-principal">listagem de produtos</h2>
+                        <span class="pesquisa-subtitulo-contador" id="pesquisa-subtitulo-contador">0 produtos
+                            encontrados</span>
+                    </div>
+
+                    <div class="toolbar-pesquisa-controles">
+                        <!-- Botão mobile para exibir filtros na tela pequena -->
+                        <button type="button" class="btn-abrir-filtros-mobile" id="btn-abrir-filtros-mobile">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6" />
+                            </svg>
+                            Filtrar por
+                        </button>
+
+                        <!-- Ordenação da Pesquisa -->
+                        <div class="ordenar-grupo-pesquisa">
+                            <label for="select-ordem-pesquisa" class="label-ordenar-por">ordenar por:</label>
+                            <select class="select-filtro select-ordem-pesquisa" id="select-ordem-pesquisa"
+                                aria-label="Ordenar produtos da busca">
+                                <option value="relevantes">mais relevantes</option>
+                                <option value="recentes">mais recentes</option>
+                                <option value="menor-preco">menor preço</option>
+                                <option value="maior-preco">maior preço</option>
+                            </select>
+                        </div>
+
+                        <!-- Alternador de Visualização: Grid vs Lista -->
+                        <div class="visualizacao-toggle-grupo" role="group" aria-label="Visualização">
+                            <button type="button" class="btn-toggle-view ativo" id="btn-view-grid"
+                                title="Visualização em grade" aria-pressed="true">
+                                <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
+                                    <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
+                                    <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
+                                    <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
+                                    <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
+                                </svg>
+                                <span>grid</span>
+                            </button>
+                            <button type="button" class="btn-toggle-view" id="btn-view-lista"
+                                title="Visualização em lista" aria-pressed="false">
+                                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor"
+                                    stroke-width="2.5" stroke-linecap="round">
+                                    <line x1="8" y1="6" x2="21" y2="6"></line>
+                                    <line x1="8" y1="12" x2="21" y2="12"></line>
+                                    <line x1="8" y1="18" x2="21" y2="18"></line>
+                                    <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                                    <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                                    <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                                </svg>
+                                <span>lista</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BARRA DE CONTROLE E FILTROS DA VITRINE (MODO PADRÃO HOME) -->
+                <section class="barra-filtros-vitrine" id="barra-filtros-padrao">
+                    <div class="titulo-vitrine-grupo">
+                        <h2 class="titulo-vitrine" id="titulo-secao-produtos">Anúncios Recentes</h2>
+
+                    </div>
+
+                    <div class="controles-filtros">
+                        <!-- Filtro por Cidade -->
+                        <select class="select-filtro" id="filtro-cidade" aria-label="Filtrar por cidade">
+                            <option value="todas">Todas as Cidades</option>
+                            <option value="Paulistana">Paulistana</option>
+                            <option value="Acauã">Acauã</option>
+                            <option value="Betânia do Piauí">Betânia do Piauí</option>
+                            <option value="Curral Novo">Curral Novo</option>
+                            <option value="Jacobina do Piauí">Jacobina do Piauí</option>
+                            <option value="Queimada Nova">Queimada Nova</option>
+                            <option value="Picos">Picos</option>
+                            <option value="Afrânio">Afrânio</option>
+                            <option value="Petrolina">Petrolina</option>
+                        </select>
+
+                        <!-- Filtro por Bairro (populado dinamicamente conforme a cidade selecionada) -->
+                        <select class="select-filtro" id="filtro-bairro" aria-label="Filtrar por bairro" disabled
+                            style="opacity: 0.6; cursor: not-allowed;">
+                            <option value="todos">Todos os Bairros</option>
+                        </select>
+
+                        <!-- Ordenação -->
+                        <select class="select-filtro" id="filtro-ordem" aria-label="Ordenar produtos">
+                            <option value="recentes">Mais recentes</option>
+                            <option value="menor-preco">Menor preço</option>
+                            <option value="maior-preco">Maior preço</option>
+                        </select>
+
+                        <button type="button" class="btn-limpar-filtros" id="btn-limpar-filtros">
+                            ✕ Limpar filtros
+                        </button>
+                    </div>
+                </section>
+
+                <!-- GRADE DE CARDS DE PRODUTOS -->
+                <section class="grade-produtos" id="grade-produtos" aria-label="Lista de produtos à venda">
+                    <!-- Os cards são injetados dinamicamente via JS com dados reais da aplicação -->
+                </section>
+
             </div>
-
-            <div class="controles-filtros">
-                <!-- Filtro por Cidade -->
-                <select class="select-filtro" id="filtro-cidade" aria-label="Filtrar por cidade">
-                    <option value="todas">Todas as Cidades</option>
-                    <option value="Paulistana">Paulistana</option>
-                    <option value="Acauã">Acauã</option>
-                    <option value="Betânia do Piauí">Betânia do Piauí</option>
-                    <option value="Curral Novo">Curral Novo</option>
-                    <option value="Picos">Picos</option>
-                    <option value="Petrolina">Petrolina</option>
-                </select>
-
-                <!-- Ordenação -->
-                <select class="select-filtro" id="filtro-ordem" aria-label="Ordenar produtos">
-                    <option value="recentes">Mais recentes</option>
-                    <option value="menor-preco">Menor preço</option>
-                    <option value="maior-preco">Maior preço</option>
-                </select>
-
-                <button type="button" class="btn-limpar-filtros" id="btn-limpar-filtros">
-                    ✕ Limpar filtros
-                </button>
-            </div>
-        </section>
-
-        <!-- GRADE DE CARDS DE PRODUTOS -->
-        <section class="grade-produtos" id="grade-produtos" aria-label="Lista de produtos à venda">
-            <!-- Os cards são injetados dinamicamente via JS com dados reais da aplicação -->
-        </section>
+        </div>
     </main>
 
     <!-- A criação de anúncios ocorre na página dedicada: vender.html -->
@@ -392,58 +727,61 @@
     <footer class="footer-principal">
         <div class="footer-container">
             <div class="footer-col">
-                <img src="../../assets/header-logo.png" alt="Itaim Vende" class="footer-logo-img">
+                <img src="../../assets/logos/header1-logo.png" alt="Itaim Vende" class="footer-logo-img">
                 <p class="footer-sobre">
-                    O Itaim Vende é o maior portal de compra, venda e troca da região de Paulistana e cidades vizinhas no Piauí. Conectando pessoas e bons negócios.
+                    Portal de vendas, compras e doações da região de Paulistana.
                 </p>
             </div>
 
             <div class="footer-col">
                 <h4>Categorias</h4>
                 <ul class="footer-links">
-                    <li><a href="../produtos/categoria.html?cat=Eletrônicos">Eletrônicos</a></li>
-                    <li><a href="../produtos/categoria.html?cat=Móveis">Móveis</a></li>
-                    <li><a href="../produtos/categoria.html?cat=Decoração">Decoração</a></li>
-                    <li><a href="../produtos/categoria.html?cat=Moda">Moda & Vestuário</a></li>
-                    <li><a href="../produtos/categoria.html?cat=Serviços">Serviços</a></li>
+                    <li><a href="/categoria?cat=Eletrônicos">Eletrônicos</a></li>
+                    <li><a href="/categoria?cat=Móveis">Móveis</a></li>
+                    <li><a href="/categoria?cat=Decoração">Decoração</a></li>
+                    <li><a href="/categoria?cat=Moda">Moda & Vestuário</a></li>
+                    <li><a href="/categoria?cat=Serviços">Serviços</a></li>
                 </ul>
             </div>
 
             <div class="footer-col">
                 <h4>Cidades Atendidas</h4>
                 <ul class="footer-links">
-                    <li><a href="home.html">Paulistana - PI</a></li>
-                    <li><a href="home.html">Acauã - PI</a></li>
-                    <li><a href="home.html">Betânia do Piauí</a></li>
-                    <li><a href="home.html">Curral Novo</a></li>
-                    <li><a href="home.html">Picos e Região</a></li>
+                    <li><a href="/">Paulistana - PI</a></li>
+                    <li><a href="/">Acauã - PI</a></li>
+                    <li><a href="/">Betânia do Piauí</a></li>
+                    <li><a href="/">Curral Novo</a></li>
+                    <li><a href="/">Picos e Região</a></li>
                 </ul>
             </div>
 
             <div class="footer-col">
                 <h4>Minha Conta</h4>
                 <ul class="footer-links">
-                    <li><a href="../../index.html">Entrar / Cadastro</a></li>
-                    <li><a href="../vender/meus-anuncios.html" id="footer-link-anuncios">Meus Anúncios</a></li>
-                    <li><a href="../favoritos/favoritos.html" id="footer-link-favoritos">Meus Favoritos</a></li>
+                    <li><a href="/login">Entrar / Cadastro</a></li>
+                    <li><a href="/meus-anuncios" id="footer-link-anuncios">Meus Anúncios</a></li>
+                    <li><a href="/favoritos" id="footer-link-favoritos">Meus Favoritos</a></li>
 
-                    <li><a href="../perfil/perfil.html">Meu Perfil</a></li>
+                    <li><a href="/perfil">Meu Perfil</a></li>
                 </ul>
             </div>
         </div>
 
         <div class="footer-bottom">
             <span>© 2026 Itaim Vende. Todos os direitos reservados.</span>
-            <span>Desenvolvido com carinho para o Piauí.</span>
+            <span>v2.0.0 (API RESTful)</span>
+            <span>Compre, venda e anuncie com facilidade.</span>
         </div>
     </footer>
 
     <!-- Dados e Lógica JS -->
-    <script src="../../js/core/produtos-dados.js"></script>
-    <script src="../../js/core/rotas.js"></script>
-    <script src="../../js/core/api.js"></script>
-    <script src="../../js/core/sessao.js"></script>
-    <script src="../../js/core/skeleton.js"></script>
-    <script src="../../js/pages/home/home.js?v=4"></script>
+    <script src="../../js/core/categorias/index.js"></script>
+    <script src="../../js/core/produtos-dados/index.js"></script>
+    <script src="../../js/core/rotas/index.js"></script>
+    <script src="../../js/core/api/index.js"></script>
+    <script src="../../js/core/sessao/index.js"></script>
+    <script src="../../js/core/skeleton/index.js"></script>
+    <script src="../../js/pages/home/home.js?v=5"></script>
 </body>
+
 </html>

@@ -1,0 +1,194 @@
+
+/* Responsividade */
+@media (max-width: 1080px) {
+    .grid-anuncio-conteudo {
+        grid-template-columns: 1fr;
+    }
+
+    .card-sidebar-acoes {
+        position: static;
+    }
+
+    .sobre-anuncio-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .breadcrumb-ref-wrapper {
+        padding: 0 12px;
+        margin: 12px auto 6px;
+    }
+
+    .breadcrumb-ref-lista {
+        font-size: 12.5px;
+        gap: 6px;
+    }
+
+    .breadcrumb-ref-wrapper {
+        padding: 0 10px;
+        margin: 10px auto 4px;
+    }
+
+    .btn-voltar-home {
+        padding: 6px 12px;
+        font-size: 12.5px;
+    }
+
+    .layout-anuncio-wrapper {
+        padding: 0 10px;
+        margin: 8px auto 36px;
+    }
+
+    .grid-anuncio-conteudo {
+        gap: 16px;
+    }
+
+    .card-anuncio-topo {
+        padding: 14px 12px;
+        border-radius: 14px;
+    }
+
+    .grid-carrossel-detalhes {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .carrossel-wrapper {
+        max-width: 440px;
+        margin: 0 auto;
+        width: 100%;
+    }
+
+    .carrossel-foto-box {
+        aspect-ratio: 4 / 3;
+        max-height: 270px;
+        border-radius: 14px;
+    }
+
+    .miniaturas-row {
+        justify-content: center;
+        gap: 6px;
+        margin-top: 8px;
+    }
+
+    .thumb-box {
+        width: 46px;
+        height: 46px;
+        border-radius: 8px;
+        padding: 2px;
+    }
+
+    .destaques-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .produto-titulo-destaque {
+        font-size: 20px;
+        line-height: 1.3;
+    }
+
+    .card-sidebar-acoes {
+        padding: 20px 16px;
+        border-radius: 16px;
+    }
+
+    .valor-preco-grande {
+        font-size: 28px;
+    }
+
+    .btn-whatsapp-vendedor {
+        height: 48px;
+        font-size: 15px;
+    }
+
+    .secao-relacionados {
+        padding: 0 12px !important;
+        margin: 24px auto 40px !important;
+    }
+
+    .secao-relacionados-topo {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 8px;
+    }
+
+    .secao-relacionados .grade-produtos,
+    #grade-relacionados {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        gap: 12px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .breadcrumb-ref-wrapper {
+        margin: 6px auto 2px;
+    }
+
+    .card-anuncio-topo {
+        padding: 12px 10px;
+        border-radius: 12px;
+    }
+
+    .carrossel-foto-box {
+        aspect-ratio: 4 / 3;
+        max-height: 235px;
+        border-radius: 12px;
+    }
+
+    .badge-disponivel {
+        top: 10px;
+        left: 10px;
+        font-size: 11px;
+        padding: 4px 10px;
+    }
+
+    .carrossel-seta {
+        width: 30px;
+        height: 30px;
+    }
+
+    .carrossel-seta svg {
+        width: 15px;
+        height: 15px;
+    }
+
+    .carrossel-seta-esq {
+        left: 8px;
+    }
+
+    .carrossel-seta-dir {
+        right: 8px;
+    }
+
+    .badge-contador-fotos {
+        bottom: 8px;
+        right: 8px;
+        font-size: 11px;
+        padding: 3px 9px;
+    }
+
+    .thumb-box {
+        width: 40px;
+        height: 40px;
+    }
+
+    .produto-titulo-destaque {
+        font-size: 18px;
+    }
+
+    .valor-preco-grande {
+        font-size: 24px;
+    }
+
+    .especificacoes-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px 28px;
+    }
+}

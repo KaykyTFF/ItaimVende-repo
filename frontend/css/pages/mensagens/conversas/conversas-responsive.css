@@ -1,0 +1,84 @@
+/* ==========================================================================
+   RESPONSIVIDADE (TABLETS E COMPUTADORES MENORES <= 1100px)
+   ========================================================================== */
+@media (max-width: 1100px) {
+    .chat-layout-grid {
+        grid-template-columns: 310px 1fr 280px;
+    }
+
+    .chat-produto-preco-destaque {
+        font-size: 21px;
+    }
+}
+
+/* ==========================================================================
+   RESPONSIVIDADE MOBILE (<= 768px)
+   ========================================================================== */
+@media (max-width: 768px) {
+    .chat-app-root {
+        flex: 1 1 0;
+        min-height: 0;
+        height: auto;
+    }
+
+    .chat-layout-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* No celular: Oculta a Coluna da Direita de Detalhes (já temos o mini-resumo no topo) */
+    .chat-col-produto {
+        display: none !important;
+    }
+
+    /* Estado Inicial no Celular: Mostra Lista de Conversas */
+    .chat-col-conversas {
+        display: flex;
+        width: 100%;
+    }
+
+    .chat-col-mensagens {
+        display: none;
+        width: 100%;
+    }
+
+    /* Quando uma conversa é selecionada no Celular: */
+    .chat-layout-grid.conversa-aberta-mobile .chat-col-conversas {
+        display: none !important;
+    }
+
+    .chat-layout-grid.conversa-aberta-mobile .chat-col-mensagens {
+        display: flex !important;
+    }
+
+    .btn-voltar-mobile-chat {
+        display: flex;
+    }
+
+    .mobile-resumo-produto-topo {
+        display: flex !important;
+    }
+
+    .msg-balao {
+        max-width: 86%;
+        font-size: 13.5px;
+    }
+
+    .chat-feed-mensagens {
+        padding: 14px 14px;
+        gap: 10px;
+    }
+
+    .chat-envio-form {
+        padding: 10px 12px;
+    }
+
+    .chat-input-texto {
+        height: 40px;
+        font-size: 13.5px;
+    }
+
+    .btn-enviar-mensagem {
+        width: 40px;
+        height: 40px;
+    }
+}

@@ -1,0 +1,23 @@
+/**
+ * ITAIM VENDE - PERFIL PÚBLICO DO VENDEDOR (VENDEDOR.HTML)
+ * Arquivo orquestrador / modular
+ */
+
+/* 1. Herança do Perfil e Base */
+@import url('perfil.css?v=20');
+@import url('./vendedor/vendedor-base.css?v=20');
+
+/* 2. Hero Card: Informações, Avatar e Contatos */
+@import url('./vendedor/vendedor-hero.css?v=20');
+
+/* 3. Métricas e Reputação */
+@import url('./vendedor/vendedor-stats.css?v=20');
+
+/* 4. Vitrine de Anúncios e Filtros */
+@import url('./vendedor/vendedor-anuncios.css?v=20');
+
+/* 5. Avaliações e Dicas de Segurança */
+@import url('./vendedor/vendedor-avaliacoes.css?v=20');
+
+/* 6. Responsividade (Tablet e Mobile) */
+@import url('./vendedor/vendedor-responsive.css?v=20');

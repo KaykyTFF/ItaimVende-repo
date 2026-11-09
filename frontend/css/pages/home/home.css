@@ -1,0 +1,26 @@
+/**
+ * ITAIM VENDE - PÁGINA INICIAL (HOME)
+ * Arquivo orquestrador / modular
+ */
+
+/* 1. Cabeçalho e componentes globais */
+@import url('../../core/header-global.css');
+
+/* 2. Base e Tema */
+@import url('./home/home-base.css');
+
+/* 3. Compatibilidade de Cabeçalho e Drawer */
+@import url('./home/home-header-compat.css');
+@import url('./home/home-drawer.css');
+
+/* 4. Conteúdo Principal e Vitrine */
+@import url('./home/home-hero-carrossel.css?v=3');
+@import url('./home/home-categorias.css');
+@import url('./home/home-filtros.css');
+@import url('./home/home-produtos-grid.css');
+@import url('./home/home-sidebar-busca.css?v=2');
+
+/* 5. Modais, Rodapé e Responsividade */
+@import url('./home/home-modais.css');
+@import url('./home/home-footer.css');
+@import url('./home/home-responsive.css');

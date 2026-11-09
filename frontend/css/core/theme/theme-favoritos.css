@@ -1,0 +1,43 @@
+/**
+ * ITAIM VENDE - FAVORITOS NO MODO ESCURO
+ * Arquivo: frontend/css/core/theme/theme-favoritos.css
+ */
+
+/* ==========================================================================
+   PÁGINA DE FAVORITOS (FAVORITOS.HTML) - MODO ESCURO
+   ========================================================================== */
+[data-theme="dark"] .favoritos-container {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .favoritos-titulos h1 {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .favoritos-titulos p {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .favoritos-vazio {
+    background-color: #1F2831 !important;
+    border: 1px dashed #2C3946 !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25) !important;
+}
+
+[data-theme="dark"] .favoritos-vazio h2 {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .favoritos-vazio p {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .favoritos-barra-filtros .campo-filtro-favoritos {
+    background-color: #1F2831 !important;
+    border-color: #2C3946 !important;
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .favoritos-barra-filtros .campo-filtro-favoritos::placeholder {
+    color: #64748B !important;
+}

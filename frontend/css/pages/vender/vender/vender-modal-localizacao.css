@@ -1,0 +1,111 @@
+/* ==========================================================================
+   MODAL DE EDIÇÃO DE LOCALIZAÇÃO
+   ========================================================================== */
+.modal-localizacao-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.modal-localizacao-backdrop.ativo {
+    display: flex;
+}
+
+.modal-localizacao-card {
+    background: #FFFFFF;
+    border-radius: 20px;
+    padding: 28px;
+    width: 100%;
+    max-width: 440px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    animation: modalScaleIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalScaleIn {
+    from { transform: scale(0.92); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.modal-localizacao-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.modal-localizacao-header h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.btn-fechar-modal-loc {
+    background: none;
+    border: none;
+    font-size: 22px;
+    color: #9CA3AF;
+    cursor: pointer;
+    padding: 4px;
+}
+
+.btn-fechar-modal-loc:hover {
+    color: #111827;
+}
+
+.form-grupo-modal {
+    margin-bottom: 16px;
+}
+
+.form-grupo-modal label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #4B5563;
+    margin-bottom: 6px;
+}
+
+.form-grupo-modal select,
+.form-grupo-modal input {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid #D1D5DB;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+}
+
+.form-grupo-modal select:focus,
+.form-grupo-modal input:focus {
+    border-color: #38A129;
+    box-shadow: none;
+}
+
+.btn-salvar-localizacao {
+    width: 100%;
+    background-color: #38A129;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: none;
+    transition: background 0.2s ease;
+}
+
+.btn-salvar-localizacao:hover {
+    background-color: #2E8B22;
+    box-shadow: none;
+}
+

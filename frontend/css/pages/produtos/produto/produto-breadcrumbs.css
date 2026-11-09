@@ -1,0 +1,93 @@
+/* ==========================================================================
+   NOVO DESIGN DE REFERÊNCIA (ESTILO CONTROLE REMOTO / MOTO G9 POWER)
+   ========================================================================== */
+
+/* Fundo geral da página */
+body {
+    background-color: var(--light-bg, #F4F6F8);
+}
+
+/* Breadcrumbs e Botão Voltar Circular no topo */
+.breadcrumb-ref-wrapper {
+    max-width: 1380px;
+    margin: 18px auto 10px;
+    padding: 0 24px;
+}
+
+.breadcrumb-barra-alinhamento {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+/* Botão circular de voltar no tom exato da divisória verde (#44BD32) */
+.btn-voltar-circular-verde {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    border-radius: 50%;
+    background-color: #44BD32;
+    /* Tom exato da divisória verde abaixo do cabeçalho */
+    color: #FFFFFF;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    box-shadow: none;
+    transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+    flex-shrink: 0;
+}
+
+.btn-voltar-circular-verde:hover {
+    background-color: #3ca82b;
+    transform: scale(1.08);
+    box-shadow: none;
+}
+
+.btn-voltar-circular-verde:active {
+    transform: scale(0.96);
+}
+
+.btn-voltar-circular-verde svg {
+    display: block;
+    width: 20px;
+    height: 20px;
+}
+
+.breadcrumb-ref-lista {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13.5px;
+    color: #64748B;
+    list-style: none;
+    font-weight: 500;
+    flex-wrap: wrap;
+}
+
+.breadcrumb-ref-lista a {
+    color: #475569;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.breadcrumb-ref-lista a:hover {
+    color: #44BD32;
+}
+
+.breadcrumb-ref-lista .sep {
+    color: #94A3B8;
+    font-size: 11px;
+}
+
+.breadcrumb-ref-lista .atual {
+    color: #1E293B;
+    font-weight: 600;
+}
+
+.breadcrumb-home-icon {
+    font-size: 15px;
+    line-height: 1;
+}

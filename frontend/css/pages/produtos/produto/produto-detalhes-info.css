@@ -1,0 +1,150 @@
+
+/* Detalhes do Anúncio (Centro) */
+.info-detalhes-coluna {
+    display: flex;
+    flex-direction: column;
+}
+
+.selo-anuncio-verificado {
+    color: #44BD32;
+    font-weight: 800;
+    font-size: 12.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.produto-titulo-destaque {
+    font-size: 26px;
+    font-weight: 800;
+    color: #1E293B;
+    line-height: 1.25;
+    margin-bottom: 8px;
+}
+
+.produto-localizacao-linha {
+    color: #64748B;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 20px;
+}
+
+.divisor-suave {
+    border: none;
+    border-top: 1px solid #F1F5F9;
+    margin: 0 0 20px;
+}
+
+.bloco-descricao-curta {
+    margin-bottom: 24px;
+}
+
+.subtitulo-secao {
+    font-size: 16px;
+    font-weight: 800;
+    color: #1E293B;
+    margin-bottom: 8px;
+}
+
+.texto-descricao-paragrafo {
+    font-size: 14px;
+    color: #475569;
+    line-height: 1.6;
+}
+
+.especificacoes-grid {
+    display: flex;
+    align-items: flex-start;
+    gap: 36px;
+    margin-top: 0;
+    margin-bottom: 22px;
+    padding-top: 0;
+    flex-wrap: nowrap;
+}
+
+.espec-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: max-content;
+    white-space: nowrap;
+}
+
+.espec-chave {
+    font-size: 12.5px;
+    color: #64748B;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.espec-valor {
+    font-size: 15px;
+    font-weight: 800;
+    color: #1E293B;
+    white-space: nowrap;
+}
+
+/* Card Sobre Este Anúncio */
+.card-sobre-anuncio {
+    background: #FFFFFF;
+    border-radius: 20px;
+    border: 1px solid #E2E8F0;
+    padding: 24px 28px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+.sobre-anuncio-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #1E293B;
+    font-size: 16px;
+    font-weight: 800;
+    margin-bottom: 16px;
+}
+
+.sobre-anuncio-grid {
+    display: block;
+    width: 100%;
+}
+
+.sobre-anuncio-desc {
+    font-size: 14.5px;
+    color: #475569;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.destaques-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.destaque-col {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.destaque-titulo {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 800;
+    color: #1E293B;
+}
+
+.destaque-sub {
+    font-size: 12px;
+    color: #64748B;
+    line-height: 1.45;
+}

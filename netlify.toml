@@ -13,6 +13,11 @@
 # REESCRITAS DE URL AMIGÁVEIS (STATUS 200)
 # ==============================================================================
 [[redirects]]
+  from = "/"
+  to = "/pages/home/home.html"
+  status = 200
+
+[[redirects]]
   from = "/home"
   to = "/pages/home/home.html"
   status = 200

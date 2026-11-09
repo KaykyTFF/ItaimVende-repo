@@ -1,0 +1,95 @@
+/* ==========================================================================
+   ITAIM VENDE - PÁGINA DE CHAT E MENSAGENS (CONVERSAS.HTML)
+   Layout profissional em 3 colunas, responsivo e com tons pastéis harmônicos
+   ========================================================================== */
+
+:root {
+    --chat-font: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --chat-sidebar-bg: #16222F;
+    --chat-sidebar-dark: #111C24;
+    --chat-item-hover: rgba(255, 255, 255, 0.05);
+    --chat-item-active: rgba(56, 161, 41, 0.14);
+    --chat-border-dark: rgba(255, 255, 255, 0.08);
+    --chat-feed-bg: #EAEFF5;
+    --chat-msg-received: #FFFFFF;
+    --chat-msg-sent: #D8F3DC;
+    --chat-msg-border-sent: rgba(56, 161, 41, 0.25);
+    --chat-msg-text: #1E293B;
+    --chat-input-bg: #1E2D3B;
+    --chat-primary: #38A129;
+    --chat-primary-hover: #2E8B22;
+}
+
+[data-theme="dark"],
+.dark-theme {
+    --chat-sidebar-bg: #16222F;
+    --chat-sidebar-dark: #111C24;
+    --chat-item-hover: rgba(255, 255, 255, 0.05);
+    --chat-item-active: rgba(56, 161, 41, 0.18);
+    --chat-border-dark: #24303C;
+    --chat-feed-bg: #141A20;
+    --chat-msg-received: #242E38;
+    --chat-msg-sent: #1F4E2E;
+    --chat-msg-border-sent: #2E7D32;
+    --chat-msg-text: #F1F5F9;
+    --chat-input-bg: #141A20;
+    --chat-primary: #38A129;
+    --chat-primary-hover: #2E8B22;
+}
+
+/* Tipografia moderna e uniforme idêntica às outras páginas da plataforma */
+html,
+body.pagina-chat,
+.pagina-chat,
+.pagina-chat *,
+.pagina-chat *::before,
+.pagina-chat *::after {
+    box-sizing: border-box;
+    font-family: var(--chat-font) !important;
+}
+
+/* Trava a rolagem global da página para o chat funcionar como aplicação fluida */
+html,
+body.pagina-chat {
+    height: 100%;
+    height: 100dvh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: var(--chat-sidebar-dark);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.pagina-chat {
+    display: flex;
+    flex-direction: column;
+}
+
+/* O Cabeçalho Global no chat fica no topo e não encolhe */
+.pagina-chat .header-principal {
+    flex-shrink: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+/* ==========================================================================
+   LAYOUT PRINCIPAL (3 COLUNAS NO COMPUTADOR)
+   ========================================================================== */
+.chat-app-root {
+    flex: 1 1 0;
+    min-height: 0;
+    height: auto;
+    width: 100%;
+    display: flex;
+    overflow: hidden;
+    background-color: var(--chat-sidebar-dark);
+}
+
+.chat-layout-grid {
+    display: grid;
+    grid-template-columns: 340px 1fr 340px;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}

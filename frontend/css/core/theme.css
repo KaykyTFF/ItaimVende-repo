@@ -1,0 +1,27 @@
+/**
+ * ITAIM VENDE - SISTEMA GLOBAL DE TEMAS (CLARO & ESCURO)
+ * Arquivo: frontend/css/core/theme.css
+ * Arquivo orquestrador / modular unificado
+ */
+
+/* 1. Variáveis de Tema (Modo Claro & Escuro) */
+@import url('./theme/theme-variables.css');
+
+/* 2. Estilos Base e Componentes Globais */
+@import url('./theme/theme-base.css?v=22');
+
+/* 3. Componentes Compartilhados de Interface */
+@import url('./theme/theme-drawer.css');
+@import url('./theme/theme-configuracoes.css');
+@import url('./theme/theme-foto-modal.css');
+@import url('./theme/theme-skeleton.css');
+
+/* 4. Módulos Específicos por Página */
+@import url('./theme/theme-categoria.css');
+@import url('./theme/theme-produto.css?v=20');
+@import url('./theme/theme-perfil.css?v=22');
+@import url('./theme/theme-meus-anuncios.css');
+@import url('./theme/theme-vender.css?v=15');
+@import url('./theme/theme-conversas.css?v=20');
+@import url('./theme/theme-notificacoes.css');
+@import url('./theme/theme-favoritos.css');

@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Itaim Vende - Painel de Controle, Diagnóstico e Monitoramento Operacional">
+    <title>Painel de Controle & Saúde do Sistema - Itaim Vende</title>
+
+    <!-- Anti-FOUC: Aplicação imediata do tema escuro/claro para eliminar qualquer flash visual -->
+    <script>
+        (function() {
+            try {
+                var p = (window.location.pathname || '').toLowerCase();
+                var isAuth = p.endsWith('index.html') || p.includes('/auth/') || p.includes('/login') || p.includes('/cadastro');
+                var tema = (!isAuth && localStorage.getItem('itaim_tema') === 'dark') ? 'dark' : 'light';
+                var d = document.documentElement;
+                d.setAttribute('data-theme', tema);
+                if (tema === 'dark') {
+                    d.classList.add('dark-theme');
+                } else {
+                    d.classList.remove('dark-theme');
+                }
+                d.classList.add('tema-sem-transicao');
+                var o = new MutationObserver(function() {
+                    if (document.body) {
+                        document.body.setAttribute('data-theme', tema);
+                        if (tema === 'dark') {
+                            document.body.classList.add('dark-theme');
+                        } else {
+                            document.body.classList.remove('dark-theme');
+                        }
+                        o.disconnect();
+                    }
+                });
+                o.observe(d, { childList: true, subtree: true });
+                window.addEventListener('DOMContentLoaded', function() {
+                    o.disconnect();
+                    if (document.body) {
+                        document.body.setAttribute('data-theme', tema);
+                        if (tema === 'dark') {
+                            document.body.classList.add('dark-theme');
+                        } else {
+                            document.body.classList.remove('dark-theme');
+                        }
+                    }
+                    requestAnimationFrame(function() {
+                        requestAnimationFrame(function() {
+                            d.classList.remove('tema-sem-transicao');
+                        });
+                    });
+                });
+            } catch (e) {}
+        })();
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/pages/admin/painel.css?v=1">
+    <link rel="icon" type="image/png" href="../../assets/logos/header-logo.png">
+</head>
+<body class="painel-body">
+
+    <!-- ==========================================================
+         CABEÇALHO DO PAINEL DE CONTROLE
+         ========================================================== -->
+    <header class="painel-header">
+        <div class="painel-header-container">
+            <div class="painel-brand">
+                <a href="/home" class="painel-logo-link" title="Voltar para a Página Inicial">
+                    <img src="../../assets/logos/header1-logo.png" alt="Itaim Vende Logo" class="painel-logo-img">
+                </a>
+                <div class="painel-brand-text">
+                    <div class="painel-title-row">
+                        <h1 class="painel-title">Painel de Controle</h1>
+                        <span class="badge-env" id="badge-env">DEV</span>
+                        <span class="badge-version" style="color: #94A3B8; font-size: 0.8rem; font-weight: 600; margin-left: 4px;">v2.0.0</span>
+                        <span class="badge-tunnel" id="badge-tunnel"><i class="fa-solid fa-network-wired"></i> <span id="tunnel-text">Verificando...</span></span>
+                    </div>
+                    <p class="painel-subtitle">Observabilidade, Integridade e Diagnósticos em Tempo Real</p>
+                </div>
+            </div>
+
+            <!-- Ações Rápidas no Topo -->
+            <div class="painel-header-actions">
+                <div class="auto-refresh-control" title="Intervalo de atualização automática">
+                    <label for="select-refresh"><i class="fa-solid fa-clock-rotate-left"></i> Auto:</label>
+                    <select id="select-refresh" class="painel-select">
+                        <option value="0">Pausado</option>
+                        <option value="5">5s</option>
+                        <option value="10" selected>10s</option>
+                        <option value="30">30s</option>
+                    </select>
+                </div>
+
+                <button type="button" class="btn-painel btn-refresh" id="btn-atualizar-status" title="Atualizar dados agora">
+                    <i class="fa-solid fa-arrows-rotate" id="icon-refresh"></i> Atualizar
+                </button>
+
+                <button type="button" class="btn-painel btn-cloud-tunnel" id="btn-header-tunnel" title="Ligar site e gerar link público">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> <span id="btn-header-tunnel-text">Ligar Site (Cloud)</span>
+                </button>
+
+                <button type="button" class="btn-painel btn-diagnostico" id="btn-executar-diagnostico">
+                    <i class="fa-solid fa-bolt-lightning"></i> Testar Tudo Agora
+                </button>
+
+                <button type="button" class="btn-painel btn-copiar" id="btn-copiar-relatorio" title="Copiar relatório completo de saúde">
+                    <i class="fa-regular fa-copy"></i> Relatório
+                </button>
+
+                <a href="/" class="btn-painel btn-home" id="btn-ver-site" title="Ir para a Loja Pública">
+                    <i class="fa-solid fa-store"></i> Ver Site
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==========================================================
+         CONTEÚDO PRINCIPAL
+         ========================================================== -->
+    <main class="painel-main">
+
+        <!-- 1. BANNER DE STATUS GERAL DO SISTEMA -->
+        <section class="painel-hero-card" id="painel-hero-status">
+            <div class="hero-status-left">
+                <div class="status-indicator-ring" id="hero-pulse-ring">
+                    <div class="status-pulse-dot" id="hero-pulse-dot"></div>
+                </div>
+                <div class="hero-status-content">
+                    <span class="hero-label">Status Operacional Global</span>
+                    <h2 class="hero-status-title" id="hero-status-text">Verificando Conectividade...</h2>
+                    <p class="hero-status-desc" id="hero-status-subtext">Aguardando resposta do servidor em localhost:3000...</p>
+                </div>
+            </div>
+
+            <div class="hero-status-metrics">
+                <div class="metric-pill">
+                    <span class="pill-label"><i class="fa-solid fa-database"></i> Latência DB</span>
+                    <span class="pill-value" id="metric-db-latency">-- ms</span>
+                </div>
+                <div class="metric-pill">
+                    <span class="pill-label"><i class="fa-solid fa-stopwatch"></i> Uptime</span>
+                    <span class="pill-value" id="metric-uptime">--</span>
+                </div>
+                <div class="metric-pill">
+                    <span class="pill-label"><i class="fa-solid fa-microchip"></i> Memória Heap</span>
+                    <span class="pill-value" id="metric-memory">-- MB</span>
+                </div>
+                <div class="metric-pill">
+                    <span class="pill-label"><i class="fa-solid fa-fingerprint"></i> Boot ID</span>
+                    <span class="pill-value code-font" id="metric-boot-id">--</span>
+                </div>
+            </div>
+
+            <!-- Gráfico de Telemetria Dinâmica ao Vivo -->
+            <div class="hero-telemetry-chart-box">
+                <div class="telemetry-chart-header">
+                    <span class="telemetry-chart-title"><i class="fa-solid fa-chart-line"></i> Telemetria em Tempo Real (Latência & Heap)</span>
+                    <span class="telemetry-live-badge"><span class="live-dot"></span> Live Stream</span>
+                </div>
+                <canvas id="canvas-telemetry-chart" width="480" height="65"></canvas>
+            </div>
+        </section>
+
+        <!-- 2. SEÇÃO DEDICADA: GERENCIADOR DO SITE NA NUVEM (CLOUDFLARE QUICK TUNNEL) -->
+        <section class="painel-tunnel-card" id="section-cloud-tunnel">
+            <div class="tunnel-header-row">
+                <div class="tunnel-title-block">
+                    <div class="tunnel-icon-wrapper" id="tunnel-status-icon">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                    </div>
+                    <div>
+                        <div class="tunnel-status-line">
+                            <h2 class="tunnel-title">Publicação do Site na Nuvem (Cloudflare Tunnel)</h2>
+                            <span class="tunnel-pill-badge" id="tunnel-badge-state">Detectando...</span>
+                        </div>
+                        <p class="tunnel-subtitle">Ligue o marketplace na internet instantaneamente, gere o link público HTTPS e compartilhe ou teste pelo celular</p>
+                    </div>
+                </div>
+
+                <div class="tunnel-actions-top">
+                    <button type="button" class="btn-painel btn-iniciar-tunnel" id="btn-iniciar-tunnel">
+                        <i class="fa-solid fa-bolt"></i> <span id="text-iniciar-tunnel">Ligar Site & Gerar Link</span>
+                    </button>
+                    <button type="button" class="btn-painel btn-desligar-tunnel" id="btn-desligar-tunnel" style="display: none;">
+                        <i class="fa-solid fa-power-off"></i> Desligar Túnel
+                    </button>
+                </div>
+            </div>
+
+            <!-- Box do Link Público Ativo -->
+            <div class="tunnel-link-box" id="tunnel-link-box">
+                <div class="tunnel-link-display">
+                    <span class="tunnel-link-label"><i class="fa-solid fa-globe"></i> Link Oficial do Cloud:</span>
+                    <div class="tunnel-url-wrapper">
+                        <input type="text" readonly id="input-tunnel-url" class="tunnel-url-input" value="Nenhum link ativo no momento. Clique no botão ao lado para ligar.">
+                        <button type="button" class="btn-copy-url" id="btn-copiar-tunnel-url" title="Copiar link para a área de transferência">
+                            <i class="fa-regular fa-copy"></i> Copiar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="tunnel-quick-buttons">
+                    <a href="#" target="_blank" class="btn-tunnel-action" id="btn-abrir-tunnel" rel="noopener noreferrer" style="display: none;">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir Site Público
+                    </a>
+                    <button type="button" class="btn-tunnel-action" id="btn-qrcode-tunnel" style="display: none;">
+                        <i class="fa-solid fa-qrcode"></i> QR Code (Celular)
+                    </button>
+                    <button type="button" class="btn-tunnel-action btn-tunnel-test" id="btn-testar-tunnel-link" style="display: none;">
+                        <i class="fa-solid fa-heart-pulse"></i> Testar Conexão
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. GRID DE RESUMO POR SUBSISTEMA (4 CARDS PRINCIPAIS) -->
+        <section class="cards-grid">
+
+            <!-- Card: Banco de Dados -->
+            <article class="stat-card" id="card-database">
+                <div class="stat-card-header">
+                    <div class="stat-icon-wrapper icon-db">
+                        <i class="fa-solid fa-database"></i>
+                    </div>
+                    <div class="stat-title-area">
+                        <h3 class="stat-title">Banco de Dados Relacional</h3>
+                        <span class="stat-badge badge-green" id="db-badge-status">Prisma Conectado</span>
+                    </div>
+                </div>
+                <div class="stat-body">
+                    <div class="data-row">
+                        <span>Usuários Registrados:</span>
+                        <strong id="stat-users-count">--</strong>
+                    </div>
+                    <div class="data-row">
+                        <span>Anúncios Cadastrados:</span>
+                        <strong><span id="stat-active-products">--</span> ativos / <span id="stat-total-products">--</span> tot</strong>
+                    </div>
+                    <div class="data-row">
+                        <span>Categorias Oficiais:</span>
+                        <strong id="stat-categories-count">--</strong>
+                    </div>
+                    <div class="data-row">
+                        <span>Conversas no Chat:</span>
+                        <strong id="stat-chat-count">--</strong>
+                    </div>
+                    <div class="data-row">
+                        <span>Pedidos Realizados:</span>
+                        <strong id="stat-orders-count">--</strong>
+                    </div>
+                </div>
+                <div class="stat-card-footer">
+                    <span class="footer-note" id="db-latency-note">Latência: medindo...</span>
+                    <button class="btn-card-action" id="btn-testar-db" title="Testar Query">Testar</button>
+                </div>
+            </article>
+
+            <!-- Card: Armazenamento e Uploads -->
+            <article class="stat-card" id="card-storage">
+                <div class="stat-card-header">
+                    <div class="stat-icon-wrapper icon-storage">
+                        <i class="fa-solid fa-hard-drive"></i>
+                    </div>
+                    <div class="stat-title-area">
+                        <h3 class="stat-title">Armazenamento & Uploads</h3>
+                        <span class="stat-badge badge-green" id="storage-badge-status">Permissão Total</span>
+                    </div>
+                </div>
+                <div class="stat-body">
+                    <div class="data-row">
+                        <span>Pasta /uploads/perfil:</span>
+                        <strong><span id="stat-files-perfil">--</span> fotos</strong>
+                    </div>
+                    <div class="data-row">
+                        <span>Pasta /uploads/vendas:</span>
+                        <strong><span id="stat-files-vendas">--</span> fotos</strong>
+                    </div>
+                    <div class="data-row">
+                        <span>Total de Arquivos:</span>
+                        <strong id="stat-files-total">-- arquivos</strong>
+                    </div>
+                    <div class="data-row">
+                        <span>Espaço em Disco:</span>
+                        <strong id="stat-size-total">-- MB</strong>
+                    </div>
+                    <div class="data-row">
+                        <span>Permissão de Escrita:</span>
+                        <strong id="stat-storage-writable" class="text-green">Verificando...</strong>
+                    </div>
+                </div>
+                <div class="stat-card-footer">
+                    <span class="footer-note">Upload categorizado ativo</span>
+                    <button class="btn-card-action" id="btn-testar-storage">Testar</button>
+                </div>
+            </article>
+
+            <!-- Card: Servidor Node.js -->
+            <article class="stat-card" id="card-runtime">
+                <div class="stat-card-header">
+                    <div class="stat-icon-wrapper icon-node">
+                        <i class="fa-brands fa-node-js"></i>
+                    </div>
+                    <div class="stat-title-area">
+                        <h3 class="stat-title">Ambiente de Execução</h3>
+                        <span class="stat-badge badge-purple" id="node-badge-version">Node.js</span>
+                    </div>
+                </div>
+                <div class="stat-body">
+                    <div class="data-row">
+                        <span>Porta de Escuta:</span>
+                        <strong id="stat-port">3000</strong>
+                    </div>
+                    <div class="data-row">
+                        <span>Sistema Operacional:</span>
+                        <strong id="stat-platform">--</strong>
+                    </div>
+                    <div class="data-row">
+                        <span>Process ID (PID):</span>
+                        <strong class="code-font" id="stat-pid">--</strong>
+                    </div>
+                    <div class="data-row">
+                        <span>Consumo RSS:</span>
+                        <strong id="stat-mem-rss">-- MB</strong>
+                    </div>
+                    <div class="data-row">
+                        <span>Política de CORS:</span>
+                        <strong class="code-font" id="stat-cors">--</strong>
+                    </div>
+                </div>
+                <div class="stat-card-footer">
+                    <span class="footer-note" id="server-uptime-note">Uptime: --</span>
+                    <button class="btn-card-action" id="btn-testar-health">Ping</button>
+                </div>
+            </article>
+
+            <!-- Card: Conexão e Túnel Cloudflare -->
+            <article class="stat-card" id="card-network">
+                <div class="stat-card-header">
+                    <div class="stat-icon-wrapper icon-cloud">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                    </div>
+                    <div class="stat-title-area">
+                        <h3 class="stat-title">Acesso Externo & Rede</h3>
+                        <span class="stat-badge badge-blue" id="network-badge-type">Local / Túnel</span>
+                    </div>
+                </div>
+                <div class="stat-body">
+                    <div class="data-row">
+                        <span>Host Atual:</span>
+                        <strong class="code-font" id="stat-host-name">localhost</strong>
+                    </div>
+                    <div class="data-row">
+                        <span>Protocolo:</span>
+                        <strong id="stat-protocol">HTTP</strong>
+                    </div>
+                    <div class="data-row">
+                        <span>Latência Cliente-Servidor:</span>
+                        <strong id="stat-client-latency">-- ms</strong>
+                    </div>
+                    <div class="data-row">
+                        <span>Canal de Túnel:</span>
+                        <strong id="stat-tunnel-state">Detectando...</strong>
+                    </div>
+                    <div class="data-row">
+                        <span>Rota da API:</span>
+                        <strong class="code-font" id="stat-api-base">/api</strong>
+                    </div>
+                </div>
+                <div class="stat-card-footer">
+                    <span class="footer-note">CORS dinâmico habilitado</span>
+                    <button class="btn-card-action" id="btn-testar-rede">Medir Ping</button>
+                </div>
+            </article>
+
+        </section>
+
+        <!-- 3. OPERAÇÕES DE MANUTENÇÃO & DADOS (STORAGE CLEANUP & SEED DEMO) -->
+        <section class="painel-section" id="section-operacoes-dados">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title"><i class="fa-solid fa-screwdriver-wrench"></i> Ferramentas Operacionais & Manutenção</h2>
+                    <p class="section-subtitle">Otimização de disco, varredura de integridade de mídias e injeção controlada de massa de testes</p>
+                </div>
+            </div>
+
+            <div class="operacoes-grid">
+                <!-- Card 1: Auditoria e Limpeza de Storage -->
+                <div class="operacao-card">
+                    <div class="operacao-card-header">
+                        <div class="operacao-icon icon-storage">
+                            <i class="fa-solid fa-broom"></i>
+                        </div>
+                        <div>
+                            <h3 class="operacao-card-title">Auditoria & Limpeza de Storage</h3>
+                            <span class="operacao-card-desc">Varre fotos órfãs em /uploads sem referência no banco de dados</span>
+                        </div>
+                    </div>
+
+                    <div class="operacao-stats-box">
+                        <div class="op-stat-item">
+                            <span class="op-stat-label">Arquivos em Disco:</span>
+                            <strong class="op-stat-val" id="op-storage-disk">--</strong>
+                        </div>
+                        <div class="op-stat-item">
+                            <span class="op-stat-label">Imagens Vinculadas:</span>
+                            <strong class="op-stat-val text-green" id="op-storage-linked">--</strong>
+                        </div>
+                        <div class="op-stat-item">
+                            <span class="op-stat-label">Fotos Órfãs (Lixo):</span>
+                            <strong class="op-stat-val text-amber" id="op-storage-orphans">--</strong>
+                        </div>
+                        <div class="op-stat-item">
+                            <span class="op-stat-label">Espaço Recuperável:</span>
+                            <strong class="op-stat-val" id="op-storage-freed">-- MB</strong>
+                        </div>
+                    </div>
+
+                    <div class="operacao-actions">
+                        <button type="button" class="btn-painel btn-op-action" id="btn-auditar-storage">
+                            <i class="fa-solid fa-magnifying-glass"></i> Auditar Storage
+                        </button>
+                        <button type="button" class="btn-painel btn-op-danger" id="btn-limpar-orfaos" disabled>
+                            <i class="fa-solid fa-trash-can"></i> Limpar Fotos Órfãs
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Card 2: Injetor de Massa de Testes (Seed Demo) -->
+                <div class="operacao-card">
+                    <div class="operacao-card-header">
+                        <div class="operacao-icon icon-seed">
+                            <i class="fa-solid fa-flask-vial"></i>
+                        </div>
+                        <div>
+                            <h3 class="operacao-card-title">Massa de Dados & Testes (Demo Seed)</h3>
+                            <span class="operacao-card-desc">Gere anúncios realistas com 1 clique para testar paginação, vitrine e busca</span>
+                        </div>
+                    </div>
+
+                    <div class="operacao-stats-box">
+                        <div class="op-stat-item">
+                            <span class="op-stat-label">Objetivo do Módulo:</span>
+                            <span class="op-stat-val text-blue">Testes Rápidos de UI</span>
+                        </div>
+                        <div class="op-stat-item">
+                            <span class="op-stat-label">Categorias Incluídas:</span>
+                            <span class="op-stat-val">Eletrônicos, Esportes, etc.</span>
+                        </div>
+                        <div class="op-stat-item">
+                            <span class="op-stat-label">Identificação:</span>
+                            <span class="op-stat-val code-font">[DEMO] no título</span>
+                        </div>
+                        <div class="op-stat-item">
+                            <span class="op-stat-label">Segurança:</span>
+                            <span class="op-stat-val text-green">Remoção em Lote Segura</span>
+                        </div>
+                    </div>
+
+                    <div class="operacao-actions">
+                        <button type="button" class="btn-painel btn-op-success" id="btn-seed-demo">
+                            <i class="fa-solid fa-plus"></i> Gerar 3 Anúncios Demo
+                        </button>
+                        <button type="button" class="btn-painel btn-op-secondary" id="btn-clean-demo">
+                            <i class="fa-solid fa-eraser"></i> Remover Anúncios Demo
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. MATRIZ DE TESTES DE INTEGRIDADE (LIVE HEALTH MATRIX) -->
+        <section class="painel-section">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title"><i class="fa-solid fa-list-check"></i> Matriz de Testes das Funcionalidades</h2>
+                    <p class="section-subtitle">Verifique se cada recurso individual do marketplace responde conforme esperado</p>
+                </div>
+                <div class="section-actions">
+                    <button type="button" class="btn-painel btn-primary-small" id="btn-rodar-matriz">
+                        <i class="fa-solid fa-play"></i> Executar Bateria de Testes
+                    </button>
+                </div>
+            </div>
+
+            <div class="tests-table-wrapper">
+                <table class="tests-table" id="tabela-testes">
+                    <thead>
+                        <tr>
+                            <th>Recurso / Módulo</th>
+                            <th>Endpoint da API</th>
+                            <th>Status de Integridade</th>
+                            <th>Tempo de Resposta</th>
+                            <th>Detalhes / Diagnóstico</th>
+                            <th class="text-right">Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-testes">
+                        <!-- Linhas geradas dinamicamente via painel.js -->
+                        <tr>
+                            <td colspan="6" class="table-loading-state">
+                                <i class="fa-solid fa-spinner fa-spin"></i> Inicializando testes de diagnóstico...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 5. CENTRAL DE MODERAÇÃO RÁPIDA (ÚLTIMOS ANÚNCIOS & USUÁRIOS) -->
+        <section class="painel-section" id="section-moderacao">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title"><i class="fa-solid fa-shield-halved"></i> Central de Moderação e Auditoria</h2>
+                    <p class="section-subtitle">Supervisione denúncias de fraudes, anúncios recentes e contas de vendedores com ações imediatas</p>
+                </div>
+                <div class="section-actions">
+                    <button type="button" class="btn-painel btn-refresh-small" id="btn-atualizar-moderacao">
+                        <i class="fa-solid fa-arrows-rotate"></i> Atualizar Moderação
+                    </button>
+                </div>
+            </div>
+
+            <!-- Fila de Moderação de Denúncias e Fraudes (Reports & Tickets) -->
+            <div class="moderacao-reports-container" id="container-moderacao-reports">
+                <div class="reports-header-row">
+                    <div class="reports-title-block">
+                        <div class="reports-icon-wrapper">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <div>
+                            <div class="reports-title-line">
+                                <h3 class="reports-title">Fila de Denúncias de Anúncios (Tickets de Moderação)</h3>
+                                <span class="badge-report-total" id="badge-total-reports">0 denúncias</span>
+                            </div>
+                            <p class="reports-subtitle">Analise queixas de compradores, investigue anúncios suspeitos e tome ações seguras de remoção ou suspensão</p>
+                            <div style="margin-top: 8px;">
+                                <a href="tickets.html" style="display: inline-flex; align-items: center; gap: 6px; background: #44BD32; color: #fff; padding: 6px 14px; border-radius: 6px; font-size: 0.82rem; font-weight: 700; text-decoration: none;">
+                                    <i class="fa-solid fa-headset"></i> Abrir Painel Completo de Tickets & Suporte &rarr;
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filtros de Status -->
+                    <div class="reports-filter-tabs">
+                        <button type="button" class="btn-filter-report active" data-status="ALL" onclick="window.painelFiltrarDenuncias('ALL')">
+                            Todas (<span id="count-reports-all">0</span>)
+                        </button>
+                        <button type="button" class="btn-filter-report" data-status="PENDING" onclick="window.painelFiltrarDenuncias('PENDING')">
+                            <i class="fa-solid fa-clock text-amber"></i> Pendentes (<span id="count-reports-pending">0</span>)
+                        </button>
+                        <button type="button" class="btn-filter-report" data-status="UNDER_REVIEW" onclick="window.painelFiltrarDenuncias('UNDER_REVIEW')">
+                            <i class="fa-solid fa-magnifying-glass text-blue"></i> Em Análise (<span id="count-reports-review">0</span>)
+                        </button>
+                        <button type="button" class="btn-filter-report" data-status="RESOLVED" onclick="window.painelFiltrarDenuncias('RESOLVED')">
+                            <i class="fa-solid fa-check text-green"></i> Resolvidas (<span id="count-reports-resolved">0</span>)
+                        </button>
+                        <button type="button" class="btn-filter-report" data-status="DISMISSED" onclick="window.painelFiltrarDenuncias('DISMISSED')">
+                            <i class="fa-solid fa-xmark text-muted"></i> Descartadas (<span id="count-reports-dismissed">0</span>)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Lista Dinâmica de Tickets de Denúncias -->
+                <div class="reports-cards-list" id="lista-moderacao-denuncias">
+                    <div class="moderacao-empty"><i class="fa-solid fa-spinner fa-spin"></i> Carregando fila de denúncias...</div>
+                </div>
+            </div>
+
+            <div class="moderacao-grid">
+                <!-- Coluna 1: Últimos Anúncios -->
+                <div class="moderacao-col">
+                    <div class="moderacao-col-header">
+                        <h4><i class="fa-solid fa-bullhorn text-blue"></i> Últimos Anúncios Cadastrados</h4>
+                        <span class="badge-count" id="count-moderacao-ads">--</span>
+                    </div>
+                    <div class="moderacao-list" id="lista-moderacao-anuncios">
+                        <div class="moderacao-empty"><i class="fa-solid fa-spinner fa-spin"></i> Carregando anúncios...</div>
+                    </div>
+                </div>
+
+                <!-- Coluna 2: Últimos Usuários -->
+                <div class="moderacao-col">
+                    <div class="moderacao-col-header">
+                        <h4><i class="fa-solid fa-user-shield text-purple"></i> Últimos Usuários Registrados</h4>
+                        <span class="badge-count" id="count-moderacao-users">--</span>
+                    </div>
+                    <div class="moderacao-list" id="lista-moderacao-usuarios">
+                        <div class="moderacao-empty"><i class="fa-solid fa-spinner fa-spin"></i> Carregando usuários...</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. CONSOLE DE TESTE MANUAL DE ROTAS & PLAYGROUND -->
+        <section class="painel-section">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title"><i class="fa-solid fa-terminal"></i> Console de Teste Manual da API</h2>
+                    <p class="section-subtitle">Dispare requisições em tempo real para qualquer endpoint e visualize a resposta JSON instantaneamente</p>
+                </div>
+            </div>
+
+            <div class="console-box">
+                <form class="console-form" id="form-console-api">
+                    <div class="console-inputs">
+                        <select id="console-method" class="console-select">
+                            <option value="GET">GET</option>
+                            <option value="POST">POST</option>
+                            <option value="PUT">PUT</option>
+                            <option value="DELETE">DELETE</option>
+                        </select>
+                        <input 
+                            type="text" 
+                            id="console-endpoint" 
+                            class="console-input" 
+                            value="/api/health" 
+                            placeholder="/api/products?page=1&limit=5"
+                            autocomplete="off"
+                        >
+                        <button type="submit" class="btn-painel btn-send" id="btn-console-send">
+                            <i class="fa-solid fa-paper-plane"></i> Enviar
+                        </button>
+                    </div>
+
+                    <!-- Atalhos rápidos de teste -->
+                    <div class="console-quick-links">
+                        <span>Atalhos Rápidos:</span>
+                        <button type="button" class="quick-link-btn" data-method="GET" data-path="/api/health">/api/health</button>
+                        <button type="button" class="quick-link-btn" data-method="GET" data-path="/api/categories">/api/categories</button>
+                        <button type="button" class="quick-link-btn" data-method="GET" data-path="/api/products?page=1&limit=3">/api/products</button>
+                        <button type="button" class="quick-link-btn" data-method="GET" data-path="/api/system/status">/api/system/status</button>
+                        <button type="button" class="quick-link-btn" data-method="GET" data-path="/api/system/diagnostics">/api/system/diagnostics</button>
+                        <button type="button" class="quick-link-btn" data-method="GET" data-path="/api/reports">/api/reports (Tickets)</button>
+                    </div>
+                </form>
+
+                <!-- Resposta do Console -->
+                <div class="console-output-area">
+                    <div class="output-header">
+                        <span class="output-title">Resposta do Servidor:</span>
+                        <div class="output-meta">
+                            <span class="output-badge" id="console-status-badge">Aguardando Envio</span>
+                            <span class="output-time" id="console-time-badge">-- ms</span>
+                        </div>
+                    </div>
+                    <pre class="console-code" id="console-output-code">Clique em "Enviar" ou escolha um atalho rápido acima para inspecionar uma resposta HTTP.</pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. FEED DE LOGS E AUDITORIA EM TEMPO REAL -->
+        <section class="painel-section">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title"><i class="fa-solid fa-clock-rotate-left"></i> Histórico de Eventos & Logs</h2>
+                    <p class="section-subtitle">Últimas verificações de saúde disparadas nesta sessão do painel</p>
+                </div>
+                <div class="section-actions">
+                    <button type="button" class="btn-painel btn-clear-logs" id="btn-limpar-logs">
+                        <i class="fa-regular fa-trash-can"></i> Limpar Logs
+                    </button>
+                </div>
+            </div>
+
+            <div class="logs-container" id="logs-feed">
+                <!-- Logs dinâmicos inseridos aqui -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ==========================================================
+         RODAPÉ DO PAINEL
+         ========================================================== -->
+    <footer class="painel-footer">
+        <div class="footer-container">
+            <span>© 2026 Itaim Vende • Monitoramento de Alta Disponibilidade</span>
+            <div class="footer-links">
+                <a href="/home"><i class="fa-solid fa-house"></i> Home</a>
+                <a href="/produto"><i class="fa-solid fa-box"></i> Vitrine</a>
+                <a href="/conversas"><i class="fa-solid fa-comments"></i> Chat</a>
+                <a href="/meus-anuncios"><i class="fa-solid fa-bullhorn"></i> Meus Anúncios</a>
+                <a href="/perfil"><i class="fa-solid fa-user"></i> Perfil</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal / Caixa de QR Code (Nível Global) -->
+    <div class="tunnel-qrcode-modal" id="modal-qrcode-tunnel" style="display: none;">
+        <div class="qrcode-content">
+            <div class="qrcode-header">
+                <h4><i class="fa-solid fa-mobile-screen"></i> Acessar no Smartphone</h4>
+                <button type="button" class="btn-close-modal" id="btn-fechar-qrcode">&times;</button>
+            </div>
+            <p>Aponte a câmera do seu celular para testar o site ao vivo pelo link da nuvem:</p>
+            <div class="qrcode-image-wrapper">
+                <img id="img-qrcode" src="" alt="QR Code do Site">
+            </div>
+            <span class="qrcode-url-text" id="qrcode-url-text"></span>
+        </div>
+    </div>
+
+    <!-- Toast de Notificação do Painel -->
+    <div id="painel-toast" class="painel-toast" role="alert"></div>
+
+    <!-- Scripts do Sistema -->
+    <script src="../../js/core/produtos-dados/index.js"></script>
+    <script src="../../js/core/rotas/index.js"></script>
+    <script src="../../js/core/api/index.js"></script>
+    <script src="../../js/core/sessao/index.js"></script>
+    <script src="../../js/pages/admin/painel.js?v=2.0"></script>
+</body>
+</html>

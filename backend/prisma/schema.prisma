@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 // =============================================================================
@@ -50,12 +51,18 @@ model User {
   salesCount      Int           @default(0)
 
   // Segurança & Auditoria
-  lastLoginAt     DateTime?
-  emailVerifiedAt DateTime?
-  phoneVerifiedAt DateTime?
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-  deletedAt       DateTime?
+  lastLoginAt          DateTime?
+  emailVerifiedAt      DateTime?
+  phoneVerifiedAt      DateTime?
+  phoneLastChangedAt   DateTime? @map("phone_last_changed_at")
+  usernameLastChangedAt DateTime? @map("username_last_changed_at")
+  preferences          Json?     @default("{}")
+  resetPasswordToken   String?       @unique
+  resetPasswordCode    String?
+  resetPasswordExpires DateTime?
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+  deletedAt            DateTime?
 
   // Relações
   products        Product[]
@@ -66,11 +73,52 @@ model User {
   sentMessages    Message[]     @relation("SentMessages")
   conversationsAsBuyer  Conversation[] @relation("BuyerConversations")
   conversationsAsSeller Conversation[] @relation("SellerConversations")
+  blockedConversations  Conversation[] @relation("BlockedConversations")
   auditLogs       AuditLog[]
+  addresses       Address[]
+  notifications   Notification[]
+  usernameHistory UsernameHistory[]
+  emailChangeRequests EmailChangeRequest[]
+  phoneHistory    PhoneHistory[]
+  phoneChangeRequests PhoneChangeRequest[]
 
   @@index([email])
   @@index([city, state])
   @@index([status])
+}
+
+model Address {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  nickname     String   @default("Casa")
+  street       String
+  number       String?
+  complement   String?
+  neighborhood String?  @default("Centro")
+  city         String   @default("Paulistana")
+  state        String   @default("PI")
+  postalCode   String?
+  isDefault    Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  message   String   @db.Text
+  type      String   @default("aviso")
+  isRead    Boolean  @default(false)
+  link      String?
+  createdAt DateTime @default(now())
+
+  @@index([userId, isRead])
+  @@index([userId, createdAt])
 }
 
 // =============================================================================
@@ -162,8 +210,14 @@ model Product {
   updatedAt       DateTime         @updatedAt
   deletedAt       DateTime?
 
+  // Índices de Alta Performance para Consultas e Vitrine (<20ms)
+  @@index([status, createdAt(sort: Desc)])
+  @@index([city, categoryId])
+  @@index([status, city])
+  @@index([status, categoryId])
+  @@index([status, isFeatured, createdAt(sort: Desc)])
   @@index([status, city, categoryId, createdAt(sort: Desc)])
-  @@index([sellerId])
+  @@index([sellerId, status])
   @@index([slug])
   @@index([price])
 }
@@ -191,6 +245,13 @@ enum ConversationStatus {
   BLOCKED
 }
 
+enum OfferStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  CANCELLED
+}
+
 model Conversation {
   id            String             @id @default(cuid())
   productId     String
@@ -200,12 +261,16 @@ model Conversation {
   sellerId      String
   seller        User               @relation("SellerConversations", fields: [sellerId], references: [id])
   status        ConversationStatus @default(ACTIVE)
+  blockedById   String?
+  blockedBy     User?              @relation("BlockedConversations", fields: [blockedById], references: [id])
 
   messages      Message[]
   lastMessageAt DateTime           @default(now())
   createdAt     DateTime           @default(now())
 
   @@unique([productId, buyerId, sellerId])
+  @@index([buyerId, lastMessageAt(sort: Desc)])
+  @@index([sellerId, lastMessageAt(sort: Desc)])
   @@index([buyerId])
   @@index([sellerId])
 }
@@ -226,11 +291,13 @@ model Message {
   content        String       @db.Text
   messageType    MessageType  @default(TEXT)
   offerValue     Decimal?     @db.Decimal(10, 2)
+  offerStatus    OfferStatus?
   isRead         Boolean      @default(false)
   readAt         DateTime?
   createdAt      DateTime     @default(now())
 
   @@index([conversationId, createdAt])
+  @@index([conversationId, isRead, senderId])
 }
 
 // =============================================================================
@@ -365,4 +432,72 @@ model AuditLog {
   createdAt DateTime @default(now())
 
   @@index([entity, entityId])
+}
+
+model UsernameHistory {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  oldUsername String?
+  newUsername String
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime @default(now())
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
+model EmailChangeRequest {
+  id               String    @id @default(cuid())
+  userId           String
+  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  oldEmail         String
+  newEmail         String
+  code             String
+  attempts         Int       @default(0)
+  maxAttempts      Int       @default(5)
+  expiresAt        DateTime
+  confirmedAt      DateTime?
+  ipAddress        String?
+  userAgent        String?
+  createdAt        DateTime  @default(now())
+
+  @@index([userId, newEmail])
+  @@index([expiresAt])
+}
+
+model PhoneHistory {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  oldPhone  String?
+  newPhone  String?
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
+model PhoneChangeRequest {
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  oldPhone    String?
+  newPhone    String
+  codeHash    String
+  attempts    Int       @default(0)
+  maxAttempts Int       @default(5)
+  expiresAt   DateTime
+  confirmedAt DateTime?
+  revertToken String?   @unique
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime  @default(now())
+
+  @@index([userId, newPhone])
+  @@index([expiresAt])
+  @@index([revertToken])
 }

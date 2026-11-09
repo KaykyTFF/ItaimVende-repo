@@ -2,9 +2,56 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="Criar anúncio no Itaim Vende - Anuncie gratuitamente seus produtos e serviços na região de Paulistana e Piauí.">
     <title>Criar Anúncio - Itaim Vende</title>
+
+    <!-- Anti-FOUC: Aplicação imediata do tema escuro/claro para eliminar qualquer flash visual -->
+    <script>
+        (function() {
+            try {
+                var p = (window.location.pathname || '').toLowerCase();
+                var isAuth = p.endsWith('index.html') || p.includes('/auth/') || p.includes('/login') || p.includes('/cadastro');
+                var tema = (!isAuth && localStorage.getItem('itaim_tema') === 'dark') ? 'dark' : 'light';
+                var d = document.documentElement;
+                d.setAttribute('data-theme', tema);
+                if (tema === 'dark') {
+                    d.classList.add('dark-theme');
+                } else {
+                    d.classList.remove('dark-theme');
+                }
+                d.classList.add('tema-sem-transicao');
+                var o = new MutationObserver(function() {
+                    if (document.body) {
+                        document.body.setAttribute('data-theme', tema);
+                        if (tema === 'dark') {
+                            document.body.classList.add('dark-theme');
+                        } else {
+                            document.body.classList.remove('dark-theme');
+                        }
+                        o.disconnect();
+                    }
+                });
+                o.observe(d, { childList: true, subtree: true });
+                window.addEventListener('DOMContentLoaded', function() {
+                    o.disconnect();
+                    if (document.body) {
+                        document.body.setAttribute('data-theme', tema);
+                        if (tema === 'dark') {
+                            document.body.classList.add('dark-theme');
+                        } else {
+                            document.body.classList.remove('dark-theme');
+                        }
+                    }
+                    requestAnimationFrame(function() {
+                        requestAnimationFrame(function() {
+                            d.classList.remove('tema-sem-transicao');
+                        });
+                    });
+                });
+            } catch (e) {}
+        })();
+    </script>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,12 +59,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Segoe+UI&display=swap" rel="stylesheet">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="../../assets/header-logo.png">
+    <link rel="icon" type="image/png" href="../../assets/logos/header-logo.png">
     
     <!-- CSS do Projeto e Estilos Específicos da Página Vender -->
-    <link rel="stylesheet" href="../../css/home.css">
-    <link rel="stylesheet" href="../../css/header-global.css?v=7">
-    <link rel="stylesheet" href="../../css/vender.css?v=2">
+    <link rel="stylesheet" href="../../css/pages/home/home.css">
+    <link rel="stylesheet" href="../../css/core/header-global.css?v=26">
+    <link rel="stylesheet" href="../../css/pages/vender/vender.css?v=15">
 </head>
 <body class="pagina-vender">
 
@@ -35,8 +82,8 @@
                         <line x1="3" y1="18" x2="21" y2="18"></line>
                     </svg>
                 </button>
-                <a href="../home/home.html" class="header-logo-link" title="Itaim Vende - Página Inicial">
-                    <img src="../../assets/header1-logo.png" alt="Itaim Vende" class="header-logo-img">
+                <a href="/" class="header-logo-link" title="Itaim Vende - Página Inicial">
+                    <img src="../../assets/logos/header1-logo.png" alt="Itaim Vende" class="header-logo-img">
                 </a>
             </div>
 
@@ -77,14 +124,14 @@
                 </a>
 
                 <!-- Ícone Conversas -->
-                <a href="../mensagens/conversas.html" class="btn-icone-header" id="btn-chat" aria-label="Conversas" title="Conversas">
+                <a href="/conversas" class="btn-icone-header" id="btn-chat" aria-label="Conversas" title="Conversas">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                     </svg>
                 </a>
 
                 <!-- Ícone Notificações -->
-                <a href="../notificacoes/notificacoes.html" class="btn-icone-header" id="btn-notificacoes" aria-label="Notificações" title="Notificações">
+                <a href="/notificacoes" class="btn-icone-header" id="btn-notificacoes" aria-label="Notificações" title="Notificações">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
                         <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
@@ -101,15 +148,15 @@
                 <!-- Perfil do Usuário com Dropdown -->
                 <div class="perfil-wrapper">
                     <button type="button" class="btn-avatar-header" id="btn-avatar-dropdown" aria-label="Abrir menu de perfil">
-                        <img src="../../assets/icon-user.png" alt="Foto de perfil" class="avatar-img" id="img-avatar-user">
+                        <img src="../../assets/icons/icon-user.png" alt="Foto de perfil" class="avatar-img" id="img-avatar-user">
                     </button>
 
                     <div class="dropdown-perfil" id="dropdown-perfil">
-                        <a href="../perfil/perfil.html" class="dropdown-header-user" title="Ir para Meu Perfil">
-                            <strong id="dropdown-user-name">Raili</strong>
+                        <a href="/perfil" class="dropdown-header-user" title="Ir para Meu Perfil">
+                            <strong id="dropdown-user-name">Admin</strong>
                             <span id="dropdown-user-email">admin@gmail.com</span>
                         </a>
-                        <a href="../perfil/perfil.html" class="dropdown-item" id="link-menu-perfil">
+                        <a href="/perfil" class="dropdown-item" id="link-menu-perfil">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                             Meu Perfil
                         </a>
@@ -117,18 +164,18 @@
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l19-9-9 19-2-8-8-2z"></path></svg>
                             Meus Anúncios
                         </a>
-                        <a href="../favoritos/favoritos.html" class="dropdown-item" id="link-menu-favoritos">
+                        <a href="/favoritos" class="dropdown-item" id="link-menu-favoritos">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
                             Favoritos (<span id="favoritos-contador-badge">0</span>)
                         </a>
-                        <a href="../perfil/configuracoes.html" class="dropdown-item" id="link-menu-configuracoes">
+                        <a href="/configuracoes" class="dropdown-item" id="link-menu-configuracoes">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="3"></circle>
                                 <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0 1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
                             </svg>
                             Configurações
                         </a>
-                        <a href="../../index.html" class="dropdown-item item-sair">
+                        <a href="/login" class="dropdown-item item-sair">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                                 <polyline points="16 17 21 12 16 7"></polyline>
@@ -148,27 +195,16 @@
     <div class="drawer-backdrop" id="drawer-backdrop">
         <aside class="drawer-menu" aria-label="Menu principal">
             <div class="drawer-header">
-                <img src="../../assets/header1-logo.png" alt="Itaim Vende" class="drawer-logo">
+                <img src="../../assets/logos/header1-logo.png" alt="Itaim Vende" class="drawer-logo">
                 <button type="button" class="drawer-close" id="btn-fechar-drawer" aria-label="Fechar menu">&times;</button>
             </div>
 
-            <!-- Perfil do Usuário no Drawer (Acesso rápido ao Perfil) -->
-            <a href="../perfil/perfil.html" class="drawer-user-card" id="drawer-user-card" title="Acessar Meu Perfil">
-                <div class="drawer-user-avatar-wrap">
-                    <img src="../../assets/icon-user.png" alt="Foto de perfil" class="drawer-user-avatar" id="drawer-user-avatar">
-                </div>
-                <div class="drawer-user-info">
-                    <span class="drawer-user-nome" id="drawer-user-name">Raili</span>
-                    <span class="drawer-user-sub">Ver meu perfil &rarr;</span>
-                </div>
-            </a>
-
             <nav class="drawer-nav">
-                <a href="../home/home.html" class="drawer-link" id="drawer-link-home">
+                <a href="/" class="drawer-link" id="drawer-link-home">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
                     Início
                 </a>
-                <a href="../perfil/perfil.html" class="drawer-link" id="drawer-link-perfil">
+                <a href="/perfil" class="drawer-link" id="drawer-link-perfil">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                     Meu Perfil
                 </a>
@@ -176,11 +212,11 @@
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l19-9-9 19-2-8-8-2z"></path></svg>
                     Meus Anúncios
                 </a>
-                <a href="../favoritos/favoritos.html" class="drawer-link" id="drawer-link-favoritos">
+                <a href="/favoritos" class="drawer-link" id="drawer-link-favoritos">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
                     Meus Favoritos
                 </a>
-                <a href="../mensagens/conversas.html" class="drawer-link" id="drawer-link-chat">
+                <a href="/conversas" class="drawer-link" id="drawer-link-chat">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                     </svg>
@@ -190,7 +226,7 @@
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                     Vender Produto
                 </a>
-                <a href="../notificacoes/notificacoes.html" class="drawer-link" id="drawer-link-notificacoes">
+                <a href="/notificacoes" class="drawer-link" id="drawer-link-notificacoes">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
                     Notificações
                 </a>
@@ -212,25 +248,76 @@
                     </svg>
                 </button>
                 <div class="drawer-categorias-conteudo" id="drawer-categorias-conteudo">
-                    <a href="../produtos/categoria.html?cat=Eletrônicos" class="drawer-sublink">Eletrônicos</a>
-                    <a href="../produtos/categoria.html?cat=Decoração" class="drawer-sublink">Decoração</a>
-                    <a href="../produtos/categoria.html?cat=Móveis" class="drawer-sublink">Móveis</a>
-                    <a href="../produtos/categoria.html?cat=Moda" class="drawer-sublink">Moda & Vestuário</a>
-                    <a href="../produtos/categoria.html?cat=Infantil" class="drawer-sublink">Infantil & Bebês</a>
-                    <a href="../produtos/categoria.html?cat=Esportes" class="drawer-sublink">Esportes & Lazer</a>
-                    <a href="../produtos/categoria.html?cat=Hobbies" class="drawer-sublink">Hobbies & Games</a>
-                    <a href="../produtos/categoria.html?cat=Serviços" class="drawer-sublink">Serviços</a>
+                    <a href="/categoria?cat=Ve%C3%ADculos" class="drawer-sublink">Veículos</a>
+                    <a href="/categoria?cat=Autope%C3%A7as" class="drawer-sublink">Autopeças</a>
+                    <a href="/categoria?cat=Im%C3%B3veis" class="drawer-sublink">Imóveis</a>
+                    <a href="/categoria?cat=Terrenos" class="drawer-sublink">Terrenos</a>
+                    <a href="/categoria?cat=Agro" class="drawer-sublink">Agro</a>
+                    <a href="/categoria?cat=Pecu%C3%A1ria" class="drawer-sublink">Pecuária</a>
+                    <a href="/categoria?cat=Celulares" class="drawer-sublink">Celulares</a>
+                    <a href="/categoria?cat=Telefonia" class="drawer-sublink">Telefonia</a>
+                    <a href="/categoria?cat=Eletr%C3%B4nicos" class="drawer-sublink">Eletrônicos</a>
+                    <a href="/categoria?cat=%C3%81udio%20%26%20V%C3%ADdeo" class="drawer-sublink">Áudio & Vídeo</a>
+                    <a href="/categoria?cat=Inform%C3%A1tica" class="drawer-sublink">Informática</a>
+                    <a href="/categoria?cat=Games" class="drawer-sublink">Games</a>
+                    <a href="/categoria?cat=M%C3%B3veis" class="drawer-sublink">Móveis</a>
+                    <a href="/categoria?cat=Decora%C3%A7%C3%A3o" class="drawer-sublink">Decoração</a>
+                    <a href="/categoria?cat=Eletrodom%C3%A9sticos" class="drawer-sublink">Eletrodomésticos</a>
+                    <a href="/categoria?cat=Moda" class="drawer-sublink">Moda</a>
+                    <a href="/categoria?cat=Cal%C3%A7ados" class="drawer-sublink">Calçados</a>
+                    <a href="/categoria?cat=Acess%C3%B3rios" class="drawer-sublink">Acessórios</a>
+                    <a href="/categoria?cat=Beleza" class="drawer-sublink">Beleza</a>
+                    <a href="/categoria?cat=Cuidado%20Pessoal" class="drawer-sublink">Cuidado Pessoal</a>
+                    <a href="/categoria?cat=Infantil" class="drawer-sublink">Infantil</a>
+                    <a href="/categoria?cat=Beb%C3%AAs" class="drawer-sublink">Bebês</a>
+                    <a href="/categoria?cat=Esportes" class="drawer-sublink">Esportes</a>
+                    <a href="/categoria?cat=Fitness" class="drawer-sublink">Fitness</a>
+                    <a href="/categoria?cat=Lazer" class="drawer-sublink">Lazer</a>
+                    <a href="/categoria?cat=Constru%C3%A7%C3%A3o" class="drawer-sublink">Construção</a>
+                    <a href="/categoria?cat=Ferramentas" class="drawer-sublink">Ferramentas</a>
+                    <a href="/categoria?cat=Com%C3%A9rcio" class="drawer-sublink">Comércio</a>
+                    <a href="/categoria?cat=Escrit%C3%B3rio" class="drawer-sublink">Escritório</a>
+                    <a href="/categoria?cat=Servi%C3%A7os" class="drawer-sublink">Serviços</a>
+                    <a href="/categoria?cat=M%C3%BAsica" class="drawer-sublink">Música</a>
+                    <a href="/categoria?cat=Hobbies" class="drawer-sublink">Hobbies</a>
+                    <a href="/categoria?cat=Animais%20de%20Estima%C3%A7%C3%A3o" class="drawer-sublink">Animais de Estimação</a>
+                    <a href="/categoria?cat=Pet%20Shop" class="drawer-sublink">Pet Shop</a>
+                    <a href="/categoria?cat=Doa%C3%A7%C3%B5es" class="drawer-sublink">Doações</a>
+                    <a href="/categoria?cat=Trocas" class="drawer-sublink">Trocas</a>
+                    <a href="/categoria?cat=Outros" class="drawer-sublink">Outros</a>
                 </div>
 
                 <div class="drawer-secao-divisor"></div>
-                <a href="../perfil/configuracoes.html" class="drawer-link" id="drawer-link-configuracoes">
+                <button type="button" class="drawer-link btn-alternar-tema" id="btn-tema-drawer" aria-label="Alternar tema do site">
+                    <svg class="icone-tema-lua" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg class="icone-tema-sol" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <span class="drawer-tema-texto">Modo Escuro</span>
+                    <span class="drawer-tema-switch" aria-hidden="true">
+                        <span class="drawer-tema-trilho">
+                            <span class="drawer-tema-bolinha"></span>
+                        </span>
+                    </span>
+                </button>
+                <a href="/configuracoes" class="drawer-link" id="drawer-link-configuracoes">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="3"></circle>
                         <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0 1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
                     </svg>
                     Configurações
                 </a>
-                <a href="../../index.html" class="drawer-link item-sair">
+                <a href="/login" class="drawer-link item-sair">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                         <polyline points="16 17 21 12 16 7"></polyline>
@@ -257,170 +344,367 @@
         </div>
 
         <!-- ======================================================
-             ESTADO 1: FORMULÁRIO COM OS 2 CARDS LADO A LADO
+             PROCESSO INTERATIVO POR ETAPAS (WIZARD DE CRIAÇÃO)
              ====================================================== -->
-        <div class="vender-cards-wrapper" id="vender-cards-wrapper">
+        <div class="vender-wizard-wrapper" id="vender-cards-wrapper">
             
-            <!-- CARD DA ESQUERDA: FOTOS E LOCALIZAÇÃO -->
-            <div class="card-vender card-fotos-container">
-                
-                <!-- Grid de Fotos com 6 slots no total (1 principal 2x2 + 5 secundários) -->
-                <div class="grid-fotos-upload" id="grid-fotos">
-                    
-                    <!-- Slot 1: Foto Principal com Ícone de Câmera -->
-                    <div class="slot-foto-upload slot-foto-principal" title="Adicionar foto principal">
-                        <svg class="icone-slot" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-                            <circle cx="12" cy="13" r="4"></circle>
-                        </svg>
-                        <span class="rotulo-slot">Foto principal</span>
-                        <span class="subrotulo-slot">Clique ou arraste</span>
-                        <input type="file" accept="image/*">
-                        <div class="slot-overlay-remover" title="Remover imagem">&times;</div>
-                    </div>
-
-                    <!-- Slot 2: Secundário Superior Direito -->
-                    <div class="slot-foto-upload slot-foto-secundario" title="Adicionar foto">
-                        <span class="icone-slot-plus">+</span>
-                        <input type="file" accept="image/*">
-                        <div class="slot-overlay-remover" title="Remover imagem">&times;</div>
-                    </div>
-
-                    <!-- Slot 3: Secundário Meio Direito -->
-                    <div class="slot-foto-upload slot-foto-secundario" title="Adicionar foto">
-                        <span class="icone-slot-plus">+</span>
-                        <input type="file" accept="image/*">
-                        <div class="slot-overlay-remover" title="Remover imagem">&times;</div>
-                    </div>
-
-                    <!-- Slot 4: Secundário Inferior Esquerda -->
-                    <div class="slot-foto-upload slot-foto-secundario" title="Adicionar foto">
-                        <span class="icone-slot-plus">+</span>
-                        <input type="file" accept="image/*">
-                        <div class="slot-overlay-remover" title="Remover imagem">&times;</div>
-                    </div>
-
-                    <!-- Slot 5: Secundário Inferior Centro -->
-                    <div class="slot-foto-upload slot-foto-secundario" title="Adicionar foto">
-                        <span class="icone-slot-plus">+</span>
-                        <input type="file" accept="image/*">
-                        <div class="slot-overlay-remover" title="Remover imagem">&times;</div>
-                    </div>
-
-                    <!-- Slot 6: Secundário Inferior Direito -->
-                    <div class="slot-foto-upload slot-foto-secundario" title="Adicionar foto">
-                        <span class="icone-slot-plus">+</span>
-                        <input type="file" accept="image/*">
-                        <div class="slot-overlay-remover" title="Remover imagem">&times;</div>
-                    </div>
+            <!-- Barra de Progresso Limpa (Estilo Cadastrar) -->
+            <div class="vender-progresso-box" role="region" aria-label="Progresso do cadastro do anúncio">
+                <div class="wizard-info-linha">
+                    <span class="wizard-etapa-badge" id="wizard-etapa-badge">Etapa 1 de 4</span>
+                    <span class="wizard-etapa-nome" id="wizard-etapa-nome">Fotos</span>
                 </div>
-
-                <!-- Seção de Localização -->
-                <div class="secao-localizacao-card">
-                    <div class="localizacao-titulo">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                            <circle cx="12" cy="10" r="3"></circle>
-                        </svg>
-                        Localização
-                    </div>
-                    <div class="localizacao-endereco" id="texto-localizacao">
-                        Paulistana - 64750-000
-                    </div>
-                    <button type="button" class="btn-editar-localizacao" id="btn-editar-localizacao">
-                        EDITAR
-                    </button>
+                <div class="wizard-barra-trilha">
+                    <div class="wizard-barra-progresso" id="wizard-barra-progresso" style="width: 25%;"></div>
                 </div>
             </div>
 
-            <!-- CARD DA DIREITA: CAMPOS E DROPDOWNS -->
-            <div class="card-vender card-form-container">
+            <!-- Paineis do Wizard -->
+            <div class="wizard-paineis-wrapper">
                 
-                <!-- Campo: Título do Anúncio -->
-                <div class="campo-vender-wrapper">
-                    <input 
-                        type="text" 
-                        class="input-vender-padrao" 
-                        id="input-titulo" 
-                        placeholder="Título do Anúncio" 
-                        autocomplete="off"
-                    >
-                </div>
+                <!-- ==============================================================
+                     ETAPA 1: FOTOS DO PRODUTO
+                     ============================================================== -->
+                <div class="etapa-painel etapa-ativa" id="painel-etapa-1">
+                    <div class="card-etapa-wizard">
+                        <div class="etapa-cabecalho">
+                            <div class="etapa-cabecalho-texto">
+                                <h2>
+                                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2">
+                                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                                        <circle cx="12" cy="13" r="4"></circle>
+                                    </svg>
+                                    Fotos
+                                </h2>
+                            </div>
+                            <span class="badge-contador-etapa" id="badge-contador-fotos">0 de 6 fotos</span>
+                        </div>
 
-                <!-- Campo: Descrição Detalhada -->
-                <div class="campo-vender-wrapper">
-                    <textarea 
-                        class="textarea-vender-padrao" 
-                        id="textarea-descricao" 
-                        placeholder="Descrição detalhada..."
-                        maxlength="1000"
-                    ></textarea>
-                    <div class="contador-caracteres" id="contador-desc">0 / 1000</div>
-                </div>
+                        <!-- Galeria de Fotos: Quadrado com + e fotos adicionadas ao lado (a 1ª é a capa) -->
+                        <div class="galeria-fotos-vender" id="galeria-fotos-vender">
+                            <!-- Quadrado de Adicionar Foto com + -->
+                            <div class="quadrado-add-foto" id="btn-add-foto" role="button" tabindex="0" title="Adicionar fotos" aria-label="Adicionar fotos">
+                                <svg class="icone-mais-svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                                <input type="file" id="input-fotos-upload" accept="image/*" multiple style="display: none;">
+                            </div>
+                        </div>
 
-                <!-- Campo: Preço (R$) -->
-                <div class="campo-vender-wrapper">
-                    <input 
-                        type="text" 
-                        class="input-vender-padrao" 
-                        id="input-preco" 
-                        placeholder="Preço (R$)" 
-                        autocomplete="off"
-                    >
-                </div>
-
-                <!-- Dropdowns em formato de pílula verde -->
-                <div class="grupo-dropdowns-vender">
-                    
-                    <!-- Dropdown: Categoria -->
-                    <div class="dropdown-pill-container" id="dropdown-categoria">
-                        <button type="button" class="btn-dropdown-pill" id="btn-dropdown-categoria">
-                            <span id="label-categoria-texto">CATEGORIA</span>
-                            <svg class="chevron-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                        </button>
-                        <div class="menu-dropdown-opcoes" id="menu-categoria-opcoes">
-                            <div class="item-opcao-dropdown" data-valor="Celulares e Smartphones">Celulares e Smartphones</div>
-                            <div class="item-opcao-dropdown" data-valor="Eletrônicos e Áudio">Eletrônicos e Áudio</div>
-                            <div class="item-opcao-dropdown" data-valor="Computadores e Informática">Informática & PC</div>
-                            <div class="item-opcao-dropdown" data-valor="Móveis e Decoração">Móveis e Decoração</div>
-                            <div class="item-opcao-dropdown" data-valor="Moda e Acessórios">Moda e Calçados</div>
-                            <div class="item-opcao-dropdown" data-valor="Carros e Motos">Carros e Motos</div>
-                            <div class="item-opcao-dropdown" data-valor="Games e Brinquedos">Games e Brinquedos</div>
-                            <div class="item-opcao-dropdown" data-valor="Serviços e Trabalhos">Serviços e Negócios</div>
-                            <div class="item-opcao-dropdown" data-valor="Outros Produtos">Outros</div>
+                        <!-- Barra de Navegação da Etapa 1 -->
+                        <div class="wizard-botoes-navegacao">
+                            <button type="button" class="btn-wizard-nav btn-wizard-proximo" id="btn-passo1-proximo">
+                                <span>Avançar</span>
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </button>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Dropdown: Condição -->
-                    <div class="dropdown-pill-container" id="dropdown-condicao">
-                        <button type="button" class="btn-dropdown-pill" id="btn-dropdown-condicao">
-                            <span id="label-condicao-texto">CONDIÇÃO</span>
-                            <svg class="chevron-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                        </button>
-                        <div class="menu-dropdown-opcoes" id="menu-condicao-opcoes">
-                            <div class="item-opcao-dropdown" data-valor="Novo">Novo (Lacrado)</div>
-                            <div class="item-opcao-dropdown" data-valor="Usado - Excelente">Usado – Excelente estado</div>
-                            <div class="item-opcao-dropdown" data-valor="Usado - Bom">Usado – Bom estado</div>
-                            <div class="item-opcao-dropdown" data-valor="Usado - Sinais de uso">Usado – Sinais de uso</div>
-                            <div class="item-opcao-dropdown" data-valor="Para Peças / Defeito">Para retirada de peças</div>
+                <!-- ==============================================================
+                     ETAPA 2: DETALHES DO PRODUTO (TÍTULO, CATEGORIA, CONDIÇÃO, DESCRIÇÃO)
+                     ============================================================== -->
+                <div class="etapa-painel" id="painel-etapa-2">
+                    <div class="card-etapa-wizard">
+                        <div class="etapa-cabecalho">
+                            <div class="etapa-cabecalho-texto">
+                                <h2>
+                                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                        <polyline points="14 2 14 8 20 8"></polyline>
+                                    </svg>
+                                    Detalhes
+                                </h2>
+                            </div>
+                        </div>
+
+                        <div class="card-form-container">
+                            <!-- Título do Anúncio -->
+                            <div class="campo-vender-wrapper">
+                                <label for="input-titulo" class="rotulo-secao-campo">Título *</label>
+                                <input 
+                                    type="text" 
+                                    class="input-vender-padrao" 
+                                    id="input-titulo" 
+                                    placeholder="Ex: iPhone 13 128GB Azul" 
+                                    autocomplete="off"
+                                    maxlength="80"
+                                >
+                            </div>
+
+                            <!-- Categoria (Gaveta Verde Oficial) -->
+                            <div class="campo-vender-wrapper">
+                                <label class="rotulo-secao-campo">Categoria *</label>
+                                <div class="dropdown-pill-container" id="dropdown-categoria">
+                                    <button type="button" class="btn-dropdown-pill" id="btn-dropdown-categoria" aria-haspopup="listbox">
+                                        <span id="label-categoria-texto">Selecionar Categoria</span>
+                                        <svg class="chevron-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="6 9 12 15 18 9"></polyline>
+                                        </svg>
+                                    </button>
+                                    <div class="menu-dropdown-opcoes" id="menu-categoria-opcoes" role="listbox">
+                                        <div class="item-opcao-dropdown" data-valor="Veículos">Veículos</div>
+                                        <div class="item-opcao-dropdown" data-valor="Autopeças">Autopeças</div>
+                                        <div class="item-opcao-dropdown" data-valor="Imóveis">Imóveis</div>
+                                        <div class="item-opcao-dropdown" data-valor="Terrenos">Terrenos</div>
+                                        <div class="item-opcao-dropdown" data-valor="Agro">Agro</div>
+                                        <div class="item-opcao-dropdown" data-valor="Pecuária">Pecuária</div>
+                                        <div class="item-opcao-dropdown" data-valor="Celulares">Celulares</div>
+                                        <div class="item-opcao-dropdown" data-valor="Telefonia">Telefonia</div>
+                                        <div class="item-opcao-dropdown" data-valor="Eletrônicos">Eletrônicos</div>
+                                        <div class="item-opcao-dropdown" data-valor="Áudio & Vídeo">Áudio & Vídeo</div>
+                                        <div class="item-opcao-dropdown" data-valor="Informática">Informática</div>
+                                        <div class="item-opcao-dropdown" data-valor="Games">Games</div>
+                                        <div class="item-opcao-dropdown" data-valor="Móveis">Móveis</div>
+                                        <div class="item-opcao-dropdown" data-valor="Decoração">Decoração</div>
+                                        <div class="item-opcao-dropdown" data-valor="Eletrodomésticos">Eletrodomésticos</div>
+                                        <div class="item-opcao-dropdown" data-valor="Moda">Moda</div>
+                                        <div class="item-opcao-dropdown" data-valor="Calçados">Calçados</div>
+                                        <div class="item-opcao-dropdown" data-valor="Acessórios">Acessórios</div>
+                                        <div class="item-opcao-dropdown" data-valor="Beleza">Beleza</div>
+                                        <div class="item-opcao-dropdown" data-valor="Cuidado Pessoal">Cuidado Pessoal</div>
+                                        <div class="item-opcao-dropdown" data-valor="Infantil">Infantil</div>
+                                        <div class="item-opcao-dropdown" data-valor="Bebês">Bebês</div>
+                                        <div class="item-opcao-dropdown" data-valor="Esportes">Esportes</div>
+                                        <div class="item-opcao-dropdown" data-valor="Fitness">Fitness</div>
+                                        <div class="item-opcao-dropdown" data-valor="Lazer">Lazer</div>
+                                        <div class="item-opcao-dropdown" data-valor="Construção">Construção</div>
+                                        <div class="item-opcao-dropdown" data-valor="Ferramentas">Ferramentas</div>
+                                        <div class="item-opcao-dropdown" data-valor="Comércio">Comércio</div>
+                                        <div class="item-opcao-dropdown" data-valor="Escritório">Escritório</div>
+                                        <div class="item-opcao-dropdown" data-valor="Serviços">Serviços</div>
+                                        <div class="item-opcao-dropdown" data-valor="Música">Música</div>
+                                        <div class="item-opcao-dropdown" data-valor="Hobbies">Hobbies</div>
+                                        <div class="item-opcao-dropdown" data-valor="Animais de Estimação">Animais de Estimação</div>
+                                        <div class="item-opcao-dropdown" data-valor="Pet Shop">Pet Shop</div>
+                                        <div class="item-opcao-dropdown" data-valor="Doações">Doações</div>
+                                        <div class="item-opcao-dropdown" data-valor="Trocas">Trocas</div>
+                                        <div class="item-opcao-dropdown" data-valor="Outros">Outros</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Condição (Gaveta Verde Oficial) -->
+                            <div class="campo-vender-wrapper">
+                                <label class="rotulo-secao-campo">Condição *</label>
+                                <div class="dropdown-pill-container" id="dropdown-condicao">
+                                    <button type="button" class="btn-dropdown-pill" id="btn-dropdown-condicao" aria-haspopup="listbox">
+                                        <span id="label-condicao-texto">Selecionar Condição</span>
+                                        <svg class="chevron-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="6 9 12 15 18 9"></polyline>
+                                        </svg>
+                                    </button>
+                                    <div class="menu-dropdown-opcoes" id="menu-condicao-opcoes" role="listbox">
+                                        <div class="item-opcao-dropdown" data-valor="Novo">Novo (Lacrado)</div>
+                                        <div class="item-opcao-dropdown" data-valor="Usado - Excelente">Usado – Excelente estado</div>
+                                        <div class="item-opcao-dropdown" data-valor="Usado - Bom">Usado – Bom estado</div>
+                                        <div class="item-opcao-dropdown" data-valor="Usado - Sinais de uso">Usado – Sinais de uso</div>
+                                        <div class="item-opcao-dropdown" data-valor="Para Peças / Defeito">Para retirada de peças</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Descrição -->
+                            <div class="campo-vender-wrapper">
+                                <label for="textarea-descricao" class="rotulo-secao-campo">Descrição</label>
+                                <textarea 
+                                    class="textarea-vender-padrao" 
+                                    id="textarea-descricao" 
+                                    placeholder="Descreva detalhes, condições e informações do produto..."
+                                    maxlength="1000"
+                                ></textarea>
+                                <div class="contador-caracteres" id="contador-desc">0 / 1000</div>
+                            </div>
+                        </div>
+
+                        <!-- Barra de Navegação da Etapa 2 -->
+                        <div class="wizard-botoes-navegacao">
+                            <button type="button" class="btn-wizard-nav btn-wizard-anterior" id="btn-passo2-anterior">
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                                    <polyline points="12 19 5 12 12 5"></polyline>
+                                </svg>
+                                <span>Voltar</span>
+                            </button>
+                            <button type="button" class="btn-wizard-nav btn-wizard-proximo" id="btn-passo2-proximo">
+                                <span>Avançar</span>
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </button>
                         </div>
                     </div>
-
                 </div>
+
+                <!-- ==============================================================
+                     ETAPA 3: PREÇO E LOCALIZAÇÃO
+                     ============================================================== -->
+                <div class="etapa-painel" id="painel-etapa-3">
+                    <div class="card-etapa-wizard">
+                        <div class="etapa-cabecalho">
+                            <div class="etapa-cabecalho-texto">
+                                <h2>
+                                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2">
+                                        <line x1="12" y1="1" x2="12" y2="23"></line>
+                                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                    </svg>
+                                    Preço e Localização
+                                </h2>
+                            </div>
+                        </div>
+
+                        <!-- Bloco de Preço Destacado -->
+                        <div class="bloco-preco-destacado">
+                            <div class="header-preco-linha">
+                                <label for="input-preco" class="rotulo-secao-campo" style="margin-bottom: 0;">Preço *</label>
+                                <button type="button" class="btn-toggle-doacao" id="btn-toggle-doacao" aria-pressed="false" title="Clique para anunciar este item como Doação gratuita">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <polyline points="20 12 20 22 4 22 4 12"></polyline>
+                                        <rect x="2" y="7" width="20" height="5"></rect>
+                                        <line x1="12" y1="22" x2="12" y2="7"></line>
+                                        <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+                                        <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+                                    </svg>
+                                    <span>Doação</span>
+                                </button>
+                            </div>
+                            <div class="campo-preco-grande" id="campo-preco-wrapper">
+                                <span class="cifrao-destaque" id="cifrao-preco">R$</span>
+                                <input 
+                                    type="text" 
+                                    class="input-vender-padrao input-preco-destacado" 
+                                    id="input-preco" 
+                                    placeholder="0,00" 
+                                    autocomplete="off"
+                                >
+                            </div>
+                        </div>
+
+                        <!-- Card de Localização Interativo -->
+                        <div class="card-localizacao-etapa">
+                            <div class="localizacao-info-box">
+                                <div class="icone-pin-grande" aria-hidden="true">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                        <circle cx="12" cy="10" r="3"></circle>
+                                    </svg>
+                                </div>
+                                <div class="localizacao-texto-detalhe">
+                                    <strong>Localização de Retirada</strong>
+                                    <span id="texto-localizacao">Paulistana - Centro</span>
+                                </div>
+                            </div>
+                            <button type="button" class="btn-editar-localizacao" id="btn-editar-localizacao">
+                                Alterar Localização
+                            </button>
+                        </div>
+
+                        <!-- Barra de Navegação da Etapa 3 -->
+                        <div class="wizard-botoes-navegacao">
+                            <button type="button" class="btn-wizard-nav btn-wizard-anterior" id="btn-passo3-anterior">
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                                    <polyline points="12 19 5 12 12 5"></polyline>
+                                </svg>
+                                <span>Voltar</span>
+                            </button>
+                            <button type="button" class="btn-wizard-nav btn-wizard-proximo" id="btn-passo3-proximo">
+                                <span>Avançar</span>
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==============================================================
+                     ETAPA 4: REVISÃO INTERATIVA E CONFIRMAÇÃO FINAL
+                     ============================================================== -->
+                <div class="etapa-painel" id="painel-etapa-4">
+                    <div class="card-etapa-wizard">
+                        <div class="etapa-cabecalho">
+                            <div class="etapa-cabecalho-texto">
+                                <h2>
+                                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2">
+                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                    </svg>
+                                    Revisão
+                                </h2>
+                            </div>
+                        </div>
+
+                        <!-- Live Preview do Anúncio -->
+                        <div class="preview-anuncio-card">
+                            <!-- Coluna Esquerda: Fotos -->
+                            <div class="preview-col-foto">
+                                <div class="preview-foto-principal-wrapper">
+                                    <img src="../../assets/placeholders/produto-placeholder.svg" alt="Foto de capa do anúncio" id="preview-foto-capa">
+                                </div>
+                                <div class="preview-fotos-miniaturas" id="preview-fotos-miniaturas">
+                                    <!-- Miniaturas injetadas dinamicamente via JS -->
+                                </div>
+                            </div>
+
+                            <!-- Coluna Direita: Informações -->
+                            <div class="preview-col-dados">
+                                <div class="preview-dados-topo">
+                                    <div class="preview-tags-row">
+                                        <span class="preview-tag-badge" id="preview-tag-cat">GERAL</span>
+                                        <span class="preview-tag-badge preview-tag-condicao" id="preview-tag-cond">USADO</span>
+                                    </div>
+                                    <h3 class="preview-titulo-anuncio" id="preview-titulo">Título do Anúncio</h3>
+                                    <div class="preview-preco-anuncio" id="preview-preco">R$ 0,00</div>
+                                    <div class="preview-local-linha">
+                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                            <circle cx="12" cy="10" r="3"></circle>
+                                        </svg>
+                                        <span id="preview-local">Paulistana - 64750-000</span>
+                                    </div>
+                                    <div class="preview-descricao-box">
+                                        <strong>Descrição</strong>
+                                        <p class="preview-descricao-texto" id="preview-descricao">Nenhuma descrição adicionada.</p>
+                                    </div>
+                                </div>
+
+                                <!-- Atalhos rápidos para editar campos específicos -->
+                                <div class="preview-editar-atalho">
+                                    <button type="button" class="btn-editar-etapa-link" data-ir-etapa="1">Editar fotos</button>
+                                    <button type="button" class="btn-editar-etapa-link" data-ir-etapa="2">Editar detalhes</button>
+                                    <button type="button" class="btn-editar-etapa-link" data-ir-etapa="3">Editar valor</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Botão Principal de Publicação e Feedback -->
+                        <div class="secao-acao-anunciar" id="secao-acao-anunciar">
+                            <div style="display: flex; gap: 16px; align-items: center; width: 100%; justify-content: space-between;">
+                                <button type="button" class="btn-wizard-nav btn-wizard-anterior" id="btn-passo4-anterior">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                                        <polyline points="12 19 5 12 12 5"></polyline>
+                                    </svg>
+                                    <span>Voltar</span>
+                                </button>
+                                
+                                <button type="button" class="btn-anunciar-destaque" id="btn-anunciar">
+                                    <span class="spinner-vender"></span>
+                                    <span class="texto-btn-anunciar">Publicar Anúncio</span>
+                                </button>
+                            </div>
+                            <div class="feedback-msg-validacao" id="feedback-validacao" role="alert"></div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-        </div>
-
-        <!-- Botão Principal: ANUNCIAR -->
-        <div class="secao-acao-anunciar" id="secao-acao-anunciar">
-            <button type="button" class="btn-anunciar-destaque" id="btn-anunciar">
-                <span class="spinner-vender"></span>
-                <span class="texto-btn-anunciar">ANUNCIAR</span>
-            </button>
-            <div class="feedback-msg-validacao" id="feedback-validacao"></div>
         </div>
 
         <!-- ======================================================
@@ -438,7 +722,7 @@
             <h2 class="titulo-sucesso">Anuncio criado com Sucesso!</h2>
 
             <!-- Link para ver o anúncio -->
-            <a href="../produtos/produto.html" class="link-ver-anuncio-sucesso" id="link-ver-anuncio">
+            <a href="/produto" class="link-ver-anuncio-sucesso" id="link-ver-anuncio">
                 clique aqui para ver anuncio
             </a>
 
@@ -447,7 +731,7 @@
                 <button type="button" class="btn-sucesso-secundario" id="btn-criar-outro">
                     + Criar outro anúncio
                 </button>
-                <a href="../home/home.html" class="btn-sucesso-secundario">
+                <a href="/" class="btn-sucesso-secundario">
                     Voltar para a Página Inicial
                 </a>
             </div>
@@ -478,8 +762,8 @@
                 </select>
             </div>
             <div class="form-grupo-modal">
-                <label for="input-cep-modal">CEP:</label>
-                <input type="text" id="input-cep-modal" value="64750-000" placeholder="00000-000">
+                <label for="input-bairro-modal">Bairro:</label>
+                <input type="text" id="input-bairro-modal" value="Centro" placeholder="Ex: Centro, Triângulo, Guarita">
             </div>
             <button type="button" class="btn-salvar-localizacao" id="btn-salvar-loc">Confirmar Localização</button>
         </div>
@@ -491,20 +775,20 @@
     <footer class="footer-principal">
         <div class="footer-container">
             <div class="footer-col">
-                <img src="../../assets/header-logo.png" alt="Itaim Vende" class="footer-logo-img">
+                <img src="../../assets/logos/header1-logo.png" alt="Itaim Vende" class="footer-logo-img">
                 <p class="footer-sobre">
-                    O Itaim Vende é o maior portal de compra, venda e troca da região de Paulistana e cidades vizinhas no Piauí. Conectando pessoas e bons negócios.
+                    Portal de vendas, compras e doações da região de Paulistana.
                 </p>
             </div>
 
             <div class="footer-col">
                 <h4>Categorias</h4>
                 <ul class="footer-links">
-                    <li><a href="../home/home.html">Eletrônicos</a></li>
-                    <li><a href="../home/home.html">Móveis</a></li>
-                    <li><a href="../home/home.html">Decoração</a></li>
-                    <li><a href="../home/home.html">Moda & Vestuário</a></li>
-                    <li><a href="../home/home.html">Serviços</a></li>
+                    <li><a href="/">Eletrônicos</a></li>
+                    <li><a href="/">Móveis</a></li>
+                    <li><a href="/">Decoração</a></li>
+                    <li><a href="/">Moda & Vestuário</a></li>
+                    <li><a href="/">Serviços</a></li>
                 </ul>
             </div>
 
@@ -522,7 +806,7 @@
             <div class="footer-col">
                 <h4>Minha Conta</h4>
                 <ul class="footer-links">
-                    <li><a href="../../index.html">Entrar / Cadastro</a></li>
+                    <li><a href="/login">Entrar / Cadastro</a></li>
                     <li><a href="../home/home.html#meus-anuncios">Meus Anúncios</a></li>
                     <li><a href="../home/home.html#favoritos">Meus Favoritos</a></li>
                     <li><a href="#">Termos de Uso</a></li>
@@ -533,15 +817,15 @@
 
         <div class="footer-bottom">
             <span>© 2026 Itaim Vende. Todos os direitos reservados.</span>
-            <span>Desenvolvido com carinho para o Piauí.</span>
+            <span>Compre, venda e anuncie com facilidade.</span>
         </div>
     </footer>
 
     <!-- Scripts -->
-    <script src="../../js/core/rotas.js"></script>
-    <script src="../../js/core/api.js"></script>
-    <script src="../../js/core/sessao.js"></script>
-    <script src="../../js/core/ajustar-foto.js"></script>
+    <script src="../../js/core/rotas/index.js"></script>
+    <script src="../../js/core/api/index.js"></script>
+    <script src="../../js/core/sessao/index.js"></script>
+    <script src="../../js/core/ajustar-foto/index.js?v=2"></script>
     <script src="../../js/pages/vender/vender.js"></script>
 </body>
 </html>

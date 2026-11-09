@@ -1,0 +1,126 @@
+/**
+ * ITAIM VENDE - SISTEMA GLOBAL DE ANIMAÇÕES E TRANSIÇÕES DE PÁGINA
+ * Arquivo: frontend/css/core/transicoes.css
+ * 
+ * Funcionalidades:
+ * - Animação suave de entrada ao carregar qualquer página (fade-in + slide sutil)
+ * - Animação suave de saída ao clicar em links internos (fade-out coordenado)
+ * - Barra de progresso superior de transição (estilo moderno app / SPA)
+ * - Suporte nativo à View Transitions API do CSS (@view-transition)
+ * - Respeito estrito às preferências de acessibilidade (prefers-reduced-motion)
+ */
+
+/* 1. Suporte Nativo a View Transitions (Chrome, Edge, Safari 18+) */
+@view-transition {
+    navigation: auto;
+}
+
+::view-transition {
+    background-color: var(--light-bg);
+}
+
+::view-transition-old(root) {
+    animation: 200ms cubic-bezier(0.4, 0, 0.2, 1) both itaimFadeOut;
+}
+
+::view-transition-new(root) {
+    animation: 240ms cubic-bezier(0.16, 1, 0.3, 1) both itaimFadeIn;
+}
+
+/* 2. Barra de Progresso Superior de Transição (Top Loading Bar) */
+#itaim-transition-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background: #44BD32;
+    box-shadow: none;
+    z-index: 9999999;
+    pointer-events: none;
+    opacity: 0;
+    transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.15s ease;
+}
+
+#itaim-transition-bar.ativo {
+    opacity: 1;
+}
+
+#itaim-transition-bar.concluido {
+    width: 100% !important;
+    opacity: 0;
+    transition: width 0.15s ease, opacity 0.3s ease 0.1s;
+}
+
+/* 3. Animações de Entrada e Saída do Corpo da Página */
+body {
+    transition: opacity 0.22s cubic-bezier(0.4, 0, 0.2, 1), transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Entrada Suave da Página */
+body.pagina-entrando {
+    animation: itaimPaginaEntrar 0.26s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Saída Suave da Página ao navegar */
+body.pagina-saindo {
+    opacity: 0 !important;
+    transform: translateY(-8px) scale(0.995) !important;
+    pointer-events: none !important;
+    transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Keyframes globais */
+@keyframes itaimPaginaEntrar {
+    0% {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes itaimFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes itaimFadeOut {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+}
+
+/* 4. Acessibilidade: Desativa animações se o usuário tiver redução de movimento ativada */
+@media (prefers-reduced-motion: reduce) {
+    body,
+    body.pagina-entrando,
+    body.pagina-saindo {
+        animation: none !important;
+        transition: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+    }
+    
+    #itaim-transition-bar {
+        display: none !important;
+    }
+
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+        animation: none !important;
+    }
+}

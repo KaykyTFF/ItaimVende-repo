@@ -1,309 +1,554 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="light">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Itaim Vende - Plataforma de Compra, Venda e Trocas. Acesse sua conta ou cadastre-se agora.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description"
+        content="Itaim Vende - Plataforma de Compra, Venda e Trocas. Acesse sua conta ou cadastre-se agora.">
     <title>ItaimVende - Autenticação</title>
-    
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Segoe+UI&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Segoe+UI&display=swap"
+        rel="stylesheet">
+
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="assets/header-logo.png">
-    
+    <link rel="icon" type="image/png" href="assets/logos/header-logo.png">
+
     <!-- CSS -->
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/core/style.css">
+    <!-- Google Identity Services -->
+        <!-- Capturador Instantâneo de Retorno do Google OAuth na Mini Janela -->
+    <script>
+        (function() {
+            try {
+                var hash = window.location.hash;
+                if (hash && hash.indexOf('access_token=') !== -1) {
+                    var isPopup = (window.name === 'ItaimGoogleAuthWindow') ||
+                                  (hash.indexOf('state=itaim_popup') !== -1) ||
+                                  (window.opener && window.opener !== window) ||
+                                  (window.innerWidth < 650 && window.innerHeight < 750);
+
+                    if (isPopup) {
+                        var params = new URLSearchParams(hash.substring(1));
+                        var token = params.get('access_token');
+                        if (token) {
+                            try {
+                                localStorage.setItem('itaim_google_oauth_token', token);
+                                localStorage.setItem('itaim_google_oauth_timestamp', Date.now().toString());
+                            } catch (e) {}
+
+                            try {
+                                var channel = new BroadcastChannel('itaim_google_auth_channel');
+                                channel.postMessage({ type: 'GOOGLE_AUTH_TOKEN', accessToken: token });
+                                channel.close();
+                            } catch (e) {}
+
+                            if (window.opener) {
+                                try {
+                                    window.opener.postMessage({ type: 'GOOGLE_AUTH_TOKEN', accessToken: token }, '*');
+                                } catch (e) {}
+                            }
+
+                            document.documentElement.innerHTML = '<head><title>Autenticado</title></head><body style="background:#fff;display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;color:#489636;margin:0;"><h3>Autenticado com sucesso! Fechando janela...</h3></body>';
+                            window.close();
+                            setTimeout(function() { window.close(); }, 100);
+                            setTimeout(function() { window.close(); }, 300);
+                            throw new Error('OAuth Popup Terminated');
+                        }
+                    }
+                }
+            } catch (e) {}
+        })();
+    </script>
 </head>
+
 <body>
-    <main class="auth-wrapper">
-        <!-- ÁREA SUPERIOR (LOGO E MASCOTE) -->
-        <header class="topo-container" id="topo-container">
-            <div class="logo-box">
-                <img src="assets/header-logo.png" alt="Itaim Vende - Compra, Venda e Trocas" class="logo-img" id="img-logo">
-            </div>
+    <main class="auth-wrapper auth-floating-wrapper">
+        <!-- ==============================================================
+             CARTÃO FLUTUANTE CENTRALIZADO (LAYOUT MODERNO DIVIDIDO)
+             ============================================================== -->
+        <div class="auth-floating-card" role="region" aria-label="Painel de Acesso">
+            <!-- ==============================================================
+                 BLOCO ESQUERDO: IDENTIDADE VISUAL COM FUNDO GEOMÉTRICO ESCURO E VERDE
+                 ============================================================== -->
+            <aside class="auth-brand-block" id="painel-marca" aria-label="Marca Itaim Vende">
+                <div class="brand-logo-centered-box">
+                    <a href="/" class="brand-logo-link" title="Itaim Vende - Início">
+                        <img src="assets/logos/logo-itaimvende-contorno-branco.png" alt="Itaim Vende - Compra, Venda e Trocas"
+                            class="brand-logo-center-img" id="img-logo">
+                    </a>
+                    <div class="brand-slogan-box">
+                        <span class="brand-slogan-text">O MELHOR DA NOSSA REGIÃO</span>
+                        <div class="brand-slogan-line" aria-hidden="true"></div>
+                    </div>
+                </div>
+            </aside>
 
-            <!-- Seletor de visualização (Login / Cadastro) -->
-            <nav class="nav-abas" aria-label="Navegação entre Login e Cadastro">
-                <button type="button" class="btn-aba aba-ativa" id="aba-login" data-target="login">Entrar</button>
-                <button type="button" class="btn-aba" id="aba-cadastro" data-target="cadastro">Cadastre-se</button>
-            </nav>
-        </header>
+            <!-- ==============================================================
+                 BLOCO DIREITO: FORMULÁRIO DE LOGIN (FUNDO BRANCO TOTAL)
+                 ============================================================== -->
+            <section class="auth-form-block" id="painel-principal" aria-label="Painel de Autenticação">
+                <div class="auth-card-inner">
 
-        <!-- ÁREA INFERIOR (PAINEL ESCURO) -->
-        <section class="painel-inferior painel-curvo" id="painel-principal" aria-label="Painel de Autenticação">
-            
-            <!-- ==========================================================
-                 VISÃO 1: TELA DE LOGIN
-                 ========================================================== -->
-            <div class="view-secao secao-ativa container-login" id="secao-login">
-                <h1 class="titulo-login">LOGIN</h1>
+                    <!-- ==========================================================
+                         TELA DE LOGIN
+                         ========================================================== -->
+                    <div class="view-secao secao-ativa container-login" id="secao-login">
+                        <h1 class="titulo-login">LOGIN</h1>
 
-                <form id="form-login" class="form-auth" novalidate>
-                    <!-- Campo E-mail -->
-                    <div class="grupo-campo">
-                        <label for="input-email" class="label-campo">E-mail:</label>
-                        <div class="input-wrapper">
-                            <input 
-                                type="email" 
-                                id="input-email" 
-                                name="email" 
-                                class="campo-texto" 
-                                placeholder="Digite seu e-mail" 
-                                autocomplete="email" 
-                                required
-                            >
+                        <form id="form-login" class="form-auth" novalidate>
+                            <!-- Campo E-mail -->
+                            <div class="grupo-campo">
+                                <label for="input-email" class="label-campo">E-mail:</label>
+                                <div class="input-wrapper">
+                                    <input type="email" id="input-email" name="email" class="campo-texto"
+                                        placeholder="Digite seu e-mail" autocomplete="email" required>
+                                </div>
+                            </div>
+
+                            <!-- Campo Senha -->
+                            <div class="grupo-campo">
+                                <label for="input-senha" class="label-campo">Senha:</label>
+                                <div class="input-wrapper">
+                                    <input type="password" id="input-senha" name="senha" class="campo-texto"
+                                        placeholder="Digite sua senha" autocomplete="current-password" required>
+                                    <button type="button" class="btn-toggle-senha" id="btn-toggle-senha-login"
+                                        aria-label="Mostrar ou ocultar senha">
+                                        <svg class="icone-olho icone-aberto icone-oculto" viewBox="0 0 24 24" width="20" height="20"
+                                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                            <circle cx="12" cy="12" r="3"></circle>
+                                        </svg>
+                                        <svg class="icone-olho icone-fechado" viewBox="0 0 24 24"
+                                            width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path
+                                                d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+                                            </path>
+                                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Link Esqueceu a Senha -->
+                            <div class="box-esqueceu">
+                                <a href="#recuperar-senha" class="link-esqueceu" id="link-esqueceu">Esqueceu a
+                                    senha?</a>
+                            </div>
+
+                            <!-- Botões -->
+                            <div class="box-botoes">
+                                <button type="submit" class="btn-entrar" id="btn-entrar">
+                                    <span class="btn-texto">ENTRAR</span>
+                                    <span class="btn-spinner" aria-hidden="true"></span>
+                                </button>
+
+                                <div class="divisor-linha-simples" aria-hidden="true"></div>
+
+                                <button type="button" class="btn-cadastrar" id="btn-ir-para-cadastro">
+                                    CADASTRE-SE
+                                </button>
+
+                                <div class="divisor-ou">
+                                    <span class="linha-ou"></span>
+                                    <span class="label-ou">ou</span>
+                                    <span class="linha-ou"></span>
+                                </div>
+
+                                <!-- Opção de Login Rápido com Google (Card Lateral) -->
+                                <button type="button" class="btn-cadastro-google btn-login-google" id="btn-social-google" style="margin-bottom: 0;">
+                                    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                                        <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+                                        <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
+                                        <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+                                        <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+                                    </svg>
+                                    <span>Entrar com o Google</span>
+                                </button>
+                            </div>
+                        </form>
+
+                        <!-- Feedback de Status -->
+                        <div class="status-msg" id="status-msg-login" role="alert" aria-live="polite"></div>
+                    </div>
+
+                    <!-- ==========================================================
+                         2. SEÇÃO DE CADASTRO (WIZARD EM 4 ETAPAS DIRETAMENTE NO BLOCO)
+                         ========================================================== -->
+                    <div class="view-secao container-cadastro" id="secao-cadastro" style="display: none;">
+                        <div class="cadastro-wizard-header">
+                            <h2 class="titulo-login">CADASTRO</h2>
+
+                            <div class="wizard-progresso-box">
+                                <div class="wizard-info-linha">
+                                    <span class="wizard-etapa-badge" id="wizard-etapa-badge">Etapa 1 de 4</span>
+                                    <span class="wizard-etapa-nome" id="wizard-etapa-nome">Sobre você</span>
+                                </div>
+                                <div class="wizard-barra-trilha">
+                                    <div class="wizard-barra-progresso" id="wizard-barra-progresso" style="width: 25%;"></div>
+                                </div>
+                            </div>
+                            <div class="status-msg" id="status-msg-cadastro" role="alert" aria-live="polite"></div>
                         </div>
-                    </div>
 
-                    <!-- Campo Senha -->
-                    <div class="grupo-campo">
-                        <label for="input-senha" class="label-campo">Senha:</label>
-                        <div class="input-wrapper">
-                            <input 
-                                type="password" 
-                                id="input-senha" 
-                                name="senha" 
-                                class="campo-texto" 
-                                placeholder="Digite sua senha" 
-                                autocomplete="current-password" 
-                                required
-                            >
-                            <button type="button" class="btn-toggle-senha" id="btn-toggle-senha-login" aria-label="Mostrar ou ocultar senha">
-                                <svg class="icone-olho icone-aberto" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                    <circle cx="12" cy="12" r="3"></circle>
-                                </svg>
-                                <svg class="icone-olho icone-fechado icone-oculto" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
-                                    <line x1="1" y1="1" x2="23" y2="23"></line>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Link Esqueceu a Senha -->
-                    <div class="box-esqueceu">
-                        <a href="#recuperar-senha" class="link-esqueceu" id="link-esqueceu">Esqueceu a senha?</a>
-                    </div>
-
-                    <!-- Botões -->
-                    <div class="box-botoes">
-                        <button type="submit" class="btn-entrar" id="btn-entrar">
-                            <span class="btn-texto">ENTRAR</span>
-                            <span class="btn-spinner" aria-hidden="true"></span>
-                        </button>
-
-                        <span class="label-ou">ou</span>
-
-                        <button type="button" class="btn-cadastrar" id="btn-ir-para-cadastro">
-                            CADASTRE-SE
-                        </button>
-                    </div>
-
-                    <!-- Feedback de Status -->
-                    <div class="status-msg" id="status-msg-login" role="alert" aria-live="polite"></div>
-                </form>
-            </div>
-
-            <!-- ==========================================================
-                 VISÃO 2: TELA DE CADASTRO (EXATAMENTE COMO NAS IMAGENS, SEM CPF)
-                 ========================================================== -->
-            <div class="view-secao container-cadastro" id="secao-cadastro">
-                <form id="form-cadastro-completo" class="form-auth" novalidate>
-                    
-                    <!-- Campo Nome Completo -->
-                    <div class="grupo-campo">
-                        <label for="cad-nome" class="label-campo">Nome Completo:</label>
-                        <input 
-                            type="text" 
-                            id="cad-nome" 
-                            name="nome" 
-                            class="campo-texto" 
-                            placeholder="Seu nome completo" 
-                            required
-                        >
-                    </div>
-
-                    <!-- Campo Nome de Usuário (@) posicionado logo abaixo do Nome Completo -->
-                    <div class="grupo-campo">
-                        <label for="cad-username" class="label-campo">Nome de Usuário (@):</label>
-                        <input 
-                            type="text" 
-                            id="cad-username" 
-                            name="username" 
-                            class="campo-texto" 
-                            placeholder="ex: joaosilva" 
-                            required
-                        >
-                    </div>
-
-                    <!-- Campo Cidade -->
-                    <div class="grupo-campo">
-                        <label for="cad-cidade" class="label-campo">Cidade:</label>
-                        <div class="select-wrapper">
-                            <select id="cad-cidade" name="cidade" class="select-campo" required>
-                                <option value="" disabled selected>Selecione sua cidade</option>
-                                <option value="Paulistana">Paulistana</option>
-                                <option value="Acauã">Acauã</option>
-                                <option value="Betânia do Piauí">Betânia do Piauí</option>
-                                <option value="Curral Novo">Curral Novo</option>
-                                <option value="Jacobina">Jacobina</option>
-                                <option value="Queimada Nova">Queimada Nova</option>
-                                <option value="Patos">Patos</option>
-                                <option value="Simões">Simões</option>
-                                <option value="Caridade">Caridade</option>
-                                <option value="Marcolândia">Marcolândia</option>
-                                <option value="Jaicós">Jaicós</option>
-                                <option value="Massapê">Massapê</option>
-                                <option value="Picos">Picos</option>
-                                <option value="Petrolina">Petrolina</option>
-                            </select>
-                            <svg class="select-seta" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="6 9 12 15 18 9"></polyline>
+                                                <!-- Opção de Cadastro Rápido com Google -->
+                        <button type="button" class="btn-cadastro-google" id="btn-cadastro-wizard-google" style="margin-bottom: 14px;">
+                            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                                <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+                                <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
+                                <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+                                <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
                             </svg>
-                        </div>
-                    </div>
-
-                    <!-- Campo Bairro -->
-                    <div class="grupo-campo">
-                        <label for="cad-bairro" class="label-campo">Bairro:</label>
-                        <input 
-                            type="text" 
-                            id="cad-bairro" 
-                            name="bairro" 
-                            class="campo-texto" 
-                            placeholder="Seu Bairro"
-                        >
-                    </div>
-
-                    <!-- Campo WhatsApp / Contato -->
-                    <div class="grupo-campo">
-                        <label for="cad-telefone" class="label-campo">WhatsApp / Contato:</label>
-                        <input 
-                            type="tel" 
-                            id="cad-telefone" 
-                            name="telefone" 
-                            class="campo-texto" 
-                            placeholder="(00) 00000-0000"
-                            maxlength="15"
-                        >
-                    </div>
-
-                    <div class="grupo-campo">
-                        <label for="cad-email-completo" class="label-campo">E-mail:</label>
-                        <input 
-                            type="email" 
-                            id="cad-email-completo" 
-                            name="email" 
-                            class="campo-texto" 
-                            placeholder="email@exemplo.com" 
-                            required
-                        >
-                    </div>
-
-                    <div class="grupo-campo">
-                        <label for="cad-senha-completo" class="label-campo">Senha:</label>
-                        <div class="input-wrapper">
-                            <input 
-                                type="password" 
-                                id="cad-senha-completo" 
-                                name="senha" 
-                                class="campo-texto" 
-                                placeholder="Mín 8 chars, 1 Maiúscula, 1 Símbolo" 
-                                required
-                            >
-                            <button type="button" class="btn-toggle-senha" id="btn-toggle-cad-senha" aria-label="Mostrar ou ocultar senha">
-                                <svg class="icone-olho icone-aberto" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                    <circle cx="12" cy="12" r="3"></circle>
-                                </svg>
-                                <svg class="icone-olho icone-fechado icone-oculto" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
-                                    <line x1="1" y1="1" x2="23" y2="23"></line>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="grupo-campo">
-                        <label for="cad-confirma-senha" class="label-campo">Confirmar Senha:</label>
-                        <div class="input-wrapper">
-                            <input 
-                                type="password" 
-                                id="cad-confirma-senha" 
-                                name="confirmaSenha" 
-                                class="campo-texto" 
-                                placeholder="Confirme sua senha" 
-                                required
-                            >
-                            <button type="button" class="btn-toggle-senha" id="btn-toggle-cad-confirma" aria-label="Mostrar ou ocultar confirmação de senha">
-                                <svg class="icone-olho icone-aberto" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                    <circle cx="12" cy="12" r="3"></circle>
-                                </svg>
-                                <svg class="icone-olho icone-fechado icone-oculto" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
-                                    <line x1="1" y1="1" x2="23" y2="23"></line>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Botão CONCLUIR CADASTRO -->
-                    <button type="submit" class="btn-concluir-cadastro" id="btn-concluir-cadastro">
-                        <span class="btn-texto">CONCLUIR CADASTRO</span>
-                        <span class="btn-spinner" aria-hidden="true"></span>
-                    </button>
-
-                    <!-- Link Voltar ao Login -->
-                    <div class="box-voltar-login">
-                        <button type="button" class="link-voltar" id="btn-voltar-ao-login">
-                            Voltar ao Login
+                            <span>Cadastrar-se com o Google</span>
                         </button>
+                        <div class="divisor-social">
+                            <span>ou preencha por etapas</span>
+                        </div>
+<form id="form-cadastro-completo" class="form-auth form-wizard" novalidate>
+
+                            <!-- ETAPA 1: Sobre você (Identificação pessoal) -->
+                            <div class="wizard-etapa-painel etapa-ativa" id="etapa-1" data-step="1">
+                                <div class="grupo-campo">
+                                    <label for="cad-nome" class="label-campo">Nome:</label>
+                                    <div class="input-wrapper">
+                                        <input type="text" id="cad-nome" name="nome" class="campo-texto"
+                                            placeholder="Digite seu nome completo">
+                                    </div>
+                                </div>
+
+                                <div class="grupo-campo">
+                                    <label for="cad-username" class="label-campo">Usuário:</label>
+                                    <div class="input-wrapper">
+                                        <input type="text" id="cad-username" name="username" class="campo-texto"
+                                            placeholder="ex: joaosilva">
+                                    </div>
+                                </div>
+
+                                <div class="wizard-botoes-duplos">
+                                    <button type="button" class="btn-cadastrar btn-voltar-etapa btn-voltar-auth" id="btn-cad-voltar-login">
+                                        VOLTAR
+                                    </button>
+                                    <button type="button" class="btn-avancar-etapa" id="btn-avancar-etapa-1">
+                                        AVANÇAR
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- ETAPA 2: Sua conta (Acesso e segurança) -->
+                            <div class="wizard-etapa-painel" id="etapa-2" data-step="2">
+                                <div class="grupo-campo">
+                                    <label for="cad-email-completo" class="label-campo">E-mail:</label>
+                                    <div class="input-wrapper">
+                                        <input type="email" id="cad-email-completo" name="email" class="campo-texto"
+                                            placeholder="Digite seu e-mail">
+                                    </div>
+                                </div>
+
+                                <div class="grupo-campo">
+                                    <label for="cad-senha-completo" class="label-campo">Senha:</label>
+                                    <div class="input-wrapper">
+                                        <input type="password" id="cad-senha-completo" name="senha" class="campo-texto"
+                                            placeholder="Digite sua senha">
+                                        <button type="button" class="btn-toggle-senha" id="btn-toggle-cad-senha"
+                                            aria-label="Mostrar ou ocultar senha">
+                                            <svg class="icone-olho icone-aberto icone-oculto" viewBox="0 0 24 24" width="20" height="20"
+                                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                stroke-linejoin="round">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                <circle cx="12" cy="12" r="3"></circle>
+                                            </svg>
+                                            <svg class="icone-olho icone-fechado" viewBox="0 0 24 24"
+                                                width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round">
+                                                <path
+                                                    d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+                                                </path>
+                                                <line x1="1" y1="1" x2="23" y2="23"></line>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="grupo-campo">
+                                    <label for="cad-confirma-senha" class="label-campo">Confirmar senha:</label>
+                                    <div class="input-wrapper">
+                                        <input type="password" id="cad-confirma-senha" name="confirmaSenha" class="campo-texto"
+                                            placeholder="Confirme sua senha">
+                                        <button type="button" class="btn-toggle-senha" id="btn-toggle-cad-confirma"
+                                            aria-label="Mostrar ou ocultar confirmação de senha">
+                                            <svg class="icone-olho icone-aberto icone-oculto" viewBox="0 0 24 24" width="20" height="20"
+                                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                stroke-linejoin="round">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                <circle cx="12" cy="12" r="3"></circle>
+                                            </svg>
+                                            <svg class="icone-olho icone-fechado" viewBox="0 0 24 24"
+                                                width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round">
+                                                <path
+                                                    d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+                                                </path>
+                                                <line x1="1" y1="1" x2="23" y2="23"></line>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="wizard-botoes-duplos">
+                                    <button type="button" class="btn-cadastrar btn-voltar-etapa" id="btn-voltar-etapa-2">
+                                        VOLTAR
+                                    </button>
+                                    <button type="button" class="btn-avancar-etapa" id="btn-avancar-etapa-2">
+                                        AVANÇAR
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- ETAPA 3: Onde você está (Localização e endereço) -->
+                            <div class="wizard-etapa-painel" id="etapa-3" data-step="3">
+                                <div class="linha-dupla-campos">
+                                    <div class="grupo-campo campo-flex-2">
+                                        <label for="cad-cep" class="label-campo">CEP:</label>
+                                        <div class="input-wrapper">
+                                            <input type="text" id="cad-cep" name="cep" class="campo-texto"
+                                                placeholder="00000-000" maxlength="9">
+                                        </div>
+                                    </div>
+                                    <div class="grupo-campo campo-flex-1">
+                                        <label for="cad-estado" class="label-campo">Estado:</label>
+                                        <div class="input-wrapper">
+                                            <input type="text" id="cad-estado" name="estado" class="campo-texto"
+                                                placeholder="ex: PI" maxlength="2">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="grupo-campo">
+                                    <label for="cad-cidade" class="label-campo">Cidade:</label>
+                                    <div class="input-wrapper">
+                                        <input type="text" id="cad-cidade" name="cidade" class="campo-texto"
+                                            placeholder="Digite sua cidade">
+                                    </div>
+                                </div>
+
+                                <div class="grupo-campo">
+                                    <label for="cad-bairro" class="label-campo">Bairro:</label>
+                                    <div class="input-wrapper">
+                                        <input type="text" id="cad-bairro" name="bairro" class="campo-texto"
+                                            placeholder="Digite seu bairro">
+                                    </div>
+                                </div>
+
+                                <div class="wizard-botoes-duplos">
+                                    <button type="button" class="btn-cadastrar btn-voltar-etapa" id="btn-voltar-etapa-3">
+                                        VOLTAR
+                                    </button>
+                                    <button type="button" class="btn-avancar-etapa" id="btn-avancar-etapa-3">
+                                        AVANÇAR
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- ETAPA 4: Vamos finalizar? (Contato opcional e confirmação) -->
+                            <div class="wizard-etapa-painel" id="etapa-4" data-step="4">
+                                <div class="grupo-campo">
+                                    <label for="cad-telefone" class="label-campo">Número do WhatsApp (opcional):</label>
+                                    <div class="input-wrapper">
+                                        <input type="tel" id="cad-telefone" name="telefone" class="campo-texto"
+                                            placeholder="(00) 00000-0000" maxlength="15">
+                                    </div>
+                                </div>
+
+                                <div class="wizard-botoes-duplos">
+                                    <button type="button" class="btn-cadastrar btn-voltar-etapa" id="btn-voltar-etapa-4">
+                                        VOLTAR
+                                    </button>
+                                    <button type="submit" class="btn-concluir-cadastro" id="btn-concluir-cadastro">
+                                        <span class="btn-texto">FINALIZAR</span>
+                                        <span class="btn-spinner" aria-hidden="true"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
 
-                    <!-- Feedback de Status Cadastro -->
-                    <div class="status-msg" id="status-msg-cadastro" role="alert" aria-live="polite"></div>
-                </form>
-            </div>
-        </section>
+                    <!-- ==========================================================
+                         3. SEÇÃO DE RECUPERAR SENHA (EM 2 ETAPAS NO BLOCO BRANCO)
+                         ========================================================== -->
+                    <div class="view-secao container-recuperar" id="secao-recuperar" style="display: none;">
+                        <div class="cadastro-wizard-header">
+                            <h2 class="titulo-login">RECUPERAR SENHA</h2>
+                            <p class="subtitulo-recuperar" id="subtitulo-recuperar">Informe seu e-mail para receber o código de verificação.</p>
+                        </div>
+
+                        <!-- ETAPA 1: Identificação por E-mail -->
+                        <form id="form-recuperar-etapa1" class="form-auth" novalidate>
+                            <div class="grupo-campo">
+                                <label for="recuperar-email" class="label-campo">E-mail:</label>
+                                <div class="input-wrapper">
+                                    <input type="email" id="recuperar-email" class="campo-texto"
+                                        placeholder="Digite seu e-mail cadastrado" required>
+                                </div>
+                            </div>
+
+                            <div class="wizard-botoes-duplos">
+                                <button type="button" class="btn-cadastrar btn-voltar-etapa btn-voltar-auth" id="btn-recuperar-voltar-login">
+                                    VOLTAR
+                                </button>
+                                <button type="submit" class="btn-avancar-etapa" id="btn-enviar-recuperacao">
+                                    <span class="btn-texto">AVANÇAR</span>
+                                    <span class="btn-spinner" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                            <div class="status-msg" id="status-modal-recuperar" role="alert" aria-live="polite"></div>
+                        </form>
+
+                        <!-- ETAPA 2: Código de Verificação -->
+                        <form id="form-recuperar-etapa2" class="form-auth" style="display: none;" novalidate>
+                            <div class="grupo-campo">
+                                <label class="label-campo" id="label-recuperar-codigo">Código de Verificação:</label>
+                                <div class="otp-container" id="otp-container" role="group" aria-labelledby="label-recuperar-codigo">
+                                    <input type="text" class="otp-quadrinho" maxlength="1" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" data-index="0" aria-label="Dígito 1">
+                                    <input type="text" class="otp-quadrinho" maxlength="1" inputmode="numeric" pattern="[0-9]*" autocomplete="off" data-index="1" aria-label="Dígito 2">
+                                    <input type="text" class="otp-quadrinho" maxlength="1" inputmode="numeric" pattern="[0-9]*" autocomplete="off" data-index="2" aria-label="Dígito 3">
+                                    <input type="text" class="otp-quadrinho" maxlength="1" inputmode="numeric" pattern="[0-9]*" autocomplete="off" data-index="3" aria-label="Dígito 4">
+                                    <input type="text" class="otp-quadrinho" maxlength="1" inputmode="numeric" pattern="[0-9]*" autocomplete="off" data-index="4" aria-label="Dígito 5">
+                                    <input type="text" class="otp-quadrinho" maxlength="1" inputmode="numeric" pattern="[0-9]*" autocomplete="off" data-index="5" aria-label="Dígito 6">
+                                </div>
+                                <input type="hidden" id="recuperar-codigo" name="recuperar-codigo" value="">
+                            </div>
+
+                            <!-- Link Reenviar Código (Estilo idêntico ao Esqueceu a Senha) -->
+                            <div class="box-esqueceu box-reenviar-codigo">
+                                <a href="javascript:void(0)" class="link-esqueceu" id="btn-reenviar-codigo">Reenviar código</a>
+                            </div>
+
+                            <div class="wizard-botoes-duplos">
+                                <button type="button" class="btn-cadastrar btn-voltar-etapa" id="btn-recuperar-voltar-etapa1">
+                                    VOLTAR
+                                </button>
+                                <button type="submit" class="btn-concluir-cadastro" id="btn-confirmar-codigo">
+                                    <span class="btn-texto">CONFIRMAR</span>
+                                    <span class="btn-spinner" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                            <div class="status-msg" id="status-recuperar-etapa2" role="alert" aria-live="polite"></div>
+                        </form>
+
+                        <!-- ETAPA 3: Nova Senha e Confirmação -->
+                        <form id="form-recuperar-etapa3" class="form-auth" style="display: none;" novalidate>
+                            <div class="grupo-campo">
+                                <label for="recuperar-nova-senha" class="label-campo">Nova senha:</label>
+                                <div class="input-wrapper">
+                                    <input type="password" id="recuperar-nova-senha" name="novaSenha" class="campo-texto"
+                                        placeholder="Crie uma nova senha" required autocomplete="new-password">
+                                    <button type="button" class="btn-toggle-senha" id="btn-toggle-rec-nova-senha"
+                                        aria-label="Mostrar ou ocultar nova senha">
+                                        <svg class="icone-olho icone-aberto icone-oculto" viewBox="0 0 24 24" width="20" height="20"
+                                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                            <circle cx="12" cy="12" r="3"></circle>
+                                        </svg>
+                                        <svg class="icone-olho icone-fechado" viewBox="0 0 24 24"
+                                            width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path
+                                                d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+                                            </path>
+                                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="grupo-campo">
+                                <label for="recuperar-confirmar-senha" class="label-campo">Confirmar nova senha:</label>
+                                <div class="input-wrapper">
+                                    <input type="password" id="recuperar-confirmar-senha" name="confirmarNovaSenha" class="campo-texto"
+                                        placeholder="Confirme a nova senha" required autocomplete="new-password">
+                                    <button type="button" class="btn-toggle-senha" id="btn-toggle-rec-confirma-senha"
+                                        aria-label="Mostrar ou ocultar confirmação da nova senha">
+                                        <svg class="icone-olho icone-aberto icone-oculto" viewBox="0 0 24 24" width="20" height="20"
+                                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                            <circle cx="12" cy="12" r="3"></circle>
+                                        </svg>
+                                        <svg class="icone-olho icone-fechado" viewBox="0 0 24 24"
+                                            width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path
+                                                d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+                                            </path>
+                                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="wizard-botoes-duplos">
+                                <button type="button" class="btn-cadastrar btn-voltar-etapa" id="btn-recuperar-voltar-etapa2">
+                                    VOLTAR
+                                </button>
+                                <button type="submit" class="btn-concluir-cadastro" id="btn-salvar-nova-senha">
+                                    <span class="btn-texto">REDEFINIR SENHA</span>
+                                    <span class="btn-spinner" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                            <div class="status-msg" id="status-recuperar-etapa3" role="alert" aria-live="polite"></div>
+                        </form>
+                    </div>
+
+                </div>
+
+                <!-- Ações secundárias compactas (visitante e modo dev) ocultadas da tela de login -->
+                <div class="box-acoes-secundarias-mini" id="box-acoes-secundarias-mini">
+                    <div class="box-visitante">
+                        <a href="pages/home/home.html" class="link-continuar-visitante" id="link-continuar-visitante">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            </svg>
+                            <span>Continuar como visitante</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </div>
     </main>
 
-    <!-- MODAL ESQUECEU A SENHA / CONFIRMAÇÃO DE CÓDIGO -->
-    <div class="modal-backdrop" id="modal-esqueceu" aria-hidden="true" role="dialog" aria-labelledby="modal-titulo-recuperar">
-        <div class="modal-card">
-            <button class="modal-close" id="modal-close-btn" aria-label="Fechar">&times;</button>
-            <div class="modal-icon-topo" id="modal-icon-topo">
-                <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#44BD32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                </svg>
+        <!-- Modal Pop-up: Recurso em Desenvolvimento (Login Social) -->
+    <div class="modal-social-backdrop" id="modal-social-aviso" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="modal-social-card">
+            <button type="button" class="modal-social-fechar" id="btn-fechar-modal-social" aria-label="Fechar pop-up">
+                &times;
+            </button>
+            <div class="modal-social-icone-box" id="modal-social-icone-box">
+                <!-- Ícone dinâmico inserido via JS -->
             </div>
-            <h2 class="modal-titulo" id="modal-titulo-recuperar">Recuperar Senha</h2>
-            <p class="modal-descricao" id="modal-descricao-recuperar">Informe o e-mail cadastrado na sua conta para enviarmos as instruções de recuperação de senha.</p>
-            
-            <!-- FORMULÁRIO DE RECUPERAÇÃO -->
-            <form id="form-recuperar-etapa1" class="form-auth" novalidate>
-                <div class="grupo-campo">
-                    <label for="recuperar-email" class="label-campo">E-mail cadastrado:</label>
-                    <input type="email" id="recuperar-email" class="campo-texto" placeholder="exemplo@email.com" required>
-                </div>
-                <button type="submit" class="btn-entrar btn-modal" id="btn-enviar-recuperacao">
-                    <span class="btn-texto">ENVIAR INSTRUÇÕES</span>
-                    <span class="btn-spinner" aria-hidden="true"></span>
-                </button>
-                <div class="status-msg" id="status-modal-recuperar"></div>
-            </form>
+            <span class="modal-social-badge" id="modal-social-badge">EM BREVE</span>
+            <h3 class="modal-social-titulo" id="modal-social-titulo">Entrar com Rede Social</h3>
+            <p class="modal-social-mensagem" id="modal-social-mensagem">
+                O login rápido com esta opção ainda não foi implementado. Por favor, utilize seu e-mail e senha cadastrados no formulário para entrar normalmente.
+            </p>
+            <button type="button" class="btn-modal-social-entendi" id="btn-modal-social-entendi">
+                ENTENDI
+            </button>
         </div>
     </div>
 
     <!-- Script JS -->
-    <script src="js/core/rotas.js"></script>
-    <script src="js/core/api.js"></script>
-    <script src="js/core/sessao.js"></script>
-    <script src="js/pages/auth/app.js"></script>
+    <script src="js/core/rotas/index.js"></script>
+    <script src="js/core/api/index.js"></script>
+    <script src="js/core/sessao/index.js"></script>
+    <script src="js/pages/auth/auth-senha-toggle.js"></script>
+    <script src="js/pages/auth/app.js?v=2.0"></script>
 </body>
+
 </html>

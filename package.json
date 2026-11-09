@@ -1,15 +1,25 @@
 {
   "name": "itaim-vende",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Itaim Vende - Plataforma de Compra, Venda e Trocas",
   "private": true,
+  "type": "module",
   "scripts": {
+    "setup": "node scripts/setup-db.js",
+    "modo:ifpi": "node scripts/switch-env.js ifpi",
+    "modo:supabase": "node scripts/switch-env.js supabase",
+    "modo:sem-bd": "node scripts/modo-dev.js",
+    "modo:sem-bd:admin": "node scripts/modo-dev.js admin",
+    "modo:sem-bd:off": "node scripts/modo-dev.js off",
+    "dev:sem-bd": "node scripts/modo-dev.js",
     "start": "npm --prefix backend run start",
     "dev": "npm --prefix backend run dev",
-    "tunnel": "\"C:\\Program Files (x86)\\cloudflared\\cloudflared.exe\" tunnel --url http://localhost:3000",
+    "tunnel": "cloudflared tunnel --protocol http2 --url http://localhost:3000",
     "dev:frontend": "npx -y serve frontend -p 5500",
     "dev:backend": "npm --prefix backend run dev",
     "start:backend": "npm --prefix backend run start",
+    "test": "npm --prefix backend run test",
+    "test:backend": "npm --prefix backend run test",
     "install:backend": "npm --prefix backend install"
   },
   "keywords": [

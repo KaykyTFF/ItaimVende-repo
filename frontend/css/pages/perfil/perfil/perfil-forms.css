@@ -1,0 +1,616 @@
+/* ==========================================================================
+   3 & 4. CARTÕES DE SEÇÃO (DADOS PESSOAIS & SEGURANÇA)
+   ========================================================================== */
+.perfil-secao-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 34px 38px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.02);
+    border: 1px solid #edf2ee;
+    margin-bottom: 22px;
+}
+
+.perfil-secao-cabecalho {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 28px;
+}
+
+.perfil-cabecalho-icone {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background-color: rgba(68, 189, 50, 0.12);
+    color: #44BD32;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.perfil-cabecalho-texto h2 {
+    font-size: 20px;
+    font-weight: 800;
+    color: #1E272E;
+    margin: 0 0 4px 0;
+    letter-spacing: -0.2px;
+}
+
+.perfil-cabecalho-texto p {
+    font-size: 13.5px;
+    color: #64748b;
+    margin: 0;
+    font-weight: 400;
+    line-height: 1.4;
+}
+
+/* Grid de Formulário */
+.form-grid-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 24px;
+    margin-bottom: 28px;
+}
+
+.campo-grupo-perfil {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.campo-label-perfil {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #1E272E;
+}
+
+.campo-label-perfil svg {
+    color: #44BD32;
+    flex-shrink: 0;
+}
+
+.campo-input-perfil {
+    height: 48px;
+    border-radius: 12px;
+    background-color: #f8faf8;
+    border: 1px solid #e1ece4;
+    padding: 0 16px;
+    font-size: 14.5px;
+    font-family: inherit;
+    color: #2d3748;
+    font-weight: 500;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.campo-input-perfil:focus {
+    background-color: #ffffff;
+    border-color: #44BD32;
+    box-shadow: none;
+}
+
+.campo-input-perfil::placeholder {
+    color: #9ba8a0;
+    font-weight: 400;
+}
+
+/* Botões de Ação */
+.btn-salvar-dados {
+    background-color: #44BD32;
+    color: #ffffff;
+    font-size: 14.5px;
+    font-weight: 700;
+    padding: 13px 26px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+    box-shadow: none;
+    font-family: inherit;
+}
+
+.btn-salvar-dados:hover {
+    background-color: #3ca82b;
+    transform: translateY(-1px);
+    box-shadow: none;
+}
+
+.btn-salvar-dados:active {
+    transform: translateY(0);
+}
+
+.btn-atualizar-senha {
+    background-color: #1E272E;
+    color: #ffffff;
+    font-size: 14.5px;
+    font-weight: 700;
+    padding: 13px 26px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 14px rgba(30, 39, 46, 0.25);
+    font-family: inherit;
+}
+
+.btn-atualizar-senha:hover {
+    background-color: #151c22;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(30, 39, 46, 0.32);
+}
+
+.btn-atualizar-senha:active {
+    transform: translateY(0);
+}
+
+
+/* ==========================================================================
+   5. BOTÃO EDITAR PERFIL & MODAL "DADOS DA CONTA"
+   ========================================================================== */
+.btn-editar-perfil-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #ffffff;
+    border: 1.5px solid #CBD5E1;
+    color: #334155;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 5px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    font-family: inherit;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+.btn-editar-perfil-tag:hover {
+    border-color: #44BD32;
+    color: #44BD32;
+    background: #F0FDF4;
+    transform: translateY(-1px);
+    box-shadow: none;
+}
+
+.modal-editar-perfil-fundo {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.modal-editar-perfil-fundo.aberto {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Trava o scroll da página enquanto o modal de perfil estiver aberto */
+html.modal-perfil-aberto,
+body.modal-perfil-aberto {
+    overflow: hidden !important;
+}
+
+.modal-editar-perfil-card {
+    background: #ffffff;
+    border-radius: 20px;
+    max-width: 520px;
+    width: 100%;
+    padding: 28px 30px;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.2);
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: scale(0.96) translateY(8px);
+    transition: transform 0.2s ease;
+}
+
+.modal-editar-perfil-fundo.aberto .modal-editar-perfil-card {
+    transform: scale(1) translateY(0);
+}
+
+.modal-perfil-cabecalho {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    gap: 16px;
+}
+
+.modal-perfil-titulo {
+    font-size: 20px;
+    font-weight: 800;
+    color: #1E293B;
+    margin: 0 0 4px 0;
+    letter-spacing: -0.2px;
+}
+
+.modal-perfil-desc {
+    font-size: 13.5px;
+    color: #64748B;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.modal-perfil-btn-fechar {
+    background: none;
+    border: none;
+    font-size: 26px;
+    line-height: 1;
+    color: #94A3B8;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 8px;
+    transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.modal-perfil-btn-fechar:hover {
+    color: #1E293B;
+    background: #F1F5F9;
+}
+
+/* Foto de perfil dentro do modal */
+.modal-avatar-box {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 16px;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 16px;
+    margin-bottom: 20px;
+}
+
+.modal-avatar-preview-wrap {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid #44BD32;
+    box-shadow: none;
+    flex-shrink: 0;
+    background: #1E293B;
+}
+
+.modal-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.modal-avatar-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.modal-avatar-titulo {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #1E293B;
+}
+
+.modal-avatar-sub {
+    font-size: 12px;
+    color: #64748B;
+    margin-bottom: 6px;
+}
+
+.modal-avatar-botoes {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.modal-btn-avatar-upload {
+    background: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    color: #1E293B;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 7px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.modal-btn-avatar-upload:hover {
+    border-color: #44BD32;
+    color: #44BD32;
+    background: #F0FDF4;
+}
+
+.modal-btn-avatar-remover {
+    background: #FEF2F2;
+    border: 1px solid #FECACA;
+    color: #DC2626;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 7px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.modal-btn-avatar-remover:hover {
+    background: #FEE2E2;
+    border-color: #F87171;
+}
+
+/* Campos do modal */
+.modal-perfil-campos {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.modal-perfil-campo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.modal-perfil-label {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #1E293B;
+}
+
+.modal-perfil-input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 11px 14px;
+    border: 1.5px solid #CBD5E1;
+    border-radius: 12px;
+    background: #F8FAFC;
+    font-family: inherit;
+    font-size: 14.5px;
+    color: #1E293B;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.modal-perfil-input:focus {
+    background: #FFFFFF;
+    border-color: #44BD32;
+    box-shadow: none;
+}
+
+.modal-perfil-input.com-erro {
+    border-color: #DC2626;
+    background: #FEF2F2;
+}
+
+.modal-perfil-textarea {
+    resize: vertical;
+    min-height: 85px;
+    line-height: 1.45;
+}
+
+.modal-perfil-erro {
+    font-size: 12px;
+    color: #DC2626;
+    font-weight: 600;
+    min-height: 16px;
+}
+
+.modal-perfil-bio-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2px;
+}
+
+.modal-perfil-bio-dica {
+    font-size: 12px;
+    color: #64748B;
+}
+
+.modal-perfil-bio-contador {
+    font-size: 12px;
+    color: #64748B;
+    font-weight: 700;
+}
+
+/* Ações do modal */
+.modal-perfil-acoes {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+}
+
+.modal-btn-cancelar {
+    background: #F1F5F9;
+    color: #475569;
+    border: 1px solid #CBD5E1;
+    padding: 11px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.modal-btn-cancelar:hover {
+    background: #E2E8F0;
+    color: #1E293B;
+}
+
+.modal-btn-salvar {
+    background: #44BD32;
+    color: #FFFFFF;
+    border: none;
+    padding: 11px 24px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: none;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.modal-btn-salvar:hover {
+    background: #3ca82b;
+    transform: translateY(-1px);
+    box-shadow: none;
+}
+
+.modal-btn-salvar:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* MODO ESCURO */
+[data-theme="dark"] .btn-editar-perfil-tag,
+.dark-theme .btn-editar-perfil-tag {
+    background: #1E293B;
+    border-color: #334155;
+    color: #F1F5F9;
+}
+
+[data-theme="dark"] .btn-editar-perfil-tag:hover,
+.dark-theme .btn-editar-perfil-tag:hover {
+    background: rgba(68, 189, 50, 0.15);
+    border-color: #44BD32;
+    color: #38A129;
+}
+
+[data-theme="dark"] .modal-editar-perfil-card,
+.dark-theme .modal-editar-perfil-card {
+    background: #1F2831;
+    border: 1px solid #2C3946;
+}
+
+[data-theme="dark"] .modal-perfil-titulo,
+.dark-theme .modal-perfil-titulo {
+    color: #F1F5F9;
+}
+
+[data-theme="dark"] .modal-perfil-desc,
+.dark-theme .modal-perfil-desc {
+    color: #94A3B8;
+}
+
+[data-theme="dark"] .modal-perfil-btn-fechar,
+.dark-theme .modal-perfil-btn-fechar {
+    color: #94A3B8;
+}
+
+[data-theme="dark"] .modal-perfil-btn-fechar:hover,
+.dark-theme .modal-perfil-btn-fechar:hover {
+    color: #F1F5F9;
+    background: #2C3946;
+}
+
+[data-theme="dark"] .modal-avatar-box,
+.dark-theme .modal-avatar-box {
+    background: #141A20;
+    border-color: #2C3946;
+}
+
+[data-theme="dark"] .modal-avatar-titulo,
+.dark-theme .modal-avatar-titulo {
+    color: #F1F5F9;
+}
+
+[data-theme="dark"] .modal-avatar-sub,
+.dark-theme .modal-avatar-sub {
+    color: #94A3B8;
+}
+
+[data-theme="dark"] .modal-btn-avatar-upload,
+.dark-theme .modal-btn-avatar-upload {
+    background: #1F2831;
+    border-color: #334155;
+    color: #F1F5F9;
+}
+
+[data-theme="dark"] .modal-btn-avatar-upload:hover,
+.dark-theme .modal-btn-avatar-upload:hover {
+    border-color: #44BD32;
+    color: #38A129;
+    background: rgba(68, 189, 50, 0.12);
+}
+
+[data-theme="dark"] .modal-btn-avatar-remover,
+.dark-theme .modal-btn-avatar-remover {
+    background: rgba(220, 38, 38, 0.15);
+    border-color: rgba(220, 38, 38, 0.35);
+    color: #F87171;
+}
+
+[data-theme="dark"] .modal-btn-avatar-remover:hover,
+.dark-theme .modal-btn-avatar-remover:hover {
+    background: rgba(220, 38, 38, 0.25);
+    border-color: rgba(220, 38, 38, 0.5);
+}
+
+[data-theme="dark"] .modal-perfil-label,
+.dark-theme .modal-perfil-label {
+    color: #F1F5F9;
+}
+
+[data-theme="dark"] .modal-perfil-input,
+.dark-theme .modal-perfil-input {
+    background: #141A20;
+    border-color: #2C3946;
+    color: #F1F5F9;
+}
+
+[data-theme="dark"] .modal-perfil-input:focus,
+.dark-theme .modal-perfil-input:focus {
+    background: #1A222B;
+    border-color: #44BD32;
+}
+
+[data-theme="dark"] .modal-perfil-bio-dica,
+.dark-theme .modal-perfil-bio-dica,
+[data-theme="dark"] .modal-perfil-bio-contador,
+.dark-theme .modal-perfil-bio-contador {
+    color: #94A3B8;
+}
+
+[data-theme="dark"] .modal-btn-cancelar,
+.dark-theme .modal-btn-cancelar {
+    background: #2C3946;
+    border-color: #3B4B5B;
+    color: #CBD5E1;
+}
+
+[data-theme="dark"] .modal-btn-cancelar:hover,
+.dark-theme .modal-btn-cancelar:hover {
+    background: #3B4B5B;
+    color: #F1F5F9;
+}

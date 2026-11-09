@@ -1,0 +1,19 @@
+/**
+ * ITAIM VENDE - PÁGINA MEUS ANÚNCIOS (MEUS-ANUNCIOS.HTML)
+ * Arquivo orquestrador / modular
+ */
+
+/* 1. Topo, Breadcrumb e Botão Novo Anúncio */
+@import url('./meus-anuncios/meus-anuncios-header.css');
+
+/* 2. Abas de Status e Filtros */
+@import url('./meus-anuncios/meus-anuncios-tabs.css');
+
+/* 3. Lista e Cards de Anúncios */
+@import url('./meus-anuncios/meus-anuncios-lista.css');
+
+/* 4. Ações de Gerenciamento e Estado Vazio */
+@import url('./meus-anuncios/meus-anuncios-acoes-vazio.css');
+
+/* 5. Responsividade (Mobile e Tablet) */
+@import url('./meus-anuncios/meus-anuncios-responsive.css');

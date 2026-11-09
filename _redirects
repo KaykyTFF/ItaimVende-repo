@@ -1,6 +1,5 @@
 # Regras de redirecionamento caso o Netlify publique a raiz do repositório
-/                        /frontend/index.html                     200
-/index.html              /frontend/index.html                     200
+/                        /frontend/pages/home/home.html           200
 /home                    /frontend/pages/home/home.html           200
 /login                   /frontend/index.html                     200
 /cadastro                /frontend/pages/auth/cadastro.html       200
@@ -13,6 +12,9 @@
 /perfil                  /frontend/pages/perfil/perfil.html       200
 /vendedor                /frontend/pages/perfil/vendedor.html     200
 /configuracoes           /frontend/pages/perfil/configuracoes.html 200
+/tickets                 /frontend/pages/admin/tickets.html       200
+/moderacao               /frontend/pages/admin/tickets.html       200
+/login-tickets           /frontend/pages/admin/login-tickets.html 200
 /favoritos               /frontend/pages/favoritos/favoritos.html 200
 /notificacoes            /frontend/pages/notificacoes/notificacoes.html 200
 

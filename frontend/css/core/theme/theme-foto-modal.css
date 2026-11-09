@@ -1,0 +1,91 @@
+/**
+ * ITAIM VENDE - MODAL DE AJUSTAR FOTO NO MODO ESCURO
+ * Arquivo: frontend/css/core/theme/theme-foto-modal.css
+ */
+
+/* ==========================================================================
+   MODAL DE AJUSTAR FOTO (FOTO-MODAL) - MODO ESCURO
+   ========================================================================== */
+[data-theme="dark"] .modal-ajuste-card {
+    background-color: #1F2831 !important;
+    border: 1px solid #2C3946 !important;
+    color: #F1F5F9 !important;
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.55) !important;
+}
+
+[data-theme="dark"] .modal-ajuste-topo {
+    border-bottom: 1px solid #2C3946 !important;
+}
+
+[data-theme="dark"] .modal-ajuste-titulo {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .modal-ajuste-fechar {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .modal-ajuste-fechar:hover {
+    color: #F1F5F9 !important;
+    background-color: #242E38 !important;
+}
+
+[data-theme="dark"] .modal-ajuste-corpo {
+    background-color: #161C22 !important;
+}
+
+[data-theme="dark"] .modal-ajuste-dica {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .modal-ajuste-controles {
+    background-color: #1F2831 !important;
+    border: 1px solid #2C3946 !important;
+}
+
+[data-theme="dark"] .modal-ajuste-controles svg {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .modal-ajuste-btn-girar {
+    background-color: #242E38 !important;
+    border-color: #2C3946 !important;
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .modal-ajuste-btn-girar:hover {
+    background-color: #2D3945 !important;
+    color: #38A129 !important;
+    border-color: #38A129 !important;
+}
+
+[data-theme="dark"] .modal-ajuste-rodape {
+    background-color: #1F2831 !important;
+    border-top: 1px solid #2C3946 !important;
+}
+
+[data-theme="dark"] .modal-ajuste-btn-cancelar {
+    background-color: #242E38 !important;
+    border-color: #2C3946 !important;
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .modal-ajuste-btn-cancelar:hover {
+    background-color: #2D3945 !important;
+    color: #FFFFFF !important;
+}
+
+[data-theme="dark"] .modal-ajuste-btn-salvar,
+.dark-theme .modal-ajuste-btn-salvar {
+    background: #38A129 !important;
+    background-color: #38A129 !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35) !important;
+}
+
+[data-theme="dark"] .modal-ajuste-btn-salvar:hover,
+.dark-theme .modal-ajuste-btn-salvar:hover {
+    background: #2E8B22 !important;
+    background-color: #2E8B22 !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.45) !important;
+}

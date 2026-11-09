@@ -1,0 +1,25 @@
+/**
+ * ITAIM VENDE - PAINEL DE CONTROLE & OBSERVABILIDADE
+ * Arquivo orquestrador / modular
+ */
+
+/* 1. Base, Reset e Variáveis de Tema */
+@import url('./painel/painel-base.css');
+
+/* 2. Topo e Estrutura Principal */
+@import url('./painel/painel-header.css');
+@import url('./painel/painel-hero.css');
+
+/* 3. Cards, Métricas e Diagnóstico */
+@import url('./painel/painel-cards.css');
+@import url('./painel/painel-testes.css');
+@import url('./painel/painel-console.css');
+
+/* 4. Logs, Toasts e Rodapé */
+@import url('./painel/painel-logs.css');
+
+/* 5. Serviços Externos, Gráficos e Operações */
+@import url('./painel/painel-tunnel.css');
+@import url('./painel/painel-telemetry.css');
+@import url('./painel/painel-operacoes.css');
+@import url('./painel/painel-moderacao.css');

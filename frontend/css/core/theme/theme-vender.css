@@ -1,0 +1,529 @@
+/**
+ * ITAIM VENDE - PÁGINA VENDER NO MODO ESCURO
+ * Arquivo: frontend/css/core/theme/theme-vender.css
+ * 
+ * Cobertura completa de todos os componentes da sessão de criação de anúncios (Wizard, Fotos,
+ * Detalhes, Preço, Localização, Revisão / Live Preview e Tela de Sucesso) nos temas escuros.
+ */
+
+/* ==========================================================================
+   1. FUNDO E TÍTULO DA PÁGINA VENDER
+   ========================================================================== */
+[data-theme="dark"].pagina-vender,
+[data-theme="dark"] .pagina-vender,
+body[data-theme="dark"].pagina-vender,
+.dark-theme.pagina-vender,
+.dark-theme .pagina-vender,
+body.dark-theme.pagina-vender {
+    background-color: #141A20 !important;
+}
+
+[data-theme="dark"] .vender-titulo-pagina,
+.dark-theme .vender-titulo-pagina {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .btn-voltar-vender,
+.dark-theme .btn-voltar-vender {
+    background-color: #1F2831 !important;
+    border-color: #2C3946 !important;
+    color: #CBD5E1 !important;
+}
+
+[data-theme="dark"] .btn-voltar-vender:hover,
+.dark-theme .btn-voltar-vender:hover {
+    background-color: #242E38 !important;
+    color: #4ADE80 !important;
+    border-color: #4ADE80 !important;
+}
+
+/* ==========================================================================
+   2. BARRA DE PROGRESSO DO WIZARD
+   ========================================================================== */
+[data-theme="dark"] .vender-progresso-box,
+.dark-theme .vender-progresso-box {
+    background-color: #1F2831 !important;
+    border: 1px solid #2C3946 !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme="dark"] .wizard-etapa-badge,
+.dark-theme .wizard-etapa-badge {
+    background: rgba(74, 222, 128, 0.15) !important;
+    color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .wizard-etapa-nome,
+.dark-theme .wizard-etapa-nome {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .wizard-barra-trilha,
+.dark-theme .wizard-barra-trilha {
+    background: #2C3946 !important;
+}
+
+/* ==========================================================================
+   3. CARDS DE ETAPA DO WIZARD
+   ========================================================================== */
+[data-theme="dark"] .card-vender,
+[data-theme="dark"] .card-etapa-wizard,
+.dark-theme .card-vender,
+.dark-theme .card-etapa-wizard {
+    background-color: #1F2831 !important;
+    border: 1px solid #2C3946 !important;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="dark"] .etapa-cabecalho,
+.dark-theme .etapa-cabecalho {
+    border-bottom: 2px solid #2C3946 !important;
+}
+
+[data-theme="dark"] .etapa-cabecalho-texto h2,
+.dark-theme .etapa-cabecalho-texto h2 {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .etapa-cabecalho-texto p,
+.dark-theme .etapa-cabecalho-texto p {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .badge-contador-etapa,
+.dark-theme .badge-contador-etapa {
+    background: #161C22 !important;
+    border-color: #4ADE80 !important;
+    color: #4ADE80 !important;
+}
+
+/* Caixa de Dica ao Vendedor */
+[data-theme="dark"] .dica-vendedor-box,
+.dark-theme .dica-vendedor-box {
+    background: rgba(74, 222, 128, 0.08) !important;
+    border: 1px solid rgba(74, 222, 128, 0.22) !important;
+    color: #86EFAC !important;
+}
+
+[data-theme="dark"] .dica-vendedor-box strong,
+.dark-theme .dica-vendedor-box strong {
+    color: #4ADE80 !important;
+}
+
+/* ==========================================================================
+   4. ETAPA 1: GALERIA DE FOTOS
+   ========================================================================== */
+[data-theme="dark"] .quadrado-add-foto,
+.dark-theme .quadrado-add-foto {
+    background-color: #161C22 !important;
+    border-color: #2C3946 !important;
+    color: #64748B !important;
+}
+
+[data-theme="dark"] .quadrado-add-foto:hover,
+[data-theme="dark"] .quadrado-add-foto:focus-visible,
+.dark-theme .quadrado-add-foto:hover,
+.dark-theme .quadrado-add-foto:focus-visible {
+    border-color: #4ADE80 !important;
+    color: #4ADE80 !important;
+    background-color: rgba(74, 222, 128, 0.08) !important;
+}
+
+[data-theme="dark"] .quadrado-add-foto.drag-over,
+.dark-theme .quadrado-add-foto.drag-over {
+    border-color: #4ADE80 !important;
+    background-color: rgba(74, 222, 128, 0.16) !important;
+}
+
+[data-theme="dark"] .item-foto-preview,
+.dark-theme .item-foto-preview {
+    border-color: #2C3946 !important;
+    background-color: #161C22 !important;
+}
+
+[data-theme="dark"] .item-foto-preview.item-foto-capa,
+.dark-theme .item-foto-preview.item-foto-capa {
+    border-color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .tag-foto-capa,
+.dark-theme .tag-foto-capa {
+    background-color: #22C55E !important;
+    color: #FFFFFF !important;
+}
+
+/* ==========================================================================
+   5. ETAPA 2: FORMULÁRIO, CHIPS E DROPDOWNS
+   ========================================================================== */
+[data-theme="dark"] .rotulo-secao-campo,
+.dark-theme .rotulo-secao-campo {
+    color: #CBD5E1 !important;
+}
+
+/* Chips de Seleção Rápida (Categoria e Condição) */
+[data-theme="dark"] .chip-opcao,
+.dark-theme .chip-opcao {
+    background: #161C22 !important;
+    border: 1.5px solid #2C3946 !important;
+    color: #CBD5E1 !important;
+}
+
+[data-theme="dark"] .chip-opcao:hover,
+.dark-theme .chip-opcao:hover {
+    border-color: #4ADE80 !important;
+    color: #4ADE80 !important;
+    background: #1F2831 !important;
+}
+
+[data-theme="dark"] .chip-opcao.ativo,
+.dark-theme .chip-opcao.ativo {
+    background: #22C55E !important;
+    border-color: #22C55E !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 14px rgba(34, 197, 94, 0.35) !important;
+}
+
+/* Inputs e Textarea */
+[data-theme="dark"] .input-vender-padrao,
+[data-theme="dark"] .textarea-vender-padrao,
+.dark-theme .input-vender-padrao,
+.dark-theme .textarea-vender-padrao {
+    background-color: #161C22 !important;
+    color: #F1F5F9 !important;
+    border: 2px solid #2C3946 !important;
+}
+
+[data-theme="dark"] .input-vender-padrao::placeholder,
+[data-theme="dark"] .textarea-vender-padrao::placeholder,
+.dark-theme .input-vender-padrao::placeholder,
+.dark-theme .textarea-vender-padrao::placeholder {
+    color: #64748B !important;
+}
+
+[data-theme="dark"] .input-vender-padrao:hover,
+[data-theme="dark"] .textarea-vender-padrao:hover,
+.dark-theme .input-vender-padrao:hover,
+.dark-theme .textarea-vender-padrao:hover {
+    background-color: #1A222A !important;
+    border-color: #384756 !important;
+}
+
+[data-theme="dark"] .input-vender-padrao:focus,
+[data-theme="dark"] .textarea-vender-padrao:focus,
+.dark-theme .input-vender-padrao:focus,
+.dark-theme .textarea-vender-padrao:focus {
+    background-color: #161C22 !important;
+    border-color: #4ADE80 !important;
+    box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.2) !important;
+}
+
+[data-theme="dark"] .contador-caracteres,
+.dark-theme .contador-caracteres {
+    color: #64748B !important;
+}
+
+/* Botões de Dropdown do Vender (Categoria / Condição) */
+[data-theme="dark"] .btn-dropdown-pill,
+.dark-theme .btn-dropdown-pill {
+    background: linear-gradient(135deg, #44BD32 0%, #3CA92C 100%) !important;
+    background: linear-gradient(135deg, #38A129 0%, #2E8B22 100%) !important;
+    color: #FFFFFF !important;
+    border: 1px solid rgba(255, 255, 255, 0.16) !important;
+    box-shadow: 0 4px 16px rgba(68, 189, 50, 0.35) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35) !important;
+}
+
+[data-theme="dark"] .btn-dropdown-pill:hover,
+.dark-theme .btn-dropdown-pill:hover {
+    background: linear-gradient(135deg, #48C735 0%, #3CA92C 100%) !important;
+    box-shadow: 0 6px 22px rgba(68, 189, 50, 0.45) !important;
+    background: linear-gradient(135deg, #44BD32 0%, #38A129 100%) !important;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45) !important;
+}
+
+[data-theme="dark"] .dropdown-pill-container.aberto .btn-dropdown-pill,
+.dark-theme .dropdown-pill-container.aberto .btn-dropdown-pill {
+    background: linear-gradient(135deg, #3CA92C 0%, #359826 100%) !important;
+    box-shadow: 0 2px 10px rgba(68, 189, 50, 0.4), 0 0 0 3px rgba(68, 189, 50, 0.3) !important;
+    background: linear-gradient(135deg, #2E8B22 0%, #25731B 100%) !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4), 0 0 0 2px rgba(56, 161, 41, 0.3) !important;
+}
+
+/* Menus de Dropdown do Vender (Categoria / Condição) */
+[data-theme="dark"] .menu-dropdown-opcoes,
+.dark-theme .menu-dropdown-opcoes {
+    background-color: #1F2831 !important;
+    border: 1px solid #2C3946 !important;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5) !important;
+}
+
+[data-theme="dark"] .item-opcao-dropdown,
+[data-theme="dark"] .item-dropdown-opcao,
+.dark-theme .item-opcao-dropdown,
+.dark-theme .item-dropdown-opcao {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .item-opcao-dropdown:hover,
+[data-theme="dark"] .item-dropdown-opcao:hover,
+.dark-theme .item-opcao-dropdown:hover,
+.dark-theme .item-dropdown-opcao:hover {
+    background-color: #242E38 !important;
+    color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .item-opcao-dropdown.selecionado,
+.dark-theme .item-opcao-dropdown.selecionado {
+    background-color: rgba(74, 222, 128, 0.15) !important;
+    color: #4ADE80 !important;
+}
+
+/* ==========================================================================
+   6. ETAPA 3: PREÇO E LOCALIZAÇÃO DESTACADOS
+   ========================================================================== */
+[data-theme="dark"] .bloco-preco-destacado,
+.dark-theme .bloco-preco-destacado {
+    background-color: #1F2831 !important;
+    border: 1px solid #2C3946 !important;
+}
+
+[data-theme="dark"] .cifrao-destaque,
+.dark-theme .cifrao-destaque {
+    color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .input-preco-destacado,
+.dark-theme .input-preco-destacado {
+    color: #F1F5F9 !important;
+    background-color: #161C22 !important;
+}
+
+[data-theme="dark"] .card-localizacao-etapa,
+.dark-theme .card-localizacao-etapa {
+    background-color: #1F2831 !important;
+    border: 1px solid #2C3946 !important;
+}
+
+[data-theme="dark"] .icone-pin-grande,
+.dark-theme .icone-pin-grande {
+    background: rgba(74, 222, 128, 0.15) !important;
+    color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .localizacao-texto-detalhe strong,
+.dark-theme .localizacao-texto-detalhe strong {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .localizacao-texto-detalhe span,
+.dark-theme .localizacao-texto-detalhe span {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .btn-editar-localizacao,
+.dark-theme .btn-editar-localizacao {
+    background-color: #242E38 !important;
+    border: 1px solid #2C3946 !important;
+    color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .btn-editar-localizacao:hover,
+.dark-theme .btn-editar-localizacao:hover {
+    background-color: #2C3946 !important;
+    color: #86EFAC !important;
+}
+
+/* ==========================================================================
+   7. ETAPA 4: REVISÃO INTERATIVA (LIVE PREVIEW DO ANÚNCIO)
+   ========================================================================== */
+[data-theme="dark"] .preview-anuncio-card,
+.dark-theme .preview-anuncio-card {
+    background-color: #1F2831 !important;
+    border: 1px solid #2C3946 !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="dark"] .preview-col-foto,
+.dark-theme .preview-col-foto {
+    background-color: #161C22 !important;
+}
+
+[data-theme="dark"] .preview-foto-principal-wrapper,
+.dark-theme .preview-foto-principal-wrapper {
+    background-color: #242E38 !important;
+}
+
+[data-theme="dark"] .preview-thumb-item,
+.dark-theme .preview-thumb-item {
+    background-color: #242E38 !important;
+    border-color: #2C3946 !important;
+}
+
+[data-theme="dark"] .preview-thumb-item.ativo,
+[data-theme="dark"] .preview-thumb-item:hover,
+.dark-theme .preview-thumb-item.ativo,
+.dark-theme .preview-thumb-item:hover {
+    border-color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .preview-titulo-anuncio,
+.dark-theme .preview-titulo-anuncio {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .preview-preco-anuncio,
+.dark-theme .preview-preco-anuncio {
+    color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .preview-local-linha,
+.dark-theme .preview-local-linha {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .preview-descricao-box,
+.dark-theme .preview-descricao-box {
+    border-top: 1px solid #2C3946 !important;
+}
+
+[data-theme="dark"] .preview-descricao-box strong,
+.dark-theme .preview-descricao-box strong {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .preview-descricao-texto,
+.dark-theme .preview-descricao-texto {
+    color: #CBD5E1 !important;
+}
+
+[data-theme="dark"] .btn-editar-etapa-link,
+.dark-theme .btn-editar-etapa-link {
+    color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .btn-editar-etapa-link:hover,
+.dark-theme .btn-editar-etapa-link:hover {
+    color: #86EFAC !important;
+}
+
+[data-theme="dark"] .preview-tag-badge,
+.dark-theme .preview-tag-badge {
+    background: rgba(74, 222, 128, 0.15) !important;
+    color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .preview-tag-condicao,
+.dark-theme .preview-tag-condicao {
+    background: rgba(59, 130, 246, 0.15) !important;
+    color: #60A5FA !important;
+}
+
+/* ==========================================================================
+   8. BOTÕES DE NAVEGAÇÃO DO WIZARD
+   ========================================================================== */
+[data-theme="dark"] .btn-wizard-anterior,
+.dark-theme .btn-wizard-anterior {
+    background-color: #242E38 !important;
+    border: 1px solid #2C3946 !important;
+    color: #CBD5E1 !important;
+}
+
+[data-theme="dark"] .btn-wizard-anterior:hover,
+.dark-theme .btn-wizard-anterior:hover {
+    background-color: #2C3946 !important;
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .btn-wizard-proximo,
+.dark-theme .btn-wizard-proximo {
+    background-color: #38A129 !important;
+    background: #38A129 !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35) !important;
+}
+
+[data-theme="dark"] .btn-wizard-proximo:hover,
+.dark-theme .btn-wizard-proximo:hover {
+    background-color: #2E8B22 !important;
+    background: #2E8B22 !important;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45) !important;
+}
+
+[data-theme="dark"] .btn-anunciar-destaque,
+.dark-theme .btn-anunciar-destaque {
+    background-color: #38A129 !important;
+    background: #38A129 !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="dark"] .btn-anunciar-destaque:hover,
+.dark-theme .btn-anunciar-destaque:hover {
+    background-color: #2E8B22 !important;
+    background: #2E8B22 !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* ==========================================================================
+   9. MODAL DE LOCALIZAÇÃO NO MODO ESCURO
+   ========================================================================== */
+[data-theme="dark"] .modal-loc-card,
+.dark-theme .modal-loc-card {
+    background-color: #1F2831 !important;
+    border: 1px solid #2C3946 !important;
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .modal-loc-topo,
+.dark-theme .modal-loc-topo {
+    border-bottom: 1px solid #2C3946 !important;
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .modal-loc-fechar,
+.dark-theme .modal-loc-fechar {
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .modal-loc-fechar:hover,
+.dark-theme .modal-loc-fechar:hover {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .modal-loc-item,
+.dark-theme .modal-loc-item {
+    color: #F1F5F9 !important;
+    border-bottom-color: #2C3946 !important;
+}
+
+[data-theme="dark"] .modal-loc-item:hover,
+.dark-theme .modal-loc-item:hover {
+    background-color: #242E38 !important;
+    color: #4ADE80 !important;
+}
+
+/* ==========================================================================
+   10. TELA DE SUCESSO DO ANÚNCIO (ESTADO 2)
+   ========================================================================== */
+[data-theme="dark"] .titulo-sucesso,
+.dark-theme .titulo-sucesso {
+    color: #F1F5F9 !important;
+}
+
+[data-theme="dark"] .link-ver-anuncio-sucesso,
+.dark-theme .link-ver-anuncio-sucesso {
+    color: #4ADE80 !important;
+}
+
+[data-theme="dark"] .btn-sucesso-secundario,
+.dark-theme .btn-sucesso-secundario {
+    background-color: #242E38 !important;
+    border: 1px solid #2C3946 !important;
+    color: #CBD5E1 !important;
+}
+
+[data-theme="dark"] .btn-sucesso-secundario:hover,
+.dark-theme .btn-sucesso-secundario:hover {
+    background-color: #2C3946 !important;
+    color: #F1F5F9 !important;
+}

@@ -2,18 +2,65 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="Configurações da conta no Itaim Vende: dados, segurança, endereços, notificações e privacidade.">
     <title>Configurações - Itaim Vende</title>
+
+    <!-- Anti-FOUC: Aplicação imediata do tema escuro/claro para eliminar qualquer flash visual -->
+    <script>
+        (function() {
+            try {
+                var p = (window.location.pathname || '').toLowerCase();
+                var isAuth = p.endsWith('index.html') || p.includes('/auth/') || p.includes('/login') || p.includes('/cadastro');
+                var tema = (!isAuth && localStorage.getItem('itaim_tema') === 'dark') ? 'dark' : 'light';
+                var d = document.documentElement;
+                d.setAttribute('data-theme', tema);
+                if (tema === 'dark') {
+                    d.classList.add('dark-theme');
+                } else {
+                    d.classList.remove('dark-theme');
+                }
+                d.classList.add('tema-sem-transicao');
+                var o = new MutationObserver(function() {
+                    if (document.body) {
+                        document.body.setAttribute('data-theme', tema);
+                        if (tema === 'dark') {
+                            document.body.classList.add('dark-theme');
+                        } else {
+                            document.body.classList.remove('dark-theme');
+                        }
+                        o.disconnect();
+                    }
+                });
+                o.observe(d, { childList: true, subtree: true });
+                window.addEventListener('DOMContentLoaded', function() {
+                    o.disconnect();
+                    if (document.body) {
+                        document.body.setAttribute('data-theme', tema);
+                        if (tema === 'dark') {
+                            document.body.classList.add('dark-theme');
+                        } else {
+                            document.body.classList.remove('dark-theme');
+                        }
+                    }
+                    requestAnimationFrame(function() {
+                        requestAnimationFrame(function() {
+                            d.classList.remove('tema-sem-transicao');
+                        });
+                    });
+                });
+            } catch (e) {}
+        })();
+    </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Segoe+UI&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/png" href="../../assets/header-logo.png">
+    <link rel="icon" type="image/png" href="../../assets/logos/header-logo.png">
 
-    <link rel="stylesheet" href="../../css/home.css">
-    <link rel="stylesheet" href="../../css/header-global.css?v=7">
-    <link rel="stylesheet" href="../../css/configuracoes.css?v=3">
+    <link rel="stylesheet" href="../../css/pages/home/home.css">
+    <link rel="stylesheet" href="../../css/core/header-global.css?v=20">
+    <link rel="stylesheet" href="../../css/pages/perfil/configuracoes.css?v=3">
 </head>
 <body>
 
@@ -28,8 +75,8 @@
                         <line x1="3" y1="18" x2="21" y2="18"></line>
                     </svg>
                 </button>
-                <a href="../home/home.html" class="header-logo-link" title="Itaim Vende - Página Inicial">
-                    <img src="../../assets/header1-logo.png" alt="Itaim Vende" class="header-logo-img">
+                <a href="/" class="header-logo-link" title="Itaim Vende - Página Inicial">
+                    <img src="../../assets/logos/header1-logo.png" alt="Itaim Vende" class="header-logo-img">
                 </a>
             </div>
 
@@ -57,7 +104,7 @@
             <!-- Direita: Ações do Cabeçalho -->
             <div class="header-right">
                 <!-- Desktop: Meus Anúncios (Ícone + Texto) -->
-                <a href="../vender/meus-anuncios.html" class="btn-nav-texto" id="link-meus-anuncios">
+                <a href="/meus-anuncios" class="btn-nav-texto" id="link-meus-anuncios">
                     <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M3 11l19-9-9 19-2-8-8-2z"></path>
                     </svg>
@@ -65,19 +112,19 @@
                 </a>
 
                 <!-- Botão Vender -->
-                <a href="../vender/vender.html" class="btn-vender-destaque" id="btn-abrir-modal-vender">
+                <a href="/vender" class="btn-vender-destaque" id="btn-abrir-modal-vender">
                     <span>Vender</span>
                 </a>
 
                 <!-- Ícone Conversas -->
-                <a href="../mensagens/conversas.html" class="btn-icone-header" id="btn-chat" aria-label="Conversas" title="Conversas">
+                <a href="/conversas" class="btn-icone-header" id="btn-chat" aria-label="Conversas" title="Conversas">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                     </svg>
                 </a>
 
                 <!-- Ícone Notificações -->
-                <a href="../notificacoes/notificacoes.html" class="btn-icone-header" id="btn-notificacoes" aria-label="Notificações" title="Notificações">
+                <a href="/notificacoes" class="btn-icone-header" id="btn-notificacoes" aria-label="Notificações" title="Notificações">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
                         <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
@@ -85,7 +132,7 @@
                 </a>
 
                 <!-- Mobile: Ícone Meus Anúncios (substitui o coração no celular) -->
-                <a href="../vender/meus-anuncios.html" class="btn-icone-header btn-meus-anuncios-mobile" id="btn-meus-anuncios-mobile" aria-label="Meus Anúncios" title="Meus Anúncios">
+                <a href="/meus-anuncios" class="btn-icone-header btn-meus-anuncios-mobile" id="btn-meus-anuncios-mobile" aria-label="Meus Anúncios" title="Meus Anúncios">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M3 11l19-9-9 19-2-8-8-2z"></path>
                     </svg>
@@ -94,23 +141,23 @@
                 <!-- Perfil do Usuário com Dropdown -->
                 <div class="perfil-wrapper">
                     <button type="button" class="btn-avatar-header" id="btn-avatar-dropdown" aria-label="Abrir menu de perfil">
-                        <img src="../../assets/icon-user.png" alt="Foto de perfil" class="avatar-img" id="img-avatar-user">
+                        <img src="../../assets/icons/icon-user.png" alt="Foto de perfil" class="avatar-img" id="img-avatar-user">
                     </button>
 
                     <div class="dropdown-perfil" id="dropdown-perfil">
                         <a href="perfil.html" class="dropdown-header-user" title="Ir para Meu Perfil">
-                            <strong id="dropdown-user-name">Raili</strong>
+                            <strong id="dropdown-user-name">Admin</strong>
                             <span id="dropdown-user-email">admin@gmail.com</span>
                         </a>
                         <a href="perfil.html" class="dropdown-item" id="link-menu-perfil">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                             Meu Perfil
                         </a>
-                        <a href="../vender/meus-anuncios.html" class="dropdown-item" id="link-menu-anuncios">
+                        <a href="/meus-anuncios" class="dropdown-item" id="link-menu-anuncios">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l19-9-9 19-2-8-8-2z"></path></svg>
                             Meus Anúncios
                         </a>
-                        <a href="../favoritos/favoritos.html" class="dropdown-item" id="link-menu-favoritos">
+                        <a href="/favoritos" class="dropdown-item" id="link-menu-favoritos">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
                             Favoritos (<span id="favoritos-contador-badge">0</span>)
                         </a>
@@ -121,7 +168,7 @@
                             </svg>
                             Configurações
                         </a>
-                        <a href="../../index.html" class="dropdown-item item-sair">
+                        <a href="/login" class="dropdown-item item-sair">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                                 <polyline points="16 17 21 12 16 7"></polyline>
@@ -141,23 +188,12 @@
     <div class="drawer-backdrop" id="drawer-backdrop">
         <aside class="drawer-menu" aria-label="Menu principal">
             <div class="drawer-header">
-                <img src="../../assets/header1-logo.png" alt="Itaim Vende" class="drawer-logo">
+                <img src="../../assets/logos/header1-logo.png" alt="Itaim Vende" class="drawer-logo">
                 <button type="button" class="drawer-close" id="btn-fechar-drawer" aria-label="Fechar menu">&times;</button>
             </div>
 
-            <!-- Perfil do Usuário no Drawer (Acesso rápido ao Perfil) -->
-            <a href="perfil.html" class="drawer-user-card" id="drawer-user-card" title="Acessar Meu Perfil">
-                <div class="drawer-user-avatar-wrap">
-                    <img src="../../assets/icon-user.png" alt="Foto de perfil" class="drawer-user-avatar" id="drawer-user-avatar">
-                </div>
-                <div class="drawer-user-info">
-                    <span class="drawer-user-nome" id="drawer-user-name">Raili</span>
-                    <span class="drawer-user-sub">Ver meu perfil &rarr;</span>
-                </div>
-            </a>
-
             <nav class="drawer-nav">
-                <a href="../home/home.html" class="drawer-link" id="drawer-link-home">
+                <a href="/" class="drawer-link" id="drawer-link-home">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
                     Início
                 </a>
@@ -165,25 +201,25 @@
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                     Meu Perfil
                 </a>
-                <a href="../vender/meus-anuncios.html" class="drawer-link" id="drawer-link-anuncios">
+                <a href="/meus-anuncios" class="drawer-link" id="drawer-link-anuncios">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l19-9-9 19-2-8-8-2z"></path></svg>
                     Meus Anúncios
                 </a>
-                <a href="../favoritos/favoritos.html" class="drawer-link" id="drawer-link-favoritos">
+                <a href="/favoritos" class="drawer-link" id="drawer-link-favoritos">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
                     Meus Favoritos
                 </a>
-                <a href="../mensagens/conversas.html" class="drawer-link" id="drawer-link-chat">
+                <a href="/conversas" class="drawer-link" id="drawer-link-chat">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                     </svg>
                     Conversas
                 </a>
-                <a href="../vender/vender.html" class="drawer-link" id="drawer-link-vender">
+                <a href="/vender" class="drawer-link" id="drawer-link-vender">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                     Vender Produto
                 </a>
-                <a href="../notificacoes/notificacoes.html" class="drawer-link" id="drawer-link-notificacoes">
+                <a href="/notificacoes" class="drawer-link" id="drawer-link-notificacoes">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
                     Notificações
                 </a>
@@ -205,17 +241,68 @@
                     </svg>
                 </button>
                 <div class="drawer-categorias-conteudo" id="drawer-categorias-conteudo">
-                    <a href="../produtos/categoria.html?cat=Eletrônicos" class="drawer-sublink">Eletrônicos</a>
-                    <a href="../produtos/categoria.html?cat=Decoração" class="drawer-sublink">Decoração</a>
-                    <a href="../produtos/categoria.html?cat=Móveis" class="drawer-sublink">Móveis</a>
-                    <a href="../produtos/categoria.html?cat=Moda" class="drawer-sublink">Moda & Vestuário</a>
-                    <a href="../produtos/categoria.html?cat=Infantil" class="drawer-sublink">Infantil & Bebês</a>
-                    <a href="../produtos/categoria.html?cat=Esportes" class="drawer-sublink">Esportes & Lazer</a>
-                    <a href="../produtos/categoria.html?cat=Hobbies" class="drawer-sublink">Hobbies & Games</a>
-                    <a href="../produtos/categoria.html?cat=Serviços" class="drawer-sublink">Serviços</a>
+                    <a href="/categoria?cat=Ve%C3%ADculos" class="drawer-sublink">Veículos</a>
+                    <a href="/categoria?cat=Autope%C3%A7as" class="drawer-sublink">Autopeças</a>
+                    <a href="/categoria?cat=Im%C3%B3veis" class="drawer-sublink">Imóveis</a>
+                    <a href="/categoria?cat=Terrenos" class="drawer-sublink">Terrenos</a>
+                    <a href="/categoria?cat=Agro" class="drawer-sublink">Agro</a>
+                    <a href="/categoria?cat=Pecu%C3%A1ria" class="drawer-sublink">Pecuária</a>
+                    <a href="/categoria?cat=Celulares" class="drawer-sublink">Celulares</a>
+                    <a href="/categoria?cat=Telefonia" class="drawer-sublink">Telefonia</a>
+                    <a href="/categoria?cat=Eletr%C3%B4nicos" class="drawer-sublink">Eletrônicos</a>
+                    <a href="/categoria?cat=%C3%81udio%20%26%20V%C3%ADdeo" class="drawer-sublink">Áudio & Vídeo</a>
+                    <a href="/categoria?cat=Inform%C3%A1tica" class="drawer-sublink">Informática</a>
+                    <a href="/categoria?cat=Games" class="drawer-sublink">Games</a>
+                    <a href="/categoria?cat=M%C3%B3veis" class="drawer-sublink">Móveis</a>
+                    <a href="/categoria?cat=Decora%C3%A7%C3%A3o" class="drawer-sublink">Decoração</a>
+                    <a href="/categoria?cat=Eletrodom%C3%A9sticos" class="drawer-sublink">Eletrodomésticos</a>
+                    <a href="/categoria?cat=Moda" class="drawer-sublink">Moda</a>
+                    <a href="/categoria?cat=Cal%C3%A7ados" class="drawer-sublink">Calçados</a>
+                    <a href="/categoria?cat=Acess%C3%B3rios" class="drawer-sublink">Acessórios</a>
+                    <a href="/categoria?cat=Beleza" class="drawer-sublink">Beleza</a>
+                    <a href="/categoria?cat=Cuidado%20Pessoal" class="drawer-sublink">Cuidado Pessoal</a>
+                    <a href="/categoria?cat=Infantil" class="drawer-sublink">Infantil</a>
+                    <a href="/categoria?cat=Beb%C3%AAs" class="drawer-sublink">Bebês</a>
+                    <a href="/categoria?cat=Esportes" class="drawer-sublink">Esportes</a>
+                    <a href="/categoria?cat=Fitness" class="drawer-sublink">Fitness</a>
+                    <a href="/categoria?cat=Lazer" class="drawer-sublink">Lazer</a>
+                    <a href="/categoria?cat=Constru%C3%A7%C3%A3o" class="drawer-sublink">Construção</a>
+                    <a href="/categoria?cat=Ferramentas" class="drawer-sublink">Ferramentas</a>
+                    <a href="/categoria?cat=Com%C3%A9rcio" class="drawer-sublink">Comércio</a>
+                    <a href="/categoria?cat=Escrit%C3%B3rio" class="drawer-sublink">Escritório</a>
+                    <a href="/categoria?cat=Servi%C3%A7os" class="drawer-sublink">Serviços</a>
+                    <a href="/categoria?cat=M%C3%BAsica" class="drawer-sublink">Música</a>
+                    <a href="/categoria?cat=Hobbies" class="drawer-sublink">Hobbies</a>
+                    <a href="/categoria?cat=Animais%20de%20Estima%C3%A7%C3%A3o" class="drawer-sublink">Animais de Estimação</a>
+                    <a href="/categoria?cat=Pet%20Shop" class="drawer-sublink">Pet Shop</a>
+                    <a href="/categoria?cat=Doa%C3%A7%C3%B5es" class="drawer-sublink">Doações</a>
+                    <a href="/categoria?cat=Trocas" class="drawer-sublink">Trocas</a>
+                    <a href="/categoria?cat=Outros" class="drawer-sublink">Outros</a>
                 </div>
 
                 <div class="drawer-secao-divisor"></div>
+                <button type="button" class="drawer-link btn-alternar-tema" id="btn-tema-drawer" aria-label="Alternar tema do site">
+                    <svg class="icone-tema-lua" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg class="icone-tema-sol" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <span class="drawer-tema-texto">Modo Escuro</span>
+                    <span class="drawer-tema-switch" aria-hidden="true">
+                        <span class="drawer-tema-trilho">
+                            <span class="drawer-tema-bolinha"></span>
+                        </span>
+                    </span>
+                </button>
                 <a href="configuracoes.html" class="drawer-link ativo" id="drawer-link-configuracoes">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="3"></circle>
@@ -223,7 +310,7 @@
                     </svg>
                     Configurações
                 </a>
-                <a href="../../index.html" class="drawer-link item-sair">
+                <a href="/login" class="drawer-link item-sair">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                         <polyline points="16 17 21 12 16 7"></polyline>
@@ -243,7 +330,7 @@
         </button>
 
         <nav class="cfg-breadcrumb" aria-label="Navegação">
-            <a href="../home/home.html">Início</a><span>/</span><span class="ativo">Configurações</span>
+            <a href="/">Início</a><span>/</span><span class="ativo">Configurações</span>
         </nav>
         <h1 class="cfg-titulo-pagina">Configurações</h1>
         <p class="cfg-subtitulo-pagina">Gerencie sua conta, segurança, endereços e preferências de aviso.</p>
@@ -255,6 +342,8 @@
                 <button type="button" class="cfg-nav-item" data-alvo="enderecos" role="tab" aria-selected="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>Endereços</button>
                 <button type="button" class="cfg-nav-item" data-alvo="notificacoes" role="tab" aria-selected="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>Notificações</button>
                 <button type="button" class="cfg-nav-item" data-alvo="privacidade" role="tab" aria-selected="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>Privacidade</button>
+                <button type="button" class="cfg-nav-item" data-alvo="aparencia" role="tab" aria-selected="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>Aparência</button>
+                <button type="button" class="cfg-nav-item" data-alvo="suporte" role="tab" aria-selected="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>Suporte</button>
             </nav>
 
             <div class="cfg-paineis">
@@ -266,7 +355,7 @@
                         <!-- FOTO DE PERFIL -->
                         <div class="cfg-avatar-box">
                             <div class="cfg-avatar-preview-wrap">
-                                <img src="../../assets/icon-user.png" alt="Foto de perfil" id="cfg-avatar-preview" class="cfg-avatar-img" onerror="this.onerror=null; this.src='../../assets/icon-user.png';">
+                                <img src="../../assets/icons/icon-user.png" alt="Foto de perfil" id="cfg-avatar-preview" class="cfg-avatar-img" onerror="this.onerror=null; this.src='../../assets/icons/icon-user.png';">
                             </div>
                             <div class="cfg-avatar-info">
                                 <span class="cfg-avatar-titulo">Foto do Perfil</span>
@@ -285,43 +374,142 @@
                         </div>
 
                         <div class="cfg-grid">
-                            <div class="cfg-campo">
+                            <div class="cfg-campo cheio">
                                 <label for="cfg-nome">Nome completo</label>
                                 <input class="cfg-input" type="text" id="cfg-nome" autocomplete="name" maxlength="80">
                                 <span class="cfg-erro" id="erro-nome"></span>
                             </div>
-                            <div class="cfg-campo">
-                                <label for="cfg-usuario">Nome de usuário</label>
-                                <input class="cfg-input" type="text" id="cfg-usuario" autocomplete="username" maxlength="30" placeholder="seunome">
-                                <span class="cfg-erro" id="erro-usuario"></span>
-                            </div>
-                            <div class="cfg-campo">
-                                <label for="cfg-email">E-mail</label>
-                                <input class="cfg-input" type="email" id="cfg-email" autocomplete="email">
-                                <span class="cfg-erro" id="erro-email"></span>
-                            </div>
-                            <div class="cfg-campo">
-                                <label for="cfg-telefone">WhatsApp / Celular</label>
-                                <input class="cfg-input" type="tel" id="cfg-telefone" autocomplete="tel" placeholder="(89) 99999-9999" inputmode="numeric">
-                                <span class="cfg-erro" id="erro-telefone"></span>
-                            </div>
-                            <div class="cfg-campo">
-                                <label for="cfg-cidade">Cidade</label>
-                                <select class="cfg-select" id="cfg-cidade"><option value="Paulistana">Paulistana</option><option value="Acauã">Acauã</option><option value="Betânia do Piauí">Betânia do Piauí</option><option value="Curral Novo">Curral Novo</option><option value="Jacobina do Piauí">Jacobina do Piauí</option><option value="Queimada Nova">Queimada Nova</option><option value="Picos">Picos</option><option value="Afrânio">Afrânio</option></select>
-                            </div>
-                            <div class="cfg-campo">
-                                <label for="cfg-bairro">Bairro</label>
-                                <input class="cfg-input" type="text" id="cfg-bairro" maxlength="60" placeholder="Centro">
+                            <div class="cfg-campo cheio">
+                                <label for="cfg-bio">Biografia / Sobre você</label>
+                                <textarea class="cfg-input cfg-textarea" id="cfg-bio" maxlength="80" rows="3" placeholder="Conte um pouco sobre você, o que costuma vender ou suas preferências de negociação..."></textarea>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+                                    <span style="font-size: 12px; color: var(--text-secondary);">Máximo de 80 caracteres. Visível no seu perfil.</span>
+                                    <span id="contador-bio" style="font-size: 12px; color: var(--text-secondary); font-weight: 600;">0/80</span>
+                                </div>
                             </div>
                         </div>
                         <div class="cfg-acoes">
                             <button type="submit" class="cfg-btn cfg-btn-primario">Salvar alterações</button>
                         </div>
                     </form>
+
+                    <!-- CARD EXCLUSIVO: NOME DE USUÁRIO (@) -->
+                    <div class="cfg-card" id="card-username-secao" style="margin-top: 24px;">
+                        <h2>Nome de usuário</h2>
+                        <p class="cfg-desc">Seu identificador único no Itaim Vende. Usado no link do seu perfil público e em menções.</p>
+
+                        <div class="cfg-campo cheio">
+                            <label class="cfg-campo-label" for="cfg-username-display">Nome de usuário (@) atual</label>
+                            <div class="cfg-input-acao-linha">
+                                <div class="cfg-input-display">
+                                    <span class="cfg-username-arroba">@</span>
+                                    <span class="cfg-username-valor" id="cfg-username-display">...</span>
+                                </div>
+                                <button type="button" class="cfg-btn cfg-btn-secundario" id="btn-abrir-modal-trocar-username">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                    </svg>
+                                    <span>Alterar nome de usuário</span>
+                                </button>
+                            </div>
+                            <div class="cfg-dica-campo" id="box-status-cooldown-username">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                </svg>
+                                <span id="texto-status-cooldown-username">Você pode alterar seu nome de usuário uma vez a cada 30 dias.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CARD EXCLUSIVO: WHATSAPP / CELULAR -->
+                    <div class="cfg-card" id="card-telefone-secao" style="margin-top: 24px;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px;">
+                            <div>
+                                <h2>WhatsApp / Celular</h2>
+                                <p class="cfg-desc">Número utilizado para contato direto com compradores nos seus anúncios e no seu perfil.</p>
+                            </div>
+                            <span id="cfg-telefone-badge-status" class="cfg-status-badge nao-verificado">
+                                Não verificado
+                            </span>
+                        </div>
+
+                        <div class="cfg-campo cheio" style="margin-top: 14px;">
+                            <label class="cfg-campo-label" for="cfg-telefone-display">WhatsApp cadastrado</label>
+                            <div class="cfg-input-acao-linha">
+                                <div class="cfg-input-display">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cfg-icone-whatsapp">
+                                        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                                    </svg>
+                                    <span class="cfg-telefone-valor" id="cfg-telefone-display">...</span>
+                                </div>
+                                <div class="cfg-botoes-acao-wrap">
+                                    <button type="button" class="cfg-btn cfg-btn-verificar" id="btn-verificar-telefone" style="display: none;">
+                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                                        Verificar número
+                                    </button>
+                                    <button type="button" class="cfg-btn cfg-btn-remover-link" id="btn-remover-telefone" style="display: none;">
+                                        Remover
+                                    </button>
+                                    <button type="button" class="cfg-btn cfg-btn-secundario" id="btn-abrir-modal-trocar-telefone">
+                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                        </svg>
+                                        <span id="label-btn-trocar-telefone">Alterar WhatsApp</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="cfg-dica-campo" id="box-status-cooldown-telefone">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                </svg>
+                                <span id="texto-status-cooldown-telefone">Ao cadastrar seu WhatsApp, compradores poderão iniciar conversas diretamente pelo app nos seus anúncios.</span>
+                            </div>
+                        </div>
+                    </div>
                 </section>
 
                 <!-- SEGURANÇA -->
                 <section class="cfg-painel" id="painel-seguranca" role="tabpanel">
+                    <!-- CARD EXCLUSIVO: E-MAIL DE ACESSO -->
+                    <div class="cfg-card" id="card-email-secao" style="margin-bottom: 24px;">
+                        <h2>E-mail de acesso</h2>
+                        <p class="cfg-desc">Endereço de e-mail utilizado para login, avisos de compras/vendas e segurança.</p>
+
+                        <div class="cfg-campo cheio">
+                            <label class="cfg-campo-label" for="cfg-email-mascarado">E-mail atual cadastrado</label>
+                            <div class="cfg-input-acao-linha">
+                                <div class="cfg-input-display">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-secondary); flex-shrink: 0;">
+                                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                        <polyline points="22,6 12,13 2,6"></polyline>
+                                    </svg>
+                                    <span class="cfg-email-valor" id="cfg-email-mascarado">...</span>
+                                </div>
+                                <button type="button" class="cfg-btn cfg-btn-secundario" id="btn-abrir-modal-trocar-email">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                    </svg>
+                                    <span>Alterar e-mail</span>
+                                </button>
+                            </div>
+                            <div class="cfg-dica-campo">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                </svg>
+                                <span>Para alterar seu e-mail, é exigida confirmação com senha atual e código enviado ao novo endereço.</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <form class="cfg-card" id="form-senha" novalidate>
                         <h2>Alterar senha</h2>
                         <p class="cfg-desc">Use pelo menos 8 caracteres, misturando letras e números.</p>
@@ -376,7 +564,21 @@
                     <div class="cfg-card">
                         <h2>Meus endereços</h2>
                         <p class="cfg-desc">Locais de retirada ou entrega que você usa nos anúncios e negociações.</p>
-                        <div class="cfg-enderecos" id="lista-enderecos"></div>
+                        <div class="cfg-enderecos" id="lista-enderecos">
+                            <div class="cfg-endereco-skeleton" aria-hidden="true">
+                                <div style="flex: 1;">
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <div class="skeleton-line" style="width: 100px; height: 18px; border-radius: 4px;"></div>
+                                        <div class="skeleton-line" style="width: 72px; height: 18px; border-radius: 12px;"></div>
+                                    </div>
+                                    <div class="skeleton-line" style="width: 180px; height: 13px; margin-top: 8px; border-radius: 4px;"></div>
+                                </div>
+                                <div class="cfg-endereco-acoes" style="display: flex; gap: 8px; align-items: center;">
+                                    <div class="skeleton-line" style="width: 44px; height: 16px; border-radius: 4px;"></div>
+                                    <div class="skeleton-line" style="width: 54px; height: 16px; border-radius: 4px;"></div>
+                                </div>
+                            </div>
+                        </div>
 
                         <form class="cfg-form-endereco" id="form-endereco" novalidate>
                             <h3 id="titulo-form-endereco">Adicionar endereço</h3>
@@ -388,26 +590,23 @@
                                 </div>
                                 <div class="cfg-campo">
                                     <label for="end-cep">CEP</label>
-                                    <input class="cfg-input" type="text" id="end-cep" maxlength="9" placeholder="64750-000" inputmode="numeric">
+                                    <input class="cfg-input" type="text" id="end-cep" maxlength="9" placeholder="00000-000" inputmode="numeric">
                                     <span class="cfg-erro" id="erro-end-cep"></span>
-                                </div>
-                                <div class="cfg-campo cheio">
-                                    <label for="end-rua">Rua e número</label>
-                                    <input class="cfg-input" type="text" id="end-rua" maxlength="100" placeholder="Rua das Flores, 120">
-                                    <span class="cfg-erro" id="erro-end-rua"></span>
                                 </div>
                                 <div class="cfg-campo">
                                     <label for="end-bairro">Bairro</label>
-                                    <input class="cfg-input" type="text" id="end-bairro" maxlength="60">
+                                    <input class="cfg-input" type="text" id="end-bairro" maxlength="60" placeholder="Centro, Cohab...">
+                                    <span class="cfg-erro" id="erro-end-bairro"></span>
                                 </div>
                                 <div class="cfg-campo">
                                     <label for="end-cidade">Cidade</label>
-                                    <select class="cfg-select" id="end-cidade"><option value="Paulistana">Paulistana</option><option value="Acauã">Acauã</option><option value="Betânia do Piauí">Betânia do Piauí</option><option value="Curral Novo">Curral Novo</option><option value="Jacobina do Piauí">Jacobina do Piauí</option><option value="Queimada Nova">Queimada Nova</option><option value="Picos">Picos</option><option value="Afrânio">Afrânio</option></select>
+                                    <input class="cfg-input" type="text" id="end-cidade" maxlength="60" placeholder="Patos, Paulistana...">
+                                    <span class="cfg-erro" id="erro-end-cidade"></span>
                                 </div>
                             </div>
                             <div class="cfg-acoes">
                                 <button type="submit" class="cfg-btn cfg-btn-primario" id="btn-salvar-endereco">Adicionar endereço</button>
-                                <button type="button" class="cfg-btn cfg-btn-neutro" id="btn-cancelar-endereco" hidden>Cancelar edição</button>
+                                <button type="button" class="cfg-btn cfg-btn-neutro" id="btn-cancelar-endereco" hidden style="display: none;">Cancelar edição</button>
                             </div>
                         </form>
                     </div>
@@ -485,17 +684,181 @@
                         <h2>Zona de risco</h2>
                         <p class="cfg-desc">Gerencie a suspensão temporária da conta ou sua exclusão definitiva.</p>
                         <div class="cfg-acoes" style="margin-top:0; display: flex; gap: 12px; flex-wrap: wrap;">
-                            <button type="button" class="cfg-btn cfg-btn-suspender" id="btn-suspender-conta" style="background: #FEF3C7; color: #92400E; border: 1px solid #FCD34D; font-weight: 700; display: inline-flex; align-items: center; gap: 8px;">
+                            <button type="button" class="cfg-btn cfg-btn-suspender" id="btn-suspender-conta">
                                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><line x1="10" y1="15" x2="10" y2="9"></line><line x1="14" y1="15" x2="14" y2="9"></line></svg>
                                 <span>Suspender conta</span>
                             </button>
-                            <button type="button" class="cfg-btn cfg-btn-perigo" id="btn-excluir-conta" style="display: inline-flex; align-items: center; gap: 8px;">
+                            <button type="button" class="cfg-btn cfg-btn-perigo" id="btn-excluir-conta">
                                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
                                 <span>Excluir conta permanentemente</span>
                             </button>
                         </div>
                     </div>
                 </section>
+
+                <!-- APARÊNCIA E TEMA -->
+                <section class="cfg-painel" id="painel-aparencia" role="tabpanel">
+                    <div class="cfg-card">
+                        <h2>Aparência e Tema</h2>
+                        <p class="cfg-desc">Escolha como o Itaim Vende é exibido para você neste dispositivo.</p>
+
+                        <div class="cfg-tema-cards-grid">
+                            <!-- Opção Modo Claro -->
+                            <div class="cfg-tema-card ativo" id="card-tema-claro" role="button" tabindex="0" data-tema="light" aria-pressed="true">
+                                <div class="cfg-tema-mockup mockup-claro">
+                                    <div class="mockup-header">
+                                        <span class="mockup-dot"></span>
+                                        <span class="mockup-bar"></span>
+                                    </div>
+                                    <div class="mockup-body">
+                                        <div class="mockup-side"></div>
+                                        <div class="mockup-main">
+                                            <div class="mockup-card-item"></div>
+                                            <div class="mockup-card-item"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="cfg-tema-card-header">
+                                    <div class="cfg-tema-card-titulo">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                                        <span>Modo Claro</span>
+                                    </div>
+                                    <span class="cfg-tema-badge-check">
+                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    </span>
+                                </div>
+                                <p class="cfg-tema-card-desc">Visual claro clássico com alto contraste e legibilidade ideal para o dia.</p>
+                                <button type="button" class="btn-ativar-tema cfg-btn cfg-btn-neutro" data-tema="light">Ativar Modo Claro</button>
+                            </div>
+
+                            <!-- Opção Modo Escuro -->
+                            <div class="cfg-tema-card" id="card-tema-escuro" role="button" tabindex="0" data-tema="dark" aria-pressed="false">
+                                <div class="cfg-tema-mockup mockup-escuro">
+                                    <div class="mockup-header">
+                                        <span class="mockup-dot"></span>
+                                        <span class="mockup-bar"></span>
+                                    </div>
+                                    <div class="mockup-body">
+                                        <div class="mockup-side"></div>
+                                        <div class="mockup-main">
+                                            <div class="mockup-card-item"></div>
+                                            <div class="mockup-card-item"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="cfg-tema-card-header">
+                                    <div class="cfg-tema-card-titulo">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                                        <span>Modo Escuro</span>
+                                    </div>
+                                    <span class="cfg-tema-badge-check">
+                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    </span>
+                                </div>
+                                <p class="cfg-tema-card-desc">Tons escuros elegantes, conforto aos olhos em ambientes com pouca luz e economia de bateria.</p>
+                                <button type="button" class="btn-ativar-tema cfg-btn cfg-btn-primario" data-tema="dark">Ativar Modo Escuro</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SUPORTE -->
+                <section class="cfg-painel" id="painel-suporte" role="tabpanel">
+
+                    <!-- Card: Abrir Ticket -->
+                    <div class="cfg-card">
+                        <h2>Fale com o Suporte</h2>
+                        <p class="cfg-desc">Encontrou um problema ou tem uma dúvida? Abra um ticket e nossa equipe responderá em breve.</p>
+
+                        <form class="cfg-suporte-form" id="form-ticket" novalidate>
+                            <div class="cfg-suporte-categorias">
+                                <label class="cfg-campo-label" for="ticket-categoria">Categoria do problema</label>
+                                <select class="cfg-input cfg-select" id="ticket-categoria">
+                                    <option value="">Selecione uma categoria...</option>
+                                    <option value="conta">Conta e acesso</option>
+                                    <option value="anuncio">Anúncio</option>
+                                    <option value="pagamento">Pagamento</option>
+                                    <option value="seguranca">Segurança</option>
+                                    <option value="bug">Erro técnico / Bug</option>
+                                    <option value="outro">Outro</option>
+                                </select>
+                                <span class="cfg-erro" id="erro-ticket-categoria"></span>
+                            </div>
+
+                            <div class="cfg-campo cheio" style="margin-top: 16px;">
+                                <label for="ticket-titulo">Título do ticket</label>
+                                <input class="cfg-input" type="text" id="ticket-titulo" maxlength="80" placeholder="Descreva o problema em poucas palavras..." autocomplete="off">
+                                <span class="cfg-erro" id="erro-ticket-titulo"></span>
+                            </div>
+
+                            <div class="cfg-campo cheio" style="margin-top: 16px;">
+                                <label for="ticket-descricao">Descrição detalhada</label>
+                                <textarea class="cfg-input cfg-textarea cfg-suporte-textarea" id="ticket-descricao" maxlength="1000" rows="5" placeholder="Explique com detalhes o que aconteceu, quando aconteceu e o que você estava tentando fazer..."></textarea>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+                                    <span style="font-size: 12px; color: var(--text-secondary);">Quanto mais detalhes, mais rápido conseguimos ajudar.</span>
+                                    <span id="contador-ticket-desc" style="font-size: 12px; color: var(--text-secondary); font-weight: 600;">0/1000</span>
+                                </div>
+                                <span class="cfg-erro" id="erro-ticket-descricao"></span>
+                            </div>
+
+                            <div class="cfg-suporte-upload-area" id="suporte-upload-area">
+                                <input type="file" id="ticket-anexos" accept="image/*,.pdf" multiple style="display: none;">
+                                <label for="ticket-anexos" class="cfg-suporte-upload-label">
+                                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
+                                    </svg>
+                                    <span>Anexar imagem ou PDF <span style="color: var(--text-secondary); font-weight: 400;">(opcional, máx. 3 arquivos)</span></span>
+                                </label>
+                                <div class="cfg-suporte-anexos-lista" id="lista-anexos-ticket"></div>
+                            </div>
+
+                            <div class="cfg-acoes" style="margin-top: 20px;">
+                                <button type="submit" class="cfg-btn cfg-btn-primario" id="btn-enviar-ticket">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                                    </svg>
+                                    Enviar ticket
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Card: Meus Tickets -->
+                    <div class="cfg-card" style="margin-top: 0;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 4px;">
+                            <div>
+                                <h2 style="margin-bottom: 2px;">Meus tickets</h2>
+                                <p class="cfg-desc" style="margin-bottom: 0;">Acompanhe o histórico e o status dos seus chamados de suporte.</p>
+                            </div>
+                            <button type="button" class="cfg-btn cfg-btn-secundario" id="btn-atualizar-tickets" title="Atualizar lista">
+                                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="23 4 23 10 17 10"></polyline>
+                                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                                </svg>
+                                Atualizar
+                            </button>
+                        </div>
+
+                        <div class="cfg-suporte-filtros" id="suporte-filtros">
+                            <button type="button" class="cfg-suporte-filtro-btn ativo" data-status="todos">Todos</button>
+                            <button type="button" class="cfg-suporte-filtro-btn" data-status="aberto">Abertos</button>
+                            <button type="button" class="cfg-suporte-filtro-btn" data-status="em_andamento">Em andamento</button>
+                            <button type="button" class="cfg-suporte-filtro-btn" data-status="resolvido">Resolvidos</button>
+                            <button type="button" class="cfg-suporte-filtro-btn" data-status="fechado">Fechados</button>
+                        </div>
+
+                        <div class="cfg-suporte-tickets-lista" id="lista-tickets-suporte">
+                            <!-- Skeleton inicial -->
+                            <div class="cfg-suporte-ticket-skeleton" aria-hidden="true">
+                                <div class="skeleton-line" style="width: 60%; height: 16px; border-radius: 4px;"></div>
+                                <div class="skeleton-line" style="width: 90%; height: 13px; margin-top: 8px; border-radius: 4px;"></div>
+                                <div class="skeleton-line" style="width: 40%; height: 13px; margin-top: 6px; border-radius: 4px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
             </div>
         </div>
     </main>
@@ -513,43 +876,408 @@
         </div>
     </div>
 
+    <!-- Modal: Alteração do Nome de Usuário (@) -->
+    <div class="cfg-modal-fundo" id="modal-alterar-username" role="dialog" aria-modal="true" aria-labelledby="modal-username-titulo">
+        <div class="cfg-modal cfg-modal-lg">
+            <button type="button" class="cfg-modal-close" id="btn-fechar-modal-alterar-username" aria-label="Fechar">&times;</button>
+            
+            <!-- Fase 1: Digitação do Novo Username -->
+            <div id="username-modal-fase-edicao">
+                <div class="cfg-modal-header-icone">
+                    <div class="cfg-modal-icon-badge neutro">
+                        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </div>
+                    <h3 id="modal-username-titulo">Alterar nome de usuário</h3>
+                    <p class="cfg-modal-subdesc">Escolha seu novo @ exclusivo. O identificador atual será desvinculado da sua conta.</p>
+                </div>
+
+                <div class="cfg-campo" style="margin-top: 18px;">
+                    <label for="input-modal-novo-username">Novo nome de usuário (@)</label>
+                    <div class="cfg-input-com-prefixo">
+                        <span class="cfg-prefixo-arroba">@</span>
+                        <input type="text" id="input-modal-novo-username" class="cfg-input cfg-input-arroba" maxlength="20" placeholder="novousername" autocomplete="off" spellcheck="false">
+                        <div class="cfg-status-indicador" id="status-indicador-username"></div>
+                    </div>
+                    <span class="cfg-erro" id="erro-modal-username"></span>
+                    <div id="feedback-disp-username" class="cfg-feedback-validacao"></div>
+                </div>
+
+                <!-- Requisitos e Regra dos 30 dias -->
+                <div class="cfg-regras-lista">
+                    <div class="cfg-regra-item" id="regra-formato">
+                        <span class="cfg-regra-dot">•</span>
+                        <span>3 a 20 caracteres (apenas letras minúsculas, números, . ou _)</span>
+                    </div>
+                    <div class="cfg-regra-item" id="regra-simbolos">
+                        <span class="cfg-regra-dot">•</span>
+                        <span>Não pode começar nem terminar com símbolos</span>
+                    </div>
+                    <div class="cfg-regra-item" id="regra-disponivel">
+                        <span class="cfg-regra-dot">•</span>
+                        <span>Disponível e não reservado pelo sistema</span>
+                    </div>
+                </div>
+
+                <div class="cfg-modal-alerta-box">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                    <span><strong>Regra de segurança:</strong> Você só pode alterar o nome de usuário uma vez a cada <strong>30 dias</strong>.</span>
+                </div>
+
+                <div class="cfg-acoes" style="margin-top: 24px;">
+                    <button type="button" class="cfg-btn cfg-btn-neutro" id="btn-cancelar-modal-alterar-username">Cancelar</button>
+                    <button type="button" class="cfg-btn cfg-btn-primario" id="btn-avancar-modal-alterar-username" disabled>Continuar</button>
+                </div>
+            </div>
+
+            <!-- Fase 2: Confirmação Intencional -->
+            <div id="username-modal-fase-confirmacao" style="display: none;">
+                <div class="cfg-modal-icon-badge aviso">
+                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                </div>
+                <h3>Confirmar novo @</h3>
+                <p class="cfg-modal-destaque-texto">
+                    Seu perfil e links antigos passarão a usar <strong id="modal-preview-novo-username">@novo</strong>.
+                </p>
+
+                <div class="cfg-modal-info-box">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    <span>Ao confirmar, você <strong>não poderá alterar seu nome de usuário novamente pelos próximos 30 dias</strong>.</span>
+                </div>
+
+                <p class="cfg-modal-pergunta">Deseja realmente confirmar esta alteração?</p>
+
+                <div class="cfg-acoes">
+                    <button type="button" class="cfg-btn cfg-btn-neutro" id="btn-voltar-modal-alterar-username">Voltar</button>
+                    <button type="button" class="cfg-btn cfg-btn-primario" id="btn-confirmar-modal-alterar-username">Sim, alterar @</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Alteração Segura de E-mail em Etapas -->
+    <div class="cfg-modal-fundo" id="modal-alterar-email" role="dialog" aria-modal="true" aria-labelledby="modal-email-titulo">
+        <div class="cfg-modal cfg-modal-lg">
+            <button type="button" class="cfg-modal-close" id="btn-fechar-modal-alterar-email" aria-label="Fechar">&times;</button>
+
+            <!-- Stepper Visual -->
+            <div class="cfg-stepper">
+                <div class="cfg-step-item ativo" id="step-indicador-1">1. Senha</div>
+                <div class="cfg-step-item" id="step-indicador-2">2. Novo e-mail</div>
+                <div class="cfg-step-item" id="step-indicador-3">3. Código</div>
+            </div>
+
+            <!-- PASSO 1: Reautenticação com Senha Atual -->
+            <div id="email-step-1" class="cfg-email-step-pane">
+                <div class="cfg-modal-header-icone">
+                    <div class="cfg-modal-icon-badge neutro">
+                        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                    </div>
+                    <h3 id="modal-email-titulo">Confirme sua senha</h3>
+                    <p class="cfg-modal-subdesc">Por motivos de segurança, informe sua senha atual para autorizar a alteração de e-mail.</p>
+                </div>
+
+                <div class="cfg-campo" style="margin-top: 18px;">
+                    <label for="email-input-senha-atual">Senha atual</label>
+                    <div class="cfg-senha-wrap">
+                        <input type="password" id="email-input-senha-atual" class="cfg-input" autocomplete="current-password" placeholder="Digite sua senha">
+                        <button type="button" class="cfg-ver-senha" data-alvo="email-input-senha-atual">Mostrar</button>
+                    </div>
+                    <span class="cfg-erro" id="erro-email-senha-atual"></span>
+                </div>
+
+                <div class="cfg-acoes" style="margin-top: 24px;">
+                    <button type="button" class="cfg-btn cfg-btn-neutro" id="btn-cancelar-modal-email">Cancelar</button>
+                    <button type="button" class="cfg-btn cfg-btn-primario" id="btn-avancar-email-step-1">Continuar</button>
+                </div>
+            </div>
+
+            <!-- PASSO 2: Digitação e Validação do Novo E-mail -->
+            <div id="email-step-2" class="cfg-email-step-pane" style="display: none;">
+                <div class="cfg-modal-header-icone">
+                    <div class="cfg-modal-icon-badge neutro">
+                        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                    </div>
+                    <h3>Novo e-mail de acesso</h3>
+                    <p class="cfg-modal-subdesc">Digite o novo endereço de e-mail que passará a ser a chave de login da sua conta.</p>
+                </div>
+
+                <div class="cfg-campo" style="margin-top: 18px;">
+                    <label for="email-input-novo-email">Novo e-mail</label>
+                    <input type="email" id="email-input-novo-email" class="cfg-input" placeholder="exemplo@gmail.com" autocomplete="email">
+                    <span class="cfg-erro" id="erro-email-novo"></span>
+                </div>
+
+                <div class="cfg-modal-alerta-box">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                    <span>Enviaremos um código de 6 dígitos para o novo endereço para confirmar que você tem acesso a ele.</span>
+                </div>
+
+                <div class="cfg-acoes" style="margin-top: 24px;">
+                    <button type="button" class="cfg-btn cfg-btn-neutro" id="btn-voltar-email-step-2">Voltar</button>
+                    <button type="button" class="cfg-btn cfg-btn-primario" id="btn-avancar-email-step-2">Enviar código</button>
+                </div>
+            </div>
+
+            <!-- PASSO 3: Confirmação com Código OTP de 6 Dígitos -->
+            <div id="email-step-3" class="cfg-email-step-pane" style="display: none;">
+                <div class="cfg-modal-header-icone">
+                    <div class="cfg-modal-icon-badge sucesso">
+                        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                    </div>
+                    <h3>Digite o código de verificação</h3>
+                    <p class="cfg-modal-subdesc">
+                        Enviamos um código de 6 dígitos para <strong id="email-label-destinatario">novo@email.com</strong>.
+                    </p>
+                </div>
+
+                <div class="cfg-campo" style="margin-top: 18px; text-align: center;">
+                    <label for="email-input-codigo-otp" style="text-align: center; display: block;">Código de 6 dígitos</label>
+                    <input type="text" id="email-input-codigo-otp" class="cfg-input cfg-input-otp" maxlength="6" inputmode="numeric" placeholder="000000" autocomplete="one-time-code">
+                    <span class="cfg-erro" id="erro-email-codigo" style="text-align: center; display: block;"></span>
+                </div>
+
+                <div style="text-align: center; margin-top: 12px;">
+                    <span style="font-size: 13px; color: var(--text-secondary);">Não recebeu o código?</span>
+                    <button type="button" id="btn-reenviar-codigo-email" class="cfg-link-reenviar" style="background: none; border: none; color: var(--primary); font-weight: 700; cursor: pointer; text-decoration: underline; margin-left: 4px;">Reenviar código</button>
+                </div>
+
+                <div class="cfg-modal-info-box" style="margin-top: 16px;">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span>O código expira em <strong>15 minutos</strong>. Após a confirmação, seu e-mail antigo receberá um aviso de segurança.</span>
+                </div>
+
+                <div class="cfg-acoes" style="margin-top: 24px;">
+                    <button type="button" class="cfg-btn cfg-btn-neutro" id="btn-voltar-email-step-3">Voltar</button>
+                    <button type="button" class="cfg-btn cfg-btn-primario" id="btn-confirmar-email-step-3">Confirmar alteração</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================================
+         MODAL EXCLUSIVO: ALTERAR / CADASTRAR WHATSAPP (COM CONFIRMAÇÃO)
+         ========================================================== -->
+    <div class="cfg-modal-fundo" id="modal-alterar-telefone" role="dialog" aria-modal="true" aria-labelledby="modal-telefone-titulo">
+        <div class="cfg-modal cfg-modal-lg">
+            <button type="button" class="cfg-modal-close" id="btn-fechar-modal-alterar-telefone" aria-label="Fechar">&times;</button>
+
+            <!-- Stepper Visual de Etapas -->
+            <div class="cfg-stepper">
+                <div class="cfg-step-item ativo" id="step-telefone-1">1. Número & Segurança</div>
+                <div class="cfg-step-item" id="step-telefone-2">2. Código OTP & E-mail</div>
+            </div>
+
+            <!-- FASE 1: DADOS, REAUTENTICAÇÃO E NÚMERO -->
+            <div id="telefone-modal-fase-edicao">
+                <div class="cfg-modal-header-icone">
+                    <div class="cfg-modal-icon-badge sucesso">
+                        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                        </svg>
+                    </div>
+                    <h3 id="modal-telefone-titulo">Cadastrar / Alterar WhatsApp</h3>
+                </div>
+
+                <p class="cfg-modal-subdesc">
+                    Informe seu número de celular com DDD. Por segurança, enviaremos um código de 6 dígitos para o seu WhatsApp e também para o seu e-mail cadastrado.
+                </p>
+
+                <!-- Bloco Reautenticação Senha (Contas normais) -->
+                <div class="cfg-campo" id="bloco-telefone-reautenticacao-senha" style="margin-top: 14px;">
+                    <label for="input-modal-telefone-senha">Sua senha atual de acesso</label>
+                    <input type="password" id="input-modal-telefone-senha" class="cfg-input" placeholder="Digite sua senha atual para autorizar" autocomplete="current-password">
+                    <span class="cfg-erro" id="erro-modal-telefone-senha"></span>
+                </div>
+
+                <!-- Bloco Reautenticação Google (Contas Google) -->
+                <div class="cfg-box-google-note" id="bloco-telefone-reautenticacao-google" style="display: none; margin-top: 14px;">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                    <span>Conta conectada via Google. Reautenticação confirmada pela sua sessão ativa.</span>
+                </div>
+
+                <!-- Campo do Novo Telefone -->
+                <div class="cfg-campo" style="margin-top: 14px;">
+                    <label for="input-modal-novo-telefone">Novo número com DDD</label>
+                    <div class="cfg-input-prefix-wrap">
+                        <span class="cfg-prefix-badge">BR +55</span>
+                        <input type="tel" id="input-modal-novo-telefone" class="cfg-input cfg-input-com-badge" placeholder="(89) 99999-9999" maxlength="15" autocomplete="tel" inputmode="numeric">
+                        <div class="cfg-status-indicador" id="status-indicador-telefone"></div>
+                    </div>
+                    <span class="cfg-erro" id="erro-modal-telefone"></span>
+                </div>
+
+                <div class="cfg-regras-lista" style="margin-top: 12px;">
+                    <div class="cfg-regra-item" id="regra-telefone-ddd">
+                        <span class="cfg-regra-dot">○</span>
+                        <span>DDD válido do Brasil (11 a 99)</span>
+                    </div>
+                    <div class="cfg-regra-item" id="regra-telefone-formato">
+                        <span class="cfg-regra-dot">○</span>
+                        <span>Celular de 9 dígitos (iniciando em 9)</span>
+                    </div>
+                </div>
+
+                <div class="cfg-modal-acoes" style="margin-top: 22px;">
+                    <button type="button" class="cfg-btn cfg-btn-neutro" id="btn-cancelar-modal-alterar-telefone">Cancelar</button>
+                    <button type="button" class="cfg-btn cfg-btn-primario" id="btn-avancar-modal-telefone" disabled>
+                        <span>Enviar código de verificação</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- FASE 2: CÓDIGO OTP (ENVIADO PARA WHATSAPP E E-MAIL) -->
+            <div id="telefone-modal-fase-confirmacao" style="display: none;">
+                <div class="cfg-modal-header-icone">
+                    <div class="cfg-modal-icon-badge sucesso">
+                        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                    </div>
+                    <h3 id="modal-telefone-titulo-conf">Digite o código de verificação</h3>
+                </div>
+
+                <p class="cfg-modal-subdesc" style="text-align: center;">
+                    Enviamos um código de 6 dígitos para <strong id="modal-preview-novo-telefone" style="color: var(--primary);">(89) 99999-9999</strong> e também para o seu e-mail cadastrado (<strong id="modal-preview-email-telefone" style="color: var(--text-primary);">...</strong>).
+                </p>
+
+                <div class="cfg-campo" style="margin-top: 18px;">
+                    <label for="input-modal-telefone-codigo" style="text-align: center; display: block;">Código de 6 dígitos</label>
+                    <input type="text" id="input-modal-telefone-codigo" class="cfg-input cfg-input-otp" placeholder="000000" maxlength="6" inputmode="numeric" autocomplete="one-time-code">
+                    <span class="cfg-erro" id="erro-modal-telefone-codigo" style="text-align: center; display: block; margin-top: 6px;"></span>
+                </div>
+
+                <div style="text-align: center; margin-top: 14px; font-size: 13px; color: var(--text-secondary);">
+                    <span id="texto-reenvio-telefone">Aguarde <strong id="contador-reenvio-telefone">60</strong>s para reenviar o código</span>
+                    <button type="button" id="btn-reenviar-codigo-telefone" style="display: none; background: none; border: none; color: var(--primary); font-weight: 700; cursor: pointer; text-decoration: underline; margin-left: 6px;">
+                        Reenviar código
+                    </button>
+                </div>
+
+                <div class="cfg-modal-acoes" style="margin-top: 24px;">
+                    <button type="button" class="cfg-btn cfg-btn-secundario" id="btn-voltar-modal-telefone">Voltar</button>
+                    <button type="button" class="cfg-btn cfg-btn-primario" id="btn-confirmar-modal-telefone" disabled>
+                        <span>Confirmar e ativar</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE CONFIRMAÇÃO DE REMOÇÃO DE WHATSAPP -->
+    <div class="cfg-modal-fundo" id="modal-remover-telefone" role="dialog" aria-modal="true" aria-labelledby="modal-remover-telefone-titulo">
+        <div class="cfg-modal">
+            <div class="cfg-modal-header-icone">
+                <div class="cfg-modal-icon-badge perigo">
+                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        <line x1="10" y1="11" x2="10" y2="17"></line>
+                        <line x1="14" y1="11" x2="14" y2="17"></line>
+                    </svg>
+                </div>
+                <h3 id="modal-remover-telefone-titulo">Remover WhatsApp</h3>
+            </div>
+            <p class="cfg-modal-subdesc" style="text-align: center; margin-top: 8px;">
+                Ao remover seu WhatsApp, os botões de contato direto nos seus anúncios ficarão ocultos para os compradores.
+            </p>
+            <p class="cfg-modal-pergunta" style="text-align: center; margin-top: 14px;">
+                Deseja realmente desvincular o número atual (<strong id="modal-remover-telefone-preview">...</strong>)?
+            </p>
+
+            <!-- Reautenticação para remoção de telefone -->
+            <div class="cfg-campo" id="bloco-remover-telefone-senha" style="margin-top: 16px;">
+                <label for="input-remover-telefone-senha">Sua senha atual para confirmar</label>
+                <input type="password" id="input-remover-telefone-senha" class="cfg-input" placeholder="Digite sua senha atual" autocomplete="current-password">
+                <span class="cfg-erro" id="erro-remover-telefone-senha"></span>
+            </div>
+
+            <!-- Nota Google para remoção de telefone -->
+            <div class="cfg-box-google-note" id="bloco-remover-telefone-google" style="display: none; margin-top: 16px;">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+                <span>Conta Google: confirmação imediata pela sessão autenticada.</span>
+            </div>
+
+            <div class="cfg-modal-acoes" style="justify-content: center; margin-top: 20px;">
+                <button type="button" class="cfg-btn cfg-btn-neutro" id="btn-cancelar-remover-telefone">Cancelar</button>
+                <button type="button" class="cfg-btn cfg-btn-perigo" id="btn-confirmar-remover-telefone">Sim, remover WhatsApp</button>
+            </div>
+        </div>
+    </div>
+
     <footer class="footer-principal">
         <div class="footer-container">
             <div class="footer-col">
-                <img src="../../assets/header-logo.png" alt="Itaim Vende" class="footer-logo-img">
+                <img src="../../assets/logos/header1-logo.png" alt="Itaim Vende" class="footer-logo-img">
                 <p class="footer-sobre">
-                    O Itaim Vende é o maior portal de compra, venda e troca da região de Paulistana e cidades vizinhas no Piauí. Conectando pessoas e bons negócios.
+                    Portal de vendas, compras e doações da região de Paulistana.
                 </p>
             </div>
 
             <div class="footer-col">
                 <h4>Categorias</h4>
                 <ul class="footer-links">
-                    <li><a href="../produtos/categoria.html?cat=Eletrônicos">Eletrônicos</a></li>
-                    <li><a href="../produtos/categoria.html?cat=Móveis">Móveis</a></li>
-                    <li><a href="../produtos/categoria.html?cat=Decoração">Decoração</a></li>
-                    <li><a href="../produtos/categoria.html?cat=Moda">Moda & Vestuário</a></li>
-                    <li><a href="../produtos/categoria.html?cat=Serviços">Serviços</a></li>
+                    <li><a href="/categoria?cat=Eletrônicos">Eletrônicos</a></li>
+                    <li><a href="/categoria?cat=Móveis">Móveis</a></li>
+                    <li><a href="/categoria?cat=Decoração">Decoração</a></li>
+                    <li><a href="/categoria?cat=Moda">Moda & Vestuário</a></li>
+                    <li><a href="/categoria?cat=Serviços">Serviços</a></li>
                 </ul>
             </div>
 
             <div class="footer-col">
                 <h4>Cidades Atendidas</h4>
                 <ul class="footer-links">
-                    <li><a href="../home/home.html">Paulistana - PI</a></li>
-                    <li><a href="../home/home.html">Acauã - PI</a></li>
-                    <li><a href="../home/home.html">Betânia do Piauí</a></li>
-                    <li><a href="../home/home.html">Curral Novo</a></li>
-                    <li><a href="../home/home.html">Picos e Região</a></li>
+                    <li><a href="/">Paulistana - PI</a></li>
+                    <li><a href="/">Acauã - PI</a></li>
+                    <li><a href="/">Betânia do Piauí</a></li>
+                    <li><a href="/">Curral Novo</a></li>
+                    <li><a href="/">Picos e Região</a></li>
                 </ul>
             </div>
 
             <div class="footer-col">
                 <h4>Minha Conta</h4>
                 <ul class="footer-links">
-                    <li><a href="../../index.html">Entrar / Cadastro</a></li>
-                    <li><a href="../vender/meus-anuncios.html" id="footer-link-anuncios">Meus Anúncios</a></li>
-                    <li><a href="../favoritos/favoritos.html" id="footer-link-favoritos">Meus Favoritos</a></li>
+                    <li><a href="/login">Entrar / Cadastro</a></li>
+                    <li><a href="/meus-anuncios" id="footer-link-anuncios">Meus Anúncios</a></li>
+                    <li><a href="/favoritos" id="footer-link-favoritos">Meus Favoritos</a></li>
 
                     <li><a href="perfil.html">Meu Perfil</a></li>
                 </ul>
@@ -558,14 +1286,14 @@
 
         <div class="footer-bottom">
             <span>© 2026 Itaim Vende. Todos os direitos reservados.</span>
-            <span>Desenvolvido com carinho para o Piauí.</span>
+            <span>Compre, venda e anuncie com facilidade.</span>
         </div>
     </footer>
 
-    <script src="../../js/core/rotas.js"></script>
-    <script src="../../js/core/api.js"></script>
-    <script src="../../js/core/sessao.js"></script>
-    <script src="../../js/core/ajustar-foto.js"></script>
+    <script src="../../js/core/rotas/index.js"></script>
+    <script src="../../js/core/api/index.js"></script>
+    <script src="../../js/core/sessao/index.js"></script>
+    <script src="../../js/core/ajustar-foto/index.js"></script>
     <script src="../../js/pages/perfil/configuracoes.js"></script>
 </body>
 </html>

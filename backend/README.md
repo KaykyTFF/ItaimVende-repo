@@ -1,152 +1,180 @@
-# 🚀 Itaim Vende - Backend API
+# Itaim Vende API - Modulo Backend (v2.0.0)
 
-API RESTful completa, funcional e segura desenvolvida para a plataforma **Itaim Vende**, com arquitetura em camadas, autenticação JWT, integridade relacional com Prisma ORM e proteção contra ataques comuns da web.
-
----
-
-## 🛠️ Tecnologias Utilizadas
-
-- **Node.js (v20+)** com **ES Modules** (`import`/`export`)
-- **Express.js (v5)**: Framework HTTP rápido e flexível
-- **Prisma ORM (v6)**: Modelagem e controle relacional de banco de dados
-- **SQLite (Local)** / **PostgreSQL (Nuvem / Produção)**
-- **Bcrypt.js**: Hash unidirecional de senhas com salt
-- **JSON Web Token (jsonwebtoken)**: Autenticação stateless com expiração
-- **Zod**: Validação e sanitização estrita de dados de entrada
-- **Helmet**: Cabeçalhos HTTP de segurança avançados
-- **Express Rate Limit**: Proteção contra ataques de força bruta no login
-- **CORS**: Controle de origens autorizadas
+API RESTful completa desenvolvida para a plataforma de marketplace e intermediacao comercial **Itaim Vende**, construida com arquitetura modular em camadas, persistencia relacional com Prisma ORM e PostgreSQL, validacao estrita via Zod e seguranca baseada em tokens JWT.
 
 ---
 
-## 📁 Estrutura de Pastas
+## 1. Visao Geral
+
+O backend do Itaim Vende prove a camada de servicos e regras de negocio para operacoes de comercio eletronico regional, abrangendo autenticacao segura, gestao de anuncios com busca fonetica regional, intermediacao de pedidos com validacao financeira no servidor, comunicacao em tempo real via WebSockets e governanca de dados cadastrais.
+
+### Links Rapidos de Documentacao
+
+- **Documentacao Interativa (Swagger UI):** [`http://localhost:3000/api-docs`](http://localhost:3000/api-docs) ou [`http://localhost:3000/api/v1/docs`](http://localhost:3000/api/v1/docs)
+- **Especificacao OpenAPI 3.0.3 (JSON):** [`http://localhost:3000/api/v1/docs/openapi.json`](http://localhost:3000/api/v1/docs/openapi.json)
+- **Colecao Postman Oficial:** [`../itaim-vende.postman_collection.json`](../itaim-vende.postman_collection.json)
+
+---
+
+## 2. Tecnologias Utilizadas
+
+- **Runtime:** Node.js (versao 20 LTS ou superior) com ECMAScript Modules (`"type": "module"`)
+- **Framework Web:** Express.js 5
+- **ORM & Banco de Dados:** Prisma ORM v6 sobre PostgreSQL (Supabase)
+- **Extensoes de Banco:** `unaccent` e `pg_trgm` para busca textual fonetica resiliente
+- **Autenticacao:** JSON Web Token (`jsonwebtoken`) e criptografia de senhas com `bcryptjs` (10 rounds)
+- **Validacao de Entrada:** `zod` com schemas declarativos por dominio
+- **Seguranca:** `helmet`, `cors`, `express-rate-limit`
+- **Tempo Real:** `socket.io` para negociacoes instantaneas de chat
+- **Processamento de Midia:** `sharp` com conversao para formato WebP e auto-rotacao EXIF
+- **Armazenamento:** Provedor Supabase Storage com fallback local para desenvolvimento
+- **Testes:** Node.js Test Runner nativo (`node:test`, `node:assert/strict`)
+
+---
+
+## 3. Arquitetura e Organizacao do Codigo
+
+O modulo backend adota uma arquitetura em camadas estruturada por responsabilidade:
 
 ```
 backend/
 ├── prisma/
-│   ├── schema.prisma      # Modelagem relacional do banco de dados
-│   └── seed.js            # Povoamento inicial (categorias, admin e anúncios)
+│   ├── schema.prisma              # Definicao dos modelos relacionais e indices
+│   └── seed.js                    # Script de povoamento inicial do banco
+├── scripts/
+│   └── setup-unaccent.js          # Configuracao de extensoes unaccent/trigram
 ├── src/
 │   ├── config/
-│   │   ├── env.js         # Variáveis de ambiente validadas
-│   │   └── prisma.js      # Conexão singleton com o banco
-│   ├── controllers/
-│   │   ├── auth.controller.js     # Orquestrador HTTP (Login, Registro, Perfil)
-│   │   ├── product.controller.js  # Orquestrador HTTP (Anúncios e Vitrine)
-│   │   ├── chat.controller.js     # Orquestrador HTTP (Conversas e Mensagens)
-│   │   ├── category.controller.js # Orquestrador HTTP (Categorias)
-│   │   └── order.controller.js    # Orquestrador HTTP (Pedidos e Checkout)
-│   ├── services/
-│   │   ├── auth.service.js        # Regras de negócio de usuários e tokens
-│   │   ├── product.service.js     # Regras de vitrine, slugs, filtros e soft-delete
-│   │   ├── chat.service.js        # Negociação, mensagens e controle de leitura
-│   │   ├── category.service.js    # Gestão e contagem de categorias
-│   │   └── order.service.js       # Transações e cálculo de preços seguros
-│   ├── middlewares/
-│   │   ├── auth.middleware.js     # Validação de token JWT e roles
-│   │   ├── error.middleware.js    # Tratamento central de erros operacionais
-│   │   └── validate.middleware.js # Validador automático com esquemas Zod
-│   ├── routes/
-│   │   ├── auth.routes.js
-│   │   ├── product.routes.js
-│   │   ├── chat.routes.js
-│   │   ├── category.routes.js
-│   │   └── order.routes.js
-│   ├── schemas/
-│   │   ├── auth.schema.js
-│   │   ├── product.schema.js
-│   │   └── order.schema.js
-│   └── utils/
-│       └── errors.js              # Classe AppError para erros operacionais
-│   └── server.js          # Ponto de entrada do servidor HTTP
-├── .env                   # Variáveis locais
-├── .env.example           # Modelo para produção
-└── package.json
+│   │   ├── env.js                 # Validacao de variaveis de ambiente
+│   │   ├── prisma.js              # Conexao singleton com o PostgreSQL
+│   │   └── supabase.js            # Cliente do servico de armazenamento
+│   ├── controllers/               # Controladores HTTP desacoplados por recurso
+│   │   ├── account/
+│   │   ├── auth/
+│   │   ├── category/
+│   │   ├── chat/
+│   │   ├── favorite/
+│   │   ├── order/
+│   │   ├── product/
+│   │   ├── report/
+│   │   ├── review/
+│   │   └── upload/
+│   ├── docs/                      # Especificacao OpenAPI 3.0.3 e rotas Swagger
+│   ├── middlewares/               # auth, error, rateLimiter, validate
+│   ├── routes/                    # Rotas mapeadas por recurso sob /api/v1
+│   ├── schemas/                   # Schemas de validacao Zod por recurso
+│   ├── services/                  # Logica de negocio, regras de dominio e transacoes
+│   ├── utils/                     # Utilitarios (AppError, sanitize)
+│   └── server.js                  # Ponto de entrada do servidor HTTP e WebSocket
+├── tests/                         # Suite de 47 testes automatizados
+│   ├── account-email.test.js
+│   ├── account-phone.test.js
+│   ├── api.test.js
+│   ├── rest-conformance.test.js
+│   └── username-cooldown.test.js
+├── .env.example                   # Modelo de configuracao das variaveis locais
+└── package.json                   # Dependencias e scripts de execucao
 ```
+
+### Fluxo de Execucao de uma Requisicao:
+
+1. **Entrada:** A requisicao atinge o Express Router sob o prefixo `/api/v1/`.
+2. **Seguranca e Interceptacao:** Middlewares globais (`helmet`, `cors`, `rateLimiter`) avaliam as restricoes de trafego.
+3. **Autenticacao e RBAC:** Se a rota for protegida, `authenticateToken` valida a assinatura do JWT e confere o status e nivel do usuario (`BUYER`, `SELLER`, `MODERATOR`, `ADMIN`).
+4. **Validacao de Schema:** O middleware `validate(schema)` avalia o payload atraves do Zod. Violacoes retornam `400 Bad Request` padronizado.
+5. **Controlador:** O Controller extrai os parametros e invoca o Service competente.
+6. **Servico de Dominio:** O Service aplica regras de negocio, executa operacoes transacionais via Prisma ORM e emite eventos quando aplicavel.
+7. **Resposta:** O Controller devolve a resposta no padrao JSON com codigo de status HTTP condizente (`200`, `201`, `204`).
+8. **Tratamento de Excecoes:** Erros de negocio lancam `AppError`, capturados pelo `error.middleware.js` sem vazamento de stacktraces em producao.
 
 ---
 
-## 🏃 Como Rodar Localmente
+## 4. Instalacao e Execucao
 
-1. **Acesse a pasta do backend:**
-   ```bash
-   cd backend
-   ```
+### Pre-requisitos:
+- Node.js >= 20.0.0
+- Instancia PostgreSQL ativa
 
-2. **Instale as dependências:**
+### Passo a Passo:
+
+1. **Instale as dependencias:**
    ```bash
    npm install
    ```
 
-3. **Sincronize o banco de dados (SQLite local):**
+2. **Configure o arquivo de ambiente:**
    ```bash
-   npm run prisma:push
+   cp .env.example .env
    ```
+   Preencha as variaveis de banco de dados (`DATABASE_URL`, `DIRECT_URL`), `JWT_SECRET` e configuracoes de nuvem.
 
-4. **Popule o banco com dados iniciais:**
+3. **Prepare o banco de dados:**
    ```bash
+   # Gera os tipos do Prisma Client
+   npm run prisma:generate
+
+   # Sincroniza o schema com o banco
+   npm run prisma:push
+
+   # Cria a extensao unaccent e indices Trigram no PostgreSQL
+   npm run db:indexes
+
+   # Popula o banco com os dados iniciais
    npm run seed
    ```
 
-5. **Inicie o servidor de desenvolvimento:**
+4. **Inicie o servidor:**
    ```bash
+   # Modo de desenvolvimento com live-reload:
    npm run dev
+
+   # Modo de producao:
+   npm run start
    ```
 
-O servidor estará ouvindo em: `http://localhost:3000`
+O servidor iniciara na porta configurada (padrao: 3000).
 
 ---
 
-## 🌐 Endpoints da API
+## 5. Endpoints Disponiveis (/api/v1)
 
-### 1. Diagnóstico
-- `GET /api/health` -> Status da API e tempo de atividade.
+A API disponibiliza endpoints organizados por dominios funcionais com padronizacao RESTful:
 
-### 2. Autenticação & Usuários
-- `POST /api/auth/register` -> Cria nova conta (validação Zod + Bcrypt).
-- `POST /api/auth/login` -> Autentica e retorna token JWT (com proteção de taxa).
-- `GET /api/auth/me` -> Retorna dados do usuário autenticado (requer Bearer token).
-- `PUT /api/auth/me` -> Atualiza dados do perfil (requer Bearer token).
+- **Diagnostico:** `GET /health`
+- **Autenticacao:** `POST /auth/register`, `POST /auth/login`, `POST /auth/google`, `POST /auth/forgot-password`, `POST /auth/verify-reset-code`, `POST /auth/reset-password`, `GET /auth/me`, `PUT /auth/profile`, `PUT /auth/password`
+- **Usuarios e Nomes de Usuario:** `GET /users/:id`, `GET /users/:userId/reviews`, `POST /users/:userId/reviews`, `GET /usernames/availability`
+- **Conta e Governanca:** `PATCH /account/username`, `POST /account/email/change-request`, `POST /account/email/confirm`, `POST /account/phone/change-request`, `POST /account/phone/confirm`, `POST /account/phone-reversals`, `DELETE /account/phone`, `GET /account/preferences`, `PATCH /account/preferences`
+- **Produtos:** `GET /products`, `GET /products/:id`, `POST /products`, `PUT /products/:id`, `DELETE /products/:id`
+- **Categorias:** `GET /categories` (com cabecalho HTTP `Cache-Control`)
+- **Pedidos:** `POST /orders`, `GET /orders`, `GET /orders/:id`, `PATCH /orders/:id/status`
+- **Chat:** `GET /chat/conversations`, `POST /chat/conversations`, `GET /chat/conversations/:id/messages`, `POST /chat/conversations/:id/messages`, `PATCH /chat/messages/:id/status`
+- **Favoritos:** `GET /favorites`, `GET /favorites/:productId`, `PUT /favorites/:productId`, `DELETE /favorites/:productId`
+- **Avaliacoes:** `DELETE /reviews/:id`
+- **Denuncias e Moderacao:** `POST /reports/:productId`, `GET /reports`, `DELETE /reports/:id/product`
+- **Enderecos:** `GET /addresses`, `POST /addresses`, `DELETE /addresses/:id`
+- **Notificacoes:** `GET /notifications`, `PATCH /notifications/read-all`
+- **Upload:** `POST /upload` (multipart/form-data com compressao WebP)
 
-### 3. Anúncios & Produtos
-- `GET /api/products` -> Lista produtos com filtros (`search`, `category`, `minPrice`, `maxPrice`, `sort`, `page`).
-- `GET /api/products/:id` -> Detalhes do anúncio com informações do vendedor.
-- `POST /api/products` -> Cria novo anúncio (requer Bearer token).
-- `PUT /api/products/:id` -> Atualiza anúncio (apenas dono ou admin).
-- `DELETE /api/products/:id` -> Exclui anúncio (apenas dono ou admin).
-
-### 4. Categorias
-- `GET /api/categories` -> Lista todas as categorias e contagem de anúncios.
-
-### 5. Pedidos & Checkout
-- `POST /api/orders` -> Cria novo pedido (preços validados diretamente no banco de dados).
-- `GET /api/orders` -> Lista pedidos do comprador logado.
-- `GET /api/orders/:id` -> Consulta detalhes de um pedido específico.
+Consulte a documentacao Swagger em [`http://localhost:3000/api-docs`](http://localhost:3000/api-docs) para esquemas completos de payloads e contratos.
 
 ---
 
-## 🔒 Segurança Implementada
+## 6. Testes Automatizados
 
-1. **Nenhum preço confiado ao cliente:** No checkout, o backend consulta o valor real de cada produto no banco de dados e calcula o total no servidor.
-2. **Proteção contra Brute Force:** Limite de 15 tentativas a cada 15 minutos por endereço IP nas rotas de login/registro.
-3. **Senhas com Hash:** Senhas nunca são salvas em texto puro; utiliza-se salt de 10 rounds do `bcryptjs`.
-4. **Proteção de Cabeçalhos HTTP:** `helmet` ativo com políticas seguras contra injeção e clickjacking.
-5. **CORS Restrito:** Permite especificar origens permitidas em `.env`.
+O backend conta com 47 testes de integracao automatizados executados nativamente pelo Node.js:
+
+```bash
+# Com o servidor em execucao na porta 3000:
+npm test
+```
+
+### Resultados da Suite:
+- **Total de Testes:** 47
+- **Suites Executadas:** 5 (`rest-conformance.test.js`, `account-email.test.js`, `account-phone.test.js`, `api.test.js`, `username-cooldown.test.js`)
+- **Taxa de Sucesso:** 100% de aprovacao (47 testes aprovados, 0 falhas).
 
 ---
 
-## 🚀 Como Colocar no Ar (Produção)
+## 7. Declaracao de Uso de Ferramentas de IA
 
-1. **Crie um Banco PostgreSQL gratuito** no [Neon.tech](https://neon.tech) ou [Supabase](https://supabase.com).
-2. No arquivo `prisma/schema.prisma`, altere o datasource:
-   ```prisma
-   datasource db {
-     provider = "postgresql"
-     url      = env("DATABASE_URL")
-   }
-   ```
-3. Suba o código no **GitHub**.
-4. Crie um Web Service no [Render.com](https://render.com) ou [Railway.app](https://railway.app):
-   - **Build Command**: `npm install && npx prisma db push && npm run seed`
-   - **Start Command**: `npm start`
-   - Configure a variável `DATABASE_URL` com a URL do seu PostgreSQL da nuvem e defina `JWT_SECRET`.
+Ferramentas de Inteligencia Artificial Generativa foram utilizadas como instrumento de apoio ao desenvolvimento para auxilio na estruturacao modular das camadas de arquitetura, identificacao de salvaguardas de seguranca defensiva, parametrizacao de compressao de midia com Sharp e formatacao da especificacao formal OpenAPI 3.0.3. Toda a implementacao foi revisada, homologada e validada pela equipe tecnica responsavel.

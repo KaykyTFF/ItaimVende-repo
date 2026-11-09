@@ -12,6 +12,7 @@ export async function authenticateToken(req, res, next) {
   if (!token) {
     return res.status(401).json({
       success: false,
+      code: 'UNAUTHORIZED',
       message: 'Acesso não autorizado. Token não informado.',
     });
   }
@@ -21,7 +22,7 @@ export async function authenticateToken(req, res, next) {
     
     // Busca dados atualizados do usuário no banco
     const user = await prisma.user.findUnique({
-      where: { id: decoded.userId },
+      where: { id: decoded.userId || decoded.id },
       select: {
         id: true,
         name: true,
@@ -39,6 +40,7 @@ export async function authenticateToken(req, res, next) {
     if (!user) {
       return res.status(401).json({
         success: false,
+        code: 'USER_NOT_FOUND',
         message: 'Usuário associado ao token não encontrado.',
       });
     }
@@ -46,6 +48,7 @@ export async function authenticateToken(req, res, next) {
     if (user.status === 'BANNED' || user.status === 'SUSPENDED') {
       return res.status(403).json({
         success: false,
+        code: 'ACCOUNT_SUSPENDED',
         message: 'Acesso negado. Esta conta foi suspensa ou desativada.',
       });
     }
@@ -79,7 +82,7 @@ export async function optionalAuth(req, res, next) {
   try {
     const decoded = jwt.verify(token, ENV.JWT_SECRET);
     const user = await prisma.user.findUnique({
-      where: { id: decoded.userId },
+      where: { id: decoded.userId || decoded.id },
       select: { id: true, name: true, email: true, role: true },
     });
     if (user) req.user = user;
@@ -95,11 +98,16 @@ export async function optionalAuth(req, res, next) {
 export function requireRole(...allowedRoles) {
   return (req, res, next) => {
     if (!req.user) {
-      return res.status(401).json({ success: false, message: 'Não autenticado.' });
+      return res.status(401).json({
+        success: false,
+        code: 'UNAUTHORIZED',
+        message: 'Não autenticado.',
+      });
     }
     if (!allowedRoles.includes(req.user.role)) {
       return res.status(403).json({
         success: false,
+        code: 'FORBIDDEN',
         message: 'Acesso negado. Permissão insuficiente.',
       });
     }

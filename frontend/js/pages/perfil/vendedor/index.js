@@ -1,0 +1,39 @@
+/**
+ * ITAIM VENDE - VENDEDOR: ORQUESTRADOR GERAL
+ * Arquivo: frontend/js/pages/perfil/vendedor/index.js
+ */
+
+(function () {
+    'use strict';
+
+    async function inicializar() {
+        if (window.ItaimSkeleton) {
+            if (typeof window.ItaimSkeleton.renderizarCards === 'function') {
+                window.ItaimSkeleton.renderizarCards('#grade-produtos-vendedor', 4);
+            }
+            if (typeof window.ItaimSkeleton.renderizarAvaliacoes === 'function') {
+                window.ItaimSkeleton.renderizarAvaliacoes('#lista-avaliacoes-vendedor', 3);
+            }
+        }
+
+        if (window.ItaimVendedorDados?.inicializar) {
+            await window.ItaimVendedorDados.inicializar();
+        }
+        if (window.ItaimVendedorVitrine?.inicializar) {
+            window.ItaimVendedorVitrine.inicializar();
+        }
+        if (window.ItaimVendedorAvaliacoes?.inicializar) {
+            await window.ItaimVendedorAvaliacoes.inicializar();
+        }
+
+
+        // Sincronização do Header Global
+        if (window.ItaimSessao && typeof window.ItaimSessao.atualizarHeaderUsuario === 'function') {
+            window.ItaimSessao.atualizarHeaderUsuario();
+        }
+    }
+
+    window.ItaimVendedorOrquestrador = {
+        inicializar
+    };
+})();

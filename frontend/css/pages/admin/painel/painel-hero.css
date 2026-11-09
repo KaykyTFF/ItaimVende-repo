@@ -1,0 +1,148 @@
+/* ==========================================================================
+   CONTEÚDO PRINCIPAL
+   ========================================================================== */
+.painel-main {
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 24px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* 1. HERO STATUS CARD */
+.painel-hero-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--bg-card-border);
+    border-radius: var(--radius-lg);
+    padding: 24px 28px;
+    box-shadow: var(--shadow-card);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s ease;
+}
+
+.painel-hero-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--brand-gradient);
+}
+
+.hero-status-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.status-indicator-ring {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: rgba(16, 185, 129, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.status-indicator-ring::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 2px solid rgba(16, 185, 129, 0.4);
+    animation: pulseWave 2s infinite ease-out;
+}
+
+@keyframes pulseWave {
+    0% { transform: scale(0.9); opacity: 0.8; }
+    50% { transform: scale(1.15); opacity: 0; }
+    100% { transform: scale(0.9); opacity: 0; }
+}
+
+.status-pulse-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--success-green);
+    box-shadow: 0 0 16px var(--success-green);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.status-pulse-dot.warning {
+    background: var(--warning-amber);
+    box-shadow: 0 0 16px var(--warning-amber);
+}
+
+.status-pulse-dot.critical {
+    background: var(--danger-red);
+    box-shadow: 0 0 16px var(--danger-red);
+}
+
+.hero-label {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+}
+
+.hero-status-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+    margin: 2px 0 4px;
+}
+
+.hero-status-desc {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+}
+
+.hero-status-metrics {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.metric-pill {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--bg-card-border);
+    padding: 10px 16px;
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 110px;
+}
+
+.pill-label {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.pill-value {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+

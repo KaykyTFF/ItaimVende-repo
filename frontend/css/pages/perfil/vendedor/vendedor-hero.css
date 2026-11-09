@@ -1,0 +1,266 @@
+/* ==========================================================================
+   1. HERO CARD DO VENDEDOR (BANNER PRINCIPAL)
+   ========================================================================== */
+.card-vendedor-hero {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(15, 23, 42, 0.04);
+    margin-bottom: 28px;
+}
+
+/* Capa decorativa no topo */
+.vendedor-capa-header {
+    height: 120px;
+    background: linear-gradient(135deg, #1E293B 0%, #0F172A 50%, #166534 100%);
+    position: relative;
+}
+
+.vendedor-capa-padrao {
+    position: absolute;
+    inset: 0;
+    opacity: 0.12;
+    background-image: radial-gradient(#FFFFFF 1px, transparent 1px);
+    background-size: 16px 16px;
+}
+
+/* Corpo do Perfil */
+.vendedor-hero-conteudo {
+    padding: 0 36px 32px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 28px;
+    position: relative;
+}
+
+.vendedor-avatar-e-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    flex: 1;
+}
+
+/* Avatar com borda destacada e selo */
+.vendedor-avatar-box {
+    position: relative;
+    margin-top: -50px;
+    flex-shrink: 0;
+}
+
+.vendedor-avatar-img {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid #FFFFFF;
+    background-color: #F1F5F9;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    display: block;
+}
+
+.vendedor-selo-verificado-badge {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    width: 28px;
+    height: 28px;
+    background: #38A129;
+    color: #FFFFFF;
+    border: 3px solid #FFFFFF;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: none;
+}
+
+.vendedor-selo-verificado-badge svg {
+    width: 14px;
+    height: 14px;
+}
+
+/* Informações de Texto */
+.vendedor-dados-coluna {
+    padding-top: 14px;
+    flex: 1;
+}
+
+.vendedor-nome-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+}
+
+.vendedor-nome-titulo {
+    font-size: 26px;
+    font-weight: 800;
+    color: #0F172A;
+    letter-spacing: -0.02em;
+    margin: 0;
+}
+
+.vendedor-tag-tipo {
+    background: #E8F5E9;
+    color: #2E7D32;
+    font-size: 12.5px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid #C8E6C9;
+}
+
+.vendedor-tag-tipo svg {
+    width: 13px;
+    height: 13px;
+}
+
+.vendedor-username-sub {
+    font-size: 14px;
+    color: #64748B;
+    font-weight: 500;
+    margin-bottom: 12px;
+}
+
+.vendedor-meta-itens {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    font-size: 14px;
+    color: #475569;
+    margin-bottom: 16px;
+}
+
+.vendedor-meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.vendedor-meta-item svg {
+    color: #64748B;
+}
+
+.vendedor-avaliacao-box {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #FFFBEB;
+    border: 1px solid #FDE68A;
+    padding: 3px 10px;
+    border-radius: 8px;
+    color: #B45309;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+/* Bio */
+.vendedor-bio-paragrafo {
+    font-size: 14.5px;
+    color: #334155;
+    line-height: 1.6;
+    max-width: 650px;
+    margin-top: 4px;
+}
+
+/* Coluna de Ações (WhatsApp + Compartilhar) */
+.vendedor-acoes-hero {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 220px;
+    padding-top: 14px;
+}
+
+.btn-vendedor-wpp,
+.btn-banner-wpp,
+#btn-vendedor-wpp {
+    background: #38A129;
+    color: #FFFFFF;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 13px 20px;
+    border-radius: 14px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: none;
+    transition: all 0.25s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-vendedor-wpp:hover,
+.btn-banner-wpp:hover,
+#btn-vendedor-wpp:hover {
+    background: #2E8B22;
+    transform: translateY(-2px);
+    box-shadow: none;
+    color: #FFFFFF;
+}
+
+.btn-vendedor-compartilhar {
+    background: #F1F5F9;
+    color: #334155;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 11px 18px;
+    border-radius: 12px;
+    border: 1px solid #CBD5E1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-vendedor-compartilhar:hover {
+    background: #E2E8F0;
+    color: #0F172A;
+}
+
+/* Botão de Denúncia do Perfil (Canto superior direito) */
+.btn-denunciar-perfil {
+    position: absolute;
+    top: 20px;
+    right: 22px;
+    background: transparent;
+    border: none;
+    color: #94A3B8;
+    border-radius: 8px;
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 10;
+    padding: 0;
+}
+
+.btn-denunciar-perfil:hover {
+    color: #DC2626;
+    background: rgba(220, 38, 38, 0.06);
+    transform: translateY(-1px);
+}
+
+.btn-denunciar-perfil svg {
+    transition: transform 0.25s ease;
+}
+
+.btn-denunciar-perfil:hover svg {
+    transform: rotate(-6deg);
+}
+
+

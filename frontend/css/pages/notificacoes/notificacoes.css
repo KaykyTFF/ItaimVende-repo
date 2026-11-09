@@ -1,0 +1,602 @@
+/* ==========================================================================
+   ITAIM VENDE - PÁGINA DE NOTIFICAÇÕES (NOTIFICACOES.HTML)
+   Estilo moderno com cards de notificações ricos, badges e thumbnails
+   ========================================================================== */
+
+.breadcrumb-container {
+    margin-bottom: 20px;
+}
+
+.notificacoes-container {
+    max-width: 960px;
+    margin: 28px auto 80px;
+    padding: 0 20px;
+}
+
+/* ==========================================================================
+   Cabeçalho da Página
+   ========================================================================== */
+.notificacoes-topo-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 26px;
+}
+
+.notificacoes-titulos-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    flex: 1;
+    min-width: 0;
+}
+
+.notificacoes-titulos {
+    flex: 1;
+    min-width: 0;
+}
+
+.notificacoes-icone-sino-header {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1E293B;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.notificacoes-titulos h1 {
+    font-size: 26px;
+    font-weight: 800;
+    color: #0F172A;
+    letter-spacing: -0.5px;
+    margin: 0;
+}
+
+.notificacoes-titulos p {
+    color: #64748B;
+    font-size: 14.5px;
+    margin-top: 4px;
+    line-height: 1.45;
+    max-width: 540px;
+}
+
+.notificacoes-acoes-topo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    margin-top: 4px;
+}
+
+.btn-marcar-lidas {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    color: #475569;
+    font-size: 13px;
+    font-weight: 600;
+    height: 36px;
+    padding: 0 16px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    white-space: nowrap;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.btn-marcar-lidas svg {
+    flex-shrink: 0;
+}
+
+.btn-marcar-lidas:hover {
+    color: #0E8F1A;
+    border-color: #0E8F1A;
+    background: #F8FAFC;
+    box-shadow: 0 2px 6px rgba(14, 143, 26, 0.12);
+}
+
+.btn-marcar-lidas:active {
+    transform: scale(0.98);
+}
+
+.btn-marcar-lidas.btn-limpar-topo {
+    border-color: #E2E8F0;
+    color: #475569;
+    background: #FFFFFF;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.btn-marcar-lidas.btn-limpar-topo:hover,
+.btn-marcar-lidas.btn-limpar-topo:active {
+    background: #FEF2F2;
+    border-color: #EF4444;
+    color: #DC2626;
+    box-shadow: 0 2px 6px rgba(220, 38, 38, 0.12);
+}
+
+/* ==========================================================================
+   Barra de Filtros e Ordenação
+   ========================================================================== */
+.notificacoes-filtros-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+}
+
+.notificacoes-tabs-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 2px 2px 6px 2px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.notificacoes-tabs-bar::-webkit-scrollbar {
+    display: none;
+}
+
+.tab-notif-btn {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    color: #334155;
+    font-size: 13.5px;
+    font-weight: 600;
+    padding: 7px 16px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.tab-notif-btn:hover {
+    color: #0F172A;
+    border-color: #CBD5E1;
+    background: #F8FAFC;
+}
+
+.tab-notif-btn.ativo {
+    background: #0E8F1A;
+    color: #FFFFFF;
+    border-color: #0E8F1A;
+}
+
+.tab-notif-btn svg {
+    flex-shrink: 0;
+}
+
+.tab-badge-contador {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 1px 7px;
+    border-radius: 999px;
+    min-width: 18px;
+    text-align: center;
+    background: #E2E8F0;
+    color: #475569;
+    display: inline-block;
+    line-height: 1.4;
+}
+
+.tab-notif-btn.ativo .tab-badge-contador {
+    background: #FFFFFF;
+    color: #0E8F1A;
+    font-weight: 800;
+}
+
+/* Seletor de Ordenação Padrão (igual às outras páginas da plataforma) */
+.notificacoes-ordenacao-box {
+    flex-shrink: 0;
+}
+
+.notificacoes-ordenacao-box .select-filtro {
+    height: 38px;
+    padding: 0 36px 0 16px;
+    border-radius: 999px;
+    border: 1px solid #E2E8F0;
+    background-color: #FFFFFF;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 14px 14px;
+    font-size: 13.5px;
+    font-family: inherit;
+    font-weight: 600;
+    color: #475569;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.notificacoes-ordenacao-box .select-filtro:hover {
+    border-color: #CBD5E1;
+    color: #1E293B;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23334155' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+}
+
+.notificacoes-ordenacao-box .select-filtro:focus {
+    border-color: #0E8F1A;
+    box-shadow: 0 0 0 3px rgba(14, 143, 26, 0.15);
+}
+
+/* ==========================================================================
+   Lista de Notificações e Cards Modernos
+   ========================================================================== */
+.notificacoes-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.notificacao-card {
+    background: #FFFFFF;
+    border: 1px solid #F1F5F9;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    padding: 16px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    cursor: pointer;
+}
+
+.notificacao-card:hover {
+    border-color: #E2E8F0;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+    transform: translateY(-2px);
+}
+
+.notificacao-card.nao-lida {
+    border-left: 3.5px solid #0E8F1A;
+}
+
+/* Área Esquerda (Avatar + Conteúdo) */
+.notif-corpo-principal {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex: 1;
+    min-width: 0;
+}
+
+/* Avatar e Indicador */
+.notif-avatar-wrapper {
+    position: relative;
+    width: 54px;
+    height: 54px;
+    flex-shrink: 0;
+}
+
+.notif-avatar-img {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    background: #F1F5F9;
+}
+
+.notif-avatar-wrapper.avatar-ring-verde .notif-avatar-img {
+    border: 2.5px solid #22C55E;
+    box-sizing: border-box;
+}
+
+/* Indicadores de tipo no avatar (Ícones clean outline no lugar de bolinhas coloridas) */
+.avatar-badge-ponto {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    border: 2px solid #FFFFFF;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.06);
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #334155;
+    z-index: 2;
+}
+
+.avatar-badge-ponto svg {
+    display: block;
+    width: 11px;
+    height: 11px;
+    stroke: currentColor;
+    flex-shrink: 0;
+}
+
+.avatar-badge-ponto.badge-tipo-mensagem,
+.avatar-badge-ponto.badge-tipo-avaliacao,
+.avatar-badge-ponto.badge-tipo-favorito,
+.avatar-badge-ponto.badge-tipo-outline,
+.avatar-badge-ponto.laranja,
+.avatar-badge-ponto.roxa,
+.avatar-badge-ponto.vermelha {
+    background: #FFFFFF;
+    color: #334155;
+}
+
+[data-theme="dark"] .avatar-badge-ponto {
+    background: #1A222A;
+    border-color: #1F2831;
+    color: #E2E8F0;
+    box-shadow: 0 1.5px 5px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .avatar-badge-ponto.badge-tipo-mensagem,
+[data-theme="dark"] .avatar-badge-ponto.badge-tipo-avaliacao,
+[data-theme="dark"] .avatar-badge-ponto.badge-tipo-favorito,
+[data-theme="dark"] .avatar-badge-ponto.badge-tipo-outline,
+[data-theme="dark"] .avatar-badge-ponto.laranja,
+[data-theme="dark"] .avatar-badge-ponto.roxa,
+[data-theme="dark"] .avatar-badge-ponto.vermelha {
+    background: #1A222A;
+    color: #E2E8F0;
+}
+
+/* Textos da Notificação */
+.notif-conteudo-central {
+    flex: 1;
+    min-width: 0;
+}
+
+.notif-tag-nova {
+    display: inline-block;
+    background: #DCFCE7;
+    color: #166534;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-bottom: 4px;
+    line-height: 1.3;
+}
+
+.notif-titulo {
+    font-size: 15.5px;
+    font-weight: 700;
+    color: #0F172A;
+    margin: 0 0 3px 0;
+    line-height: 1.35;
+}
+
+.notif-descricao {
+    font-size: 13.5px;
+    color: #475569;
+    margin: 0 0 6px 0;
+    line-height: 1.45;
+    word-break: break-word;
+}
+
+.notif-tempo-meta {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #94A3B8;
+    font-size: 12.5px;
+    font-weight: 500;
+}
+
+.notif-tempo-meta svg {
+    flex-shrink: 0;
+}
+
+/* Área Central (Mídia: Thumbnail ou Estrelas) */
+.notif-midia-preview {
+    flex-shrink: 0;
+    width: 104px;
+    min-width: 104px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+}
+
+.notif-thumb-produto {
+    width: 62px;
+    height: 62px;
+    border-radius: 12px;
+    object-fit: cover;
+    background: #F1F5F9;
+    border: 1px solid #E2E8F0;
+    display: block;
+}
+
+.notif-estrelas-avaliacao {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    color: #F59E0B;
+}
+
+/* Divisor Vertical Sutil */
+.notif-divisor-vertical {
+    width: 1px;
+    height: 36px;
+    background: #E2E8F0;
+    margin: 0 14px;
+    flex-shrink: 0;
+}
+
+/* Coluna de Ação à Direita */
+.notif-coluna-acao {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 174px;
+    min-width: 174px;
+    justify-content: flex-end;
+}
+
+.btn-notif-acao-primaria {
+    background: #0E8F1A;
+    color: #FFFFFF;
+    font-weight: 700;
+    font-size: 13px;
+    border-radius: 7px;
+    height: 36px;
+    width: 138px;
+    min-width: 138px;
+    max-width: 138px;
+    box-sizing: border-box;
+    padding: 0 8px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(14, 143, 26, 0.2);
+    font-family: inherit;
+    flex-shrink: 0;
+}
+
+.btn-notif-acao-primaria:hover {
+    background: #0B7315;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(14, 143, 26, 0.3);
+    color: #FFFFFF;
+}
+
+.btn-notif-acao-primaria svg {
+    flex-shrink: 0;
+}
+
+/* Botão discreto de excluir notificação */
+.btn-excluir-notif-card {
+    background: transparent;
+    border: none;
+    color: #94A3B8;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.btn-excluir-notif-card:hover {
+    color: #EF4444;
+    background: #FEF2F2;
+}
+
+/* ==========================================================================
+   Estado Vazio
+   ========================================================================== */
+.notificacoes-vazio {
+    background: #FFFFFF;
+    border: 1px dashed #CBD5E1;
+    border-radius: 16px;
+    padding: 60px 24px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.notificacoes-vazio-icone {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: rgba(14, 143, 26, 0.1);
+    color: #0E8F1A;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.notificacoes-vazio h2 {
+    font-size: 19px;
+    font-weight: 800;
+    color: #0F172A;
+    margin: 0 0 8px 0;
+}
+
+.notificacoes-vazio p {
+    color: #64748B;
+    font-size: 14.5px;
+    max-width: 440px;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* ==========================================================================
+   Responsividade Mobile (<= 768px)
+   ========================================================================== */
+@media (max-width: 768px) {
+    .notificacoes-container {
+        padding: 0 16px;
+        margin-top: 16px;
+    }
+
+    .notificacoes-card {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 16px;
+        gap: 14px;
+    }
+
+    .notif-corpo-principal {
+        width: 100%;
+        align-items: flex-start;
+    }
+
+    .notif-midia-preview {
+        margin-left: 0;
+    }
+
+    .notif-divisor-vertical {
+        display: none;
+    }
+
+    .notif-coluna-acao {
+        width: 100%;
+        justify-content: flex-end;
+        padding-top: 10px;
+        border-top: 1px solid #F1F5F9;
+    }
+
+    .btn-notif-acao-primaria {
+        width: 100%;
+    }
+}

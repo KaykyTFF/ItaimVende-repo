@@ -1,0 +1,177 @@
+/* ==========================================================================
+   RESPONSIVIDADE (MOBILE & TABLET)
+   ========================================================================== */
+@media (max-width: 768px) {
+    .vendedor-page-wrapper {
+        padding: 0 12px;
+        margin: 14px auto 40px;
+    }
+
+    .vendedor-breadcrumb {
+        font-size: 12.5px;
+        margin-bottom: 14px;
+    }
+
+    .vendedor-banner-acoes {
+        width: 100%;
+        margin-top: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .btn-banner-wpp,
+    .btn-banner-compartilhar {
+        width: 100% !important;
+        justify-content: center !important;
+        box-sizing: border-box !important;
+    }
+
+    .vendedor-stats-grid {
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        gap: 8px;
+        margin-bottom: 18px;
+        width: 100%;
+    }
+
+    .stat-vendedor-card,
+    .vendedor-stat-card {
+        flex: 1 1 0;
+        min-width: 0;
+        background: #ffffff;
+        border-radius: 14px;
+        padding: 10px 6px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        gap: 5px;
+        min-height: 82px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+        border: 1px solid #edf2ee;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        box-sizing: border-box;
+    }
+
+    .stat-icone-wrapper {
+        width: 34px;
+        height: 34px;
+        min-width: 34px;
+        margin: 0 auto;
+        background-color: rgba(56, 161, 41, 0.12);
+        color: #38A129;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .stat-icone-wrapper svg {
+        width: 17px;
+        height: 17px;
+    }
+
+    .stat-dados-textos {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        width: 100%;
+        min-width: 0;
+    }
+
+    .stat-valor-num {
+        font-size: 16px;
+        font-weight: 800;
+        color: #1E272E;
+        line-height: 1.15;
+    }
+
+    .stat-rotulo-txt {
+        font-size: 11px;
+        color: #64748B;
+        font-weight: 500;
+        white-space: normal;
+        word-break: normal;
+        line-height: 1.2;
+        margin-top: 1px;
+    }
+
+    .vendedor-anuncios-header-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+
+    .vendedor-filtro-box {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .vendedor-select-ordem {
+        flex: 1;
+    }
+
+    .grade-produtos-vendedor {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 10px !important;
+    }
+
+    .vendedor-duas-colunas {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .card-secao-vendedor {
+        padding: 18px 14px;
+        border-radius: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .grade-produtos-vendedor {
+        gap: 8px !important;
+    }
+
+    .vendedor-stats-grid {
+        gap: 6px;
+        margin-bottom: 16px;
+    }
+
+    .stat-vendedor-card,
+    .vendedor-stat-card {
+        padding: 8px 4px;
+        min-height: 76px;
+    }
+
+    .stat-icone-wrapper {
+        width: 30px;
+        height: 30px;
+        min-width: 30px;
+    }
+
+    .stat-icone-wrapper svg {
+        width: 15px;
+        height: 15px;
+    }
+
+    .stat-valor-num {
+        font-size: 14.5px;
+    }
+
+    .stat-rotulo-txt {
+        font-size: 10px;
+    }
+}
+
+/* Ocultar listras geométricas decorativas do banner do vendedor */
+.perfil-banner-stripes,
+.perfil-banner-stripes-desktop,
+.perfil-banner-stripes-mobile {
+    display: none !important;
+}
+
