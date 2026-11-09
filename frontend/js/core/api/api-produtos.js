@@ -34,10 +34,44 @@
             });
 
             const queryStr = params.toString() ? `?${params.toString()}` : '';
-            return getCore().requisicao(`/products${queryStr}`, {
+            const res = await getCore().requisicao(`/products${queryStr}`, {
                 method: 'GET',
                 headers: getCore().obterHeaders(true)
             });
+
+            if (res && Array.isArray(res.data)) {
+                let excluidosSet = new Set();
+                let statusMap = {};
+                try {
+                    const arr = JSON.parse(localStorage.getItem('itaim_produtos_excluidos') || '[]');
+                    if (Array.isArray(arr)) excluidosSet = new Set(arr.map(String));
+                } catch (_) {}
+                try {
+                    statusMap = JSON.parse(localStorage.getItem('itaim_produtos_status_map') || '{}') || {};
+                } catch (_) {}
+
+                // Sincroniza silenciosamente no servidor qualquer exclusão pendente em itaim_produtos_excluidos
+                const token = localStorage.getItem('itaim_token') || '';
+                if (token && !token.startsWith('mock_') && excluidosSet.size > 0) {
+                    res.data.forEach(p => {
+                        if (p && p.id && excluidosSet.has(String(p.id))) {
+                            getCore().requisicao(`/products/${encodeURIComponent(p.id)}`, {
+                                method: 'DELETE',
+                                headers: getCore().obterHeaders(true)
+                            }).catch(() => {});
+                        }
+                    });
+                }
+
+                res.data = res.data
+                    .filter(p => p && !p.deletedAt && !excluidosSet.has(String(p.id)))
+                    .map(p => {
+                        const sId = String(p.id);
+                        return statusMap[sId] ? { ...p, status: statusMap[sId] } : p;
+                    });
+            }
+
+            return res;
         },
 
         /**
