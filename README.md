@@ -13,19 +13,17 @@
 
 ---
 
-# Itaim Vende API - Plataforma de Marketplace e Intermediacao Comercial
+# Itaim Vende
 
-Versao da API: 2.0.0  
-Padrao de Especificacao: OpenAPI 3.0.3  
-Ambiente Base: Node.js (ES Modules) com Express.js e PostgreSQL  
+Plataforma digital de marketplace voltada para a comercializacao e intermediacao de produtos novos, seminovos e usados.
 
 ---
 
 ## Sumario
 
 - [1. Nome e Apresentacao do Projeto](#1-nome-e-apresentacao-do-projeto)
-- [2. Principais Funcionalidades](#2-principais-funcionalidades)
-- [3. Diferenciais Tecnicos](#3-diferenciais-tecnicos)
+- [2. Funcionalidades do Marketplace](#2-funcionalidades-do-marketplace)
+- [3. Diferenciais da Plataforma](#3-diferenciais-da-plataforma)
 - [4. Tecnologias Utilizadas](#4-tecnologias-utilizadas)
 - [5. Arquitetura do Sistema](#5-arquitetura-do-sistema)
 - [6. Estrutura de Diretorios](#6-estrutura-de-diretorios)
@@ -49,99 +47,73 @@ Ambiente Base: Node.js (ES Modules) com Express.js e PostgreSQL
 
 ## 1. Nome e Apresentacao do Projeto
 
-O **Itaim Vende API** e uma solucao de backend RESTful projetada para intermediacao comercial, compra e venda de mercadorias e negociacao direta em mercados regionais.
+O **Itaim Vende** e uma plataforma de marketplace desenvolvida para conectar compradores e vendedores de forma direta, promovendo a circulacao comercial em polos regionais do interior do Piaui, com foco em Paulistana e nos municipios que integram o Vale do Itaim.
 
-### Proposito e Problema Resolvido
+### Proposito da Plataforma
 
-A plataforma atende a polos comerciais interioranos e produtores locais que dependem de intermediarios genericos de grande porte, os quais cobram taxas elevadas e nao oferecem filtros contextuais para municipios vizinhos, localidades rurais e habitos de retirada presencial. O Itaim Vende conecta vendedores e compradores de forma direta, com baixa latencia, busca fonetica regional e integridade relacional.
+A solucao oferece um canal proprio e acessivel para que comerciantes locais, pequenos produtores rurais, prestadores de servicos e moradores possam divulgar mercadorias, negociar precos em tempo real e concluir transacoes sem a cobranca de tarifas abusivas de intermediarios genericos, respeitando a realidade logistica e os habitos de retirada presencial da regiao.
 
-### Usuarios Principais
+### Perfis de Usuarios no Marketplace
 
-- **Compradores (BUYER):** Moradores locais que buscam produtos, enviam propostas de preco, avaliam vendedores e gerenciam favoritos e enderecos.
-- **Vendedores e Produtores (SELLER):** Comerciantes e produtores rurais que cadastram anuncios, recebem propostas de negociacao e acompanham pedidos.
-- **Moderadores e Administradores (MODERATOR / ADMIN):** Equipe responsavel pela triagem de denuncias, remocao preventiva de anuncios fraudulentos, auditoria de contas e conformidade da plataforma.
-
-### Funcionalidades Centrais
-
-A plataforma engloba autenticacao com JWT e Google OAuth2, catalogo com busca fonetica unaccent, pedidos com validacao financeira estrita no servidor, chat em tempo real com WebSockets, avaliacoes com notas e comentarios, lista de favoritos, denuncias com purga de imagens e governanca de dados cadastrais.
+- **Compradores (`BUYER`):** Navegam pelo catalogo, utilizam busca com tolerancia a erros de digitacao, enviam contrapropostas no chat, salvam itens favoritos, avaliam vendedores e gerenciam seus pedidos e enderecos.
+- **Vendedores (`SELLER`):** Publicam e gerenciam anuncios com fotos, definem condicoes de venda, recebem propostas de compradores e acompanham o status de pedidos.
+- **Moderadores e Administradores (`MODERATOR` / `ADMIN`):** Realizam a triagem de denuncias, revisao cautelar e remocao preventiva de anuncios irregulares, zelando pela conformidade e seguranca da comunidade.
 
 ---
 
-## 2. Principais Funcionalidades
+## 2. Funcionalidades do Marketplace
 
-O sistema implementa 12 dominios funcionais estruturados:
+A plataforma entrega uma experiencia completa de marketplace estruturada nas seguintes areas funcionais:
 
-1. **Gestao de Identidade e Autenticacao:**
-   - Cadastro de contas com hash bcrypt e validacao de complexidade de senha.
-   - Autenticacao stateless via JSON Web Token (Bearer JWT).
-   - Suporte a autenticacao federada via Google OAuth2.
-   - Recuperacao de senha por e-mail com envio de codigo OTP de 6 digitos e protecao contra tentativas excessivas.
-   - Perfil de usuario com suporte a atualizacao cadastral, bio, telefone e foto de avatar.
+1. **Cadastro, Login e Gestao de Usuarios:**
+   - Registro de conta com criptografia de senha e suporte a login rapido com Google OAuth2.
+   - Gestao de perfil pessoal com biografia, foto de avatar, telefone e multiplos enderecos de entrega ou retirada.
+   - Fluxos de seguranca para recuperacao de senha e confirmacao de e-mail e celular por codigo OTP de 6 digitos.
+   - Intervalo compulsorio de 30 dias para alteracao do nome de usuario (`@username`) e token de reversao emergencial de seguranca.
 
-2. **Governanca e Seguranca de Conta:**
-   - Alteracao controlada do nome de usuario (`@username`) com verificacao de termos reservados e janela de retencao (cooldown) de 30 dias entre alteracoes.
-   - Verificacao de disponibilidade de nome de usuario em tempo real.
-   - Fluxo seguro de alteracao de e-mail com validacao de senha atual e codigo OTP enviado ao novo endereco.
-   - Fluxo seguro de alteracao de telefone/WhatsApp com confirmacao por codigo OTP e cooldown de 7 dias.
-   - Reversao emergencial de numero de telefone atraves de token assinado de seguranca (`POST /account/phone-reversals`).
-   - Preferencias de notificacao do usuario por canal (mensagens, avaliacoes, favoritos e novidades).
+2. **Criacao, Edicao e Gestao de Anuncios:**
+   - Publicacao de produtos com titulo, descricao detalhada, preco, condicao de uso (novo, seminovo, usado ou com defeito) e localizacao.
+   - Upload de multiplas imagens com conversao automatica para WebP e armazenamento em nuvem.
+   - Painel "Meus Anuncios" para atualizacao de dados, fotos e encerramento de publicacoes ativas com controle estrito de propriedade.
 
-3. **Catalogo de Produtos e Anuncios:**
-   - Publicacao de anuncios com titulo, descricao, preco, condicao de uso (NOVO, SEMINOVO, USADO, DEFEITO) e localizacao.
-   - Upload e vinculacao de multiplas imagens com ordenacao customizada.
-   - Consulta publica detalhada de anuncios por identificador ou slug semantico.
-   - Edicao e exclusao de anuncios com controle estrito de propriedade (somente o anunciante proprietario ou administradores).
-   - Busca textual com normalizacao fonetica e filtros combinados por categoria, cidade, bairro, preco e ordenacao.
+3. **Pesquisa e Navegacao por Categorias:**
+   - Catalogo estruturado por departamentos comerciais com carregamento otimizado via cache HTTP.
+   - Filtros combinados por categoria, faixa de preco, condicao de uso e localizacao (municipios e bairros do Vale do Itaim).
+   - Busca fonetica tolerante a acentos (`unaccent`), garantindo que buscas por "eletronicos" encontrem anuncios cadastrados como "Eletrônicos".
 
-4. **Categorias de Mercado:**
-   - Consulta de departamentos e categorias ativas com cabecalho HTTP `Cache-Control: public, max-age=300`.
+4. **Visualizacao de Produtos:**
+   - Pagina de detalhes do anuncio com galeria de fotos, especificacoes, dados de localizacao, perfil publico do anunciante e reputacao.
+   - Slugs semanticos amigaveis para compartilhamento e navegacao.
 
-5. **Intermediacao de Pedidos e Checkout:**
-   - Criacao de ordens com recalculado compulsorio de valores no servidor, garantindo integridade financeira e impedindo manipulacoes client-side.
-   - Consulta de historico de pedidos efetuados pelo comprador com detalhes de itens e endereco de entrega.
-   - Acompanhamento de status da ordem (pendente, aprovado, entregue, cancelado).
+5. **Conversas e Negociacao em Tempo Real:**
+   - Central de mensagens instantaneas integrada entre comprador e vendedor via WebSockets.
+   - Envio formal de contrapropostas de preco com botoes para aceite ou recusa direta no chat.
+   - Disparo automatico de notificacao por e-mail quando o usuario de destino estiver desconectado.
 
-6. **Chat e Negociacao em Tempo Real:**
-   - Abertura de conversas vinculadas a anuncios especificos entre comprador e vendedor.
-   - Troca de mensagens instantaneas via WebSockets (`socket.io`).
-   - Envio formal de contrapropostas de preco com atualizacao atomica de status (aceitar ou recusar via `PATCH /chat/messages/:id/status`).
-   - Contingencia automatica para envio de e-mail transacional caso o destinatario esteja offline no momento da mensagem.
+6. **Favoritos e Avaliacoes:**
+   - Lista de desejos para salvar e gerenciar anuncios favoritos com operacoes idempotentes.
+   - Sistema de reputacao com notas de 1 a 5 estrelas e comentarios descritivos sobre vendedores, com limite de uma avaliacao por comprador.
 
-7. **Reputacao e Avaliacoes:**
-   - Publicacao de avaliacoes com notas numericas (1 a 5 estrelas) e comentarios descritivos sobre vendedores.
-   - Consulta publica da reputacao do vendedor com media ponderada e contagem total de avaliacoes.
-   - Exclusao de avaliacoes restrita ao autor da postagem ou moderadores.
+7. **Gerenciamento e Acompanhamento de Pedidos:**
+   - Emissao de pedidos de compra com recalculo de valores obrigatoriamente no servidor, prevenindo adulteracoes no navegador.
+   - Painel de historico para consulta de pedidos emitidos, itens vinculados, endereco selecionado e status de atendimento.
 
-8. **Favoritos:**
-   - Gerenciamento idempotente de anuncios favoritados (`GET`, `PUT` e `DELETE` em `/favorites/:productId`).
-   - Listagem completa dos anuncios salvos pelo usuario logado.
+8. **Notificacoes:**
+   - Central de avisos transacionais para atualizacoes de negociacoes, novos pedidos, mensagens e marcacao de leitura em lote.
 
 9. **Denuncias e Moderacao:**
-   - Registro de denuncias de irregularidades em anuncios por qualquer usuario, com geracao de protocolo de acompanhamento.
-   - Painel restrito a moderadores e administradores para triagem e revisao de ocorrencias pendentes.
-   - Remocao sumaria de anuncios fraudulentos (`DELETE /reports/:id/product`) com purga automatica de arquivos no armazenamento de nuvem.
-
-10. **Enderecos:**
-    - Cadastro, consulta e remocao de multiplos enderecos residenciais e de retirada para o usuario.
-
-11. **Notificacoes:**
-    - Central de notificacoes transacionais com listagem e marcacao de leitura em lote (`PATCH /notifications/read-all`).
-
-12. **Pipeline de Midia e Imagens:**
-    - Upload via `multipart/form-data` com auto-rotacao baseada em metadados EXIF de smartphones.
-    - Redimensionamento proporcional e compressao em formato WebP de alta densidade via biblioteca Sharp.
-    - Persistencia no Supabase Storage com fallback para disco local em desenvolvimento.
+   - Canal de reporte de irregularidades com geracao de protocolo para acompanhamento.
+   - Painel exclusivo para moderadores e administradores realizarem triagem, revisao e exclusao cautelar de anuncios fraudulentos com expurgo automatico de fotos na nuvem.
 
 ---
 
-## 3. Diferenciais Tecnicos
+## 3. Diferenciais da Plataforma
 
-- **Busca Fonetica com Extensao PostgreSQL unaccent:** A busca textual da API normaliza caracteres acentuados diretamente na camada de banco de dados (`unaccent_text(lower(...))`), assegurando que termos informados sem diacriticos localizem conteudos cadastrados com acento (por exemplo, "eletronicos" encontra "Eletronicos").
-- **Calculo Financeiro Confinado ao Servidor:** Na emissao de pedidos (`POST /orders`), a API ignora precos enviados no corpo da requisicao e consulta os valores reais vigentes na tabela de produtos, prevenindo ataques de adulteracao de parametros financeiros.
-- **Governanca de Credenciais com Cooldown e Rollback Token:** Alteracoes no `@username` ativam um bloqueio transacional de 30 dias registrado em tabela historica de auditoria (`UsernameHistory`). Trocas de numero de telefone emitem um token de reversao criptografado com validade temporaria, permitindo desfazer alteracoes nao autorizadas de imediato.
-- **Negociacao em Tempo Real com Notificacao Hibrida:** O chat opera sobre conexao WebSocket com baixa latencia. Caso o destinatario nao esteja conectado ao socket no instante do envio, o backend enfileira e dispara um e-mail transacional via Resend ou Nodemailer.
-- **Conformidade RESTful Estrita com Aliases de Compatibilidade:** Todas as rotas canonicas utilizam substantivos no plural, verbos HTTP semanticos (`PUT` e `DELETE` para recursos idempotentes, `PATCH` para estados) e identificadores em path parameters, mantendo rotas legadas ativas como aliases para nao interromper clientes existentes.
-- **Verificacao de Permissoes em Tempo Real:** O middleware de autenticacao consulta a base de dados em cada requisicao autenticada para atestar se o usuario permanece ativo e com o papel informado, garantindo que suspensoes ou alteracoes de privileges (RBAC) surtam efeito imediato.
+- **Busca Regional Fonetica:** Pesquisa otimizada com extensao nativa PostgreSQL `unaccent`, permitindo localizar mercadorias digitando termos sem acentuacao no celular.
+- **Negociacao Dinamica no Chat:** Baloes interativos de proposta financeira integrados a conversa, permitindo fechar combinados de valor de forma agil.
+- **Seguranca Financeira no Servidor:** O checkout recalcula compulsoriamente os precos consultando a base de dados, ignorando quaisquer valores adulterados client-side.
+- **Governanca Contra Fraudes:** Janela de seguranca de 30 dias para mudanca de nome de usuario (`@username`) e mecanismo de reversao emergencial de telefone para coibir golpes cadastrais.
+- **Interface Responsiva e Tema Escuro:** Design limpo adaptado a dispositivos moveis, com carregamento suave via Skeleton Shimmer e suporte completo a modo escuro.
 
 ---
 
@@ -174,224 +146,62 @@ A selecao de tecnologias apoia-se em componentes consolidados do ecossistema Nod
 
 ## 5. Arquitetura do Sistema
 
-O sistema e estruturado no padrao de arquitetura em camadas desacopladas:
+O backend utiliza arquitetura em camadas, separando o recebimento das requisições, as regras de negócio e o acesso aos dados.
 
-```
-+-------------------------------------------------------------+
-|                     Cliente HTTP / SPA                      |
-+------------------------------+------------------------------+
-                               | Requisicao HTTP / JSON
-                               v
-+-------------------------------------------------------------+
-|                      Camada de Entrada                      |
-|   - Express Router (/api/v1)                                |
-|   - Middlewares Globais (CORS, Helmet, Rate Limit)          |
-+------------------------------+------------------------------+
-                               |
-                               v
-+-------------------------------------------------------------+
-|                    Camada de Middlewares                    |
-|   - Autenticacao (authenticateToken - Bearer JWT)           |
-|   - Autorizacao RBAC (requireRole)                          |
-|   - Validacao de Esquemas (validate - Zod)                  |
-+------------------------------+------------------------------+
-                               |
-                               v
-+-------------------------------------------------------------+
-|                    Camada de Controllers                    |
-|   - Extracao de parametros (body, params, query)            |
-|   - Invocacao dos servicos de dominio                       |
-|   - Formatacao de respostas e status HTTP (200, 201, 204)   |
-+------------------------------+------------------------------+
-                               |
-                               v
-+-------------------------------------------------------------+
-|                     Camada de Services                      |
-|   - Logica de negocio, regras de dominio e validacoes       |
-|   - Recalculo de precos e operacoes transacionais           |
-|   - Despacho de eventos (Sockets e E-mails)                 |
-+------------------------------+------------------------------+
-                               |
-                               v
-+-------------------------------------------------------------+
-|                Camada de Acesso a Dados / ORM               |
-|   - Prisma Client (Instancia Singleton)                     |
-|   - Transacoes atomicas ($transaction)                      |
-+------------------------------+------------------------------+
-                               |
-                               v
-+-------------------------------------------------------------+
-|                  Banco de Dados PostgreSQL                  |
-|   - 12 tabelas relacionais com chaves estrangeiras          |
-|   - Indices Trigram e extensao unaccent                     |
-+-------------------------------------------------------------+
+```text
+Cliente HTTP
+    |
+Routes
+    |
+Middlewares
+    |
+Controllers
+    |
+Services
+    |
+Prisma Client
+    |
+PostgreSQL
 ```
 
-### Responsabilidade de Cada Camada
-
-- **Routes (`backend/src/routes`):** Mapeia os endpoints REST sob `/api/v1`, associando middlewares de autenticacao, autorizacao e validacao aos controladores.
-- **Middlewares (`backend/src/middlewares`):** Valida tokens JWT, fiscaliza permissoes RBAC, checa contratos Zod e captura excecoes operacionais de forma unificada.
-- **Controllers (`backend/src/controllers`):** Extrai dados da requisicao HTTP, direciona a chamada para o servico competente e entrega a resposta padronizada com o status HTTP correto.
-- **Services (`backend/src/services`):** Centraliza a totalidade das regras de negocio, integridade de precos, validacao de cooldowns, transacoes no banco e integracoes com APIs de terceiros.
-- **Prisma Client (`backend/src/config/prisma.js`):** Gerencia o pool de conexoes com o PostgreSQL e provê consultas relacionais tipadas.
-- **Schemas (`backend/src/schemas`):** Define os contratos formais de entrada com Zod para sanitizacao de payloads.
-- **Utils (`backend/src/utils`):** Classes e funcoes auxiliares compartilhadas, destacando a classe `AppError`.
+- **Routes:** definem os endpoints da API.
+- **Middlewares:** tratam autenticação, autorização, validação e erros.
+- **Controllers:** recebem as requisições e encaminham as operações.
+- **Services:** concentram as regras de negócio.
+- **Prisma:** realiza o acesso ao banco de dados.
+- **Schemas e Utils:** apoiam a validação dos dados e funções compartilhadas.
 
 ---
 
 ## 6. Estrutura de Diretorios
 
-O projeto e estruturado como um monorepo contendo os modulos desacoplados de **Backend** (API RESTful), **Frontend** (Interface Web Modular), documentacao do processo agil (**Scrum**) e artefatos de engenharia de software (**Docs**):
+O repositório está organizado em módulos de frontend, backend e documentação:
 
 ```text
-marketplace-frontend/ (Itaim Vende Monorepo)
-├── backend/                           # Modulo da API RESTful (Node.js, Express, Prisma, PostgreSQL)
-│   ├── prisma/
-│   │   ├── schema.prisma              # Modelos relacionais, enums e indices de banco
-│   │   └── seed.js                    # Script de povoamento inicial de dados
-│   ├── scripts/
-│   │   └── setup-unaccent.js          # Criacao de extensoes unaccent e indices Trigram no PostgreSQL
+ItaimVende-repo/
+├── backend/
+│   ├── prisma/          # Modelos e configuração do banco
 │   ├── src/
-│   │   ├── adapters/                  # Adaptadores de comunicacao externa
 │   │   ├── config/
-│   │   │   ├── env.js                 # Validacao rigorosa de variaveis de ambiente
-│   │   │   ├── prisma.js              # Instancia singleton do Prisma Client
-│   │   │   └── supabase.js            # Cliente Supabase Storage
-│   │   ├── controllers/               # Controladores HTTP desacoplados por dominio
-│   │   │   ├── account/               # Gestao de credenciais, email, phone e username
-│   │   │   ├── auth/                  # Identidade, login, registro, Google OAuth e perfil
-│   │   │   ├── category/              # Catalogo de categorias e departamentos
-│   │   │   ├── chat/                  # Conversas, mensagens e propostas de negociacao
-│   │   │   ├── favorite/              # Gestao idempotente de favoritos
-│   │   │   ├── order/                 # Emissao e historico de pedidos com calculo no servidor
-│   │   │   ├── product/               # Anuncios, consultas com busca fonetica e mutacoes
-│   │   │   ├── report/                # Registro e triagem de denuncias
-│   │   │   ├── review/                # Avaliacoes e reputacao de vendedores
-│   │   │   └── upload/                # Pipeline de processamento de fotos (Sharp WebP)
-│   │   ├── docs/
-│   │   │   ├── openapi.js             # Objeto de especificacao OpenAPI 3.0.3
-│   │   │   └── openapi.json           # Especificacao OpenAPI 3.0.3 serializada
+│   │   ├── controllers/
 │   │   ├── middlewares/
-│   │   │   ├── auth.middleware.js     # Validacao de token Bearer JWT e RBAC em tempo real
-│   │   │   ├── error.middleware.js    # Interceptador central e padronizador de erros (RFC 7807)
-│   │   │   ├── rateLimiter.js         # Limitador de requisicoes por IP contra forca bruta
-│   │   │   └── validate.middleware.js # Validacao de contratos e schemas Zod
-│   │   ├── routes/                    # Roteadores Express organizados por recurso (/api/v1)
-│   │   │   ├── account/
-│   │   │   ├── auth/
-│   │   │   ├── category/
-│   │   │   ├── chat/
-│   │   │   ├── favorite/
-│   │   │   ├── order/
-│   │   │   ├── product/
-│   │   │   ├── report/
-│   │   │   ├── review/
-│   │   │   ├── upload/
-│   │   │   ├── user/                  # Rotas publicas de vendedores (/users)
-│   │   │   └── index.js               # Agrupador oficial do prefixo /api/v1
-│   │   ├── schemas/                   # Esquemas de validacao Zod declarativos por recurso
-│   │   ├── services/                  # Regras de negocio, transacoes e integracoes
-│   │   │   ├── account/               # email, phone, username, preferences services
-│   │   │   ├── auth/                  # identity, profile, recovery services
-│   │   │   ├── category/
-│   │   │   ├── chat/
-│   │   │   ├── favorite/
-│   │   │   ├── order/
-│   │   │   ├── product/
-│   │   │   ├── report/
-│   │   │   └── review/
-│   │   ├── sockets/                   # Servidor WebSocket (Socket.io) para chat em tempo real
-│   │   ├── utils/
-│   │   │   └── AppError.js            # Classe de erro operacional padronizada
-│   │   └── server.js                  # Ponto de entrada do servidor HTTP e WebSocket
-│   ├── tests/                         # Suite completa de 88 testes automatizados
-│   │   ├── unit/                      # Testes unitarios puros (schemas Zod e regras de negocio)
-│   │   │   ├── formatters-and-rules.test.js
-│   │   │   └── schemas.test.js
-│   │   ├── account-email.test.js      # Testes de alteracao segura de e-mail e OTP
-│   │   ├── account-phone.test.js      # Testes de alteracao segura de telefone e cooldown
-│   │   ├── api.test.js                # Testes de integracao da API
-│   │   ├── notification.test.js       # Testes da central de notificacoes
-│   │   ├── rest-conformance.test.js   # Testes de conformidade REST e verbos HTTP
-│   │   └── username-cooldown.test.js  # Testes de regra de 30 dias para @
-│   ├── .env.example                   # Modelo de configuracao das variaveis locais
-│   └── package.json                   # Dependencias e scripts do modulo backend
-│
-├── frontend/                          # Modulo da Interface Web (HTML5, CSS3 Modular, Vanilla JS)
-│   ├── assets/                        # Imagens, logotipos, icones e banners
-│   ├── css/                           # Folhas de estilo modularizadas por contexto
-│   │   ├── header-global.css          # Cabecalho global e drawer responsivo
-│   │   ├── home.css                   # Vitrine inicial e banners
-│   │   ├── categoria.css              # Catalogo de departamentos e filtros
-│   │   ├── produto.css                # Detalhes do anuncio, galeria e contato
-│   │   ├── perfil.css                 # Painel do usuario e reputacao
-│   │   ├── vendedor.css               # Perfil publico de outros anunciantes
-│   │   ├── vender.css                 # Formulario de publicacao em etapas
-│   │   ├── meus-anuncios.css          # Gestao de anuncios do vendedor
-│   │   ├── favoritos.css              # Grid de anuncios favoritados
-│   │   ├── conversas.css              # Inbox de negociacao e chat
-│   │   ├── notificacoes.css           # Central de alertas e avisos
-│   │   ├── configuracoes.css          # Seguranca, @username, email e telefone
-│   │   ├── style.css                  # Folha de estilo base e autenticacao
-│   │   └── pages/                     # Modulos especializados (ex: admin/painel/)
-│   ├── js/                            # Camada de comportamento logico client-side
-│   │   ├── core/                      # Modulos centrais e utilitarios globais
-│   │   │   ├── api/                   # Cliente HTTP modular (auth, produtos, chat, upload)
-│   │   │   ├── rotas/                 # Resolvedor canonico de rotas e assets
-│   │   │   ├── sessao/                # Gestao de estado, token JWT e persistencia
-│   │   │   ├── componentes-globais/   # Navbar, drawer e cards unificados
-│   │   │   ├── produtos-dados/        # Formato e utilitarios de produtos
-│   │   │   ├── categorias/            # Mapeamento oficial de categorias
-│   │   │   ├── skeleton/              # Sistema unificado de carregamento shimmer
-│   │   │   └── ajustar-foto/          # Utilitario de recorte 1:1 de fotos
-│   │   └── pages/                     # Controladores especificos espelhados por pagina
-│   │       ├── auth/                  # Logica de login e cadastro
-│   │       ├── admin/                 # Painel de controle e observabilidade
-│   │       ├── home/                  # Feed principal e ordenacao
-│   │       ├── produtos/              # Visualizacao de anuncio e categorias
-│   │       ├── vender/                # Formulario e upload de fotos
-│   │       ├── mensagens/             # Negociacao, WebSockets e propostas
-│   │       ├── perfil/                # Perfil e configuracoes de conta
-│   │       ├── favoritos/             # Itens favoritados
-│   │       └── notificacoes/          # Gestao de notificacoes
-│   ├── pages/                         # Telas HTML organizadas por dominio de negocio
-│   │   ├── admin/                     # painel.html (Painel de Saude e Observabilidade)
-│   │   ├── auth/                      # cadastro.html
-│   │   ├── favoritos/                 # favoritos.html
-│   │   ├── home/                      # home.html
-│   │   ├── mensagens/                 # conversas.html e chat.html
-│   │   ├── notificacoes/              # notificacoes.html
-│   │   ├── perfil/                    # perfil.html, vendedor.html e configuracoes.html
-│   │   ├── produtos/                  # produto.html e categoria.html
-│   │   └── vender/                    # vender.html e meus-anuncios.html
-│   ├── 404.html                       # Pagina de erro 404 com arte regional
-│   ├── index.html                     # Portal de entrada e autenticacao
-│   └── reverter-telefone.html         # Tela de reversao emergencial de telefone
-│
-├── scrum/                             # Documentacao do Processo Agil (IFPI Campus Paulistana)
-│   ├── acordos.md                     # Product Goal, Papeis da Equipe, DoD (10 itens) e Acordos
-│   ├── product-backlog.md             # 13 Historias de Usuario (BDD), MoSCoW e Planning Poker
-│   ├── sprint-1/
-│   │   ├── planning.md                # Sprint Goal, Capacidade (24 pts), Fatias e Quadrantes Q1-Q4
-│   │   ├── dailies.md                 # 4 Registros de Daily Scrum e tratamento de impedimentos
-│   │   └── review-retro.md            # Demonstracao, Aceite do PO (V1 = 24 pts) e Acao MELH-1
-│   └── sprint-2/
-│       ├── planning.md                # Sprint Goal, Capacidade (28 pts), Inclusao de MELH-1
-│       ├── dailies.md                 # 3 Registros de Daily Scrum e tratamento de impedimentos
-│       └── review-retro.md            # Demonstracao, Aceite do PO (V2 = 28 pts) e Questoes Obrigatorias
-│
-├── docs/                              # Artefatos Formais de Engenharia de Testes
-│   └── testes/                        # Processo formal de testes em 5 fases
-│       ├── 01-plano-de-testes.md
-│       ├── 02-casos-de-teste-e-rastreabilidade.md
-│       ├── 03-execucao-e-relatorios-de-defeitos.md
-│       ├── 04-painel-de-metricas.md
-│       └── 05-relatorio-final-de-testes.md
-│
-├── itaim-vende.postman_collection.json # Colecao Postman oficial com 11 recursos
-├── package.json                       # Scripts orquestradores da raiz do monorepo
-├── CHANGELOG.md                       # Historico cronologico de versoes
-└── README.md                          # Documentacao tecnica central da aplicacao
+│   │   ├── routes/
+│   │   ├── schemas/
+│   │   ├── services/
+│   │   ├── sockets/
+│   │   └── utils/
+│   ├── tests/           # Testes automatizados
+│   └── .env.example
+├── frontend/
+│   ├── assets/
+│   ├── css/
+│   ├── js/
+│   └── pages/
+├── scrum/               # Registros das sprints
+├── docs/testes/         # Documentação do processo de testes
+├── itaim-vende.postman_collection.json
+├── package.json
+└── README.md
 ```
 
 ---
@@ -769,9 +579,7 @@ A API adota respostas uniformes em JSON. Em cenarios de falha, o middleware inte
 - `429 Too Many Requests`: Limite de taxa excedido no rate limiter.
 - `503 Service Unavailable`: Falha de conexao com o banco de dados.
 
-### Exemplos de Resposta de Erro
-
-#### Erro de Validacao de Dados (400 Bad Request)
+### Exemplo de Resposta de Erro (400 Bad Request)
 
 ```json
 {
@@ -782,56 +590,8 @@ A API adota respostas uniformes em JSON. Em cenarios de falha, o middleware inte
     {
       "field": "email",
       "message": "Informe um endereco de e-mail valido."
-    },
-    {
-      "field": "password",
-      "message": "A senha deve conter no minimo 6 caracteres."
     }
   ]
-}
-```
-
-#### Falha de Autenticacao (401 Unauthorized)
-
-```json
-{
-  "success": false,
-  "code": "UNAUTHORIZED",
-  "message": "Acesso nao autorizado. Token nao informado."
-}
-```
-
-#### Bloqueio por Regra de Negocio / Cooldown (403 Forbidden)
-
-```json
-{
-  "success": false,
-  "code": "USERNAME_CHANGE_COOLDOWN",
-  "message": "Voce so pode alterar seu nome de usuario a cada 30 dias. Proxima alteracao disponivel em 29 dias.",
-  "details": {
-    "nextAllowedDate": "2026-12-07T15:00:00.000Z",
-    "daysRemaining": 29
-  }
-}
-```
-
-#### Recurso Nao Encontrado (404 Not Found)
-
-```json
-{
-  "success": false,
-  "code": "NOT_FOUND",
-  "message": "O registro solicitado nao foi encontrado no banco de dados."
-}
-```
-
-#### Conflito de Duplicidade (409 Conflict)
-
-```json
-{
-  "success": false,
-  "code": "DUPLICATE_ENTRY",
-  "message": "Conflito de dados: ja existe um registro com o valor informado (username)."
 }
 ```
 
@@ -851,162 +611,52 @@ A interface Swagger documenta integralmente esquemas de dados de entrada e saida
 
 ## 17. Testes Automatizados
 
-A API conta com uma suite de **47 testes automatizados de integracao e conformidade RESTful**, executados diretamente sobre o runner de testes nativo do Node.js (`node:test` e `node:assert/strict`), sem adicao de dependencias externas.
+O projeto possui **88 testes automatizados**, executados com o Node.js Test Runner (`node:test`).
 
-### Como Executar os Testes
-
-Com o servidor backend ativo na porta 3000:
+Para executar os testes pela raiz do projeto:
 
 ```bash
 npm test
 ```
 
-Ou diretamente a partir da pasta `backend/`:
+Ou diretamente no backend:
 
 ```bash
 npm --prefix backend run test
 ```
 
-### Distribuicao das 5 Suites de Teste
+A suíte cobre autenticação, validação de dados, regras de negócio, notificações, operações da API e conformidade REST.
 
-1. **Conformidade RESTful Canônica (`backend/tests/rest-conformance.test.js` - 9 testes):**
-   - Validacao de `GET /users/:id` com retorno 200 de perfil publico ou 404 para ID inexistente.
-   - Listagem (`GET /users/:userId/reviews`) e publicacao (`POST /users/:userId/reviews`) de avaliacoes.
-   - Checagem em tempo real de disponibilidade de username via `GET /usernames/availability`.
-   - Idempotencia na adicao de favoritos (`PUT /favorites/:productId`).
-   - Idempotencia na remocao de favoritos (`DELETE /favorites/:productId`).
-   - Verificacao de status favoritado (`GET /favorites/:productId`).
-   - Aceitacao e rejeicao de propostas via `PATCH /chat/messages/:id/status`.
-   - Modificacao de denuncias e protecao de remocao via `DELETE /reports/:id/product`.
-   - Validacao de payload no endpoint `POST /account/phone-reversals`.
+**Último resultado registrado no projeto:**
 
-2. **Integridade da API e Seguranca (`backend/tests/api.test.js` - 14 testes):**
-   - Healthcheck operacional com 200 em `GET /health`.
-   - Presenca do cabecalho `Cache-Control` em `GET /categories`.
-   - Paginacao e ordenacao estruturada em `GET /products`.
-   - Busca fonetica regional via extensao PostgreSQL `unaccent`.
-   - Rejeicao de credenciais incorretas com 401 em `POST /auth/login`.
-   - Bloqueio de rotas privadas sem token com 401 em `GET /auth/me`.
-   - Validacao de esquemas Zod com 400 em `POST /auth/register`.
-   - Controle de acesso RBAC com 403 em `GET /reports` para perfil BUYER.
-   - Protecao contra enumeracao de compradores em `GET /users/:id`.
-   - Protecao contra forca bruta em codigos de verificacao OTP.
-   - Resposta uniforme 404 em rotas inexistentes.
-   - Bloqueio de pedidos nao autenticados com 401 em `POST /orders`.
-   - Autenticacao federada Google via `POST /auth/google`.
-   - Cadastro real com geracao de hash bcrypt e emissao de JWT em `POST /auth/register`.
+| Indicador | Resultado |
+| :--- | :---: |
+| Testes executados | 88 |
+| Aprovados | 88 |
+| Falhas | 0 |
+| Cobertura de regras de negócio | 97,03% |
 
-3. **Fluxo Seguro de Alteracao de E-mail (`backend/tests/account-email.test.js` - 5 testes):**
-   - Rejeicao de solicitacao com senha incorreta (401).
-   - Bloqueio ao solicitar o mesmo e-mail atualmente ativo (400).
-   - Envio de codigo OTP de 6 digitos sob validacao de credenciais (200).
-   - Rejeicao de codigo incorreto com rastreamento de tentativas falhas (400).
-   - Confirmacao atômica de novo e-mail no banco e invalidacao de tokens pendentes (200).
-
-4. **Fluxo Seguro de Telefone / WhatsApp (`backend/tests/account-phone.test.js` - 10 testes):**
-   - Rejeicao com senha incorreta (401).
-   - Bloqueio preventivo sem vazamento de dados para numero em uso (409).
-   - Envio de codigo OTP criptografado (200).
-   - Bloqueio de codigo incorreto e controle de tentativas (400).
-   - Confirmacao de codigo, ativacao do status verificado e persistencia (200).
-   - Bloqueio de nova troca dentro da janela de cooldown de 7 dias (403).
-   - Reversao imediata de numero via token assinado (200).
-   - Suporte a contas originadas do Google OAuth para envio de OTP (200).
-   - Desvinculacao segura de telefone mediante confirmacao de credenciais (200).
-   - Bloqueio de alteracao indevida de telefone via endpoint geral de perfil (400).
-
-5. **Regra de Cooldown de 30 Dias para Username (`backend/tests/username-cooldown.test.js` - 9 testes):**
-   - Alteracao bem-sucedida de `@username` e gravacao em historico de auditoria (200).
-   - Bloqueio imediato de segunda tentativa com 403 e dias restantes.
-   - Persistencia do bloqueio apos encerramento e reinicio de sessao.
-   - Persistencia do bloqueio em multiplos dispositivos via consulta de perfil.
-   - Bloqueio de bypass de username via endpoint generico `PUT /auth/profile` (400).
-   - Liberacao automatica de alteracao apos transcorridos os 30 dias.
-   - Rejeicao com 409 em nome duplicado sem consumir o prazo de alteracao.
-   - Alteracao de outros campos de perfil sem ativacao indevida do cooldown.
-   - Precisao matematica no calculo de dias restantes e data limite.
-
-6. **Suite de Testes Unitarios — Schemas e Validacoes Zod (`backend/tests/unit/schemas.test.js` - 20 testes):**
-   - Validacao de limites de comprimento (AVL) para username (3 a 20 caracteres).
-   - Bloqueio de caracteres especiais e lista de palavras reservadas do sistema.
-   - Schemas de formatacao estrita para e-mails e codigos OTP de 6 digitos.
-   - Schemas de validacao de celulares brasileiros e nono digito obrigatorio.
-   - Schemas de cadastro de produtos, regras de preco nao negativo e enums.
-   - Schemas de checkout de ordens (`createOrderSchema`) com regras de integridade.
-
-7. **Suite de Testes Unitarios — Regras de Negocio e Formatadores (`backend/tests/unit/formatters-and-rules.test.js` - 10 testes):**
-   - Calculo matematico de cooldown de 30 dias com precisao temporal em milissegundos.
-   - Sanitizacao e normalizacao de telefones para formato E.164 brasileiro.
-   - Calculo compulsorio de totais de pedidos e formatacao monetaria de centavos.
-   - Rejeicao de itens inexistentes ou manipulacoes client-side de preco.
-
-8. **Suite de Testes do Fluxo de Notificacoes (`backend/tests/notifications.test.js` - 11 testes):**
-   - Listagem paginada, filtros por tipo (mensagem, avaliacao), ordenacao e contadores.
-   - Marcacao de leitura individual e em lote.
-   - Isolamento de dados entre usuarios (usuario A nao acessa notificacoes do usuario B).
-
-### Resultado Verificado da Suite Automatizada
-
-```text
-Suite de Testes Unitarios — Schemas e Validacoes de Entrada (Zod) (20/20)
-Suite de Testes Unitarios — Regras de Negocio e Formatadores Puros (10/10)
-Suite de Testes Automatizados — Sistema de Notificacoes Itaim Vende (11/11)
-Suite de Testes do Fluxo de Alteracao Segura de E-mail (/account/email) (5/5)
-Suite de Testes do Fluxo Seguro de WhatsApp / Celular (/account/phone) (10/10)
-Suite de Testes de Conformidade REST e Integracao da API Itaim Vende (14/14)
-Suite de Testes de Conformidade REST Canonica (Novas Rotas e Metodos) (9/9)
-Suite de Testes da Regra de Cooldown de 30 Dias e Historico para Username (@) (9/9)
-
-Total de testes: 88
-Suites executadas: 15
-Aprovados: 88 (100%)
-Falhas: 0
-Cobertura em Regras de Negocio: 97,03%
-```
+Os planos, casos de teste, registros de execução e métricas estão disponíveis em [`docs/testes/`](docs/testes/).
 
 ---
 
 ## 18. Colecao Postman
 
-A colecao oficial de endpoints para realizacao de testes manuais e integracoes encontra-se na raiz do projeto:
+A colecao para testes manuais esta disponivel na raiz do repositorio:
 
 [`itaim-vende.postman_collection.json`](itaim-vende.postman_collection.json)
 
-### Pastas e Recursos Contemplados na Colecao
+Para utilizar:
 
-- `01 - Diagnostico & Saude`: Testes do endpoint `GET /health`.
-- `02 - Autenticacao & Usuarios`: Registro, login, autenticacao Google, recuperacao de senha por OTP, consulta de perfil autenticado (`/auth/me`), perfil publico do vendedor (`/users/:id`), disponibilidade de username (`/usernames/availability`) e reversao de telefone (`/account/phone-reversals`).
-- `03 - Anuncios & Produtos`: Listagem paginada com busca fonetica unaccent, filtros compostos, publicacao de anuncios, consulta individual e exclusao.
-- `04 - Categorias`: Listagem de categorias com verificacao do cabecalho `Cache-Control`.
-- `05 - Chat & Negociacao`: Abertura de conversas, envio de mensagens e aceitacao/rejeicao de contrapropostas de valor (`PATCH /chat/messages/:id/status`).
-- `06 - Pedidos & Checkout`: Emissao de pedidos com calculo no servidor e listagem de ordens.
-- `07 - Favoritos`: Consulta de status, adicao idempotente (`PUT`), remocao idempotente (`DELETE`) e listagem de favoritos.
-- `08 - Avaliacoes (Reviews)`: Consulta e publicacao de avaliacoes vinculadas a vendedores (`/users/:userId/reviews`).
-- `09 - Denuncias & Moderacao`: Registro de denuncia, listagem no painel de moderadores e remocao cautelar de anuncios (`DELETE /reports/:id/product`).
-- `10 - Enderecos`: Listagem, cadastro e remocao de enderecos.
-- `11 - Notificacoes`: Listagem de avisos e marcacao de leitura em lote.
-
-### Como Utilizar
-
-1. Abra o Postman ou Insomnia.
-2. Selecione a opcao **Import** e escolha o arquivo `itaim-vende.postman_collection.json`.
-3. Configure a variavel de colecao `baseUrl` com o valor `http://localhost:3000/api/v1`.
-4. Ao efetuar login ou registro, o token retornado pode ser atribuido a variavel `token` para autenticar automaticamente as rotas privadas.
+1. Abra o Postman ou Insomnia e importe o arquivo.
+2. Configure `baseUrl` como `http://localhost:3000/api/v1`.
+3. Apos o login, informe o token JWT na variavel `token` para acessar as rotas protegidas.
 
 ---
 
 ## 19. Declaracao de Uso de Inteligencia Artificial
 
-Ferramentas de Inteligencia Artificial Generativa baseadas em modelos de linguagem (LLMs) foram empregadas como instrumento de apoio ao desenvolvimento, revisao, documentacao e elaboracao de testes deste projeto.
-
-### Atividades em que a IA foi Utilizada como Apoio
-
-1. **Refatoracao e Modularizacao Arquitetural:** Auxilio no desacoplamento de modulos monoliticos em camadas especializadas (*Controllers, Services, Middlewares e Schemas*), reduzindo acoplamento e reforcando o principio de responsabilidade unica.
-2. **Engenharia de Seguranca Defensiva:** Identificacao de vetores de vulnerabilidade em rotas HTTP, estruturacao de limitadores de taxa adaptativos (*rate limiting*) e validacao estrita de entradas contra injecao de parametros e manipulacao client-side de precos.
-3. **Pipeline de Imagens:** Parametrizacao dos comandos de manipulacao da biblioteca Sharp, aplicando auto-rotacao com base em flags EXIF de smartphones e compressao em WebP sem perda perceptual de qualidade.
-4. **Padronizacao de Contratos e Documentacao:** Apoio na estruturacao da especificacao formal OpenAPI 3.0.3 e consolidacao dos casos de teste para a suite de testes automatizados com o Node Test Runner nativo.
-
-Todas as regras de negocio, decisoes de modelagem de dados, algoritmos de calculo e codigos-fonte foram implementados, testados, validados e homologados diretamente pelos desenvolvedores responsaveis pela aplicacao.
+Foram utilizadas ferramentas de Inteligencia Artificial Generativa como apoio tecnico ao desenvolvimento e a documentacao deste projeto. Todas as decisoes de projeto, regras de negocio, arquitetura e validacoes foram concebidas, implementadas e homologadas pelos integrantes da equipe.
 
 ---
 
@@ -1102,11 +752,10 @@ A totalidade dos registros documentais do processo agil encontra-se versionada n
 
 ## 21. Processo e Engenharia de Testes
 
-A estrategia de garantia da qualidade da API Itaim Vende segue o processo formal de testes em cinco fases documentadas no diretorio [`docs/testes/`](docs/testes/):
+O processo de testes está documentado em [`docs/testes/`](docs/testes/) e dividido em cinco etapas:
 
-1. **Fase 1 — Planejamento ([01-plano-de-testes.md](docs/testes/01-plano-de-testes.md)):** Escopo, objetivos, niveis de teste (unidade, integracao, sistema e aceitacao), estrategia de automacao, riscos mapeados com planos de contingencia e criterios formais de entrada e saida.
-2. **Fase 2 — Projeto ([02-casos-de-teste-e-rastreabilidade.md](docs/testes/02-casos-de-teste-e-rastreabilidade.md)):** 20 casos de teste projetados com tecnicas formais de Particao de Equivalencia (PE), Analise de Valor Limite (AVL) e Tabela de Decisao (TD), integrados a Matriz de Rastreabilidade bidirecional.
-3. **Fase 3 — Execucao ([03-execucao-e-relatorios-de-defeitos.md](docs/testes/03-execucao-e-relatorios-de-defeitos.md)):** Log completo de execucao da suite de 88 testes automatizados e formalizacao de cinco relatorios de defeitos de engenharia (BUG-01 a BUG-05) com severidade e prioridade.
-4. **Fase 4 — Monitoramento e Controle ([04-painel-de-metricas.md](docs/testes/04-painel-de-metricas.md)):** Painel de metricas quantitativas de evolucao (ciclos T1 e T2), densidade de defeitos, velocidade de execucao (~430ms na suíte unitaria pura) e acoes de controle tomadas.
-5. **Fase 5 — Encerramento ([05-relatorio-final-de-testes.md](docs/testes/05-relatorio-final-de-testes.md)):** Relatorio final consolidado, avaliacao de cobertura de regras de negocio (97,03%), conformidade com o Modelo V e parecer formal de liberacao para homologacao.
-
+1. **Planejamento:** escopo, objetivos, estratégia, riscos e critérios de entrada e saída.
+2. **Projeto:** casos de teste e matriz de rastreabilidade.
+3. **Execução:** resultados dos testes e registro de defeitos.
+4. **Monitoramento:** métricas e acompanhamento da qualidade.
+5. **Encerramento:** consolidação dos resultados e parecer final.

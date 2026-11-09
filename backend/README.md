@@ -13,7 +13,7 @@
 
 ---
 
-# Itaim Vende API - Modulo Backend (v2.0.0)
+# Itaim Vende - Modulo Backend (v2.0.0)
 
 API RESTful completa desenvolvida para a plataforma de marketplace e intermediacao comercial **Itaim Vende**, construida com arquitetura modular em camadas, persistencia relacional com Prisma ORM e PostgreSQL, validacao estrita via Zod e seguranca baseada em tokens JWT.
 
