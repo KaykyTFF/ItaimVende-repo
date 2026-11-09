@@ -4,16 +4,10 @@
   <p><strong>Plataforma de marketplace regional e intermediacao comercial de Paulistana e regiao do Vale do Itaim (PI).</strong></p>
 
   <p>
-    <img src="https://img.shields.io/badge/Node.js-20.x-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js">
-    <img src="https://img.shields.io/badge/Express.js-5.2-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express.js">
-    <img src="https://img.shields.io/badge/PostgreSQL-15+-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL">
-    <img src="https://img.shields.io/badge/Prisma-6.x-2D3748?style=for-the-badge&logo=prisma&logoColor=white" alt="Prisma ORM">
-    <img src="https://img.shields.io/badge/JavaScript-ES_Modules-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript">
-    <img src="https://img.shields.io/badge/Socket.io-Real--Time-010101?style=for-the-badge&logo=socketdotio&logoColor=white" alt="Socket.io">
-    <img src="https://img.shields.io/badge/Zod-Validacao-3E67B1?style=for-the-badge&logo=zod&logoColor=white" alt="Zod">
-    <img src="https://img.shields.io/badge/OpenAPI-3.0.3-85EA2D?style=for-the-badge&logo=openapiinitiative&logoColor=black" alt="OpenAPI 3.0.3">
-    <img src="https://img.shields.io/badge/Plataforma-Web_%7C_REST_API-44BD32?style=for-the-badge" alt="Plataforma">
-    <img src="https://img.shields.io/badge/Testes-88_Aprovados-10B981?style=for-the-badge" alt="Testes Automatizados">
+    <img src="https://img.shields.io/badge/NODE.JS-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js">
+    <img src="https://img.shields.io/badge/EXPRESS.JS-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express.js">
+    <img src="https://img.shields.io/badge/POSTGRESQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL">
+    <img src="https://img.shields.io/badge/PLATAFORMA-WEB_%7C_REST_API-44BD32?style=for-the-badge" alt="Plataforma">
   </p>
 </div>
 
