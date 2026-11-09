@@ -172,12 +172,13 @@
         atualizarEstadoFavorito();
 
         function alternarFavorito() {
-            if (favoritosSet.has(produto.id)) {
-                favoritosSet.delete(produto.id);
+            const prodIdStr = String(produto.id);
+            if (favoritosSet.has(prodIdStr)) {
+                favoritosSet.delete(prodIdStr);
                 mostrarToast('Removido dos favoritos');
             } else {
-                favoritosSet.add(produto.id);
-                mostrarToast('Salvo nos seus favoritos! ❤️');
+                favoritosSet.add(prodIdStr);
+                mostrarToast('Salvo nos seus favoritos!');
                 if (window.ItaimNotificacoes && typeof window.ItaimNotificacoes.notificarItemSalvo === 'function') {
                     window.ItaimNotificacoes.notificarItemSalvo(produto);
                 }

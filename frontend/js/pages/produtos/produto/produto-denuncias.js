@@ -60,11 +60,11 @@
         };
 
         const LABELS_MOTIVOS = {
-            'FRAUD': { label: 'Golpe ou Fraude', icon: '🚨', badgeClass: 'icone-box-red' },
-            'INAPPROPRIATE_CONTENT': { label: 'Conteúdo Impróprio', icon: '🔞', badgeClass: 'icone-box-blue' },
-            'SPAM': { label: 'Spam / Anúncio Falso', icon: '📄', badgeClass: 'icone-box-purple' },
-            'ALREADY_SOLD': { label: 'Já Vendido / Indisponível', icon: '📦', badgeClass: 'icone-box-orange' },
-            'OTHER': { label: 'Outro Motivo', icon: '💬', badgeClass: 'icone-box-violet' }
+            'FRAUD': { label: 'Golpe ou Fraude' },
+            'INAPPROPRIATE_CONTENT': { label: 'Conteúdo Impróprio' },
+            'SPAM': { label: 'Spam / Anúncio Falso' },
+            'ALREADY_SOLD': { label: 'Já Vendido / Indisponível' },
+            'OTHER': { label: 'Outro Motivo' }
         };
 
         const STORAGE_TICKETS_KEY = 'itaim_tickets_denuncias';
@@ -139,23 +139,18 @@
         function atualizarDadosRevisao() {
             const radioSelecionado = document.querySelector('input[name="denuncia-motivo"]:checked');
             const motivoVal = radioSelecionado ? radioSelecionado.value : 'FRAUD';
-            const motivoInfo = LABELS_MOTIVOS[motivoVal] || { label: motivoVal, badgeClass: 'icone-box-red', icon: '🚨' };
+            const motivoInfo = LABELS_MOTIVOS[motivoVal] || { label: motivoVal };
 
             const revisaoMotivoTxt = document.getElementById('revisao-motivo-texto');
-            const revisaoMotivoIcone = document.getElementById('revisao-motivo-icone');
             const revisaoDescricaoTxt = document.getElementById('revisao-descricao-texto');
 
             if (revisaoMotivoTxt) revisaoMotivoTxt.textContent = motivoInfo.label;
-            if (revisaoMotivoIcone) {
-                revisaoMotivoIcone.className = `revisao-row-icone ${motivoInfo.badgeClass || ''}`;
-                revisaoMotivoIcone.textContent = motivoInfo.icon || '🚨';
-            }
 
             const descDigitada = descTextarea ? descTextarea.value.trim() : '';
             if (revisaoDescricaoTxt) {
                 revisaoDescricaoTxt.textContent = descDigitada || '(não informada)';
                 revisaoDescricaoTxt.style.fontStyle = descDigitada ? 'normal' : 'italic';
-                revisaoDescricaoTxt.style.color = descDigitada ? '#0F172A' : '#94A3B8';
+                revisaoDescricaoTxt.style.opacity = descDigitada ? '1' : '0.65';
             }
         }
 
@@ -419,7 +414,6 @@
             if (tickets.length === 0) {
                 listaEl.innerHTML = `
                     <div class="tickets-vazio-box">
-                        <div class="tickets-vazio-icone">🛡️</div>
                         <h4 class="tickets-vazio-titulo">Nenhum ticket aberto</h4>
                         <p class="tickets-vazio-desc">Você ainda não realizou denúncias de anúncios na plataforma.</p>
                     </div>

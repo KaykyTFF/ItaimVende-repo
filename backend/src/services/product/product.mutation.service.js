@@ -44,6 +44,110 @@ export async function removerImagensDoStorage(urls) {
 }
 
 /**
+ * Normaliza URLs de imagens para o formato canônico salvo no banco
+ * (evita que 'http://localhost:3000/uploads/...' divirja de '/uploads/...')
+ */
+function normalizarUrlImagemBanco(url) {
+  if (!url || typeof url !== 'string') return '';
+  const limpo = url.trim();
+  if (limpo.startsWith('data:')) return limpo;
+
+  const idxUploads = limpo.indexOf('/uploads/');
+  if (idxUploads !== -1) {
+    return limpo.substring(idxUploads);
+  }
+
+  const idxAssets = limpo.indexOf('assets/');
+  if (
+    idxAssets !== -1 &&
+    (!limpo.startsWith('http') || limpo.startsWith('http://localhost') || limpo.startsWith('http://127.0.0.1'))
+  ) {
+    return limpo.substring(idxAssets);
+  }
+
+  return limpo;
+}
+
+/**
+ * Remove acentos e normaliza texto de categoria para busca tolerante
+ */
+function normalizarChaveCategoria(texto) {
+  return String(texto || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/&/g, ' ')
+    .replace(/[^\w\s-]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/**
+ * Resolve de forma determinística a categoria do anúncio no banco de dados
+ * priorizando o nome/slug enviado pelo frontend e o orderIndex oficial (1..37)
+ */
+async function resolverCategoriaNoBanco({ categoryId, categoryName, category: categoryProp }) {
+  const nomeBusca = (categoryName || categoryProp || '').trim();
+
+  // 1. Se o nome da categoria foi informado (ex: "Eletrônicos", "Calçados", "Áudio & Vídeo")
+  if (nomeBusca && nomeBusca.toLowerCase() !== 'geral') {
+    const slugBusca = normalizarChaveCategoria(nomeBusca).replace(/\s+/g, '-');
+
+    const exata = await prisma.category.findFirst({
+      where: {
+        OR: [
+          { name: { equals: nomeBusca, mode: 'insensitive' } },
+          { slug: { equals: slugBusca, mode: 'insensitive' } },
+          ...(nomeBusca.toLowerCase().includes('animais') ? [{ slug: 'pets' }] : []),
+        ],
+      },
+    });
+    if (exata) return exata;
+
+    // Fallback insensível a acentos varrendo as categorias cadastradas
+    const todas = await prisma.category.findMany();
+    const alvoNorm = normalizarChaveCategoria(nomeBusca);
+    const encontradaNorm =
+      todas.find(
+        (c) =>
+          normalizarChaveCategoria(c.name) === alvoNorm ||
+          normalizarChaveCategoria(c.slug).replace(/-/g, ' ') === alvoNorm
+      ) ||
+      todas.find(
+        (c) =>
+          normalizarChaveCategoria(c.name).includes(alvoNorm) ||
+          alvoNorm.includes(normalizarChaveCategoria(c.name))
+      );
+
+    if (encontradaNorm) return encontradaNorm;
+  }
+
+  // 2. Se foi enviado categoryId numérico (o frontend envia orderIndex de 1 a 37)
+  if (categoryId !== undefined && categoryId !== null) {
+    const idNum = Number(categoryId);
+    if (!isNaN(idNum) && idNum > 0) {
+      // Prioriza orderIndex pois os IDs autoincrementais podem divergir após upserts
+      const porOrderIndex = await prisma.category.findFirst({
+        where: { orderIndex: idNum },
+      });
+      if (porOrderIndex) return porOrderIndex;
+
+      const porId = await prisma.category.findUnique({
+        where: { id: idNum },
+      });
+      if (porId) return porId;
+    }
+  }
+
+  // 3. Fallback final para 'Outros'
+  return (
+    (await prisma.category.findFirst({
+      where: { slug: 'outros' },
+    })) || (await prisma.category.findFirst())
+  );
+}
+
+/**
  * Criação de novo anúncio com imagens e slug automático
  * @param {string} sellerId - ID do vendedor autenticado
  * @param {object} productData - Dados do anúncio
@@ -55,6 +159,8 @@ export async function createProduct(sellerId, productData) {
     price,
     originalPrice,
     categoryId,
+    categoryName,
+    category: categoryProp,
     condition,
     listingType,
     city,
@@ -64,30 +170,16 @@ export async function createProduct(sellerId, productData) {
     images = [],
   } = productData;
 
-  let category = await prisma.category.findUnique({
-    where: { id: categoryId },
+  const category = await resolverCategoriaNoBanco({
+    categoryId,
+    categoryName,
+    category: categoryProp,
   });
-
-  if (!category) {
-    category = await prisma.category.findFirst({
-      where: {
-        OR: [
-          { orderIndex: categoryId },
-          { id: categoryId },
-        ],
-      },
-    });
-  }
-
-  if (!category) {
-    category = await prisma.category.findFirst({
-      where: { OR: [{ slug: 'outros' }, { id: 10 }] },
-    }) || await prisma.category.findFirst();
-  }
 
   const categoryIdFinal = category ? category.id : categoryId;
 
   const slug = gerarSlug(title);
+  const imagensNormalizadas = images.map(normalizarUrlImagemBanco).filter(Boolean);
 
   const product = await prisma.product.create({
     data: {
@@ -105,7 +197,7 @@ export async function createProduct(sellerId, productData) {
       acceptsTrade: Boolean(acceptsTrade),
       sellerId,
       images: {
-        create: images.map((url, idx) => ({
+        create: imagensNormalizadas.map((url, idx) => ({
           url,
           orderIndex: idx,
           isCover: idx === 0,
@@ -160,10 +252,17 @@ export async function updateProduct(userId, userRole, productId, updateData) {
     throw new AppError('Anúncios arquivados ou excluídos não podem ser editados.', 400);
   }
 
-  // 2. Proteção contra "Metamorfose de Anúncio" (Bait-and-Switch)
-  // Impede que um vendedor troque a categoria de um produto já ativo para introduzir itens proibidos
-  if (updateData.categoryId !== undefined && updateData.categoryId !== existing.categoryId && userRole !== 'ADMIN') {
-    throw new AppError('Por segurança e prevenção a fraudes, a categoria do anúncio não pode ser alterada após a publicação.', 400);
+  // 2. Resolução da Categoria (suporta alteração de categoria por nome, slug ou orderIndex)
+  let targetCategoryId = undefined;
+  if (updateData.categoryId !== undefined || updateData.categoryName || updateData.category) {
+    const resolvedCategory = await resolverCategoriaNoBanco({
+      categoryId: updateData.categoryId,
+      categoryName: updateData.categoryName,
+      category: updateData.category,
+    });
+    if (resolvedCategory) {
+      targetCategoryId = resolvedCategory.id;
+    }
   }
 
   // 3. Prevenção de Links Maliciosos, Phishing e Injeção no Título e Descrição
@@ -183,30 +282,33 @@ export async function updateProduct(userId, userRole, productId, updateData) {
     }
   }
 
-  const { images, price, originalPrice, ...otherData } = updateData;
+  const { images, price, originalPrice, categoryId, categoryName, category, ...otherData } = updateData;
   const dataToUpdate = { ...otherData };
 
+  if (targetCategoryId !== undefined) dataToUpdate.categoryId = targetCategoryId;
   if (price !== undefined) dataToUpdate.price = parseFloat(price);
   if (originalPrice !== undefined) dataToUpdate.originalPrice = originalPrice ? parseFloat(originalPrice) : null;
 
   let fotosOrfasParaRemover = [];
 
   if (Array.isArray(images)) {
-    // Identifica quais fotos antigas foram removidas/substituídas
-    const novasImagensSet = new Set(
-      images.map((img) => (typeof img === 'string' ? img.trim() : (img?.url || '').trim()))
-    );
+    const imagensNormalizadas = images
+      .map((img) => normalizarUrlImagemBanco(typeof img === 'string' ? img : img?.url || ''))
+      .filter(Boolean);
+
+    // Identifica quais fotos antigas foram realmente removidas/substituídas
+    const novasImagensSet = new Set(imagensNormalizadas);
 
     fotosOrfasParaRemover = existing.images
       .map((img) => img.url)
-      .filter((url) => !novasImagensSet.has(url.trim()));
+      .filter((url) => !novasImagensSet.has(normalizarUrlImagemBanco(url)));
 
     await prisma.productImage.deleteMany({ where: { productId } });
 
-    if (images.length > 0) {
+    if (imagensNormalizadas.length > 0) {
       dataToUpdate.images = {
-        create: images.map((img, idx) => ({
-          url: typeof img === 'string' ? img : img.url,
+        create: imagensNormalizadas.map((url, idx) => ({
+          url,
           orderIndex: idx,
           isCover: idx === 0,
         })),

@@ -1,4 +1,4 @@
-import { describe, it, before } from 'node:test';
+import { describe, it, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import jwt from 'jsonwebtoken';
 import { ENV } from '../src/config/env.js';
@@ -7,20 +7,38 @@ import prisma from '../src/config/prisma.js';
 const BASE_URL = process.env.TEST_API_URL || 'http://localhost:3000/api/v1';
 
 let buyerToken = '';
+let createdBuyer = null;
 
 describe('Suite de Testes de Conformidade REST e Integração da API Itaim Vende', () => {
 
   before(async () => {
-    // Localiza um usuário real com papel BUYER para os testes de controle de acesso (RBAC)
-    const buyer = await prisma.user.findFirst({ where: { role: 'BUYER' } });
-    const buyerId = buyer ? buyer.id : 'cmvi96g1b0000ttn4ebaaooca';
-    const buyerEmail = buyer ? buyer.email : 'aa@gmail.com';
+    // Localiza ou cria um usuário real com papel BUYER para os testes de controle de acesso (RBAC)
+    let buyer = await prisma.user.findFirst({ where: { role: 'BUYER' } });
+    if (!buyer) {
+      buyer = await prisma.user.create({
+        data: {
+          name: 'Comprador Teste API',
+          email: `buyer_api_test_${Date.now()}@itaimvende.local`,
+          password: 'SenhaSeguraTeste123',
+          role: 'BUYER',
+          city: 'Paulistana',
+          state: 'PI',
+        },
+      });
+      createdBuyer = buyer;
+    }
 
     buyerToken = jwt.sign(
-      { id: buyerId, email: buyerEmail, role: 'BUYER' },
+      { id: buyer.id, email: buyer.email, role: 'BUYER' },
       ENV.JWT_SECRET,
       { expiresIn: '1h' }
     );
+  });
+
+  after(async () => {
+    if (createdBuyer?.id) {
+      await prisma.user.delete({ where: { id: createdBuyer.id } }).catch(() => {});
+    }
   });
 
   // Teste 1: Diagnóstico e Saúde (Princípio REST)

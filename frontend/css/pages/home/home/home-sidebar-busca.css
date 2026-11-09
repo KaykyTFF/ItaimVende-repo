@@ -56,6 +56,7 @@
         opacity: 0;
         transform: translateX(-12px);
     }
+
     to {
         opacity: 1;
         transform: translateX(0);
@@ -67,6 +68,7 @@
         opacity: 0;
         transform: translateY(-8px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -94,7 +96,7 @@
 .btn-limpar-filtros-sidebar {
     background: none;
     border: none;
-    color: #44BD32;
+    color: #38A129;
     font-size: 12.5px;
     font-weight: 700;
     cursor: pointer;
@@ -104,8 +106,8 @@
 }
 
 .btn-limpar-filtros-sidebar:hover {
-    background: rgba(68, 189, 50, 0.1);
-    color: #389e28;
+    background: rgba(56, 161, 41, 0.1);
+    color: #2E8B22;
 }
 
 /* Grupos de Filtros */
@@ -143,9 +145,11 @@
 .sidebar-grupo-opcoes::-webkit-scrollbar {
     width: 4px;
 }
+
 .sidebar-grupo-opcoes::-webkit-scrollbar-track {
     background: transparent;
 }
+
 .sidebar-grupo-opcoes::-webkit-scrollbar-thumb {
     background: #CBD5E1;
     border-radius: 4px;
@@ -220,12 +224,12 @@
     border-color: #64748B;
 }
 
-.filtro-sidebar-check:checked + .custom-checkbox {
-    background-color: var(--primary, #44BD32);
-    border-color: var(--primary, #44BD32);
+.filtro-sidebar-check:checked+.custom-checkbox {
+    background-color: var(--primary, #38A129);
+    border-color: var(--primary, #38A129);
 }
 
-.filtro-sidebar-check:checked + .custom-checkbox::after {
+.filtro-sidebar-check:checked+.custom-checkbox::after {
     content: '';
     width: 5px;
     height: 9px;
@@ -251,11 +255,11 @@
     position: relative;
 }
 
-.filtro-sidebar-radio:checked + .custom-radio {
+.filtro-sidebar-radio:checked+.custom-radio {
     border-color: var(--primary, #44BD32);
 }
 
-.filtro-sidebar-radio:checked + .custom-radio::after {
+.filtro-sidebar-radio:checked+.custom-radio::after {
     content: '';
     width: 8px;
     height: 8px;
@@ -341,8 +345,8 @@
 }
 
 .select-ordem-pesquisa:focus {
-    border-color: var(--primary, #44BD32);
-    box-shadow: 0 0 0 2px rgba(68, 189, 50, 0.18);
+    border-color: var(--primary, #38A129);
+    box-shadow: none;
 }
 
 /* Alternador de Visualização (Grid vs Lista - Verde no tom do site) */
@@ -371,15 +375,15 @@
 }
 
 .btn-toggle-view:hover {
-    border-color: var(--primary, #44BD32);
-    color: var(--primary, #44BD32);
+    border-color: var(--primary, #38A129);
+    color: var(--primary, #38A129);
 }
 
 .btn-toggle-view.ativo {
-    background-color: var(--primary, #44BD32);
-    border-color: var(--primary, #44BD32);
+    background-color: var(--primary, #38A129);
+    border-color: var(--primary, #38A129);
     color: #FFFFFF;
-    box-shadow: 0 2px 8px rgba(68, 189, 50, 0.28);
+    box-shadow: none;
 }
 
 .btn-toggle-view.ativo svg {
@@ -521,8 +525,8 @@
 }
 
 .btn-reset-preco-slider:hover {
-    color: #44BD32;
-    background: rgba(68, 189, 50, 0.08);
+    color: #38A129;
+    background: rgba(56, 161, 41, 0.08);
 }
 
 .sidebar-preco-slider-box {
@@ -585,7 +589,7 @@
 .preco-slider-track-fill {
     position: absolute;
     height: 6px;
-    background: #44BD32;
+    background: #38A129;
     border-radius: 999px;
     top: 50%;
     transform: translateY(-50%);
@@ -621,7 +625,7 @@
     height: 20px;
     border-radius: 50%;
     background: #FFFFFF;
-    border: 2.5px solid #44BD32;
+    border: 2.5px solid #38A129;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
     cursor: grab;
     transition: transform 0.15s ease, box-shadow 0.15s ease;
@@ -629,13 +633,13 @@
 
 .preco-slider-input::-webkit-slider-thumb:hover {
     transform: scale(1.15);
-    box-shadow: 0 3px 8px rgba(68, 189, 50, 0.35);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 .preco-slider-input::-webkit-slider-thumb:active {
     cursor: grabbing;
     transform: scale(1.22);
-    box-shadow: 0 0 0 5px rgba(68, 189, 50, 0.2);
+    box-shadow: 0 0 0 4px rgba(56, 161, 41, 0.16);
 }
 
 /* Thumb Styling Firefox */
@@ -645,7 +649,7 @@
     height: 20px;
     border-radius: 50%;
     background: #FFFFFF;
-    border: 2.5px solid #44BD32;
+    border: 2.5px solid #38A129;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
     cursor: grab;
     transition: transform 0.15s ease, box-shadow 0.15s ease;
@@ -653,13 +657,13 @@
 
 .preco-slider-input::-moz-range-thumb:hover {
     transform: scale(1.15);
-    box-shadow: 0 3px 8px rgba(68, 189, 50, 0.35);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 .preco-slider-input::-moz-range-thumb:active {
     cursor: grabbing;
     transform: scale(1.22);
-    box-shadow: 0 0 0 5px rgba(68, 189, 50, 0.2);
+    box-shadow: 0 0 0 4px rgba(56, 161, 41, 0.16);
 }
 
 /* Linha de Marcas de Escala */
@@ -700,8 +704,8 @@
 }
 
 .chip-preco.ativo {
-    background: rgba(68, 189, 50, 0.12);
-    color: #2D8A20;
-    border-color: #44BD32;
+    background: rgba(56, 161, 41, 0.12);
+    color: #2E8B22;
+    border-color: #38A129;
     font-weight: 600;
 }

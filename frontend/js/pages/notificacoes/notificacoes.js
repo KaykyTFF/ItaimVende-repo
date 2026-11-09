@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (estaAutenticado() && window.ItaimApi.notificacoes) {
             try {
-                const res = await window.ItaimApi.notificacoes.listar();
+                const res = await window.ItaimApi.notificacoes.listar({ sort: ordemAtiva });
                 if (res && res.success && Array.isArray(res.notifications) && res.notifications.length > 0) {
                     todasNotifs = res.notifications;
                     if (window.ItaimNotificacoes && typeof window.ItaimNotificacoes.salvarNotificacoes === 'function') {
@@ -184,7 +184,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         atualizarBadgesAbas();
 
         const prefs = (() => {
-            try { return JSON.parse(localStorage.getItem('itaim_configuracoes') || '{}'); } catch(e) { return {}; }
+            try { return JSON.parse(localStorage.getItem('itaim_configuracoes') || '{}'); } catch (e) { return {}; }
         })();
 
         let filtradas = todasNotifs.filter(n => {
@@ -342,6 +342,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             const linkDestino = item.link && item.link !== 'notificacoes.html' ? item.link : '#';
 
             card.innerHTML = `
+                <button type="button" class="btn-excluir-notif-card" data-id="${item.id}" title="Excluir notificação" aria-label="Excluir notificação">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+
                 <div class="notif-corpo-principal">
                     <div class="notif-avatar-wrapper ${avatarRingClass}">
                         <img src="${avatarUrl}" alt="Avatar" class="notif-avatar-img">
@@ -356,32 +363,32 @@ document.addEventListener('DOMContentLoaded', async () => {
                             <span>${tempo}</span>
                         </div>
                     </div>
+                    ${midiaHtml ? `<div class="notif-midia-preview">${midiaHtml}</div>` : ''}
                 </div>
 
-                ${midiaHtml ? `<div class="notif-midia-preview">${midiaHtml}</div>` : ''}
-                <div class="notif-divisor-vertical"></div>
-
-                <div class="notif-coluna-acao">
-                    <a href="${linkDestino}" class="btn-notif-acao-primaria">
-                        ${iconeBotao}
-                        <span>${textoBotao}</span>
-                        ${setaBotao}
-                    </a>
-                    <button type="button" class="btn-excluir-notif-card" data-id="${item.id}" title="Excluir notificação">&times;</button>
+                <div class="notif-lado-direito">
+                    <div class="notif-divisor-vertical"></div>
+                    <div class="notif-coluna-acao">
+                        <a href="${linkDestino}" class="btn-notif-acao-primaria">
+                            ${iconeBotao}
+                            <span>${textoBotao}</span>
+                            ${setaBotao}
+                        </a>
+                    </div>
                 </div>
             `;
 
             // Clique no corpo do card para marcar como lida e redirecionar
             card.addEventListener('click', async (e) => {
                 if (e.target.closest('.btn-excluir-notif-card')) return;
-                
+
                 item.lida = true;
                 item.isRead = true;
 
                 if (estaAutenticado() && window.ItaimApi.notificacoes) {
                     try {
                         await window.ItaimApi.notificacoes.marcarComoLida(item.id);
-                    } catch (err) {}
+                    } catch (err) { }
                 }
 
                 if (window.ItaimNotificacoes) {
@@ -408,7 +415,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (estaAutenticado() && window.ItaimApi.notificacoes) {
                     try {
                         await window.ItaimApi.notificacoes.remover(id);
-                    } catch (err) {}
+                    } catch (err) { }
                 }
 
                 if (window.ItaimNotificacoes) {
@@ -451,7 +458,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (estaAutenticado() && window.ItaimApi.notificacoes) {
                 try {
                     await window.ItaimApi.notificacoes.marcarTodasComoLidas();
-                } catch (err) {}
+                } catch (err) { }
             }
 
             if (window.ItaimNotificacoes) {
@@ -461,25 +468,79 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
+    // Modal de Confirmação (Limpar todas as notificações no estilo do site)
+    const modalLimpar = document.getElementById('modal-confirmar-limpar');
+    const btnFecharModalLimpar = document.getElementById('btn-fechar-modal-limpar');
+    const btnCancelarLimpar = document.getElementById('btn-cancelar-limpar');
+    const btnConfirmarLimpar = document.getElementById('btn-confirmar-limpar');
+
+    function abrirModalLimpar() {
+        if (!modalLimpar) {
+            if (confirm('Deseja limpar todas as notificações?')) {
+                executarLimpezaNotificacoes();
+            }
+            return;
+        }
+        modalLimpar.classList.add('aberto');
+        document.body.style.overflow = 'hidden';
+        if (btnCancelarLimpar) {
+            btnCancelarLimpar.focus();
+        }
+    }
+
+    function fecharModalLimpar() {
+        if (!modalLimpar) return;
+        modalLimpar.classList.remove('aberto');
+        document.body.style.overflow = '';
+    }
+
+    if (modalLimpar) {
+        if (btnFecharModalLimpar) {
+            btnFecharModalLimpar.addEventListener('click', fecharModalLimpar);
+        }
+        if (btnCancelarLimpar) {
+            btnCancelarLimpar.addEventListener('click', fecharModalLimpar);
+        }
+        modalLimpar.addEventListener('click', (e) => {
+            if (e.target === modalLimpar) {
+                fecharModalLimpar();
+            }
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modalLimpar.classList.contains('aberto')) {
+                fecharModalLimpar();
+            }
+        });
+    }
+
+    async function executarLimpezaNotificacoes() {
+        todasNotifs = [];
+
+        if (estaAutenticado() && window.ItaimApi && window.ItaimApi.notificacoes) {
+            try {
+                await window.ItaimApi.notificacoes.limparTodas();
+            } catch (err) { }
+        }
+
+        if (window.ItaimNotificacoes) {
+            window.ItaimNotificacoes.salvarNotificacoes([]);
+        } else {
+            localStorage.setItem('itaim_notificacoes', JSON.stringify([]));
+        }
+        renderizar();
+    }
+
     // Limpar todas as notificações
     if (btnLimparTodas) {
-        btnLimparTodas.addEventListener('click', async () => {
-            if (confirm('Deseja limpar todas as notificações?')) {
-                todasNotifs = [];
+        btnLimparTodas.addEventListener('click', () => {
+            abrirModalLimpar();
+        });
+    }
 
-                if (estaAutenticado() && window.ItaimApi.notificacoes) {
-                    try {
-                        await window.ItaimApi.notificacoes.limparTodas();
-                    } catch (err) {}
-                }
-
-                if (window.ItaimNotificacoes) {
-                    window.ItaimNotificacoes.salvarNotificacoes([]);
-                } else {
-                    localStorage.setItem('itaim_notificacoes', JSON.stringify([]));
-                }
-                renderizar();
-            }
+    if (btnConfirmarLimpar) {
+        btnConfirmarLimpar.addEventListener('click', async () => {
+            fecharModalLimpar();
+            await executarLimpezaNotificacoes();
         });
     }
 

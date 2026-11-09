@@ -66,8 +66,8 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="../../css/pages/home/home.css?v=2">
-    <link rel="stylesheet" href="../../css/core/header-global.css?v=25">
-    <link rel="stylesheet" href="../../css/pages/produtos/produto.css?v=20">
+    <link rel="stylesheet" href="../../css/core/header-global.css?v=28">
+    <link rel="stylesheet" href="../../css/pages/produtos/produto.css?v=21">
 </head>
 
 <body class="pagina-produto">
@@ -432,7 +432,6 @@
                             </div>
                         </div>
                         <div class="skeleton-detalhes-info">
-                            <div class="skeleton-selo-topo"></div>
                             <div class="skeleton-titulo-grande-1"></div>
                             <div class="skeleton-titulo-grande-2"></div>
                             <div class="skeleton-localizacao-bar"></div>
@@ -516,7 +515,13 @@
 
                                 <div class="foto-bg-blur" id="foto-bg-blur"></div>
                                 <img src="../../assets/placeholders/produto-placeholder.svg" alt="Foto do anúncio"
-                                    id="foto-principal-img" class="foto-principal-display">
+                                    id="foto-principal-img" class="foto-principal-display" title="Clique para ampliar a foto">
+
+                                <button type="button" class="btn-expandir-foto" id="btn-expandir-foto" aria-label="Ampliar foto" title="Ver foto por inteiro">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path>
+                                    </svg>
+                                </button>
 
                                 <div class="badge-contador-fotos" id="contador-fotos-badge">
                                     <span id="contador-fotos-texto">1/2</span>
@@ -529,14 +534,6 @@
 
                         <!-- 2. Detalhes do Anúncio (Centro) -->
                         <div class="info-detalhes-coluna">
-                            <div class="selo-anuncio-verificado">
-                                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                                    <path
-                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
-                                </svg>
-                                <span>ANÚNCIO VERIFICADO</span>
-                            </div>
-
                             <h1 class="produto-titulo-destaque" id="produto-titulo">Carregando anúncio...</h1>
 
                             <div class="produto-localizacao-linha" id="produto-localizacao">
@@ -806,18 +803,8 @@
 
                 <!-- ETAPA 1: APRESENTAÇÃO / RESUMO DO ANÚNCIO -->
                 <div class="denuncia-etapa-painel etapa-ativa" id="denuncia-etapa-1">
-                    <div class="denuncia-step-center">
-                        <div class="denuncia-step-icone-wrapper alerta-vermelho">
-                            <svg viewBox="0 0 24 24" width="38" height="38" fill="none" stroke="#EF4444"
-                                stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                <path
-                                    d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z">
-                                </path>
-                                <line x1="12" y1="9" x2="12" y2="13"></line>
-                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                            </svg>
-                        </div>
-                        <h3 class="denuncia-step-titulo" id="modal-denuncia-titulo">Denunciar Anúncio</h3>
+                    <div class="denuncia-step-header-left">
+                        <h3 class="denuncia-step-titulo" id="modal-denuncia-titulo">Denunciar anúncio</h3>
                         <p class="denuncia-step-subtitulo">Sua denúncia será analisada pela nossa equipe de moderação.
                         </p>
                     </div>
@@ -864,7 +851,6 @@
                                     <polyline points="20 6 9 17 4 12"></polyline>
                                 </svg>
                             </div>
-                            <div class="motivo-icone-quadrado icone-box-red">🚨</div>
                             <div class="motivo-textos">
                                 <strong>Golpe ou Fraude</strong>
                                 <span>Preço suspeito, pedido de adiantamento, sinal enganoso.</span>
@@ -883,7 +869,6 @@
                                     <polyline points="20 6 9 17 4 12"></polyline>
                                 </svg>
                             </div>
-                            <div class="motivo-icone-quadrado icone-box-blue">🔞</div>
                             <div class="motivo-textos">
                                 <strong>Conteúdo Impróprio</strong>
                                 <span>Imagens ofensivas, linguagem abusiva ou desrespeitosa.</span>
@@ -902,7 +887,6 @@
                                     <polyline points="20 6 9 17 4 12"></polyline>
                                 </svg>
                             </div>
-                            <div class="motivo-icone-quadrado icone-box-purple">📄</div>
                             <div class="motivo-textos">
                                 <strong>Spam / Anúncio Falso</strong>
                                 <span>Produto duplicado, propaganda externa ou dados fakes.</span>
@@ -921,7 +905,6 @@
                                     <polyline points="20 6 9 17 4 12"></polyline>
                                 </svg>
                             </div>
-                            <div class="motivo-icone-quadrado icone-box-orange">📦</div>
                             <div class="motivo-textos">
                                 <strong>Já Vendido / Indisponível</strong>
                                 <span>Vendedor informa que não tem mais o item à venda.</span>
@@ -940,7 +923,6 @@
                                     <polyline points="20 6 9 17 4 12"></polyline>
                                 </svg>
                             </div>
-                            <div class="motivo-icone-quadrado icone-box-violet">💬</div>
                             <div class="motivo-textos">
                                 <strong>Outro Motivo</strong>
                                 <span>Outra infração dos termos de uso da comunidade.</span>
@@ -968,17 +950,7 @@
 
                 <!-- ETAPA 3: CONTE MAIS DETALHES -->
                 <div class="denuncia-etapa-painel" id="denuncia-etapa-3" style="display: none;">
-                    <div class="denuncia-step-center">
-                        <div class="denuncia-step-icone-wrapper icone-verde">
-                            <svg viewBox="0 0 24 24" width="38" height="38" fill="none" stroke="#44BD32"
-                                stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                <polyline points="14 2 14 8 20 8"></polyline>
-                                <line x1="16" y1="13" x2="8" y2="13"></line>
-                                <line x1="16" y1="17" x2="8" y2="17"></line>
-                                <polyline points="10 9 9 9 8 9"></polyline>
-                            </svg>
-                        </div>
+                    <div class="denuncia-step-header-left">
                         <h3 class="denuncia-step-titulo">Conte mais detalhes</h3>
                         <p class="denuncia-step-subtitulo">Descreva o que aconteceu de forma clara e objetiva.</p>
                     </div>
@@ -1038,7 +1010,6 @@
                     <div class="denuncia-revisao-cards-box">
                         <div class="denuncia-revisao-row" id="revisao-btn-editar-motivo"
                             title="Clique para editar o motivo">
-                            <div class="revisao-row-icone icone-box-red" id="revisao-motivo-icone">🚨</div>
                             <div class="revisao-row-textos">
                                 <span class="revisao-row-label">Tipo de denúncia</span>
                                 <strong class="revisao-row-valor" id="revisao-motivo-texto">Golpe ou Fraude</strong>
@@ -1051,7 +1022,6 @@
 
                         <div class="denuncia-revisao-row" id="revisao-btn-editar-descricao"
                             title="Clique para editar a descrição">
-                            <div class="revisao-row-icone icone-box-purple">📄</div>
                             <div class="revisao-row-textos">
                                 <span class="revisao-row-label">Descrição</span>
                                 <strong class="revisao-row-valor" id="revisao-descricao-texto">(texto
@@ -1081,8 +1051,8 @@
                 <div class="denuncia-etapa-painel" id="denuncia-etapa-5" style="display: none;">
                     <div class="denuncia-step-center">
                         <div class="denuncia-sucesso-icone-circulo">
-                            <svg viewBox="0 0 24 24" width="46" height="46" fill="none" stroke="#FFFFFF"
-                                stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor"
+                                stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
                                 <polyline points="20 6 9 17 4 12"></polyline>
                             </svg>
                         </div>
@@ -1144,13 +1114,56 @@
         </div>
     </div>
 
+    <!-- ==========================================================
+         MODAL / LIGHTBOX DE VISUALIZAÇÃO EM TELA CHEIA DA FOTO
+         ========================================================== -->
+    <div class="modal-lightbox-fotos" id="modal-lightbox-fotos" style="display: none;" role="dialog" aria-modal="true" aria-label="Visualizador de Fotos em Tela Cheia">
+        <div class="lightbox-overlay" id="lightbox-overlay"></div>
+        <div class="lightbox-conteudo">
+            <!-- Barra Superior: Contador e Botão Fechar -->
+            <div class="lightbox-header">
+                <span class="lightbox-contador" id="lightbox-contador">1/1</span>
+                <button type="button" class="btn-lightbox-fechar" id="btn-lightbox-fechar" aria-label="Fechar visualizador">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Área Central: Imagem Expandida e Setas de Navegação -->
+            <div class="lightbox-corpo">
+                <button type="button" class="lightbox-seta lightbox-seta-esq" id="btn-lightbox-prev" aria-label="Foto anterior">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </button>
+
+                <div class="lightbox-img-wrapper" id="lightbox-img-wrapper">
+                    <img src="" alt="Foto expandida do produto" id="lightbox-img-principal" class="lightbox-img-principal">
+                </div>
+
+                <button type="button" class="lightbox-seta lightbox-seta-dir" id="btn-lightbox-next" aria-label="Próxima foto">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Barra Inferior: Miniaturas -->
+            <div class="lightbox-footer">
+                <div class="lightbox-miniaturas-row" id="lightbox-miniaturas-row"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script src="../../js/core/produtos-dados/index.js"></script>
     <script src="../../js/core/rotas/index.js"></script>
     <script src="../../js/core/api/index.js"></script>
     <script src="../../js/core/sessao/index.js?v=8"></script>
     <script src="../../js/core/skeleton/index.js"></script>
-    <script src="../../js/pages/produtos/produto.js?v=12"></script>
+    <script src="../../js/pages/produtos/produto.js?v=13"></script>
 </body>
 
 </html>

@@ -36,7 +36,7 @@
     ];
 
     arquivos.forEach(function(arquivo) {
-        document.write('<script src="' + base + arquivo + '"><\/script>');
+        document.write('<script src="' + base + arquivo + '?v=3"><\/script>');
     });
 
 })();

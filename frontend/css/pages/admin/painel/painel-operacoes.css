@@ -8,7 +8,7 @@
 }
 
 .operacao-card {
-    background: rgba(15, 23, 42, 0.6);
+    background: #FFFFFF;
     border: 1px solid var(--bg-card-border);
     border-radius: var(--radius-md);
     padding: 20px;
@@ -16,12 +16,13 @@
     flex-direction: column;
     justify-content: space-between;
     gap: 16px;
+    box-shadow: var(--shadow-card);
     transition: all 0.25s ease;
 }
 
 .operacao-card:hover {
-    border-color: rgba(99, 102, 241, 0.4);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    border-color: var(--brand-primary);
+    box-shadow: var(--shadow-card-hover);
 }
 
 .operacao-card-header {
@@ -42,33 +43,33 @@
 }
 
 .icon-storage {
-    background: rgba(245, 158, 11, 0.15);
-    color: #fbbf24;
+    background: rgba(245, 158, 11, 0.12);
+    color: #D97706;
 }
 
 .icon-seed {
-    background: rgba(168, 85, 247, 0.15);
-    color: #c084fc;
+    background: rgba(68, 189, 50, 0.12);
+    color: var(--brand-primary);
 }
 
 .operacao-card-title {
     font-size: 1rem;
     font-weight: 700;
-    color: #ffffff;
+    color: var(--text-primary);
     margin: 0;
 }
 
 .operacao-card-desc {
-    font-size: 0.78rem;
+    font-size: 0.8rem;
     color: var(--text-secondary);
     display: block;
     margin-top: 3px;
-    line-height: 1.35;
+    line-height: 1.4;
 }
 
 .operacao-stats-box {
-    background: rgba(0, 0, 0, 0.25);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--bg-card-subtle);
+    border: 1px solid var(--bg-card-border);
     border-radius: var(--radius-sm);
     padding: 12px 14px;
     display: flex;
@@ -84,12 +85,12 @@
 }
 
 .op-stat-label {
-    color: var(--text-muted);
+    color: var(--text-secondary);
 }
 
 .op-stat-val {
     font-weight: 700;
-    color: #ffffff;
+    color: var(--text-primary);
 }
 
 .operacao-actions {
@@ -100,24 +101,40 @@
 }
 
 .btn-op-action {
-    background: rgba(255, 255, 255, 0.08);
+    background: #FFFFFF;
     border: 1px solid var(--bg-card-border);
-    color: #ffffff;
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.2s;
 }
 
 .btn-op-action:hover {
-    background: rgba(255, 255, 255, 0.15);
+    background: #F8FAFC;
+    border-color: var(--brand-primary);
+    color: var(--brand-primary);
 }
 
 .btn-op-danger {
-    background: rgba(239, 68, 68, 0.15);
-    border-color: rgba(239, 68, 68, 0.3);
-    color: #f87171;
+    background: #FEE2E2;
+    border: 1px solid #FECACA;
+    color: #DC2626;
+    font-family: inherit;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.2s;
 }
 
 .btn-op-danger:hover:not(:disabled) {
-    background: rgba(239, 68, 68, 0.25);
-    color: #ffffff;
+    background: #FCA5A5;
+    color: #991B1B;
 }
 
 .btn-op-danger:disabled {
@@ -126,24 +143,38 @@
 }
 
 .btn-op-success {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    background: var(--brand-gradient);
     color: #ffffff;
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    border: none;
+    font-family: inherit;
+    font-size: 0.82rem;
+    font-weight: 700;
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(68, 189, 50, 0.25);
+    transition: all 0.2s;
 }
 
 .btn-op-success:hover {
-    box-shadow: 0 6px 18px rgba(16, 185, 129, 0.5);
+    box-shadow: 0 6px 18px rgba(68, 189, 50, 0.35);
     transform: translateY(-1px);
 }
 
 .btn-op-secondary {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: var(--bg-card-border);
+    background: #F1F5F9;
+    border: 1px solid var(--bg-card-border);
     color: var(--text-secondary);
+    font-family: inherit;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.2s;
 }
 
 .btn-op-secondary:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: #ffffff;
+    background: #E2E8F0;
+    color: var(--text-primary);
 }
-

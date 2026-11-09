@@ -40,6 +40,7 @@ export function formatarProdutoParaFrontend(p) {
     titulo: p.title,
     preco: Number(p.price),
     descricao: p.description,
+    data: p.createdAt ? new Date(p.createdAt).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' }) : new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' }),
     condicao: p.condition || 'Seminovo',
     categoria: p.category ? p.category.name : 'Geral',
     categoriaSlug: p.category ? p.category.slug : 'geral',

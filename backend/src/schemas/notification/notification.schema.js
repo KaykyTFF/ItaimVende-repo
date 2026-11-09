@@ -10,6 +10,7 @@ export const createNotificationSchema = z.object({
 export const listNotificationsQuerySchema = z.object({
   isRead: z.enum(['true', 'false', '1', '0']).optional(),
   type: z.string().optional(),
+  sort: z.enum(['recentes', 'antigas', 'nao-lidas', 'asc', 'desc']).optional().default('recentes'),
   page: z.coerce.number().int().positive().default(1),
   limit: z.coerce.number().int().positive().max(100).default(30),
 });

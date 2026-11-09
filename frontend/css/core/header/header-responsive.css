@@ -136,8 +136,8 @@
     .campo-busca:focus,
     .search-input:focus {
         background-color: #FFFFFF !important;
-        border-color: #44BD32 !important;
-        box-shadow: 0 0 0 3px rgba(68, 189, 50, 0.25) !important;
+        border-color: #38A129 !important;
+        box-shadow: 0 0 0 3px rgba(56, 161, 41, 0.25) !important;
     }
 
     .btn-busca-submit,
@@ -174,7 +174,9 @@
         gap: 0 !important;
     }
 
-    /* Ocultar rigorosamente botões indesejados no mobile */
+    /* Ocultar rigorosamente botões indesejados no mobile (mantendo APENAS o avatar do perfil) */
+    .header-right > a,
+    .header-right > button:not(.btn-avatar-header),
     .btn-nav-texto,
     .btn-texto-header,
     #btn-meus-anuncios,
@@ -186,7 +188,25 @@
     #btn-chat,
     #btn-notificacoes,
     .badge-contador-header,
-    #btn-header-entrar {
+    #btn-header-entrar,
+    html.usuario-logado #link-meus-anuncios,
+    html.usuario-logado #btn-meus-anuncios,
+    html.usuario-logado #btn-abrir-modal-vender,
+    html.usuario-logado .btn-vender-destaque,
+    html.usuario-logado #btn-chat,
+    html.usuario-logado #btn-notificacoes,
+    html.usuario-logado .btn-nav-texto,
+    html.usuario-logado .btn-icone-header,
+    html.usuario-logado #btn-meus-anuncios-mobile,
+    body.usuario-logado #link-meus-anuncios,
+    body.usuario-logado #btn-meus-anuncios,
+    body.usuario-logado #btn-abrir-modal-vender,
+    body.usuario-logado .btn-vender-destaque,
+    body.usuario-logado #btn-chat,
+    body.usuario-logado #btn-notificacoes,
+    body.usuario-logado .btn-nav-texto,
+    body.usuario-logado .btn-icone-header,
+    body.usuario-logado #btn-meus-anuncios-mobile {
         display: none !important;
     }
 

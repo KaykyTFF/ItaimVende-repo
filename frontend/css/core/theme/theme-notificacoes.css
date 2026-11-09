@@ -97,8 +97,8 @@
 }
 
 [data-theme="dark"] .notificacao-card.nao-lida {
-    border-left-color: #4ADE80 !important;
-    background-color: rgba(74, 222, 128, 0.04) !important;
+    border-left-color: #22C55E !important;
+    background-color: #1F2831 !important;
 }
 
 [data-theme="dark"] .avatar-badge-ponto {
@@ -120,12 +120,12 @@
 }
 
 [data-theme="dark"] .notif-tag-nova {
-    background-color: rgba(74, 222, 128, 0.18) !important;
+    background-color: rgba(34, 197, 94, 0.18) !important;
     color: #4ADE80 !important;
 }
 
 [data-theme="dark"] .notif-titulo {
-    color: #F1F5F9 !important;
+    color: #F8FAFC !important;
 }
 
 [data-theme="dark"] .notif-descricao {
@@ -141,8 +141,28 @@
 }
 
 [data-theme="dark"] .notif-thumb-produto {
-    background-color: #1A222A !important;
-    border-color: #2C3946 !important;
+    background-color: #FFFFFF !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+[data-theme="dark"] .btn-notif-acao-primaria {
+    background-color: #16A34A !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 14px rgba(22, 163, 74, 0.35) !important;
+}
+
+[data-theme="dark"] .btn-notif-acao-primaria:hover {
+    background-color: #15803D !important;
+}
+
+[data-theme="dark"] .btn-excluir-notif-card {
+    color: #64748B !important;
+    background-color: transparent !important;
+}
+
+[data-theme="dark"] .btn-excluir-notif-card:hover {
+    color: #EF4444 !important;
+    background-color: rgba(239, 68, 68, 0.16) !important;
 }
 
 [data-theme="dark"] .notificacoes-vazio {

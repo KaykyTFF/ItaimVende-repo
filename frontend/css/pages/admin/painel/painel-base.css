@@ -1,49 +1,81 @@
 /* ==========================================================================
    ITAIM VENDE - PAINEL DE CONTROLE & OBSERVABILIDADE (CSS/PAINEL.CSS)
-   Design System Escuro, Glassmorphism e Microanimações em Tempo Real
+   Design System Limpo, Branco e Moderno alinhado à Identidade do Marketplace
    ========================================================================== */
 
 :root {
-    --bg-main: #0b0f19;
-    --bg-card: rgba(17, 24, 39, 0.75);
-    --bg-card-hover: rgba(24, 34, 53, 0.85);
-    --bg-card-border: rgba(255, 255, 255, 0.08);
-    --bg-card-border-glow: rgba(99, 102, 241, 0.25);
+    /* Cores de Fundo (Modo Claro / Design do Site) */
+    --bg-main: #F4F6F8;
+    --bg-card: #FFFFFF;
+    --bg-card-subtle: #F8FAFC;
+    --bg-card-hover: #FFFFFF;
+    --bg-card-border: #E2E8F0;
+    --bg-card-border-glow: rgba(68, 189, 50, 0.25);
     
-    --text-primary: #f8fafc;
-    --text-secondary: #94a3b8;
-    --text-muted: #64748b;
+    /* Tipografia e Cores de Texto */
+    --text-primary: #1E272E;
+    --text-secondary: #475569;
+    --text-muted: #808E9B;
 
-    --brand-primary: #6366f1;
-    --brand-primary-hover: #4f46e5;
-    --brand-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    /* Identidade da Marca (Verde Oficial Itaim Vende) */
+    --brand-primary: #44BD32;
+    --brand-primary-hover: #3CA82B;
+    --brand-gradient: linear-gradient(135deg, #44BD32 0%, #2E7D32 100%);
     
-    --success-green: #10b981;
-    --success-bg: rgba(16, 185, 129, 0.15);
-    --success-border: rgba(16, 185, 129, 0.3);
+    /* Status e Alertas */
+    --success-green: #10B981;
+    --success-bg: rgba(16, 185, 129, 0.12);
+    --success-border: rgba(16, 185, 129, 0.28);
 
-    --warning-amber: #f59e0b;
-    --warning-bg: rgba(245, 158, 11, 0.15);
-    --warning-border: rgba(245, 158, 11, 0.3);
+    --warning-amber: #F59E0B;
+    --warning-bg: rgba(245, 158, 11, 0.12);
+    --warning-border: rgba(245, 158, 11, 0.28);
 
-    --danger-red: #ef4444;
-    --danger-bg: rgba(239, 68, 68, 0.15);
-    --danger-border: rgba(239, 68, 68, 0.3);
+    --danger-red: #EF4444;
+    --danger-bg: rgba(239, 68, 68, 0.12);
+    --danger-border: rgba(239, 68, 68, 0.28);
 
-    --info-blue: #38bdf8;
-    --info-bg: rgba(56, 189, 248, 0.15);
-    --info-border: rgba(56, 189, 248, 0.3);
+    --info-blue: #0284C7;
+    --info-bg: rgba(2, 132, 199, 0.12);
+    --info-border: rgba(2, 132, 199, 0.28);
 
+    /* Raios de Arredondamento */
     --radius-sm: 8px;
     --radius-md: 12px;
     --radius-lg: 16px;
     --radius-full: 9999px;
 
+    /* Fontes */
     --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     --font-mono: 'JetBrains Mono', Consolas, monospace;
 
+    /* Sombras Sutis e Elegantes do Site */
+    --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.04);
+    --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.08);
+    --shadow-glow: 0 0 20px rgba(68, 189, 50, 0.15);
+}
+
+/* Suporte Opcional ao Tema Escuro */
+:root[data-theme="dark"],
+html[data-theme="dark"],
+body[data-theme="dark"] {
+    --bg-main: #0B0F19;
+    --bg-card: rgba(17, 24, 39, 0.85);
+    --bg-card-subtle: rgba(15, 23, 42, 0.6);
+    --bg-card-hover: rgba(24, 34, 53, 0.95);
+    --bg-card-border: rgba(255, 255, 255, 0.08);
+    --bg-card-border-glow: rgba(68, 189, 50, 0.35);
+
+    --text-primary: #F8FAFC;
+    --text-secondary: #94A3B8;
+    --text-muted: #64748B;
+
+    --brand-primary: #44BD32;
+    --brand-primary-hover: #3CA82B;
+    --brand-gradient: linear-gradient(135deg, #44BD32 0%, #2E7D32 100%);
+
     --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
-    --shadow-glow: 0 0 25px rgba(99, 102, 241, 0.2);
+    --shadow-card-hover: 0 12px 36px rgba(0, 0, 0, 0.6);
 }
 
 /* Reset Básico */
@@ -55,11 +87,6 @@
 
 body.painel-body {
     background-color: var(--bg-main);
-    background-image: 
-        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
-        radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.12) 0px, transparent 50%),
-        radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.08) 0px, transparent 50%);
-    background-attachment: fixed;
     color: var(--text-primary);
     font-family: var(--font-sans);
     min-height: 100vh;
@@ -71,4 +98,3 @@ body.painel-body {
 .code-font {
     font-family: var(--font-mono);
 }
-

@@ -141,28 +141,34 @@ export async function sendConversationMessage(senderId, userRole, conversationId
 
   // Cria notificação persistente para o destinatário no banco
   const recipientId = conversation.buyerId === senderId ? conversation.sellerId : conversation.buyerId;
-  import('../notification/index.js').then(({ createNotification }) => {
-    let tituloNotif = `Nova mensagem de ${message.sender?.name || 'Usuário'}`;
-    let tipoNotif = 'mensagem';
-    let previewNotif = content.trim();
+  if (recipientId && recipientId !== senderId) {
+    import('../notification/index.js').then(({ createNotification }) => {
+      let tituloNotif = `Nova mensagem de ${message.sender?.name || 'Usuário'}`;
+      let tipoNotif = 'mensagem';
+      let previewNotif = content.trim();
 
-    if (messageType === 'IMAGE') {
-      tituloNotif = `${message.sender?.name || 'Usuário'} enviou uma foto`;
-      previewNotif = '📷 Foto';
-    } else if (messageType === 'OFFER_PROPOSAL') {
-      tituloNotif = `Nova proposta de R$ ${offerValNum?.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} de ${message.sender?.name || 'Usuário'}`;
-      previewNotif = `🤝 Proposta de R$ ${offerValNum?.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
-      tipoNotif = 'oferta';
-    }
+      if (messageType === 'IMAGE') {
+        tituloNotif = `${message.sender?.name || 'Usuário'} enviou uma foto`;
+        previewNotif = 'Foto enviada';
+      } else if (messageType === 'OFFER_PROPOSAL') {
+        tituloNotif = `Nova proposta de R$ ${offerValNum?.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} de ${message.sender?.name || 'Usuário'}`;
+        previewNotif = `Proposta de R$ ${offerValNum?.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
+      }
 
-    createNotification({
-      userId: recipientId,
-      title: tituloNotif,
-      message: previewNotif.length > 60 ? `${previewNotif.substring(0, 57)}...` : previewNotif,
-      type: tipoNotif,
-      link: `/pages/mensagens/conversas.html?id=${conversationId}`,
+      const senderAvatar = message.sender?.avatar || '';
+      const prodImg = (conversation.product && Array.isArray(conversation.product.images) && conversation.product.images.length > 0)
+        ? conversation.product.images[0]
+        : '';
+
+      createNotification({
+        userId: recipientId,
+        title: tituloNotif,
+        message: previewNotif.length > 60 ? `${previewNotif.substring(0, 57)}...` : previewNotif,
+        type: tipoNotif,
+        link: `/pages/mensagens/conversas.html?id=${conversationId}${senderAvatar ? `&avatar=${encodeURIComponent(senderAvatar)}` : ''}${prodImg ? `&img=${encodeURIComponent(prodImg)}` : ''}`,
+      }).catch(() => {});
     }).catch(() => {});
-  }).catch(() => {});
+  }
 
   // Se o destinatário estiver offline no WebSocket, dispara e-mail transacional
   if (!isUserOnline(recipientId)) {
@@ -280,15 +286,17 @@ export async function acceptOfferProposal(userId, userRole, messageId) {
   ]);
 
   // Notifica o autor da proposta
-  import('../notification/index.js').then(({ createNotification }) => {
-    createNotification({
-      userId: message.senderId,
-      title: 'Proposta Aceita! 🎉',
-      message: `Sua proposta de ${valorFormatado} foi aceita! Abra a conversa para combinar a entrega.`,
-      type: 'oferta',
-      link: `/pages/mensagens/conversas.html?id=${conv.id}`,
+  if (message.senderId && message.senderId !== userId) {
+    import('../notification/index.js').then(({ createNotification }) => {
+      createNotification({
+        userId: message.senderId,
+        title: 'Proposta aceita',
+        message: `Sua proposta de ${valorFormatado} foi aceita. Abra a conversa para combinar os detalhes.`,
+        type: 'mensagem',
+        link: `/pages/mensagens/conversas.html?id=${conv.id}`,
+      }).catch(() => {});
     }).catch(() => {});
-  }).catch(() => {});
+  }
 
   // Se o autor da proposta estiver offline, dispara e-mail transacional
   if (!isUserOnline(message.senderId)) {
@@ -390,15 +398,17 @@ export async function rejectOfferProposal(userId, userRole, messageId) {
   ]);
 
   // Notifica o autor da proposta
-  import('../notification/index.js').then(({ createNotification }) => {
-    createNotification({
-      userId: message.senderId,
-      title: 'Proposta Recusada',
-      message: `Sua proposta de ${valorFormatado} foi recusada.`,
-      type: 'oferta',
-      link: `/pages/mensagens/conversas.html?id=${conv.id}`,
+  if (message.senderId && message.senderId !== userId) {
+    import('../notification/index.js').then(({ createNotification }) => {
+      createNotification({
+        userId: message.senderId,
+        title: 'Proposta recusada',
+        message: `Sua proposta de ${valorFormatado} foi recusada.`,
+        type: 'mensagem',
+        link: `/pages/mensagens/conversas.html?id=${conv.id}`,
+      }).catch(() => {});
     }).catch(() => {});
-  }).catch(() => {});
+  }
 
   const formattedUpdated = formatarMensagem(updatedMessage, userId);
   const formattedSystem = formatarMensagem(systemMessage, userId);

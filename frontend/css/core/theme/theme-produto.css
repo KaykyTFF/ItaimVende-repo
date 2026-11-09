@@ -112,10 +112,6 @@ body[data-theme="dark"].pagina-produto,
 }
 
 /* Informações do Anúncio (Centro) */
-[data-theme="dark"] .selo-anuncio-verificado {
-    color: #38A129 !important;
-}
-
 [data-theme="dark"] .produto-titulo-destaque,
 [data-theme="dark"] #produto-titulo {
     color: #F1F5F9 !important;
@@ -358,7 +354,7 @@ body[data-theme="dark"].pagina-produto,
 }
 
 [data-theme="dark"] .wizard-etapa-badge {
-    background: rgba(56, 161, 41, 0.16) !important;
+    background: rgba(56, 161, 41, 0.14) !important;
     color: #38A129 !important;
 }
 
@@ -370,26 +366,21 @@ body[data-theme="dark"].pagina-produto,
     background: #2C3946 !important;
 }
 
+[data-theme="dark"] .wizard-barra-progresso {
+    background: #38A129 !important;
+    box-shadow: none !important;
+}
+
 [data-theme="dark"] .denuncia-step-titulo,
+[data-theme="dark"] .denuncia-step-titulo-left,
 [data-theme="dark"] .modal-denuncia-titulo {
     color: #F1F5F9 !important;
 }
 
 [data-theme="dark"] .denuncia-step-subtitulo,
+[data-theme="dark"] .denuncia-step-subtitulo-left,
 [data-theme="dark"] .modal-denuncia-subtitulo {
     color: #94A3B8 !important;
-}
-
-[data-theme="dark"] .denuncia-step-icone-wrapper.alerta-vermelho {
-    background: rgba(239, 68, 68, 0.15) !important;
-    color: #F87171 !important;
-    border-color: rgba(239, 68, 68, 0.25) !important;
-}
-
-[data-theme="dark"] .denuncia-step-icone-wrapper.icone-verde {
-    background: rgba(56, 161, 41, 0.16) !important;
-    color: #38A129 !important;
-    border-color: rgba(56, 161, 41, 0.25) !important;
 }
 
 [data-theme="dark"] .denuncia-produto-resumo {
@@ -401,18 +392,25 @@ body[data-theme="dark"].pagina-produto,
     color: #F1F5F9 !important;
 }
 
+[data-theme="dark"] .denuncia-resumo-preco {
+    color: #38A129 !important;
+}
+
+[data-theme="dark"] .denuncia-resumo-vendedor,
 [data-theme="dark"] .denuncia-resumo-meta {
     color: #94A3B8 !important;
 }
 
-[data-theme="dark"] .denuncia-label {
-    color: #F1F5F9 !important;
+[data-theme="dark"] .denuncia-label,
+[data-theme="dark"] .denuncia-label-suave {
+    color: #94A3B8 !important;
 }
 
 [data-theme="dark"] .motivo-card-item {
     background-color: #161C22 !important;
     border: 1.5px solid #2C3946 !important;
     color: #F1F5F9 !important;
+    box-shadow: none !important;
 }
 
 [data-theme="dark"] .motivo-card-item:hover {
@@ -422,36 +420,14 @@ body[data-theme="dark"].pagina-produto,
 
 [data-theme="dark"] .motivo-card-item.ativo {
     border-color: #38A129 !important;
-    background-color: rgba(56, 161, 41, 0.12) !important;
+    background-color: rgba(56, 161, 41, 0.1) !important;
+    box-shadow: none !important;
 }
 
-[data-theme="dark"] .icone-box-red {
-    background: rgba(239, 68, 68, 0.2) !important;
-    color: #F87171 !important;
-}
-
-[data-theme="dark"] .icone-box-blue {
-    background: rgba(59, 130, 246, 0.2) !important;
-    color: #60A5FA !important;
-}
-
-[data-theme="dark"] .icone-box-purple {
-    background: rgba(168, 85, 247, 0.2) !important;
-    color: #C084FC !important;
-}
-
-[data-theme="dark"] .icone-box-orange {
-    background: rgba(249, 115, 22, 0.2) !important;
-    color: #FB923C !important;
-}
-
-[data-theme="dark"] .icone-box-violet {
-    background: rgba(139, 92, 246, 0.2) !important;
-    color: #A78BFA !important;
-}
-
-[data-theme="dark"] .motivo-card-item.ativo .motivo-icone-quadrado {
-    filter: brightness(1.15);
+[data-theme="dark"] .motivo-check-badge {
+    background-color: #38A129 !important;
+    color: #FFFFFF !important;
+    box-shadow: none !important;
 }
 
 [data-theme="dark"] .motivo-textos strong {
@@ -463,23 +439,28 @@ body[data-theme="dark"].pagina-produto,
 }
 
 [data-theme="dark"] .denuncia-textarea,
+[data-theme="dark"] .denuncia-input-text,
 [data-theme="dark"] .denuncia-input-email {
     background-color: #161C22 !important;
     border: 1.5px solid #2C3946 !important;
     color: #F1F5F9 !important;
+    box-shadow: none !important;
 }
 
 [data-theme="dark"] .denuncia-textarea:focus,
+[data-theme="dark"] .denuncia-input-text:focus,
 [data-theme="dark"] .denuncia-input-email:focus {
     border-color: #38A129 !important;
     box-shadow: none !important;
 }
 
 [data-theme="dark"] .denuncia-textarea::placeholder,
+[data-theme="dark"] .denuncia-input-text::placeholder,
 [data-theme="dark"] .denuncia-input-email::placeholder {
     color: #64748B !important;
 }
 
+[data-theme="dark"] .denuncia-chars-count,
 [data-theme="dark"] .denuncia-char-counter {
     color: #64748B !important;
 }
@@ -511,6 +492,12 @@ body[data-theme="dark"].pagina-produto,
 }
 
 /* Sucesso (Etapa 5) */
+[data-theme="dark"] .denuncia-sucesso-icone-circulo {
+    background-color: rgba(56, 161, 41, 0.14) !important;
+    color: #38A129 !important;
+    box-shadow: none !important;
+}
+
 [data-theme="dark"] .denuncia-analise-aviso-box {
     background-color: #161C22 !important;
     border: 1px solid #2C3946 !important;
@@ -522,6 +509,28 @@ body[data-theme="dark"].pagina-produto,
 
 [data-theme="dark"] .analise-aviso-texto {
     color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .btn-denuncia-proximo,
+[data-theme="dark"] .btn-denuncia-enviar,
+[data-theme="dark"] .btn-wizard-enviar,
+[data-theme="dark"] #btn-enviar-denuncia,
+[data-theme="dark"] #btn-voltar-ao-anuncio,
+[data-theme="dark"] #btn-fechar-historico {
+    background-color: #38A129 !important;
+    color: #FFFFFF !important;
+    box-shadow: none !important;
+}
+
+[data-theme="dark"] .btn-denuncia-proximo:hover,
+[data-theme="dark"] .btn-denuncia-enviar:hover,
+[data-theme="dark"] .btn-wizard-enviar:hover,
+[data-theme="dark"] #btn-enviar-denuncia:hover,
+[data-theme="dark"] #btn-voltar-ao-anuncio:hover,
+[data-theme="dark"] #btn-fechar-historico:hover {
+    background-color: #2E8B22 !important;
+    color: #FFFFFF !important;
+    box-shadow: none !important;
 }
 
 [data-theme="dark"] .ticket-protocolo-box {

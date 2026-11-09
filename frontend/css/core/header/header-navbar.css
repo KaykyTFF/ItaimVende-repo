@@ -263,15 +263,21 @@ body.usuario-logado #btn-header-entrar {
     display: none !important;
 }
 
-html.usuario-logado #link-meus-anuncios,
-html.usuario-logado #btn-abrir-modal-vender,
-html.usuario-logado #btn-chat,
-html.usuario-logado #btn-notificacoes,
-body.usuario-logado #link-meus-anuncios,
-body.usuario-logado #btn-abrir-modal-vender,
-body.usuario-logado #btn-chat,
-body.usuario-logado #btn-notificacoes {
-    display: inline-flex !important;
+@media (min-width: 961px) {
+    html.usuario-logado #link-meus-anuncios,
+    html.usuario-logado #btn-meus-anuncios,
+    html.usuario-logado #btn-abrir-modal-vender,
+    html.usuario-logado .btn-vender-destaque,
+    html.usuario-logado #btn-chat,
+    html.usuario-logado #btn-notificacoes,
+    body.usuario-logado #link-meus-anuncios,
+    body.usuario-logado #btn-meus-anuncios,
+    body.usuario-logado #btn-abrir-modal-vender,
+    body.usuario-logado .btn-vender-destaque,
+    body.usuario-logado #btn-chat,
+    body.usuario-logado #btn-notificacoes {
+        display: inline-flex !important;
+    }
 }
 
 html.usuario-logado .perfil-wrapper,

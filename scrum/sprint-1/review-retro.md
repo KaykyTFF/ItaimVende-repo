@@ -1,85 +1,93 @@
-# 🔍 Sprint 1 Review e Retrospectiva (28/10/2026)
+# Sprint 1 Review e Retrospectiva (03/11/2026)
 
-> **Data da Sessão:** 28/10/2026  
-> **Scrum Master Facilitador:** Josimar  
-> **Product Owner:** Kayky  
-> **Participantes:** Kayky, Pedro Ravy, Josimar, Raili, Giselly  
-
----
-
-## 🎪 Parte 1: Sprint Review (Inspeção do Produto)
-
-### 1.1. Recordação do Sprint Goal
-> *"Disponibilizar o esqueleto funcional e seguro da API v1 do Itaim Vende (cadastro com JWT, login com rate limiting, categorias com cache HTTP e publicação de anúncios com upload em nuvem), acompanhado de uma experiência de frontend padronizada (Skeleton Loading universal, suporte refinado ao modo escuro, pop-ups de autenticação e consistência de navegação e denúncias)."*
-
-### 1.2. Demonstração dos Incrementos (Live Demo via Swagger UI, Postman e Navegador)
-1. **Cadastro e Login Seguro (H1 e H2):** Demonstração do registro com hashing Bcrypt, emissão de JWT, rate limiting com HTTP 429 após 20 tentativas erradas e suporte a login rápido via Google OAuth.
-2. **Catálogo de Categorias com Cache HTTP (H3):** Demonstração do cabeçalho `Cache-Control: public, max-age=3600` na rota `GET /api/v1/categories`, acelerando as respostas para menos de 10ms.
-3. **Publicação de Anúncios com Foto em Nuvem (H4):** Upload de imagem na tela `vender.html`, conversão automática para WebP via Sharp e salvamento do arquivo no bucket do Supabase Storage.
-4. **Checkout com Integridade Financeira (H8):** Demonstração de que o valor do pedido em `POST /api/v1/orders` é consultado diretamente do banco de dados pelo servidor, impedindo manipulações pelo cliente.
-5. **Múltiplos Endereços (H10):** CRUD completo na aba de endereços consumindo a API real.
-6. **Padronização do Skeleton Loading (UI-S1-04):** Apresentação do efeito visual de carregamento esqueleto em todas as listagens do site durante a busca assíncrona de dados.
-7. **Suporte Completo ao Modo Escuro (UI-S1-01, 05, 06):** Demonstração de todo o site no tema escuro, com alto contraste no nome do avaliador e adaptação completa da página de criação de anúncios (`vender.html`).
-8. **Fluxo de Autenticação e Navegação (UI-S1-07, 08, 09, 10, 11):** Pop-up de login amigável para ações restritas, botão "Entrar" no header para visitantes, botão "Vender" com dimensões padronizadas em todas as telas, eliminação de saltos de layout causados pelo scroll (`scrollbar-gutter: stable`) e dropdowns com design único.
-9. **Interface de Denúncias e Negociação (UI-S1-12, 13, 14, 15, 16, 17, 18):** Botão de denúncia discretizado sem texto redundante de ticket, denúncia de vendedores direto no perfil, balões de proposta redesenhados no chat, reposicionamento das tags de categorias/condição acima da descrição e barra lateral de filtros avançados na busca.
+**Data da Sessao:** 03/11/2026  
+**Duracao Total:** 60 minutos (Review: 30 min e Retrospectiva: 30 min)  
+**Scrum Master Facilitador:** Josimar  
+**Product Owner:** Kayky  
+**Participantes:** Kayky, Pedro Ravy, Josimar, Raili, Giselly  
 
 ---
 
-### 1.3. Veredito do Product Owner (Aceite das Histórias e Tarefas)
+## 1. Sprint Review — Inspecao do Incremento do Produto
 
-O Product Owner (Kayky) inspecionou todas as entregas frente à Definition of Done (DoD) e aos critérios de aceitação:
+### 1.1. Sprint Goal da Sprint 1
+> "Disponibilizar o esqueleto funcional e seguro da API v1 do Itaim Vende (cadastro com JWT, login com rate limiting e Google Auth, categorias com cache HTTP e publicacao de anuncios com upload em nuvem), acompanhado de filtros regionais, avaliacoes e uma experiencia de frontend padronizada (Skeleton Loading universal, suporte refinado ao modo escuro, pop-ups de autenticacao e consistencia de navegacao e denuncias)."
 
-| Item (ID) | Descrição do Item de Trabalho | Responsáveis | Estimativa | Decisão do PO | Justificativa / Observações |
+### 1.2. Demonstracao dos Incrementos
+Na nossa Review, demonstramos as funcionalidades funcionando ao vivo na integracao entre o frontend e a nossa API, alem de testar chamadas no Swagger UI e no Postman:
+
+1. **Autenticacao e Seguranca (H1 e H2):** Mostramos o cadastro com hash Bcrypt, emissao de token JWT, protecao com limitador de taxa retornando HTTP 429 apos tentativas em excesso e login rapido com Google OAuth implementados no backend pelo Kayky, integrados as telas e ao layout de login refinados pela Giselly.
+2. **Catalogo de Categorias e Cache HTTP (H3):** Mostramos o cabecalho `Cache-Control: public, max-age=300` na rota `GET /api/v1/categories`, acelerando as consultas seguintes no navegador.
+3. **Publicacao de Anuncios com Imagem na Nuvem (H4):** Upload de foto real no formulario `vender.html`, conversao automatica para WebP com Sharp e salvamento no bucket do Supabase Storage.
+4. **Filtro Regional e Avaliacoes (FILT-01 e EVAL-01):** Mostramos o filtro avancado por cidades e bairros vizinhos no Prisma feito pelo Pedro Ravy, alem do sistema de avaliacao de vendedores com limite de 1 nota por comprador.
+5. **Checkout com Calculo Financeiro no Servidor (H8):** Mostramos a criacao de pedidos na rota `POST /api/v1/orders` puxando o preco original direto do banco, impedindo qualquer tentativa de alterar o valor pelo navegador.
+6. **Multiplos Enderecos do Usuario (H10):** Operacoes completas de cadastro, edicao e remocao de enderecos na rota `/api/v1/addresses` integradas na pagina de configuracoes.
+7. **Carregamento Suave com Skeleton Loading (UI-S1-04):** Apresentamos o efeito de carregamento shimmer em todas as listagens da plataforma enquanto os dados sao buscados.
+8. **Modo Escuro Global (UI-S1-01, UI-S1-05 e UI-S1-06):** Conferimos o contraste em todas as telas, a leitura do nome de avaliadores e a adaptacao da tela de criacao de anuncios ao tema escuro.
+9. **Fluxo de Navegacao (UI-S1-07 a UI-S1-11):** Janela de aviso de login para visitantes, botao Entrar no topo, botao Vender com proporcoes certas, remocao de trepidacoes com `scrollbar-gutter: stable` e menus suspensos com o mesmo padrao visual.
+10. **Denuncias e Negociacao no Chat (UI-S1-12 a UI-S1-18):** Botao de denuncia no perfil de vendedores, botoes discretos nos anuncios, baloes de proposta de preco no chat e barra lateral de filtros avancados.
+
+---
+
+### 1.3. Homologacao das Entregas pelo Product Owner
+
+O Kayky, no papel de PO, conferiu cada entrega com base nos criterios de aceitacao e nos itens da nossa Definition of Done:
+
+| Item (ID) | Descricao do Item de Trabalho | Responsavel | Pontos | Veredito do PO | Justificativa |
 | :---: | :--- | :--- | :---: | :---: | :--- |
-| **H1** | Cadastro com hashing Bcrypt e emissão de JWT | Kayky | 4 pts | ✅ **Aceita** | Cumpre todos os requisitos de segurança e testes de schema. |
-| **H2** | Login Seguro com Rate Limiting e Google Auth | Pedro & Giselly | 3 pts | ✅ **Aceita** | Bloqueio anti-bruteforce validado com sucesso e login rápido funcional. |
-| **H3** | Categorias com princípio REST e `Cache-Control` | Pedro Ravy | 2 pts | ✅ **Aceita** | Princípio REST de cacheabilidade cumprido à risca. |
-| **H4** | Publicação de Anúncios com foto em nuvem (Sharp WebP) | Kayky | 4 pts | ✅ **Aceita** | Upload em nuvem e otimização WebP funcionando perfeitamente. |
-| **H8** | Checkout com integridade financeira no servidor | Pedro Ravy | 2 pts | ✅ **Aceita** | Teste automatizado comprova segurança e travamento de preços. |
-| **H10**| Gestão de Múltiplos Endereços do Usuário | Pedro Ravy | 2 pts | ✅ **Aceita** | CRUD integrado ao banco de dados relacional. |
-| **UI-S1-01** | Revisão e correção do Modo Escuro em todas as páginas | Raili | 2 pts | ✅ **Aceita** | Contrastes e legibilidade corrigidos em todo o ecossistema. |
-| **UI-S1-02** | Corrigir ícone de Configurações na sidebar (substituir emoji) | Raili | 1 pt | ✅ **Aceita** | Ícone SVG padronizado com os demais itens da navegação. |
-| **UI-S1-03** | Melhorar botões de Meus Anúncios (cores sólidas sem neon) | Raili | 1 pt | ✅ **Aceita** | Visual moderno com alto contraste e sem brilhos fluorescentes. |
-| **UI-S1-04** | Padronizar Skeleton Loading em todas as páginas do site | Josimar | 2 pts | ✅ **Aceita** | Experiência de carregamento consistente e sem telas em branco. |
-| **UI-S1-05** | Consertar exibição do nome do avaliador no modo escuro | Josimar | 1 pt | ✅ **Aceita** | Texto perfeitamente legível com tipografia semântica. |
-| **UI-S1-06** | Ajustar página de realizar anúncios para o modo escuro | Josimar | 1 pt | ✅ **Aceita** | Formulário de venda 100% harmonizado com o tema escuro. |
-| **UI-S1-07** | Pop-up de login/cadastro para ações de usuários deslogados | Giselly | 2 pts | ✅ **Aceita** | Bloqueia ações sensíveis de forma educada e converte o usuário. |
-| **UI-S1-08** | Botão "Entrar" no cabeçalho quando o usuário estiver desconectado | Giselly | 1 pt | ✅ **Aceita** | Visibilidade imediata de login para visitantes da plataforma. |
-| **UI-S1-09** | Padronizar botão "Vender" uniforme entre páginas e conversas | Giselly | 1 pt | ✅ **Aceita** | Altura e espaçamentos simétricos em toda a aplicação. |
-| **UI-S1-10** | Corrigir deslocamento causado pela barra de scroll (`scrollbar-gutter`) | Giselly | 1 pt | ✅ **Aceita** | Layout perfeitamente estável sem trepidação ao rolar. |
-| **UI-S1-11** | Padronizar menus dropdown com design único | Giselly | 1 pt | ✅ **Aceita** | Estilo visual consistente em todas as caixas de seleção. |
-| **UI-S1-12** | Corrigir botão de filtros e alinhamento das setas na Home | Giselly | 1 pt | ✅ **Aceita** | Alinhamento visual e funcionamento das setas ajustados. |
-| **UI-S1-13** | Reposicionar categorias e condição acima da descrição | Giselly | 1 pt | ✅ **Aceita** | Hierarquia de leitura do produto melhorada substancialmente. |
-| **UI-S1-14** | Melhorar interface de denúncias (design limpo e intuitivo) | Giselly | 1 pt | ✅ **Aceita** | Modal amigável e direto para o usuário reportar fraudes. |
-| **UI-S1-15** | Discretizar botão Denunciar e remover informação de ticket | Giselly | 1 pt | ✅ **Aceita** | Redução de poluição visual na página de produto. |
-| **UI-S1-16** | Denunciar vendedor diretamente pelo perfil do vendedor | Giselly | 1 pt | ✅ **Aceita** | Recurso de segurança comunitária acessível no perfil público. |
-| **UI-S1-17** | Redesenhar mensagens de propostas de valor negociado no chat | Giselly | 2 pts | ✅ **Aceita** | Apresentação simétrica e moderna para comprador e vendedor. |
-| **UI-S1-18** | Criar barra lateral de filtros avançados ao pesquisar | Giselly | 2 pts | ✅ **Aceita** | Filtros rápidos facilitando a navegação no catálogo. |
+| **H1** | Cadastro de usuario com Bcrypt e emissao de JWT | Kayky | 4 pts | **Aceito** | Criterios de seguranca cumpridos e validacao em Zod funcionando. |
+| **H2** | Login com limitador de taxa e Google Auth | Kayky (Backend/Google Auth) e Giselly (UI de Login) | 3 pts | **Aceito** | Protecao contra tentativas continuas, OAuth e telas operacionais. |
+| **H3** | Catalogo de categorias com cabecalho `Cache-Control` | Kayky | 2 pts | **Aceito** | Regra de cacheabilidade REST atendida conforme o requisito. |
+| **H4** | Publicacao de anuncios com foto na nuvem e WebP | Kayky | 4 pts | **Aceito** | Upload e gravacao no banco funcionando de ponta a ponta. |
+| **H8** | Checkout seguro com calculo de preco no servidor | Kayky | 2 pts | **Aceito** | Teste automatizado confirma que precos alterados pelo cliente sao rejeitados. |
+| **H10**| Gestao de multiplos enderecos do usuario | Kayky | 2 pts | **Aceito** | Operacoes no PostgreSQL e telas funcionando perfeitamente. |
+| **FILT-01** | Filtro de cidades e bairros do Vale do Itaim no Prisma | Pedro Ravy | 2 pts | **Aceito** | Mapeamento regional funcional no catalogo. |
+| **EVAL-01** | Sistema de avaliacao de vendedor com trava de 1 por usuario | Pedro Ravy | 2 pts | **Aceito** | Regra de negocio salva no banco impedindo duplicidade. |
+| **UI-S1-01** | Revisao do modo escuro em todas as paginas | Raili | 2 pts | **Aceito** | Contraste e cores ajustadas sem perda de legibilidade. |
+| **UI-S1-02** | Troca de emoji por icone SVG na barra lateral | Raili | 1 pt | **Aceito** | Padrao visual consistente com o resto do sistema. |
+| **UI-S1-03** | Botoes solidos na tela Meus Anuncios | Raili | 1 pt | **Aceito** | Estilo visual sem distorcoes luminosas. |
+| **UI-S1-04** | Padronizacao do Skeleton Loading no site todo | Josimar | 2 pts | **Aceito** | Eliminou telas em branco durante a busca de dados. |
+| **UI-S1-05** | Correcao de contraste do nome do avaliador no tema escuro | Josimar | 1 pt | **Aceito** | Variavel de cor corrigida no CSS. |
+| **UI-S1-06** | Ajuste do formulario de novo anuncio ao tema escuro | Josimar | 1 pt | **Aceito** | Campos de texto e seletores claros no modo escuro. |
+| **UI-S1-07** | Modal de aviso de login para visitantes | Giselly | 2 pts | **Aceito** | Bloqueio amigavel direcionando para o login. |
+| **UI-S1-08** | Botao Entrar no cabecalho para visitantes | Giselly | 1 pt | **Aceito** | Facilita a identificacao de quem ainda nao entrou na conta. |
+| **UI-S1-09** | Padronizacao de tamanho do botao Vender | Giselly | 1 pt | **Aceito** | Alinhamento e tamanho uniforme em todas as telas. |
+| **UI-S1-10** | Eliminacao de saltos de tela com `scrollbar-gutter` | Giselly | 1 pt | **Aceito** | Rolagem estavel sem saltos laterais. |
+| **UI-S1-11** | Unificacao visual de menus suspensos | Giselly | 1 pt | **Aceito** | Consistencia de bordas e tipografia nos menus de selecao. |
+| **UI-S1-12** | Correcao de filtros e setas na pagina inicial | Giselly | 1 pt | **Aceito** | Alinhamentos corrigidos na busca. |
+| **UI-S1-13** | Reordenacao de tags de categoria e condicao no produto | Giselly | 1 pt | **Aceito** | Hierarquia de leitura melhorada nos detalhes do produto. |
+| **UI-S1-14** | Redesenho da interface de denuncias | Giselly | 1 pt | **Aceito** | Modal limpo, direto e intuitivo. |
+| **UI-S1-15** | Ajuste discreto do botao Denunciar | Giselly | 1 pt | **Aceito** | Menor poluicao visual na tela do anuncio. |
+| **UI-S1-16** | Denuncia de vendedor direto pelo perfil publico | Giselly | 1 pt | **Aceito** | Canal de alerta da comunidade facil de encontrar. |
+| **UI-S1-17** | Redesenho das propostas de preco no chat | Giselly | 2 pts | **Aceito** | Baloes organizados com opcoes de aceitar e recusar propostas. |
+| **UI-S1-18** | Barra lateral de filtros avancados na busca | Giselly | 2 pts | **Aceito** | Filtragem precisa por condicao, preco e localidade. |
 
-* **Total de Pontos Entregues e Aceitos:** **24 pontos**.
-* **Velocidade da Sprint 1 ($V_1$):** **24 pontos**.
+* **Total de pontos entregues e aceitos:** 24 pontos.
+* **Velocidade alcancada na Sprint 1:** **24 pontos**.
+* **Reorganizacao do Backlog:** Apos homologar as entregas, o Kayky reorganizou as prioridades para a Sprint 2, colocando no topo do backlog a funcionalidade inovadora do cooldown de 30 dias para o @, a busca fonetica unaccent e a correcao dos problemas de sessao e usabilidade.
 
 ---
 
-## 🔄 Parte 2: Retrospectiva da Sprint 1 (Inspeção do Processo e da Forma de Trabalhar)
+## 2. Sprint Retrospective — Inspecao do Processo e Adaptacao
 
-A equipe realizou a dinâmica dos três pilares (*Começar, Parar, Continuar*) para avaliar o fluxo de trabalho da primeira semana:
+Logo apos a Review, nos reunimos com o Josimar facilitando a Retrospectiva da Sprint 1. Usamos a dinamica de Comecar, Parar e Continuar para avaliar onde estavamos acertando e o que precisavamos mudar no nosso dia a dia:
 
-| Membro | 🚀 Começar a Fazer | 🛑 Parar de Fazer | ⭐ Continuar Fazendo |
+| Integrante | Comecar a fazer | Parar de fazer | Continuar fazendo |
 | :--- | :--- | :--- | :--- |
-| **Kayky** | Padronizar checagens de validação com respostas de erro prévias para não sobrecarregar rotas no submit | Deixar revisões de PR acumularem para o final do dia | Manter cobertura de testes automatizados desde a criação da rota |
-| **Pedro Ravy** | Criar scripts automatizados de migração e índices antes de subir os endpoints | Submeter branches com commits genéricos sem citar o ID da história | Alinhamento técnico rápido via Discord quando surge dúvida de modelo |
-| **Josimar** | Adicionar feedback de validação em tempo real com debounce nos campos do frontend | Testar integração apenas com dados estáticos no navegador | Pareamento rápido para destravar problemas de CORS e autenticação |
-| **Raili** | Incluir validações visuais antes de disparar requisições para evitar chamadas 400 desnecessárias | Deixar de ler os schemas Zod do backend antes de fazer o formulário | Manter o layout consistente com a identidade visual do projeto |
-| **Giselly** | Criar mensagens de erro amigáveis para o usuário quando o backend rejeitar por regras de negócio | Ignorar mensagens de erro no console durante os testes manuais | Apoiar nos testes cruzados entre frontend e backend |
+| **Kayky** | Fazer validacao em tempo real no frontend antes do envio final do formulario. | Deixar revisoes de Pull Requests acumularem para o fim do dia. | Manter os testes automatizados rodando a cada mudanca feita. |
+| **Pedro Ravy** | Criar scripts de banco e indices antes de subir endpoints que dependem de consultas mais pesadas. | Escrever mensagens de commit genericas sem citar o que foi feito. | Manter alinhamentos rapidos no WhatsApp quando bater duvida de tabela ou rota. |
+| **Josimar** | Adicionar debounce nos campos de digitacao no frontend para nao sobrecarregar a API. | Testar integracoes apenas com dados falsos sem chamar o backend real. | Fazer programacao em dupla no laboratorio para destravar problemas dificeis. |
+| **Raili** | Colocar avisos visuais preventivos nos formularios para evitar respostas de erro 400. | Desenvolver telas sem olhar os schemas de validacao definidos no backend. | Seguir rigorosamente o padrao visual e de cores do nosso projeto. |
+| **Giselly** | Tratar os codigos de erro da API com mensagens claras para quem esta usando o sistema. | Deixar passar alertas no console do navegador durante os testes manuais. | Fazer testes cruzados de ponta a ponta entre as telas e a API. |
 
 ---
 
-## 🏆 3. Melhoria Escolhida da Sprint 1 (Ação Concreta para a Sprint 2)
+## 3. Melhoria Escolhida da Sprint 1 (Acao para a Sprint 2)
 
-Em votação consensual, a equipe definiu a seguinte melhoria de processo:
+Conversando juntos, escolhemos a principal melhoria de processo para colocar em pratica na Sprint 2:
 
-* **Descrição da Melhoria (MELH-1):** *"Implementar validação prévia em tempo real com debounce no frontend e tratamento padronizado de códigos de erro específicos (`code`) retornados pelo backend, garantindo que o usuário veja mensagens orientativas e claras antes mesmo de submeter o formulário."*
-* **Responsáveis:** **Giselly** e **Pedro Ravy**.
-* **Prazo de Aplicação:** Sprint 2 (a ser incorporado como item de trabalho no Sprint Backlog da Sprint 2 e verificado na Retro 2).
-* **Critério de Sucesso:** Mensagens de erro amigáveis e debounce de 400ms em endpoints críticos (como checagem de username e busca de produtos).
+* **Descricao da Melhoria (MELH-1):**  
+  *"Colocar validacao previa com debounce de 400ms no frontend e tratar os codigos de erro vindos da API, para que o usuario receba orientacoes claras enquanto digita o seu nome de usuario (@) antes mesmo de enviar o formulario, evitando requisicoes desnecessarias e mensagens de erro genericas."*
+* **Responsaveis:** **Giselly** (Frontend) e **Kayky** (Backend).
+* **Prazo de aplicacao:** Sprint 2 (entrou como item no Sprint Backlog da Sprint 2 e sera avaliada na Retrospectiva da Sprint 2).
+* **Como comprovar:** Presenca do temporizador de debounce no JavaScript e consumo do endpoint `/auth/check-username` na tela de configuracoes de conta, tratando codigos de bloqueio e duplicidade.

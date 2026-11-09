@@ -19,6 +19,9 @@
     "dev:backend": "npm --prefix backend run dev",
     "start:backend": "npm --prefix backend run start",
     "test": "npm --prefix backend run test",
+    "test:unit": "npm --prefix backend run test:unit",
+    "test:unit:coverage": "npm --prefix backend run test:unit:coverage",
+    "test:integration": "npm --prefix backend run test:integration",
     "test:backend": "npm --prefix backend run test",
     "install:backend": "npm --prefix backend install"
   },

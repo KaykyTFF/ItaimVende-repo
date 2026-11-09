@@ -24,7 +24,7 @@ body[data-theme="dark"].pagina-categoria,
 }
 
 [data-theme="dark"] .breadcrumb-cat a:hover {
-    color: #4ADE80 !important;
+    color: #38A129 !important;
 }
 
 [data-theme="dark"] .breadcrumb-cat span {
@@ -33,19 +33,19 @@ body[data-theme="dark"].pagina-categoria,
 
 [data-theme="dark"] .breadcrumb-cat .ativo,
 [data-theme="dark"] #breadcrumb-categoria-nome {
-    color: #4ADE80 !important;
+    color: #38A129 !important;
 }
 
 /* Banner Hero da Categoria */
 [data-theme="dark"] .categoria-hero {
     background: #1F2831 !important;
     border: 1px solid #2C3946 !important;
-    border-left: 5px solid #44BD32 !important;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35) !important;
+    border-left: 5px solid #38A129 !important;
+    box-shadow: none !important;
 }
 
 [data-theme="dark"] .categoria-hero::after {
-    background: radial-gradient(circle at 100% 50%, rgba(68, 189, 50, 0.12) 0%, transparent 70%) !important;
+    display: none !important;
 }
 
 [data-theme="dark"] .categoria-hero-info h1,
@@ -59,15 +59,53 @@ body[data-theme="dark"].pagina-categoria,
 }
 
 [data-theme="dark"] .categoria-hero-badge,
-[data-theme="dark"] #categoria-contador-badge {
-    background-color: rgba(74, 222, 128, 0.16) !important;
-    border: 1px solid rgba(74, 222, 128, 0.3) !important;
-    color: #4ADE80 !important;
+[data-theme="dark"] #categoria-contador-badge,
+.dark-theme .categoria-hero-badge,
+.dark-theme #categoria-contador-badge {
+    background-color: #38A129 !important;
+    background: #38A129 !important;
+    border: none !important;
+    color: #FFFFFF !important;
+    box-shadow: none !important;
+}
+
+[data-theme="dark"] .categoria-hero-badge::before,
+[data-theme="dark"] #categoria-contador-badge::before,
+.dark-theme .categoria-hero-badge::before,
+.dark-theme #categoria-contador-badge::before {
+    background-color: #FFFFFF !important;
+    background: #FFFFFF !important;
+    box-shadow: none !important;
 }
 
 /* Barra de Filtros e Título da Vitrine */
 [data-theme="dark"] .titulo-vitrine {
     color: #F1F5F9 !important;
+}
+
+/* Botões Grid / Lista */
+[data-theme="dark"] .btn-toggle-view.ativo {
+    background-color: #38A129 !important;
+    border-color: #38A129 !important;
+    color: #FFFFFF !important;
+    box-shadow: none !important;
+}
+
+/* Botão Limpar Filtros */
+[data-theme="dark"] .btn-limpar-filtros-sidebar {
+    color: #38A129 !important;
+}
+
+[data-theme="dark"] .btn-limpar-filtros-sidebar:hover {
+    background-color: rgba(56, 161, 41, 0.12) !important;
+    color: #2E8B22 !important;
+}
+
+/* Checkbox Marcado no Tema Escuro */
+[data-theme="dark"] .filtro-sidebar-check:checked+.custom-checkbox {
+    background-color: #38A129 !important;
+    border-color: #38A129 !important;
+    box-shadow: none !important;
 }
 
 /* Ícones de Categoria Circulares */
@@ -78,7 +116,7 @@ body[data-theme="dark"].pagina-categoria,
 }
 
 [data-theme="dark"] .circulo-icon-categoria:hover {
-    border-color: #4ADE80 !important;
+    border-color: #38A129 !important;
 }
 
 [data-theme="dark"] .label-categoria {

@@ -1,11 +1,12 @@
 /* ==========================================================================
-   CABEÇALHO
+   CABEÇALHO DO PAINEL (DESIGN BRANCO / SITE ITAIM VENDE)
    ========================================================================== */
 .painel-header {
-    background: rgba(11, 15, 25, 0.85);
+    background: var(--bg-card);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--bg-card-border);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
     position: sticky;
     top: 0;
     z-index: 100;
@@ -14,7 +15,7 @@
 .painel-header-container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 16px 24px;
+    padding: 14px 24px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -50,7 +51,7 @@
     font-size: 1.25rem;
     font-weight: 800;
     letter-spacing: -0.02em;
-    color: #ffffff;
+    color: var(--text-primary);
 }
 
 .painel-subtitle {
@@ -59,9 +60,9 @@
 }
 
 .badge-env {
-    background: rgba(99, 102, 241, 0.2);
-    color: #a5b4fc;
-    border: 1px solid rgba(99, 102, 241, 0.4);
+    background: rgba(68, 189, 50, 0.12);
+    color: #2E7D32;
+    border: 1px solid rgba(68, 189, 50, 0.3);
     font-size: 0.7rem;
     font-weight: 700;
     padding: 2px 8px;
@@ -69,9 +70,13 @@
     text-transform: uppercase;
 }
 
+.badge-version {
+    color: var(--text-muted);
+}
+
 .badge-tunnel {
-    background: rgba(16, 185, 129, 0.15);
-    color: #34d399;
+    background: var(--success-bg);
+    color: #059669;
     border: 1px solid var(--success-border);
     font-size: 0.72rem;
     font-weight: 600;
@@ -95,7 +100,7 @@
     gap: 6px;
     font-size: 0.82rem;
     color: var(--text-secondary);
-    background: rgba(255, 255, 255, 0.04);
+    background: var(--bg-card-subtle);
     border: 1px solid var(--bg-card-border);
     padding: 6px 12px;
     border-radius: var(--radius-sm);
@@ -104,7 +109,7 @@
 .painel-select {
     background: transparent;
     border: none;
-    color: #ffffff;
+    color: var(--text-primary);
     font-family: inherit;
     font-size: 0.82rem;
     font-weight: 600;
@@ -113,8 +118,8 @@
 }
 
 .painel-select option {
-    background: #111827;
-    color: #ffffff;
+    background: var(--bg-card);
+    color: var(--text-primary);
 }
 
 .btn-painel {
@@ -133,46 +138,49 @@
 }
 
 .btn-refresh {
-    background: rgba(255, 255, 255, 0.06);
+    background: var(--bg-card);
     border-color: var(--bg-card-border);
     color: var(--text-primary);
 }
 
 .btn-refresh:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--bg-card-subtle);
+    border-color: var(--brand-primary);
     transform: translateY(-1px);
 }
 
 .btn-diagnostico {
-    background: var(--brand-gradient);
-    color: #ffffff;
-    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+    background: var(--brand-primary);
+    color: #FFFFFF;
+    box-shadow: 0 4px 14px rgba(68, 189, 50, 0.25);
 }
 
 .btn-diagnostico:hover {
-    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+    background: var(--brand-primary-hover);
+    box-shadow: 0 6px 20px rgba(68, 189, 50, 0.35);
     transform: translateY(-1px);
 }
 
 .btn-copiar {
-    background: rgba(255, 255, 255, 0.06);
+    background: var(--bg-card);
     border-color: var(--bg-card-border);
     color: var(--text-secondary);
 }
 
 .btn-copiar:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: #ffffff;
+    background: var(--bg-card-subtle);
+    color: var(--text-primary);
+    border-color: var(--brand-primary);
 }
 
 .btn-home {
-    background: transparent;
+    background: var(--bg-card);
     color: var(--text-secondary);
     border-color: var(--bg-card-border);
 }
 
 .btn-home:hover {
-    background: rgba(255, 255, 255, 0.06);
-    color: #ffffff;
+    background: var(--bg-card-subtle);
+    color: var(--brand-primary);
+    border-color: var(--brand-primary);
 }
-

@@ -1,6 +1,7 @@
 import {
   listUserNotifications,
   getUnreadNotificationCount,
+  getNotificationCategoryCounts,
   markNotificationAsRead,
   markAllNotificationsAsRead,
   deleteNotification,
@@ -31,12 +32,25 @@ export async function getUnreadCount(req, res, next) {
   }
 }
 
+export async function getCategoryCounts(req, res, next) {
+  try {
+    const data = await getNotificationCategoryCounts(req.user.id);
+    res.status(200).json({
+      success: true,
+      data,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function markRead(req, res, next) {
   try {
     const data = await markNotificationAsRead(req.user.id, req.params.id);
     res.status(200).json({
       success: true,
       message: 'Notificação marcada como lida.',
+      ...data,
       data,
     });
   } catch (error) {

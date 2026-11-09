@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="Criar anúncio no Itaim Vende - Anuncie gratuitamente seus produtos e serviços na região de Paulistana e Piauí.">
+    <meta name="description"
+        content="Criar anúncio no Itaim Vende - Anuncie gratuitamente seus produtos e serviços na região de Paulistana e Piauí.">
     <title>Criar Anúncio - Itaim Vende</title>
 
     <!-- Anti-FOUC: Aplicação imediata do tema escuro/claro para eliminar qualquer flash visual -->
     <script>
-        (function() {
+        (function () {
             try {
                 var p = (window.location.pathname || '').toLowerCase();
                 var isAuth = p.endsWith('index.html') || p.includes('/auth/') || p.includes('/login') || p.includes('/cadastro');
@@ -21,7 +23,7 @@
                     d.classList.remove('dark-theme');
                 }
                 d.classList.add('tema-sem-transicao');
-                var o = new MutationObserver(function() {
+                var o = new MutationObserver(function () {
                     if (document.body) {
                         document.body.setAttribute('data-theme', tema);
                         if (tema === 'dark') {
@@ -33,7 +35,7 @@
                     }
                 });
                 o.observe(d, { childList: true, subtree: true });
-                window.addEventListener('DOMContentLoaded', function() {
+                window.addEventListener('DOMContentLoaded', function () {
                     o.disconnect();
                     if (document.body) {
                         document.body.setAttribute('data-theme', tema);
@@ -43,29 +45,32 @@
                             document.body.classList.remove('dark-theme');
                         }
                     }
-                    requestAnimationFrame(function() {
-                        requestAnimationFrame(function() {
+                    requestAnimationFrame(function () {
+                        requestAnimationFrame(function () {
                             d.classList.remove('tema-sem-transicao');
                         });
                     });
                 });
-            } catch (e) {}
+            } catch (e) { }
         })();
     </script>
-    
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Segoe+UI&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Segoe+UI&display=swap"
+        rel="stylesheet">
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="../../assets/logos/header-logo.png">
-    
+
     <!-- CSS do Projeto e Estilos Específicos da Página Vender -->
     <link rel="stylesheet" href="../../css/pages/home/home.css">
     <link rel="stylesheet" href="../../css/core/header-global.css?v=26">
-    <link rel="stylesheet" href="../../css/pages/vender/vender.css?v=15">
+    <link rel="stylesheet" href="../../css/pages/vender/vender.css?v=16">
 </head>
+
 <body class="pagina-vender">
 
     <!-- ==========================================================
@@ -75,8 +80,10 @@
         <div class="header-container">
             <!-- Esquerda: Menu Hambúrguer e Logo -->
             <div class="header-left">
-                <button type="button" class="btn-menu-hamburguer" id="btn-abrir-drawer" aria-label="Abrir menu de navegação">
-                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <button type="button" class="btn-menu-hamburguer" id="btn-abrir-drawer"
+                    aria-label="Abrir menu de navegação">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2"
+                        stroke-linecap="round" stroke-linejoin="round">
                         <line x1="3" y1="12" x2="21" y2="12"></line>
                         <line x1="3" y1="6" x2="21" y2="6"></line>
                         <line x1="3" y1="18" x2="21" y2="18"></line>
@@ -90,17 +97,12 @@
             <!-- Centro: Barra de Pesquisa Estilo Pílula -->
             <div class="header-center">
                 <form class="busca-form" id="form-busca" role="search" action="categoria.html" method="GET">
-                    <input 
-                        type="search" 
-                        class="campo-busca" 
-                        id="campo-busca" 
-                        name="q"
-                        placeholder="Buscar produtos, marcas e muito mais..." 
-                        autocomplete="off"
-                        aria-label="Buscar produtos"
-                    >
+                    <input type="search" class="campo-busca" id="campo-busca" name="q"
+                        placeholder="Buscar produtos, marcas e muito mais..." autocomplete="off"
+                        aria-label="Buscar produtos">
                     <button type="submit" class="btn-busca-submit" id="btn-submit-busca" aria-label="Pesquisar">
-                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                            stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="11" cy="11" r="8"></circle>
                             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                         </svg>
@@ -112,7 +114,8 @@
             <div class="header-right">
                 <!-- Desktop: Meus Anúncios (Ícone + Texto) -->
                 <a href="meus-anuncios.html" class="btn-nav-texto" id="link-meus-anuncios">
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
                         <path d="M3 11l19-9-9 19-2-8-8-2z"></path>
                     </svg>
                     <span>Meus Anúncios</span>
@@ -125,30 +128,37 @@
 
                 <!-- Ícone Conversas -->
                 <a href="/conversas" class="btn-icone-header" id="btn-chat" aria-label="Conversas" title="Conversas">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                     </svg>
                 </a>
 
                 <!-- Ícone Notificações -->
-                <a href="/notificacoes" class="btn-icone-header" id="btn-notificacoes" aria-label="Notificações" title="Notificações">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <a href="/notificacoes" class="btn-icone-header" id="btn-notificacoes" aria-label="Notificações"
+                    title="Notificações">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
                         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
                         <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
                     </svg>
                 </a>
 
                 <!-- Mobile: Ícone Meus Anúncios (substitui o coração no celular) -->
-                <a href="meus-anuncios.html" class="btn-icone-header btn-meus-anuncios-mobile" id="btn-meus-anuncios-mobile" aria-label="Meus Anúncios" title="Meus Anúncios">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <a href="meus-anuncios.html" class="btn-icone-header btn-meus-anuncios-mobile"
+                    id="btn-meus-anuncios-mobile" aria-label="Meus Anúncios" title="Meus Anúncios">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
                         <path d="M3 11l19-9-9 19-2-8-8-2z"></path>
                     </svg>
                 </a>
 
                 <!-- Perfil do Usuário com Dropdown -->
                 <div class="perfil-wrapper">
-                    <button type="button" class="btn-avatar-header" id="btn-avatar-dropdown" aria-label="Abrir menu de perfil">
-                        <img src="../../assets/icons/icon-user.png" alt="Foto de perfil" class="avatar-img" id="img-avatar-user">
+                    <button type="button" class="btn-avatar-header" id="btn-avatar-dropdown"
+                        aria-label="Abrir menu de perfil">
+                        <img src="../../assets/icons/icon-user.png" alt="Foto de perfil" class="avatar-img"
+                            id="img-avatar-user">
                     </button>
 
                     <div class="dropdown-perfil" id="dropdown-perfil">
@@ -157,26 +167,42 @@
                             <span id="dropdown-user-email">admin@gmail.com</span>
                         </a>
                         <a href="/perfil" class="dropdown-item" id="link-menu-perfil">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
                             Meu Perfil
                         </a>
                         <a href="meus-anuncios.html" class="dropdown-item" id="link-menu-anuncios">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l19-9-9 19-2-8-8-2z"></path></svg>
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M3 11l19-9-9 19-2-8-8-2z"></path>
+                            </svg>
                             Meus Anúncios
                         </a>
                         <a href="/favoritos" class="dropdown-item" id="link-menu-favoritos">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path
+                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                                </path>
+                            </svg>
                             Favoritos (<span id="favoritos-contador-badge">0</span>)
                         </a>
                         <a href="/configuracoes" class="dropdown-item" id="link-menu-configuracoes">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="3"></circle>
-                                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0 1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                                <path
+                                    d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0 1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                                </path>
                             </svg>
                             Configurações
                         </a>
                         <a href="/login" class="dropdown-item item-sair">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                                 <polyline points="16 17 21 12 16 7"></polyline>
                                 <line x1="21" y1="12" x2="9" y2="12"></line>
@@ -196,38 +222,57 @@
         <aside class="drawer-menu" aria-label="Menu principal">
             <div class="drawer-header">
                 <img src="../../assets/logos/header1-logo.png" alt="Itaim Vende" class="drawer-logo">
-                <button type="button" class="drawer-close" id="btn-fechar-drawer" aria-label="Fechar menu">&times;</button>
+                <button type="button" class="drawer-close" id="btn-fechar-drawer"
+                    aria-label="Fechar menu">&times;</button>
             </div>
 
             <nav class="drawer-nav">
                 <a href="/" class="drawer-link" id="drawer-link-home">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    </svg>
                     Início
                 </a>
                 <a href="/perfil" class="drawer-link" id="drawer-link-perfil">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
                     Meu Perfil
                 </a>
                 <a href="meus-anuncios.html" class="drawer-link" id="drawer-link-anuncios">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l19-9-9 19-2-8-8-2z"></path></svg>
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 11l19-9-9 19-2-8-8-2z"></path>
+                    </svg>
                     Meus Anúncios
                 </a>
                 <a href="/favoritos" class="drawer-link" id="drawer-link-favoritos">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                        </path>
+                    </svg>
                     Meus Favoritos
                 </a>
                 <a href="/conversas" class="drawer-link" id="drawer-link-chat">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                     </svg>
                     Conversas
                 </a>
                 <a href="vender.html" class="drawer-link ativo" id="drawer-link-vender">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
                     Vender Produto
                 </a>
                 <a href="/notificacoes" class="drawer-link" id="drawer-link-notificacoes">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
                     Notificações
                 </a>
 
@@ -235,7 +280,8 @@
                 <div class="drawer-secao-divisor"></div>
                 <button type="button" class="drawer-accordion-btn" id="btn-toggle-categorias" aria-expanded="false">
                     <span class="drawer-accordion-label">
-                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+                            stroke-width="2">
                             <rect x="3" y="3" width="7" height="7"></rect>
                             <rect x="14" y="3" width="7" height="7"></rect>
                             <rect x="14" y="14" width="7" height="7"></rect>
@@ -243,7 +289,8 @@
                         </svg>
                         <span>Categorias</span>
                     </span>
-                    <svg class="chevron-accordion" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg class="chevron-accordion" viewBox="0 0 24 24" width="16" height="16" fill="none"
+                        stroke="currentColor" stroke-width="2">
                         <polyline points="6 9 12 15 18 9"></polyline>
                     </svg>
                 </button>
@@ -280,7 +327,8 @@
                     <a href="/categoria?cat=Servi%C3%A7os" class="drawer-sublink">Serviços</a>
                     <a href="/categoria?cat=M%C3%BAsica" class="drawer-sublink">Música</a>
                     <a href="/categoria?cat=Hobbies" class="drawer-sublink">Hobbies</a>
-                    <a href="/categoria?cat=Animais%20de%20Estima%C3%A7%C3%A3o" class="drawer-sublink">Animais de Estimação</a>
+                    <a href="/categoria?cat=Animais%20de%20Estima%C3%A7%C3%A3o" class="drawer-sublink">Animais de
+                        Estimação</a>
                     <a href="/categoria?cat=Pet%20Shop" class="drawer-sublink">Pet Shop</a>
                     <a href="/categoria?cat=Doa%C3%A7%C3%B5es" class="drawer-sublink">Doações</a>
                     <a href="/categoria?cat=Trocas" class="drawer-sublink">Trocas</a>
@@ -288,11 +336,15 @@
                 </div>
 
                 <div class="drawer-secao-divisor"></div>
-                <button type="button" class="drawer-link btn-alternar-tema" id="btn-tema-drawer" aria-label="Alternar tema do site">
-                    <svg class="icone-tema-lua" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <button type="button" class="drawer-link btn-alternar-tema" id="btn-tema-drawer"
+                    aria-label="Alternar tema do site">
+                    <svg class="icone-tema-lua" viewBox="0 0 24 24" width="20" height="20" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                     </svg>
-                    <svg class="icone-tema-sol" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                    <svg class="icone-tema-sol" viewBox="0 0 24 24" width="20" height="20" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        style="display: none;">
                         <circle cx="12" cy="12" r="5"></circle>
                         <line x1="12" y1="1" x2="12" y2="3"></line>
                         <line x1="12" y1="21" x2="12" y2="23"></line>
@@ -311,14 +363,18 @@
                     </span>
                 </button>
                 <a href="/configuracoes" class="drawer-link" id="drawer-link-configuracoes">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="3"></circle>
-                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0 1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                        <path
+                            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0 1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                        </path>
                     </svg>
                     Configurações
                 </a>
                 <a href="/login" class="drawer-link item-sair">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                         <polyline points="16 17 21 12 16 7"></polyline>
                         <line x1="21" y1="12" x2="9" y2="12"></line>
@@ -333,11 +389,17 @@
          3. CONTEÚDO PRINCIPAL (CRIAR ANÚNCIO / MODELO EXATO DA IMAGEM)
          ========================================================== -->
     <main class="vender-main">
-        
+
         <!-- Topo da página: Botão voltar e Título Central -->
         <div class="vender-header-bar">
-            <button type="button" class="btn-voltar-cat btn-voltar-vender" onclick="if(window.history.length > 1){window.history.back()}else{window.location.href='../home/home.html'}" aria-label="Voltar para a página anterior">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            <button type="button" class="btn-voltar-cat btn-voltar-vender"
+                onclick="if(window.history.length > 1){window.history.back()}else{window.location.href='../home/home.html'}"
+                aria-label="Voltar para a página anterior">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
                 Voltar
             </button>
             <h1 class="vender-titulo-pagina">Criar anúncio</h1>
@@ -347,7 +409,7 @@
              PROCESSO INTERATIVO POR ETAPAS (WIZARD DE CRIAÇÃO)
              ====================================================== -->
         <div class="vender-wizard-wrapper" id="vender-cards-wrapper">
-            
+
             <!-- Barra de Progresso Limpa (Estilo Cadastrar) -->
             <div class="vender-progresso-box" role="region" aria-label="Progresso do cadastro do anúncio">
                 <div class="wizard-info-linha">
@@ -361,7 +423,7 @@
 
             <!-- Paineis do Wizard -->
             <div class="wizard-paineis-wrapper">
-                
+
                 <!-- ==============================================================
                      ETAPA 1: FOTOS DO PRODUTO
                      ============================================================== -->
@@ -370,8 +432,11 @@
                         <div class="etapa-cabecalho">
                             <div class="etapa-cabecalho-texto">
                                 <h2>
-                                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2">
-                                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+                                        stroke-width="2.2">
+                                        <path
+                                            d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z">
+                                        </path>
                                         <circle cx="12" cy="13" r="4"></circle>
                                     </svg>
                                     Fotos
@@ -383,20 +448,35 @@
                         <!-- Galeria de Fotos: Quadrado com + e fotos adicionadas ao lado (a 1ª é a capa) -->
                         <div class="galeria-fotos-vender" id="galeria-fotos-vender">
                             <!-- Quadrado de Adicionar Foto com + -->
-                            <div class="quadrado-add-foto" id="btn-add-foto" role="button" tabindex="0" title="Adicionar fotos" aria-label="Adicionar fotos">
-                                <svg class="icone-mais-svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <div class="quadrado-add-foto" id="btn-add-foto" role="button" tabindex="0"
+                                title="Adicionar fotos" aria-label="Adicionar fotos">
+                                <svg class="icone-mais-svg" viewBox="0 0 24 24" width="32" height="32" fill="none"
+                                    stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                                    stroke-linejoin="round">
                                     <line x1="12" y1="5" x2="12" y2="19"></line>
                                     <line x1="5" y1="12" x2="19" y2="12"></line>
                                 </svg>
-                                <input type="file" id="input-fotos-upload" accept="image/*" multiple style="display: none;">
+                                <input type="file" id="input-fotos-upload" accept="image/*" multiple
+                                    style="display: none;">
                             </div>
+                        </div>
+
+                        <!-- Feedback de validação de fotos obrigatórias -->
+                        <div class="feedback-msg-fotos" id="feedback-fotos" style="display: none; color: #DC2626; font-size: 13.5px; font-weight: 600; margin-top: 14px; align-items: center; gap: 6px;">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="8" x2="12" y2="12"></line>
+                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                            </svg>
+                            <span>Adicione pelo menos 1 foto do produto para continuar.</span>
                         </div>
 
                         <!-- Barra de Navegação da Etapa 1 -->
                         <div class="wizard-botoes-navegacao">
                             <button type="button" class="btn-wizard-nav btn-wizard-proximo" id="btn-passo1-proximo">
                                 <span>Avançar</span>
-                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                    stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                     <line x1="5" y1="12" x2="19" y2="12"></line>
                                     <polyline points="12 5 19 12 12 19"></polyline>
                                 </svg>
@@ -413,7 +493,8 @@
                         <div class="etapa-cabecalho">
                             <div class="etapa-cabecalho-texto">
                                 <h2>
-                                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2">
+                                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+                                        stroke-width="2.2">
                                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                                         <polyline points="14 2 14 8 20 8"></polyline>
                                     </svg>
@@ -426,23 +507,19 @@
                             <!-- Título do Anúncio -->
                             <div class="campo-vender-wrapper">
                                 <label for="input-titulo" class="rotulo-secao-campo">Título *</label>
-                                <input 
-                                    type="text" 
-                                    class="input-vender-padrao" 
-                                    id="input-titulo" 
-                                    placeholder="Ex: iPhone 13 128GB Azul" 
-                                    autocomplete="off"
-                                    maxlength="80"
-                                >
+                                <input type="text" class="input-vender-padrao" id="input-titulo"
+                                    placeholder="Ex: iPhone 13 128GB Azul" autocomplete="off" maxlength="80">
                             </div>
 
                             <!-- Categoria (Gaveta Verde Oficial) -->
                             <div class="campo-vender-wrapper">
                                 <label class="rotulo-secao-campo">Categoria *</label>
                                 <div class="dropdown-pill-container" id="dropdown-categoria">
-                                    <button type="button" class="btn-dropdown-pill" id="btn-dropdown-categoria" aria-haspopup="listbox">
+                                    <button type="button" class="btn-dropdown-pill" id="btn-dropdown-categoria"
+                                        aria-haspopup="listbox">
                                         <span id="label-categoria-texto">Selecionar Categoria</span>
-                                        <svg class="chevron-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                        <svg class="chevron-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-linecap="round" stroke-linejoin="round">
                                             <polyline points="6 9 12 15 18 9"></polyline>
                                         </svg>
                                     </button>
@@ -461,12 +538,14 @@
                                         <div class="item-opcao-dropdown" data-valor="Games">Games</div>
                                         <div class="item-opcao-dropdown" data-valor="Móveis">Móveis</div>
                                         <div class="item-opcao-dropdown" data-valor="Decoração">Decoração</div>
-                                        <div class="item-opcao-dropdown" data-valor="Eletrodomésticos">Eletrodomésticos</div>
+                                        <div class="item-opcao-dropdown" data-valor="Eletrodomésticos">Eletrodomésticos
+                                        </div>
                                         <div class="item-opcao-dropdown" data-valor="Moda">Moda</div>
                                         <div class="item-opcao-dropdown" data-valor="Calçados">Calçados</div>
                                         <div class="item-opcao-dropdown" data-valor="Acessórios">Acessórios</div>
                                         <div class="item-opcao-dropdown" data-valor="Beleza">Beleza</div>
-                                        <div class="item-opcao-dropdown" data-valor="Cuidado Pessoal">Cuidado Pessoal</div>
+                                        <div class="item-opcao-dropdown" data-valor="Cuidado Pessoal">Cuidado Pessoal
+                                        </div>
                                         <div class="item-opcao-dropdown" data-valor="Infantil">Infantil</div>
                                         <div class="item-opcao-dropdown" data-valor="Bebês">Bebês</div>
                                         <div class="item-opcao-dropdown" data-valor="Esportes">Esportes</div>
@@ -479,7 +558,8 @@
                                         <div class="item-opcao-dropdown" data-valor="Serviços">Serviços</div>
                                         <div class="item-opcao-dropdown" data-valor="Música">Música</div>
                                         <div class="item-opcao-dropdown" data-valor="Hobbies">Hobbies</div>
-                                        <div class="item-opcao-dropdown" data-valor="Animais de Estimação">Animais de Estimação</div>
+                                        <div class="item-opcao-dropdown" data-valor="Animais de Estimação">Animais de
+                                            Estimação</div>
                                         <div class="item-opcao-dropdown" data-valor="Pet Shop">Pet Shop</div>
                                         <div class="item-opcao-dropdown" data-valor="Doações">Doações</div>
                                         <div class="item-opcao-dropdown" data-valor="Trocas">Trocas</div>
@@ -492,18 +572,24 @@
                             <div class="campo-vender-wrapper">
                                 <label class="rotulo-secao-campo">Condição *</label>
                                 <div class="dropdown-pill-container" id="dropdown-condicao">
-                                    <button type="button" class="btn-dropdown-pill" id="btn-dropdown-condicao" aria-haspopup="listbox">
+                                    <button type="button" class="btn-dropdown-pill" id="btn-dropdown-condicao"
+                                        aria-haspopup="listbox">
                                         <span id="label-condicao-texto">Selecionar Condição</span>
-                                        <svg class="chevron-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                        <svg class="chevron-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-linecap="round" stroke-linejoin="round">
                                             <polyline points="6 9 12 15 18 9"></polyline>
                                         </svg>
                                     </button>
                                     <div class="menu-dropdown-opcoes" id="menu-condicao-opcoes" role="listbox">
                                         <div class="item-opcao-dropdown" data-valor="Novo">Novo (Lacrado)</div>
-                                        <div class="item-opcao-dropdown" data-valor="Usado - Excelente">Usado – Excelente estado</div>
-                                        <div class="item-opcao-dropdown" data-valor="Usado - Bom">Usado – Bom estado</div>
-                                        <div class="item-opcao-dropdown" data-valor="Usado - Sinais de uso">Usado – Sinais de uso</div>
-                                        <div class="item-opcao-dropdown" data-valor="Para Peças / Defeito">Para retirada de peças</div>
+                                        <div class="item-opcao-dropdown" data-valor="Usado - Excelente">Usado –
+                                            Excelente estado</div>
+                                        <div class="item-opcao-dropdown" data-valor="Usado - Bom">Usado – Bom estado
+                                        </div>
+                                        <div class="item-opcao-dropdown" data-valor="Usado - Sinais de uso">Usado –
+                                            Sinais de uso</div>
+                                        <div class="item-opcao-dropdown" data-valor="Para Peças / Defeito">Para retirada
+                                            de peças</div>
                                     </div>
                                 </div>
                             </div>
@@ -511,12 +597,9 @@
                             <!-- Descrição -->
                             <div class="campo-vender-wrapper">
                                 <label for="textarea-descricao" class="rotulo-secao-campo">Descrição</label>
-                                <textarea 
-                                    class="textarea-vender-padrao" 
-                                    id="textarea-descricao" 
+                                <textarea class="textarea-vender-padrao" id="textarea-descricao"
                                     placeholder="Descreva detalhes, condições e informações do produto..."
-                                    maxlength="1000"
-                                ></textarea>
+                                    maxlength="1000"></textarea>
                                 <div class="contador-caracteres" id="contador-desc">0 / 1000</div>
                             </div>
                         </div>
@@ -524,7 +607,8 @@
                         <!-- Barra de Navegação da Etapa 2 -->
                         <div class="wizard-botoes-navegacao">
                             <button type="button" class="btn-wizard-nav btn-wizard-anterior" id="btn-passo2-anterior">
-                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                    stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                     <line x1="19" y1="12" x2="5" y2="12"></line>
                                     <polyline points="12 19 5 12 12 5"></polyline>
                                 </svg>
@@ -532,7 +616,8 @@
                             </button>
                             <button type="button" class="btn-wizard-nav btn-wizard-proximo" id="btn-passo2-proximo">
                                 <span>Avançar</span>
-                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                    stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                     <line x1="5" y1="12" x2="19" y2="12"></line>
                                     <polyline points="12 5 19 12 12 19"></polyline>
                                 </svg>
@@ -549,7 +634,8 @@
                         <div class="etapa-cabecalho">
                             <div class="etapa-cabecalho-texto">
                                 <h2>
-                                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2">
+                                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+                                        stroke-width="2.2">
                                         <line x1="12" y1="1" x2="12" y2="23"></line>
                                         <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
                                     </svg>
@@ -561,9 +647,13 @@
                         <!-- Bloco de Preço Destacado -->
                         <div class="bloco-preco-destacado">
                             <div class="header-preco-linha">
-                                <label for="input-preco" class="rotulo-secao-campo" style="margin-bottom: 0;">Preço *</label>
-                                <button type="button" class="btn-toggle-doacao" id="btn-toggle-doacao" aria-pressed="false" title="Clique para anunciar este item como Doação gratuita">
-                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <label for="input-preco" class="rotulo-secao-campo" style="margin-bottom: 0;">Preço
+                                    *</label>
+                                <button type="button" class="btn-toggle-doacao" id="btn-toggle-doacao"
+                                    aria-pressed="false" title="Clique para anunciar este item como Doação gratuita">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                        stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"
+                                        aria-hidden="true">
                                         <polyline points="20 12 20 22 4 22 4 12"></polyline>
                                         <rect x="2" y="7" width="20" height="5"></rect>
                                         <line x1="12" y1="22" x2="12" y2="7"></line>
@@ -575,13 +665,8 @@
                             </div>
                             <div class="campo-preco-grande" id="campo-preco-wrapper">
                                 <span class="cifrao-destaque" id="cifrao-preco">R$</span>
-                                <input 
-                                    type="text" 
-                                    class="input-vender-padrao input-preco-destacado" 
-                                    id="input-preco" 
-                                    placeholder="0,00" 
-                                    autocomplete="off"
-                                >
+                                <input type="text" class="input-vender-padrao input-preco-destacado" id="input-preco"
+                                    placeholder="0,00" autocomplete="off">
                             </div>
                         </div>
 
@@ -589,7 +674,8 @@
                         <div class="card-localizacao-etapa">
                             <div class="localizacao-info-box">
                                 <div class="icone-pin-grande" aria-hidden="true">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                                        stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                                         <circle cx="12" cy="10" r="3"></circle>
                                     </svg>
@@ -607,7 +693,8 @@
                         <!-- Barra de Navegação da Etapa 3 -->
                         <div class="wizard-botoes-navegacao">
                             <button type="button" class="btn-wizard-nav btn-wizard-anterior" id="btn-passo3-anterior">
-                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                    stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                     <line x1="19" y1="12" x2="5" y2="12"></line>
                                     <polyline points="12 19 5 12 12 5"></polyline>
                                 </svg>
@@ -615,7 +702,8 @@
                             </button>
                             <button type="button" class="btn-wizard-nav btn-wizard-proximo" id="btn-passo3-proximo">
                                 <span>Avançar</span>
-                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                    stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                     <line x1="5" y1="12" x2="19" y2="12"></line>
                                     <polyline points="12 5 19 12 12 19"></polyline>
                                 </svg>
@@ -632,8 +720,11 @@
                         <div class="etapa-cabecalho">
                             <div class="etapa-cabecalho-texto">
                                 <h2>
-                                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2">
-                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+                                        stroke-width="2.2">
+                                        <polygon
+                                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                                        </polygon>
                                     </svg>
                                     Revisão
                                 </h2>
@@ -644,8 +735,20 @@
                         <div class="preview-anuncio-card">
                             <!-- Coluna Esquerda: Fotos -->
                             <div class="preview-col-foto">
-                                <div class="preview-foto-principal-wrapper">
-                                    <img src="../../assets/placeholders/produto-placeholder.svg" alt="Foto de capa do anúncio" id="preview-foto-capa">
+                                <div class="preview-foto-principal-wrapper" id="preview-foto-wrapper">
+                                    <img src="../../assets/placeholders/produto-placeholder.svg"
+                                        alt="Foto de capa do anúncio" id="preview-foto-capa">
+                                    <button type="button" class="preview-seta-nav preview-seta-prev" id="preview-btn-prev" aria-label="Foto anterior" style="display: none;">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="15 18 9 12 15 6"></polyline>
+                                        </svg>
+                                    </button>
+                                    <button type="button" class="preview-seta-nav preview-seta-next" id="preview-btn-next" aria-label="Próxima foto" style="display: none;">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="9 18 15 12 9 6"></polyline>
+                                        </svg>
+                                    </button>
+                                    <span class="preview-badge-contador" id="preview-badge-contador" style="display: none;">1/1</span>
                                 </div>
                                 <div class="preview-fotos-miniaturas" id="preview-fotos-miniaturas">
                                     <!-- Miniaturas injetadas dinamicamente via JS -->
@@ -657,12 +760,14 @@
                                 <div class="preview-dados-topo">
                                     <div class="preview-tags-row">
                                         <span class="preview-tag-badge" id="preview-tag-cat">GERAL</span>
-                                        <span class="preview-tag-badge preview-tag-condicao" id="preview-tag-cond">USADO</span>
+                                        <span class="preview-tag-badge preview-tag-condicao"
+                                            id="preview-tag-cond">USADO</span>
                                     </div>
                                     <h3 class="preview-titulo-anuncio" id="preview-titulo">Título do Anúncio</h3>
                                     <div class="preview-preco-anuncio" id="preview-preco">R$ 0,00</div>
                                     <div class="preview-local-linha">
-                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none"
+                                            stroke="currentColor" stroke-width="2">
                                             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                                             <circle cx="12" cy="10" r="3"></circle>
                                         </svg>
@@ -670,30 +775,40 @@
                                     </div>
                                     <div class="preview-descricao-box">
                                         <strong>Descrição</strong>
-                                        <p class="preview-descricao-texto" id="preview-descricao">Nenhuma descrição adicionada.</p>
+                                        <p class="preview-descricao-texto" id="preview-descricao">Nenhuma descrição
+                                            adicionada.</p>
                                     </div>
                                 </div>
 
                                 <!-- Atalhos rápidos para editar campos específicos -->
                                 <div class="preview-editar-atalho">
-                                    <button type="button" class="btn-editar-etapa-link" data-ir-etapa="1">Editar fotos</button>
-                                    <button type="button" class="btn-editar-etapa-link" data-ir-etapa="2">Editar detalhes</button>
-                                    <button type="button" class="btn-editar-etapa-link" data-ir-etapa="3">Editar valor</button>
+                                    <button type="button" class="btn-editar-etapa-link" data-ir-etapa="1">
+                                        <span>Editar fotos</span>
+                                    </button>
+                                    <button type="button" class="btn-editar-etapa-link" data-ir-etapa="2">
+                                        <span>Editar detalhes</span>
+                                    </button>
+                                    <button type="button" class="btn-editar-etapa-link" data-ir-etapa="3">
+                                        <span>Editar valor</span>
+                                    </button>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Botão Principal de Publicação e Feedback -->
                         <div class="secao-acao-anunciar" id="secao-acao-anunciar">
-                            <div style="display: flex; gap: 16px; align-items: center; width: 100%; justify-content: space-between;">
-                                <button type="button" class="btn-wizard-nav btn-wizard-anterior" id="btn-passo4-anterior">
-                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <div
+                                style="display: flex; gap: 16px; align-items: center; width: 100%; justify-content: space-between;">
+                                <button type="button" class="btn-wizard-nav btn-wizard-anterior"
+                                    id="btn-passo4-anterior">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                        stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                         <line x1="19" y1="12" x2="5" y2="12"></line>
                                         <polyline points="12 19 5 12 12 5"></polyline>
                                     </svg>
                                     <span>Voltar</span>
                                 </button>
-                                
+
                                 <button type="button" class="btn-anunciar-destaque" id="btn-anunciar">
                                     <span class="spinner-vender"></span>
                                     <span class="texto-btn-anunciar">Publicar Anúncio</span>
@@ -740,32 +855,97 @@
     </main>
 
     <!-- ==========================================================
-         4. MODAL PARA EDITAR LOCALIZAÇÃO
+         4. MODAL PARA EDITAR LOCALIZAÇÃO (ENDEREÇOS SALVOS E CADASTRO)
          ========================================================== -->
     <div class="modal-localizacao-backdrop" id="modal-localizacao">
-        <div class="modal-localizacao-card">
+        <div class="modal-localizacao-card loc-modal-ampliado">
             <div class="modal-localizacao-header">
-                <h3>Editar Localização</h3>
-                <button type="button" class="btn-fechar-modal-loc" id="btn-fechar-modal-loc">&times;</button>
+                <div>
+                    <h3>Editar Localização</h3>
+                    <p class="modal-loc-subtitulo">Selecione o local de retirada ou cadastre um novo endereço</p>
+                </div>
+                <button type="button" class="btn-fechar-modal-loc" id="btn-fechar-modal-loc" aria-label="Fechar">&times;</button>
             </div>
-            <div class="form-grupo-modal">
-                <label for="select-cidade-modal">Cidade / Região:</label>
+
+            <!-- Seção 1: Meus Endereços Salvos -->
+            <div class="loc-secao-enderecos">
+                <div class="loc-secao-header">
+                    <h4>Meus endereços</h4>
+                </div>
+                <p class="loc-secao-desc">Locais de retirada ou entrega que você usa nos anúncios e negociações.</p>
+                
+                <div class="loc-lista-enderecos" id="loc-lista-enderecos">
+                    <!-- Preenchido dinamicamente via JS -->
+                </div>
+            </div>
+
+            <!-- Divisor -->
+            <div class="loc-divisor">
+                <span>ou</span>
+            </div>
+
+            <!-- Seção 2: Adicionar Endereço (Gatilho em Botão + Gaveta Desdobrável) -->
+            <div class="loc-secao-adicionar">
+                <button type="button" class="btn-toggle-novo-endereco" id="btn-toggle-novo-endereco" aria-expanded="false">
+                    <div class="toggle-novo-end-conteudo">
+                        <span class="toggle-novo-end-icone">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                        </span>
+                        <span class="toggle-novo-end-texto">Adicionar endereço</span>
+                    </div>
+                    <svg class="chevron-toggle-end" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+
+                <!-- Gaveta Deslizante com os Itens do Formulário -->
+                <div class="loc-gaveta-novo-endereco" id="loc-gaveta-novo-endereco">
+                    <form class="loc-form-novo" id="loc-form-novo-endereco" novalidate>
+                        <div class="loc-grid">
+                            <div class="loc-campo">
+                                <label for="loc-end-apelido">Apelido</label>
+                                <input class="loc-input" type="text" id="loc-end-apelido" maxlength="30" placeholder="Casa, Trabalho...">
+                                <span class="loc-erro" id="erro-loc-end-apelido"></span>
+                            </div>
+                            <div class="loc-campo">
+                                <label for="loc-end-cep">CEP</label>
+                                <input class="loc-input" type="text" id="loc-end-cep" maxlength="9" placeholder="00000-000" inputmode="numeric">
+                                <span class="loc-erro" id="erro-loc-end-cep"></span>
+                            </div>
+                            <div class="loc-campo">
+                                <label for="loc-end-bairro">Bairro</label>
+                                <input class="loc-input" type="text" id="loc-end-bairro" maxlength="60" placeholder="Centro, Cohab...">
+                                <span class="loc-erro" id="erro-loc-end-bairro"></span>
+                            </div>
+                            <div class="loc-campo">
+                                <label for="loc-end-cidade">Cidade</label>
+                                <input class="loc-input" type="text" id="loc-end-cidade" maxlength="60" placeholder="Patos, Paulistana...">
+                                <span class="loc-erro" id="erro-loc-end-cidade"></span>
+                            </div>
+                        </div>
+                        <div class="loc-form-acoes">
+                            <button type="submit" class="btn-salvar-localizacao btn-adicionar-end-loc" id="btn-adicionar-end-loc">
+                                Salvar endereço
+                            </button>
+                            <button type="button" class="btn-cancelar-end-loc" id="btn-cancelar-end-loc">
+                                Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Elementos auxiliares para retrocompatibilidade -->
+            <div style="display: none;" aria-hidden="true">
                 <select id="select-cidade-modal">
                     <option value="Paulistana" selected>Paulistana - PI</option>
-                    <option value="Acauã">Acauã - PI</option>
-                    <option value="Betânia do Piauí">Betânia do Piauí - PI</option>
-                    <option value="Curral Novo">Curral Novo - PI</option>
-                    <option value="Jacobina do Piauí">Jacobina do Piauí - PI</option>
-                    <option value="Queimada Nova">Queimada Nova - PI</option>
-                    <option value="Picos">Picos - PI</option>
-                    <option value="Afrânio">Afrânio - PE</option>
                 </select>
+                <input type="text" id="input-bairro-modal" value="Centro">
+                <button type="button" id="btn-salvar-loc"></button>
             </div>
-            <div class="form-grupo-modal">
-                <label for="input-bairro-modal">Bairro:</label>
-                <input type="text" id="input-bairro-modal" value="Centro" placeholder="Ex: Centro, Triângulo, Guarita">
-            </div>
-            <button type="button" class="btn-salvar-localizacao" id="btn-salvar-loc">Confirmar Localização</button>
         </div>
     </div>
 
@@ -823,9 +1003,16 @@
 
     <!-- Scripts -->
     <script src="../../js/core/rotas/index.js"></script>
-    <script src="../../js/core/api/index.js"></script>
+    <script src="../../js/core/api/index.js?v=3"></script>
     <script src="../../js/core/sessao/index.js"></script>
     <script src="../../js/core/ajustar-foto/index.js?v=2"></script>
-    <script src="../../js/pages/vender/vender.js"></script>
+    <script src="../../js/pages/vender/anuncio/vender-estado.js?v=3"></script>
+    <script src="../../js/pages/vender/anuncio/vender-fotos.js?v=3"></script>
+    <script src="../../js/pages/vender/anuncio/vender-localizacao.js?v=3"></script>
+    <script src="../../js/pages/vender/anuncio/vender-wizard.js?v=3"></script>
+    <script src="../../js/pages/vender/anuncio/vender-publicacao.js?v=3"></script>
+    <script src="../../js/pages/vender/anuncio/index.js?v=3"></script>
+    <script src="../../js/pages/vender/vender.js?v=3"></script>
 </body>
+
 </html>

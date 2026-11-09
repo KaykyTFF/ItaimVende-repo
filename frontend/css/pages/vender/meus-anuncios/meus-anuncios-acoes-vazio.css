@@ -209,3 +209,343 @@
     border: 1px solid #334155;
     color: #F8FAFC;
 }
+
+/* ==========================================================================
+   MODAL DE CONFIRMAÇÃO DE AÇÕES EM MEUS ANÚNCIOS
+   (Pausar, Reativar, Marcar Vendido e Excluir)
+   ========================================================================== */
+.modal-anuncio-backdrop {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(15, 23, 42, 0.58);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 100000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.22s ease;
+    box-sizing: border-box;
+}
+
+.modal-anuncio-backdrop.aberto {
+    display: flex;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.modal-anuncio-card {
+    position: relative;
+    background: #FFFFFF;
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    border-radius: 22px;
+    width: 100%;
+    max-width: 420px;
+    padding: 28px 24px 24px;
+    box-shadow: 0 24px 50px -12px rgba(15, 23, 42, 0.28), 0 0 1px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    box-sizing: border-box;
+    transform: scale(0.94) translateY(10px);
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-anuncio-backdrop.aberto .modal-anuncio-card {
+    transform: scale(1) translateY(0);
+}
+
+.modal-anuncio-fechar {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: transparent;
+    border: none;
+    color: #94A3B8;
+    cursor: pointer;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    line-height: 1;
+    transition: all 0.2s ease;
+    padding: 0;
+}
+
+.modal-anuncio-fechar:hover {
+    color: #0F172A;
+    background: rgba(148, 163, 184, 0.15);
+}
+
+.modal-anuncio-titulo {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text-primary, #0F172A);
+    margin: 2px 0 10px;
+    padding: 0 24px;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+}
+
+.modal-anuncio-texto {
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--text-secondary, #64748B);
+    margin: 0 0 20px;
+    padding: 0 4px;
+}
+
+.modal-anuncio-resumo {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 14px;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 14px;
+    margin-bottom: 22px;
+    text-align: left;
+    box-sizing: border-box;
+}
+
+.modal-anuncio-resumo-foto {
+    width: 52px;
+    height: 52px;
+    border-radius: 10px;
+    object-fit: cover;
+    background: #E2E8F0;
+    flex-shrink: 0;
+}
+
+.modal-anuncio-resumo-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.modal-anuncio-resumo-nome {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--text-primary, #0F172A);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.modal-anuncio-resumo-preco {
+    font-size: 14px;
+    font-weight: 800;
+    color: #2E8B22;
+}
+
+.modal-anuncio-acoes {
+    width: 100%;
+    display: flex;
+    gap: 12px;
+    margin-top: 2px;
+}
+
+.btn-modal-anuncio-cancelar,
+.btn-modal-anuncio-confirmar {
+    flex: 1;
+    min-height: 46px;
+    height: 46px;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 14.5px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+    padding: 12px 16px;
+    box-sizing: border-box;
+}
+
+.btn-modal-anuncio-cancelar {
+    background: #FFFFFF;
+    color: var(--text-primary, #1E293B);
+    border: 1px solid var(--border-color, #CBD5E1);
+}
+
+.btn-modal-anuncio-cancelar:hover {
+    background: #F1F5F9;
+    border-color: #94A3B8;
+}
+
+.btn-modal-anuncio-confirmar {
+    color: #FFFFFF;
+    border: 1px solid transparent;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-modal-anuncio-confirmar.pausar {
+    background-color: #F97316;
+    border-color: #F97316;
+}
+
+.btn-modal-anuncio-confirmar.pausar:hover {
+    background-color: #EA580C;
+    border-color: #EA580C;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(249, 115, 22, 0.3);
+}
+
+.btn-modal-anuncio-confirmar.reativar {
+    background-color: #2563EB;
+    border-color: #2563EB;
+}
+
+.btn-modal-anuncio-confirmar.reativar:hover {
+    background-color: #1D4ED8;
+    border-color: #1D4ED8;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(37, 99, 235, 0.3);
+}
+
+.btn-modal-anuncio-confirmar.vendido {
+    background-color: #38A129;
+    border-color: #38A129;
+}
+
+.btn-modal-anuncio-confirmar.vendido:hover {
+    background-color: #2E8B22;
+    border-color: #2E8B22;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(56, 161, 41, 0.3);
+}
+
+.btn-modal-anuncio-confirmar.excluir {
+    background-color: #DC2626;
+    border-color: #DC2626;
+}
+
+.btn-modal-anuncio-confirmar.excluir:hover {
+    background-color: #B91C1C;
+    border-color: #B91C1C;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(220, 38, 38, 0.3);
+}
+
+/* Modo Escuro - Modal de Confirmação */
+[data-theme="dark"] .modal-anuncio-card,
+.dark-theme .modal-anuncio-card {
+    background: #1F2831;
+    border-color: #2C3946;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.65);
+}
+
+[data-theme="dark"] .modal-anuncio-titulo,
+.dark-theme .modal-anuncio-titulo {
+    color: #F1F5F9;
+}
+
+[data-theme="dark"] .modal-anuncio-texto,
+.dark-theme .modal-anuncio-texto {
+    color: #94A3B8;
+}
+
+[data-theme="dark"] .modal-anuncio-fechar,
+.dark-theme .modal-anuncio-fechar {
+    color: #64748B;
+}
+
+[data-theme="dark"] .modal-anuncio-fechar:hover,
+.dark-theme .modal-anuncio-fechar:hover {
+    color: #F8FAFC;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .modal-anuncio-resumo,
+.dark-theme .modal-anuncio-resumo {
+    background: #161C22;
+    border-color: #2C3946;
+}
+
+[data-theme="dark"] .modal-anuncio-resumo-foto,
+.dark-theme .modal-anuncio-resumo-foto {
+    background: #242E38;
+}
+
+[data-theme="dark"] .modal-anuncio-resumo-nome,
+.dark-theme .modal-anuncio-resumo-nome {
+    color: #F1F5F9;
+}
+
+[data-theme="dark"] .modal-anuncio-resumo-preco,
+.dark-theme .modal-anuncio-resumo-preco {
+    color: #4ADE80;
+}
+
+[data-theme="dark"] .btn-modal-anuncio-cancelar,
+.dark-theme .btn-modal-anuncio-cancelar {
+    background: #242E38;
+    border-color: #2C3946;
+    color: #F1F5F9;
+}
+
+[data-theme="dark"] .btn-modal-anuncio-cancelar:hover,
+.dark-theme .btn-modal-anuncio-cancelar:hover {
+    background: #2D3945;
+    color: #FFFFFF;
+}
+
+@media (max-width: 480px) {
+    .modal-anuncio-backdrop {
+        padding: 18px;
+    }
+
+    .modal-anuncio-card {
+        padding: 26px 20px 22px;
+        border-radius: 20px;
+    }
+
+    .modal-anuncio-titulo {
+        font-size: 19px;
+        margin: 2px 0 10px;
+        padding: 0 24px;
+    }
+
+    .modal-anuncio-texto {
+        font-size: 14px;
+        line-height: 1.55;
+        margin: 0 0 18px;
+    }
+
+    .modal-anuncio-resumo {
+        padding: 12px;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .modal-anuncio-acoes {
+        flex-direction: column-reverse;
+        gap: 10px;
+    }
+
+    .btn-modal-anuncio-cancelar,
+    .btn-modal-anuncio-confirmar {
+        flex: none;
+        width: 100%;
+        min-height: 46px;
+        height: 46px;
+        padding: 12px 16px;
+        font-size: 14.5px;
+    }
+}

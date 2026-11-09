@@ -23,29 +23,56 @@
         return Number(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     }
 
-    function formatarTempoPublicacao(dataIso) {
-        if (!dataIso) return 'Hoje';
+    function formatarTempoPublicacao(itemOuData) {
+        if (!itemOuData) return new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        const raw = typeof itemOuData === 'object'
+            ? (itemOuData.createdAt || itemOuData.publishedAt || itemOuData.criadoEm || itemOuData.updatedAt)
+            : itemOuData;
+        if (raw) {
+            const d = new Date(raw);
+            if (!isNaN(d.getTime())) {
+                return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            }
+        }
+        if (typeof itemOuData === 'object' && itemOuData.data && typeof itemOuData.data === 'string' && itemOuData.data.trim().toLowerCase() !== 'hoje') {
+            return itemOuData.data.trim();
+        }
+        return new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    }
+
+    function obterMapaExcluidos() {
         try {
-            const diffMs = Date.now() - new Date(dataIso).getTime();
-            const diffHoras = Math.floor(diffMs / (1000 * 60 * 60));
-            if (diffHoras < 1) return 'Agora há pouco';
-            if (diffHoras < 24) return `${diffHoras}h atrás`;
-            const diffDias = Math.floor(diffHoras / 24);
-            return diffDias === 1 ? 'Ontem' : `${diffDias} dias atrás`;
+            const arr = JSON.parse(localStorage.getItem('itaim_produtos_excluidos') || '[]');
+            return new Set(Array.isArray(arr) ? arr.map(x => String(x)) : []);
         } catch (e) {
-            return 'Hoje';
+            return new Set();
+        }
+    }
+
+    function obterMapaStatusModificados() {
+        try {
+            return JSON.parse(localStorage.getItem('itaim_produtos_status_map') || '{}') || {};
+        } catch (e) {
+            return {};
         }
     }
 
     async function buscarProdutos() {
         let lista = [];
+        const mapaExcluidos = obterMapaExcluidos();
+        const mapaStatus = obterMapaStatusModificados();
 
         // 1. Tentar buscar vitrine via API oficial
         if (window.ItaimApi && typeof window.ItaimApi.produtos?.listar === 'function') {
             try {
                 const resp = await window.ItaimApi.produtos.listar();
                 if (resp && resp.success && Array.isArray(resp.data)) {
-                    lista = resp.data;
+                    lista = resp.data
+                        .filter(p => p && !p.deletedAt && !mapaExcluidos.has(String(p.id)))
+                        .map(p => ({
+                            ...p,
+                            status: mapaStatus[String(p.id)] || p.status || 'ATIVO'
+                        }));
                 }
             } catch (err) {
                 console.info('[Relacionados] Vitrine da API indisponível, usando fallback local.');
@@ -234,7 +261,9 @@
         const prodAtualCat = String(categoriaNome).trim().toLowerCase();
         const prodAtualCidade = String(produto.cidade || produto.city || 'Paulistana').trim().toLowerCase();
 
-        // 4. Filtrar anúncios válidos (não vendido, não arquivado, não é o anúncio atual)
+        // 4. Filtrar anúncios válidos (não excluído, não vendido, não pausado, não arquivado, não é o anúncio atual)
+        const mapaExcluidos = obterMapaExcluidos();
+        const mapaStatus = obterMapaStatusModificados();
         const vistos = new Set();
         const candidatos = [];
 
@@ -248,9 +277,23 @@
             if (itemId === prodAtualId) continue;
             if (prodAtualSlug && String(item.slug || '') === prodAtualSlug) continue;
 
-            // Exclui anúncios encerrados / vendidos
-            const status = String(item.status || '').toUpperCase();
-            if (status === 'VENDIDO' || status === 'ARQUIVADO' || status === 'INATIVO' || item.vendido) {
+            // Exclui anúncios removidos pelo usuário ou com soft-delete
+            if (item.deletedAt || mapaExcluidos.has(itemId)) {
+                continue;
+            }
+
+            // Exclui anúncios encerrados / vendidos / pausados
+            const status = String(mapaStatus[itemId] || item.status || 'ATIVO').toUpperCase();
+            if (
+                status === 'VENDIDO' ||
+                status === 'PAUSADO' ||
+                status === 'ARQUIVADO' ||
+                status === 'INATIVO' ||
+                status === 'EXCLUIDO' ||
+                status === 'REMOVIDO' ||
+                status === 'REJEITADO' ||
+                item.vendido
+            ) {
                 continue;
             }
 
@@ -338,7 +381,7 @@
             let bairroLimpo = bairro || 'Centro';
             if (!bairroLimpo || /^\d/.test(bairroLimpo) || /\d{5}/.test(bairroLimpo)) bairroLimpo = 'Centro';
             const localTexto = `${cidade} - ${bairroLimpo}`;
-            const tempoFormatado = formatarTempoPublicacao(p.createdAt || p.criadoEm);
+            const tempoFormatado = formatarTempoPublicacao(p);
 
             return `
                 <article class="card-produto fade-in-content" data-id="${pId}">

@@ -23,12 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const badgePausado = document.getElementById('badge-pausado');
     const badgeVendido = document.getElementById('badge-vendido');
 
-    // Atualiza subtítulo com o nome do usuário logado se disponível
-    const titulosBox = document.querySelector('.anuncios-titulos p');
-    if (titulosBox && userLogado && emailUsuario) {
-        titulosBox.innerHTML = `Gerenciando anúncios de <strong>${nomeUsuario}</strong> (${emailUsuario}) em ${cidadeUsuario} - PI.`;
-    }
-
     let statusFiltro = 'todos';
     let meusAnuncios = [];
 
@@ -47,6 +41,133 @@ document.addEventListener('DOMContentLoaded', () => {
         toastEl._timer = setTimeout(() => {
             toastEl.classList.remove('visivel');
         }, 3200);
+    }
+
+    // =========================================================================
+    // MODAL DE CONFIRMAÇÃO DE AÇÕES NOS ANÚNCIOS (PAUSAR, REATIVAR, VENDIDO, EXCLUIR)
+    // =========================================================================
+    let acaoConfirmadaAtual = null;
+
+    function obterOuCriarModalConfirmacao() {
+        let modal = document.getElementById('modal-confirmar-acao-anuncio');
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = 'modal-confirmar-acao-anuncio';
+            modal.className = 'modal-anuncio-backdrop';
+            modal.setAttribute('role', 'dialog');
+            modal.setAttribute('aria-modal', 'true');
+            modal.setAttribute('aria-labelledby', 'modal-anuncio-titulo');
+            modal.innerHTML = `
+                <div class="modal-anuncio-card">
+                    <button type="button" class="modal-anuncio-fechar" id="btn-fechar-modal-anuncio" aria-label="Fechar">&times;</button>
+                    <h3 class="modal-anuncio-titulo" id="modal-anuncio-titulo">Confirmar ação</h3>
+                    <p class="modal-anuncio-texto" id="modal-anuncio-texto"></p>
+                    <div class="modal-anuncio-resumo" id="modal-anuncio-resumo" style="display: none;">
+                        <img src="" alt="" class="modal-anuncio-resumo-foto" id="modal-anuncio-resumo-foto">
+                        <div class="modal-anuncio-resumo-info">
+                            <span class="modal-anuncio-resumo-nome" id="modal-anuncio-resumo-nome"></span>
+                            <span class="modal-anuncio-resumo-preco" id="modal-anuncio-resumo-preco"></span>
+                        </div>
+                    </div>
+                    <div class="modal-anuncio-acoes">
+                        <button type="button" class="btn-modal-anuncio-cancelar" id="btn-cancelar-modal-anuncio">Cancelar</button>
+                        <button type="button" class="btn-modal-anuncio-confirmar" id="btn-confirmar-modal-anuncio">Confirmar</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        if (!modal._eventosRegistrados) {
+            modal._eventosRegistrados = true;
+
+            const fecharModal = () => {
+                modal.classList.remove('aberto');
+                document.body.style.overflow = '';
+                acaoConfirmadaAtual = null;
+            };
+
+            modal._fechar = fecharModal;
+
+            const btnFechar = modal.querySelector('#btn-fechar-modal-anuncio');
+            const btnCancelar = modal.querySelector('#btn-cancelar-modal-anuncio');
+            const btnConfirmar = modal.querySelector('#btn-confirmar-modal-anuncio');
+
+            if (btnFechar) btnFechar.addEventListener('click', fecharModal);
+            if (btnCancelar) btnCancelar.addEventListener('click', fecharModal);
+            if (btnConfirmar) {
+                btnConfirmar.addEventListener('click', async () => {
+                    const callback = acaoConfirmadaAtual;
+                    fecharModal();
+                    if (typeof callback === 'function') {
+                        await callback();
+                    }
+                });
+            }
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) fecharModal();
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.classList.contains('aberto')) {
+                    fecharModal();
+                }
+            });
+        }
+
+        return modal;
+    }
+
+    function abrirModalConfirmacao({ tipo, titulo, texto, textoConfirmar, item, aoConfirmar }) {
+        const modal = obterOuCriarModalConfirmacao();
+        const tituloEl = modal.querySelector('#modal-anuncio-titulo');
+        const textoEl = modal.querySelector('#modal-anuncio-texto');
+        const resumoBox = modal.querySelector('#modal-anuncio-resumo');
+        const resumoFoto = modal.querySelector('#modal-anuncio-resumo-foto');
+        const resumoNome = modal.querySelector('#modal-anuncio-resumo-nome');
+        const resumoPreco = modal.querySelector('#modal-anuncio-resumo-preco');
+        const btnConfirmar = modal.querySelector('#btn-confirmar-modal-anuncio');
+        const btnCancelar = modal.querySelector('#btn-cancelar-modal-anuncio');
+
+        if (tituloEl) tituloEl.textContent = titulo || 'Confirmar ação';
+        if (textoEl) textoEl.textContent = texto || '';
+
+        if (resumoBox) {
+            if (item) {
+                const placeholderSrc = (window.ItaimRotas && typeof window.ItaimRotas.obterAsset === 'function')
+                    ? window.ItaimRotas.obterAsset('assets/placeholders/produto-placeholder.svg')
+                    : (window.location.protocol && window.location.protocol.startsWith('http') ? '/assets/placeholders/produto-placeholder.svg' : '../../assets/placeholders/produto-placeholder.svg');
+                const fotoImg = item.imagem || (item.fotos && item.fotos[0]) || placeholderSrc;
+
+                if (resumoFoto) {
+                    resumoFoto.src = fotoImg;
+                    resumoFoto.alt = item.titulo || 'Anúncio';
+                    resumoFoto.onerror = function() {
+                        this.onerror = null;
+                        this.src = placeholderSrc;
+                    };
+                }
+                if (resumoNome) resumoNome.textContent = item.titulo || 'Anúncio';
+                if (resumoPreco) resumoPreco.innerHTML = formatarPreco(item.preco, item);
+                resumoBox.style.display = 'flex';
+            } else {
+                resumoBox.style.display = 'none';
+            }
+        }
+
+        if (btnConfirmar) {
+            btnConfirmar.textContent = textoConfirmar || 'Confirmar';
+            btnConfirmar.className = `btn-modal-anuncio-confirmar ${tipo || 'pausar'}`;
+        }
+
+        acaoConfirmadaAtual = aoConfirmar;
+        modal.classList.add('aberto');
+        document.body.style.overflow = 'hidden';
+
+        if (btnCancelar) {
+            requestAnimationFrame(() => btnCancelar.focus());
+        }
     }
 
     async function carregarAnunciosDoUsuario() {
@@ -282,135 +403,163 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 1. Ação Pausar / Reativar
         container.querySelectorAll('[data-action="toggle-status"]').forEach(btn => {
-            btn.addEventListener('click', async (e) => {
+            btn.addEventListener('click', (e) => {
                 const id = e.currentTarget.dataset.id;
                 const atual = e.currentTarget.dataset.atual;
-                const novoStatusBackend = (atual === 'pausado' || atual === 'vendido') ? 'ATIVO' : 'PAUSADO';
+                const isReativar = (atual === 'pausado' || atual === 'vendido');
+                const novoStatusBackend = isReativar ? 'ATIVO' : 'PAUSADO';
                 const novoStatusLocal = novoStatusBackend.toLowerCase();
 
                 const item = meusAnuncios.find(a => String(a.id) === String(id));
                 const statusAnterior = item ? item.status : atual;
 
-                // Atualização otimista imediata na interface
-                if (item) {
-                    item.status = novoStatusLocal;
-                }
-                atualizarBadges();
-                renderizar();
-
-                if (novoStatusLocal === 'pausado') {
-                    mostrarToast('Anúncio pausado e retirado da loja.');
-                } else {
-                    mostrarToast('Anúncio reativado e disponível na loja!');
-                }
-
-                // Sincroniza localmente
-                if (window.ItaimSessao && typeof window.ItaimSessao.atualizarStatusAnuncio === 'function') {
-                    window.ItaimSessao.atualizarStatusAnuncio(id, novoStatusLocal);
-                }
-
-                // Sincroniza com o backend via API
-                if (window.ItaimApi && window.ItaimApi.auth && window.ItaimApi.auth.obterToken()) {
-                    try {
-                        await window.ItaimApi.produtos.alterarStatus(id, novoStatusBackend);
-                    } catch(err) {
-                        console.warn('[Meus Anúncios] Erro na API ao alterar status:', err);
+                abrirModalConfirmacao({
+                    tipo: isReativar ? 'reativar' : 'pausar',
+                    titulo: isReativar ? 'Reativar anúncio?' : 'Pausar anúncio?',
+                    texto: isReativar
+                        ? 'Deseja reativar este anúncio? Ele voltará a ficar ativo e visível para os compradores na loja.'
+                        : 'Deseja pausar este anúncio? Ele ficará temporariamente oculto na loja e você poderá reativá-lo quando quiser.',
+                    textoConfirmar: isReativar ? 'Sim, reativar' : 'Sim, pausar',
+                    item,
+                    aoConfirmar: async () => {
+                        // Atualização otimista imediata na interface
                         if (item) {
-                            item.status = statusAnterior;
-                            atualizarBadges();
-                            renderizar();
+                            item.status = novoStatusLocal;
                         }
+                        atualizarBadges();
+                        renderizar();
+
+                        if (novoStatusLocal === 'pausado') {
+                            mostrarToast('Anúncio pausado e retirado da loja.');
+                        } else {
+                            mostrarToast('Anúncio reativado e disponível na loja!');
+                        }
+
+                        // Sincroniza localmente
                         if (window.ItaimSessao && typeof window.ItaimSessao.atualizarStatusAnuncio === 'function') {
-                            window.ItaimSessao.atualizarStatusAnuncio(id, statusAnterior);
+                            window.ItaimSessao.atualizarStatusAnuncio(id, novoStatusLocal);
                         }
-                        mostrarToast(err.message || 'Erro ao atualizar status do anúncio.', true);
+
+                        // Sincroniza com o backend via API
+                        if (window.ItaimApi && window.ItaimApi.auth && window.ItaimApi.auth.obterToken()) {
+                            try {
+                                await window.ItaimApi.produtos.alterarStatus(id, novoStatusBackend);
+                            } catch (err) {
+                                console.warn('[Meus Anúncios] Erro na API ao alterar status:', err);
+                                if (item) {
+                                    item.status = statusAnterior;
+                                    atualizarBadges();
+                                    renderizar();
+                                }
+                                if (window.ItaimSessao && typeof window.ItaimSessao.atualizarStatusAnuncio === 'function') {
+                                    window.ItaimSessao.atualizarStatusAnuncio(id, statusAnterior);
+                                }
+                                mostrarToast(err.message || 'Erro ao atualizar status do anúncio.', true);
+                            }
+                        }
                     }
-                }
+                });
             });
         });
 
         // 2. Ação Marcar como Vendido
         container.querySelectorAll('[data-action="marcar-vendido"]').forEach(btn => {
-            btn.addEventListener('click', async (e) => {
+            btn.addEventListener('click', (e) => {
                 const id = e.currentTarget.dataset.id;
-                if (confirm('Deseja marcar este anúncio como vendido? Ele sairá da loja e ficará registrado como vendido.')) {
-                    const item = meusAnuncios.find(a => String(a.id) === String(id));
-                    const titulo = item ? item.titulo : 'Produto';
-                    const statusAnterior = item ? item.status : 'ativo';
+                const item = meusAnuncios.find(a => String(a.id) === String(id));
+                const titulo = item ? item.titulo : 'Produto';
+                const statusAnterior = item ? item.status : 'ativo';
 
-                    // Atualização otimista imediata na interface
-                    if (item) {
-                        item.status = 'vendido';
-                    }
-                    atualizarBadges();
-                    renderizar();
-                    mostrarToast('Anúncio marcado como vendido e retirado da loja!');
+                abrirModalConfirmacao({
+                    tipo: 'vendido',
+                    titulo: 'Marcar como vendido?',
+                    texto: 'Deseja marcar este anúncio como vendido? Ele sairá da loja e ficará registrado no seu histórico de vendidos.',
+                    textoConfirmar: 'Sim, marcar vendido',
+                    item,
+                    aoConfirmar: async () => {
+                        // Atualização otimista imediata na interface
+                        if (item) {
+                            item.status = 'vendido';
+                        }
+                        atualizarBadges();
+                        renderizar();
+                        mostrarToast('Anúncio marcado como vendido e retirado da loja!');
 
-                    // Sincroniza localmente
-                    if (window.ItaimSessao && typeof window.ItaimSessao.atualizarStatusAnuncio === 'function') {
-                        window.ItaimSessao.atualizarStatusAnuncio(id, 'vendido');
-                    }
-                    if (window.ItaimNotificacoes && typeof window.ItaimNotificacoes.criarNotificacao === 'function') {
-                        window.ItaimNotificacoes.criarNotificacao({
-                            tipo: 'compra',
-                            titulo: 'Anúncio vendido!',
-                            texto: `Seu anúncio "${titulo}" foi marcado como vendido e finalizado com sucesso.`,
-                            link: (window.ItaimRotas ? window.ItaimRotas.obterUrl('meus-anuncios') : 'meus-anuncios.html')
-                        });
-                    }
+                        // Sincroniza localmente
+                        if (window.ItaimSessao && typeof window.ItaimSessao.atualizarStatusAnuncio === 'function') {
+                            window.ItaimSessao.atualizarStatusAnuncio(id, 'vendido');
+                        }
+                        if (window.ItaimNotificacoes && typeof window.ItaimNotificacoes.criarNotificacao === 'function') {
+                            window.ItaimNotificacoes.criarNotificacao({
+                                tipo: 'compra',
+                                titulo: 'Anúncio vendido!',
+                                texto: `Seu anúncio "${titulo}" foi marcado como vendido e finalizado com sucesso.`,
+                                link: (window.ItaimRotas ? window.ItaimRotas.obterUrl('meus-anuncios') : 'meus-anuncios.html')
+                            });
+                        }
 
-                    // Sincroniza com a API
-                    if (window.ItaimApi && window.ItaimApi.auth && window.ItaimApi.auth.obterToken()) {
-                        try {
-                            await window.ItaimApi.produtos.alterarStatus(id, 'VENDIDO');
-                        } catch(err) {
-                            console.warn('[Meus Anúncios] Erro na API ao marcar vendido:', err);
-                            if (item) {
-                                item.status = statusAnterior;
-                                atualizarBadges();
-                                renderizar();
+                        // Sincroniza com a API
+                        if (window.ItaimApi && window.ItaimApi.auth && window.ItaimApi.auth.obterToken()) {
+                            try {
+                                await window.ItaimApi.produtos.alterarStatus(id, 'VENDIDO');
+                            } catch (err) {
+                                console.warn('[Meus Anúncios] Erro na API ao marcar vendido:', err);
+                                if (item) {
+                                    item.status = statusAnterior;
+                                    atualizarBadges();
+                                    renderizar();
+                                }
+                                if (window.ItaimSessao && typeof window.ItaimSessao.atualizarStatusAnuncio === 'function') {
+                                    window.ItaimSessao.atualizarStatusAnuncio(id, statusAnterior);
+                                }
+                                mostrarToast(err.message || 'Erro ao marcar anúncio como vendido.', true);
                             }
-                            if (window.ItaimSessao && typeof window.ItaimSessao.atualizarStatusAnuncio === 'function') {
-                                window.ItaimSessao.atualizarStatusAnuncio(id, statusAnterior);
-                            }
-                            mostrarToast(err.message || 'Erro ao marcar anúncio como vendido.', true);
                         }
                     }
-                }
+                });
             });
         });
 
         // 3. Ação Excluir Anúncio
         container.querySelectorAll('[data-action="excluir"]').forEach(btn => {
-            btn.addEventListener('click', async (e) => {
+            btn.addEventListener('click', (e) => {
                 const id = e.currentTarget.dataset.id;
-                if (confirm('Tem certeza que deseja remover este anúncio definitivamente? Ele sairá da loja e não poderá ser recuperado.')) {
-                    const copiaAnterior = [...meusAnuncios];
+                const item = meusAnuncios.find(a => String(a.id) === String(id));
 
-                    // Atualização otimista imediata na interface
-                    meusAnuncios = meusAnuncios.filter(a => String(a.id) !== String(id));
-                    atualizarBadges();
-                    renderizar();
-                    mostrarToast('Anúncio excluído com sucesso.');
+                abrirModalConfirmacao({
+                    tipo: 'excluir',
+                    titulo: 'Excluir anúncio?',
+                    texto: 'Tem certeza que deseja remover este anúncio definitivamente? Ele sairá da loja e não poderá ser recuperado.',
+                    textoConfirmar: 'Sim, excluir',
+                    item,
+                    aoConfirmar: async () => {
+                        const copiaAnterior = [...meusAnuncios];
 
-                    // Sincroniza no cache local
-                    if (window.ItaimSessao && typeof window.ItaimSessao.excluirAnuncio === 'function') {
-                        window.ItaimSessao.excluirAnuncio(id);
-                    }
+                        // Atualização otimista imediata na interface
+                        meusAnuncios = meusAnuncios.filter(a => String(a.id) !== String(id));
+                        atualizarBadges();
+                        renderizar();
+                        mostrarToast('Anúncio excluído com sucesso.');
 
-                    // Sincroniza exclusão no backend
-                    if (window.ItaimApi && window.ItaimApi.auth && window.ItaimApi.auth.obterToken()) {
-                        try {
-                            await window.ItaimApi.produtos.excluir(id);
-                        } catch(err) {
-                            console.warn('[Meus Anúncios] Erro na API ao excluir:', err);
-                            meusAnuncios = copiaAnterior;
-                            atualizarBadges();
-                            renderizar();
-                            mostrarToast(err.message || 'Erro ao excluir anúncio no servidor.', true);
+                        // Sincroniza no cache local
+                        if (window.ItaimSessao && typeof window.ItaimSessao.excluirAnuncio === 'function') {
+                            window.ItaimSessao.excluirAnuncio(id);
+                        }
+
+                        // Sincroniza exclusão no backend
+                        if (window.ItaimApi && window.ItaimApi.auth && window.ItaimApi.auth.obterToken()) {
+                            try {
+                                await window.ItaimApi.produtos.excluir(id);
+                            } catch (err) {
+                                console.warn('[Meus Anúncios] Erro na API ao excluir:', err);
+                                meusAnuncios = copiaAnterior;
+                                atualizarBadges();
+                                renderizar();
+                                mostrarToast(err.message || 'Erro ao excluir anúncio no servidor.', true);
+                            }
                         }
                     }
-                }
+                });
             });
         });
     }

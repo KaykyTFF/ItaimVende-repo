@@ -8,13 +8,14 @@
 }
 
 .moderacao-col {
-    background: rgba(15, 23, 42, 0.5);
+    background: #FFFFFF;
     border: 1px solid var(--bg-card-border);
     border-radius: var(--radius-md);
     padding: 18px 20px;
     display: flex;
     flex-direction: column;
     gap: 14px;
+    box-shadow: var(--shadow-card);
 }
 
 .moderacao-col-header {
@@ -22,13 +23,13 @@
     align-items: center;
     justify-content: space-between;
     padding-bottom: 12px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid var(--bg-card-border);
 }
 
 .moderacao-col-header h4 {
     font-size: 0.95rem;
     font-weight: 700;
-    color: #ffffff;
+    color: var(--text-primary);
     display: flex;
     align-items: center;
     gap: 8px;
@@ -36,12 +37,13 @@
 }
 
 .badge-count {
-    background: rgba(255, 255, 255, 0.08);
+    background: #F1F5F9;
     font-size: 0.72rem;
     font-weight: 700;
     padding: 2px 8px;
     border-radius: var(--radius-full);
-    color: var(--text-muted);
+    color: var(--text-secondary);
+    border: 1px solid var(--bg-card-border);
 }
 
 .moderacao-list {
@@ -53,8 +55,8 @@
 }
 
 .moderacao-item {
-    background: rgba(0, 0, 0, 0.25);
-    border: 1px solid rgba(255, 255, 255, 0.04);
+    background: var(--bg-card-subtle);
+    border: 1px solid var(--bg-card-border);
     border-radius: var(--radius-sm);
     padding: 10px 14px;
     display: flex;
@@ -65,8 +67,9 @@
 }
 
 .moderacao-item:hover {
-    background: rgba(255, 255, 255, 0.03);
-    border-color: rgba(255, 255, 255, 0.08);
+    background: #FFFFFF;
+    border-color: #CBD5E1;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .mod-info {
@@ -80,7 +83,7 @@
 .mod-title {
     font-size: 0.86rem;
     font-weight: 700;
-    color: #ffffff;
+    color: var(--text-primary);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -88,7 +91,7 @@
 
 .mod-meta {
     font-size: 0.74rem;
-    color: var(--text-muted);
+    color: var(--text-secondary);
     display: flex;
     align-items: center;
     gap: 8px;
@@ -106,13 +109,13 @@
 }
 
 .mod-pill.ativo, .mod-pill.active {
-    background: rgba(16, 185, 129, 0.18);
-    color: #34d399;
+    background: rgba(16, 185, 129, 0.12);
+    color: #059669;
 }
 
 .mod-pill.pausado, .mod-pill.suspended {
-    background: rgba(245, 158, 11, 0.18);
-    color: #fbbf24;
+    background: rgba(245, 158, 11, 0.12);
+    color: #D97706;
 }
 
 .mod-actions {
@@ -123,7 +126,7 @@
 }
 
 .btn-mod-toggle {
-    background: rgba(255, 255, 255, 0.06);
+    background: #FFFFFF;
     border: 1px solid var(--bg-card-border);
     color: var(--text-secondary);
     font-family: inherit;
@@ -136,20 +139,25 @@
 }
 
 .btn-mod-toggle:hover {
-    background: rgba(255, 255, 255, 0.14);
-    color: #ffffff;
+    background: #F1F5F9;
+    border-color: var(--brand-primary);
+    color: var(--brand-primary);
 }
 
 .btn-refresh-small {
-    background: rgba(255, 255, 255, 0.06);
+    background: #FFFFFF;
+    border: 1px solid var(--bg-card-border);
     color: var(--text-secondary);
     font-size: 0.76rem;
     padding: 4px 10px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.2s;
 }
 
 .btn-refresh-small:hover {
-    background: rgba(255, 255, 255, 0.12);
-    color: #ffffff;
+    background: #F8FAFC;
+    color: var(--text-primary);
 }
 
 .moderacao-empty {
@@ -159,24 +167,24 @@
     padding: 24px;
 }
 
-.text-blue { color: #38bdf8 !important; }
-.text-purple { color: #c084fc !important; }
-.text-amber { color: #fbbf24 !important; }
-.text-green { color: #34d399 !important; }
-.text-red { color: #f87171 !important; }
+.text-blue { color: #0284C7 !important; }
+.text-purple { color: #7C3AED !important; }
+.text-amber { color: #D97706 !important; }
+.text-green { color: #059669 !important; }
+.text-red { color: #DC2626 !important; }
 
 /* ==========================================================================
    FILA DE MODERAÇÃO DE DENÚNCIAS (TICKETS DE FRAUDE & ABUSO)
    ========================================================================== */
 .moderacao-reports-container {
-    background: rgba(15, 23, 42, 0.75);
+    background: #FFFFFF;
     border: 1px solid var(--bg-card-border);
     border-radius: var(--radius-md);
     padding: 20px 22px;
     display: flex;
     flex-direction: column;
     gap: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    box-shadow: var(--shadow-card);
 }
 
 .reports-header-row {
@@ -186,7 +194,7 @@
     gap: 16px;
     flex-wrap: wrap;
     padding-bottom: 14px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid var(--bg-card-border);
 }
 
 .reports-title-block {
@@ -199,9 +207,9 @@
     width: 42px;
     height: 42px;
     border-radius: var(--radius-sm);
-    background: rgba(239, 68, 68, 0.15);
-    color: #f87171;
-    border: 1px solid rgba(239, 68, 68, 0.3);
+    background: rgba(239, 68, 68, 0.12);
+    color: #DC2626;
+    border: 1px solid rgba(239, 68, 68, 0.25);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -219,14 +227,14 @@
 .reports-title {
     font-size: 1.02rem;
     font-weight: 700;
-    color: #ffffff;
+    color: var(--text-primary);
     margin: 0;
 }
 
 .badge-report-total {
-    background: rgba(239, 68, 68, 0.18);
-    color: #fca5a5;
-    border: 1px solid rgba(239, 68, 68, 0.3);
+    background: rgba(239, 68, 68, 0.12);
+    color: #DC2626;
+    border: 1px solid rgba(239, 68, 68, 0.25);
     font-size: 0.72rem;
     font-weight: 700;
     padding: 2px 9px;
@@ -235,7 +243,7 @@
 
 .reports-subtitle {
     font-size: 0.78rem;
-    color: var(--text-muted);
+    color: var(--text-secondary);
     margin: 3px 0 0;
 }
 
@@ -248,7 +256,7 @@
 }
 
 .btn-filter-report {
-    background: rgba(255, 255, 255, 0.04);
+    background: var(--bg-card-subtle);
     border: 1px solid var(--bg-card-border);
     color: var(--text-secondary);
     font-family: inherit;
@@ -264,15 +272,15 @@
 }
 
 .btn-filter-report:hover {
-    background: rgba(255, 255, 255, 0.09);
-    color: #ffffff;
+    background: #E2E8F0;
+    color: var(--text-primary);
 }
 
 .btn-filter-report.active {
-    background: rgba(99, 102, 241, 0.2);
-    border-color: #6366f1;
-    color: #c7d2fe;
-    box-shadow: 0 0 12px rgba(99, 102, 241, 0.25);
+    background: rgba(68, 189, 50, 0.12);
+    border-color: var(--brand-primary);
+    color: var(--brand-primary);
+    font-weight: 700;
 }
 
 /* Lista e Cards de Denúncias */
@@ -286,8 +294,8 @@
 }
 
 .report-card {
-    background: rgba(0, 0, 0, 0.32);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: var(--bg-card-subtle);
+    border: 1px solid var(--bg-card-border);
     border-left: 4px solid #f59e0b;
     border-radius: var(--radius-sm);
     padding: 14px 16px;
@@ -298,8 +306,9 @@
 }
 
 .report-card:hover {
-    background: rgba(255, 255, 255, 0.025);
-    border-color: rgba(255, 255, 255, 0.1);
+    background: #FFFFFF;
+    border-color: #CBD5E1;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
 .report-card.status-pending {
@@ -307,17 +316,17 @@
 }
 
 .report-card.status-under_review {
-    border-left-color: #38bdf8;
+    border-left-color: #0284c7;
 }
 
 .report-card.status-resolved {
     border-left-color: #10b981;
-    opacity: 0.85;
+    opacity: 0.9;
 }
 
 .report-card.status-dismissed {
-    border-left-color: #64748b;
-    opacity: 0.7;
+    border-left-color: #94a3b8;
+    opacity: 0.75;
 }
 
 .report-card-top {
@@ -339,8 +348,8 @@
     font-family: var(--font-mono);
     font-size: 0.75rem;
     font-weight: 700;
-    color: #e2e8f0;
-    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-primary);
+    background: #E2E8F0;
     padding: 2px 7px;
     border-radius: var(--radius-sm);
 }
@@ -356,27 +365,27 @@
 }
 
 .report-reason-badge.fraud {
-    background: rgba(239, 68, 68, 0.2);
-    color: #fca5a5;
-    border: 1px solid rgba(239, 68, 68, 0.35);
+    background: rgba(239, 68, 68, 0.12);
+    color: #DC2626;
+    border: 1px solid rgba(239, 68, 68, 0.25);
 }
 
 .report-reason-badge.illegal {
-    background: rgba(244, 63, 94, 0.2);
-    color: #fda4af;
-    border: 1px solid rgba(244, 63, 94, 0.35);
+    background: rgba(244, 63, 94, 0.12);
+    color: #E11D48;
+    border: 1px solid rgba(244, 63, 94, 0.25);
 }
 
 .report-reason-badge.spam {
-    background: rgba(168, 85, 247, 0.2);
-    color: #d8b4fe;
-    border: 1px solid rgba(168, 85, 247, 0.35);
+    background: rgba(168, 85, 247, 0.12);
+    color: #7E22CE;
+    border: 1px solid rgba(168, 85, 247, 0.25);
 }
 
 .report-reason-badge.other {
-    background: rgba(148, 163, 184, 0.18);
-    color: #cbd5e1;
-    border: 1px solid rgba(148, 163, 184, 0.3);
+    background: rgba(148, 163, 184, 0.15);
+    color: #475569;
+    border: 1px solid rgba(148, 163, 184, 0.25);
 }
 
 .report-status-badge {
@@ -389,27 +398,27 @@
 }
 
 .report-status-badge.pending {
-    background: rgba(245, 158, 11, 0.2);
-    color: #fcd34d;
-    border: 1px solid rgba(245, 158, 11, 0.4);
+    background: rgba(245, 158, 11, 0.15);
+    color: #B45309;
+    border: 1px solid rgba(245, 158, 11, 0.3);
 }
 
 .report-status-badge.under_review {
-    background: rgba(56, 189, 248, 0.2);
-    color: #7dd3fc;
-    border: 1px solid rgba(56, 189, 248, 0.4);
+    background: rgba(2, 132, 199, 0.15);
+    color: #0369A1;
+    border: 1px solid rgba(2, 132, 199, 0.3);
 }
 
 .report-status-badge.resolved {
-    background: rgba(16, 185, 129, 0.2);
-    color: #6ee7b7;
-    border: 1px solid rgba(16, 185, 129, 0.4);
+    background: rgba(16, 185, 129, 0.15);
+    color: #047857;
+    border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
 .report-status-badge.dismissed {
-    background: rgba(100, 116, 139, 0.2);
-    color: #94a3b8;
-    border: 1px solid rgba(100, 116, 139, 0.4);
+    background: rgba(100, 116, 139, 0.15);
+    color: #475569;
+    border: 1px solid rgba(100, 116, 139, 0.3);
 }
 
 .report-time {
@@ -423,10 +432,10 @@
     align-items: center;
     gap: 14px;
     flex-wrap: wrap;
-    background: rgba(0, 0, 0, 0.2);
+    background: #FFFFFF;
     padding: 10px 12px;
     border-radius: var(--radius-sm);
-    border: 1px solid rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--bg-card-border);
 }
 
 .report-product-thumb {
@@ -434,8 +443,8 @@
     height: 52px;
     border-radius: var(--radius-sm);
     object-fit: cover;
-    background: #1e293b;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: #F8FAFC;
+    border: 1px solid var(--bg-card-border);
     flex-shrink: 0;
 }
 
@@ -443,8 +452,8 @@
     width: 52px;
     height: 52px;
     border-radius: var(--radius-sm);
-    background: #1e293b;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: #F1F5F9;
+    border: 1px solid var(--bg-card-border);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -464,7 +473,7 @@
 .report-product-title {
     font-size: 0.88rem;
     font-weight: 700;
-    color: #ffffff;
+    color: var(--text-primary);
     display: flex;
     align-items: center;
     gap: 8px;
@@ -472,8 +481,8 @@
 
 .report-product-price {
     font-size: 0.8rem;
-    font-weight: 600;
-    color: #34d399;
+    font-weight: 700;
+    color: var(--brand-primary);
 }
 
 .report-seller-info {
@@ -494,24 +503,24 @@
 
 .seller-status-pill.active {
     background: rgba(16, 185, 129, 0.15);
-    color: #34d399;
+    color: #047857;
 }
 
 .seller-status-pill.suspended, .seller-status-pill.banned {
-    background: rgba(239, 68, 68, 0.2);
-    color: #f87171;
+    background: rgba(239, 68, 68, 0.15);
+    color: #DC2626;
 }
 
 /* Queixa do denunciante */
 .report-complaint-box {
     width: 100%;
     margin-top: 4px;
-    background: rgba(255, 255, 255, 0.03);
-    border-left: 2px solid rgba(255, 255, 255, 0.15);
-    padding: 6px 10px;
+    background: #F8FAFC;
+    border-left: 3px solid #CBD5E1;
+    padding: 8px 12px;
     border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
     font-size: 0.75rem;
-    color: #cbd5e1;
+    color: var(--text-primary);
     display: flex;
     align-items: flex-start;
     gap: 8px;
@@ -550,52 +559,50 @@
 }
 
 .btn-report-danger {
-    background: rgba(239, 68, 68, 0.2);
-    color: #fca5a5;
-    border: 1px solid rgba(239, 68, 68, 0.4);
+    background: #FEE2E2;
+    color: #DC2626;
+    border: 1px solid #FECACA;
 }
 
 .btn-report-danger:hover {
-    background: #dc2626;
-    color: #ffffff;
-    border-color: #dc2626;
-    box-shadow: 0 0 10px rgba(220, 38, 38, 0.4);
+    background: #DC2626;
+    color: #FFFFFF;
+    border-color: #DC2626;
+    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.25);
 }
 
 .btn-report-warning {
-    background: rgba(245, 158, 11, 0.18);
-    color: #fcd34d;
-    border: 1px solid rgba(245, 158, 11, 0.35);
+    background: #FEF3C7;
+    color: #B45309;
+    border: 1px solid #FDE68A;
 }
 
 .btn-report-warning:hover {
-    background: #d97706;
-    color: #ffffff;
-    border-color: #d97706;
-    box-shadow: 0 0 10px rgba(217, 119, 6, 0.4);
+    background: #D97706;
+    color: #FFFFFF;
+    border-color: #D97706;
+    box-shadow: 0 2px 8px rgba(217, 119, 6, 0.25);
 }
 
 .btn-report-secondary {
-    background: rgba(255, 255, 255, 0.06);
+    background: #FFFFFF;
     color: var(--text-secondary);
     border: 1px solid var(--bg-card-border);
 }
 
 .btn-report-secondary:hover {
-    background: rgba(255, 255, 255, 0.12);
-    color: #ffffff;
+    background: #F8FAFC;
+    color: var(--text-primary);
+    border-color: #CBD5E1;
 }
 
 .btn-report-view {
-    background: rgba(56, 189, 248, 0.12);
-    color: #7dd3fc;
-    border: 1px solid rgba(56, 189, 248, 0.25);
+    background: #EFF6FF;
+    color: #1D4ED8;
+    border: 1px solid #BFDBFE;
 }
 
 .btn-report-view:hover {
-    background: rgba(56, 189, 248, 0.22);
-    color: #bae6fd;
+    background: #DBEAFE;
+    color: #1E40AF;
 }
-
-
-

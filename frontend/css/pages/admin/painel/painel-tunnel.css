@@ -2,29 +2,27 @@
    TÚNEL CLOUDFLARE & PUBLICAÇÃO DO SITE
    ========================================================================== */
 .btn-cloud-tunnel {
-    background: linear-gradient(135deg, #0284c7 0%, #2563eb 50%, #4f46e5 100%);
+    background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
     color: #ffffff;
-    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
 }
 
 .btn-cloud-tunnel:hover {
-    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.6);
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
     transform: translateY(-1px);
 }
 
 .btn-cloud-tunnel.active {
-    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+    background: var(--brand-gradient);
+    box-shadow: 0 4px 14px rgba(68, 189, 50, 0.35);
 }
 
 .painel-tunnel-card {
-    background: linear-gradient(135deg, rgba(17, 24, 39, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(99, 102, 241, 0.3);
+    background: #FFFFFF;
+    border: 1px solid var(--bg-card-border);
     border-radius: var(--radius-lg);
     padding: 24px 28px;
-    box-shadow: var(--shadow-card), 0 0 25px rgba(99, 102, 241, 0.15);
+    box-shadow: var(--shadow-card);
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -33,14 +31,18 @@
     transition: all 0.3s ease;
 }
 
+.painel-tunnel-card:hover {
+    box-shadow: var(--shadow-card-hover);
+}
+
 .painel-tunnel-card::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, #38bdf8, #6366f1, #a855f7);
+    height: 4px;
+    background: var(--brand-gradient);
 }
 
 .tunnel-header-row {
@@ -61,8 +63,8 @@
     width: 48px;
     height: 48px;
     border-radius: var(--radius-md);
-    background: rgba(56, 189, 248, 0.15);
-    color: #38bdf8;
+    background: rgba(68, 189, 50, 0.12);
+    color: var(--brand-primary);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -72,9 +74,9 @@
 }
 
 .tunnel-icon-wrapper.active {
-    background: rgba(16, 185, 129, 0.2);
-    color: #34d399;
-    box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+    background: rgba(16, 185, 129, 0.18);
+    color: #10b981;
+    box-shadow: 0 0 16px rgba(16, 185, 129, 0.25);
 }
 
 .tunnel-status-line {
@@ -87,7 +89,7 @@
 .tunnel-title {
     font-size: 1.15rem;
     font-weight: 800;
-    color: #ffffff;
+    color: var(--text-primary);
 }
 
 .tunnel-subtitle {
@@ -104,19 +106,20 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--bg-card-subtle);
     color: var(--text-muted);
+    border: 1px solid var(--bg-card-border);
 }
 
 .tunnel-pill-badge.online {
-    background: rgba(16, 185, 129, 0.18);
-    color: #34d399;
+    background: rgba(16, 185, 129, 0.12);
+    color: #059669;
     border: 1px solid var(--success-border);
 }
 
 .tunnel-pill-badge.offline {
-    background: rgba(239, 68, 68, 0.15);
-    color: #f87171;
+    background: rgba(239, 68, 68, 0.12);
+    color: #DC2626;
     border: 1px solid var(--danger-border);
 }
 
@@ -127,33 +130,41 @@
 }
 
 .btn-iniciar-tunnel {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    background: var(--brand-gradient);
     color: #ffffff;
     font-weight: 700;
     padding: 10px 20px;
-    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(68, 189, 50, 0.3);
+    transition: all 0.2s;
 }
 
 .btn-iniciar-tunnel:hover {
-    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.55);
+    box-shadow: 0 6px 20px rgba(68, 189, 50, 0.45);
     transform: translateY(-1px);
 }
 
 .btn-desligar-tunnel {
-    background: rgba(239, 68, 68, 0.15);
-    color: #f87171;
-    border-color: rgba(239, 68, 68, 0.35);
+    background: #FEE2E2;
+    color: #DC2626;
+    border: 1px solid #FECACA;
     font-weight: 700;
+    padding: 10px 20px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.2s;
 }
 
 .btn-desligar-tunnel:hover {
-    background: rgba(239, 68, 68, 0.25);
-    color: #ffffff;
+    background: #FCA5A5;
+    color: #991B1B;
 }
 
 /* Link Box */
 .tunnel-link-box {
-    background: rgba(0, 0, 0, 0.35);
+    background: var(--bg-card-subtle);
     border: 1px solid var(--bg-card-border);
     border-radius: var(--radius-md);
     padding: 16px 20px;
@@ -175,7 +186,7 @@
 .tunnel-link-label {
     font-size: 0.76rem;
     font-weight: 700;
-    color: var(--text-muted);
+    color: var(--text-secondary);
     text-transform: uppercase;
     display: flex;
     align-items: center;
@@ -185,22 +196,23 @@
 .tunnel-url-wrapper {
     display: flex;
     align-items: center;
-    background: rgba(11, 15, 25, 0.8);
+    background: #FFFFFF;
     border: 1px solid var(--bg-card-border);
     border-radius: var(--radius-sm);
     overflow: hidden;
-    transition: border-color 0.2s;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .tunnel-url-wrapper:focus-within {
     border-color: var(--brand-primary);
+    box-shadow: 0 0 0 3px rgba(68, 189, 50, 0.15);
 }
 
 .tunnel-url-input {
     flex: 1;
     background: transparent;
     border: none;
-    color: #38bdf8;
+    color: var(--brand-primary);
     font-family: var(--font-mono);
     font-size: 0.95rem;
     font-weight: 600;
@@ -209,10 +221,10 @@
 }
 
 .btn-copy-url {
-    background: rgba(255, 255, 255, 0.06);
+    background: #F8FAFC;
     border: none;
     border-left: 1px solid var(--bg-card-border);
-    color: #ffffff;
+    color: var(--text-primary);
     font-family: inherit;
     font-size: 0.82rem;
     font-weight: 600;
@@ -225,7 +237,7 @@
 }
 
 .btn-copy-url:hover {
-    background: rgba(255, 255, 255, 0.12);
+    background: #E2E8F0;
 }
 
 .tunnel-quick-buttons {
@@ -236,9 +248,9 @@
 }
 
 .btn-tunnel-action {
-    background: rgba(255, 255, 255, 0.05);
+    background: #FFFFFF;
     border: 1px solid var(--bg-card-border);
-    color: #ffffff;
+    color: var(--text-primary);
     font-family: inherit;
     font-size: 0.82rem;
     font-weight: 600;
@@ -253,7 +265,9 @@
 }
 
 .btn-tunnel-action:hover {
-    background: rgba(255, 255, 255, 0.12);
+    background: #F8FAFC;
+    border-color: var(--brand-primary);
+    color: var(--brand-primary);
     transform: translateY(-1px);
 }
 
@@ -261,8 +275,8 @@
 .tunnel-qrcode-modal {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(8px);
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -270,13 +284,13 @@
 }
 
 .qrcode-content {
-    background: #0f172a;
-    border: 1px solid var(--bg-card-border-glow);
+    background: #FFFFFF;
+    border: 1px solid var(--bg-card-border);
     border-radius: var(--radius-lg);
     padding: 24px 28px;
     max-width: 360px;
     width: 90%;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -299,7 +313,7 @@
 
 .qrcode-header h4 {
     font-size: 1.05rem;
-    color: #ffffff;
+    color: var(--text-primary);
     font-weight: 700;
     display: flex;
     align-items: center;
@@ -316,17 +330,18 @@
 }
 
 .btn-close-modal:hover {
-    color: #ffffff;
+    color: var(--text-primary);
 }
 
 .qrcode-image-wrapper {
-    background: #ffffff;
+    background: #FFFFFF;
     padding: 12px;
     border-radius: var(--radius-md);
+    border: 1px solid var(--bg-card-border);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
 }
 
 .qrcode-image-wrapper img {
@@ -338,7 +353,7 @@
 .qrcode-url-text {
     font-family: var(--font-mono);
     font-size: 0.75rem;
-    color: #38bdf8;
+    color: var(--brand-primary);
     word-break: break-all;
+    font-weight: 600;
 }
-

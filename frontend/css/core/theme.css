@@ -8,7 +8,7 @@
 @import url('./theme/theme-variables.css');
 
 /* 2. Estilos Base e Componentes Globais */
-@import url('./theme/theme-base.css?v=22');
+@import url('./theme/theme-base.css?v=24');
 
 /* 3. Componentes Compartilhados de Interface */
 @import url('./theme/theme-drawer.css');
@@ -17,11 +17,11 @@
 @import url('./theme/theme-skeleton.css');
 
 /* 4. Módulos Específicos por Página */
-@import url('./theme/theme-categoria.css');
-@import url('./theme/theme-produto.css?v=20');
-@import url('./theme/theme-perfil.css?v=22');
+@import url('./theme/theme-categoria.css?v=25');
+@import url('./theme/theme-produto.css?v=21');
+@import url('./theme/theme-perfil.css?v=25');
 @import url('./theme/theme-meus-anuncios.css');
-@import url('./theme/theme-vender.css?v=15');
-@import url('./theme/theme-conversas.css?v=20');
+@import url('./theme/theme-vender.css?v=16');
+@import url('./theme/theme-conversas.css?v=25');
 @import url('./theme/theme-notificacoes.css');
 @import url('./theme/theme-favoritos.css');

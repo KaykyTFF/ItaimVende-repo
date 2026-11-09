@@ -353,6 +353,84 @@
         return valido;
     }
 
+    // ─── Conversão de anexo para Base64 para visualização no Admin ───
+    function lerAnexoComoBase64(file) {
+        return new Promise((resolve) => {
+            if (!file) {
+                resolve(null);
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const rawDataUrl = e.target?.result || null;
+                if (!rawDataUrl) {
+                    resolve({ nome: file.name, tamanho: file.size, tipo: file.type, dataUrl: null });
+                    return;
+                }
+
+                // Se for imagem maior que 150KB, redimensiona/comprime suavemente para caber com folga no localStorage
+                if (file.type && file.type.startsWith('image/') && file.size > 150 * 1024) {
+                    const img = new Image();
+                    img.onload = function () {
+                        try {
+                            const maxDim = 1280;
+                            let w = img.width;
+                            let h = img.height;
+                            if (w > maxDim || h > maxDim) {
+                                if (w > h) {
+                                    h = Math.round((h * maxDim) / w);
+                                    w = maxDim;
+                                } else {
+                                    w = Math.round((w * maxDim) / h);
+                                    h = maxDim;
+                                }
+                            }
+                            const canvas = document.createElement('canvas');
+                            canvas.width = w;
+                            canvas.height = h;
+                            const ctx = canvas.getContext('2d');
+                            ctx.drawImage(img, 0, 0, w, h);
+                            const compressedUrl = canvas.toDataURL('image/jpeg', 0.82);
+                            resolve({
+                                nome: file.name,
+                                tamanho: file.size,
+                                tipo: file.type,
+                                dataUrl: compressedUrl
+                            });
+                        } catch {
+                            resolve({
+                                nome: file.name,
+                                tamanho: file.size,
+                                tipo: file.type,
+                                dataUrl: rawDataUrl
+                            });
+                        }
+                    };
+                    img.onerror = function () {
+                        resolve({
+                            nome: file.name,
+                            tamanho: file.size,
+                            tipo: file.type,
+                            dataUrl: rawDataUrl
+                        });
+                    };
+                    img.src = rawDataUrl;
+                } else {
+                    resolve({
+                        nome: file.name,
+                        tamanho: file.size,
+                        tipo: file.type,
+                        dataUrl: rawDataUrl
+                    });
+                }
+            };
+            reader.onerror = function () {
+                resolve({ nome: file.name, tamanho: file.size, tipo: file.type, dataUrl: null });
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
     // ─── Envio do ticket ─────────────────────────────────────────────
     function iniciarFormTicket() {
         const form = document.getElementById('form-ticket');
@@ -372,12 +450,6 @@
             const userId = usuario?.id || null;
             const userName = usuario?.name || usuario?.nome || 'Usuário';
 
-            const anexosInfo = anexosSelecionados.map(f => ({
-                nome: f.name,
-                tamanho: f.size,
-                tipo: f.type
-            }));
-
             btnEnviar.disabled = true;
             const textoOriginal = btnEnviar.innerHTML;
             btnEnviar.innerHTML = `
@@ -386,6 +458,8 @@
             `;
 
             try {
+                const anexosInfo = (await Promise.all(anexosSelecionados.map(f => lerAnexoComoBase64(f)))).filter(Boolean);
+
                 let novoTicket = null;
                 const apiCore = window.ItaimApiCore;
 
@@ -403,6 +477,9 @@
                             body: formData
                         });
                         novoTicket = resp?.dados || resp?.ticket || null;
+                        if (novoTicket && (!Array.isArray(novoTicket.anexos) || novoTicket.anexos.length === 0)) {
+                            novoTicket.anexos = anexosInfo;
+                        }
                     } catch {
                         // Sem rota de suporte no backend, prossegue com persistência local garantida
                     }

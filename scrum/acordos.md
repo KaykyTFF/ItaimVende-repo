@@ -1,76 +1,81 @@
-# 📋 Acordos de Trabalho, Papéis, Visão do Produto e Definition of Done (DoD)
+# Acordos de Trabalho, Papeis, Visao do Produto e Definition of Done
 
-> **Instituto Federal do Piauí (IFPI) — Campus Paulistana**  
-> **Disciplina:** Engenharia de Software III  
-> **Professor:** Prof. Me. Julian Rodrigues Valério  
-> **Projeto:** Itaim Vende — API RESTful Própria de Comércio Regional  
-> **Data de Criação:** 19/10/2026 (Sprint 0)  
-
----
-
-## 👥 1. Identificação da Equipe e Papéis
-
-| Integrante | Papel Principal | Foco Técnico Primário | Papel Scrum Sprint 1 | Papel Scrum Sprint 2 |
-| :--- | :--- | :--- | :--- | :--- |
-| **Kayky** | Líder da Equipe | **Backend Developer** | **Product Owner (PO)** | **Product Owner (PO)** |
-| **Pedro Ravy** | Desenvolvedor | **Backend Developer** | Developer | Developer |
-| **Josimar** | Desenvolvedor | **Frontend Developer** | **Scrum Master (SM)** | Developer |
-| **Raili** | Desenvolvedora | **Frontend Developer** | Developer | Developer |
-| **Giselly** | Desenvolvedora | **Frontend Developer** | Developer | **Scrum Master (SM)** |
-
-* **Stakeholder Oficial:** Prof. Me. Julian Rodrigues Valério (valida requisitos, direciona visão de negócio e avalia os incrementos nas Reviews).
-* **Regra de Alternância do Scrum Master:** Em conformidade com o guia da disciplina, o Product Owner (Kayky) permaneceu o mesmo ao longo de todo o ciclo para preservar a visão do produto, enquanto o papel de Scrum Master foi alternado entre Josimar (Sprint 1) e Giselly (Sprint 2).
-* **Visão Coletiva de Qualidade:** Todos os integrantes atuam como Developers multidisciplinares. Não existe a figura isolada de "testador"; a garantia de testes automatizados e critérios de aceitação é de responsabilidade coletiva.
+**Instituto Federal do Piauí — Campus Paulistana**  
+**Disciplina:** Engenharia de Software III  
+**Professor:** Me. Julian Rodrigues Valério  
+**Projeto:** Itaim Vende — API RESTful de Comercio Regional  
+**Sprint 0:** 27/10/2026 e 28/10/2026  
+**Quadro Kanban:** [GitHub Projects #4 — Itaim Vende](https://github.com/users/KaykyTFF/projects/4)  
 
 ---
 
-## 🎯 2. Product Goal (Visão do Produto)
+## 1. Nossa Equipe e Divisao de Papeis
 
-> **Nossa API ajuda** pequenos produtores rurais, artesãos, comerciantes, prestadores de serviços e a comunidade de Paulistana e demais municípios do Vale do Itaim **a** negociar, anunciar, comprar e vender produtos e serviços regionais com segurança, velocidade e autonomia digital, **porque** centraliza a economia local em um ecossistema próprio que elimina intermediários abusivos, oferece busca tolerante a variações ortográficas, chat em tempo real com proposta de preços e verificação de vendedores.  
+Para organizar o desenvolvimento do Itaim Vende com Scrum, nos dividimos em papeis claros para facilitar os processos, mantendo todo mundo programando e testando no dia a dia.
+
+| Integrante | Foco Principal | Papel na Sprint 1 | Papel na Sprint 2 |
+| :--- | :--- | :--- | :--- |
+| **Kayky** | Lider Tecnico e Backend | Product Owner | Product Owner |
+| **Pedro Ravy** | Backend e Usabilidade | Desenvolvedor | Desenvolvedor |
+| **Josimar** | Frontend | Scrum Master | Desenvolvedor |
+| **Giselly** | Frontend | Desenvolvedora | Scrum Master |
+| **Raili** | Frontend | Desenvolvedora | Desenvolvedora |
+
+* **Product Owner:** O Kayky ficou como PO nas duas sprints para manter a visao geral do produto alinhada do comeco ao fim.
+* **Alternancia do Scrum Master:** Seguindo a regra da atividade, alternamos quem facilitava as sprints. O Josimar foi o Scrum Master da Sprint 1 e a Giselly assumiu a funcao na Sprint 2.
+* **Qualidade coletiva:** Nao temos a figura isolada de testador no grupo. Todos nos programamos e somos responsaveis por criar e rodar os testes automatizados das funcionalidades que desenvolvemos.
+
+---
+
+## 2. Product Goal — Visao do Produto
+
+Completando o modelo pedido na atividade:
+
+> **Nossa API ajuda** pequenos produtores rurais, comerciantes locais, prestadores de servicos e moradores de Paulistana e regiao do Vale do Itaim **a** negociar, anunciar, comprar e vender produtos e servicos de maneira direta, confiavel e sem intermediarios, **porque** disponibiliza uma plataforma regional com busca que tolera erros de digitacao, chat com envio de propostas de preco, regras de seguranca cadastral e calculo financeiro travado no servidor.  
 >  
-> **Diferente de** plataformas nacionais genéricas como OLX e Mercado Livre, **a nossa API e plataforma** é moldada especificamente para as particularidades logísticas, linguísticas e geográficas do semiárido piauiense, suportando busca fonética sem acentos (`unaccent`), segmentação precisa por municípios e bairros vizinhos, integridade de preços travada no servidor, regras comunitárias de moderação com purga de arquivos em nuvem e sistema de segurança com cooldown de 30 dias para alteração de nome de usuário.
+> **Diferente de** plataformas genericas como OLX e Mercado Livre, **a nossa API e plataforma** foi pensada para a realidade do semiárido piauiense, trazendo busca fonetica sem acentos (`unaccent`), filtros por bairros e cidades vizinhas, moderacao com limpeza automatica de fotos na nuvem e protecao contra golpes com intervalo de 30 dias para mudar o nome de usuario (`@`).
 
 ---
 
-## ✅ 3. Definition of Done (DoD) — Critério de "Pronto"
+## 3. Definition of Done — Criterios de Conclusao
 
-Uma história de usuário do Product Backlog ou Sprint Backlog só é considerada **"Pronta" (Done)** quando atende cumulativamente a **todos** os seguintes requisitos:
+No nosso time, uma historia so e considerada pronta se cumprir todos os dez itens abaixo:
 
-- [x] **Revisão por Pares (Pull Request):** O código foi integrado por Pull Request revisado e aprovado formalmente por outro integrante da equipe, sem merges diretos na branch principal (`main`).
-- [x] **Testes Automatizados Verificados:** Os testes automatizados da história foram escritos, executados localmente e passam integralmente (suíte com 23 testes passando sem falhas).
-- [x] **Critérios de Aceitação Validados:** Todos os cenários em formato *Dado / Quando / Então* foram verificados e validados em conjunto com o Product Owner.
-- [x] **Especificação OpenAPI Atualizada:** O endpoint, seus parâmetros, schemas de entrada e todas as respostas (sucesso e erros) estão documentados no OpenAPI 3.0.3 (`/api-docs`).
-- [x] **Coleção Postman Funcional:** A coleção oficial (`itaim-vende.postman_collection.json`) contém a requisição de sucesso e ao menos um exemplo de erro tratado (ex: `400`, `401`, `403`, `404` ou `409`).
-- [x] **Segurança e Higiene de Repositório:** Nenhum segredo, chave de API privada, token JWT estático ou senha foi commitado no repositório (uso estrito de `.env` e `.gitignore`).
-- [x] **Execução Conforme README:** A API continua subindo e rodando perfeitamente a partir das instruções descritas no `README.md`.
-- [x] **Item da Equipe 1 — Validação e Erros Padronizados:** Toda entrada de dados deve possuir schema Zod correspondente e retornar respostas de erro no formato padronizado com `code`, `message` e `details`.
-- [x] **Item da Equipe 2 — Integração Completa Frontend-Backend:** As telas do frontend devem consumir os endpoints reais da API sem disparar exceções no console do navegador, tratando estados de carregamento, erros e sucesso.
-- [x] **Item da Equipe 3 — Limpeza e Integridade de Mídia em Nuvem:** Operações de exclusão ou moderação de anúncios devem obrigatoriamente acionar a purga automatizada de arquivos no bucket do Supabase Storage para evitar custos e arquivos órfãos.
+1. **Revisao por colega:** O codigo so entra na branch principal por meio de Pull Request revisado e aprovado por outro integrante da equipe. Ninguem sobre codigo direto na main.
+2. **Testes automatizados passando:** Todos os testes unitarios e de integracao da funcionalidade foram escritos e estao passando com sucesso na esteira do GitHub Actions, mantendo os 88 testes do projeto aprovados.
+3. **Criterios de aceitacao conferidos:** Validamos todos os cenarios de Dado, Quando e Entao junto com o Product Owner.
+4. **Documentado no OpenAPI:** O endpoint, seus campos de envio e as respostas de sucesso e erro estao descritos na documentacao interativa do Swagger UI e no arquivo openapi.json.
+5. **Colecao de testes atualizada:** A colecao do Postman contem os exemplos de chamada de sucesso e os casos de erro da funcionalidade.
+6. **Seguranca de chaves e senhas:** Nenhuma senha, token ou chave de servico externo foi enviada para o GitHub. Tudo fica protegido em variaveis de ambiente no arquivo .env.
+7. **Instrucoes do README funcionando:** A aplicacao roda normalmente seguindo os passos de instalacao descritos no README.
+8. **Item da equipe 1 — Validacao rigorosa com Zod:** Toda entrada de dados em rotas de cadastro ou atualizacao passa por validacao com schemas Zod, devolvendo erros no formato padrao com code, message e details.
+9. **Item da equipe 2 — Integracao visual sem erros no console:** As telas do frontend mostram estados de carregamento com efeito shimmer e tratam erros sem quebrar a aplicacao nem exibir mensagens no console do navegador.
+10. **Item da equipe 3 — Limpeza de fotos na nuvem:** Quando um anuncio e apagado ou removido pela moderacao, o arquivo de imagem correspondente e excluido do bucket do Supabase Storage para nao deixar lixo na nuvem.
 
 ---
 
-## 🤝 4. Acordos de Trabalho (Working Agreements)
+## 4. Acordos de Trabalho
 
-Os acordos abaixo foram decididos democraticamente na Sprint 0 e vigoram durante todo o projeto:
+Na Sprint 0, nos reunimos e combinamos as regras de trabalho que seguimos durante todo o projeto:
 
-1. **Horário e Canal das Dailies:**  
-   * As reuniões diárias (Daily Scrum) ocorrem de forma assíncrona às **19h30** no canal `#daily-scrum` do Discord e grupo do WhatsApp, com consolidação presencial de 15 minutos no laboratório de informática do IFPI nos dias de aula presencial.
-   * Todos os membros devem responder obrigatoriamente às três perguntas: *O que fiz desde a última daily? O que farei até a próxima? Existe algum impedimento travando meu progresso?*
+1. **Canal de comunicacao e rotina das Dailies:**  
+   - Nosso acompanhamento diario e feito pelo grupo do WhatsApp. Como a noite temos aula no campus, nao fazia sentido marcar chamada fixa nesse horario.
+   - A distribuicao de demandas e feita por meio de listas no WhatsApp: passamos o que cada um precisa fazer e vamos mandando no grupo o que estamos fazendo, o que terminamos e se alguem encontrou algum problema.
+   - Nos dias de aula presencial no IFPI Campus Paulistana, nos juntamos no laboratorio para conversar sobre o andamento, planejar o que falta adicionar, testar o sistema juntos procurando bugs e pensar na evolucao da plataforma.
 
-2. **Fluxo de Branches e Revisão de Pull Requests:**  
-   * É terminantemente proibido commitar diretamente na branch `main`.
-   * Branches de funcionalidade devem seguir o padrão `feat/H<numero>-descricao` ou `fix/descricao`.
-   * Todo Pull Request deve ser revisado por pelo menos um colega com foco na área oposta (ex: Backend revisa Frontend e vice-versa) para garantir conhecimento compartilhado.
+2. **Fluxo do Git e revisao de codigo:**  
+   - Criamos branches separadas para cada funcionalidade ou correcao e ninguem sobe codigo direto na branch main.
+   - Sempre que alguem abre um Pull Request, outro colega revisa o codigo antes de fazer o merge. Sempre que possivel, quem faz backend revisa frontend e vice-versa para que todos conhecam o sistema como um todo.
 
-3. **Regra de Escalação de Impedimentos (Regra das 4 Horas):**  
-   * Caso algum membro fique bloqueado por mais de 4 horas em um problema técnico (banco de dados, integração de rotas, CORS, etc.), deve sinalizar o Scrum Master imediatamente.
-   * O Scrum Master tem a obrigação de organizar uma sessão de pareamento (*Pair Programming*) entre o membro travado e o especialista da área em até 12 horas.
+3. **O que fazer quando alguem travar:**  
+   - Se alguem passar mais de 4 horas travado em algum problema de banco, rota, CORS ou integracao, avisa no grupo na mesma hora.
+   - O Scrum Master organiza uma sessao de programacao em dupla com outro integrante para destravarmos o problema juntos.
 
-4. **Commits Rastreáveis e Semânticos:**  
-   * Mensagens de commit devem citar o ID da história correspondente para garantir rastreabilidade, por exemplo:  
-     `feat(auth): implementar cooldown de 30 dias para alteracao de username (#H13)`  
-     `test(products): adicionar teste de busca unaccent sem acentuacao (#H4)`
+4. **Commits organizados:**  
+   - Colocamos mensagens claras citando o que foi feito e a historia correspondente para sabermos exatamente o historico de cada alteracao.
 
-5. **Responsabilidade Coletiva sobre Testes:**  
-   * Nenhuma história é marcada como "Em Revisão" sem que o teste automatizado correspondente tenha sido criado e validado no ambiente local.
+5. **Responsabilidade com a qualidade:**  
+   - Nao consideramos uma tarefa finalizada sem antes criar e rodar os testes dela localmente e no pipeline de integracao continua.
 
+6. **Acompanhamento no Quadro Kanban:**  
+   - Mantemos o fluxo visual de tarefas no nosso quadro no GitHub Projects: [https://github.com/users/KaykyTFF/projects/4](https://github.com/users/KaykyTFF/projects/4), com as colunas Backlog, Sprint Backlog, Em andamento, Em revisao e Pronto.

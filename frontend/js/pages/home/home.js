@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const cadastrados = JSON.parse(localStorage.getItem('itaim_produtos_cadastrados') || '[]');
                 if (Array.isArray(cadastrados)) locais = [...cadastrados, ...locais];
-            } catch(e) {}
+            } catch (e) { }
         }
         return locais;
     }
@@ -128,11 +128,11 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const salvos = JSON.parse(localStorage.getItem('itaim_favoritos') || '[]');
             favoritosSet = new Set(salvos.map(String));
-        } catch (e) {}
+        } catch (e) { }
     } else {
         try {
             localStorage.removeItem('itaim_favoritos');
-        } catch (e) {}
+        } catch (e) { }
     }
 
     function atualizarContadorFavoritos() {
@@ -205,7 +205,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const contagemCat = {};
         const contagemCid = {};
         let countNovo = 0;
-        let countUsado = 0;
+        let countExcelente = 0;
+        let countBom = 0;
+        let countSinais = 0;
+        let countDefeito = 0;
         let countPreco50 = 0;
         let countPreco200 = 0;
         let countPreco500 = 0;
@@ -216,9 +219,9 @@ document.addEventListener('DOMContentLoaded', () => {
             ? produtos.filter(p => {
                 const q = termoBusca.toLowerCase();
                 return (p.titulo && p.titulo.toLowerCase().includes(q)) ||
-                       (p.categoria && p.categoria.toLowerCase().includes(q)) ||
-                       (p.cidade && p.cidade.toLowerCase().includes(q)) ||
-                       (p.bairro && p.bairro.toLowerCase().includes(q));
+                    (p.categoria && p.categoria.toLowerCase().includes(q)) ||
+                    (p.cidade && p.cidade.toLowerCase().includes(q)) ||
+                    (p.bairro && p.bairro.toLowerCase().includes(q));
             })
             : produtos;
 
@@ -229,9 +232,18 @@ document.addEventListener('DOMContentLoaded', () => {
             const cid = p.cidade || 'Paulistana';
             contagemCid[cid] = (contagemCid[cid] || 0) + 1;
 
-            const cond = (p.condicao || '').toLowerCase();
-            if (cond.includes('novo')) countNovo++;
-            else countUsado++;
+            const cond = (p.condicao || p.condition || '').toLowerCase();
+            if (cond.includes('novo') && !cond.includes('semi')) {
+                countNovo++;
+            } else if (cond.includes('excelente') || cond.includes('semi')) {
+                countExcelente++;
+            } else if (cond.includes('sinais')) {
+                countSinais++;
+            } else if (cond.includes('defeito') || cond.includes('peça') || cond.includes('peca')) {
+                countDefeito++;
+            } else {
+                countBom++;
+            }
 
             const pr = Number(p.preco || 0);
             if (pr > 0 && pr <= 50) countPreco50++;
@@ -242,9 +254,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Atualizar Contadores de Condição
         const elNovo = document.getElementById('count-condicao-novo');
-        const elUsado = document.getElementById('count-condicao-usado');
+        const elExcelente = document.getElementById('count-condicao-excelente');
+        const elBom = document.getElementById('count-condicao-bom');
+        const elSinais = document.getElementById('count-condicao-sinais');
+        const elDefeito = document.getElementById('count-condicao-defeito');
         if (elNovo) elNovo.textContent = `(${countNovo})`;
-        if (elUsado) elUsado.textContent = `(${countUsado})`;
+        if (elExcelente) elExcelente.textContent = `(${countExcelente})`;
+        if (elBom) elBom.textContent = `(${countBom})`;
+        if (elSinais) elSinais.textContent = `(${countSinais})`;
+        if (elDefeito) elDefeito.textContent = `(${countDefeito})`;
 
         // Atualizar Contadores de Preço
         const elP50 = document.getElementById('count-preco-50');
@@ -357,14 +375,35 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderizarVitrine() {
-    function formatarLocalCard(cidade, bairro) {
-        const c = (cidade || 'Paulistana').trim();
-        let b = (bairro || 'Centro').trim();
-        if (!b || /^\d/.test(b) || /\d{5}/.test(b) || b.toLowerCase().includes('cep')) {
-            b = 'Centro';
+        function formatarLocalCard(cidade, bairro) {
+            const c = (cidade || 'Paulistana').trim();
+            let b = (bairro || 'Centro').trim();
+            if (!b || /^\d/.test(b) || /\d{5}/.test(b) || b.toLowerCase().includes('cep')) {
+                b = 'Centro';
+            }
+            return `${c} - ${b}`;
         }
-        return `${c} - ${b}`;
-    }
+
+        function formatarDataCard(item) {
+            if (!item) return new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            const raw = item.createdAt || item.publishedAt || item.criadoEm || item.updatedAt;
+            if (raw) {
+                const d = new Date(raw);
+                if (!isNaN(d.getTime())) {
+                    return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                }
+            }
+            if (item.data && typeof item.data === 'string' && item.data.trim().toLowerCase() !== 'hoje') {
+                return item.data.trim();
+            }
+            if (item.id && /^\d{12,14}$/.test(String(item.id))) {
+                const dId = new Date(Number(item.id));
+                if (!isNaN(dId.getTime())) {
+                    return dId.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                }
+            }
+            return new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        }
 
         if (!gradeProdutos) return;
 
@@ -414,10 +453,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!matchesBairro) return false;
             }
 
-            // Condição (Novo vs Usado na sidebar)
+            // Condição na sidebar
             if (modoPesquisaAtivo && condicoesSelecionadas.size > 0) {
-                const cond = (p.condicao || 'usado').toLowerCase();
-                const matchesCond = Array.from(condicoesSelecionadas).some(c => cond.includes(c.toLowerCase()));
+                const cond = (p.condicao || p.condition || 'usado').toLowerCase();
+                const matchesCond = Array.from(condicoesSelecionadas).some(c => {
+                    const cLow = c.toLowerCase();
+                    if (cLow === 'novo') return cond.includes('novo') && !cond.includes('semi');
+                    if (cLow.includes('excelente') || cLow.includes('semi')) return cond.includes('excelente') || cond.includes('semi');
+                    if (cLow.includes('sinais')) return cond.includes('sinais');
+                    if (cLow.includes('defeito') || cLow.includes('peça') || cLow.includes('peca')) return cond.includes('defeito') || cond.includes('peça') || cond.includes('peca');
+                    if (cLow.includes('bom') || cLow === 'usado') return cond.includes('bom') || cond === 'usado' || (!cond.includes('novo') && !cond.includes('excelente') && !cond.includes('semi') && !cond.includes('sinais') && !cond.includes('defeito'));
+                    return cond.includes(cLow);
+                });
                 if (!matchesCond) return false;
             }
 
@@ -493,9 +540,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         ${produtos.length === 0 ? 'Nenhum produto anunciado no momento' : 'Nenhum anúncio encontrado'}
                     </h3>
                     <p style="color: #64748B; font-size: 14.5px; margin-bottom: 22px; line-height: 1.5;">
-                        ${produtos.length === 0 
-                            ? 'Ainda não há produtos à venda. Desapegue do que você não usa mais ou seja o primeiro a anunciar!' 
-                            : 'Tente buscar por outro termo ou remova os filtros selecionados na barra lateral.'}
+                        ${produtos.length === 0
+                    ? 'Ainda não há produtos à venda. Desapegue do que você não usa mais ou seja o primeiro a anunciar!'
+                    : 'Tente buscar por outro termo ou remova os filtros selecionados na barra lateral.'}
                     </p>
                     <a href="${window.ItaimRotas ? window.ItaimRotas.obterUrl('vender') : '../vender/vender.html'}" style="background: #44BD32; color: #FFFFFF; font-weight: 700; padding: 12px 24px; border-radius: 30px; text-decoration: none; font-size: 15px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(68,189,50,0.25);">
                         + Anunciar Produto Agora
@@ -540,7 +587,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <span class="card-local" title="${formatarLocalCard(p.cidade, p.bairro)}">
                                 <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -1px; margin-right: 2px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>${formatarLocalCard(p.cidade, p.bairro)}
                             </span>
-                            <span>Hoje</span>
+                            <span>${formatarDataCard(p)}</span>
                         </div>
                     </div>
                 </article>
@@ -595,7 +642,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (userEmail) {
                         localStorage.setItem('itaim_favoritos_' + userEmail.toLowerCase().trim(), JSON.stringify(favArr));
                     }
-                } catch (err) {}
+                } catch (err) { }
                 atualizarContadorFavoritos();
 
                 // Sincroniza com a API se usuário autenticado
@@ -627,10 +674,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const res = await window.ItaimApi.produtos.listar(apiFiltros);
                 if (res && res.success && Array.isArray(res.data)) {
                     const mapaExcluidos = (() => {
-                        try { return new Set(JSON.parse(localStorage.getItem('itaim_produtos_excluidos') || '[]').map(String)); } catch(e) { return new Set(); }
+                        try { return new Set(JSON.parse(localStorage.getItem('itaim_produtos_excluidos') || '[]').map(String)); } catch (e) { return new Set(); }
                     })();
                     const mapaStatus = (() => {
-                        try { return JSON.parse(localStorage.getItem('itaim_produtos_status_map') || '{}'); } catch(e) { return {}; }
+                        try { return JSON.parse(localStorage.getItem('itaim_produtos_status_map') || '{}'); } catch (e) { return {}; }
                     })();
 
                     const apiProdutos = res.data
@@ -646,9 +693,9 @@ document.addEventListener('DOMContentLoaded', () => {
                                 categoria: p.categoria || (p.category ? p.category.name : 'Geral'),
                                 cidade: p.cidade || p.city || 'Paulistana',
                                 bairro: (() => {
-            const b = (p.bairro || p.neighborhood || 'Centro').trim();
-            return (!b || /^\d/.test(b) || /\d{5}/.test(b) || b.toLowerCase().includes('cep')) ? 'Centro' : b;
-        })(),
+                                    const b = (p.bairro || p.neighborhood || 'Centro').trim();
+                                    return (!b || /^\d/.test(b) || /\d{5}/.test(b) || b.toLowerCase().includes('cep')) ? 'Centro' : b;
+                                })(),
                                 imagem: (window.ItaimApi && window.ItaimApi.resolverUrlImagem)
                                     ? window.ItaimApi.resolverUrlImagem(p.imagem || (p.images && p.images[0]) || '')
                                     : (window.ItaimRotas ? window.ItaimRotas.obterAsset('assets/produtos/anuncio_13.jpg') : '../../assets/produtos/anuncio_13.jpg')
@@ -693,7 +740,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 url.searchParams.delete('q');
                 url.searchParams.delete('busca');
                 window.history.pushState({}, '', url.toString());
-            } catch (err) {}
+            } catch (err) { }
             atualizarSidebarFiltros();
             renderizarVitrine();
         }
@@ -704,7 +751,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const valorDigitado = campoBusca ? campoBusca.value.trim() : '';
         if (valorDigitado.length > 0) {
             e.preventDefault();
-            const urlDestino = window.ItaimRotas 
+            const urlDestino = window.ItaimRotas
                 ? window.ItaimRotas.obterUrl('categoria', `q=${encodeURIComponent(valorDigitado)}`) : `../produtos/categoria.html?q=${encodeURIComponent(valorDigitado)}`;
             window.location.href = urlDestino;
         }
@@ -885,7 +932,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    window.filtrarPorCategoria = function(catNome) {
+    window.filtrarPorCategoria = function (catNome) {
         botoesCategorias.forEach(b => {
             const matches = b.getAttribute('data-categoria') === catNome;
             b.classList.toggle('categoria-selecionada', matches);
@@ -1025,5 +1072,5 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.filtrarPorCategoria(catParam);
             }, 100);
         }
-    } catch (err) {}
+    } catch (err) { }
 });

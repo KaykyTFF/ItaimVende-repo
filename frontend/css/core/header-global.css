@@ -8,17 +8,17 @@
 @import url('./header/header-base.css');
 
 /* 2. Módulos do cabeçalho */
-@import url('./header/header-navbar.css');
+@import url('./header/header-navbar.css?v=26');
 @import url('./header/header-drawer.css');
 
 /* 3. Responsividade e regras móveis */
-@import url('./header/header-responsive.css');
+@import url('./header/header-responsive.css?v=26');
 
 /* 4. Elementos compartilhados */
 @import url('./header/header-ui-elements.css');
 
 /* 5. Sistema Global de Temas (Claro / Escuro) */
-@import url('theme.css?v=20');
+@import url('theme.css?v=22');
 
 /* 6. Sistema Global de Transições e Animações de Página */
 @import url('transicoes.css');

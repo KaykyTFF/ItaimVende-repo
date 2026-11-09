@@ -34,9 +34,9 @@
 }
 
 .categoria-hero-badge {
-    background: rgba(68, 189, 50, 0.1);
-    border: 1px solid rgba(68, 189, 50, 0.28);
-    color: #27811d;
+    background: #38A129;
+    border: none;
+    color: #FFFFFF;
     padding: 8px 18px;
     border-radius: var(--radius-full);
     font-weight: 700;
@@ -47,6 +47,7 @@
     white-space: nowrap;
     position: relative;
     z-index: 1;
+    box-shadow: none;
 }
 
 .categoria-hero-badge::before {
@@ -54,7 +55,7 @@
     width: 7px;
     height: 7px;
     border-radius: 50%;
-    background: var(--primary);
+    background: #FFFFFF;
     display: inline-block;
 }
 
@@ -155,7 +156,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.15);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
     transition: all 0.2s ease;
     -fx-background-color: white;
     -fx-background-radius: 100;
@@ -164,7 +165,7 @@
     -fx-max-width: 70px;
     -fx-max-height: 70px;
     -fx-alignment: center;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 10, 0, 0, 5);
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.15), 10, 0, 0, 5);
 }
 
 /* Efeito extra no círculo ao passar o mouse */
@@ -318,9 +319,10 @@ body[data-theme="dark"].pagina-categoria,
 
 [data-theme="dark"] .categoria-hero-badge,
 [data-theme="dark"] #categoria-contador-badge {
-    background-color: rgba(74, 222, 128, 0.16) !important;
-    border: 1px solid rgba(74, 222, 128, 0.3) !important;
-    color: #4ADE80 !important;
+    background-color: rgba(56, 161, 41, 0.12) !important;
+    border: 1px solid rgba(56, 161, 41, 0.25) !important;
+    color: #38A129 !important;
+    box-shadow: none !important;
 }
 
 /* Botão Voltar e Breadcrumbs */
@@ -332,8 +334,8 @@ body[data-theme="dark"].pagina-categoria,
 
 [data-theme="dark"] .btn-voltar-cat:hover {
     background-color: #2D3945 !important;
-    color: #4ADE80 !important;
-    border-color: #4ADE80 !important;
+    color: #38A129 !important;
+    border-color: #38A129 !important;
 }
 
 [data-theme="dark"] .breadcrumb-cat {
@@ -345,7 +347,7 @@ body[data-theme="dark"].pagina-categoria,
 }
 
 [data-theme="dark"] .breadcrumb-cat a:hover {
-    color: #4ADE80 !important;
+    color: #38A129 !important;
 }
 
 [data-theme="dark"] .breadcrumb-cat span {
@@ -354,7 +356,7 @@ body[data-theme="dark"].pagina-categoria,
 
 [data-theme="dark"] .breadcrumb-cat .ativo,
 [data-theme="dark"] #breadcrumb-categoria-nome {
-    color: #4ADE80 !important;
+    color: #38A129 !important;
 }
 
 /* Título da Seção e Filtros */
@@ -373,8 +375,8 @@ body[data-theme="dark"].pagina-categoria,
 }
 
 [data-theme="dark"] .select-filtro:focus {
-    border-color: #4ADE80 !important;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234ADE80' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") !important;
+    border-color: #38A129 !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2338A129' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") !important;
 }
 
 [data-theme="dark"] .select-filtro option {
@@ -390,7 +392,7 @@ body[data-theme="dark"].pagina-categoria,
 }
 
 [data-theme="dark"] .circulo-icon-categoria:hover {
-    border-color: #4ADE80 !important;
+    border-color: #38A129 !important;
 }
 
 [data-theme="dark"] .label-categoria {
@@ -411,4 +413,3 @@ body[data-theme="dark"].pagina-categoria,
 [data-theme="dark"] .estado-vazio p {
     color: #94A3B8 !important;
 }
-

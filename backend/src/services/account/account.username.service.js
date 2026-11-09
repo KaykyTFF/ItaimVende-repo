@@ -249,6 +249,16 @@ export async function changeUsername(userId, newUsername, meta = {}) {
 
   const novoStatus = calcularStatusUsername(updatedUser.usernameLastChangedAt);
 
+  import('../notification/index.js').then(({ createNotification }) => {
+    createNotification({
+      userId,
+      title: 'Nome de usuário atualizado',
+      message: `Seu nome de usuário foi atualizado com sucesso para @${clean}.`,
+      type: 'aviso',
+      link: '/pages/perfil/configuracoes.html',
+    }).catch(() => {});
+  }).catch(() => {});
+
   return {
     success: true,
     message: 'Nome de usuário alterado com sucesso! Próxima alteração disponível em 30 dias.',

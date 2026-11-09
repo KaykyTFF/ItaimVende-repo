@@ -1,0 +1,86 @@
+name: CI / Testes Automatizados - Itaim Vende API
+
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main, dev ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Execução de Testes Automatizados e Cobertura
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: itaim_user
+          POSTGRES_PASSWORD: itaim_password
+          POSTGRES_DB: itaimvende_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      NODE_ENV: test
+      PORT: 3000
+      DATABASE_URL: "postgresql://itaim_user:itaim_password@localhost:5432/itaimvende_test?schema=public"
+      DIRECT_URL: "postgresql://itaim_user:itaim_password@localhost:5432/itaimvende_test?schema=public"
+      JWT_SECRET: "ci_pipeline_super_secret_test_jwt_key_32_chars_min"
+      JWT_EXPIRES_IN: "7d"
+      CORS_ORIGIN: "*"
+      UPLOAD_DESTINATION: "local"
+
+    steps:
+      - name: Checkout do Repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: backend/package.json
+
+      - name: Instalar Dependências do Backend
+        working-directory: backend
+        run: npm ci || npm install
+
+      - name: Gerar Cliente Prisma
+        working-directory: backend
+        run: npx prisma generate
+
+      - name: Sincronizar Esquema do Banco no PostgreSQL
+        working-directory: backend
+        run: npx prisma db push --skip-generate
+
+      - name: Executar Testes Unitários com Cobertura de Código
+        working-directory: backend
+        run: npm run test:unit:coverage
+
+      - name: Iniciar Servidor de Testes em Background
+        working-directory: backend
+        run: |
+          node src/server.js &
+          for i in $(seq 1 30); do
+            curl -fsSL http://localhost:3000/api/v1/health && break || sleep 1
+          done
+
+      - name: Executar Testes de Integração e Conformidade REST
+        working-directory: backend
+        run: npm test
+
+      - name: Arquivar Relatório de Cobertura
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: relatorio-cobertura-testes
+          path: backend/coverage/
+          if-no-files-found: ignore
+

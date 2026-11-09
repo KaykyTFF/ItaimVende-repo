@@ -27,6 +27,8 @@ Ambiente Base: Node.js (ES Modules) com Express.js e PostgreSQL
 - [17. Testes Automatizados](#17-testes-automatizados)
 - [18. Colecao Postman](#18-colecao-postman)
 - [19. Declaracao de Uso de Inteligencia Artificial](#19-declaracao-de-uso-de-inteligencia-artificial)
+- [20. Processo de Gestao Agil (Scrum)](#20-processo-de-gestao-agil-scrum)
+- [21. Processo e Engenharia de Testes](#21-processo-e-engenharia-de-testes)
 
 ---
 
@@ -828,19 +830,42 @@ npm --prefix backend run test
    - Alteracao de outros campos de perfil sem ativacao indevida do cooldown.
    - Precisao matematica no calculo de dias restantes e data limite.
 
-### Resultado Verificado da Suite
+6. **Suite de Testes Unitarios — Schemas e Validacoes Zod (`backend/tests/unit/schemas.test.js` - 20 testes):**
+   - Validacao de limites de comprimento (AVL) para username (3 a 20 caracteres).
+   - Bloqueio de caracteres especiais e lista de palavras reservadas do sistema.
+   - Schemas de formatacao estrita para e-mails e codigos OTP de 6 digitos.
+   - Schemas de validacao de celulares brasileiros e nono digito obrigatorio.
+   - Schemas de cadastro de produtos, regras de preco nao negativo e enums.
+   - Schemas de checkout de ordens (`createOrderSchema`) com regras de integridade.
 
-```
+7. **Suite de Testes Unitarios — Regras de Negocio e Formatadores (`backend/tests/unit/formatters-and-rules.test.js` - 10 testes):**
+   - Calculo matematico de cooldown de 30 dias com precisao temporal em milissegundos.
+   - Sanitizacao e normalizacao de telefones para formato E.164 brasileiro.
+   - Calculo compulsorio de totais de pedidos e formatacao monetaria de centavos.
+   - Rejeicao de itens inexistentes ou manipulacoes client-side de preco.
+
+8. **Suite de Testes do Fluxo de Notificacoes (`backend/tests/notifications.test.js` - 11 testes):**
+   - Listagem paginada, filtros por tipo (mensagem, avaliacao), ordenacao e contadores.
+   - Marcacao de leitura individual e em lote.
+   - Isolamento de dados entre usuarios (usuario A nao acessa notificacoes do usuario B).
+
+### Resultado Verificado da Suite Automatizada
+
+```text
+Suite de Testes Unitarios — Schemas e Validacoes de Entrada (Zod) (20/20)
+Suite de Testes Unitarios — Regras de Negocio e Formatadores Puros (10/10)
+Suite de Testes Automatizados — Sistema de Notificacoes Itaim Vende (11/11)
 Suite de Testes do Fluxo de Alteracao Segura de E-mail (/account/email) (5/5)
 Suite de Testes do Fluxo Seguro de WhatsApp / Celular (/account/phone) (10/10)
 Suite de Testes de Conformidade REST e Integracao da API Itaim Vende (14/14)
 Suite de Testes de Conformidade REST Canonica (Novas Rotas e Metodos) (9/9)
 Suite de Testes da Regra de Cooldown de 30 Dias e Historico para Username (@) (9/9)
 
-Total de testes: 47
-Suites executadas: 5
-Aprovados: 47 (100%)
+Total de testes: 88
+Suites executadas: 15
+Aprovados: 88 (100%)
 Falhas: 0
+Cobertura em Regras de Negocio: 97,03%
 ```
 
 ---
@@ -886,3 +911,56 @@ Ferramentas de Inteligencia Artificial Generativa baseadas em modelos de linguag
 4. **Padronizacao de Contratos e Documentacao:** Apoio na estruturacao da especificacao formal OpenAPI 3.0.3 e consolidacao dos casos de teste para a suite de testes automatizados com o Node Test Runner nativo.
 
 Todas as regras de negocio, decisoes de modelagem de dados, algoritmos de calculo e codigos-fonte foram implementados, testados, validados e homologados diretamente pelos desenvolvedores responsaveis pela aplicacao.
+
+---
+
+## 20. Processo de Gestao Agil (Scrum)
+
+O gerenciamento do ciclo de desenvolvimento do Itaim Vende foi conduzido integralmente sob o framework Scrum, adaptado ao contexto academico da disciplina de Engenharia de Software III no IFPI Campus Paulistana.
+
+### Quadro Kanban Oficial no GitHub Projects
+
+O fluxo de trabalho foi gerenciado atraves de quadro Kanban integrado ao GitHub Projects, estruturado com as colunas *Backlog, Sprint Backlog, Em andamento, Em revisao e Pronto*:
+
+* **Quadro Kanban do Projeto:** [Quadro de Gestao Agil — Itaim Vende (GitHub Projects)](https://github.com/users/KaykyTFF/projects/4)
+* **Repositorio de Origem:** [KaykyTFF/ItaimVende-repo](https://github.com/KaykyTFF/ItaimVende-repo)
+
+### Estrutura de Artefatos na Pasta `/scrum`
+
+Todos os registros de planejamento, execucao diaria, inspecao e adaptacao estao organizados na raiz do projeto dentro do diretorio [`/scrum`](scrum/):
+
+```text
+scrum/
+  acordos.md                  # Product Goal, Papeis, Definition of Done (10 itens) e Acordos de Trabalho
+  product-backlog.md          # 13 Historias de Usuario (BDD), MoSCoW, Planning Poker e Matriz de Rastreabilidade
+  sprint-1/
+    planning.md               # Sprint Goal, Capacidade (24 pts), Fatias Verticais e Quadrantes Ageis (Q1-Q4)
+    dailies.md                # 4 Registros de Daily Scrum baseados em commits, 4 Impedimentos e Burndown
+    review-retro.md           # Demonstracao ao vivo, Aceite do PO (V1 = 24 pts), Retrospectiva e Acao MELH-1
+  sprint-2/
+    planning.md               # Sprint Goal, Capacidade (28 pts), Inclusao de MELH-1 e Mapa de Testes
+    dailies.md                # 3 Registros de Daily Scrum baseados em commits, 5 Impedimentos e Burndown
+    review-retro.md           # Demonstracao ao vivo, Aceite do PO (V2 = 28 pts) e Respostas as 3 Questoes Obrigatorias
+  relatos/                    # Relatos individuais de autoavaliacao dos integrantes (elaborados pela equipe)
+```
+
+### Resumo das Sprints e Metricas de Velocidade
+
+| Fase | Periodo | Foco Tecnico | Metas e Incremento | Pontos Planejados | Pontos Entregues | Velocidade Efetiva |
+| :---: | :---: | :--- | :--- | :---: | :---: | :---: |
+| **Sprint 0** | 27/10 e 28/10 | Planejamento Inicial | Definicao do Product Goal, papeis no time, 10 criterios de DoD, 13 historias no Backlog e acordos operacionais. | — | — | — |
+| **Sprint 1** | 29/10 a 03/11 | Nucleo Arquitetural e UI | Esqueleto funcional completo (Auth JWT, Bcrypt, Cache HTTP, Sharp WebP, Orders seguro, Skeleton Shimmer e Dark Mode). | 24 | 24 | **$V_1 = 24$ pts** |
+| **Sprint 2** | 04/11 a 08/11 | Inovacao e Estabilidade | Cooldown de 30 dias para username (@), busca unaccent sem acentos, painel de moderacao, estilizacao 404 e MELH-1. | 28 | 28 | **$V_2 = 28$ pts** |
+
+---
+
+## 21. Processo e Engenharia de Testes
+
+A estrategia de garantia da qualidade da API Itaim Vende segue o processo formal de testes em cinco fases documentadas no diretorio [`docs/testes/`](docs/testes/):
+
+1. **Fase 1 — Planejamento ([01-plano-de-testes.md](docs/testes/01-plano-de-testes.md)):** Escopo, objetivos, niveis de teste (unidade, integracao, sistema e aceitacao), estrategia de automacao, riscos mapeados com planos de contingencia e criterios formais de entrada e saida.
+2. **Fase 2 — Projeto ([02-casos-de-teste-e-rastreabilidade.md](docs/testes/02-casos-de-teste-e-rastreabilidade.md)):** 20 casos de teste projetados com tecnicas formais de Particao de Equivalencia (PE), Analise de Valor Limite (AVL) e Tabela de Decisao (TD), integrados a Matriz de Rastreabilidade bidirecional.
+3. **Fase 3 — Execucao ([03-execucao-e-relatorios-de-defeitos.md](docs/testes/03-execucao-e-relatorios-de-defeitos.md)):** Log completo de execucao da suite de 88 testes automatizados e formalizacao de cinco relatorios de defeitos de engenharia (BUG-01 a BUG-05) com severidade e prioridade.
+4. **Fase 4 — Monitoramento e Controle ([04-painel-de-metricas.md](docs/testes/04-painel-de-metricas.md)):** Painel de metricas quantitativas de evolucao (ciclos T1 e T2), densidade de defeitos, velocidade de execucao (~430ms na suíte unitaria pura) e acoes de controle tomadas.
+5. **Fase 5 — Encerramento ([05-relatorio-final-de-testes.md](docs/testes/05-relatorio-final-de-testes.md)):** Relatorio final consolidado, avaliacao de cobertura de regras de negocio (97,03%), conformidade com o Modelo V e parecer formal de liberacao para homologacao.
+

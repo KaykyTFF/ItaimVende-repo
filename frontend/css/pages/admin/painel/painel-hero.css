@@ -1,5 +1,5 @@
 /* ==========================================================================
-   CONTEÚDO PRINCIPAL
+   CONTEÚDO PRINCIPAL & HERO STATUS (DESIGN BRANCO / SITE ITAIM VENDE)
    ========================================================================== */
 .painel-main {
     max-width: 1400px;
@@ -28,7 +28,7 @@
     flex-wrap: wrap;
     position: relative;
     overflow: hidden;
-    transition: border-color 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 .painel-hero-card::before {
@@ -37,7 +37,7 @@
     top: 0;
     left: 0;
     right: 0;
-    height: 3px;
+    height: 4px;
     background: var(--brand-gradient);
 }
 
@@ -51,7 +51,7 @@
     width: 52px;
     height: 52px;
     border-radius: 50%;
-    background: rgba(16, 185, 129, 0.15);
+    background: rgba(16, 185, 129, 0.12);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -63,7 +63,7 @@
     position: absolute;
     inset: -4px;
     border-radius: 50%;
-    border: 2px solid rgba(16, 185, 129, 0.4);
+    border: 2px solid rgba(16, 185, 129, 0.35);
     animation: pulseWave 2s infinite ease-out;
 }
 
@@ -78,18 +78,18 @@
     height: 20px;
     border-radius: 50%;
     background: var(--success-green);
-    box-shadow: 0 0 16px var(--success-green);
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .status-pulse-dot.warning {
     background: var(--warning-amber);
-    box-shadow: 0 0 16px var(--warning-amber);
+    box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
 }
 
 .status-pulse-dot.critical {
     background: var(--danger-red);
-    box-shadow: 0 0 16px var(--danger-red);
+    box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
 }
 
 .hero-label {
@@ -104,7 +104,7 @@
     font-size: 1.5rem;
     font-weight: 800;
     letter-spacing: -0.02em;
-    color: #ffffff;
+    color: var(--text-primary);
     margin: 2px 0 4px;
 }
 
@@ -121,7 +121,7 @@
 }
 
 .metric-pill {
-    background: rgba(255, 255, 255, 0.04);
+    background: var(--bg-card-subtle);
     border: 1px solid var(--bg-card-border);
     padding: 10px 16px;
     border-radius: var(--radius-md);
@@ -143,6 +143,5 @@
 .pill-value {
     font-size: 1.05rem;
     font-weight: 700;
-    color: #ffffff;
+    color: var(--text-primary);
 }
-

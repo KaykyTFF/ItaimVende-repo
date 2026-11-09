@@ -51,7 +51,84 @@
     }
 
     .btn-voltar-mobile-chat {
-        display: flex;
+        display: flex !important;
+        padding: 4px !important;
+        flex-shrink: 0 !important;
+    }
+
+    /* Topo do chat ativo responsivo no mobile */
+    .chat-topo-ativo {
+        padding: 8px 10px !important;
+        gap: 8px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        min-width: 0 !important;
+    }
+
+    .chat-perfil-conversa {
+        min-width: 0 !important;
+        flex: 1 1 auto !important;
+        gap: 8px !important;
+        padding: 2px 4px !important;
+        margin: 0 !important;
+        overflow: hidden !important;
+    }
+
+    .chat-header-avatar {
+        width: 36px !important;
+        height: 36px !important;
+        flex-shrink: 0 !important;
+    }
+
+    .chat-nome-status {
+        min-width: 0 !important;
+        overflow: hidden !important;
+    }
+
+    .chat-nome-status strong {
+        font-size: 13.5px !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        display: block !important;
+    }
+
+    .chat-header-status-txt {
+        font-size: 11px !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        display: block !important;
+    }
+
+    /* Ações Proposta e Bloquear perfeitamente responsivas */
+    .chat-topo-acoes {
+        display: flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        margin-left: auto !important;
+        flex-shrink: 0 !important;
+    }
+
+    .btn-chat-acao-topo {
+        padding: 6px 9px !important;
+        font-size: 11.5px !important;
+        gap: 4px !important;
+        border-radius: 6px !important;
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
+        line-height: 1.2 !important;
+    }
+
+    .btn-chat-acao-topo svg {
+        width: 14px !important;
+        height: 14px !important;
+        flex-shrink: 0 !important;
+    }
+
+    /* Oculta 'Fazer ' mantendo 'Proposta' no mobile para caber perfeitamente sem quebrar */
+    .txt-proposta-fazer {
+        display: none !important;
     }
 
     .mobile-resumo-produto-topo {
@@ -80,5 +157,54 @@
     .btn-enviar-mensagem {
         width: 40px;
         height: 40px;
+    }
+}
+
+@media (max-width: 420px) {
+    .chat-topo-ativo {
+        padding: 6px 8px !important;
+        gap: 6px !important;
+    }
+
+    .chat-perfil-conversa {
+        gap: 6px !important;
+    }
+
+    .chat-header-avatar {
+        width: 32px !important;
+        height: 32px !important;
+    }
+
+    .chat-nome-status strong {
+        font-size: 13px !important;
+        max-width: 75px !important;
+    }
+
+    .btn-chat-acao-topo {
+        padding: 5px 7px !important;
+        font-size: 11px !important;
+        gap: 4px !important;
+    }
+
+    .btn-chat-acao-topo svg {
+        width: 13px !important;
+        height: 13px !important;
+    }
+}
+
+@media (max-width: 350px) {
+    .chat-topo-ativo {
+        padding: 5px 6px !important;
+        gap: 4px !important;
+    }
+
+    .chat-nome-status strong {
+        max-width: 55px !important;
+    }
+
+    .btn-chat-acao-topo {
+        padding: 4px 5px !important;
+        font-size: 10px !important;
+        gap: 3px !important;
     }
 }

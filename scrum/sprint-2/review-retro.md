@@ -1,98 +1,102 @@
-# 🔍 Sprint 2 Review e Retrospectiva (04/11/2026)
+# Sprint 2 Review e Retrospectiva (08/11/2026)
 
-> **Data da Sessão:** 04/11/2026  
-> **Scrum Master Facilitadora:** Giselly *(alternância de papéis conforme metodologia Scrum)*  
-> **Product Owner:** Kayky  
-> **Participantes:** Kayky, Pedro Ravy, Josimar, Raili, Giselly  
-
----
-
-## 🎪 Parte 1: Sprint Review (Inspeção do Produto Final)
-
-### 1.1. Recordação do Sprint Goal da Sprint 2
-> *"Consolidar a experiência de uso do Itaim Vende com as funcionalidades de inovação (busca unaccent sem acentos, sistema de segurança com cooldown de 30 dias para @), eliminando atritos de usabilidade (redesign da página 404, correção de bugs de sessão/deslogamento, painel de moderação e refinamentos visuais de perfil e filtros)."*
-
-### 1.2. Demonstração dos Incrementos (Live Demo no Swagger, Postman e Navegador)
-1. **Sistema de Cooldown de 30 Dias para Username (H13):** Demonstração da regra no backend onde o `@` só pode ser alterado a cada 30 dias com HTTP 403 (`USERNAME_COOLDOWN_ACTIVE`), com bloqueio visual e contador de dias na tela de configurações. Alteração do nome de perfil livre a qualquer momento.
-2. **Correção de Deslogamento Involuntário (BUG-1):** Demonstração de navegação em notificações e atualização de perfil sem que o usuário seja desconectado indevidamente por respostas 403 no interceptor HTTP.
-3. **Redesign Oficial da Página 404 (UI-2):** Demonstração da nova tela "Página Não Encontrada" estilizada com a identidade do Itaim Vende (mascote tatu com mapa de Paulistana) e botões de retorno funcionais.
-4. **Painel de Moderação e Tickets Assíncrono (MOD-1):** Demonstração da tela `tickets.html` carregando denúncias assincronamente logo ao entrar, sem spinner travado.
-5. **Correção do Anúncio do Controle Remoto (BUG-2):** Demonstração de navegação em produtos onde o anúncio fixo de controle remoto foi removido e substituído por "Outros anúncios da região" dinâmicos.
-6. **Busca Fonética Sem Acentos (H5):** Demonstração no endpoint `GET /api/v1/products?search=eletronicos` retornando produtos com acento via extensão `unaccent`.
-7. **Página Dedicada de Pesquisa e Filtros (UI-6 e UI-7):** Demonstração da pesquisa sem redirecionar forçadamente para categorias, com slider de preço e sem o card branco nas categorias.
-8. **Refinamentos de Perfil e Configurações (PRF-1, PRF-2, PRF-3, CFG-1):** Campo de Biografia integrado, remoção do fundo verde para o padrão branco-acinzentado, salvamento de endereço em configurações com campos separados de rua e número e validação de CEP.
-9. **Contato e Chat (UI-8, UI-9, UI-3):** Botão de WhatsApp exibido apenas se houver número cadastrado com ícone oficial, e novo design da caixa de proposta de negociação no chat.
+**Data da Sessao:** 08/11/2026  
+**Duracao Total:** 60 minutos (Review: 30 min e Retrospectiva: 30 min)  
+**Scrum Master Facilitadora:** Giselly (alternando papel com Josimar)  
+**Product Owner:** Kayky  
+**Participantes:** Kayky, Pedro Ravy, Josimar, Raili, Giselly  
 
 ---
 
-### 1.3. Veredito do Product Owner (Aceite das Histórias e Tarefas da Sprint)
+## 1. Sprint Review — Inspecao do Incremento Final do Produto
 
-O Product Owner (Kayky) inspecionou individualmente cada entrega frente aos critérios de aceitação e à Definition of Done (DoD):
+### 1.1. Sprint Goal da Sprint 2
+> "Consolidar a experiencia de uso do Itaim Vende com as funcionalidades de inovacao (busca unaccent sem acentos e regra de seguranca com cooldown de 30 dias para o @), eliminando atritos de usabilidade com a nova pagina 404, correcao de deslogamento indevido, painel de moderacao e tickets de suporte, e refinamentos visuais de perfil e filtros."
 
-| Item (ID) | Descrição do Item / Tarefa | Responsável | Estimativa | Decisão do PO | Justificativa / Observações |
+### 1.2. Demonstracao dos Incrementos Funcionais
+Na nossa Review final, demonstramos tudo funcionando no navegador integrado com a API, e tambem testamos diretamente no Swagger UI e no Postman:
+
+1. **Seguranca com Cooldown de 30 Dias para Username (H13):** Mostramos a regra no backend em que o `@username` so pode ser alterado uma vez a cada 30 dias (HTTP 403 `USERNAME_COOLDOWN_ACTIVE`), com o campo bloqueado e um aviso mostrando quantos dias faltam na tela de configuracoes, enquanto o nome completo e a biografia continuam liberados para edicao a qualquer momento.
+2. **Correcao de Deslogamento Involuntario (BUG-1):** Mostramos a navegacao tranquila pelas notificacoes e pelo perfil sem que o usuario seja desconectado indevidamente por respostas HTTP 403.
+3. **Nova Pagina 404 (UI-2):** Mostramos a tela de rota inexistente com a ilustracao do tatu e o mapa regional de Paulistana, com botoes que levam o usuario de volta para o inicio.
+4. **Central de Tickets e Suporte (MOD-1):** Apresentamos a aba de suporte nas configuracoes e a persistencia em banco desenvolvidas pelo Pedro Ravy, integradas a tela administrativa e controle de acesso criados pelo Josimar (`tickets.html`), permitindo aos usuarios abrir chamados e a moderacao gerenciar os tickets de forma assincrona.
+5. **Anuncios Reais da Regiao (BUG-2):** Mostramos a remocao do card estatico de controle remoto e a exibicao dos anuncios reais cadastrados no PostgreSQL.
+6. **Busca Fonetica Sem Acentos com Extensao Unaccent (H5):** Demonstramos a normalizacao fonetica desenvolvida no backend pelo Kayky combinada aos filtros regionais por cidades do Pedro Ravy, trazendo produtos como `Eletrônicos` ao buscar `eletronicos`, facilitando a vida de quem pesquisa no celular.
+7. **Pagina de Pesquisa e Filtros Combinados (UI-6 e UI-7):** Mostramos a pesquisa em tela dedicada sem redirecionamentos forcados, com controle deslizante de preco e filtros por cidade e categoria.
+8. **Perfil e Configuracoes (PRF-1, PRF-2, PRF-3 e CFG-1):** Campo de biografia no perfil, fundo neutro suave e cadastro de enderecos com logradouro, numero e CEP separados.
+9. **Contato e Negociacao no Chat (UI-8, UI-9 e UI-3):** Botao de WhatsApp que so aparece quando o vendedor cadastrou o telefone, icone oficial e baloes de proposta de preco no chat com botoes de aceitar ou recusar.
+
+---
+
+### 1.3. Homologacao das Entregas pelo Product Owner
+
+O Kayky, como PO, testou cada item entregue conferindo os criterios de aceitacao e os dez pontos da Definition of Done:
+
+| Item (ID) | Descricao do Item de Trabalho | Responsavel | Pontos | Veredito do PO | Justificativa |
 | :---: | :--- | :--- | :---: | :---: | :--- |
-| **H13** | **Cooldown de 30 dias para Username (@)** com persistência no banco e bloqueio visual | Kayky & Giselly | 5 pts | ✅ **Aceita** | Cooldown no servidor, 9 testes automatizados passando e bloqueio amigável no frontend. |
-| **BUG-1** | **Correção de deslogamento indevido:** Apertar em notificação deslogava da conta | Kayky | 3 pts | ✅ **Aceita** | Interceptor ajustado em `api-core.js`; sessão 100% estável. |
-| **CFG-1** | Salvar endereço em Configurações, mudar campos de rua/número e ajustar CEP | Kayky | 2 pts | ✅ **Aceita** | Persistência correta no banco e validação de formato de CEP. |
-| **PRF-1** | Remover cartão de dados pessoais do perfil público (endereço exclusivo em endereços) | Kayky | 2 pts | ✅ **Aceita** | Privacidade preservada; dados redundantes removidos. |
-| **H5** | **Busca Fonética Unaccent:** Consultas sem acento encontram produtos com acento | Pedro Ravy | 5 pts | ✅ **Aceita** | Inovação com extensão PostgreSQL validada com sucesso. |
-| **PRF-2** | Adicionar campo de **Biografia / Sobre você** no perfil e modal de edição rápida | Pedro Ravy | 2 pts | ✅ **Aceita** | Campo persiste no banco e renderiza corretamente no perfil. |
-| **PRF-3** | Remover fundo verde do perfil, padronizando para o design moderno branco-acinzentado | Pedro Ravy | 1 pt | ✅ **Aceita** | Interface limpa e padronizada com o restante do site. |
-| **UI-1** | Mudar cor dos botões do painel "Meus Anúncios" para cores sólidas | Pedro Ravy | 1 pt | ✅ **Aceita** | Contraste e visibilidade aprovados nos padrões de acessibilidade. |
-| **CAT-1** | Criar lista completa e robusta de categorias para navegação no site | Josimar | 2 pts | ✅ **Aceita** | Taxonomia abrangente facilitando a navegação do comprador. |
-| **MOD-1** | Criar Central de Tickets de Moderação (`tickets.html`) com carregamento assíncrono | Josimar | 3 pts | ✅ **Aceita** | Tickets carregam automaticamente ao abrir a página sem travar. |
-| **BUG-2** | Remover anúncio fixo do controle remoto e exibir anúncios reais da região | Josimar | 2 pts | ✅ **Aceita** | Anúncio mockado eliminado; carrossel de vizinhança dinâmico. |
-| **UI-2** | **Redesign completo da página 404** com identidade visual do site (mascote tatu) | Giselly | 2 pts | ✅ **Aceita** | Visual profissional com ilustração exclusiva e botões úteis. |
-| **UI-3** | Ajustar design da mensagem de proposta de preço no chat e ícones | Giselly | 2 pts | ✅ **Aceita** | Layout dos balões de negociação limpo e moderno. |
-| **UI-4** | Remover o item "tempo de resposta" no perfil do vendedor | Giselly | 1 pt | ✅ **Aceita** | Informação desnecessária removida da visualização pública. |
-| **UI-5** | Corrigir link do popup de cadastro que direcionava para tela antiga | Giselly | 1 pt | ✅ **Aceita** | Redirecionamento correto para o fluxo atual de autenticação. |
-| **UI-6** | Criar fluxo de pesquisa dedicada sem redirecionar forçadamente para categorias | Giselly | 2 pts | ✅ **Aceita** | Página `/pesquisa.html` funcional com filtros combinados. |
-| **UI-7** | Remover card branco das categorias e adicionar barra de preço nos filtros | Giselly | 2 pts | ✅ **Aceita** | Slider de faixa de preço dinâmico e visual integrado. |
-| **UI-8** | Ocultar botão de WhatsApp quando usuário não tiver número cadastrado | Giselly | 1 pt | ✅ **Aceita** | Evita links quebrados para `wa.me/undefined`. |
-| **UI-9** | Colocar ícone oficial do WhatsApp e ajustar espaçamento dos botões do menu | Giselly | 1 pt | ✅ **Aceita** | Ícone verde oficial e espaçamentos simétricos no menu. |
-| **MELH-1**| **Melhoria da Retro 1:** Validação prévia de `@` com debounce de 400ms no frontend | Giselly & Pedro | 2 pts | ✅ **Aceita** | Feedback instantâneo evitando erros 400 no formulário. |
-| **THM-1** | Corrigir FOUC (flash de modo claro por 1s) ao atualizar ou trocar de página | Raili | 2 pts | ✅ **Aceita** | Script no head amenizou significativamente o flash inicial. |
-| **THM-2** | Ajustar design do chat no modo escuro | Raili & Giselly | 2 pts | ✅ **Aceita** | Contraste e legibilidade das mensagens corrigidos no tema escuro. |
-| **MOB-1** | Ajustar zoom involuntário no celular e trava de fundo no recorte de fotos | Pedro Ravy | 2 pts | ✅ **Aceita** | `overflow: hidden` no modal de foto e meta tags de zoom ajustadas. |
+| **H13** | Cooldown de 30 dias para username (@) com gravacao no banco e bloqueio visual | Kayky (Backend/Testes) e Giselly (Frontend UI) | 5 pts | **Aceito** | Regra no servidor, suite de 9 testes automatizados passando e aviso claro na interface. |
+| **BUG-1** | Correcao de deslogamento indevido em respostas 403 | Kayky | 3 pts | **Aceito** | Ajuste no interceptor de requisicoes; sessao estavel sem quedas. |
+| **CFG-1** | Salvar endereco em Configuracoes separando campos e validando CEP | Kayky | 2 pts | **Aceito** | Gravacao correta no PostgreSQL com validacao do Zod. |
+| **PRF-1** | Remocao de dados sensiveis do perfil publico com enderecos isolados | Kayky | 2 pts | **Aceito** | Protecao de privacidade e remocao de campos expostos. |
+| **H5** | Busca unaccent: buscas sem acento acham produtos com acento | Kayky (Backend/unaccent) e Pedro Ravy (Filtros Regionais) | 5 pts | **Aceito** | Extensao nativa do PostgreSQL funcionando e aprovada nos testes. |
+| **PRF-2** | Inclusao do campo Biografia no perfil e modal de edicao rapida | Pedro Ravy | 2 pts | **Aceito** | Gravacao relacional e exibicao na tela funcionando. |
+| **PRF-3** | Troca do fundo verde do perfil pelo padrao neutro | Pedro Ravy e Kayky | 1 pt | **Aceito** | Cores consistentes em todo o sistema. |
+| **UI-1** | Botoes solidos na aba Meus Anuncios | Pedro Ravy e Raili | 1 pt | **Aceito** | Contraste e acessibilidade aprovados. |
+| **CAT-1** | Organizacao de 19 categorias completas no catalogo | Josimar (Estrutura/Header) e Raili (Estilizacao e Filtros) | 2 pts | **Aceito** | Navegacao cobrindo o comercio e servicos da regiao. |
+| **MOD-1** | Central de tickets e suporte (`tickets.html`) com carga automatica | Pedro Ravy (Tickets/Persistencia) e Josimar (Admin/Sessao) | 3 pts | **Aceito** | Denuncias e chamados de suporte operacionais com isolamento de sessao. |
+| **BUG-2** | Remocao do anuncio de teste e recomendacoes reais dinamicas | Kayky | 2 pts | **Aceito** | Lista dinamica conectada ao banco de dados real. |
+| **UI-2** | Redesign da pagina 404 com arte regional | Giselly | 2 pts | **Aceito** | Layout acolhedor com ilustracao do tatu e links funcionando. |
+| **UI-3** | Baloes de proposta financeira e acoes de negociacao no chat | Giselly (Propostas/Componentes) e Raili (Estilo e Cores) | 2 pts | **Aceito** | Componentes de proposta limpos e responsivos. |
+| **UI-4** | Remocao do tempo de resposta no perfil do vendedor | Giselly | 1 pt | **Aceito** | Eliminacao de informacao estatica que nao agregava valor. |
+| **UI-5** | Correcao de rota do modal de cadastro para a tela correta | Giselly | 1 pt | **Aceito** | Direcionamento direto para a tela de registro ativa. |
+| **UI-6** | Pagina de pesquisa sem redirecionamento automatico para categorias | Giselly | 2 pts | **Aceito** | Tela de pesquisa funcionando com filtros combinados. |
+| **UI-7** | Remocao de container branco e inclusao de slider de preco | Giselly | 2 pts | **Aceito** | Filtro deslizante por faixa de preco integrado. |
+| **UI-8** | Ocultacao do botao de WhatsApp quando nao houver telefone cadastrado | Giselly | 1 pt | **Aceito** | Eliminou links quebrados para numeros inexistentes. |
+| **UI-9** | Icone oficial do WhatsApp e ajuste de espacamento dos botoes | Giselly | 1 pt | **Aceito** | Icones padronizados e menu superior alinhado. |
+| **MELH-1**| **Melhoria da Retro 1:** Validacao previa com debounce de 400ms no frontend | Giselly (Frontend/Debounce) e Kayky (Endpoint API) | 2 pts | **Aceito** | Orientacao imediata ao usuario antes de enviar o formulario. |
+| **THM-1** | Correcao de tela piscando no modo escuro | Raili | 2 pts | **Aceito** | Script no topo da pagina acabou com a piscada ao recarregar. |
+| **THM-2** | Harmonizacao visual do chat e notificacoes no tema escuro | Raili (Chat/Notificacoes) e Giselly (Modais Mobile) | 2 pts | **Aceito** | Leitura e cores aprovadas no tema escuro. |
+| **MOB-1** | Trava de rolagem de fundo e zoom responsivo no recorte de fotos | Pedro Ravy | 2 pts | **Aceito** | Melhoria no controle de toque na versao mobile. |
 
-* **Total de Pontos Entregues e Aceitos:** **28 pontos**.
-* **Velocidade Efetiva da Sprint 2 ($V_2$):** **28 pontos**.
-
----
-
-## 📋 Parte 2: Retrospectiva da Sprint 2 (Perguntas Obrigatórias da Atividade)
-
-Em estrito atendimento às diretrizes da atividade acadêmica (Página 5 do guia oficial), a Retrospectiva da Sprint 2 responde objetivamente às três questões formuladas pelo professor:
-
-### ❓ Pergunta 1: Nossa velocidade da Sprint 2 foi maior, igual ou menor que a da Sprint 1? Por quê?
-> **Resposta da Equipe:**  
-> A nossa velocidade na Sprint 2 foi **maior** (**28 pontos entregues contra 24 pontos na Sprint 1**), demonstrando a evolução da maturidade técnica da equipe.  
->  
-> **Por quê?**  
-> Quatro motivos explicam esse salto de produtividade:
-> 1. **Base Arquitetural Já Pronta:** Na Sprint 1, perdemos tempo configurando Prisma, migrations no PostgreSQL, Express 5 e CORS. Na Sprint 2, a arquitetura já estava rodando, permitindo focar 100% no desenvolvimento de regras de negócio e refinamento visual.
-> 2. **Aplicação Imediata da Melhoria da Retro 1:** A adoção de validações assíncronas com debounce (MELH-1) e códigos de erro semânticos reduziu drasticamente o retrabalho entre backend e frontend.
-> 3. **Divisão Eficiente de Responsabilidades:** Com Kayky e Pedro focados em segurança e regras de banco, e Josimar, Raili e Giselly focados na experiência do usuário e resolução de bugs de interface, as entregas fluíram em paralelo sem gargalos.
-> 4. **Resolução Rápida de Impedimentos:** A Scrum Master Giselly atuou prontamente nos impedimentos do Windows (DLL do Prisma) e nos bugs de sessão do frontend, evitando paradas prolongadas.
+* **Total de pontos entregues e aceitos:** 28 pontos.
+* **Velocidade alcancada na Sprint 2:** **28 pontos**.
 
 ---
 
-### ❓ Pergunta 2: Qual história foi devolvida ou ficou incompleta, e que critério de aceitação ou item da DoD faltou?
-> **Resposta da Equipe:**  
-> Durante o ciclo da Sprint 2, a história **H13 (Cooldown de 30 Dias para Username)** foi inicialmente devolvida pelo Product Owner (Kayky) para refinamento técnico antes de receber o aceite final, por não atender plenamente à Definition of Done e aos critérios de aceitação:
-> * **O que faltava:** No primeiro esboço da implementação, qualquer submissão do formulário de perfil (como atualizar apenas o nome completo, a biografia ou a foto) enviava o objeto de usuário completo. O backend interpretava o envio do campo `username` existente como uma nova tentativa de alteração do `@`, disparando o bloqueio de 30 dias indevidamente ou impedindo que o usuário salvasse sua biografia.
-> * **Critério violado:** O critério explícito de aceitação: *"Essa regra deve ser aplicada exclusivamente ao nome de usuário (@), não ao nome de perfil (nome completo/exibição). O nome de perfil e demais dados devem continuar podendo ser alterados normalmente, sem qualquer restrição de prazo nem reinício de contagem"*.
-> * **Como foi resolvido:** O backend em `auth.profile.service.js` foi corrigido para comparar se o novo username é estritamente diferente do username atual (`cleanUsername !== currentUser.username.toLowerCase()`). Se forem iguais, a verificação de 30 dias é ignorada com sucesso. A história só foi aceita após o **Cenário 8** da suíte automatizada `username-cooldown.test.js` comprovar que alterar nome de perfil não consome nem reinicia o carimbo de data.
-> * **Itens de Melhoria Contínua:** Além disso, os ajustes finos de transição de tema escuro e comportamento de zoom em navegadores móveis muito específicos foram mapeados como itens de polimento contínuo para não comprometer a entrega do núcleo funcional da sprint.
+## 2. Sprint Retrospective — Respostas Obrigatorias da Atividade
+
+Seguindo o roteiro da atividade pratica da disciplina (Item 5), respondemos as tres perguntas obrigatorias com base no que vivenciamos no desenvolvimento da Sprint 2:
+
+### Pergunta 1: Nossa velocidade da Sprint 2 foi maior, igual ou menor que a da Sprint 1? Por que?
+
+**Nossa resposta:**  
+A nossa velocidade na Sprint 2 foi **maior** do que na Sprint 1. Conseguimos entregar e aprovar **28 pontos contra 24 pontos na primeira sprint**.
+
+Percebemos quatro motivos principais para esse aumento de ritmo:
+1. **A base do projeto ja estava pronta:** Na Sprint 1, gastamos bastante tempo configurando o banco no PostgreSQL, criando as tabelas com o Prisma, organizando os middlewares do Express e resolvendo questoes de CORS. Na Sprint 2, como essa fundacao ja estava estavel, focamos direto nas regras de negocio, nas telas e nas correcoes.
+2. **A melhoria da Retrospectiva 1 evitou retrabalho:** Na primeira sprint perdiamos tempo investigando por que certas requisicoes voltavam com erro do backend. Com a validacao previa de 400ms no frontend (MELH-1) e as mensagens de erro padronizadas, alinhamos o frontend e o backend de primeira.
+3. **Divisao clara e trabalho em paralelo:** O Kayky liderou o backend, regras de banco, cooldown de 30 dias e a esteira de testes automatizados com CI; o Pedro Ravy cuidou dos filtros regionais no Prisma, avaliacoes, suporte por tickets e ajustes mobile; enquanto Josimar, Raili e Giselly atuaram no frontend, formulários de venda em etapas, tema escuro, propostas no chat e modais de notificacoes.
+4. **Destravamos impedimentos rapido:** Com a comunicacao constante no grupo do WhatsApp e as reunioes no laboratorio do campus nos dias de aula, resolvemos os problemas no mesmo dia em que surgiram (como o arquivo travado do Prisma e o logout involuntario no erro 403), sem deixar ninguem travado.
 
 ---
 
-### ❓ Pergunta 3: A melhoria da Retro 1 funcionou? Qual evidência no repositório mostra isso?
-> **Resposta da Equipe:**  
-> **Sim, funcionou com excelência.**  
->  
-> **Qual evidência no repositório mostra isso?**  
-> As evidências concretas registradas no repositório são:
-> 1. **No Frontend (`frontend/js/pages/perfil/configuracoes/config-conta.js`):** A implementação da variável `timeoutValidacaoUsername` com debounce de 400ms e chamada ao método `window.ItaimApi.auth.verificarDisponibilidadeUsername(val)`. Isso garante que o usuário receba resposta em tempo real sobre a disponibilidade do seu `@` antes de clicar no botão salvar.
-> 2. **Tratamento Específico de Códigos de Erro (`err.data?.code`):** O frontend captura os códigos `USERNAME_COOLDOWN_ACTIVE` e `USERNAME_TAKEN`, exibindo alertas contextuais precisos sem disparar erros genéricos nem causar deslogamentos de sessão.
-> 3. **No Backend (`backend/src/services/auth/auth.profile.service.js`):** A rota dedicada `GET /api/v1/auth/check-username` com a função exportada `checkUsernameAvailability()`, desenvolvida sob demanda para atender à melhoria priorizada na Retrospectiva da Sprint 1.
+### Pergunta 2: Qual historia foi devolvida ou ficou incompleta, e que criterio de aceitacao ou item da DoD faltou?
+
+**Nossa resposta:**  
+A historia **H13 (Cooldown de 30 dias para alteracao de username)** foi devolvida pelo nosso PO (Kayky) na primeira tentativa de entrega, antes de ser corrigida e aceita de forma definitiva.
+
+* **O que aconteceu:** Na primeira versao que testamos, o formulario de configuracoes enviava todos os campos juntos na requisicao. Se o usuario quisesse apenas atualizar a sua biografia ou o seu nome de exibicao mantendo o mesmo @, o backend recebia o username preenchido e tratava como se fosse um pedido de alteracao do @, disparando o bloqueio de 30 dias indevidamente ou impedindo a pessoa de salvar seu perfil.
+* **Criterio que faltou cumprir:** O criterio de aceitacao exigia que a restricao de 30 dias incidisse exclusivamente quando o @ (nome de usuario) fosse efetivamente modificado, e que a edicao do nome completo e da biografia permanecesse livre a qualquer instante sem sofrer bloqueio.
+* **Como resolvemos para alcancar o aceite:** O Kayky refatorou a funcao no backend (`auth.profile.service.js`) para comparar se o username recebido era diferente do que ja estava gravado no banco de dados (`cleanUsername !== currentUser.username.toLowerCase()`). Se o username for o mesmo, a verificacao de cooldown e ignorada e os outros campos sao salvos normalmente. Alem disso, criamos um teste automatizado dedicado (o Cenario 8 da suite `username-cooldown.test.js`) comprovando que atualizar nome e biografia nao ativa o cooldown. Depois dessa correcao e dos testes aprovados no laboratorio, a historia foi homologada pelo PO.
+
+---
+
+### Pergunta 3: A melhoria da Retro 1 funcionou? Qual evidencia no repositorio mostra isso?
+
+**Nossa resposta:**  
+**Sim, a nossa melhoria funcionou plenamente.** Conseguimos avisar a pessoa em tempo real enquanto ela digita e acabamos com os erros inesperados na hora de salvar.
+
+Temos tres evidencias concretas no nosso codigo:
+1. **No frontend (`frontend/js/pages/perfil/configuracoes/config-conta.js`):** Implementamos o temporizador de debounce com 400ms usando `clearTimeout` e `setTimeout`, chamando a funcao `verificarDisponibilidadeUsername(val)`. Quando a pessoa para de digitar por 400ms, o frontend dispara a consulta assincrona para conferir se o @ esta liberado.
+2. **Tratamento de codigos de erro da API:** No mesmo arquivo JavaScript, tratamos os codigos especificos que o backend retorna, como `USERNAME_COOLDOWN_ACTIVE` e `USERNAME_TAKEN`. Se o usuario ja trocou de username ha menos de 30 dias, a interface bloqueia o campo e mostra uma mensagem amigavel informando a data exata em que o nome podera ser alterado novamente.
+3. **No backend (`backend/src/services/auth/auth.profile.service.js`):** O Kayky criou a funcao `checkUsernameAvailability()` conectada ao endpoint `GET /api/v1/auth/check-username`, desenvolvida especificamente para atender a essa verificacao previa definida na nossa retrospectiva anterior.

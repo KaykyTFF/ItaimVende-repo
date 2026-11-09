@@ -415,6 +415,34 @@
     color: #64748B;
 }
 
+[data-theme="dark"] .chat-aviso-inicio,
+.dark-theme .chat-aviso-inicio {
+    background-color: #1A222A;
+    border-color: #283440;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .chat-aviso-inicio-icone,
+.dark-theme .chat-aviso-inicio-icone {
+    background-color: rgba(56, 161, 41, 0.12);
+    color: #38A129;
+}
+
+[data-theme="dark"] .chat-aviso-inicio p,
+.dark-theme .chat-aviso-inicio p {
+    color: #CBD5E1;
+}
+
+[data-theme="dark"] .chat-aviso-inicio p strong,
+.dark-theme .chat-aviso-inicio p strong {
+    color: #F8FAFC;
+}
+
+[data-theme="dark"] .chat-aviso-inicio .chat-aviso-sub,
+.dark-theme .chat-aviso-inicio .chat-aviso-sub {
+    color: #94A3B8;
+}
+
 /* Barra Inferior de Digitação e Envio */
 .chat-envio-form {
     background-color: var(--chat-sidebar-bg);
@@ -551,7 +579,10 @@
     flex-direction: column;
     gap: 8px;
     min-width: 240px;
-    padding: 4px 0;
+    padding: 2px 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
 }
 
 .msg-proposta-header {
@@ -648,6 +679,7 @@
     align-items: center;
     gap: 8px;
     margin-left: auto;
+    flex-shrink: 0;
 }
 
 .btn-chat-acao-topo {
@@ -664,6 +696,8 @@
     color: #1E293B;
     transition: all 0.2s ease;
     text-decoration: none;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .btn-chat-acao-topo:hover {
