@@ -16,7 +16,7 @@
 ### 1.2. Demonstracao dos Incrementos
 Na nossa Review, demonstramos as funcionalidades funcionando ao vivo na integracao entre o frontend e a nossa API, alem de testar chamadas no Swagger UI e no Postman:
 
-1. **Autenticacao e Seguranca (H1 e H2):** Mostramos o cadastro com hash Bcrypt, emissao de token JWT, protecao com limitador de taxa retornando HTTP 429 apos tentativas em excesso e login rapido com Google OAuth implementado pelo Kayky.
+1. **Autenticacao e Seguranca (H1 e H2):** Mostramos o cadastro com hash Bcrypt, emissao de token JWT, protecao com limitador de taxa retornando HTTP 429 apos tentativas em excesso e login rapido com Google OAuth implementados no backend pelo Kayky, integrados as telas e ao layout de login refinados pela Giselly.
 2. **Catalogo de Categorias e Cache HTTP (H3):** Mostramos o cabecalho `Cache-Control: public, max-age=300` na rota `GET /api/v1/categories`, acelerando as consultas seguintes no navegador.
 3. **Publicacao de Anuncios com Imagem na Nuvem (H4):** Upload de foto real no formulario `vender.html`, conversao automatica para WebP com Sharp e salvamento no bucket do Supabase Storage.
 4. **Filtro Regional e Avaliacoes (FILT-01 e EVAL-01):** Mostramos o filtro avancado por cidades e bairros vizinhos no Prisma feito pelo Pedro Ravy, alem do sistema de avaliacao de vendedores com limite de 1 nota por comprador.
@@ -36,7 +36,7 @@ O Kayky, no papel de PO, conferiu cada entrega com base nos criterios de aceitac
 | Item (ID) | Descricao do Item de Trabalho | Responsavel | Pontos | Veredito do PO | Justificativa |
 | :---: | :--- | :--- | :---: | :---: | :--- |
 | **H1** | Cadastro de usuario com Bcrypt e emissao de JWT | Kayky | 4 pts | **Aceito** | Criterios de seguranca cumpridos e validacao em Zod funcionando. |
-| **H2** | Login com limitador de taxa e Google Auth | Kayky e Giselly | 3 pts | **Aceito** | Protecao contra tentativas continuas, OAuth e telas operacionais. |
+| **H2** | Login com limitador de taxa e Google Auth | Kayky (Backend/Google Auth) e Giselly (UI de Login) | 3 pts | **Aceito** | Protecao contra tentativas continuas, OAuth e telas operacionais. |
 | **H3** | Catalogo de categorias com cabecalho `Cache-Control` | Kayky | 2 pts | **Aceito** | Regra de cacheabilidade REST atendida conforme o requisito. |
 | **H4** | Publicacao de anuncios com foto na nuvem e WebP | Kayky | 4 pts | **Aceito** | Upload e gravacao no banco funcionando de ponta a ponta. |
 | **H8** | Checkout seguro com calculo de preco no servidor | Kayky | 2 pts | **Aceito** | Teste automatizado confirma que precos alterados pelo cliente sao rejeitados. |

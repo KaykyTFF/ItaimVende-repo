@@ -29,7 +29,7 @@ Selecionamos para o backlog da primeira sprint os servicos essenciais de autenti
 | ID | Item de Trabalho | Area Tecnica | Estimativa | Responsaveis | Status ao Fim da Sprint |
 | :---: | :--- | :--- | :---: | :--- | :---: |
 | **H1** | Cadastro de usuario com hash Bcrypt e emissao de token JWT | Backend e Autenticacao | 4 pts | Kayky | Concluido |
-| **H2** | Login seguro com limitador de taxa contra forca bruta e Google Auth | Backend e Autenticacao | 3 pts | Kayky e Giselly | Concluido |
+| **H2** | Login seguro com limitador de taxa contra forca bruta e Google Auth | Backend e Autenticacao | 3 pts | Kayky (Backend/Google Auth) e Giselly (UI de Login) | Concluido |
 | **H3** | Catalogo de categorias com principio REST e cabecalho `Cache-Control` | Backend e Cache | 2 pts | Kayky | Concluido |
 | **H4** | Publicacao de anuncios com upload multipart e conversao Sharp para WebP | Backend e Nuvem | 4 pts | Kayky | Concluido |
 | **H8** | Checkout de pedidos com calculo financeiro travado no servidor | Backend e Pedidos | 2 pts | Kayky | Concluido |
@@ -71,7 +71,7 @@ Para garantir que tudo funcionasse bem, organizamos os testes das nossas histori
 | Historia (ID) | Tarefas e Responsavel | Teste Derivado dos Criterios | Quadrante |
 | :---: | :--- | :--- | :---: |
 | **H1** | Criar rota `/auth/register` e schema Zod (Kayky) | Requisicao com dados validos retorna 201 e JWT; e-mail duplicado retorna 409 | **Q2** (Funcional) |
-| **H2** | Implementar `POST /auth/login`, rate limit e Google Auth (Kayky e Giselly) | Bloqueio de requisicoes excessivas com HTTP 429 e autenticacao federada | **Q4** (Seguranca) |
+| **H2** | Implementar `POST /auth/login`, rate limit e Google Auth (Kayky) com integracao da interface de login (Giselly) | Bloqueio de requisicoes excessivas com HTTP 429 e autenticacao federada | **Q4** (Seguranca) |
 | **H3** | Rota `/categories` com cache HTTP (Kayky) | Requisicao `GET /categories` retorna status 200 com cabecalho `Cache-Control` | **Q1** (Tecnico) |
 | **H4** | Integrar Multer, Sharp e Supabase Storage (Kayky) | Publicacao de anuncio com imagem real em WebP e gravacao no banco | **Q2** (Funcional) |
 | **FILT-01** | Filtro por cidades e bairros no Prisma (Pedro Ravy) | Consulta com filtro regional retorna apenas anuncios dos municipios selecionados | **Q2** (Funcional) |

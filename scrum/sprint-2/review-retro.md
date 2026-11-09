@@ -19,9 +19,9 @@ Na nossa Review final, demonstramos tudo funcionando no navegador integrado com 
 1. **Seguranca com Cooldown de 30 Dias para Username (H13):** Mostramos a regra no backend em que o `@username` so pode ser alterado uma vez a cada 30 dias (HTTP 403 `USERNAME_COOLDOWN_ACTIVE`), com o campo bloqueado e um aviso mostrando quantos dias faltam na tela de configuracoes, enquanto o nome completo e a biografia continuam liberados para edicao a qualquer momento.
 2. **Correcao de Deslogamento Involuntario (BUG-1):** Mostramos a navegacao tranquila pelas notificacoes e pelo perfil sem que o usuario seja desconectado indevidamente por respostas HTTP 403.
 3. **Nova Pagina 404 (UI-2):** Mostramos a tela de rota inexistente com a ilustracao do tatu e o mapa regional de Paulistana, com botoes que levam o usuario de volta para o inicio.
-4. **Central de Tickets e Suporte (MOD-1):** Apresentamos a tela `tickets.html` e a aba de suporte nas configuracoes, permitindo aos usuarios abrir chamados e a moderacao gerenciar os tickets de forma assincrona.
+4. **Central de Tickets e Suporte (MOD-1):** Apresentamos a aba de suporte nas configuracoes e a persistencia em banco desenvolvidas pelo Pedro Ravy, integradas a tela administrativa e controle de acesso criados pelo Josimar (`tickets.html`), permitindo aos usuarios abrir chamados e a moderacao gerenciar os tickets de forma assincrona.
 5. **Anuncios Reais da Regiao (BUG-2):** Mostramos a remocao do card estatico de controle remoto e a exibicao dos anuncios reais cadastrados no PostgreSQL.
-6. **Busca Fonetica Sem Acentos com Extensao Unaccent (H5):** Demonstramos buscas como `eletronicos` trazendo produtos gravados como `Eletrônicos`, facilitando a vida de quem pesquisa no celular.
+6. **Busca Fonetica Sem Acentos com Extensao Unaccent (H5):** Demonstramos a normalizacao fonetica desenvolvida no backend pelo Kayky combinada aos filtros regionais por cidades do Pedro Ravy, trazendo produtos como `Eletrônicos` ao buscar `eletronicos`, facilitando a vida de quem pesquisa no celular.
 7. **Pagina de Pesquisa e Filtros Combinados (UI-6 e UI-7):** Mostramos a pesquisa em tela dedicada sem redirecionamentos forcados, com controle deslizante de preco e filtros por cidade e categoria.
 8. **Perfil e Configuracoes (PRF-1, PRF-2, PRF-3 e CFG-1):** Campo de biografia no perfil, fundo neutro suave e cadastro de enderecos com logradouro, numero e CEP separados.
 9. **Contato e Negociacao no Chat (UI-8, UI-9 e UI-3):** Botao de WhatsApp que so aparece quando o vendedor cadastrou o telefone, icone oficial e baloes de proposta de preco no chat com botoes de aceitar ou recusar.
@@ -34,28 +34,28 @@ O Kayky, como PO, testou cada item entregue conferindo os criterios de aceitacao
 
 | Item (ID) | Descricao do Item de Trabalho | Responsavel | Pontos | Veredito do PO | Justificativa |
 | :---: | :--- | :--- | :---: | :---: | :--- |
-| **H13** | Cooldown de 30 dias para username (@) com gravacao no banco e bloqueio visual | Kayky e Giselly | 5 pts | **Aceito** | Regra no servidor, suite de 9 testes automatizados passando e aviso claro na interface. |
+| **H13** | Cooldown de 30 dias para username (@) com gravacao no banco e bloqueio visual | Kayky (Backend/Testes) e Giselly (Frontend UI) | 5 pts | **Aceito** | Regra no servidor, suite de 9 testes automatizados passando e aviso claro na interface. |
 | **BUG-1** | Correcao de deslogamento indevido em respostas 403 | Kayky | 3 pts | **Aceito** | Ajuste no interceptor de requisicoes; sessao estavel sem quedas. |
 | **CFG-1** | Salvar endereco em Configuracoes separando campos e validando CEP | Kayky | 2 pts | **Aceito** | Gravacao correta no PostgreSQL com validacao do Zod. |
 | **PRF-1** | Remocao de dados sensiveis do perfil publico com enderecos isolados | Kayky | 2 pts | **Aceito** | Protecao de privacidade e remocao de campos expostos. |
-| **H5** | Busca unaccent: buscas sem acento acham produtos com acento | Kayky e Pedro Ravy | 5 pts | **Aceito** | Extensao nativa do PostgreSQL funcionando e aprovada nos testes. |
+| **H5** | Busca unaccent: buscas sem acento acham produtos com acento | Kayky (Backend/unaccent) e Pedro Ravy (Filtros Regionais) | 5 pts | **Aceito** | Extensao nativa do PostgreSQL funcionando e aprovada nos testes. |
 | **PRF-2** | Inclusao do campo Biografia no perfil e modal de edicao rapida | Pedro Ravy | 2 pts | **Aceito** | Gravacao relacional e exibicao na tela funcionando. |
-| **PRF-3** | Troca do fundo verde do perfil pelo padrao neutro | Kayky e Pedro Ravy | 1 pt | **Aceito** | Cores consistentes em todo o sistema. |
+| **PRF-3** | Troca do fundo verde do perfil pelo padrao neutro | Pedro Ravy e Kayky | 1 pt | **Aceito** | Cores consistentes em todo o sistema. |
 | **UI-1** | Botoes solidos na aba Meus Anuncios | Pedro Ravy e Raili | 1 pt | **Aceito** | Contraste e acessibilidade aprovados. |
-| **CAT-1** | Organizacao de 19 categorias completas no catalogo | Josimar e Raili | 2 pts | **Aceito** | Navegacao cobrindo o comercio e servicos da regiao. |
-| **MOD-1** | Central de tickets e suporte (`tickets.html`) com carga automatica | Josimar e Pedro Ravy | 3 pts | **Aceito** | Denuncias e chamados de suporte operacionais com isolamento de sessao. |
+| **CAT-1** | Organizacao de 19 categorias completas no catalogo | Josimar (Estrutura/Header) e Raili (Estilizacao e Filtros) | 2 pts | **Aceito** | Navegacao cobrindo o comercio e servicos da regiao. |
+| **MOD-1** | Central de tickets e suporte (`tickets.html`) com carga automatica | Pedro Ravy (Tickets/Persistencia) e Josimar (Admin/Sessao) | 3 pts | **Aceito** | Denuncias e chamados de suporte operacionais com isolamento de sessao. |
 | **BUG-2** | Remocao do anuncio de teste e recomendacoes reais dinamicas | Kayky | 2 pts | **Aceito** | Lista dinamica conectada ao banco de dados real. |
 | **UI-2** | Redesign da pagina 404 com arte regional | Giselly | 2 pts | **Aceito** | Layout acolhedor com ilustracao do tatu e links funcionando. |
-| **UI-3** | Baloes de proposta financeira e acoes de negociacao no chat | Giselly e Raili | 2 pts | **Aceito** | Componentes de proposta limpos e responsivos. |
+| **UI-3** | Baloes de proposta financeira e acoes de negociacao no chat | Giselly (Propostas/Componentes) e Raili (Estilo e Cores) | 2 pts | **Aceito** | Componentes de proposta limpos e responsivos. |
 | **UI-4** | Remocao do tempo de resposta no perfil do vendedor | Giselly | 1 pt | **Aceito** | Eliminacao de informacao estatica que nao agregava valor. |
 | **UI-5** | Correcao de rota do modal de cadastro para a tela correta | Giselly | 1 pt | **Aceito** | Direcionamento direto para a tela de registro ativa. |
 | **UI-6** | Pagina de pesquisa sem redirecionamento automatico para categorias | Giselly | 2 pts | **Aceito** | Tela de pesquisa funcionando com filtros combinados. |
 | **UI-7** | Remocao de container branco e inclusao de slider de preco | Giselly | 2 pts | **Aceito** | Filtro deslizante por faixa de preco integrado. |
 | **UI-8** | Ocultacao do botao de WhatsApp quando nao houver telefone cadastrado | Giselly | 1 pt | **Aceito** | Eliminou links quebrados para numeros inexistentes. |
 | **UI-9** | Icone oficial do WhatsApp e ajuste de espacamento dos botoes | Giselly | 1 pt | **Aceito** | Icones padronizados e menu superior alinhado. |
-| **MELH-1**| **Melhoria da Retro 1:** Validacao previa com debounce de 400ms no frontend | Giselly e Kayky | 2 pts | **Aceito** | Orientacao imediata ao usuario antes de enviar o formulario. |
+| **MELH-1**| **Melhoria da Retro 1:** Validacao previa com debounce de 400ms no frontend | Giselly (Frontend/Debounce) e Kayky (Endpoint API) | 2 pts | **Aceito** | Orientacao imediata ao usuario antes de enviar o formulario. |
 | **THM-1** | Correcao de tela piscando no modo escuro | Raili | 2 pts | **Aceito** | Script no topo da pagina acabou com a piscada ao recarregar. |
-| **THM-2** | Harmonizacao visual do chat e notificacoes no tema escuro | Raili e Giselly | 2 pts | **Aceito** | Leitura e cores aprovadas no tema escuro. |
+| **THM-2** | Harmonizacao visual do chat e notificacoes no tema escuro | Raili (Chat/Notificacoes) e Giselly (Modais Mobile) | 2 pts | **Aceito** | Leitura e cores aprovadas no tema escuro. |
 | **MOB-1** | Trava de rolagem de fundo e zoom responsivo no recorte de fotos | Pedro Ravy | 2 pts | **Aceito** | Melhoria no controle de toque na versao mobile. |
 
 * **Total de pontos entregues e aceitos:** 28 pontos.
@@ -75,7 +75,7 @@ A nossa velocidade na Sprint 2 foi **maior** do que na Sprint 1. Conseguimos ent
 Percebemos quatro motivos principais para esse aumento de ritmo:
 1. **A base do projeto ja estava pronta:** Na Sprint 1, gastamos bastante tempo configurando o banco no PostgreSQL, criando as tabelas com o Prisma, organizando os middlewares do Express e resolvendo questoes de CORS. Na Sprint 2, como essa fundacao ja estava estavel, focamos direto nas regras de negocio, nas telas e nas correcoes.
 2. **A melhoria da Retrospectiva 1 evitou retrabalho:** Na primeira sprint perdiamos tempo investigando por que certas requisicoes voltavam com erro do backend. Com a validacao previa de 400ms no frontend (MELH-1) e as mensagens de erro padronizadas, alinhamos o frontend e o backend de primeira.
-3. **Divisao clara e trabalho em paralelo:** O Kayky e o Pedro focaram nas regras de banco, busca unaccent e na escrita dos testes automatizados, enquanto Josimar, Raili e Giselly cuidaram das telas, tema escuro, central de moderacao e usabilidade no celular.
+3. **Divisao clara e trabalho em paralelo:** O Kayky liderou o backend, regras de banco, cooldown de 30 dias e a esteira de testes automatizados com CI; o Pedro Ravy cuidou dos filtros regionais no Prisma, avaliacoes, suporte por tickets e ajustes mobile; enquanto Josimar, Raili e Giselly atuaram no frontend, formulários de venda em etapas, tema escuro, propostas no chat e modais de notificacoes.
 4. **Destravamos impedimentos rapido:** Com a comunicacao constante no grupo do WhatsApp e as reunioes no laboratorio do campus nos dias de aula, resolvemos os problemas no mesmo dia em que surgiram (como o arquivo travado do Prisma e o logout involuntario no erro 403), sem deixar ninguem travado.
 
 ---

@@ -16,7 +16,7 @@ Para organizar o desenvolvimento do Itaim Vende com Scrum, nos dividimos em pape
 | Integrante | Foco Principal | Papel na Sprint 1 | Papel na Sprint 2 |
 | :--- | :--- | :--- | :--- |
 | **Kayky** | Lider Tecnico e Backend | Product Owner | Product Owner |
-| **Pedro Ravy** | Backend | Desenvolvedor | Desenvolvedor |
+| **Pedro Ravy** | Backend e Usabilidade | Desenvolvedor | Desenvolvedor |
 | **Josimar** | Frontend | Scrum Master | Desenvolvedor |
 | **Giselly** | Frontend | Desenvolvedora | Scrum Master |
 | **Raili** | Frontend | Desenvolvedora | Desenvolvedora |
