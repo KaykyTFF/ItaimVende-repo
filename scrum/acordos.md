@@ -5,6 +5,7 @@
 **Professor:** Me. Julian Rodrigues Valério  
 **Projeto:** Itaim Vende — API RESTful de Comercio Regional  
 **Sprint 0:** 27/10/2026 e 28/10/2026  
+**Quadro Kanban:** [GitHub Projects #4 — Itaim Vende](https://github.com/users/KaykyTFF/projects/4)  
 
 ---
 
@@ -75,3 +76,6 @@ Na Sprint 0, nos reunimos e combinamos as regras de trabalho que seguimos durant
 
 5. **Responsabilidade com a qualidade:**  
    - Nao consideramos uma tarefa finalizada sem antes criar e rodar os testes dela localmente e no pipeline de integracao continua.
+
+6. **Acompanhamento no Quadro Kanban:**  
+   - Mantemos o fluxo visual de tarefas no nosso quadro no GitHub Projects: [https://github.com/users/KaykyTFF/projects/4](https://github.com/users/KaykyTFF/projects/4), com as colunas Backlog, Sprint Backlog, Em andamento, Em revisao e Pronto.

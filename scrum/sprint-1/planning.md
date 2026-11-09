@@ -10,7 +10,7 @@
 
 ## 1. Sprint Goal — Objetivo da Sprint 1
 
-> "Disponibilizar o esqueleto funcional e seguro da API v1 do Itaim Vende (cadastro com JWT, login com limitador de taxa, categorias com cache HTTP e publicacao de anuncios com upload na nuvem), acompanhado de uma experiencia padronizada no frontend com carregamento em esqueleto, suporte ao modo escuro, avisos visuais de login e consistencia de navegacao e denuncias."
+> "Disponibilizar o esqueleto funcional e seguro da API v1 do Itaim Vende (cadastro com JWT, login com limitador de taxa e Google Auth, categorias com cache HTTP e publicacao de anuncios com upload na nuvem), acompanhado de filtros regionais, avaliacoes, experiencia padronizada no frontend com carregamento em esqueleto, suporte ao modo escuro, avisos visuais de login e consistencia de navegacao e denuncias."
 
 ---
 
@@ -24,16 +24,18 @@
 
 ## 3. Escopo Selecionado — Sprint Backlog da Sprint 1
 
-Selecionamos para o backlog da primeira sprint os servicos essenciais de autenticacao, catalogo basico, pedidos e melhorias estruturantes de interface:
+Selecionamos para o backlog da primeira sprint os servicos essenciais de autenticacao, catalogo, filtros regionais, avaliacoes e melhorias estruturantes de interface:
 
 | ID | Item de Trabalho | Area Tecnica | Estimativa | Responsaveis | Status ao Fim da Sprint |
 | :---: | :--- | :--- | :---: | :--- | :---: |
 | **H1** | Cadastro de usuario com hash Bcrypt e emissao de token JWT | Backend e Autenticacao | 4 pts | Kayky | Concluido |
-| **H2** | Login seguro com limitador de taxa contra forca bruta e Google Auth | Backend e Autenticacao | 3 pts | Pedro Ravy e Giselly | Concluido |
-| **H3** | Catalogo de categorias com principio REST e cabecalho `Cache-Control` | Backend e Cache | 2 pts | Pedro Ravy | Concluido |
+| **H2** | Login seguro com limitador de taxa contra forca bruta e Google Auth | Backend e Autenticacao | 3 pts | Kayky e Giselly | Concluido |
+| **H3** | Catalogo de categorias com principio REST e cabecalho `Cache-Control` | Backend e Cache | 2 pts | Kayky | Concluido |
 | **H4** | Publicacao de anuncios com upload multipart e conversao Sharp para WebP | Backend e Nuvem | 4 pts | Kayky | Concluido |
-| **H8** | Checkout de pedidos com calculo financeiro travado no servidor | Backend e Pedidos | 2 pts | Pedro Ravy | Concluido |
-| **H10**| Gestao de enderecos do usuario com operacoes completas em `/addresses` | Backend e Perfil | 2 pts | Pedro Ravy | Concluido |
+| **H8** | Checkout de pedidos com calculo financeiro travado no servidor | Backend e Pedidos | 2 pts | Kayky | Concluido |
+| **H10**| Gestao de enderecos do usuario com operacoes completas em `/addresses` | Backend e Perfil | 2 pts | Kayky | Concluido |
+| **FILT-01** | Filtro avancado por cidades e bairros do Vale do Itaim no Prisma | Backend e Catalogo | 2 pts | Pedro Ravy | Concluido |
+| **EVAL-01** | Sistema de avaliacoes no backend com limite de 1 avaliacao por comprador | Backend e Avaliacoes | 2 pts | Pedro Ravy | Concluido |
 | **UI-S1-01** | Revisao e correcao do modo escuro em todas as telas da plataforma | Interface e Tema | 2 pts | Raili | Concluido |
 | **UI-S1-02** | Substituicao de emoji por icone SVG no menu lateral de configuracoes | Interface e Icones | 1 pt | Raili | Concluido |
 | **UI-S1-03** | Padronizacao dos botoes da pagina Meus Anuncios com cores solidas | Interface e Botoes | 1 pt | Raili | Concluido |
@@ -69,11 +71,12 @@ Para garantir que tudo funcionasse bem, organizamos os testes das nossas histori
 | Historia (ID) | Tarefas e Responsavel | Teste Derivado dos Criterios | Quadrante |
 | :---: | :--- | :--- | :---: |
 | **H1** | Criar rota `/auth/register` e schema Zod (Kayky) | Requisicao com dados validos retorna 201 e JWT; e-mail duplicado retorna 409 | **Q2** (Funcional) |
-| **H2** | Implementar `POST /auth/login` e limitador de taxa (Pedro Ravy) | Bloqueio de requisicoes excessivas com HTTP 429 apos 20 falhas seguidas | **Q4** (Seguranca) |
-| **H3** | Rota `/categories` com cache HTTP (Pedro Ravy) | Requisicao `GET /categories` retorna status 200 com cabecalho `Cache-Control` | **Q1** (Tecnico) |
+| **H2** | Implementar `POST /auth/login`, rate limit e Google Auth (Kayky e Giselly) | Bloqueio de requisicoes excessivas com HTTP 429 e autenticacao federada | **Q4** (Seguranca) |
+| **H3** | Rota `/categories` com cache HTTP (Kayky) | Requisicao `GET /categories` retorna status 200 com cabecalho `Cache-Control` | **Q1** (Tecnico) |
 | **H4** | Integrar Multer, Sharp e Supabase Storage (Kayky) | Publicacao de anuncio com imagem real em WebP e gravacao no banco | **Q2** (Funcional) |
-| **H8** | Checkout seguro com consulta no banco de dados (Pedro Ravy) | Requisicao `POST /orders` calcula total no servidor e rejeita itens inexistentes com 404 | **Q4** (Integridade) |
-| **H10** | Endpoints de gestao de enderecos (Pedro Ravy) | Gravacao de multiplos enderecos com schemas estritos e validacao de campos | **Q2** (Funcional) |
+| **FILT-01** | Filtro por cidades e bairros no Prisma (Pedro Ravy) | Consulta com filtro regional retorna apenas anuncios dos municipios selecionados | **Q2** (Funcional) |
+| **EVAL-01** | Regra de avaliacao de vendedor no backend (Pedro Ravy) | Impede mais de uma avaliacao por comprador para o mesmo vendedor | **Q4** (Integridade) |
+| **H10** | Endpoints de gestao de enderecos (Kayky) | Gravacao de multiplos enderecos com schemas estritos e validacao de campos | **Q2** (Funcional) |
 | **UI-S1-04** | Padronizacao do Skeleton Shimmer (Josimar) | Teste visual confirmando placeholders enquanto os dados carregam | **Q3** (Usabilidade) |
 | **UI-S1-01** | Cobertura do tema escuro global (Raili) | Inspecao visual de contraste e tipografia no tema escuro | **Q3** (Acessibilidade) |
 | **UI-S1-07** | Pop-up de login para visitantes (Giselly) | Verificacao de bloqueio de acao privada abrindo modal explicativo | **Q3** (Usabilidade) |

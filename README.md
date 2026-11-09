@@ -916,13 +916,13 @@ Todas as regras de negocio, decisoes de modelagem de dados, algoritmos de calcul
 
 ## 20. Processo de Gestao Agil (Scrum)
 
-O gerenciamento do ciclo de desenvolvimento do Itaim Vende foi conduzido integralmente sob o framework Scrum, adaptado ao contexto academico da disciplina de Engenharia de Software III (IFPI Campus Paulistana / Prof. Me. Julian Rodrigues Valério).
+O gerenciamento do ciclo de desenvolvimento do Itaim Vende foi conduzido integralmente sob o framework Scrum, adaptado ao contexto academico da disciplina de Engenharia de Software III no IFPI Campus Paulistana.
 
 ### Quadro Kanban Oficial no GitHub Projects
 
 O fluxo de trabalho foi gerenciado atraves de quadro Kanban integrado ao GitHub Projects, estruturado com as colunas *Backlog, Sprint Backlog, Em andamento, Em revisao e Pronto*:
 
-* **Quadro Kanban do Projeto:** [Quadro de Gestao Agil — Itaim Vende (GitHub Projects)](https://github.com/users/KaykyTFF/projects/1)
+* **Quadro Kanban do Projeto:** [Quadro de Gestao Agil — Itaim Vende (GitHub Projects)](https://github.com/users/KaykyTFF/projects/4)
 * **Repositorio de Origem:** [KaykyTFF/ItaimVende-repo](https://github.com/KaykyTFF/ItaimVende-repo)
 
 ### Estrutura de Artefatos na Pasta `/scrum`

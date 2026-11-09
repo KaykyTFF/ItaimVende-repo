@@ -11,20 +11,21 @@
 ## 1. Sprint Review — Inspecao do Incremento do Produto
 
 ### 1.1. Sprint Goal da Sprint 1
-> "Disponibilizar o esqueleto funcional e seguro da API v1 do Itaim Vende (cadastro com JWT, login com rate limiting, categorias com cache HTTP e publicacao de anuncios com upload em nuvem), acompanhado de uma experiencia de frontend padronizada (Skeleton Loading universal, suporte refinado ao modo escuro, pop-ups de autenticacao e consistencia de navegacao e denuncias)."
+> "Disponibilizar o esqueleto funcional e seguro da API v1 do Itaim Vende (cadastro com JWT, login com rate limiting e Google Auth, categorias com cache HTTP e publicacao de anuncios com upload em nuvem), acompanhado de filtros regionais, avaliacoes e uma experiencia de frontend padronizada (Skeleton Loading universal, suporte refinado ao modo escuro, pop-ups de autenticacao e consistencia de navegacao e denuncias)."
 
 ### 1.2. Demonstracao dos Incrementos
 Na nossa Review, demonstramos as funcionalidades funcionando ao vivo na integracao entre o frontend e a nossa API, alem de testar chamadas no Swagger UI e no Postman:
 
-1. **Autenticacao e Seguranca (H1 e H2):** Mostramos o cadastro com hash Bcrypt, emissao de token JWT, protecao com limitador de taxa retornando HTTP 429 apos tentativas em excesso e login rapido com Google.
+1. **Autenticacao e Seguranca (H1 e H2):** Mostramos o cadastro com hash Bcrypt, emissao de token JWT, protecao com limitador de taxa retornando HTTP 429 apos tentativas em excesso e login rapido com Google OAuth implementado pelo Kayky.
 2. **Catalogo de Categorias e Cache HTTP (H3):** Mostramos o cabecalho `Cache-Control: public, max-age=300` na rota `GET /api/v1/categories`, acelerando as consultas seguintes no navegador.
 3. **Publicacao de Anuncios com Imagem na Nuvem (H4):** Upload de foto real no formulario `vender.html`, conversao automatica para WebP com Sharp e salvamento no bucket do Supabase Storage.
-4. **Checkout com Calculo Financeiro no Servidor (H8):** Mostramos a criacao de pedidos na rota `POST /api/v1/orders` puxando o preco original direto do banco, impedindo qualquer tentativa de alterar o valor pelo navegador.
-5. **Multiplos Enderecos do Usuario (H10):** Operacoes completas de cadastro, edicao e remocao de enderecos na rota `/api/v1/addresses` integradas na pagina de configuracoes.
-6. **Carregamento Suave com Skeleton Loading (UI-S1-04):** Apresentamos o efeito de carregamento shimmer em todas as listagens da plataforma enquanto os dados sao buscados.
-7. **Modo Escuro Global (UI-S1-01, UI-S1-05 e UI-S1-06):** Conferimos o contraste em todas as telas, a leitura do nome de avaliadores e a adaptacao da tela de criacao de anuncios ao tema escuro.
-8. **Fluxo de Navegacao (UI-S1-07 a UI-S1-11):** Janela de aviso de login para visitantes, botao Entrar no topo, botao Vender com proporcoes certas, remocao de trepidacoes com `scrollbar-gutter: stable` e menus suspensos com o mesmo padrao visual.
-9. **Denuncias e Negociacao no Chat (UI-S1-12 a UI-S1-18):** Botao de denuncia no perfil de vendedores, botoes discretos nos anuncios, baloes de proposta de preco no chat e barra lateral de filtros avancados.
+4. **Filtro Regional e Avaliacoes (FILT-01 e EVAL-01):** Mostramos o filtro avancado por cidades e bairros vizinhos no Prisma feito pelo Pedro Ravy, alem do sistema de avaliacao de vendedores com limite de 1 nota por comprador.
+5. **Checkout com Calculo Financeiro no Servidor (H8):** Mostramos a criacao de pedidos na rota `POST /api/v1/orders` puxando o preco original direto do banco, impedindo qualquer tentativa de alterar o valor pelo navegador.
+6. **Multiplos Enderecos do Usuario (H10):** Operacoes completas de cadastro, edicao e remocao de enderecos na rota `/api/v1/addresses` integradas na pagina de configuracoes.
+7. **Carregamento Suave com Skeleton Loading (UI-S1-04):** Apresentamos o efeito de carregamento shimmer em todas as listagens da plataforma enquanto os dados sao buscados.
+8. **Modo Escuro Global (UI-S1-01, UI-S1-05 e UI-S1-06):** Conferimos o contraste em todas as telas, a leitura do nome de avaliadores e a adaptacao da tela de criacao de anuncios ao tema escuro.
+9. **Fluxo de Navegacao (UI-S1-07 a UI-S1-11):** Janela de aviso de login para visitantes, botao Entrar no topo, botao Vender com proporcoes certas, remocao de trepidacoes com `scrollbar-gutter: stable` e menus suspensos com o mesmo padrao visual.
+10. **Denuncias e Negociacao no Chat (UI-S1-12 a UI-S1-18):** Botao de denuncia no perfil de vendedores, botoes discretos nos anuncios, baloes de proposta de preco no chat e barra lateral de filtros avancados.
 
 ---
 
@@ -35,11 +36,13 @@ O Kayky, no papel de PO, conferiu cada entrega com base nos criterios de aceitac
 | Item (ID) | Descricao do Item de Trabalho | Responsavel | Pontos | Veredito do PO | Justificativa |
 | :---: | :--- | :--- | :---: | :---: | :--- |
 | **H1** | Cadastro de usuario com Bcrypt e emissao de JWT | Kayky | 4 pts | **Aceito** | Criterios de seguranca cumpridos e validacao em Zod funcionando. |
-| **H2** | Login com limitador de taxa e Google Auth | Pedro Ravy e Giselly | 3 pts | **Aceito** | Protecao contra tentativas continuas e login federado aprovados. |
-| **H3** | Catalogo de categorias com cabecalho `Cache-Control` | Pedro Ravy | 2 pts | **Aceito** | Regra de cacheabilidade REST atendida conforme o requisito. |
+| **H2** | Login com limitador de taxa e Google Auth | Kayky e Giselly | 3 pts | **Aceito** | Protecao contra tentativas continuas, OAuth e telas operacionais. |
+| **H3** | Catalogo de categorias com cabecalho `Cache-Control` | Kayky | 2 pts | **Aceito** | Regra de cacheabilidade REST atendida conforme o requisito. |
 | **H4** | Publicacao de anuncios com foto na nuvem e WebP | Kayky | 4 pts | **Aceito** | Upload e gravacao no banco funcionando de ponta a ponta. |
-| **H8** | Checkout seguro com calculo de preco no servidor | Pedro Ravy | 2 pts | **Aceito** | Teste automatizado confirma que precos alterados pelo cliente sao rejeitados. |
-| **H10**| Gestao de multiplos enderecos do usuario | Pedro Ravy | 2 pts | **Aceito** | Operacoes no PostgreSQL e telas funcionando perfeitamente. |
+| **H8** | Checkout seguro com calculo de preco no servidor | Kayky | 2 pts | **Aceito** | Teste automatizado confirma que precos alterados pelo cliente sao rejeitados. |
+| **H10**| Gestao de multiplos enderecos do usuario | Kayky | 2 pts | **Aceito** | Operacoes no PostgreSQL e telas funcionando perfeitamente. |
+| **FILT-01** | Filtro de cidades e bairros do Vale do Itaim no Prisma | Pedro Ravy | 2 pts | **Aceito** | Mapeamento regional funcional no catalogo. |
+| **EVAL-01** | Sistema de avaliacao de vendedor com trava de 1 por usuario | Pedro Ravy | 2 pts | **Aceito** | Regra de negocio salva no banco impedindo duplicidade. |
 | **UI-S1-01** | Revisao do modo escuro em todas as paginas | Raili | 2 pts | **Aceito** | Contraste e cores ajustadas sem perda de legibilidade. |
 | **UI-S1-02** | Troca de emoji por icone SVG na barra lateral | Raili | 1 pt | **Aceito** | Padrao visual consistente com o resto do sistema. |
 | **UI-S1-03** | Botoes solidos na tela Meus Anuncios | Raili | 1 pt | **Aceito** | Estilo visual sem distorcoes luminosas. |
@@ -85,6 +88,6 @@ Conversando juntos, escolhemos a principal melhoria de processo para colocar em 
 
 * **Descricao da Melhoria (MELH-1):**  
   *"Colocar validacao previa com debounce de 400ms no frontend e tratar os codigos de erro vindos da API, para que o usuario receba orientacoes claras enquanto digita o seu nome de usuario (@) antes mesmo de enviar o formulario, evitando requisicoes desnecessarias e mensagens de erro genericas."*
-* **Responsaveis:** **Giselly** (Frontend) e **Pedro Ravy** (Backend).
+* **Responsaveis:** **Giselly** (Frontend) e **Kayky** (Backend).
 * **Prazo de aplicacao:** Sprint 2 (entrou como item no Sprint Backlog da Sprint 2 e sera avaliada na Retrospectiva da Sprint 2).
 * **Como comprovar:** Presenca do temporizador de debounce no JavaScript e consumo do endpoint `/auth/check-username` na tela de configuracoes de conta, tratando codigos de bloqueio e duplicidade.

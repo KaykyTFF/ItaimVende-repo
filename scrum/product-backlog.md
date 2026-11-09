@@ -4,6 +4,7 @@
 **Disciplina:** Engenharia de Software III | Prof. Me. Julian Rodrigues Valério | IFPI – Campus Paulistana  
 **Product Owner:** Kayky  
 **Periodo de Consolidacao:** Sprint 0 (27/10 e 28/10/2026), com refinamentos nas Sprints 1 e 2  
+**Quadro Kanban:** [GitHub Projects #4 — Itaim Vende](https://github.com/users/KaykyTFF/projects/4)  
 
 O nosso grupo montou o Product Backlog para cobrir todos os requisitos funcionais, tecnicos e de inovacao da disciplina de Engenharia de Software III. Especificamos as historias de usuario variando os perfis de quem usa a nossa plataforma (moradores que compram ou vendem, moderadores e administradores), priorizamos os itens com a tecnica MoSCoW e estimamos o esforco em sessoes de Planning Poker com a sequencia de Fibonacci (1, 2, 3, 5 e 8). Para deixar bem claro o que precisavamos fazer e como testar, detalhamos cada historia com cenarios de aceitacao no formato Dado, Quando e Entao, cobrindo os fluxos de sucesso e os casos de erro com respostas HTTP padronizadas.
 
