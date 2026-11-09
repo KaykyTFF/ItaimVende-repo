@@ -23,12 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const badgePausado = document.getElementById('badge-pausado');
     const badgeVendido = document.getElementById('badge-vendido');
 
-    // Atualiza subtítulo com o nome do usuário logado se disponível
-    const titulosBox = document.querySelector('.anuncios-titulos p');
-    if (titulosBox && userLogado && emailUsuario) {
-        titulosBox.innerHTML = `Gerenciando anúncios de <strong>${nomeUsuario}</strong> (${emailUsuario}) em ${cidadeUsuario} - PI.`;
-    }
-
     let statusFiltro = 'todos';
     let meusAnuncios = [];
 

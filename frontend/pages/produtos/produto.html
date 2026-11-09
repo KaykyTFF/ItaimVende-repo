@@ -515,7 +515,13 @@
 
                                 <div class="foto-bg-blur" id="foto-bg-blur"></div>
                                 <img src="../../assets/placeholders/produto-placeholder.svg" alt="Foto do anúncio"
-                                    id="foto-principal-img" class="foto-principal-display">
+                                    id="foto-principal-img" class="foto-principal-display" title="Clique para ampliar a foto">
+
+                                <button type="button" class="btn-expandir-foto" id="btn-expandir-foto" aria-label="Ampliar foto" title="Ver foto por inteiro">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path>
+                                    </svg>
+                                </button>
 
                                 <div class="badge-contador-fotos" id="contador-fotos-badge">
                                     <span id="contador-fotos-texto">1/2</span>
@@ -1131,6 +1137,49 @@
                     </div>
                 </div>
 
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================================
+         MODAL / LIGHTBOX DE VISUALIZAÇÃO EM TELA CHEIA DA FOTO
+         ========================================================== -->
+    <div class="modal-lightbox-fotos" id="modal-lightbox-fotos" style="display: none;" role="dialog" aria-modal="true" aria-label="Visualizador de Fotos em Tela Cheia">
+        <div class="lightbox-overlay" id="lightbox-overlay"></div>
+        <div class="lightbox-conteudo">
+            <!-- Barra Superior: Contador e Botão Fechar -->
+            <div class="lightbox-header">
+                <span class="lightbox-contador" id="lightbox-contador">1/1</span>
+                <button type="button" class="btn-lightbox-fechar" id="btn-lightbox-fechar" aria-label="Fechar visualizador">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Área Central: Imagem Expandida e Setas de Navegação -->
+            <div class="lightbox-corpo">
+                <button type="button" class="lightbox-seta lightbox-seta-esq" id="btn-lightbox-prev" aria-label="Foto anterior">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </button>
+
+                <div class="lightbox-img-wrapper" id="lightbox-img-wrapper">
+                    <img src="" alt="Foto expandida do produto" id="lightbox-img-principal" class="lightbox-img-principal">
+                </div>
+
+                <button type="button" class="lightbox-seta lightbox-seta-dir" id="btn-lightbox-next" aria-label="Próxima foto">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Barra Inferior: Miniaturas -->
+            <div class="lightbox-footer">
+                <div class="lightbox-miniaturas-row" id="lightbox-miniaturas-row"></div>
             </div>
         </div>
     </div>
