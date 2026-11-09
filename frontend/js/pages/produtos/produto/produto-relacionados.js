@@ -23,18 +23,21 @@
         return Number(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     }
 
-    function formatarTempoPublicacao(dataIso) {
-        if (!dataIso) return 'Hoje';
-        try {
-            const diffMs = Date.now() - new Date(dataIso).getTime();
-            const diffHoras = Math.floor(diffMs / (1000 * 60 * 60));
-            if (diffHoras < 1) return 'Agora há pouco';
-            if (diffHoras < 24) return `${diffHoras}h atrás`;
-            const diffDias = Math.floor(diffHoras / 24);
-            return diffDias === 1 ? 'Ontem' : `${diffDias} dias atrás`;
-        } catch (e) {
-            return 'Hoje';
+    function formatarTempoPublicacao(itemOuData) {
+        if (!itemOuData) return new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        const raw = typeof itemOuData === 'object'
+            ? (itemOuData.createdAt || itemOuData.publishedAt || itemOuData.criadoEm || itemOuData.updatedAt)
+            : itemOuData;
+        if (raw) {
+            const d = new Date(raw);
+            if (!isNaN(d.getTime())) {
+                return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            }
         }
+        if (typeof itemOuData === 'object' && itemOuData.data && typeof itemOuData.data === 'string' && itemOuData.data.trim().toLowerCase() !== 'hoje') {
+            return itemOuData.data.trim();
+        }
+        return new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
     }
 
     async function buscarProdutos() {
@@ -338,7 +341,7 @@
             let bairroLimpo = bairro || 'Centro';
             if (!bairroLimpo || /^\d/.test(bairroLimpo) || /\d{5}/.test(bairroLimpo)) bairroLimpo = 'Centro';
             const localTexto = `${cidade} - ${bairroLimpo}`;
-            const tempoFormatado = formatarTempoPublicacao(p.createdAt || p.criadoEm);
+            const tempoFormatado = formatarTempoPublicacao(p);
 
             return `
                 <article class="card-produto fade-in-content" data-id="${pId}">

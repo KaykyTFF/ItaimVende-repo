@@ -217,6 +217,7 @@
             fotos: dados.imagens && dados.imagens.length > 0 ? dados.imagens : ['assets/placeholders/produto-placeholder.svg'],
             descricao: dados.descricao || '',
             status: 'ativo',
+            createdAt: new Date().toISOString(),
             data: new Intl.DateTimeFormat('pt-BR').format(new Date()),
             visualizacoes: 1,
             conversas: 0,
