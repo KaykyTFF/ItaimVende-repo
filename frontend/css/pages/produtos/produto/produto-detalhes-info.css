@@ -3,6 +3,8 @@
 .info-detalhes-coluna {
     display: flex;
     flex-direction: column;
+    min-width: 0;
+    overflow: hidden;
 }
 
 .produto-titulo-destaque {
@@ -11,6 +13,8 @@
     color: #1E293B;
     line-height: 1.25;
     margin-bottom: 8px;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .produto-localizacao-linha {
@@ -31,6 +35,9 @@
 
 .bloco-descricao-curta {
     margin-bottom: 24px;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
 }
 
 .subtitulo-secao {
@@ -44,6 +51,9 @@
     font-size: 14px;
     color: #475569;
     line-height: 1.6;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .especificacoes-grid {
