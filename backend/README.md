@@ -1,3 +1,23 @@
+<div align="center">
+  <img src="../assets/logos/header-logo.png" alt="Itaim Vende Logo" width="320">
+
+  <p><strong>API RESTful de Marketplace e Intermediacao Comercial — Paulistana e regiao do Vale do Itaim (PI)</strong></p>
+
+  <p>
+    <img src="https://img.shields.io/badge/Node.js-20.x-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js">
+    <img src="https://img.shields.io/badge/Express.js-5.2-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express.js">
+    <img src="https://img.shields.io/badge/PostgreSQL-15+-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL">
+    <img src="https://img.shields.io/badge/Prisma-6.x-2D3748?style=for-the-badge&logo=prisma&logoColor=white" alt="Prisma ORM">
+    <img src="https://img.shields.io/badge/Socket.io-Real--Time-010101?style=for-the-badge&logo=socketdotio&logoColor=white" alt="Socket.io">
+    <img src="https://img.shields.io/badge/Zod-Validacao-3E67B1?style=for-the-badge&logo=zod&logoColor=white" alt="Zod">
+    <img src="https://img.shields.io/badge/OpenAPI-3.0.3-85EA2D?style=for-the-badge&logo=openapiinitiative&logoColor=black" alt="OpenAPI 3.0.3">
+    <img src="https://img.shields.io/badge/Plataforma-REST_API-44BD32?style=for-the-badge" alt="Plataforma">
+    <img src="https://img.shields.io/badge/Testes-88_Aprovados-10B981?style=for-the-badge" alt="Testes Automatizados">
+  </p>
+</div>
+
+---
+
 # Itaim Vende API - Modulo Backend (v2.0.0)
 
 API RESTful completa desenvolvida para a plataforma de marketplace e intermediacao comercial **Itaim Vende**, construida com arquitetura modular em camadas, persistencia relacional com Prisma ORM e PostgreSQL, validacao estrita via Zod e seguranca baseada em tokens JWT.
