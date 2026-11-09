@@ -23,7 +23,7 @@
         'produto/produto-galeria.js',
         'produto/produto-vendedor.js',
         'produto/produto-acoes.js?v=2',
-        'produto/produto-denuncias.js',
+        'produto/produto-denuncias.js?v=2',
         'produto/produto-relacionados.js',
         'produto/index.js'
     ];

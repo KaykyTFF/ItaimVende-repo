@@ -434,13 +434,35 @@
                     this.onerror = null;
                     this.src = utils.fallbackProdutoImg;
                 };
+                const boxFotoPainel = dom.painelProdutoFoto.closest('.chat-produto-foto-box') || dom.painelProdutoFoto;
+                boxFotoPainel.onclick = function() {
+                    if (window.ItaimChatEnvio && typeof window.ItaimChatEnvio.abrirLightbox === 'function') {
+                        window.ItaimChatEnvio.abrirLightbox(dom.painelProdutoFoto.src);
+                    }
+                };
             }
+
+            const badgeFotosEl = document.getElementById('painel-badge-fotos');
+            if (badgeFotosEl) {
+                const spanBadge = badgeFotosEl.querySelector('span');
+                const listaFotosProd = Array.isArray(prod.fotos) && prod.fotos.length > 0
+                    ? prod.fotos
+                    : (Array.isArray(prod.images) && prod.images.length > 0 ? prod.images : []);
+                const totalFotos = Math.max(1, listaFotosProd.length);
+                if (spanBadge) spanBadge.textContent = `1/${totalFotos}`;
+            }
+
+            const condicaoBruta = String(prod.condicao || prod.condition || 'Usado').trim();
+            const condicaoFormatada = condicaoBruta
+                ? condicaoBruta.charAt(0).toUpperCase() + condicaoBruta.slice(1).toLowerCase()
+                : 'Usado';
+
             if (dom.painelProdutoNome) dom.painelProdutoNome.textContent = prod.titulo || prod.title || 'Produto';
             if (dom.painelProdutoPreco) dom.painelProdutoPreco.innerHTML = utils.formatarPreco(prod.preco ?? prod.price);
             if (dom.painelCidadeTxt) dom.painelCidadeTxt.textContent = `${prod.cidade || 'Paulistana'}, PI`;
-            if (dom.painelEspecCondicao) dom.painelEspecCondicao.textContent = prod.condicao || 'USADO';
-            if (dom.painelEspecCategoria) dom.painelEspecCategoria.textContent = prod.categoria || 'Geral';
-            if (dom.painelProdutoDesc) dom.painelProdutoDesc.textContent = prod.descricao || 'Sem descrição detalhada.';
+            if (dom.painelEspecCondicao) dom.painelEspecCondicao.textContent = condicaoFormatada;
+            if (dom.painelEspecCategoria) dom.painelEspecCategoria.textContent = prod.categoria || prod.categoryName || 'Geral';
+            if (dom.painelProdutoDesc) dom.painelProdutoDesc.textContent = prod.descricao || prod.description || 'Sem descrição detalhada.';
             if (dom.btnPainelVerAnuncio) dom.btnPainelVerAnuncio.href = urlAnuncio;
             const btnPainelDenunciar = document.getElementById('btn-painel-denunciar-anuncio');
             if (btnPainelDenunciar) {

@@ -643,19 +643,27 @@
 
 [data-theme="dark"] .chat-produto-card,
 .dark-theme .chat-produto-card {
-    background-color: #1F2831 !important;
-    border: 1px solid #2C3946 !important;
+    background-color: #1B242D !important;
+    border: 1px solid #283542 !important;
+    border-radius: 16px !important;
+    padding: 18px !important;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28) !important;
+}
+
+[data-theme="dark"] .chat-produto-card-header,
+.dark-theme .chat-produto-card-header {
+    border-bottom: 1px solid #283542 !important;
 }
 
 [data-theme="dark"] .chat-produto-card-header h3,
 .dark-theme .chat-produto-card-header h3 {
-    color: #F1F5F9 !important;
+    color: #94A3B8 !important;
 }
 
 [data-theme="dark"] .chat-produto-foto-box,
 .dark-theme .chat-produto-foto-box {
     background-color: #10151A !important;
-    border-color: #283440 !important;
+    border-color: #283542 !important;
 }
 
 [data-theme="dark"] .chat-produto-nome,
@@ -670,13 +678,20 @@
 
 [data-theme="dark"] .chat-produto-cidade-linha,
 .dark-theme .chat-produto-cidade-linha {
-    color: #94A3B8 !important;
+    color: #CBD5E1 !important;
+    background-color: #141C23 !important;
+    border: 1px solid #25313D !important;
 }
 
 [data-theme="dark"] .chat-produto-especs-bloco,
 .dark-theme .chat-produto-especs-bloco {
-    border-top: 1px solid #283440 !important;
-    border-bottom: 1px solid #283440 !important;
+    border: none !important;
+}
+
+[data-theme="dark"] .chat-espec-item,
+.dark-theme .chat-espec-item {
+    background-color: #141C23 !important;
+    border: 1px solid #25313D !important;
 }
 
 [data-theme="dark"] .espec-tag-label,
@@ -689,6 +704,12 @@
     color: #F1F5F9 !important;
 }
 
+[data-theme="dark"] .chat-produto-desc-bloco,
+.dark-theme .chat-produto-desc-bloco {
+    background-color: #141C23 !important;
+    border: 1px solid #25313D !important;
+}
+
 [data-theme="dark"] .desc-bloco-titulo,
 .dark-theme .desc-bloco-titulo {
     color: #94A3B8 !important;
@@ -699,20 +720,39 @@
     color: #CBD5E1 !important;
 }
 
+[data-theme="dark"] .chat-produto-card-rodape,
+.dark-theme .chat-produto-card-rodape {
+    border-top: 1px solid #283542 !important;
+}
+
 [data-theme="dark"] .btn-painel-ver-anuncio,
 .dark-theme .btn-painel-ver-anuncio {
-    background-color: #1F2831 !important;
-    border: 1px solid #2C3946 !important;
-    color: #F1F5F9 !important;
+    background-color: #38A129 !important;
+    border: 1px solid #38A129 !important;
+    color: #FFFFFF !important;
     box-shadow: none !important;
 }
 
 [data-theme="dark"] .btn-painel-ver-anuncio:hover,
 .dark-theme .btn-painel-ver-anuncio:hover {
-    background-color: #273440 !important;
-    border-color: #38A129 !important;
-    color: #38A129 !important;
+    background-color: #2E8B22 !important;
+    border-color: #2E8B22 !important;
+    color: #FFFFFF !important;
     box-shadow: none !important;
+}
+
+[data-theme="dark"] .btn-chat-denunciar-link,
+.dark-theme .btn-chat-denunciar-link {
+    background-color: #141C23 !important;
+    border: 1px solid #25313D !important;
+    color: #94A3B8 !important;
+}
+
+[data-theme="dark"] .btn-chat-denunciar-link:hover,
+.dark-theme .btn-chat-denunciar-link:hover {
+    background-color: rgba(239, 68, 68, 0.1) !important;
+    border-color: rgba(239, 68, 68, 0.4) !important;
+    color: #F87171 !important;
 }
 
 [data-theme="dark"] .btn-painel-fazer-proposta,

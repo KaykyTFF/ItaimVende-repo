@@ -18,7 +18,7 @@
 @import url('./header/header-ui-elements.css');
 
 /* 5. Sistema Global de Temas (Claro / Escuro) */
-@import url('theme.css?v=20');
+@import url('theme.css?v=22');
 
 /* 6. Sistema Global de Transições e Animações de Página */
 @import url('transicoes.css');

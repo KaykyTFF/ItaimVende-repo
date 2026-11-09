@@ -3,6 +3,8 @@
 .info-detalhes-coluna {
     display: flex;
     flex-direction: column;
+    min-width: 0;
+    overflow: hidden;
 }
 
 .produto-titulo-destaque {
@@ -11,6 +13,8 @@
     color: #1E293B;
     line-height: 1.25;
     margin-bottom: 8px;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .produto-localizacao-linha {
@@ -31,6 +35,9 @@
 
 .bloco-descricao-curta {
     margin-bottom: 24px;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
 }
 
 .subtitulo-secao {
@@ -44,6 +51,59 @@
     font-size: 14px;
     color: #475569;
     line-height: 1.6;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    margin: 0;
+}
+
+@media (min-width: 769px) {
+    .texto-descricao-paragrafo {
+        max-height: 220px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding-right: 10px;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(100, 116, 139, 0.45) rgba(148, 163, 184, 0.12);
+    }
+
+    .texto-descricao-paragrafo::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .texto-descricao-paragrafo::-webkit-scrollbar-track {
+        background: rgba(148, 163, 184, 0.12);
+        border-radius: 999px;
+    }
+
+    .texto-descricao-paragrafo::-webkit-scrollbar-thumb {
+        background: rgba(100, 116, 139, 0.45);
+        border-radius: 999px;
+    }
+
+    .texto-descricao-paragrafo::-webkit-scrollbar-thumb:hover {
+        background: #38A129;
+    }
+
+    [data-theme="dark"] .texto-descricao-paragrafo,
+    .dark-theme .texto-descricao-paragrafo {
+        scrollbar-color: rgba(148, 163, 184, 0.4) rgba(255, 255, 255, 0.06);
+    }
+
+    [data-theme="dark"] .texto-descricao-paragrafo::-webkit-scrollbar-track,
+    .dark-theme .texto-descricao-paragrafo::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.06);
+    }
+
+    [data-theme="dark"] .texto-descricao-paragrafo::-webkit-scrollbar-thumb,
+    .dark-theme .texto-descricao-paragrafo::-webkit-scrollbar-thumb {
+        background: rgba(148, 163, 184, 0.4);
+    }
+
+    [data-theme="dark"] .texto-descricao-paragrafo::-webkit-scrollbar-thumb:hover,
+    .dark-theme .texto-descricao-paragrafo::-webkit-scrollbar-thumb:hover {
+        background: #44BD32;
+    }
 }
 
 .especificacoes-grid {

@@ -128,7 +128,8 @@
             if (est.isModoDoacao) {
                 previewPreco.innerHTML = '<span style="color: #44BD32; font-weight: 800;">Doação</span>';
             } else {
-                previewPreco.textContent = inputPreco?.value.trim() || 'R$ 0,00';
+                const valPreco = inputPreco?.value.trim() || '0,00';
+                previewPreco.textContent = valPreco.startsWith('R$') ? valPreco : `R$ ${valPreco}`;
             }
         }
 
@@ -268,23 +269,49 @@
             bairroAnuncio = 'Centro';
         }
 
-        let fotosUrlsBackend = [];
+        const normalizarImg = window.ItaimVenderEstado.normalizarUrlImagemParaBackend || ((u) => u);
+        const indicesNovas = [];
+        const fotosNovasParaUpload = [];
 
-        // Upload de fotos multipart se autenticado
-        if (window.ItaimApi && fotosColetadas.length > 0 && window.ItaimApi.auth?.obterToken()) {
+        fotosColetadas.forEach((foto, idx) => {
+            if ((typeof foto === 'string' && foto.startsWith('data:')) || foto instanceof File || foto instanceof Blob) {
+                indicesNovas.push(idx);
+                fotosNovasParaUpload.push(foto);
+            }
+        });
+
+        let novasUrlsSubidas = [];
+
+        // Upload apenas das fotos novas adicionadas (mantendo as que já existiam no anúncio)
+        if (window.ItaimApi && fotosNovasParaUpload.length > 0 && window.ItaimApi.auth?.obterToken()) {
             try {
                 if (spanTexto) spanTexto.textContent = 'Enviando fotos...';
-                const uploadRes = await window.ItaimApi.upload.vendas(fotosColetadas);
+                const uploadRes = await window.ItaimApi.upload.vendas(fotosNovasParaUpload);
                 if (uploadRes && Array.isArray(uploadRes.urls) && uploadRes.urls.length > 0) {
-                    fotosUrlsBackend = uploadRes.urls;
+                    novasUrlsSubidas = uploadRes.urls;
                 }
             } catch (upErr) {
                 console.warn('[Vender Publicação] Falha no upload multipart, usando local:', upErr.message);
             }
         }
 
+        let ponteiroSubida = 0;
+        const fotosUrlsFinais = fotosColetadas.map((foto, idx) => {
+            if (indicesNovas.includes(idx)) {
+                const urlSubida = novasUrlsSubidas[ponteiroSubida++];
+                return urlSubida || (typeof foto === 'string' ? foto : '');
+            }
+            return typeof foto === 'string' ? normalizarImg(foto) : '';
+        }).filter(Boolean);
+
+        const listaImagensPayload = fotosUrlsFinais.length > 0
+            ? fotosUrlsFinais
+            : ['assets/placeholders/produto-placeholder.svg'];
+
         // MODO DE EDIÇÃO
         if (est.modoEdicao) {
+            let produtoAtualizadoApi = null;
+
             if (window.ItaimApi && window.ItaimApi.auth?.obterToken()) {
                 try {
                     if (spanTexto) spanTexto.textContent = 'Salvando alterações...';
@@ -294,17 +321,28 @@
                         price: isNaN(preco) ? 0 : preco,
                         listingType: listingType,
                         categoryId: obterCategoriaId(categoria),
+                        categoryName: categoria,
                         condition: normalizarCondicao(condicao),
                         city: cidadeAnuncio,
                         neighborhood: bairroAnuncio,
-                        images: fotosUrlsBackend.length > 0 ? fotosUrlsBackend : (fotosColetadas.length > 0 ? fotosColetadas : ['assets/placeholders/produto-placeholder.svg'])
+                        images: listaImagensPayload
                     };
 
-                    await window.ItaimApi.produtos.atualizar(est.idEdicao, dadosPayload);
+                    const resUpdate = await window.ItaimApi.produtos.atualizar(est.idEdicao, dadosPayload);
+                    if (resUpdate && resUpdate.data) {
+                        produtoAtualizadoApi = resUpdate.data;
+                    }
                 } catch (apiErr) {
                     console.warn('[Vender Publicação] Falha na API ao atualizar:', apiErr.message);
                 }
             }
+
+            const categoriaSalva = (produtoAtualizadoApi && produtoAtualizadoApi.categoria)
+                ? produtoAtualizadoApi.categoria
+                : categoria;
+            const imagensSalvas = (produtoAtualizadoApi && Array.isArray(produtoAtualizadoApi.images) && produtoAtualizadoApi.images.length > 0)
+                ? produtoAtualizadoApi.images
+                : listaImagensPayload;
 
             if (window.ItaimSessao && typeof window.ItaimSessao.atualizarAnuncio === 'function') {
                 window.ItaimSessao.atualizarAnuncio(est.idEdicao, {
@@ -312,15 +350,18 @@
                     preco: preco,
                     listingType: listingType,
                     isDoacao: est.isModoDoacao,
-                    categoria: categoria,
+                    categoria: categoriaSalva,
                     condicao: condicao,
                     descricao: descricaoFinal,
                     cidade: cidadeAnuncio,
                     bairro: bairroAnuncio,
-                    imagens: fotosUrlsBackend.length > 0 
-                        ? fotosUrlsBackend 
-                        : (fotosColetadas.length > 0 ? fotosColetadas : ['assets/placeholders/produto-placeholder.svg'])
+                    imagens: imagensSalvas
                 });
+            }
+
+            const tituloSucessoEl = document.querySelector('.titulo-sucesso');
+            if (tituloSucessoEl) {
+                tituloSucessoEl.textContent = 'Anúncio atualizado com sucesso!';
             }
 
             est.ultimoAnuncioCriadoId = est.idEdicao;
@@ -342,10 +383,11 @@
                     price: isNaN(preco) ? 0 : preco,
                     listingType: listingType,
                     categoryId: obterCategoriaId(categoria),
+                    categoryName: categoria,
                     condition: normalizarCondicao(condicao),
                     city: cidadeAnuncio,
                     neighborhood: bairroAnuncio,
-                    images: fotosUrlsBackend.length > 0 ? fotosUrlsBackend : ['assets/placeholders/produto-placeholder.svg']
+                    images: listaImagensPayload
                 };
 
                 const resProduto = await window.ItaimApi.produtos.criar(dadosPayload);
@@ -370,9 +412,7 @@
                     descricao: descricaoFinal,
                     cidade: cidadeAnuncio,
                     bairro: bairroAnuncio,
-                    imagens: fotosUrlsBackend.length > 0 
-                        ? fotosUrlsBackend 
-                        : (fotosColetadas.length > 0 ? fotosColetadas : ['assets/placeholders/produto-placeholder.svg'])
+                    imagens: listaImagensPayload
                 });
                 est.ultimoAnuncioCriadoId = idCriado || novoAnuncio.id;
             } else {
@@ -490,21 +530,41 @@
             window.ItaimVenderWizard.definirModoDoacao(false);
             if (inputPreco) {
                 const num = Number(produto.preco !== undefined ? produto.preco : produto.price) || 0;
-                inputPreco.value = num.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                inputPreco.value = num.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             }
         }
 
-        const catNome = produto.categoria || (produto.category && produto.category.name) || 'Geral';
+        const catNome = produto.categoria || (produto.category && produto.category.name) || 'Outros';
         if (labelCategoria) {
-            labelCategoria.textContent = catNome;
+            let nomeCatResolvido = catNome;
             if (menuCategoriaOpcoes) {
-                menuCategoriaOpcoes.querySelectorAll('.item-opcao-dropdown, .dropdown-item').forEach(item => {
-                    const val = item.textContent.trim().toLowerCase();
-                    const dataVal = (item.getAttribute('data-valor') || '').trim().toLowerCase();
-                    const match = val === catNome.toLowerCase() || dataVal === catNome.toLowerCase() || catNome.toLowerCase().includes(val) || val.includes(catNome.toLowerCase());
-                    item.classList.toggle('selecionado', match);
+                const itensCat = Array.from(menuCategoriaOpcoes.querySelectorAll('.item-opcao-dropdown, .dropdown-item'));
+                const normFn = window.ItaimVenderEstado.normalizarTextoCategoria || ((s) => String(s || '').toLowerCase().trim());
+                const catNorm = normFn(catNome);
+
+                let itemEncontrado = itensCat.find(item => {
+                    const val = normFn(item.textContent);
+                    const dataVal = normFn(item.getAttribute('data-valor'));
+                    return val === catNorm || dataVal === catNorm;
                 });
+
+                if (!itemEncontrado) {
+                    itemEncontrado = itensCat.find(item => {
+                        const val = normFn(item.textContent);
+                        const dataVal = normFn(item.getAttribute('data-valor'));
+                        return (val && catNorm.includes(val)) || (dataVal && catNorm.includes(dataVal));
+                    });
+                }
+
+                itensCat.forEach(item => {
+                    item.classList.toggle('selecionado', item === itemEncontrado);
+                });
+
+                if (itemEncontrado) {
+                    nomeCatResolvido = itemEncontrado.getAttribute('data-valor') || itemEncontrado.textContent.trim();
+                }
             }
+            labelCategoria.textContent = nomeCatResolvido;
         }
 
         const condNome = produto.condicao || produto.condition || 'Usado';
