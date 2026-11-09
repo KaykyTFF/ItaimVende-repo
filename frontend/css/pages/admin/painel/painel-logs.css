@@ -3,16 +3,19 @@
    ========================================================================== */
 .btn-clear-logs {
     background: transparent;
-    color: var(--text-muted);
-    border-color: var(--bg-card-border);
+    color: var(--text-secondary);
+    border: 1px solid var(--bg-card-border);
     font-size: 0.78rem;
     padding: 5px 12px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.2s;
 }
 
 .btn-clear-logs:hover {
-    background: rgba(239, 68, 68, 0.15);
-    color: #f87171;
-    border-color: rgba(239, 68, 68, 0.3);
+    background: #FEE2E2;
+    color: #DC2626;
+    border-color: #FCA5A5;
 }
 
 .logs-container {
@@ -29,8 +32,9 @@
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    padding: 8px 12px;
-    background: rgba(0, 0, 0, 0.25);
+    padding: 10px 14px;
+    background: var(--bg-card-subtle);
+    border: 1px solid var(--bg-card-border);
     border-left: 3px solid var(--brand-primary);
     border-radius: var(--radius-sm);
     font-size: 0.8rem;
@@ -59,14 +63,14 @@
 }
 
 .log-text {
-    color: #e2e8f0;
+    color: var(--text-primary);
     font-weight: 500;
 }
 
 .log-duration {
     font-family: var(--font-mono);
     font-size: 0.75rem;
-    color: var(--text-muted);
+    color: var(--text-secondary);
 }
 
 /* ==========================================================================
@@ -74,11 +78,12 @@
    ========================================================================== */
 .painel-footer {
     border-top: 1px solid var(--bg-card-border);
-    background: rgba(11, 15, 25, 0.9);
-    padding: 16px 24px;
-    font-size: 0.8rem;
-    color: var(--text-muted);
+    background: #FFFFFF;
+    padding: 18px 24px;
+    font-size: 0.82rem;
+    color: var(--text-secondary);
     margin-top: auto;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.02);
 }
 
 .footer-container {
@@ -104,10 +109,11 @@
     align-items: center;
     gap: 6px;
     transition: color 0.2s;
+    font-weight: 500;
 }
 
 .footer-links a:hover {
-    color: #ffffff;
+    color: var(--brand-primary);
 }
 
 /* Toast */
@@ -115,12 +121,12 @@
     position: fixed;
     bottom: 24px;
     right: 24px;
-    background: #1e293b;
-    border: 1px solid var(--bg-card-border);
-    color: #ffffff;
+    background: #1E272E;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: #FFFFFF;
     padding: 12px 20px;
     border-radius: var(--radius-md);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
     font-size: 0.88rem;
     font-weight: 600;
     z-index: 1000;
@@ -153,4 +159,3 @@
         flex: 1 1 45%;
     }
 }
-
