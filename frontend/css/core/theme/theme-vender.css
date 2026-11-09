@@ -402,14 +402,25 @@ body.dark-theme.pagina-vender {
     color: #CBD5E1 !important;
 }
 
+[data-theme="dark"] .preview-editar-atalho,
+.dark-theme .preview-editar-atalho {
+    border-top-color: rgba(255, 255, 255, 0.08) !important;
+}
+
 [data-theme="dark"] .btn-editar-etapa-link,
 .dark-theme .btn-editar-etapa-link {
-    color: #38A129 !important;
+    background-color: rgba(68, 189, 50, 0.12) !important;
+    color: #44BD32 !important;
+    border: 1px solid rgba(68, 189, 50, 0.32) !important;
+    text-decoration: none !important;
 }
 
 [data-theme="dark"] .btn-editar-etapa-link:hover,
 .dark-theme .btn-editar-etapa-link:hover {
-    color: #2E8B22 !important;
+    background-color: #38A129 !important;
+    color: #FFFFFF !important;
+    border-color: #38A129 !important;
+    box-shadow: 0 4px 12px rgba(68, 189, 50, 0.28) !important;
 }
 
 [data-theme="dark"] .preview-tag-badge,

@@ -652,27 +652,50 @@
 }
 
 .preview-editar-atalho {
-    margin-top: 14px;
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid #E2E8F0;
     display: flex;
-    gap: 12px;
-    font-size: 12px;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .btn-editar-etapa-link {
-    color: #38A129;
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-weight: 700;
-    padding: 0;
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    text-decoration: underline;
+    justify-content: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: 999px;
+    font-size: 12.5px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    background-color: rgba(56, 161, 41, 0.08);
+    color: #2E8B22;
+    border: 1px solid rgba(56, 161, 41, 0.28);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-editar-etapa-link svg {
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
 }
 
 .btn-editar-etapa-link:hover {
-    color: #2E8B22;
+    background-color: #38A129;
+    color: #FFFFFF;
+    border-color: #38A129;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(56, 161, 41, 0.22);
+}
+
+.btn-editar-etapa-link:hover svg {
+    transform: scale(1.08);
+}
+
+.btn-editar-etapa-link:active {
+    transform: translateY(0);
 }
 
 /* ==========================================================================
