@@ -29,7 +29,7 @@
         ];
 
         arquivos.forEach(function (arquivo) {
-            document.write('<script src="' + base + arquivo + '?v=2"><\/script>');
+            document.write('<script src="' + base + arquivo + '?v=3"><\/script>');
         });
     }
 

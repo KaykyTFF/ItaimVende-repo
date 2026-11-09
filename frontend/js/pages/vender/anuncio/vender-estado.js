@@ -31,55 +31,91 @@
 
     const CATEGORIA_MAPA = {
         'veículos': 1, 'veiculos': 1,
-        'imóveis': 2, 'imoveis': 2,
-        'tecnologia': 3,
-        'casa e móveis': 4, 'casa e moveis': 4,
-        'eletrodomésticos': 5, 'eletrodomesticos': 5,
-        'esportes e lazer': 6,
-        'moda e beleza': 7,
-        'infantil': 8,
-        'ferramentas': 9,
-        'outros': 10,
-        'geral': 10,
-        'agro e campo': 11,
+        'autopeças': 2, 'autopecas': 2, 'peças automotivas': 2, 'pecas automotivas': 2, 'motocicletas': 1,
+        'imóveis': 3, 'imoveis': 3,
+        'terrenos': 4,
+        'agro': 5, 'agro e campo': 5,
+        'pecuária': 6, 'pecuaria': 6,
+        'celulares': 7,
+        'telefonia': 8,
+        'eletrônicos': 9, 'eletronicos': 9, 'tecnologia': 9,
+        'áudio & vídeo': 10, 'audio & video': 10, 'áudio e vídeo': 10, 'audio e video': 10, 'audio-video': 10,
+        'informática': 11, 'informatica': 11, 'informática e acessórios': 11, 'informatica e acessorios': 11,
         'games': 12,
-        'música e instrumentos': 13, 'musica e instrumentos': 13,
-        'livros e papelaria': 14,
-        'saúde e cuidados': 15, 'saude e cuidados': 15,
-        'construção e reforma': 16, 'construcao e reforma': 16,
-        'animais e pets': 17,
-        'serviços': 18, 'servicos': 18,
-        'antiguidades e coleções': 19, 'antiguidades e colecoes': 19,
-        'alimentos e bebidas': 20,
-        'arte e artesanato': 21,
-        'bebês e cia': 22, 'bebes e cia': 22,
-        'fotografia': 23,
-        'informática e acessórios': 24, 'informatica e acessorios': 24,
-        'telefonia': 25,
-        'áudio e vídeo': 26, 'audio e video': 26,
-        'relógios e joias': 27, 'relogios e joias': 27,
-        'brinquedos': 28,
-        'calçados': 29, 'calcados': 29,
-        'bolsas e malas': 30,
-        'peças automotivas': 31, 'pecas automotivas': 31,
-        'motocicletas': 32,
-        'bicicletas': 33,
-        'náutica': 34, 'nautica': 34,
-        'instrumentos musicais': 35,
-        'decoração': 36, 'decoracao': 36,
-        'jardim e piscina': 37
+        'móveis': 13, 'moveis': 13, 'casa e móveis': 13, 'casa e moveis': 13,
+        'decoração': 14, 'decoracao': 14,
+        'eletrodomésticos': 15, 'eletrodomesticos': 15,
+        'moda': 16, 'moda e beleza': 16,
+        'calçados': 17, 'calcados': 17,
+        'acessórios': 18, 'acessorios': 18, 'relógios e joias': 18, 'relogios e joias': 18, 'bolsas e malas': 18,
+        'beleza': 19,
+        'cuidado pessoal': 20, 'cuidado-pessoal': 20, 'saúde e cuidados': 20, 'saude e cuidados': 20,
+        'infantil': 21, 'brinquedos': 21,
+        'bebês': 22, 'bebes': 22, 'bebês e cia': 22, 'bebes e cia': 22,
+        'esportes': 23, 'esportes e lazer': 23, 'bicicletas': 23,
+        'fitness': 24,
+        'lazer': 25, 'jardim e piscina': 25, 'náutica': 25, 'nautica': 25,
+        'construção': 26, 'construcao': 26, 'construção e reforma': 26, 'construcao e reforma': 26,
+        'ferramentas': 27,
+        'comércio': 28, 'comercio': 28, 'alimentos e bebidas': 28,
+        'escritório': 29, 'escritorio': 29, 'livros e papelaria': 29,
+        'serviços': 30, 'servicos': 30,
+        'música': 31, 'musica': 31, 'música e instrumentos': 31, 'musica e instrumentos': 31, 'instrumentos musicais': 31,
+        'hobbies': 32, 'antiguidades e coleções': 32, 'antiguidades e colecoes': 32, 'arte e artesanato': 32, 'fotografia': 32,
+        'animais de estimação': 33, 'animais de estimacao': 33, 'animais e pets': 33, 'pets': 33,
+        'pet shop': 34, 'pet-shop': 34,
+        'doações': 35, 'doacoes': 35,
+        'trocas': 36,
+        'outros': 37,
+        'geral': 37
     };
 
     const PADROES_SUSPEITOS = /(https?:\/\/|www\.|bit\.ly|tinyurl|t\.me|cutt\.ly|is\.gd|<\s*script)/i;
 
+    function normalizarTextoCategoria(str) {
+        return String(str || '')
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/\s+/g, ' ')
+            .trim();
+    }
+
     function obterCategoriaId(nome) {
-        if (!nome) return 10;
-        const norm = nome.toLowerCase().trim();
+        if (!nome) return 37;
+        const norm = String(nome).toLowerCase().replace(/\s+/g, ' ').trim();
         if (CATEGORIA_MAPA[norm]) return CATEGORIA_MAPA[norm];
+
+        const semAcento = normalizarTextoCategoria(nome);
+        if (CATEGORIA_MAPA[semAcento]) return CATEGORIA_MAPA[semAcento];
+
         for (const [key, id] of Object.entries(CATEGORIA_MAPA)) {
-            if (norm.includes(key) || key.includes(norm)) return id;
+            if (normalizarTextoCategoria(key) === semAcento) return id;
         }
-        return 10;
+
+        for (const [key, id] of Object.entries(CATEGORIA_MAPA)) {
+            const keyNorm = normalizarTextoCategoria(key);
+            if (semAcento.includes(keyNorm) || keyNorm.includes(semAcento)) return id;
+        }
+        return 37;
+    }
+
+    function normalizarUrlImagemParaBackend(url) {
+        if (!url || typeof url !== 'string') return '';
+        const limpo = url.trim();
+        if (limpo.startsWith('data:')) return limpo;
+
+        const idxUploads = limpo.indexOf('/uploads/');
+        if (idxUploads !== -1) {
+            return limpo.substring(idxUploads);
+        }
+
+        const idxAssets = limpo.indexOf('assets/');
+        if (idxAssets !== -1 && (!limpo.startsWith('http') || limpo.startsWith('http://localhost') || limpo.startsWith('http://127.0.0.1'))) {
+            return limpo.substring(idxAssets);
+        }
+
+        return limpo;
     }
 
     function normalizarCondicao(cond) {
@@ -143,6 +179,8 @@
         CATEGORIA_MAPA,
         PADROES_SUSPEITOS,
         obterCategoriaId,
+        normalizarTextoCategoria,
+        normalizarUrlImagemParaBackend,
         normalizarCondicao,
         mostrarToast,
         exibirFeedback,

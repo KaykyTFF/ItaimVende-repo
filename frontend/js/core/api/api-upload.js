@@ -67,8 +67,33 @@
         },
 
         /**
+         * Normaliza URLs de imagens já existentes no servidor para o formato canônico do banco
+         */
+        _normalizarUrlExistente(url) {
+            if (!url || typeof url !== 'string') return '';
+            const limpo = url.trim();
+            if (limpo.startsWith('data:')) return limpo;
+
+            const idxUploads = limpo.indexOf('/uploads/');
+            if (idxUploads !== -1) {
+                return limpo.substring(idxUploads);
+            }
+
+            const idxAssets = limpo.indexOf('assets/');
+            if (idxAssets !== -1 && !limpo.startsWith('http://') && !limpo.startsWith('https://')) {
+                return limpo.substring(idxAssets);
+            }
+            if ((limpo.startsWith('http://localhost') || limpo.startsWith('http://127.0.0.1')) && idxAssets !== -1) {
+                return limpo.substring(idxAssets);
+            }
+
+            return limpo;
+        },
+
+        /**
          * Envio de múltiplas fotos para anúncios/vendas (salva em /uploads/vendas/ - máx 6)
-         * Aceita Array de File, Blob ou Strings Base64
+         * Aceita Array misto de URLs já salvas, File, Blob ou Strings Base64 (dataURL),
+         * preservando as fotos existentes e a ordem exata da galeria.
          */
         async vendas(fotos = []) {
             if (!fotos || fotos.length === 0) {
@@ -76,22 +101,51 @@
             }
 
             const formData = new FormData();
+            const indicesNovasFotos = [];
 
             fotos.forEach((foto, index) => {
-                let arquivo = foto;
                 if (typeof foto === 'string' && foto.startsWith('data:')) {
-                    arquivo = getCore().dataURLParaBlob(foto);
+                    const arquivo = getCore().dataURLParaBlob(foto);
                     formData.append('images', arquivo, `venda_${index + 1}.jpg`);
+                    indicesNovasFotos.push(index);
                 } else if (foto instanceof File || foto instanceof Blob) {
-                    formData.append('images', arquivo, foto.name || `venda_${index + 1}.jpg`);
+                    formData.append('images', foto, foto.name || `venda_${index + 1}.jpg`);
+                    indicesNovasFotos.push(index);
                 }
             });
 
-            return getCore().requisicao('/upload/vendas', {
+            // Se todas as fotos já são URLs existentes (nenhuma foto nova adicionada),
+            // retorna as URLs existentes normalizadas sem disparar requisição vazia
+            if (indicesNovasFotos.length === 0) {
+                const urlsExistentes = fotos
+                    .map(f => (typeof f === 'string' ? this._normalizarUrlExistente(f) : ''))
+                    .filter(Boolean);
+                return { success: true, urls: urlsExistentes };
+            }
+
+            const resUpload = await getCore().requisicao('/upload/vendas', {
                 method: 'POST',
                 headers: getCore().obterHeaders(false),
                 body: formData
             });
+
+            const novasUrls = (resUpload && Array.isArray(resUpload.urls)) ? resUpload.urls : [];
+
+            // Mescla as URLs já existentes com as novas URLs enviadas mantendo a ordem original
+            let ponteiroNova = 0;
+            const urlsFinais = fotos.map((foto, idx) => {
+                if (indicesNovasFotos.includes(idx)) {
+                    const urlSubida = novasUrls[ponteiroNova++];
+                    return urlSubida || (typeof foto === 'string' ? foto : '');
+                }
+                return typeof foto === 'string' ? this._normalizarUrlExistente(foto) : '';
+            }).filter(Boolean);
+
+            return {
+                ...(resUpload || {}),
+                success: true,
+                urls: urlsFinais
+            };
         },
 
         async produtos(fotos = []) {
