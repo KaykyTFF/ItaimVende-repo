@@ -18,7 +18,7 @@
 
 * **Nossa velocidade na Sprint 1:** Conseguimos entregar e aprovar 24 pontos na primeira sprint.
 * **Por que aumentamos a capacidade:** Como já tínhamos a base técnica do projeto pronta (PostgreSQL rodando no Supabase, Prisma ORM, rotas no Express e autenticação com JWT), não precisamos gastar tempo configurando o ambiente. Além disso, com a melhoria MELH-1 alinhamos o frontend e o backend, o que reduziu retrabalho.
-* **Capacidade planejada para a Sprint 2:** Nos sentimos seguros para assumir 28 pontos de história, distribuídos entre as funcionalidades inovadoras exigidas pelo professor Julian, correções de interface e a melhoria de processo da nossa retrospectiva anterior.
+* **Capacidade planejada para a Sprint 2:** Nos sentimos seguros para assumir 28 pontos de história, distribuídos entre as funcionalidades inovadoras do projeto, correções de interface e a melhoria de processo da nossa retrospectiva anterior.
 
 ---
 

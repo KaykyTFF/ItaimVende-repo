@@ -20,7 +20,6 @@ Para organizar o desenvolvimento do Itaim Vende com Scrum, nos dividimos em pape
 | **Giselly** | Frontend | Desenvolvedora | Scrum Master |
 | **Raili** | Frontend | Desenvolvedora | Desenvolvedora |
 
-* **Stakeholder:** Prof. Me. Julian Rodrigues Valério, que atua validando nossas entregas, tirando duvidas de negocio e acompanhando as demonstracoes nas Reviews.
 * **Product Owner:** O Kayky ficou como PO nas duas sprints para manter a visao geral do produto alinhada do comeco ao fim.
 * **Alternancia do Scrum Master:** Seguindo a regra da atividade, alternamos quem facilitava as sprints. O Josimar foi o Scrum Master da Sprint 1 e a Giselly assumiu a funcao na Sprint 2.
 * **Qualidade coletiva:** Nao temos a figura isolada de testador no grupo. Todos nos programamos e somos responsaveis por criar e rodar os testes automatizados das funcionalidades que desenvolvemos.

@@ -5,7 +5,6 @@
 **Scrum Master Facilitador:** Josimar  
 **Product Owner:** Kayky  
 **Participantes:** Kayky, Pedro Ravy, Josimar, Raili, Giselly  
-**Stakeholder Convidado:** Prof. Me. Julian Rodrigues Valério  
 
 ---
 
