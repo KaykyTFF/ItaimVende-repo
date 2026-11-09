@@ -52,36 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // =========================================================================
     // MODAL DE CONFIRMAÇÃO DE AÇÕES NOS ANÚNCIOS (PAUSAR, REATIVAR, VENDIDO, EXCLUIR)
     // =========================================================================
-    const ICONES_MODAL = {
-        pausar: `
-            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"></circle>
-                <line x1="10" y1="15" x2="10" y2="9"></line>
-                <line x1="14" y1="15" x2="14" y2="9"></line>
-            </svg>
-        `,
-        reativar: `
-            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="23 4 23 10 17 10"></polyline>
-                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
-            </svg>
-        `,
-        vendido: `
-            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-            </svg>
-        `,
-        excluir: `
-            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="3 6 5 6 21 6"></polyline>
-                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                <line x1="10" y1="11" x2="10" y2="17"></line>
-                <line x1="14" y1="11" x2="14" y2="17"></line>
-            </svg>
-        `
-    };
-
     let acaoConfirmadaAtual = null;
 
     function obterOuCriarModalConfirmacao() {
@@ -96,7 +66,6 @@ document.addEventListener('DOMContentLoaded', () => {
             modal.innerHTML = `
                 <div class="modal-anuncio-card">
                     <button type="button" class="modal-anuncio-fechar" id="btn-fechar-modal-anuncio" aria-label="Fechar">&times;</button>
-                    <div class="modal-anuncio-icone" id="modal-anuncio-icone" aria-hidden="true"></div>
                     <h3 class="modal-anuncio-titulo" id="modal-anuncio-titulo">Confirmar ação</h3>
                     <p class="modal-anuncio-texto" id="modal-anuncio-texto"></p>
                     <div class="modal-anuncio-resumo" id="modal-anuncio-resumo" style="display: none;">
@@ -158,7 +127,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function abrirModalConfirmacao({ tipo, titulo, texto, textoConfirmar, item, aoConfirmar }) {
         const modal = obterOuCriarModalConfirmacao();
-        const iconeEl = modal.querySelector('#modal-anuncio-icone');
         const tituloEl = modal.querySelector('#modal-anuncio-titulo');
         const textoEl = modal.querySelector('#modal-anuncio-texto');
         const resumoBox = modal.querySelector('#modal-anuncio-resumo');
@@ -168,10 +136,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const btnConfirmar = modal.querySelector('#btn-confirmar-modal-anuncio');
         const btnCancelar = modal.querySelector('#btn-cancelar-modal-anuncio');
 
-        if (iconeEl) {
-            iconeEl.className = `modal-anuncio-icone ${tipo || 'pausar'}`;
-            iconeEl.innerHTML = ICONES_MODAL[tipo] || ICONES_MODAL.pausar;
-        }
         if (tituloEl) tituloEl.textContent = titulo || 'Confirmar ação';
         if (textoEl) textoEl.textContent = texto || '';
 
