@@ -43,21 +43,19 @@ describe('Suite de Testes de Conformidade REST Canônica (Novas Rotas e Métodos
     });
 
     if (!testProduct) {
-      let seller = await prisma.user.findFirst({ where: { role: 'SELLER' } });
-      if (!seller) {
-        seller = await prisma.user.create({
-          data: {
-            name: 'Vendedor Teste REST',
-            email: `seller_rest_${uid}@itaimvende.test`,
-            password: 'HashPassword123',
-            role: 'SELLER',
-            status: 'ACTIVE',
-            city: 'Paulistana',
-            state: 'PI',
-          },
-        });
-        createdSeller = seller;
-      }
+      const seller = await prisma.user.create({
+        data: {
+          name: 'Vendedor Teste REST',
+          username: `seller_rest_${uid}`,
+          email: `seller_rest_${uid}@itaimvende.test`,
+          password: 'HashPassword123',
+          role: 'SELLER',
+          status: 'ACTIVE',
+          city: 'Paulistana',
+          state: 'PI',
+        },
+      });
+      createdSeller = seller;
 
       let category = await prisma.category.findFirst();
       if (!category) {

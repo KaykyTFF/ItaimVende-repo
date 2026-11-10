@@ -19,39 +19,34 @@ let notifIdB1 = null;
 describe('Suite de Testes Automatizados - Sistema de Notificações Itaim Vende', () => {
 
   before(async () => {
-    // Busca ou cria dois usuários reais para validação de isolamento e RBAC
-    userA = await prisma.user.findFirst({
-      where: { role: 'BUYER' },
-    });
+    const uid = `${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
 
-    if (!userA) {
-      userA = await prisma.user.create({
-        data: {
-          name: 'Usuario Notif A',
-          email: 'notif_test_a@itaimvende.local',
-          password: 'hash_placeholder',
-          role: 'BUYER',
-        },
-      });
-    }
-
-    userB = await prisma.user.findFirst({
-      where: {
-        role: 'SELLER',
-        id: { not: userA.id },
+    // Cria usuários exclusivos para a suite de notificações (garante integridade referencial isolada)
+    userA = await prisma.user.create({
+      data: {
+        name: 'Usuario Notif A',
+        username: `notif_user_a_${uid}`,
+        email: `notif_test_a_${uid}@itaimvende.local`,
+        password: 'hash_placeholder',
+        role: 'BUYER',
+        status: 'ACTIVE',
+        city: 'Paulistana',
+        state: 'PI',
       },
     });
 
-    if (!userB) {
-      userB = await prisma.user.create({
-        data: {
-          name: 'Usuario Notif B',
-          email: 'notif_test_b@itaimvende.local',
-          password: 'hash_placeholder',
-          role: 'SELLER',
-        },
-      });
-    }
+    userB = await prisma.user.create({
+      data: {
+        name: 'Usuario Notif B',
+        username: `notif_user_b_${uid}`,
+        email: `notif_test_b_${uid}@itaimvende.local`,
+        password: 'hash_placeholder',
+        role: 'SELLER',
+        status: 'ACTIVE',
+        city: 'Paulistana',
+        state: 'PI',
+      },
+    });
 
     tokenA = jwt.sign(
       { id: userA.id, email: userA.email, role: userA.role },
@@ -96,12 +91,28 @@ describe('Suite de Testes Automatizados - Sistema de Notificações Itaim Vende'
   });
 
   after(async () => {
-    // Limpeza das notificações de teste geradas
+    // 1. Limpeza de todas as notificações associadas aos usuários deste teste
+    const userIds = [userA?.id, userB?.id].filter(Boolean);
+    if (userIds.length > 0) {
+      await prisma.notification.deleteMany({
+        where: { userId: { in: userIds } },
+      }).catch(() => {});
+    }
+
+    // 2. Limpeza pontual dos IDs
     const ids = [notifIdA1, notifIdA2, notifIdB1].filter(Boolean);
     if (ids.length > 0) {
       await prisma.notification.deleteMany({
         where: { id: { in: ids } },
       }).catch(() => {});
+    }
+
+    // 3. Exclusão dos usuários exclusivos de teste
+    if (userA?.id) {
+      await prisma.user.delete({ where: { id: userA.id } }).catch(() => {});
+    }
+    if (userB?.id) {
+      await prisma.user.delete({ where: { id: userB.id } }).catch(() => {});
     }
   });
 
@@ -237,7 +248,9 @@ describe('Suite de Testes Automatizados - Sistema de Notificações Itaim Vende'
     const resCounts = await fetch(`${BASE_URL}/notifications/counts`, {
       headers: { Authorization: `Bearer ${tokenA}` },
     });
+    assert.equal(resCounts.status, 200, 'GET /notifications/counts deve responder 200 OK');
     const countsData = await resCounts.json();
+    assert.ok(countsData.data, 'countsData deve conter a propriedade data');
     assert.equal(countsData.data.unreadTotal, 0, 'unreadTotal deve ser 0 apos marcar todas como lidas');
   });
 

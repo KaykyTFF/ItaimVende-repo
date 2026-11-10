@@ -6,7 +6,7 @@ import rateLimit from 'express-rate-limit';
  */
 export const globalLimiter = rateLimit({
   windowMs: 60 * 1000, // 1 minuto
-  max: 120, // 120 requisições por minuto
+  max: process.env.NODE_ENV === 'test' ? 10000 : 120, // 120 requisições por minuto em produção / alta tolerância em testes
   standardHeaders: true, // Retorna RateLimit-Limit e RateLimit-Remaining nos headers
   legacyHeaders: false,
   message: {
