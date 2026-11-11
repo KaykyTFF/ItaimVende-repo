@@ -8,11 +8,11 @@
 @import url('./theme/theme-variables.css');
 
 /* 2. Estilos Base e Componentes Globais */
-@import url('./theme/theme-base.css?v=24');
+@import url('./theme/theme-base.css?v=25');
 
 /* 3. Componentes Compartilhados de Interface */
 @import url('./theme/theme-drawer.css');
-@import url('./theme/theme-configuracoes.css');
+@import url('./theme/theme-configuracoes.css?v=2');
 @import url('./theme/theme-foto-modal.css');
 @import url('./theme/theme-skeleton.css');
 
