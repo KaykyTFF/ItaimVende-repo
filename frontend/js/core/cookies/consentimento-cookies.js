@@ -122,7 +122,13 @@
         const link = document.createElement('link');
         link.id = 'itaim-estilos-cookies';
         link.rel = 'stylesheet';
-        link.href = '/css/pages/institucional/institucional.css';
+        
+        const isInPages = window.location.pathname.includes('/pages/');
+        const prefixo = isInPages ? '../../' : './';
+        link.href = window.location.protocol.startsWith('http')
+            ? '/css/pages/institucional/institucional.css'
+            : prefixo + 'css/pages/institucional/institucional.css';
+
         document.head.appendChild(link);
     }
 
@@ -325,6 +331,46 @@
         }
     }
 
+    /**
+     * Impede qualquer tentativa de rolagem ou interação no fundo enquanto a modal estiver aberta
+     */
+    function bloquearRolagemFundo(e) {
+        const modalBody = document.querySelector('.itaim-modal-cookies-body');
+        if (modalBody && modalBody.contains(e.target)) {
+            // Permite rolar apenas no corpo scrollável interno da modal
+            return;
+        }
+        if (e.cancelable) {
+            e.preventDefault();
+        }
+    }
+
+    /**
+     * Gerencia atalhos de teclado da modal (Escape para fechar e restrição de foco)
+     */
+    function tratarTecladoModal(e) {
+        if (e.key === 'Escape') {
+            fecharModal();
+            return;
+        }
+        if (e.key === 'Tab') {
+            const modal = document.querySelector('.itaim-modal-cookies');
+            if (!modal) return;
+            const focaveis = modal.querySelectorAll('button, input, [tabindex]:not([tabindex="-1"])');
+            if (!focaveis.length) return;
+            const primeiro = focaveis[0];
+            const ultimo = focaveis[focaveis.length - 1];
+
+            if (e.shiftKey && document.activeElement === primeiro) {
+                ultimo.focus();
+                e.preventDefault();
+            } else if (!e.shiftKey && document.activeElement === ultimo) {
+                primeiro.focus();
+                e.preventDefault();
+            }
+        }
+    }
+
     function abrirModal() {
         const backdrop = document.getElementById('itaim-modal-cookies-backdrop');
         if (!backdrop) return;
@@ -339,7 +385,23 @@
         if (switchAnalitico) switchAnalitico.checked = Boolean(consentimento.categorias.analiticos);
         if (switchMkt) switchMkt.checked = Boolean(consentimento.categorias.marketing);
 
+        // Exibe o backdrop da modal
         backdrop.style.display = 'flex';
+
+        // Trava rigorosa de rolagem do fundo (HTML e BODY)
+        document.documentElement.classList.add('itaim-modal-cookies-aberto');
+        document.body.classList.add('itaim-modal-cookies-aberto');
+        document.documentElement.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
+
+        // Previne qualquer rolagem acidental no fundo via roda do mouse ou toque
+        window.addEventListener('wheel', bloquearRolagemFundo, { passive: false });
+        window.addEventListener('touchmove', bloquearRolagemFundo, { passive: false });
+        window.addEventListener('keydown', tratarTecladoModal);
+
+        // Foca no primeiro elemento acessível da modal
+        const btnFechar = document.getElementById('btn-fechar-modal-cookies');
+        if (btnFechar) btnFechar.focus();
     }
 
     function fecharModal() {
@@ -347,6 +409,16 @@
         if (backdrop) {
             backdrop.style.display = 'none';
         }
+
+        // Restaura a rolagem e o comportamento padrão da página
+        document.documentElement.classList.remove('itaim-modal-cookies-aberto');
+        document.body.classList.remove('itaim-modal-cookies-aberto');
+        document.documentElement.style.overflow = '';
+        document.body.style.overflow = '';
+
+        window.removeEventListener('wheel', bloquearRolagemFundo);
+        window.removeEventListener('touchmove', bloquearRolagemFundo);
+        window.removeEventListener('keydown', tratarTecladoModal);
     }
 
     /**
