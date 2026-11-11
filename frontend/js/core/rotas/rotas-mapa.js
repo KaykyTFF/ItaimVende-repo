@@ -37,6 +37,8 @@
         'tickets': 'pages/admin/tickets.html',
         'moderacao': 'pages/admin/tickets.html',
         'login-tickets': 'pages/admin/login-tickets.html',
+        'login-painel': 'pages/admin/login-painel.html',
+        'login-admin': 'pages/admin/login-painel.html',
         'painel': 'pages/admin/painel.html',
         'status': 'pages/admin/painel.html',
         '404': '404.html'
@@ -68,13 +70,15 @@
         'tickets': '/tickets',
         'moderacao': '/tickets',
         'login-tickets': '/login-tickets',
+        'login-painel': '/login-painel',
+        'login-admin': '/login-painel',
         'painel': '/painel',
         'status': '/painel',
         '404': '/404'
     };
 
     // 3. Categorias de Controle de Acesso
-    const ROTAS_PUBLICAS = ['home', 'categoria', 'produto', 'vendedor', 'login', 'cadastro', 'login-tickets', 'termos', 'termos-de-uso', 'privacidade', 'politica-de-privacidade', 'cookies', 'politica-de-cookies', 'index', '404'];
+    const ROTAS_PUBLICAS = ['home', 'categoria', 'produto', 'vendedor', 'login', 'cadastro', 'login-tickets', 'login-painel', 'login-admin', 'termos', 'termos-de-uso', 'privacidade', 'politica-de-privacidade', 'cookies', 'politica-de-cookies', 'index', '404'];
     const ROTAS_PROTEGIDAS = ['vender', 'meus-anuncios', 'perfil', 'configuracoes', 'favoritos', 'notificacoes', 'conversas', 'chat'];
     const ROTAS_ADMIN = ['tickets', 'moderacao', 'painel', 'status'];
 

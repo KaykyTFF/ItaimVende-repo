@@ -324,6 +324,9 @@ const FRONTEND_PAGES_MAP = {
   // Administração e Moderação
   'tickets': 'pages/admin/tickets.html',
   'moderacao': 'pages/admin/tickets.html',
+  'login-tickets': 'pages/admin/login-tickets.html',
+  'login-painel': 'pages/admin/login-painel.html',
+  'login-admin': 'pages/admin/login-painel.html',
   'painel': 'pages/admin/painel.html',
   'status': 'pages/admin/painel.html',
 

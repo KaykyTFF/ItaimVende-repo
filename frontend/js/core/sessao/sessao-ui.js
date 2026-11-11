@@ -474,8 +474,9 @@
             'status'
         ];
 
-        // 0. Rota pública de login dos tickets
-        if (rotaAtual === 'login-tickets' || path.includes('login-tickets')) {
+        // 0. Rotas públicas de login administrativo e de tickets
+        if (rotaAtual === 'login-tickets' || rotaAtual === 'login-painel' || rotaAtual === 'login-admin' ||
+            path.includes('login-tickets') || path.includes('login-painel') || path.includes('login-admin')) {
             return true;
         }
 
@@ -484,7 +485,10 @@
             // Tratamento especial para Tickets & Moderação:
             if (rotaAtual === 'tickets' || rotaAtual === 'moderacao' || path.includes('tickets.html')) {
                 try {
-                    const ticketsAuth = sessionStorage.getItem('itaim_tickets_auth') || localStorage.getItem('itaim_tickets_auth');
+                    const ticketsAuth = sessionStorage.getItem('itaim_tickets_auth') || 
+                                       localStorage.getItem('itaim_tickets_auth') ||
+                                       sessionStorage.getItem('itaim_painel_auth') ||
+                                       localStorage.getItem('itaim_painel_auth');
                     if (ticketsAuth) {
                         const parsed = JSON.parse(ticketsAuth);
                         if (parsed && (parsed.username || parsed.nome)) {
@@ -500,6 +504,36 @@
                 return false;
             }
 
+            // Tratamento especial para o Painel de Controle & Observabilidade:
+            if (rotaAtual === 'painel' || rotaAtual === 'status' || path.includes('painel.html')) {
+                try {
+                    const painelAuth = sessionStorage.getItem('itaim_painel_auth') || 
+                                       localStorage.getItem('itaim_painel_auth') || 
+                                       sessionStorage.getItem('itaim_tickets_auth') || 
+                                       localStorage.getItem('itaim_tickets_auth');
+                    if (painelAuth) {
+                        const parsed = JSON.parse(painelAuth);
+                        if (parsed && (parsed.username || parsed.nome)) {
+                            return true; // Autenticado com sucesso no painel!
+                        }
+                    }
+                } catch (e) {}
+
+                if (usuarioEstaAutenticado()) {
+                    const usuario = obterUsuario();
+                    const role = (usuario && (usuario.role || usuario.papel || '')).toUpperCase();
+                    if (role === 'ADMIN' || role === 'MODERATOR') {
+                        return true;
+                    }
+                }
+
+                // Se não está autenticado como administrador, redireciona estritamente para o login do painel
+                const isEmPages = path.includes('/pages/');
+                const urlLoginPainel = window.ItaimRotas ? window.ItaimRotas.obterUrl('login-painel') : (isEmPages ? 'login-painel.html' : 'pages/admin/login-painel.html');
+                window.location.replace(urlLoginPainel);
+                return false;
+            }
+
             if (!usuarioEstaAutenticado()) {
                 redirecionarParaLogin('Acesso restrito. Faça login com uma conta administrativa.', true);
                 return false;
@@ -508,7 +542,7 @@
             const role = (usuario && (usuario.role || usuario.papel || '')).toUpperCase();
             if (role !== 'ADMIN' && role !== 'MODERATOR') {
                 if (window.ItaimNotificacoes && typeof window.ItaimNotificacoes.exibirToastGlobal === 'function') {
-                    window.ItaimNotificacoes.exibirToastGlobal('Acesso negado: área exclusiva da equipe de moderação.', 'aviso');
+                    window.ItaimNotificacoes.exibirToastGlobal('Acesso negado: área exclusiva da equipe administrativa.', 'aviso');
                 }
                 const destinoHome = window.ItaimRotas ? window.ItaimRotas.obterUrl('home') : '/home';
                 setTimeout(() => { window.location.href = destinoHome; }, 300);

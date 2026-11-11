@@ -53,6 +53,49 @@
         })();
     </script>
 
+    <!-- Guarda de Autenticação Estrita do Painel (Exclusivo Administradores e Desenvolvedores) -->
+    <script>
+        (function() {
+            try {
+                var auth = sessionStorage.getItem('itaim_painel_auth') || 
+                           localStorage.getItem('itaim_painel_auth') || 
+                           sessionStorage.getItem('itaim_tickets_auth') || 
+                           localStorage.getItem('itaim_tickets_auth');
+
+                var usuarioGeral = localStorage.getItem('itaim_usuario_logado');
+                var roleGeral = '';
+                if (usuarioGeral) {
+                    try {
+                        var parsedUser = JSON.parse(usuarioGeral);
+                        roleGeral = (parsedUser.role || parsedUser.papel || '').toUpperCase();
+                    } catch (e) {}
+                }
+
+                var temAcessoAdmin = false;
+                if (auth) {
+                    try {
+                        var parsedAuth = JSON.parse(auth);
+                        if (parsedAuth && (parsedAuth.username || parsedAuth.nome)) {
+                            temAcessoAdmin = true;
+                        }
+                    } catch (e) {}
+                }
+
+                if (!temAcessoAdmin && (roleGeral === 'ADMIN' || roleGeral === 'MODERATOR')) {
+                    temAcessoAdmin = true;
+                }
+
+                if (!temAcessoAdmin) {
+                    var isPages = (window.location.pathname || '').includes('/pages/');
+                    var urlDestino = isPages ? 'login-painel.html' : '/login-painel';
+                    window.location.replace(urlDestino);
+                }
+            } catch (err) {
+                window.location.replace('login-painel.html');
+            }
+        })();
+    </script>
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -118,6 +161,21 @@
                 <a href="/" class="btn-painel btn-home" id="btn-ver-site" title="Ir para a Loja Pública">
                     <i class="fa-solid fa-store"></i> Ver Site
                 </a>
+
+                <!-- Administrador Autenticado & Logout -->
+                <div class="admin-user-pill" id="admin-user-pill">
+                    <div class="admin-user-avatar">
+                        <i class="fa-solid fa-user-shield"></i>
+                    </div>
+                    <div class="admin-user-info">
+                        <strong id="admin-user-nome">Administrador</strong>
+                        <span id="admin-user-role">ADMIN</span>
+                    </div>
+                    <button type="button" class="btn-logout-painel" id="btn-logout-painel" title="Sair do Painel de Controle">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        <span>Sair</span>
+                    </button>
+                </div>
             </div>
         </div>
     </header>
