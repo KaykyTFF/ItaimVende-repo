@@ -126,4 +126,71 @@ describe('Suíte de Testes Unitários — Governança de Privacidade e Cookies (
             assert.ok(conteudoServer.includes("'cookies': 'pages/institucional/politica-de-cookies.html'"), 'Deve manter alias cookies');
         });
     });
+
+    describe('4. Proteção de Dados, Minimização e Direitos do Titular (LGPD Art. 6º e 18)', () => {
+        test('CT-LGPD08: formatarProdutoParaFrontend não deve vazar e-mail do vendedor e deve honrar preferências de privacidade', async () => {
+            const { formatarProdutoParaFrontend } = await import('../../src/services/product/product.formatter.js');
+
+            const produtoMock = {
+                id: 'prod_test_01',
+                title: 'Trator Valmet 68',
+                description: 'Trator em ótimo estado de conservação',
+                price: 45000,
+                neighborhood: 'Zona Rural',
+                city: 'Paulistana',
+                state: 'PI',
+                createdAt: new Date(),
+                images: [],
+                seller: {
+                    id: 'seller_123',
+                    name: 'Vendedor Exemplo',
+                    phone: '89994001122',
+                    email: 'vendedor_privado@example.com',
+                    reputation: 4.8,
+                    preferences: {
+                        'priv-telefone': false, // Usuário optou por NÃO exibir telefone nos anúncios
+                        'priv-bairro': false    // Usuário optou por NÃO exibir bairro
+                    }
+                }
+            };
+
+            const formatado = formatarProdutoParaFrontend(produtoMock);
+
+            // Garantia de Não-Vazamento de E-mail
+            assert.equal(formatado.vendedorEmail, undefined, 'O e-mail do vendedor NUNCA deve ser retornado no payload público');
+            assert.equal(formatado.seller?.email, undefined, 'O objeto seller embutido não deve conter e-mail');
+
+            // Garantia de Respeito às Flags de Privacidade
+            assert.equal(formatado.vendedorTelefone, '', 'Telefone deve ser suprimido quando priv-telefone for false');
+            assert.equal(formatado.bairro, 'Centro', 'Bairro deve reverter para Centro quando priv-bairro for false');
+        });
+
+        test('CT-LGPD09: O formulário de configurações (configuracoes.html) deve conter a Central de Direitos do Titular (Art. 18)', () => {
+            const caminhoConfig = path.join(projectRoot, 'frontend/pages/perfil/configuracoes.html');
+            assert.equal(fs.existsSync(caminhoConfig), true, 'configuracoes.html deve existir');
+
+            const conteudo = fs.readFileSync(caminhoConfig, 'utf-8');
+
+            // Presença do Painel de Privacidade e Direitos
+            assert.ok(conteudo.includes('id="painel-privacidade"'), 'Deve conter o painel de privacidade');
+            assert.ok(conteudo.includes('Seus Direitos como Titular de Dados'), 'Deve evidenciar os direitos do titular');
+            assert.ok(conteudo.includes('btn-abrir-dossie-dados'), 'Deve conter o botão de consulta ao dossiê (Art. 18, II)');
+            assert.ok(conteudo.includes('btn-exportar-dados-json'), 'Deve conter o botão de portabilidade de dados (Art. 18, V)');
+            assert.ok(conteudo.includes('btn-gerenciar-cookies-cfg'), 'Deve conter atalho para gerenciar preferências de cookies');
+            assert.ok(conteudo.includes('privacidade@itaimvende.com.br'), 'Deve fornecer canal oficial de contato com DPO');
+
+            // Modais de segurança
+            assert.ok(conteudo.includes('id="modal-dossie-dados"'), 'Deve possuir o modal do dossiê de dados');
+            assert.ok(conteudo.includes('id="modal-excluir-conta-seguro"'), 'Deve possuir modal de exclusão definitiva com confirmação');
+            assert.ok(conteudo.includes('input-excluir-conta-senha'), 'Deve requerer a senha para confirmação da exclusão');
+        });
+
+        test('CT-LGPD10: O roteamento da API REST deve conter as rotas de dossiê e exportação LGPD', async () => {
+            const caminhoRoutes = path.join(projectRoot, 'backend/src/routes/account/account.routes.js');
+            const conteudo = fs.readFileSync(caminhoRoutes, 'utf-8');
+
+            assert.ok(conteudo.includes('/privacy/dossier'), 'Deve registrar rota /privacy/dossier');
+            assert.ok(conteudo.includes('/privacy/export'), 'Deve registrar rota /privacy/export');
+        });
+    });
 });

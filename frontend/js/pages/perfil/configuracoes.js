@@ -29,6 +29,7 @@
         'configuracoes/config-seguranca.js',
         'configuracoes/config-enderecos.js',
         'configuracoes/config-preferencias.js',
+        'configuracoes/config-privacidade.js',
         'configuracoes/config-tema.js',
         'configuracoes/config-suporte.js?v=3',
         'configuracoes/index.js'

@@ -48,7 +48,7 @@ export async function changePassword(req, res, next) {
 
 export async function deleteAccount(req, res, next) {
   try {
-    const result = await deleteUserAccount(req.user.id);
+    const result = await deleteUserAccount(req.user.id, req.body?.password);
     res.status(200).json(result);
   } catch (error) {
     next(error);

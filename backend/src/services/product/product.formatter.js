@@ -29,8 +29,15 @@ export function formatarProdutoParaFrontend(p) {
 
   const fotoPrincipal = p.images?.find((img) => img.isCover)?.url || fotosUrls[0];
 
+  // Sanitização de privacidade: impede vazamento de e-mail do vendedor
+  const cleanSeller = p.seller ? { ...p.seller } : undefined;
+  if (cleanSeller && cleanSeller.email !== undefined) {
+    delete cleanSeller.email;
+  }
+
   return {
     ...p,
+    seller: cleanSeller,
     status: (p.status === 'ACTIVE' || p.status === 'ATIVO') ? 'ATIVO' : (p.status === 'PAUSED' ? 'PAUSADO' : (p.status === 'SOLD' ? 'VENDIDO' : p.status)),
     price: Number(p.price),
     originalPrice: p.originalPrice ? Number(p.originalPrice) : null,
@@ -46,6 +53,10 @@ export function formatarProdutoParaFrontend(p) {
     categoriaSlug: p.category ? p.category.slug : 'geral',
     cidade: p.city || p.seller?.city || 'Paulistana',
     bairro: (() => {
+      // Respeita preferência do vendedor caso configurada para ocultar o bairro
+      if (p.seller?.preferences && p.seller.preferences['priv-bairro'] === false) {
+        return 'Centro';
+      }
       const b = (p.neighborhood || p.seller?.neighborhood || 'Centro').trim();
       return (!b || /^\d/.test(b) || /\d{5}/.test(b) || b.toLowerCase().includes('cep')) ? 'Centro' : b;
     })(),
@@ -53,9 +64,14 @@ export function formatarProdutoParaFrontend(p) {
     vendedorId: p.seller?.id || p.sellerId || '',
     vendedorNome: p.seller?.name || 'Vendedor',
     vendedorUsername: p.seller?.username || '',
-    vendedorEmail: p.seller?.email || '',
     vendedorCidade: p.city || p.seller?.city || 'Paulistana',
-    vendedorTelefone: (p.seller?.phoneVerifiedAt || p.seller?.isPhoneVerified) ? (p.seller?.phone || '') : '',
+    vendedorTelefone: (() => {
+      // Respeita preferência de privacidade do vendedor de exibir ou ocultar WhatsApp
+      if (p.seller?.preferences && p.seller.preferences['priv-telefone'] === false) {
+        return '';
+      }
+      return (p.seller?.phoneVerifiedAt || p.seller?.isPhoneVerified) ? (p.seller?.phone || '') : '';
+    })(),
     vendedorTelefoneVerificado: Boolean(p.seller?.phoneVerifiedAt || p.seller?.isPhoneVerified),
     vendedorAvatar: p.seller?.avatar || 'assets/icons/icon-user.png',
     vendedorBio: p.seller?.bio || '',

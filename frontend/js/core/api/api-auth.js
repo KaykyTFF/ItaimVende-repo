@@ -363,17 +363,27 @@
 
         /**
          * Exclui ou anonimiza permanentemente a conta do usuário autenticado no backend (LGPD)
+         * @param {string} [password] - Senha de confirmação em operações sensíveis
          */
-        async excluirConta() {
+        async excluirConta(password) {
             try {
-                const resposta = await getCore().requisicao('/auth/me', {
+                const headers = getCore().obterHeaders(true);
+                const options = {
                     method: 'DELETE',
-                    headers: getCore().obterHeaders(true)
-                });
+                    headers
+                };
+                if (password) {
+                    headers['Content-Type'] = 'application/json';
+                    options.body = JSON.stringify({ password });
+                }
+                const resposta = await getCore().requisicao('/auth/me', options);
                 this.logout();
                 return resposta;
             } catch (err) {
-                this.logout();
+                // Não desloga se o erro for senha incorreta ou cancelamento
+                if (err.status !== 401 && err.code !== 'INVALID_PASSWORD') {
+                    // Mantém sessão caso seja erro corrigível
+                }
                 throw err;
             }
         },
@@ -438,6 +448,48 @@
                 headers: getCore().obterHeaders(true),
                 body: JSON.stringify(preferencias)
             });
+        },
+
+        /**
+         * Consulta o dossiê de dados pessoais do titular (LGPD Art. 18, II)
+         */
+        async obterDossiePrivacidade() {
+            return getCore().requisicao('/account/privacy/dossier', {
+                method: 'GET',
+                headers: getCore().obterHeaders(true)
+            });
+        },
+
+        /**
+         * Realiza download direto do arquivo de portabilidade de dados em JSON (LGPD Art. 18, V)
+         */
+        async baixarExportacaoDados() {
+            const token = this.obterToken();
+            const baseUrl = getCore().API_URL || '/api/v1';
+            const url = `${baseUrl}/account/privacy/export`;
+
+            const res = await fetch(url, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!res.ok) {
+                const erroData = await res.json().catch(() => ({}));
+                throw new Error(erroData.message || 'Falha ao gerar arquivo de exportação de dados.');
+            }
+
+            const blob = await res.blob();
+            const downloadUrl = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = downloadUrl;
+            a.download = `itaimvende-meus-dados-lgpd.json`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(downloadUrl);
+            a.remove();
+            return true;
         },
 
         /**

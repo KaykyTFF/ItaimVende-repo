@@ -290,5 +290,20 @@ describe('Suite de Testes Automatizados - Sistema de Notificações Itaim Vende'
     assert.equal(listData.total, 0, 'Total de notificacoes deve ser 0');
     notifIdA2 = null;
   });
+
+  after(async () => {
+    try {
+      if (userA?.id) {
+        await prisma.notification.deleteMany({ where: { userId: userA.id } });
+        await prisma.user.delete({ where: { id: userA.id } }).catch(() => {});
+      }
+      if (userB?.id) {
+        await prisma.notification.deleteMany({ where: { userId: userB.id } });
+        await prisma.user.delete({ where: { id: userB.id } }).catch(() => {});
+      }
+    } catch {
+      // Ignora erro de limpeza no teardown
+    }
+  });
 });
 

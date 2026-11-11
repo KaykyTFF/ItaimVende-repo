@@ -13,6 +13,7 @@
         if (window.ItaimConfigSeguranca?.inicializar) window.ItaimConfigSeguranca.inicializar();
         if (window.ItaimConfigEnderecos?.inicializar) window.ItaimConfigEnderecos.inicializar();
         if (window.ItaimConfigPreferencias?.inicializar) window.ItaimConfigPreferencias.inicializar();
+        if (window.ItaimConfigPrivacidade?.inicializar) window.ItaimConfigPrivacidade.inicializar();
         if (window.ItaimConfigTema?.inicializar) window.ItaimConfigTema.inicializar();
         if (window.ItaimConfigSuporte?.inicializar) window.ItaimConfigSuporte.inicializar();
     }

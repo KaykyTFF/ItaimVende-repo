@@ -13,6 +13,10 @@ import {
   getPreferences,
   updatePreferences,
 } from '../../controllers/account/account.controller.js';
+import {
+  getPrivacyDossier,
+  exportUserPersonalData,
+} from '../../controllers/account/account.privacy.controller.js';
 import { authenticateToken, optionalAuth } from '../../middlewares/auth.middleware.js';
 import { validate } from '../../middlewares/validate.middleware.js';
 import {
@@ -121,5 +125,9 @@ router.patch('/phone', authenticateToken, validate(changePhoneSchema), changePho
 // 6. Rotas de Preferências do Usuário (Notificações e Privacidade)
 router.get('/preferences', authenticateToken, getPreferences);
 router.patch('/preferences', authenticateToken, updatePreferences);
+
+// 7. Rotas de Governança e Direitos do Titular (LGPD — Art. 18, II e V)
+router.get('/privacy/dossier', authenticateToken, getPrivacyDossier);
+router.get('/privacy/export', authenticateToken, exportUserPersonalData);
 
 export default router;
