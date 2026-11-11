@@ -25,6 +25,8 @@
         'configuracoes': 'pages/perfil/configuracoes.html',
         'favoritos': 'pages/favoritos/favoritos.html',
         'notificacoes': 'pages/notificacoes/notificacoes.html',
+        'termos': 'pages/institucional/termos-de-uso.html',
+        'termos-de-uso': 'pages/institucional/termos-de-uso.html',
         'privacidade': 'pages/institucional/politica-de-privacidade.html',
         'politica-de-privacidade': 'pages/institucional/politica-de-privacidade.html',
         'cookies': 'pages/institucional/politica-de-cookies.html',
@@ -54,6 +56,8 @@
         'configuracoes': '/configuracoes',
         'favoritos': '/favoritos',
         'notificacoes': '/notificacoes',
+        'termos': '/termos',
+        'termos-de-uso': '/termos-de-uso',
         'privacidade': '/politica-de-privacidade',
         'politica-de-privacidade': '/politica-de-privacidade',
         'cookies': '/politica-de-cookies',
@@ -70,7 +74,7 @@
     };
 
     // 3. Categorias de Controle de Acesso
-    const ROTAS_PUBLICAS = ['home', 'categoria', 'produto', 'vendedor', 'login', 'cadastro', 'login-tickets', 'privacidade', 'politica-de-privacidade', 'cookies', 'politica-de-cookies', 'index', '404'];
+    const ROTAS_PUBLICAS = ['home', 'categoria', 'produto', 'vendedor', 'login', 'cadastro', 'login-tickets', 'termos', 'termos-de-uso', 'privacidade', 'politica-de-privacidade', 'cookies', 'politica-de-cookies', 'index', '404'];
     const ROTAS_PROTEGIDAS = ['vender', 'meus-anuncios', 'perfil', 'configuracoes', 'favoritos', 'notificacoes', 'conversas', 'chat'];
     const ROTAS_ADMIN = ['tickets', 'moderacao', 'painel', 'status'];
 

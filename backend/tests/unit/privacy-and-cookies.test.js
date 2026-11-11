@@ -116,14 +116,31 @@ describe('Suíte de Testes Unitários — Governança de Privacidade e Cookies (
     });
 
     describe('3. Roteamento e Compatibilidade no Backend (server.js)', () => {
-        test('CT-LGPD07: O backend deve registrar rotas limpas para privacidade e cookies', () => {
+        test('CT-LGPD07: O backend deve registrar rotas limpas para termos, privacidade e cookies', () => {
             const caminhoServer = path.join(projectRoot, 'backend/src/server.js');
             const conteudoServer = fs.readFileSync(caminhoServer, 'utf-8');
 
+            assert.ok(conteudoServer.includes("'termos': 'pages/institucional/termos-de-uso.html'"), 'Deve rotear /termos');
+            assert.ok(conteudoServer.includes("'termos-de-uso': 'pages/institucional/termos-de-uso.html'"), 'Deve rotear /termos-de-uso');
             assert.ok(conteudoServer.includes("'politica-de-privacidade': 'pages/institucional/politica-de-privacidade.html'"), 'Deve rotear politica-de-privacidade');
             assert.ok(conteudoServer.includes("'politica-de-cookies': 'pages/institucional/politica-de-cookies.html'"), 'Deve rotear politica-de-cookies');
             assert.ok(conteudoServer.includes("'privacidade': 'pages/institucional/politica-de-privacidade.html'"), 'Deve manter alias privacidade');
             assert.ok(conteudoServer.includes("'cookies': 'pages/institucional/politica-de-cookies.html'"), 'Deve manter alias cookies');
+        });
+
+        test('CT-LGPD07B: O documento de Termos de Uso deve existir e contextualizar o modelo de vitrine sem frete ou custódia', () => {
+            const caminhoTermos = path.join(projectRoot, 'frontend/pages/institucional/termos-de-uso.html');
+            assert.equal(fs.existsSync(caminhoTermos), true, 'termos-de-uso.html deve existir');
+
+            const conteudo = fs.readFileSync(caminhoTermos, 'utf-8');
+            assert.ok(conteudo.includes('Paulistana'), 'Deve citar Paulistana como praça prioritária');
+            assert.ok(conteudo.includes('Não é intermediador financeiro'), 'Deve esclarecer a ausência de intermediação de pagamentos');
+            assert.ok(conteudo.includes('Não opera logística, envios ou frete'), 'Deve esclarecer a ausência de frete ou envios postais');
+            assert.ok(conteudo.includes('Armas, Munições e Explosivos'), 'Deve proibir expressamente armas e explosivos');
+            assert.ok(conteudo.includes('Fauna Silvestre e Animais Protegidos'), 'Deve proibir comercialização ilegal de animais silvestres');
+            assert.ok(conteudo.includes('Medicamentos e Saúde Controlada'), 'Deve proibir comércio irregular de medicamentos');
+            assert.ok(conteudo.includes('Foro da Comarca de Paulistana'), 'Deve eleger o foro da Comarca de Paulistana - PI');
+            assert.ok(conteudo.includes('/politica-de-privacidade'), 'Deve conter link direto para a Política de Privacidade');
         });
     });
 
