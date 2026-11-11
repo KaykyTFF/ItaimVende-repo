@@ -32,4 +32,7 @@
         document.write('<script src="' + base + arquivo + '"><\/script>');
     });
 
+    // Módulo Global de Consentimento LGPD e Cookies
+    document.write('<script src="' + base + '../cookies/consentimento-cookies.js"><\/script>');
+
 })();

@@ -25,6 +25,10 @@
         'configuracoes': 'pages/perfil/configuracoes.html',
         'favoritos': 'pages/favoritos/favoritos.html',
         'notificacoes': 'pages/notificacoes/notificacoes.html',
+        'privacidade': 'pages/institucional/politica-de-privacidade.html',
+        'politica-de-privacidade': 'pages/institucional/politica-de-privacidade.html',
+        'cookies': 'pages/institucional/politica-de-cookies.html',
+        'politica-de-cookies': 'pages/institucional/politica-de-cookies.html',
         'login': 'index.html',
         'cadastro': 'index.html#cadastro',
         'index': 'index.html',
@@ -50,6 +54,10 @@
         'configuracoes': '/configuracoes',
         'favoritos': '/favoritos',
         'notificacoes': '/notificacoes',
+        'privacidade': '/politica-de-privacidade',
+        'politica-de-privacidade': '/politica-de-privacidade',
+        'cookies': '/politica-de-cookies',
+        'politica-de-cookies': '/politica-de-cookies',
         'login': '/login',
         'cadastro': '/cadastro',
         'index': '/login',
@@ -62,7 +70,7 @@
     };
 
     // 3. Categorias de Controle de Acesso
-    const ROTAS_PUBLICAS = ['home', 'categoria', 'produto', 'vendedor', 'login', 'cadastro', 'login-tickets', 'index', '404'];
+    const ROTAS_PUBLICAS = ['home', 'categoria', 'produto', 'vendedor', 'login', 'cadastro', 'login-tickets', 'privacidade', 'politica-de-privacidade', 'cookies', 'politica-de-cookies', 'index', '404'];
     const ROTAS_PROTEGIDAS = ['vender', 'meus-anuncios', 'perfil', 'configuracoes', 'favoritos', 'notificacoes', 'conversas', 'chat'];
     const ROTAS_ADMIN = ['tickets', 'moderacao', 'painel', 'status'];
 
@@ -101,6 +109,8 @@
         if (str.includes('perfil')) return 'perfil';
         if (str.includes('favoritos')) return 'favoritos';
         if (str.includes('notificacoes')) return 'notificacoes';
+        if (str.includes('privacidade')) return 'politica-de-privacidade';
+        if (str.includes('cookie')) return 'politica-de-cookies';
         if (str.includes('cadastro')) return 'cadastro';
         if (str.includes('login') || str.includes('index')) return 'login';
         if (str.includes('tickets') || str.includes('moderacao')) return 'tickets';

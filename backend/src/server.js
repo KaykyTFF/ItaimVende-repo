@@ -327,6 +327,12 @@ const FRONTEND_PAGES_MAP = {
   'painel': 'pages/admin/painel.html',
   'status': 'pages/admin/painel.html',
 
+  // Institucional, Privacidade e Cookies
+  'privacidade': 'pages/institucional/politica-de-privacidade.html',
+  'politica-de-privacidade': 'pages/institucional/politica-de-privacidade.html',
+  'cookies': 'pages/institucional/politica-de-cookies.html',
+  'politica-de-cookies': 'pages/institucional/politica-de-cookies.html',
+
   // 404
   '404': '404.html',
 };

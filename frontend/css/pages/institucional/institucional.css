@@ -1,0 +1,757 @@
+/**
+ * ITAIM VENDE - ESTILOS INSTITUCIONAIS (PRIVACIDADE & COOKIES)
+ * Arquivo: frontend/css/pages/institucional/institucional.css
+ * Cores, tipografia e componentes 100% harmonizados com o design system do Itaim Vende
+ */
+
+:root {
+    --inst-primary: #489636;
+    --inst-primary-hover: #3E822E;
+    --inst-primary-soft: rgba(72, 150, 54, 0.1);
+    --inst-primary-border: rgba(72, 150, 54, 0.25);
+    --inst-bg-card: #FFFFFF;
+    --inst-bg-body: #F4F6F8;
+    --inst-text-main: #242B33;
+    --inst-text-secondary: #57606F;
+    --inst-text-muted: #8091A4;
+    --inst-border: #E4E8EE;
+    --inst-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    --inst-radius: 12px;
+}
+
+[data-theme="dark"],
+body.dark-theme,
+html.dark-theme {
+    --inst-primary: #44BD32;
+    --inst-primary-hover: #3ca92c;
+    --inst-primary-soft: rgba(68, 189, 50, 0.14);
+    --inst-primary-border: rgba(68, 189, 50, 0.3);
+    --inst-bg-card: #1F2831;
+    --inst-bg-body: #141A20;
+    --inst-text-main: #F1F5F9;
+    --inst-text-secondary: #94A3B8;
+    --inst-text-muted: #8091A4;
+    --inst-border: #2C3946;
+    --inst-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* Estrutura Geral da Página Institucional */
+.institucional-layout {
+    background-color: var(--inst-bg-body);
+    color: var(--inst-text-main);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.institucional-main {
+    flex: 1;
+    max-width: 1060px;
+    width: 100%;
+    margin: 24px auto 48px auto;
+    padding: 0 20px;
+}
+
+/* Trilha de Navegação (Breadcrumb) */
+.inst-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.88rem;
+    color: var(--inst-text-muted);
+    margin-bottom: 20px;
+}
+
+.inst-breadcrumb a {
+    color: var(--inst-text-secondary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.inst-breadcrumb a:hover {
+    color: var(--inst-primary);
+}
+
+.inst-breadcrumb .separador {
+    color: var(--inst-text-muted);
+    opacity: 0.6;
+}
+
+.inst-breadcrumb .ativo {
+    color: var(--inst-primary);
+    font-weight: 600;
+}
+
+/* Cabeçalho do Documento */
+.inst-header-card {
+    background: var(--inst-bg-card);
+    border: 1px solid var(--inst-border);
+    border-radius: var(--inst-radius);
+    padding: 32px 36px;
+    margin-bottom: 24px;
+    box-shadow: var(--inst-shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.inst-badge-versao {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--inst-primary-soft);
+    color: var(--inst-primary);
+    border: 1px solid var(--inst-primary-border);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    width: fit-content;
+}
+
+.inst-titulo {
+    font-size: 1.95rem;
+    font-weight: 800;
+    line-height: 1.25;
+    color: var(--inst-text-main);
+    margin: 0;
+}
+
+.inst-subtitulo {
+    font-size: 1.02rem;
+    color: var(--inst-text-secondary);
+    line-height: 1.5;
+    margin: 0;
+}
+
+.inst-metadados {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 20px;
+    font-size: 0.84rem;
+    color: var(--inst-text-muted);
+    padding-top: 10px;
+    border-top: 1px solid var(--inst-border);
+}
+
+/* Navegação Rápida entre Políticas */
+.inst-nav-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 24px;
+}
+
+.inst-tab-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: var(--inst-bg-card);
+    border: 1px solid var(--inst-border);
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--inst-text-secondary);
+    transition: all 0.2s ease;
+}
+
+.inst-tab-link:hover {
+    border-color: var(--inst-primary);
+    color: var(--inst-primary);
+}
+
+.inst-tab-link.ativo {
+    background: var(--inst-primary);
+    border-color: var(--inst-primary);
+    color: #FFFFFF;
+}
+
+/* Conteúdo da Política */
+.inst-conteudo-wrapper {
+    background: var(--inst-bg-card);
+    border: 1px solid var(--inst-border);
+    border-radius: var(--inst-radius);
+    padding: 40px;
+    box-shadow: var(--inst-shadow);
+}
+
+.inst-secao {
+    margin-bottom: 36px;
+}
+
+.inst-secao:last-child {
+    margin-bottom: 0;
+}
+
+.inst-secao-titulo {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--inst-text-main);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--inst-primary-soft);
+}
+
+.inst-secao-titulo .numero {
+    color: var(--inst-primary);
+    font-size: 1.1rem;
+    font-weight: 800;
+}
+
+.inst-subsecao-titulo {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--inst-text-main);
+    margin: 20px 0 10px 0;
+}
+
+.inst-paragrafo {
+    font-size: 0.96rem;
+    line-height: 1.68;
+    color: var(--inst-text-secondary);
+    margin-bottom: 14px;
+}
+
+.inst-lista {
+    margin: 0 0 16px 20px;
+    padding: 0;
+    color: var(--inst-text-secondary);
+    line-height: 1.65;
+    font-size: 0.95rem;
+}
+
+.inst-lista li {
+    margin-bottom: 8px;
+}
+
+.inst-lista strong {
+    color: var(--inst-text-main);
+}
+
+/* Callout de Pendência Institucional / Aviso de Transparência */
+.inst-aviso-box {
+    background: rgba(245, 158, 11, 0.08);
+    border-left: 4px solid #F59E0B;
+    border-radius: 4px 8px 8px 4px;
+    padding: 16px 20px;
+    margin: 18px 0;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: var(--inst-text-secondary);
+}
+
+[data-theme="dark"] .inst-aviso-box {
+    background: rgba(245, 158, 11, 0.12);
+}
+
+.inst-aviso-box strong {
+    color: #D97706;
+    display: block;
+    margin-bottom: 4px;
+    font-size: 0.95rem;
+}
+
+[data-theme="dark"] .inst-aviso-box strong {
+    color: #FBBF24;
+}
+
+/* Callout de Destaque Seguro */
+.inst-destaque-box {
+    background: var(--inst-primary-soft);
+    border-left: 4px solid var(--inst-primary);
+    border-radius: 4px 8px 8px 4px;
+    padding: 16px 20px;
+    margin: 18px 0;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: var(--inst-text-secondary);
+}
+
+.inst-destaque-box strong {
+    color: var(--inst-primary);
+    display: block;
+    margin-bottom: 4px;
+    font-size: 0.95rem;
+}
+
+/* Grade de Direitos do Titular (LGPD) */
+.inst-direitos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    margin: 20px 0;
+}
+
+.inst-direito-card {
+    background: var(--inst-bg-body);
+    border: 1px solid var(--inst-border);
+    border-radius: 8px;
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.inst-direito-card h4 {
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: var(--inst-text-main);
+    margin: 0;
+}
+
+.inst-direito-card p {
+    font-size: 0.88rem;
+    line-height: 1.48;
+    color: var(--inst-text-secondary);
+    margin: 0;
+}
+
+/* Tabelas Responsivas para Cookies e Dados */
+.inst-tabela-container {
+    width: 100%;
+    overflow-x: auto;
+    margin: 20px 0;
+    border: 1px solid var(--inst-border);
+    border-radius: 8px;
+}
+
+.inst-tabela {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    text-align: left;
+}
+
+.inst-tabela th {
+    background: var(--inst-bg-body);
+    color: var(--inst-text-main);
+    font-weight: 700;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--inst-border);
+    white-space: nowrap;
+}
+
+.inst-tabela td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--inst-border);
+    color: var(--inst-text-secondary);
+    line-height: 1.48;
+}
+
+.inst-tabela tr:last-child td {
+    border-bottom: none;
+}
+
+.inst-tabela tr:hover td {
+    background: var(--inst-primary-soft);
+}
+
+.inst-tabela code {
+    background: rgba(0, 0, 0, 0.05);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.85em;
+    color: var(--inst-primary);
+}
+
+[data-theme="dark"] .inst-tabela code {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.tag-status-essencial {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.74rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: rgba(72, 150, 54, 0.15);
+    color: var(--inst-primary);
+}
+
+.tag-status-preferencia {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.74rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: rgba(59, 130, 246, 0.15);
+    color: #2563EB;
+}
+
+[data-theme="dark"] .tag-status-preferencia {
+    color: #60A5FA;
+}
+
+.tag-status-inativo {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.74rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: rgba(148, 163, 184, 0.15);
+    color: var(--inst-text-muted);
+}
+
+/* Botão de Ação Direta para a Central de Cookies */
+.btn-abrir-cookies-central {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--inst-primary);
+    color: #FFFFFF;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.2s ease, transform 0.15s ease;
+    margin-top: 10px;
+}
+
+.btn-abrir-cookies-central:hover {
+    background: var(--inst-primary-hover);
+    transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   BANNER DE CONSENTIMENTO DE COOKIES (GLOBAL NO RODAPÉ)
+   ========================================================================== */
+.itaim-cookie-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 99999;
+    background: var(--inst-bg-card);
+    border-top: 1px solid var(--inst-border);
+    box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.15);
+    padding: 20px 24px;
+    display: none;
+    animation: itaimSlideUp 0.3s ease-out forwards;
+}
+
+@keyframes itaimSlideUp {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.itaim-cookie-banner-container {
+    max-width: 1140px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.itaim-cookie-banner-texto {
+    flex: 1;
+    min-width: 280px;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--inst-text-secondary);
+}
+
+.itaim-cookie-banner-texto strong {
+    color: var(--inst-text-main);
+    display: block;
+    margin-bottom: 4px;
+    font-size: 0.98rem;
+}
+
+.itaim-cookie-banner-texto a {
+    color: var(--inst-primary);
+    text-decoration: underline;
+    font-weight: 600;
+}
+
+.itaim-cookie-banner-acoes {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.btn-cookie-acao {
+    padding: 10px 18px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.btn-cookie-aceitar {
+    background: var(--inst-primary);
+    color: #FFFFFF;
+}
+
+.btn-cookie-aceitar:hover {
+    background: var(--inst-primary-hover);
+}
+
+.btn-cookie-rejeitar {
+    background: transparent;
+    border-color: var(--inst-border);
+    color: var(--inst-text-main);
+}
+
+.btn-cookie-rejeitar:hover {
+    background: var(--inst-primary-soft);
+    border-color: var(--inst-primary);
+}
+
+.btn-cookie-personalizar {
+    background: transparent;
+    color: var(--inst-text-secondary);
+    border-color: transparent;
+    text-decoration: underline;
+}
+
+.btn-cookie-personalizar:hover {
+    color: var(--inst-primary);
+}
+
+/* ==========================================================================
+   MODAL DA CENTRAL DE PREFERÊNCIAS DE COOKIES
+   ========================================================================== */
+.itaim-modal-cookies-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 100000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+
+.itaim-modal-cookies {
+    background: var(--inst-bg-card);
+    border: 1px solid var(--inst-border);
+    border-radius: var(--inst-radius);
+    max-width: 640px;
+    width: 100%;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--inst-shadow);
+    animation: itaimFadeZoom 0.22s ease-out;
+}
+
+@keyframes itaimFadeZoom {
+    from {
+        transform: scale(0.96);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.itaim-modal-cookies-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--inst-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.itaim-modal-cookies-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--inst-text-main);
+}
+
+.btn-fechar-modal-cookies {
+    background: none;
+    border: none;
+    color: var(--inst-text-muted);
+    font-size: 1.4rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 4px;
+    border-radius: 4px;
+    transition: color 0.15s ease;
+}
+
+.btn-fechar-modal-cookies:hover {
+    color: var(--inst-text-main);
+}
+
+.itaim-modal-cookies-body {
+    padding: 20px 24px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.itaim-categoria-item {
+    background: var(--inst-bg-body);
+    border: 1px solid var(--inst-border);
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.itaim-categoria-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.itaim-categoria-titulo {
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: var(--inst-text-main);
+    margin: 0;
+}
+
+.itaim-categoria-descricao {
+    font-size: 0.86rem;
+    line-height: 1.45;
+    color: var(--inst-text-secondary);
+    margin: 0;
+}
+
+/* Switches Acessíveis */
+.switch-cookie {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+}
+
+.switch-cookie input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider-cookie {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #CBD5E1;
+    transition: 0.2s;
+    border-radius: 24px;
+}
+
+[data-theme="dark"] .slider-cookie {
+    background-color: #334155;
+}
+
+.slider-cookie:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.2s;
+    border-radius: 50%;
+}
+
+.switch-cookie input:checked + .slider-cookie {
+    background-color: var(--inst-primary);
+}
+
+.switch-cookie input:checked + .slider-cookie:before {
+    transform: translateX(20px);
+}
+
+.switch-cookie input:disabled + .slider-cookie {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+.badge-sempre-ativo {
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: var(--inst-primary);
+    background: var(--inst-primary-soft);
+    padding: 2px 8px;
+    border-radius: 12px;
+}
+
+.itaim-modal-cookies-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--inst-border);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .inst-header-card {
+        padding: 24px 20px;
+    }
+
+    .inst-conteudo-wrapper {
+        padding: 24px 20px;
+    }
+
+    .inst-titulo {
+        font-size: 1.5rem;
+    }
+
+    .inst-nav-tabs {
+        flex-direction: column;
+    }
+
+    .itaim-cookie-banner-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .itaim-cookie-banner-acoes {
+        justify-content: stretch;
+    }
+
+    .btn-cookie-acao {
+        flex: 1;
+        text-align: center;
+    }
+
+    .itaim-modal-cookies-footer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
