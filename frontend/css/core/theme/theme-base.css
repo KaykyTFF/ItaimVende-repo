@@ -483,7 +483,13 @@ body.dark-theme {
     backdrop-filter: blur(6px);
 }
 
-/* Toasts no modo escuro */
+/* Toasts no modo claro e escuro */
+.cfg-toast:not(.erro) {
+    background-color: var(--primary-hover, #3CA82B) !important;
+    color: #FFFFFF !important;
+    box-shadow: var(--shadow-md) !important;
+}
+
 [data-theme="dark"] .cfg-toast,
 [data-theme="dark"] .toast-global {
     background-color: #141B26 !important;
