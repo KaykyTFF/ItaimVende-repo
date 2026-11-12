@@ -58,9 +58,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Segoe+UI&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="../../assets/logos/header-logo.png">
 
-    <link rel="stylesheet" href="../../css/pages/home/home.css?v=7">
+    <link rel="stylesheet" href="../../css/pages/home/home.css?v=8">
     <link rel="stylesheet" href="../../css/core/header-global.css?v=26">
-    <link rel="stylesheet" href="../../css/pages/perfil/configuracoes.css?v=7">
+    <link rel="stylesheet" href="../../css/pages/perfil/configuracoes.css?v=8">
 </head>
 <body>
 
@@ -426,18 +426,15 @@
 
                     <!-- CARD EXCLUSIVO: WHATSAPP / CELULAR -->
                     <div class="cfg-card" id="card-telefone-secao" style="margin-top: 24px;">
-                        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px;">
-                            <div>
-                                <h2>WhatsApp / Celular</h2>
-                                <p class="cfg-desc">Número utilizado para contato direto com compradores nos seus anúncios e no seu perfil.</p>
-                            </div>
+                        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 4px;">
+                            <h2 style="margin-bottom: 0;">WhatsApp</h2>
                             <span id="cfg-telefone-badge-status" class="cfg-status-badge nao-verificado">
                                 Não verificado
                             </span>
                         </div>
+                        <p class="cfg-desc" style="margin-bottom: 16px;">Número de contato exibido nos seus anúncios.</p>
 
-                        <div class="cfg-campo cheio" style="margin-top: 14px;">
-                            <label class="cfg-campo-label" for="cfg-telefone-display">WhatsApp cadastrado</label>
+                        <div class="cfg-campo cheio">
                             <div class="cfg-input-acao-linha">
                                 <div class="cfg-input-display">
                                     <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cfg-icone-whatsapp">
@@ -447,28 +444,23 @@
                                 </div>
                                 <div class="cfg-botoes-acao-wrap">
                                     <button type="button" class="cfg-btn cfg-btn-verificar" id="btn-verificar-telefone" style="display: none;">
-                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                                        Verificar número
+                                        Verificar
+                                    </button>
+                                    <button type="button" class="cfg-btn cfg-btn-secundario" id="btn-abrir-modal-trocar-telefone">
+                                        <span id="label-btn-trocar-telefone">Alterar</span>
                                     </button>
                                     <button type="button" class="cfg-btn cfg-btn-remover-link" id="btn-remover-telefone" style="display: none;">
                                         Remover
                                     </button>
-                                    <button type="button" class="cfg-btn cfg-btn-secundario" id="btn-abrir-modal-trocar-telefone">
-                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                                        </svg>
-                                        <span id="label-btn-trocar-telefone">Alterar WhatsApp</span>
-                                    </button>
                                 </div>
                             </div>
-                            <div class="cfg-dica-campo" id="box-status-cooldown-telefone">
+                            <div class="cfg-dica-campo" id="box-status-cooldown-telefone" style="display: none;">
                                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <circle cx="12" cy="12" r="10"></circle>
                                     <line x1="12" y1="8" x2="12" y2="12"></line>
                                     <line x1="12" y1="16" x2="12.01" y2="16"></line>
                                 </svg>
-                                <span id="texto-status-cooldown-telefone">Ao cadastrar seu WhatsApp, compradores poderão iniciar conversas diretamente pelo app nos seus anúncios.</span>
+                                <span id="texto-status-cooldown-telefone"></span>
                             </div>
                         </div>
                     </div>

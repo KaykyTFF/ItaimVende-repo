@@ -1081,22 +1081,27 @@
 }
 
 .cfg-btn-verificar {
-    background: #16a34a;
+    background: var(--primary-hover, #3CA82B);
     color: #ffffff;
-    border: none;
-    padding: 8px 14px;
+    border: 1px solid var(--primary-hover, #3CA82B);
+    height: 46px;
+    padding: 0 18px;
     border-radius: var(--radius-md);
     font-weight: 700;
-    font-size: 13px;
+    font-size: 13.5px;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 6px;
+    white-space: nowrap;
+    flex-shrink: 0;
     transition: all var(--transition);
 }
 
 .cfg-btn-verificar:hover {
-    background: #15803d;
+    background: #339324;
+    border-color: #339324;
     transform: translateY(-1px);
 }
 

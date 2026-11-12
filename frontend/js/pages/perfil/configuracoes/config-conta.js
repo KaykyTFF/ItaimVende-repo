@@ -631,7 +631,7 @@
                 } else {
                     badgeStatusTelefone.style.display = 'inline-flex';
                     badgeStatusTelefone.className = 'cfg-status-badge nao-verificado';
-                    badgeStatusTelefone.innerHTML = '⚠ Não verificado';
+                    badgeStatusTelefone.textContent = 'Não verificado';
                 }
             }
 
@@ -644,13 +644,14 @@
             }
 
             if (labelBtnTrocarTelefone) {
-                labelBtnTrocarTelefone.textContent = temTel ? 'Alterar WhatsApp' : 'Cadastrar WhatsApp';
+                labelBtnTrocarTelefone.textContent = temTel ? 'Alterar' : 'Cadastrar';
             }
 
             // Cooldown de 7 dias
             const canChange = user.canChangePhone !== false;
             if (boxCooldownTelefone && textoCooldownTelefone) {
                 if (!canChange) {
+                    boxCooldownTelefone.style.display = 'flex';
                     boxCooldownTelefone.classList.add('bloqueado');
                     const dias = user.daysUntilNextPhoneChange || 7;
                     let dataFmt = '';
@@ -658,8 +659,8 @@
                         try { dataFmt = new Date(user.nextPhoneChangeAt).toLocaleDateString('pt-BR'); } catch(e) {}
                     }
                     textoCooldownTelefone.innerHTML = dataFmt
-                        ? `Você poderá alterar ou remover seu WhatsApp novamente em <strong>${dataFmt}</strong> (restam ${dias} ${dias === 1 ? 'dia' : 'dias'}).`
-                        : `Você só pode alterar ou remover seu WhatsApp uma vez a cada 7 dias (restam ${dias} dias).`;
+                        ? `Próxima alteração disponível em <strong>${dataFmt}</strong>.`
+                        : `Nova alteração disponível em ${dias} ${dias === 1 ? 'dia' : 'dias'}.`;
 
                     if (btnAbrirModalTelefone) {
                         btnAbrirModalTelefone.disabled = true;
@@ -672,7 +673,9 @@
                         btnRemoverTelefone.style.cursor = 'not-allowed';
                     }
                 } else {
+                    boxCooldownTelefone.style.display = 'none';
                     boxCooldownTelefone.classList.remove('bloqueado');
+                    textoCooldownTelefone.textContent = '';
                     if (btnAbrirModalTelefone) {
                         btnAbrirModalTelefone.disabled = false;
                         btnAbrirModalTelefone.style.opacity = '';
@@ -682,14 +685,6 @@
                         btnRemoverTelefone.disabled = false;
                         btnRemoverTelefone.style.opacity = '';
                         btnRemoverTelefone.style.cursor = '';
-                    }
-
-                    if (temTel && !isVerified) {
-                        textoCooldownTelefone.innerHTML = '⚠️ Seu número ainda não foi verificado. Clique em <strong>Verificar número</strong> para receber o código via WhatsApp e e-mail e ativar o botão de contato nos seus anúncios.';
-                    } else if (temTel && isVerified) {
-                        textoCooldownTelefone.innerHTML = '✅ WhatsApp verificado. Compradores podem iniciar conversas diretamente pelo app nos seus anúncios.';
-                    } else {
-                        textoCooldownTelefone.textContent = 'Ao cadastrar seu WhatsApp, compradores poderão iniciar conversas diretamente pelo app nos seus anúncios.';
                     }
                 }
             }
