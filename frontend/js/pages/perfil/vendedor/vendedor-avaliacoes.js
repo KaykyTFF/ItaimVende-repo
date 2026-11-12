@@ -74,7 +74,7 @@
 
         const respostaHtml = item.resposta
             ? `<div class="avaliacao-resposta">
-                   <div class="avaliacao-resposta-titulo">💬 Resposta do Vendedor</div>
+                   <div class="avaliacao-resposta-titulo">Resposta do Vendedor</div>
                    <p class="avaliacao-resposta-texto">${item.resposta}</p>
                </div>`
             : (isVendedorLogado
@@ -159,11 +159,14 @@
         const containerAvaliacoes = document.getElementById('lista-avaliacoes-vendedor');
         const formAvaliacao = document.getElementById('form-nova-avaliacao');
         const inputNota = document.getElementById('input-nota-avaliacao');
-        const inputAutor = document.getElementById('input-autor-avaliacao');
         const textareaComentario = document.getElementById('textarea-comentario');
         const labelNota = document.getElementById('label-nota-selecionada');
         const estrelasContainer = document.getElementById('estrelas-seletor');
         const boxForm = document.getElementById('box-form-avaliacao');
+        const boxDeslogado = document.getElementById('box-avaliacao-deslogado');
+        const boxProprioPerfil = document.getElementById('box-proprio-perfil');
+        const contadorChar = document.getElementById('contador-caracteres-comentario');
+        const btnEntrarParaAvaliar = document.getElementById('btn-entrar-para-avaliar');
 
         // Busca usuário logado de forma ultra resiliente
         function obterUsuarioAtual() {
@@ -214,9 +217,39 @@
 
         // Preenche nome do autor logado no formulário
         const nomeLogado = usuarioLogado?.name || usuarioLogado?.nome || usuarioLogado?.username || '';
-        if (inputAutor && nomeLogado) inputAutor.value = nomeLogado;
         const labelAutorVendedor = document.getElementById('vendedor-nome-autor-logado');
-        if (labelAutorVendedor) labelAutorVendedor.textContent = nomeLogado || 'Visitante';
+        if (labelAutorVendedor) {
+            labelAutorVendedor.textContent = isLogado ? (nomeLogado || 'Usuário') : 'Visitante';
+        }
+
+        // =====================================================================
+        // CONTADOR DE CARACTERES EM TEMPO REAL NO COMENTÁRIO
+        // =====================================================================
+        if (textareaComentario && contadorChar) {
+            textareaComentario.addEventListener('input', () => {
+                const len = textareaComentario.value.length;
+                contadorChar.textContent = `${len} / 1000`;
+                if (len >= 950) {
+                    contadorChar.style.color = '#EF4444';
+                } else if (len >= 800) {
+                    contadorChar.style.color = '#F59E0B';
+                } else {
+                    contadorChar.style.color = '#94A3B8';
+                }
+            });
+        }
+
+        // =====================================================================
+        // BOTÕES DE SUPORTE: ENTRAR PARA AVALIAR / VER MINHA AVALIAÇÃO
+        // =====================================================================
+        if (btnEntrarParaAvaliar) {
+            btnEntrarParaAvaliar.addEventListener('click', (e) => {
+                if (window.ItaimSessao && typeof window.ItaimSessao.abrirModalAuth === 'function') {
+                    e.preventDefault();
+                    window.ItaimSessao.abrirModalAuth('login');
+                }
+            });
+        }
 
         // =====================================================================
         // BUSCA AVALIAÇÕES DA API REAL
@@ -240,7 +273,7 @@
             }
         }
 
-        // Fallback: dados do localStorage/ItaimAvaliacoes
+        // Fallback: dados do localStorage/ItaimAvaliacoes se API indisponível
         if (!usouApi && window.ItaimAvaliacoes) {
             const lista = window.ItaimAvaliacoes.obter(vendedor);
             const stats = window.ItaimAvaliacoes.calcularMedia(lista, vendedor);
@@ -279,23 +312,36 @@
         atualizarReputacao(mediaGeral, totalAvaliacoes);
 
         // =====================================================================
-        // CONTROLE DE VISIBILIDADE DO FORMULÁRIO (Limite de 1 avaliação)
+        // CONTROLE DE VISIBILIDADE DO FORMULÁRIO E AVISOS DE SESSÃO
         // =====================================================================
         function atualizarVisibilidadeFormulario(lista) {
-            if (!boxForm) return;
+            const minha = isLogado && Array.isArray(lista) && lista.find(item => ehMinhaAvaliacao(item, usuarioLogado));
 
-            // Se for o perfil do próprio usuário vendedor, nunca exibe o formulário de avaliação
-            if (isVendedorLogado) {
-                boxForm.style.display = 'none';
+            // Estado 1: Visitante não autenticado
+            if (!isLogado) {
+                if (boxDeslogado) boxDeslogado.style.display = 'block';
+                if (boxProprioPerfil) boxProprioPerfil.style.display = 'none';
+                if (boxForm) boxForm.style.display = 'none';
                 return;
             }
 
-            // Limite de 1 avaliação por usuário: se o usuário logado já tiver feito avaliação, esconde o formulário
-            const jaAvaliou = isLogado && Array.isArray(lista) && lista.some(item => ehMinhaAvaliacao(item, usuarioLogado));
-            if (jaAvaliou) {
-                boxForm.style.display = 'none';
+            if (boxDeslogado) boxDeslogado.style.display = 'none';
+
+            // Estado 2: Vendedor autenticado visualizando seu próprio perfil
+            if (isVendedorLogado) {
+                if (boxProprioPerfil) boxProprioPerfil.style.display = 'block';
+                if (boxForm) boxForm.style.display = 'none';
+                return;
+            }
+
+            if (boxProprioPerfil) boxProprioPerfil.style.display = 'none';
+
+            // Estado 3: Usuário já avaliou este vendedor anteriormente -> apenas oculta o formulário sem exibir mensagem
+            if (minha) {
+                if (boxForm) boxForm.style.display = 'none';
             } else {
-                boxForm.style.display = 'block';
+                // Estado 4: Usuário autenticado apto a avaliar
+                if (boxForm) boxForm.style.display = 'block';
             }
         }
 
@@ -310,7 +356,7 @@
             if (!lista || lista.length === 0) {
                 // Se for o próprio vendedor, retira a frase de incentivo
                 const subMensagemHtml = isVendedorLogado
-                    ? '<p style="font-size:13.5px;margin:4px 0 0;color:#64748B;">Você ainda não possui avaliações de compradores.</p>'
+                    ? '<p style="font-size:13.5px;margin:4px 0 0;color:#64748B;">Você ainda não possui avaliações de outros usuários.</p>'
                     : '<p style="font-size:13.5px;margin:4px 0 0;color:#64748B;">Seja o primeiro a deixar uma avaliação sobre este vendedor!</p>';
 
                 containerAvaliacoes.innerHTML = `
@@ -455,7 +501,7 @@
                             <span class="label-nota-edit" style="font-size:12.5px;font-weight:700;color:#F59E0B;margin-left:4px;">(${notaEdicao}.0)</span>
                         </div>
                     </div>
-                    <textarea class="textarea-edit-comentario" rows="3"
+                    <textarea class="textarea-edit-comentario" maxlength="1000" rows="3"
                         style="width:100%;padding:10px 12px;border-radius:8px;font-family:inherit;font-size:13px;resize:vertical;box-sizing:border-box;outline:none;"
                         placeholder="Edite seu comentário...">${item.comentario || ''}</textarea>
                     <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:10px;">
@@ -647,22 +693,40 @@
         }
 
         // =====================================================================
-        // ENVIO DO FORMULÁRIO DE AVALIAÇÃO
+        // ENVIO DO FORMULÁRIO DE AVALIAÇÃO (COM AUTENTICAÇÃO REAL)
         // =====================================================================
         if (formAvaliacao && !isVendedorLogado) {
             formAvaliacao.addEventListener('submit', async (e) => {
                 e.preventDefault();
 
+                if (!isLogado) {
+                    exibirToast('Você precisa entrar na sua conta para avaliar este vendedor.');
+                    if (window.ItaimSessao && typeof window.ItaimSessao.abrirModalAuth === 'function') {
+                        window.ItaimSessao.abrirModalAuth('login');
+                    }
+                    return;
+                }
+
+                if (isVendedorLogado) {
+                    exibirToast('Você não pode avaliar o seu próprio perfil.');
+                    return;
+                }
+
                 const nota = parseInt(inputNota?.value || '5', 10);
                 const comentario = textareaComentario?.value.trim() || '';
+
+                if (!nota || nota < 1 || nota > 5) {
+                    exibirToast('Por favor, selecione uma nota de 1 a 5 estrelas.');
+                    return;
+                }
 
                 if (!comentario) {
                     exibirToast('Por favor, escreva um comentário sobre a sua negociação.');
                     return;
                 }
 
-                if (!isLogado) {
-                    exibirToast('Você precisa estar logado para avaliar este vendedor.');
+                if (comentario.length > 1000) {
+                    exibirToast('O comentário deve ter no máximo 1000 caracteres.');
                     return;
                 }
 
@@ -675,10 +739,14 @@
 
                 try {
                     let novaAvaliacao = null;
+                    const payload = {
+                        rating: nota,
+                        comment: comentario
+                    };
 
-                    // Tenta via API real
+                    // Envio via API oficial do Itaim Vende: POST /api/v1/reviews/user/:userId
                     if (vendedorId && window.ItaimApi?.reviews?.enviar) {
-                        const res = await window.ItaimApi.reviews.enviar(vendedorId, { rating: nota, comment: comentario });
+                        const res = await window.ItaimApi.reviews.enviar(vendedorId, payload);
                         if (res?.review) {
                             novaAvaliacao = {
                                 id: res.review.id,
@@ -688,7 +756,7 @@
                                 data: res.review.createdAt,
                                 autor: {
                                     id: res.review.author?.id || usuarioLogado?.id,
-                                    nome: res.review.author?.name || nomeLogado,
+                                    nome: res.review.author?.name || nomeLogado || 'Comprador',
                                     username: res.review.author?.username || usuarioLogado?.username,
                                     avatar: res.review.author?.avatar || null
                                 }
@@ -698,9 +766,9 @@
                         }
                     }
 
-                    // Fallback: adiciona localmente
+                    // Fallback para armazenamento local apenas se a API estiver desconectada
                     if (!novaAvaliacao && window.ItaimAvaliacoes) {
-                        window.ItaimAvaliacoes.adicionar(vendedor, { autor: nomeLogado, nota, comentario });
+                        window.ItaimAvaliacoes.adicionar(vendedor, { autor: nomeLogado || 'Comprador', nota, comentario });
                         novaAvaliacao = {
                             id: Date.now().toString(),
                             nota,
@@ -709,7 +777,7 @@
                             data: new Date().toISOString(),
                             autor: {
                                 id: usuarioLogado?.id,
-                                nome: nomeLogado,
+                                nome: nomeLogado || 'Comprador',
                                 username: usuarioLogado?.username,
                                 avatar: null
                             }
@@ -726,7 +794,11 @@
                         renderizarLista(avaliacoes);
                     }
 
-                    if (textareaComentario) textareaComentario.value = '';
+                    if (textareaComentario) {
+                        textareaComentario.value = '';
+                        if (contadorChar) contadorChar.textContent = '0 / 1000';
+                    }
+
                     exibirToast('Avaliação enviada com sucesso!');
                 } catch (err) {
                     exibirToast(err.message || 'Erro ao enviar avaliação. Tente novamente.');

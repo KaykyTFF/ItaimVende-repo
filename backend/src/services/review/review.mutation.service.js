@@ -5,11 +5,20 @@ import { AppError } from '../../utils/errors.js';
  * Cria uma nova avaliação e recalcula a média do vendedor atomicamente em transação
  */
 export async function createReview(authorId, targetUserId, reviewData) {
-  const { rating, comment } = reviewData;
+  const { rating, comment } = reviewData || {};
 
-  const notaNum = parseInt(rating, 10);
-  if (isNaN(notaNum) || notaNum < 1 || notaNum > 5) {
+  const notaNum = Number(rating);
+  if (!Number.isInteger(notaNum) || notaNum < 1 || notaNum > 5) {
     throw new AppError('A nota deve ser um número inteiro entre 1 e 5 estrelas.', 400);
+  }
+
+  if (comment !== undefined && comment !== null) {
+    if (typeof comment !== 'string') {
+      throw new AppError('O comentário deve ser um texto válido.', 400);
+    }
+    if (comment.trim().length > 1000) {
+      throw new AppError('O comentário deve ter no máximo 1000 caracteres.', 400);
+    }
   }
 
   const targetUser = await prisma.user.findFirst({
@@ -107,11 +116,20 @@ export async function createReview(authorId, targetUserId, reviewData) {
  * Atualiza uma avaliação existente pelo autor
  */
 export async function updateReview(reviewId, authorId, reviewData) {
-  const { rating, comment } = reviewData;
+  const { rating, comment } = reviewData || {};
 
-  const notaNum = parseInt(rating, 10);
-  if (isNaN(notaNum) || notaNum < 1 || notaNum > 5) {
+  const notaNum = Number(rating);
+  if (!Number.isInteger(notaNum) || notaNum < 1 || notaNum > 5) {
     throw new AppError('A nota deve ser um número inteiro entre 1 e 5 estrelas.', 400);
+  }
+
+  if (comment !== undefined && comment !== null) {
+    if (typeof comment !== 'string') {
+      throw new AppError('O comentário deve ser um texto válido.', 400);
+    }
+    if (comment.trim().length > 1000) {
+      throw new AppError('O comentário deve ter no máximo 1000 caracteres.', 400);
+    }
   }
 
   const review = await prisma.review.findUnique({

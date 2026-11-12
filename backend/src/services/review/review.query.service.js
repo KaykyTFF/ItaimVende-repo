@@ -31,7 +31,15 @@ export async function getUserReviews(targetUserId) {
   });
 
   const totalAvaliacoes = reviews.length;
-  const mediaGeral = totalAvaliacoes > 0 ? Number(user.ratingAverage) : 0;
+  const soma = reviews.reduce((acc, curr) => acc + curr.rating, 0);
+  const mediaGeral = totalAvaliacoes > 0 ? parseFloat((soma / totalAvaliacoes).toFixed(2)) : 0;
+
+  const distribuicao = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+  for (const r of reviews) {
+    if (distribuicao[r.rating] !== undefined) {
+      distribuicao[r.rating]++;
+    }
+  }
 
   return {
     vendedor: {
@@ -39,6 +47,7 @@ export async function getUserReviews(targetUserId) {
       nome: user.name,
       mediaGeral,
       totalAvaliacoes,
+      distribuicao,
     },
     avaliacoes: reviews.map((r) => ({
       id: r.id,
