@@ -5,7 +5,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "setup": "node scripts/setup-db.js",
+    "setup": "npm run install:backend && npm --prefix backend run prisma:generate",
     "modo:ifpi": "node scripts/switch-env.js ifpi",
     "modo:supabase": "node scripts/switch-env.js supabase",
     "modo:sem-bd": "node scripts/modo-dev.js",

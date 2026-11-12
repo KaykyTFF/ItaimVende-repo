@@ -50,12 +50,8 @@ if (isProduction && !process.env.JWT_SECRET) {
 export const ENV = {
   PORT: Number(process.env.PORT) || 3000,
   NODE_ENV: process.env.NODE_ENV || 'development',
-<<<<<<< HEAD
-  JWT_SECRET: process.env.JWT_SECRET || 'dev-local-jwt-secret-inseguro-apenas-para-testes',
-=======
   DATABASE_URL: process.env.DATABASE_URL || '',
-  JWT_SECRET: process.env.JWT_SECRET || 'dev_jwt_key_local_only',
->>>>>>> ef76ce554904ab2e41979b743936d5b248ca1c01
+  JWT_SECRET: process.env.JWT_SECRET || 'dev-local-jwt-secret-inseguro-apenas-para-testes',
   JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || '2h',
   CORS_ORIGIN: process.env.CORS_ORIGIN || '*',
 
