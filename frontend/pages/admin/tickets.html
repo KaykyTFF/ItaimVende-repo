@@ -20,15 +20,18 @@
                 }
             } catch (e) {}
 
-            // Guarda de Autenticação Estrita dos Tickets
+            // Guarda de Autenticação Estrita dos Tickets e Painel Administrativo
             try {
-                var auth = sessionStorage.getItem('itaim_tickets_auth') || localStorage.getItem('itaim_tickets_auth');
+                var auth = sessionStorage.getItem('itaim_tickets_auth') || 
+                           localStorage.getItem('itaim_tickets_auth') ||
+                           sessionStorage.getItem('itaim_painel_auth') || 
+                           localStorage.getItem('itaim_painel_auth');
                 if (!auth) {
                     window.location.replace('login-tickets.html');
                     return;
                 }
                 var parsed = JSON.parse(auth);
-                if (!parsed || !parsed.username) {
+                if (!parsed || (!parsed.username && !parsed.nome)) {
                     window.location.replace('login-tickets.html');
                 }
             } catch (err) {

@@ -307,7 +307,7 @@
                 const link = window.location.href;
                 if (navigator.clipboard && navigator.clipboard.writeText) {
                     navigator.clipboard.writeText(link).then(() => {
-                        exibirToast('Link do perfil copiado para a área de transferência! 📋');
+                        exibirToast('Link do perfil copiado para a área de transferência!');
                     }).catch(() => {
                         exibirToast('Perfil compartilhado com sucesso!');
                     });

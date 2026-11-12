@@ -201,6 +201,178 @@
             e.preventDefault();
             alternarFavorito();
         });
+
+        // 4. Compartilhamento do Anúncio (WhatsApp e Cópia de Link)
+        const btnCompartilhar = document.getElementById('btn-compartilhar-anuncio');
+        const btnCompartilharTopo = document.getElementById('btn-compartilhar-topo');
+        const menuPopover = document.getElementById('menu-compartilhar-popover');
+        const btnShareWpp = document.getElementById('btn-share-whatsapp');
+        const btnShareCopiar = document.getElementById('btn-share-copiar-link');
+
+        // Geração da URL pública canônica sem dependência de sessão ou rotas locais
+        const origin = (window.location.origin && window.location.origin !== 'null' && !window.location.origin.startsWith('file:')) 
+            ? window.location.origin 
+            : 'https://itaimvende.com.br';
+        const identificador = produto.id || produto.slug;
+        const canonicalUrl = `${origin}/produto?id=${encodeURIComponent(identificador)}`;
+
+        // Atualiza a tag link canonical no head
+        const linkCanonical = document.getElementById('meta-canonical-url') || document.querySelector('link[rel="canonical"]');
+        if (linkCanonical) {
+            linkCanonical.setAttribute('href', canonicalUrl);
+        }
+
+        // Formatação do preço para a mensagem de compartilhamento (suporta gratuidades/doações)
+        const isGratuito = (produto.listingType === 'DOACAO' || produto.listingType === 'doacao' || produto.isDoacao)
+            || (produto.preco === 0 || produto.preco === '0' || Number(produto.preco) <= 0 || produto.preco === 'Doação');
+
+        let precoTextoFormatado = '';
+        if (isGratuito) {
+            precoTextoFormatado = 'Doação (Gratuito)';
+        } else if (produto.preco && Number(produto.preco) > 0) {
+            precoTextoFormatado = Number(produto.preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        } else {
+            precoTextoFormatado = 'A combinar';
+        }
+
+        const tituloAnuncio = (produto.titulo || produto.title || 'Anúncio').trim();
+
+        // Modelo oficial de mensagem para WhatsApp com codificação de caracteres
+        const mensagemWhatsApp = 
+            `Olha esse anúncio que encontrei no Itaim Vende!\n\n` +
+            `📦 Produto: ${tituloAnuncio}\n` +
+            `💰 Preço: ${precoTextoFormatado}\n\n` +
+            `Confira aqui:\n${canonicalUrl}\n\n` +
+            `Itaim Vende — Classificados de Paulistana e região.`;
+
+        const linkWhatsAppOficial = `https://wa.me/?text=${encodeURIComponent(mensagemWhatsApp)}`;
+
+        function abrirMenu() {
+            if (!menuPopover) return;
+            menuPopover.classList.add('aberto');
+            menuPopover.setAttribute('aria-hidden', 'false');
+            btnCompartilhar?.setAttribute('aria-expanded', 'true');
+        }
+
+        function fecharMenu() {
+            if (!menuPopover) return;
+            menuPopover.classList.remove('aberto');
+            menuPopover.setAttribute('aria-hidden', 'true');
+            btnCompartilhar?.setAttribute('aria-expanded', 'false');
+        }
+
+        function alternarMenu(e) {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            if (!menuPopover) return;
+            const aberto = menuPopover.classList.contains('aberto');
+            if (aberto) {
+                fecharMenu();
+            } else {
+                abrirMenu();
+            }
+        }
+
+        async function copiarLink() {
+            let copiado = false;
+
+            if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+                try {
+                    await navigator.clipboard.writeText(canonicalUrl);
+                    copiado = true;
+                } catch (errClip) {
+                    console.warn('[Compartilhar] API Clipboard indisponível ou permissão negada, utilizando fallback:', errClip);
+                }
+            }
+
+            if (!copiado) {
+                try {
+                    const tempInput = document.createElement('textarea');
+                    tempInput.value = canonicalUrl;
+                    tempInput.style.position = 'fixed';
+                    tempInput.style.left = '-9999px';
+                    tempInput.style.top = '0';
+                    tempInput.setAttribute('readonly', '');
+                    document.body.appendChild(tempInput);
+                    tempInput.select();
+                    tempInput.setSelectionRange(0, 99999);
+                    copiado = document.execCommand('copy');
+                    document.body.removeChild(tempInput);
+                } catch (errFallback) {
+                    console.error('[Compartilhar] Falha ao copiar pelo método fallback:', errFallback);
+                    copiado = false;
+                }
+            }
+
+            fecharMenu();
+
+            if (copiado) {
+                mostrarToast('Link do anúncio copiado com sucesso!');
+            } else {
+                mostrarToast('Não foi possível copiar o link.');
+            }
+        }
+
+        function compartilharWhatsApp(e) {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            fecharMenu();
+            window.open(linkWhatsAppOficial, '_blank', 'noopener,noreferrer');
+        }
+
+        // Eventos dos botões de compartilhamento
+        btnCompartilhar?.addEventListener('click', alternarMenu);
+
+        btnCompartilharTopo?.addEventListener('click', async (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            // Em dispositivos móveis compatíveis com Web Share API nativo
+            if (navigator.share && /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)) {
+                try {
+                    await navigator.share({
+                        title: `${tituloAnuncio} - Itaim Vende`,
+                        text: `Olha esse anúncio no Itaim Vende: ${tituloAnuncio} (${precoTextoFormatado})`,
+                        url: canonicalUrl
+                    });
+                    return;
+                } catch (errShare) {
+                    if (errShare.name === 'AbortError') return;
+                }
+            }
+
+            // Fallback: abre o popover de compartilhamento
+            alternarMenu(e);
+        });
+
+        btnShareWpp?.addEventListener('click', compartilharWhatsApp);
+        btnShareCopiar?.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            copiarLink();
+        });
+
+        // Fechar ao clicar fora
+        document.addEventListener('click', (e) => {
+            if (!menuPopover || !menuPopover.classList.contains('aberto')) return;
+            const clicouDentro = menuPopover.contains(e.target) || 
+                                 btnCompartilhar?.contains(e.target) || 
+                                 btnCompartilharTopo?.contains(e.target);
+            if (!clicouDentro) {
+                fecharMenu();
+            }
+        });
+
+        // Fechar com a tecla ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && menuPopover?.classList.contains('aberto')) {
+                fecharMenu();
+            }
+        });
     }
 
     window.ItaimProdutoAcoes = {

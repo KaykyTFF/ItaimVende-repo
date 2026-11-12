@@ -170,8 +170,8 @@
 
                     <div class="dropdown-perfil" id="dropdown-perfil">
                         <a href="perfil.html" class="dropdown-header-user" title="Ir para Meu Perfil">
-                            <strong id="dropdown-user-name">Admin</strong>
-                            <span id="dropdown-user-email">admin@gmail.com</span>
+                            <strong id="dropdown-user-name">Minha Conta</strong>
+                            <span id="dropdown-user-email">minhaconta@itaimvende.com.br</span>
                         </a>
                         <a href="perfil.html" class="dropdown-item" id="link-menu-perfil">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
@@ -602,6 +602,35 @@
                         ★ (0)</span>
                 </div>
 
+                <!-- AVISO: VISITANTE NÃO AUTENTICADO -->
+                <div class="box-avaliacao-deslogado" id="box-avaliacao-deslogado"
+                    style="display: none; border-radius: 16px; padding: 22px; margin-bottom: 22px; text-align: center; border: 1px dashed #CBD5E1; background: #F8FAFC;">
+                    <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#64748B" stroke-width="2" style="margin-bottom: 8px;">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <h4 style="font-size: 15px; font-weight: 700; margin: 0 0 6px; color: #1E293B;">Quer avaliar este vendedor?</h4>
+                    <p style="font-size: 13px; color: #64748B; margin: 0 0 14px; max-width: 440px; margin-left: auto; margin-right: auto; line-height: 1.45;">
+                        Entre na sua conta ou cadastre-se para compartilhar sua experiência de atendimento e negociação com a comunidade.
+                    </p>
+                    <a href="/login" class="btn-entrar-para-avaliar" id="btn-entrar-para-avaliar"
+                        style="display: inline-flex; align-items: center; gap: 8px; background: #38A129; color: #FFFFFF; font-size: 13.5px; font-weight: 700; padding: 9px 20px; border-radius: 8px; text-decoration: none; transition: background 0.2s;">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2">
+                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                            <polyline points="10 17 15 12 10 7"></polyline>
+                            <line x1="15" y1="12" x2="3" y2="12"></line>
+                        </svg>
+                        <span>Entrar para Avaliar</span>
+                    </a>
+                </div>
+
+
+                <!-- AVISO: VENDEDOR VISUALIZANDO O PRÓPRIO PERFIL -->
+                <div class="box-proprio-perfil" id="box-proprio-perfil"
+                    style="display: none; border-radius: 16px; padding: 14px 18px; margin-bottom: 22px; background: #F8FAFC; border: 1px solid #E2E8F0; text-align: center;">
+                    <span style="font-size: 13px; color: #64748B; font-weight: 600;">Este é o seu perfil público. As avaliações aqui exibidas são enviadas por outros usuários da plataforma.</span>
+                </div>
+
                 <!-- CAIXINHA PARA DEIXAR UMA AVALIAÇÃO E COMENTÁRIO (FUNCIONAL) -->
                 <div class="box-form-avaliacao" id="box-form-avaliacao"
                     style="border-radius: 16px; padding: 18px; margin-bottom: 22px;">
@@ -637,7 +666,7 @@
                                     style="font-size: 13.5px; font-weight: 800; color: #F59E0B; margin-left: 2px;">(5.0)</span>
                             </div>
 
-                            <div style="display: flex; align-items: center; gap: 8px;">
+                            <div id="vendedor-bloco-autor" style="display: flex; align-items: center; gap: 8px;">
                                 <span style="font-size: 12.5px; font-weight: 600;">Avaliando como:</span>
                                 <span class="badge-autor-fixo" id="vendedor-label-autor"
                                     style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 8px; font-size: 13px; font-weight: 700;">
@@ -646,16 +675,20 @@
                                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                                         <circle cx="12" cy="7" r="4"></circle>
                                     </svg>
-                                    <span id="vendedor-nome-autor-logado">Admin</span>
+                                    <span id="vendedor-nome-autor-logado">Usuário</span>
                                 </span>
-                                <input type="hidden" id="input-autor-avaliacao" value="Admin">
                             </div>
                         </div>
 
-                        <textarea id="textarea-comentario"
+                        <div style="position: relative; margin-bottom: 6px;">
+                            <textarea id="textarea-comentario" maxlength="1000"
                             placeholder="Escreva um comentário sobre sua experiência com este vendedor..." rows="3"
                             style="width: 100%; padding: 10px 14px; font-size: 13.5px; border-radius: 10px; outline: none; resize: vertical; font-family: inherit; box-sizing: border-box; transition: border-color 0.2s;"
                             required></textarea>
+                            <div style="display: flex; justify-content: flex-end; margin-top: 4px;">
+                                <span id="contador-caracteres-comentario" style="font-size: 11.5px; color: #94A3B8;">0 / 1000</span>
+                            </div>
+                        </div>
 
                         <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
                             <button type="submit" id="btn-enviar-avaliacao"
@@ -734,6 +767,15 @@
 
         <div class="footer-bottom">
             <span>© 2026 Itaim Vende. Todos os direitos reservados.</span>
+            <div class="footer-legal-links" style="display: flex; gap: 0.75rem; align-items: center; justify-content: center; flex-wrap: wrap;">
+                <a href="/termos" style="color: inherit; text-decoration: underline;">Termos de Uso</a>
+                <span>&bull;</span>
+                <a href="/politica-de-privacidade" style="color: inherit; text-decoration: underline;">Política de Privacidade</a>
+                <span>&bull;</span>
+                <a href="/politica-de-cookies" style="color: inherit; text-decoration: underline;">Política de Cookies</a>
+                <span>&bull;</span>
+                <a href="#" data-acao="abrir-cookies" style="color: inherit; text-decoration: underline;">Preferências de Cookies</a>
+            </div>
             <span>Compre, venda e anuncie com facilidade.</span>
         </div>
     </footer>

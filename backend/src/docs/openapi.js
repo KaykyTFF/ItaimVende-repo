@@ -478,15 +478,94 @@ export const openapiSpec = {
         },
       },
       delete: {
-        tags: ['Autenticação & Contas'],
-        summary: 'Exclui ou desativa a própria conta',
+        tags: ['Autenticação & Contas', 'Privacidade & LGPD'],
+        summary: 'Exclui ou anonimiza a própria conta e dados pessoais (LGPD Art. 18, VI)',
+        description: 'Exclui a conta e anonimiza os dados pessoais do titular. Requer confirmação da senha atual para contas com senha local.',
         security: [{ bearerAuth: [] }],
+        requestBody: {
+          required: false,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  password: { type: 'string', example: 'SenhaSegura@2026' },
+                },
+              },
+            },
+          },
+        },
         responses: {
           200: {
-            description: 'Conta excluída.',
+            description: 'Conta excluída e dados pessoais anonimizados/eliminados com sucesso.',
             content: {
               'application/json': {
                 example: { success: true, message: 'Conta desativada e excluída com sucesso.' },
+              },
+            },
+          },
+          400: {
+            description: 'Senha incorreta ou pendências impeditivas na conta.',
+            content: { 'application/json': { schema: { $ref: '#/components/schemas/StandardError' } } },
+          },
+          401: {
+            description: 'Não autenticado.',
+            content: { 'application/json': { schema: { $ref: '#/components/schemas/StandardError' } } },
+          },
+        },
+      },
+    },
+
+    '/account/privacy/dossier': {
+      get: {
+        tags: ['Privacidade & LGPD'],
+        summary: 'Consulta dossiê consolidado de dados pessoais do titular (LGPD Art. 18, II)',
+        description: 'Retorna a totalidade dos dados cadastrais, anúncios, endereços, transações, avaliações, favoritos e metadados de privacidade vinculados ao usuário autenticado.',
+        security: [{ bearerAuth: [] }],
+        responses: {
+          200: {
+            description: 'Dossiê do titular retornado com sucesso.',
+            content: {
+              'application/json': {
+                example: {
+                  success: true,
+                  dossier: {
+                    titular: {
+                      id: 'usr_123',
+                      nome_completo: 'Maria da Silva',
+                      nome_usuario: 'mariasilva',
+                      email: 'maria@example.com',
+                      telefone: '89994001122',
+                    },
+                    metadados_lgpd: {
+                      legislacao: 'Lei Geral de Proteção de Dados (Lei nº 13.709/2018)',
+                      canal_privacidade_dpo: 'privacidade@itaimvende.com.br',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          401: {
+            description: 'Não autenticado.',
+            content: { 'application/json': { schema: { $ref: '#/components/schemas/StandardError' } } },
+          },
+        },
+      },
+    },
+
+    '/account/privacy/export': {
+      get: {
+        tags: ['Privacidade & LGPD'],
+        summary: 'Exportação e portabilidade de dados pessoais em arquivo JSON (LGPD Art. 18, V)',
+        description: 'Gera e descarrega um arquivo JSON interoperável com a cópia integral dos dados pessoais do titular.',
+        security: [{ bearerAuth: [] }],
+        responses: {
+          200: {
+            description: 'Arquivo JSON descarregado com sucesso.',
+            content: {
+              'application/json': {
+                schema: { type: 'object' },
               },
             },
           },

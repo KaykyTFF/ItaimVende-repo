@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Política de Cookies e Armazenamento Local do Itaim Vende - Saiba como utilizamos cookies e web storage para manter sua sessão segura e suas preferências salvas.">
+    <title>Política de Cookies e Armazenamento — Itaim Vende</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Segoe+UI&display=swap" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../assets/logos/header-logo.png">
+
+    <!-- CSS Global e da Página -->
+    <link rel="stylesheet" href="../../css/core/style.css">
+    <link rel="stylesheet" href="../../css/core/header-global.css">
+    <link rel="stylesheet" href="../../css/pages/home/home/home-footer.css">
+    <link rel="stylesheet" href="../../css/pages/institucional/institucional.css">
+
+    <!-- Detecção e Aplicação Imediata de Tema para Evitar FOUC -->
+    <script>
+        (function () {
+            try {
+                var tema = localStorage.getItem('itaim_tema') === 'dark' ? 'dark' : 'light';
+                document.documentElement.setAttribute('data-theme', tema);
+                if (tema === 'dark') document.documentElement.classList.add('dark-theme');
+            } catch (e) {}
+        })();
+    </script>
+</head>
+
+<body class="institucional-layout">
+
+    <!-- ==========================================================
+         1. CABEÇALHO GLOBAL DO MARKETPLACE
+         ========================================================== -->
+    <header class="header-principal">
+        <div class="header-container">
+            <div class="header-left">
+                <a href="/" class="header-logo-link" title="Itaim Vende - Início">
+                    <img src="../../assets/logos/header1-logo.png" alt="Itaim Vende" class="header-logo-img">
+                </a>
+            </div>
+
+            <div class="header-center">
+                <form class="busca-form" role="search" action="/categoria" method="GET">
+                    <input type="search" class="campo-busca" name="q" placeholder="Buscar produtos, marcas e categorias..." autocomplete="off">
+                    <button type="submit" class="btn-busca-submit" aria-label="Pesquisar">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+
+            <div class="header-right">
+                <a href="/" class="btn-header-link" style="color: var(--inst-text-main); font-weight: 600; text-decoration: none; font-size: 0.92rem;">
+                    Voltar ao Início
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==========================================================
+         2. CONTEÚDO PRINCIPAL: POLÍTICA DE COOKIES
+         ========================================================== -->
+    <main class="institucional-main">
+
+        <!-- Trilha de Navegação -->
+        <nav class="inst-breadcrumb" aria-label="Trilha de navegação">
+            <a href="/">Início</a>
+            <span class="separador">/</span>
+            <span>Institucional</span>
+            <span class="separador">/</span>
+            <span class="ativo">Política de Cookies</span>
+        </nav>
+
+        <!-- Cartão de Cabeçalho do Documento -->
+        <section class="inst-header-card">
+            <span class="inst-badge-versao">Documento Oficial • LGPD</span>
+            <h1 class="inst-titulo">Política de Cookies e Armazenamento Local</h1>
+            <p class="inst-subtitulo">
+                Conheça com transparência quais tecnologias de armazenamento local são utilizadas na plataforma Itaim Vende e como você pode gerenciar suas preferências.
+            </p>
+            <div class="inst-metadados">
+                <span><strong>Versão:</strong> 1.0</span>
+                <span><strong>Última atualização:</strong> 11 de Novembro de 2026</span>
+                <span><strong>Conformidade:</strong> Lei Geral de Proteção de Dados (Lei nº 13.709/2018)</span>
+            </div>
+        </section>
+
+        <!-- Abas Rápidas de Navegação entre Políticas -->
+        <div class="inst-nav-tabs">
+            <a href="/termos" class="inst-tab-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+                Termos de Uso
+            </a>
+            <a href="/politica-de-privacidade" class="inst-tab-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+                Política de Privacidade
+            </a>
+            <a href="/politica-de-cookies" class="inst-tab-link ativo">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M12 6a2 2 0 0 0-2 2c0 1.1.9 2 2 2"></path>
+                    <circle cx="8" cy="14" r="1"></circle>
+                    <circle cx="16" cy="14" r="1"></circle>
+                </svg>
+                Política de Cookies e Armazenamento
+            </a>
+            <button type="button" class="btn-abrir-cookies-central" data-acao="abrir-cookies" style="margin: 0; padding: 10px 18px; font-size: 0.9rem;">
+                Abrir Central de Preferências
+            </button>
+        </div>
+
+        <!-- Conteúdo Completo e Estruturado -->
+        <article class="inst-conteudo-wrapper">
+
+            <!-- 1. O QUE SÃO COOKIES E ARMAZENAMENTO WEB -->
+            <section class="inst-secao" id="o-que-sao">
+                <h2 class="inst-secao-titulo">
+                    <span class="numero">1.</span> O que são Cookies e Tecnologias de Armazenamento Local?
+                </h2>
+                <p class="inst-paragrafo">
+                    Cookies são pequenos arquivos de texto enviados pelos servidores web e gravados no navegador do seu dispositivo. Eles permitem memorizar informações de acesso e preferências durante a navegação.
+                </p>
+                <p class="inst-paragrafo">
+                    Além dos cookies tradicionais, as aplicações modernas utilizam o <strong>Armazenamento Web do HTML5 (Web Storage)</strong>, que inclui o <code>localStorage</code> (armazenamento persistente no dispositivo até a limpeza pelo usuário) e o <code>sessionStorage</code> (armazenamento temporário que expira automaticamente ao fechar a aba do navegador).
+                </p>
+                <div class="inst-destaque-box">
+                    <strong>Abordagem Real do Itaim Vende:</strong>
+                    Nossa arquitetura prioriza a segurança e a leveza. A API é <em>stateless</em> (não armazena sessões em memória no servidor) e não utiliza cookies HTTP de rastreamento de terceiros. As tecnologias de armazenamento são aplicadas exclusivamente para autenticação via token JWT, segurança contra sessões obsoletas e persistência de preferências voluntárias de interface (como o modo escuro).
+                </div>
+            </section>
+
+            <!-- 2. INVENTÁRIO REAL DE TECNOLOGIAS UTILIZADAS -->
+            <section class="inst-secao" id="inventario">
+                <h2 class="inst-secao-titulo">
+                    <span class="numero">2.</span> Levantamento Real das Tecnologias Utilizadas no Itaim Vende
+                </h2>
+                <p class="inst-paragrafo">
+                    Abaixo apresentamos a relação completa de todas as chaves e tecnologias de armazenamento efetivamente implementadas na plataforma:
+                </p>
+
+                <div class="inst-tabela-container">
+                    <table class="inst-tabela">
+                        <thead>
+                            <tr>
+                                <th>Chave / Nome</th>
+                                <th>Tecnologia</th>
+                                <th>Categoria</th>
+                                <th>Finalidade Específica</th>
+                                <th>Duração</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>itaim_token</code></td>
+                                <td>localStorage</td>
+                                <td><span class="tag-status-essencial">Essencial</span></td>
+                                <td>Armazena o JSON Web Token (JWT) que autentica as requisições seguras à API.</td>
+                                <td>Até o logout ou 7 dias</td>
+                            </tr>
+                            <tr>
+                                <td><code>itaim_usuario_logado</code></td>
+                                <td>localStorage</td>
+                                <td><span class="tag-status-essencial">Essencial</span></td>
+                                <td>Cache das informações públicas do perfil (nome, username, avatar e papel RBAC).</td>
+                                <td>Até o logout</td>
+                            </tr>
+                            <tr>
+                                <td><code>itaim_usuario_logado_email</code></td>
+                                <td>localStorage</td>
+                                <td><span class="tag-status-essencial">Essencial</span></td>
+                                <td>Identificação do e-mail vinculado à sessão atual para recarga rápida.</td>
+                                <td>Até o logout</td>
+                            </tr>
+                            <tr>
+                                <td><code>itaim_ultima_atividade</code></td>
+                                <td>localStorage</td>
+                                <td><span class="tag-status-essencial">Essencial</span></td>
+                                <td>Timestamp da última requisição para controle de inatividade e encerramento de sessão.</td>
+                                <td>Atualizado a cada chamada</td>
+                            </tr>
+                            <tr>
+                                <td><code>itaim_server_boot</code></td>
+                                <td>localStorage</td>
+                                <td><span class="tag-status-essencial">Essencial</span></td>
+                                <td>Identificador de inicialização do backend (via cabeçalho <code>X-Server-Boot</code>) para detectar reinicializações e invalidar estados obsoletos.</td>
+                                <td>Persistente</td>
+                            </tr>
+                            <tr>
+                                <td><code>itaim_consentimento_cookies</code></td>
+                                <td>localStorage</td>
+                                <td><span class="tag-status-essencial">Essencial</span></td>
+                                <td>Armazena o registro auditável das opções de consentimento escolhidas pelo usuário (versão e timestamp).</td>
+                                <td>12 meses ou até alteração</td>
+                            </tr>
+                            <tr>
+                                <td><code>itaim_google_oauth_token</code></td>
+                                <td>localStorage</td>
+                                <td><span class="tag-status-essencial">Essencial</span></td>
+                                <td>Token transitório de autenticação recebido durante o fluxo do Google Identity Services.</td>
+                                <td>Temporário (limpo no login)</td>
+                            </tr>
+                            <tr>
+                                <td><code>itaim_tickets_auth</code></td>
+                                <td>sessionStorage</td>
+                                <td><span class="tag-status-essencial">Essencial</span></td>
+                                <td>Token de autorização para o painel de moderação e tickets de suporte.</td>
+                                <td>Durante a sessão da aba</td>
+                            </tr>
+                            <tr>
+                                <td><code>itaim_return_to</code></td>
+                                <td>sessionStorage</td>
+                                <td><span class="tag-status-essencial">Essencial</span></td>
+                                <td>Guarda a página de origem para redirecionar o usuário após o login com sucesso.</td>
+                                <td>Durante a navegação</td>
+                            </tr>
+                            <tr>
+                                <td><code>itaim_tema</code></td>
+                                <td>localStorage</td>
+                                <td><span class="tag-status-preferencia">Preferência</span></td>
+                                <td>Memoriza a preferência de alto contraste e tema visual escolhida pelo usuário (<code>light</code> ou <code>dark</code>).</td>
+                                <td>Persistente</td>
+                            </tr>
+                            <tr>
+                                <td><code>itaim_favoritos</code></td>
+                                <td>localStorage</td>
+                                <td><span class="tag-status-preferencia">Preferência</span></td>
+                                <td>Cache local dos identificadores de anúncios favoritados para resposta visual instantânea.</td>
+                                <td>Persistente</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 3. CATEGORIAS DE COOKIES E SUAS REGRAS -->
+            <section class="inst-secao" id="categorias">
+                <h2 class="inst-secao-titulo">
+                    <span class="numero">3.</span> Categorias de Tecnologias de Armazenamento
+                </h2>
+
+                <h3 class="inst-subsecao-titulo">3.1. Tecnologias Estritamente Necessárias (Essenciais)</h3>
+                <p class="inst-paragrafo">
+                    São fundamentais para que a plataforma funcione corretamente. Elas viabilizam a navegação segura, a manutenção do seu login (autenticação JWT), o controle de expiração de sessão e a proteção contra fraudes.
+                    <br>
+                    <strong>Base legal:</strong> Execução de Contrato (Art. 7º, V da LGPD) e Legítimo Interesse (Art. 7º, IX da LGPD). Não podem ser desativadas na Central de Preferências, sob pena de impossibilitar o uso da sua conta.
+                </p>
+
+                <h3 class="inst-subsecao-titulo">3.2. Tecnologias de Preferências da Interface (Opcionais)</h3>
+                <p class="inst-paragrafo">
+                    Servem para que o Itaim Vende memorize suas escolhas personalizadas, tais como o modo escuro (Dark Theme) e a exibição instantânea dos seus anúncios favoritos. Caso você opte por desativá-las, o marketplace funcionará normalmente no tema claro padrão do sistema.
+                </p>
+
+                <h3 class="inst-subsecao-titulo">3.3. Tecnologias Analíticas (Atualmente Ausentes)</h3>
+                <p class="inst-paragrafo">
+                    <strong>O Itaim Vende não utiliza cookies analíticos de terceiros</strong> (como Google Analytics, Matomo, Hotjar ou Clarity). Não monitoramos a sua navegação para fins estatísticos através de bibliotecas externas. Na nossa Central de Preferências, essa categoria permanece desativada por padrão.
+                </p>
+
+                <h3 class="inst-subsecao-titulo">3.4. Tecnologias de Publicidade e Marketing (Atualmente Ausentes)</h3>
+                <p class="inst-paragrafo">
+                    <strong>Não utilizamos cookies ou pixels de marketing</strong> (como Meta Pixel, Google Ads ou rastreadores de remarketing). A plataforma não comercializa espaços publicitários para redes de anúncios externas e não compartilha perfis com corretores de dados. Mantido permanentemente desativado.
+                </p>
+            </section>
+
+            <!-- 4. COMO GERENCIAR PREFERÊNCIAS -->
+            <section class="inst-secao" id="gerenciamento">
+                <h2 class="inst-secao-titulo">
+                    <span class="numero">4.</span> Como Gerenciar e Alterar Suas Preferências
+                </h2>
+                <p class="inst-paragrafo">
+                    Você possui total autonomia para revisar ou modificar suas preferências a qualquer instante. Para isso, basta clicar no botão abaixo ou no link <strong>"Preferências de Cookies"</strong> situado no rodapé de qualquer página do Itaim Vende:
+                </p>
+
+                <div style="margin: 20px 0;">
+                    <button type="button" class="btn-abrir-cookies-central" data-acao="abrir-cookies">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0 1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                        </svg>
+                        Abrir Central de Preferências de Cookies
+                    </button>
+                </div>
+
+                <h3 class="inst-subsecao-titulo">4.1. Limpeza Direta no Navegador</h3>
+                <p class="inst-paragrafo">
+                    Você também pode limpar os dados e cookies armazenados diretamente pelas configurações de privacidade do seu navegador:
+                </p>
+                <ul class="inst-lista">
+                    <li><strong>Google Chrome:</strong> Menu > Configurações > Privacidade e Segurança > Limpar dados de navegação > Selecionar "Cookies e outros dados do site".</li>
+                    <li><strong>Mozilla Firefox:</strong> Menu > Configurações > Privacidade e Segurança > Cookies e dados de sites > Limpar dados.</li>
+                    <li><strong>Microsoft Edge:</strong> Menu > Configurações > Privacidade, pesquisa e serviços > Limpar dados de navegação.</li>
+                    <li><strong>Apple Safari:</strong> Preferências > Privacidade > Gerenciar dados de sites > Remover tudo.</li>
+                </ul>
+            </section>
+
+            <!-- 5. DÚVIDAS E CONTATO -->
+            <section class="inst-secao" id="contato">
+                <h2 class="inst-secao-titulo">
+                    <span class="numero">5.</span> Dúvidas e Atendimento
+                </h2>
+                <p class="inst-paragrafo">
+                    Caso tenha dúvidas sobre esta Política de Cookies ou sobre como seus dados são armazenados localmente, entre em contato com nossa equipe pelo e-mail <strong><code>privacidade@itaimvende.com.br</code></strong>.
+                </p>
+            </section>
+
+        </article>
+
+    </main>
+
+    <!-- ==========================================================
+         3. RODAPÉ GLOBAL
+         ========================================================== -->
+    <footer class="footer-principal">
+        <div class="footer-container">
+            <div class="footer-col">
+                <img src="../../assets/logos/header1-logo.png" alt="Itaim Vende" class="footer-logo-img">
+                <p class="footer-sobre">
+                    Portal de compras, vendas e trocas regional de Paulistana e Vale do Itaim.
+                </p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Políticas e Termos</h4>
+                <ul class="footer-links">
+                    <li><a href="/termos">Termos de Uso</a></li>
+                    <li><a href="/politica-de-privacidade">Política de Privacidade</a></li>
+                    <li><a href="/politica-de-cookies" style="color: var(--inst-primary); font-weight: 600;">Política de Cookies</a></li>
+                    <li><a href="#" data-acao="abrir-cookies" id="link-footer-preferencias-cookies-2">Preferências de Cookies</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Cidades Atendidas</h4>
+                <ul class="footer-links">
+                    <li><a href="/">Paulistana - PI</a></li>
+                    <li><a href="/">Acauã - PI</a></li>
+                    <li><a href="/">Betânia do Piauí</a></li>
+                    <li><a href="/">Jacobina do Piauí</a></li>
+                    <li><a href="/">Queimada Nova</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Minha Conta</h4>
+                <ul class="footer-links">
+                    <li><a href="/login">Entrar / Cadastro</a></li>
+                    <li><a href="/meus-anuncios">Meus Anúncios</a></li>
+                    <li><a href="/favoritos">Meus Favoritos</a></li>
+                    <li><a href="/perfil">Meu Perfil</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <span>© 2026 Itaim Vende. Todos os direitos reservados.</span>
+            <div class="footer-legal-links" style="display: flex; gap: 0.75rem; align-items: center; justify-content: center; flex-wrap: wrap;">
+                <a href="/termos" style="color: inherit; text-decoration: underline;">Termos de Uso</a>
+                <span>&bull;</span>
+                <a href="/politica-de-privacidade" style="color: inherit; text-decoration: underline;">Política de Privacidade</a>
+                <span>&bull;</span>
+                <a href="/politica-de-cookies" style="color: inherit; text-decoration: underline;">Política de Cookies</a>
+                <span>&bull;</span>
+                <a href="#" data-acao="abrir-cookies" style="color: inherit; text-decoration: underline;">Preferências de Cookies</a>
+            </div>
+            <span>Compre, venda e anuncie com facilidade.</span>
+        </div>
+    </footer>
+
+    <!-- Scripts do Sistema -->
+    <script src="../../js/core/rotas/index.js"></script>
+    <script src="../../js/core/cookies/consentimento-cookies.js"></script>
+</body>
+
+</html>
+

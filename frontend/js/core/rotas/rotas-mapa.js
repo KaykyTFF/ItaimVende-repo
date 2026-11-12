@@ -25,12 +25,20 @@
         'configuracoes': 'pages/perfil/configuracoes.html',
         'favoritos': 'pages/favoritos/favoritos.html',
         'notificacoes': 'pages/notificacoes/notificacoes.html',
+        'termos': 'pages/institucional/termos-de-uso.html',
+        'termos-de-uso': 'pages/institucional/termos-de-uso.html',
+        'privacidade': 'pages/institucional/politica-de-privacidade.html',
+        'politica-de-privacidade': 'pages/institucional/politica-de-privacidade.html',
+        'cookies': 'pages/institucional/politica-de-cookies.html',
+        'politica-de-cookies': 'pages/institucional/politica-de-cookies.html',
         'login': 'index.html',
         'cadastro': 'index.html#cadastro',
         'index': 'index.html',
         'tickets': 'pages/admin/tickets.html',
         'moderacao': 'pages/admin/tickets.html',
         'login-tickets': 'pages/admin/login-tickets.html',
+        'login-painel': 'pages/admin/login-painel.html',
+        'login-admin': 'pages/admin/login-painel.html',
         'painel': 'pages/admin/painel.html',
         'status': 'pages/admin/painel.html',
         '404': '404.html'
@@ -50,19 +58,27 @@
         'configuracoes': '/configuracoes',
         'favoritos': '/favoritos',
         'notificacoes': '/notificacoes',
+        'termos': '/termos',
+        'termos-de-uso': '/termos-de-uso',
+        'privacidade': '/politica-de-privacidade',
+        'politica-de-privacidade': '/politica-de-privacidade',
+        'cookies': '/politica-de-cookies',
+        'politica-de-cookies': '/politica-de-cookies',
         'login': '/login',
         'cadastro': '/cadastro',
         'index': '/login',
         'tickets': '/tickets',
         'moderacao': '/tickets',
         'login-tickets': '/login-tickets',
+        'login-painel': '/login-painel',
+        'login-admin': '/login-painel',
         'painel': '/painel',
         'status': '/painel',
         '404': '/404'
     };
 
     // 3. Categorias de Controle de Acesso
-    const ROTAS_PUBLICAS = ['home', 'categoria', 'produto', 'vendedor', 'login', 'cadastro', 'login-tickets', 'index', '404'];
+    const ROTAS_PUBLICAS = ['home', 'categoria', 'produto', 'vendedor', 'login', 'cadastro', 'login-tickets', 'login-painel', 'login-admin', 'termos', 'termos-de-uso', 'privacidade', 'politica-de-privacidade', 'cookies', 'politica-de-cookies', 'index', '404'];
     const ROTAS_PROTEGIDAS = ['vender', 'meus-anuncios', 'perfil', 'configuracoes', 'favoritos', 'notificacoes', 'conversas', 'chat'];
     const ROTAS_ADMIN = ['tickets', 'moderacao', 'painel', 'status'];
 
@@ -101,6 +117,8 @@
         if (str.includes('perfil')) return 'perfil';
         if (str.includes('favoritos')) return 'favoritos';
         if (str.includes('notificacoes')) return 'notificacoes';
+        if (str.includes('privacidade')) return 'politica-de-privacidade';
+        if (str.includes('cookie')) return 'politica-de-cookies';
         if (str.includes('cadastro')) return 'cadastro';
         if (str.includes('login') || str.includes('index')) return 'login';
         if (str.includes('tickets') || str.includes('moderacao')) return 'tickets';

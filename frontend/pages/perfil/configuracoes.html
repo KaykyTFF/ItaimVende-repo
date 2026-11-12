@@ -58,9 +58,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Segoe+UI&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="../../assets/logos/header-logo.png">
 
-    <link rel="stylesheet" href="../../css/pages/home/home.css">
+    <link rel="stylesheet" href="../../css/pages/home/home.css?v=8">
     <link rel="stylesheet" href="../../css/core/header-global.css?v=26">
-    <link rel="stylesheet" href="../../css/pages/perfil/configuracoes.css?v=3">
+    <link rel="stylesheet" href="../../css/pages/perfil/configuracoes.css?v=8">
 </head>
 <body>
 
@@ -426,18 +426,15 @@
 
                     <!-- CARD EXCLUSIVO: WHATSAPP / CELULAR -->
                     <div class="cfg-card" id="card-telefone-secao" style="margin-top: 24px;">
-                        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px;">
-                            <div>
-                                <h2>WhatsApp / Celular</h2>
-                                <p class="cfg-desc">Número utilizado para contato direto com compradores nos seus anúncios e no seu perfil.</p>
-                            </div>
+                        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 4px;">
+                            <h2 style="margin-bottom: 0;">WhatsApp</h2>
                             <span id="cfg-telefone-badge-status" class="cfg-status-badge nao-verificado">
                                 Não verificado
                             </span>
                         </div>
+                        <p class="cfg-desc" style="margin-bottom: 16px;">Número de contato exibido nos seus anúncios.</p>
 
-                        <div class="cfg-campo cheio" style="margin-top: 14px;">
-                            <label class="cfg-campo-label" for="cfg-telefone-display">WhatsApp cadastrado</label>
+                        <div class="cfg-campo cheio">
                             <div class="cfg-input-acao-linha">
                                 <div class="cfg-input-display">
                                     <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cfg-icone-whatsapp">
@@ -447,28 +444,23 @@
                                 </div>
                                 <div class="cfg-botoes-acao-wrap">
                                     <button type="button" class="cfg-btn cfg-btn-verificar" id="btn-verificar-telefone" style="display: none;">
-                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                                        Verificar número
+                                        Verificar
+                                    </button>
+                                    <button type="button" class="cfg-btn cfg-btn-secundario" id="btn-abrir-modal-trocar-telefone">
+                                        <span id="label-btn-trocar-telefone">Alterar</span>
                                     </button>
                                     <button type="button" class="cfg-btn cfg-btn-remover-link" id="btn-remover-telefone" style="display: none;">
                                         Remover
                                     </button>
-                                    <button type="button" class="cfg-btn cfg-btn-secundario" id="btn-abrir-modal-trocar-telefone">
-                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                                        </svg>
-                                        <span id="label-btn-trocar-telefone">Alterar WhatsApp</span>
-                                    </button>
                                 </div>
                             </div>
-                            <div class="cfg-dica-campo" id="box-status-cooldown-telefone">
+                            <div class="cfg-dica-campo" id="box-status-cooldown-telefone" style="display: none;">
                                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <circle cx="12" cy="12" r="10"></circle>
                                     <line x1="12" y1="8" x2="12" y2="12"></line>
                                     <line x1="12" y1="16" x2="12.01" y2="16"></line>
                                 </svg>
-                                <span id="texto-status-cooldown-telefone">Ao cadastrar seu WhatsApp, compradores poderão iniciar conversas diretamente pelo app nos seus anúncios.</span>
+                                <span id="texto-status-cooldown-telefone"></span>
                             </div>
                         </div>
                     </div>
@@ -653,26 +645,37 @@
                 </section>
 
                 <!-- PRIVACIDADE -->
+                <!-- PRIVACIDADE E PROTEÇÃO DE DADOS (LGPD) -->
                 <section class="cfg-painel" id="painel-privacidade" role="tabpanel">
+                    <!-- 1. Visibilidade Pública e Controles de Exibição -->
                     <div class="cfg-card">
-                        <h2>O que os outros veem</h2>
-                        <p class="cfg-desc">Controle as informações visíveis no seu perfil e nos anúncios.</p>
+                        <h2>Visibilidade e Privacidade nos Anúncios</h2>
+                        <p class="cfg-desc">Controle quais informações pessoais ficam visíveis para compradores no marketplace.</p>
                         <div class="cfg-linha">
-                            <div class="cfg-linha-texto"><strong>Mostrar meu telefone nos anúncios</strong><span>Compradores veem seu WhatsApp sem precisar abrir o chat.</span></div>
+                            <div class="cfg-linha-texto">
+                                <strong>Mostrar meu telefone nos anúncios</strong>
+                                <span>Compradores podem ver seu WhatsApp diretamente nos detalhes do anúncio para contato rápido.</span>
+                            </div>
                             <label class="cfg-switch" aria-label="Mostrar meu telefone nos anúncios">
                                 <input type="checkbox" id="priv-telefone" data-chave="priv-telefone" checked>
                                 <span class="cfg-switch-trilho"></span>
                             </label>
                         </div>
                         <div class="cfg-linha">
-                            <div class="cfg-linha-texto"><strong>Mostrar meu bairro</strong><span>Exibe o bairro além da cidade no anúncio.</span></div>
+                            <div class="cfg-linha-texto">
+                                <strong>Mostrar meu bairro</strong>
+                                <span>Exibe o bairro informado no anúncio além da cidade. Se desativado, apenas a cidade é exibida publicamente.</span>
+                            </div>
                             <label class="cfg-switch" aria-label="Mostrar meu bairro">
                                 <input type="checkbox" id="priv-bairro" data-chave="priv-bairro" checked>
                                 <span class="cfg-switch-trilho"></span>
                             </label>
                         </div>
                         <div class="cfg-linha">
-                            <div class="cfg-linha-texto"><strong>Mostrar quando estive online</strong><span>Indica no chat a última vez que você usou o site.</span></div>
+                            <div class="cfg-linha-texto">
+                                <strong>Mostrar quando estive online</strong>
+                                <span>Indica no chat a última vez em que você esteve ativo na plataforma.</span>
+                            </div>
                             <label class="cfg-switch" aria-label="Mostrar quando estive online">
                                 <input type="checkbox" id="priv-online" data-chave="priv-online">
                                 <span class="cfg-switch-trilho"></span>
@@ -680,17 +683,152 @@
                         </div>
                     </div>
 
+                    <!-- 2. Direitos do Titular de Dados (LGPD Art. 18) -->
+                    <div class="cfg-card">
+                        <div class="cfg-lgpd-badge-header">
+                            <span class="cfg-lgpd-badge">LGPD &bull; Artigo 18</span>
+                            <h2>Seus Direitos como Titular de Dados</h2>
+                        </div>
+                        <p class="cfg-desc">
+                            Em cumprimento à Lei Geral de Proteção de Dados (Lei nº 13.709/2018), você possui total transparência e autonomia sobre os dados pessoais tratados no Itaim Vende.
+                        </p>
+
+                        <div class="cfg-lgpd-acoes-grid">
+                            <!-- Consulta Dossiê -->
+                            <div class="cfg-lgpd-item">
+                                <div class="cfg-lgpd-info">
+                                    <div class="cfg-lgpd-icone">
+                                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                            <polyline points="14 2 14 8 20 8"></polyline>
+                                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                                            <polyline points="10 9 9 9 8 9"></polyline>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <strong>Consultar Dossiê de Dados Pessoais</strong>
+                                        <p>Visualize um relatório consolidado com todas as informações cadastrais, anúncios, endereços e histórico vinculados à sua conta (Art. 18, II).</p>
+                                    </div>
+                                </div>
+                                <button type="button" class="cfg-btn cfg-btn-secundario" id="btn-abrir-dossie-dados">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                                    <span>Visualizar Dossiê</span>
+                                </button>
+                            </div>
+
+                            <!-- Portabilidade JSON -->
+                            <div class="cfg-lgpd-item">
+                                <div class="cfg-lgpd-info">
+                                    <div class="cfg-lgpd-icone">
+                                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                            <polyline points="7 10 12 15 17 10"></polyline>
+                                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <strong>Exportar Cópia dos Dados (Portabilidade)</strong>
+                                        <p>Faça o download de um arquivo JSON estruturado e interoperável contendo seus dados pessoais tratados pelo Itaim Vende (Art. 18, V).</p>
+                                    </div>
+                                </div>
+                                <button type="button" class="cfg-btn cfg-btn-primario" id="btn-exportar-dados-json">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                                    <span>Baixar Cópia (JSON)</span>
+                                </button>
+                            </div>
+
+                            <!-- Correção e Retificação com Atalhos Rápidos -->
+                            <div class="cfg-lgpd-item">
+                                <div class="cfg-lgpd-info">
+                                    <div class="cfg-lgpd-icone">
+                                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <strong>Retificação e Atualização Cadastral</strong>
+                                        <p>Mantenha seus dados completos, corretos e atualizados conforme previsto no Art. 18, III da LGPD:</p>
+                                        <div class="cfg-lgpd-atalhos-links">
+                                            <button type="button" class="cfg-link-atalho" data-ir-aba="dados">Editar Nome, @, E-mail ou WhatsApp</button>
+                                            <button type="button" class="cfg-link-atalho" data-ir-aba="enderecos">Gerenciar Endereços Cadastrados</button>
+                                            <button type="button" class="cfg-link-atalho" data-ir-aba="seguranca">Alterar Senha de Acesso</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Cookies e Rastreamento -->
+                            <div class="cfg-lgpd-item">
+                                <div class="cfg-lgpd-info">
+                                    <div class="cfg-lgpd-icone">
+                                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <circle cx="8" cy="9" r="1.5"></circle>
+                                            <circle cx="15" cy="8" r="1"></circle>
+                                            <circle cx="10" cy="15" r="1"></circle>
+                                            <circle cx="16" cy="14" r="1.5"></circle>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <strong>Consentimento de Cookies e Armazenamento</strong>
+                                        <p>Revogue ou ajuste a qualquer momento as preferências de cookies e armazenamento local salvas no seu navegador (Art. 18, IX).</p>
+                                    </div>
+                                </div>
+                                <button type="button" class="cfg-btn cfg-btn-secundario" id="btn-gerenciar-cookies-cfg">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                                    <span>Preferências de Cookies</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Canal do Encarregado (DPO) -->
+                        <div class="cfg-lgpd-dpo-box">
+                            <div class="cfg-lgpd-dpo-header">
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                </svg>
+                                <strong>Canal de Atendimento do Encarregado pelo Tratamento de Dados (DPO)</strong>
+                            </div>
+                            <p>
+                                Caso deseje solicitar esclarecimentos, revogação expressa de consentimento ou requisições formais nos termos da LGPD, entre em contato com nosso Encarregado:
+                            </p>
+                            <div class="cfg-lgpd-dpo-contatos">
+                                <a href="mailto:privacidade@itaimvende.com.br" class="cfg-dpo-link">
+                                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                                    <span>privacidade@itaimvende.com.br</span>
+                                </a>
+                                <a href="/politica-de-privacidade" target="_blank" rel="noopener" class="cfg-dpo-link">
+                                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                                    <span>Política de Privacidade Completa</span>
+                                </a>
+                                <a href="/politica-de-cookies" target="_blank" rel="noopener" class="cfg-dpo-link">
+                                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                                    <span>Política de Cookies</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. Zona de Risco e Encerramento de Conta (Art. 18, VI) -->
                     <div class="cfg-card cfg-zona-perigo">
-                        <h2>Zona de risco</h2>
-                        <p class="cfg-desc">Gerencie a suspensão temporária da conta ou sua exclusão definitiva.</p>
-                        <div class="cfg-acoes" style="margin-top:0; display: flex; gap: 12px; flex-wrap: wrap;">
+                        <h2>Zona de Risco e Encerramento de Conta</h2>
+                        <p class="cfg-desc">Gerencie a suspensão temporária da sua conta ou solicite a exclusão definitiva dos seus dados pessoais.</p>
+                        
+                        <div class="cfg-aviso-exclusao-lgpd">
+                            <strong>Aviso importante sobre a exclusão:</strong>
+                            <p>Ao solicitar a exclusão da conta, seus anúncios são retirados do ar imediatamente e seus dados identificáveis (nome, telefone, avatar, bio e senhas) são anonimizados ou deletados permanentemente. Registros de transações comerciais e notas fiscais são conservados exclusivamente pelo prazo previsto nas leis civis e tributárias (CDC e Marco Civil da Internet).</p>
+                        </div>
+
+                        <div class="cfg-acoes" style="margin-top:16px; display: flex; gap: 12px; flex-wrap: wrap;">
                             <button type="button" class="cfg-btn cfg-btn-suspender" id="btn-suspender-conta">
                                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><line x1="10" y1="15" x2="10" y2="9"></line><line x1="14" y1="15" x2="14" y2="9"></line></svg>
-                                <span>Suspender conta</span>
+                                <span>Suspender conta temporariamente</span>
                             </button>
                             <button type="button" class="cfg-btn cfg-btn-perigo" id="btn-excluir-conta">
                                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-                                <span>Excluir conta permanentemente</span>
+                                <span>Excluir conta e dados permanentemente (LGPD)</span>
                             </button>
                         </div>
                     </div>
@@ -728,7 +866,7 @@
                                     </span>
                                 </div>
                                 <p class="cfg-tema-card-desc">Visual claro clássico com alto contraste e legibilidade ideal para o dia.</p>
-                                <button type="button" class="btn-ativar-tema cfg-btn cfg-btn-neutro" data-tema="light">Ativar Modo Claro</button>
+                                <button type="button" class="btn-ativar-tema cfg-btn cfg-btn-primario" data-tema="light">Ativar Modo Claro</button>
                             </div>
 
                             <!-- Opção Modo Escuro -->
@@ -756,7 +894,7 @@
                                     </span>
                                 </div>
                                 <p class="cfg-tema-card-desc">Tons escuros elegantes, conforto aos olhos em ambientes com pouca luz e economia de bateria.</p>
-                                <button type="button" class="btn-ativar-tema cfg-btn cfg-btn-primario" data-tema="dark">Ativar Modo Escuro</button>
+                                <button type="button" class="btn-ativar-tema cfg-btn cfg-btn-neutro" data-tema="dark">Ativar Modo Escuro</button>
                             </div>
                         </div>
                     </div>
@@ -1241,6 +1379,87 @@
         </div>
     </div>
 
+        <!-- MODAL LGPD: DOSSIÊ COMPLETO DE DADOS PESSOAIS -->
+    <div class="cfg-modal-fundo" id="modal-dossie-dados" role="dialog" aria-modal="true" aria-labelledby="modal-dossie-titulo">
+        <div class="cfg-modal cfg-modal-lg">
+            <button type="button" class="cfg-modal-close" id="btn-fechar-modal-dossie" aria-label="Fechar">&times;</button>
+            <div class="cfg-modal-header-icone">
+                <div class="cfg-modal-icon-badge neutro">
+                    <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                    </svg>
+                </div>
+                <h3 id="modal-dossie-titulo">Dossiê de Dados do Titular (LGPD)</h3>
+                <p class="cfg-modal-subdesc">Relatório transparente de dados pessoais mantidos e tratados no ecossistema Itaim Vende (Art. 18 da Lei nº 13.709/2018).</p>
+            </div>
+
+            <div class="cfg-dossie-conteudo">
+                <div id="cfg-dossie-loading" class="cfg-dossie-loading">
+                    <span class="cfg-spinner" style="width:28px; height:28px; border:3px solid var(--primary); border-top-color:transparent; border-radius:50%; animation:cfgSpin 0.8s linear infinite;"></span>
+                    <p style="margin-top:10px; font-size:13px; color:var(--text-muted);">Consultando registros do titular no banco de dados...</p>
+                </div>
+                <div id="cfg-dossie-dados" style="display:none; flex-direction:column; gap:16px;"></div>
+            </div>
+
+            <div class="cfg-modal-acoes" style="justify-content: space-between; margin-top: 18px; border-top: 1px solid var(--border-color); padding-top: 14px;">
+                <button type="button" class="cfg-btn cfg-btn-primario" id="btn-baixar-dossie-json">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    <span>Baixar Cópia Completa (JSON)</span>
+                </button>
+                <button type="button" class="cfg-btn cfg-btn-neutro" id="btn-fechar-dossie-rodape">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL SEGURO: EXCLUSÃO E ANONIMIZAÇÃO DEFINITIVA DE CONTA (LGPD) -->
+    <div class="cfg-modal-fundo" id="modal-excluir-conta-seguro" role="dialog" aria-modal="true" aria-labelledby="modal-excluir-titulo">
+        <div class="cfg-modal">
+            <button type="button" class="cfg-modal-close" id="btn-fechar-modal-excluir-conta" aria-label="Fechar">&times;</button>
+            <div class="cfg-modal-header-icone">
+                <div class="cfg-modal-icon-badge perigo">
+                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                </div>
+                <h3 id="modal-excluir-titulo">Excluir Conta Permanentemente</h3>
+                <p class="cfg-modal-subdesc">Esta ação é irreversível e cumpre o direito de eliminação do titular de dados (LGPD Art. 18, VI).</p>
+            </div>
+
+            <div class="cfg-exclusao-consequencias" style="background:var(--bg-body, #F8FAFC); border:1px solid var(--border-color); border-radius:8px; padding:12px; margin-top:14px; font-size:12.5px; color:var(--text-secondary); line-height:1.5;">
+                <strong style="color:var(--text-main); display:block; margin-bottom:6px;">Consequências da exclusão:</strong>
+                <ul style="padding-left:18px; margin:0; display:flex; flex-direction:column; gap:4px;">
+                    <li>Todos os seus anúncios publicados serão imediatamente retirados da plataforma.</li>
+                    <li>Suas mensagens no chat não poderão mais ser acessadas.</li>
+                    <li>Seu nome, telefone, e-mail, biografia e foto serão desvinculados ou anonimizados.</li>
+                    <li>Registros fiscais e transacionais essenciais serão preservados sob anonimização conforme obrigação legal (Art. 15 Marco Civil da Internet e Código de Defesa do Consumidor).</li>
+                </ul>
+            </div>
+
+            <div class="cfg-campo" id="bloco-excluir-conta-senha" style="margin-top: 16px;">
+                <label for="input-excluir-conta-senha">Confirme sua senha atual para continuar</label>
+                <input type="password" id="input-excluir-conta-senha" class="cfg-input" placeholder="Digite sua senha atual" autocomplete="current-password">
+                <span class="cfg-erro" id="erro-excluir-conta-senha"></span>
+            </div>
+
+            <div class="cfg-box-google-note" id="bloco-excluir-conta-google" style="display: none; margin-top: 16px;">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+                <span>Conta Google: confirmação direta autenticada via token de sessão.</span>
+            </div>
+
+            <div class="cfg-modal-acoes" style="justify-content: flex-end; margin-top: 20px;">
+                <button type="button" class="cfg-btn cfg-btn-neutro" id="btn-cancelar-exclusao-conta">Cancelar</button>
+                <button type="button" class="cfg-btn cfg-btn-perigo" id="btn-confirmar-exclusao-conta">Confirmar Exclusão Definitiva</button>
+            </div>
+        </div>
+    </div>
+
     <footer class="footer-principal">
         <div class="footer-container">
             <div class="footer-col">
@@ -1286,6 +1505,15 @@
 
         <div class="footer-bottom">
             <span>© 2026 Itaim Vende. Todos os direitos reservados.</span>
+            <div class="footer-legal-links" style="display: flex; gap: 0.75rem; align-items: center; justify-content: center; flex-wrap: wrap;">
+                <a href="/termos" style="color: inherit; text-decoration: underline;">Termos de Uso</a>
+                <span>&bull;</span>
+                <a href="/politica-de-privacidade" style="color: inherit; text-decoration: underline;">Política de Privacidade</a>
+                <span>&bull;</span>
+                <a href="/politica-de-cookies" style="color: inherit; text-decoration: underline;">Política de Cookies</a>
+                <span>&bull;</span>
+                <a href="#" data-acao="abrir-cookies" style="color: inherit; text-decoration: underline;">Preferências de Cookies</a>
+            </div>
             <span>Compre, venda e anuncie com facilidade.</span>
         </div>
     </footer>
@@ -1294,6 +1522,7 @@
     <script src="../../js/core/api/index.js"></script>
     <script src="../../js/core/sessao/index.js"></script>
     <script src="../../js/core/ajustar-foto/index.js"></script>
+    <script src="../../js/core/cookies/consentimento-cookies.js"></script>
     <script src="../../js/pages/perfil/configuracoes.js?v=3"></script>
 </body>
 </html>

@@ -51,7 +51,11 @@ export const ENV = {
   PORT: Number(process.env.PORT) || 3000,
   NODE_ENV: process.env.NODE_ENV || 'development',
   DATABASE_URL: process.env.DATABASE_URL || '',
+<<<<<<< HEAD
   JWT_SECRET: process.env.JWT_SECRET || 'dev-local-jwt-secret-inseguro-apenas-para-testes',
+=======
+  JWT_SECRET: process.env.JWT_SECRET || 'dev_jwt_key_local_only',
+>>>>>>> c94509fc3dc36ceb8bac555d12702d318c886a1e
   JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || '2h',
   CORS_ORIGIN: process.env.CORS_ORIGIN || '*',
 

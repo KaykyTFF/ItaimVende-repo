@@ -49,6 +49,46 @@
             el.btnCopiar.addEventListener('click', copiarRelatorio);
         }
 
+        // Perfil do Administrador e Botão de Logout
+        const elNomeAdmin = document.getElementById('admin-user-nome');
+        const elRoleAdmin = document.getElementById('admin-user-role');
+        const btnLogout = document.getElementById('btn-logout-painel');
+
+        try {
+            const rawAuth = sessionStorage.getItem('itaim_painel_auth') || 
+                            localStorage.getItem('itaim_painel_auth') || 
+                            sessionStorage.getItem('itaim_tickets_auth') || 
+                            localStorage.getItem('itaim_tickets_auth');
+            if (rawAuth) {
+                const adminData = JSON.parse(rawAuth);
+                if (elNomeAdmin && adminData.nome) elNomeAdmin.textContent = adminData.nome;
+                if (elRoleAdmin && adminData.cargo) elRoleAdmin.textContent = adminData.cargo.split('&')[0].trim();
+            } else {
+                const userGeral = localStorage.getItem('itaim_usuario_logado');
+                if (userGeral) {
+                    const parsedUser = JSON.parse(userGeral);
+                    if (elNomeAdmin && (parsedUser.name || parsedUser.nome)) elNomeAdmin.textContent = parsedUser.name || parsedUser.nome;
+                    if (elRoleAdmin && parsedUser.role) elRoleAdmin.textContent = parsedUser.role;
+                }
+            }
+        } catch (e) {}
+
+        if (btnLogout) {
+            btnLogout.addEventListener('click', (e) => {
+                e.preventDefault();
+                sessionStorage.removeItem('itaim_painel_auth');
+                localStorage.removeItem('itaim_painel_auth');
+                sessionStorage.removeItem('itaim_tickets_auth');
+                localStorage.removeItem('itaim_tickets_auth');
+
+                if (mostrarToast) mostrarToast('Sessão administrativa encerrada.', 'info');
+                setTimeout(() => {
+                    const isPages = window.location.pathname.includes('/pages/');
+                    window.location.href = isPages ? 'login-painel.html' : '/login-painel';
+                }, 300);
+            });
+        }
+
         // Atalhos de teste nos cards
         if (el.btnTestarDb) {
             el.btnTestarDb.addEventListener('click', () => {

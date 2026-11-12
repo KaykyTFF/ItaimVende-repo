@@ -1,4 +1,19 @@
-# Itaim Vende API - Modulo Backend (v2.0.0)
+<div align="center">
+  <img src="../assets/logos/header-logo.png" alt="Itaim Vende Logo" width="320">
+
+  <p><strong>API RESTful de Marketplace e Intermediacao Comercial — Paulistana e regiao do Vale do Itaim (PI)</strong></p>
+
+  <p>
+    <img src="https://img.shields.io/badge/NODE.JS-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js">
+    <img src="https://img.shields.io/badge/EXPRESS.JS-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express.js">
+    <img src="https://img.shields.io/badge/POSTGRESQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL">
+    <img src="https://img.shields.io/badge/PLATAFORMA-REST_API-44BD32?style=for-the-badge" alt="Plataforma">
+  </p>
+</div>
+
+---
+
+# Itaim Vende - Modulo Backend (v2.0.0)
 
 API RESTful completa desenvolvida para a plataforma de marketplace e intermediacao comercial **Itaim Vende**, construida com arquitetura modular em camadas, persistencia relacional com Prisma ORM e PostgreSQL, validacao estrita via Zod e seguranca baseada em tokens JWT.
 

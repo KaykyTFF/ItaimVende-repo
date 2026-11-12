@@ -1081,22 +1081,27 @@
 }
 
 .cfg-btn-verificar {
-    background: #16a34a;
+    background: var(--primary-hover, #3CA82B);
     color: #ffffff;
-    border: none;
-    padding: 8px 14px;
+    border: 1px solid var(--primary-hover, #3CA82B);
+    height: 46px;
+    padding: 0 18px;
     border-radius: var(--radius-md);
     font-weight: 700;
-    font-size: 13px;
+    font-size: 13.5px;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 6px;
+    white-space: nowrap;
+    flex-shrink: 0;
     transition: all var(--transition);
 }
 
 .cfg-btn-verificar:hover {
-    background: #15803d;
+    background: #339324;
+    border-color: #339324;
     transform: translateY(-1px);
 }
 
@@ -1409,5 +1414,447 @@
         flex-direction: column;
         align-items: flex-start;
         gap: 2px;
+    }
+}
+
+
+/* ==========================================================================
+   CENTRO DE PRIVACIDADE E DIREITOS DO TITULAR (LGPD)
+   ========================================================================== */
+.cfg-card-header-badge,
+.cfg-lgpd-badge-header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.cfg-lgpd-badge-header h2 {
+    margin: 0;
+}
+
+.cfg-badge-lgpd,
+.cfg-lgpd-badge {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(68, 189, 50, 0.10);
+    color: var(--primary-hover, #3CA82B);
+    border: 1px solid rgba(68, 189, 50, 0.22);
+    font-size: 11px;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 999px;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+}
+
+[data-theme="dark"] .cfg-badge-lgpd,
+[data-theme="dark"] .cfg-lgpd-badge {
+    background: rgba(68, 189, 50, 0.12);
+    color: var(--primary, #44BD32);
+    border-color: rgba(68, 189, 50, 0.24);
+}
+
+.cfg-direitos-grid,
+.cfg-lgpd-acoes-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 18px;
+}
+
+.cfg-direito-item,
+.cfg-lgpd-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 16px 18px;
+    background: #F8FAFC;
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    transition: border-color var(--transition);
+}
+
+.cfg-direito-item:hover,
+.cfg-lgpd-item:hover {
+    border-color: #CBD5E1;
+}
+
+[data-theme="dark"] .cfg-direito-item,
+[data-theme="dark"] .cfg-lgpd-item {
+    background: #161D24;
+    border-color: #2C3946;
+}
+
+[data-theme="dark"] .cfg-direito-item:hover,
+[data-theme="dark"] .cfg-lgpd-item:hover {
+    border-color: #3B4B5A;
+}
+
+.cfg-lgpd-item .cfg-btn-primario {
+    background: var(--primary-hover, #3CA82B);
+    border-color: var(--primary-hover, #3CA82B);
+    box-shadow: none !important;
+}
+
+.cfg-lgpd-item .cfg-btn-primario:hover {
+    background: #339324;
+    border-color: #339324;
+    box-shadow: none !important;
+    transform: none;
+}
+
+.cfg-direito-info,
+.cfg-lgpd-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    flex: 1;
+    min-width: 0;
+}
+
+.cfg-direito-icone,
+.cfg-lgpd-icone {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: rgba(68, 189, 50, 0.10);
+    border: 1px solid rgba(68, 189, 50, 0.18);
+    color: var(--primary-hover, #3CA82B);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+[data-theme="dark"] .cfg-direito-icone,
+[data-theme="dark"] .cfg-lgpd-icone {
+    background: rgba(68, 189, 50, 0.12);
+    border-color: rgba(68, 189, 50, 0.20);
+    color: var(--primary, #44BD32);
+}
+
+.cfg-direito-info strong,
+.cfg-lgpd-info strong {
+    display: block;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.cfg-direito-info p,
+.cfg-lgpd-info p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.cfg-direito-links,
+.cfg-lgpd-atalhos-links {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12.5px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.cfg-link-atalho {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 13px;
+    border-radius: 8px;
+    background: rgba(68, 189, 50, 0.08);
+    border: 1px solid rgba(68, 189, 50, 0.22);
+    color: var(--primary-hover, #3CA82B);
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.cfg-link-atalho:hover {
+    background: var(--primary-hover, #3CA82B);
+    color: #FFFFFF;
+    border-color: var(--primary-hover, #3CA82B);
+}
+
+[data-theme="dark"] .cfg-link-atalho {
+    background: rgba(68, 189, 50, 0.10);
+    border-color: rgba(68, 189, 50, 0.24);
+    color: var(--primary, #44BD32);
+}
+
+[data-theme="dark"] .cfg-link-atalho:hover {
+    background: var(--primary-hover, #3CA82B);
+    border-color: var(--primary-hover, #3CA82B);
+    color: #FFFFFF;
+}
+
+.cfg-box-transparencia-lgpd,
+.cfg-lgpd-dpo-box {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 18px 20px;
+    background: #F8FAFC;
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    margin-top: 18px;
+}
+
+[data-theme="dark"] .cfg-box-transparencia-lgpd,
+[data-theme="dark"] .cfg-lgpd-dpo-box {
+    background: #161D24;
+    border-color: #2C3946;
+}
+
+.cfg-lgpd-dpo-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-primary);
+    font-size: 14.5px;
+}
+
+.cfg-lgpd-dpo-header svg {
+    color: var(--primary-hover, #3CA82B);
+    flex-shrink: 0;
+}
+
+[data-theme="dark"] .cfg-lgpd-dpo-header svg {
+    color: var(--primary, #44BD32);
+}
+
+.cfg-lgpd-dpo-box > p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.cfg-lgpd-dpo-contatos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.cfg-dpo-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 14px;
+    border-radius: 8px;
+    font-size: 12.5px;
+    font-weight: 600;
+    text-decoration: none;
+    background: #FFFFFF;
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    transition: all 0.2s ease;
+}
+
+.cfg-dpo-link svg {
+    color: var(--primary-hover, #3CA82B);
+    flex-shrink: 0;
+}
+
+.cfg-dpo-link:hover {
+    background: rgba(68, 189, 50, 0.08);
+    border-color: rgba(68, 189, 50, 0.30);
+    color: var(--primary-hover, #3CA82B);
+}
+
+[data-theme="dark"] .cfg-dpo-link {
+    background: #1F2831;
+    border-color: #2C3946;
+    color: #E2E8F0;
+}
+
+[data-theme="dark"] .cfg-dpo-link svg {
+    color: var(--primary, #44BD32);
+}
+
+[data-theme="dark"] .cfg-dpo-link:hover {
+    background: rgba(68, 189, 50, 0.12);
+    border-color: rgba(68, 189, 50, 0.32);
+    color: var(--primary, #44BD32);
+}
+
+.cfg-box-transparencia-icone {
+    color: var(--primary);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.cfg-box-transparencia-texto strong {
+    display: block;
+    font-size: 13.5px;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.cfg-box-transparencia-texto p {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.cfg-box-transparencia-texto code {
+    background: rgba(0, 0, 0, 0.06);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: var(--primary);
+}
+
+.cfg-box-alerta-exclusao,
+.cfg-aviso-exclusao-lgpd {
+    background: rgba(235, 59, 90, 0.06);
+    border: 1px solid rgba(235, 59, 90, 0.25);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-top: 14px;
+}
+
+.cfg-aviso-exclusao-lgpd strong {
+    display: block;
+    margin: 0 0 6px 0;
+    font-size: 13.5px;
+    color: #EF4444;
+}
+
+.cfg-aviso-exclusao-lgpd p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+@media (max-width: 680px) {
+    .cfg-direito-item,
+    .cfg-lgpd-item {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .cfg-lgpd-item > .cfg-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+.cfg-box-alerta-exclusao h4 {
+    margin: 0 0 8px 0;
+    font-size: 13.5px;
+    color: #EB3B5A;
+}
+
+.cfg-box-alerta-exclusao ul {
+    margin: 0;
+    padding-left: 18px;
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    line-height: 1.4;
+}
+
+/* Modal Dossiê */
+.cfg-modal-dossie {
+    max-width: 680px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.cfg-dossie-conteudo {
+    overflow-y: auto;
+    padding: 12px 4px;
+    max-height: 52vh;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.cfg-dossie-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 16px;
+    gap: 14px;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.cfg-dossie-secao {
+    background: var(--bg-body, #F8FAFC);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 14px 16px;
+}
+
+[data-theme="dark"] .cfg-dossie-secao {
+    background: #141A20;
+    border-color: #2C3946;
+}
+
+.cfg-dossie-secao h4 {
+    font-size: 13.5px;
+    font-weight: 800;
+    color: var(--text-main);
+    margin: 0 0 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.cfg-dossie-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.cfg-dossie-dado {
+    font-size: 12.5px;
+}
+
+.cfg-dossie-dado span {
+    display: block;
+    color: var(--text-muted, #8091A4);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    margin-bottom: 2px;
+}
+
+.cfg-dossie-dado strong {
+    color: var(--text-main);
+    word-break: break-all;
+}
+
+@media (max-width: 768px) {
+    .cfg-direito-item {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .cfg-direito-item .cfg-btn {
+        width: 100%;
+        text-align: center;
+    }
+    .cfg-dossie-grid {
+        grid-template-columns: 1fr;
     }
 }

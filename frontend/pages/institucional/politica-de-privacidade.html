@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Política de Privacidade do Itaim Vende - Conheça como seus dados pessoais são protegidos e tratados em conformidade com a LGPD (Lei nº 13.709/2018).">
+    <title>Política de Privacidade — Itaim Vende</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Segoe+UI&display=swap" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../assets/logos/header-logo.png">
+
+    <!-- CSS Global e da Página -->
+    <link rel="stylesheet" href="../../css/core/style.css">
+    <link rel="stylesheet" href="../../css/core/header-global.css">
+    <link rel="stylesheet" href="../../css/pages/home/home/home-footer.css">
+    <link rel="stylesheet" href="../../css/pages/institucional/institucional.css">
+
+    <!-- Detecção e Aplicação Imediata de Tema para Evitar FOUC -->
+    <script>
+        (function () {
+            try {
+                var tema = localStorage.getItem('itaim_tema') === 'dark' ? 'dark' : 'light';
+                document.documentElement.setAttribute('data-theme', tema);
+                if (tema === 'dark') document.documentElement.classList.add('dark-theme');
+            } catch (e) {}
+        })();
+    </script>
+</head>
+
+<body class="institucional-layout">
+
+    <!-- ==========================================================
+         1. CABEÇALHO GLOBAL DO MARKETPLACE
+         ========================================================== -->
+    <header class="header-principal">
+        <div class="header-container">
+            <div class="header-left">
+                <a href="/" class="header-logo-link" title="Itaim Vende - Início">
+                    <img src="../../assets/logos/header1-logo.png" alt="Itaim Vende" class="header-logo-img">
+                </a>
+            </div>
+
+            <div class="header-center">
+                <form class="busca-form" role="search" action="/categoria" method="GET">
+                    <input type="search" class="campo-busca" name="q" placeholder="Buscar produtos, vendedores e muito mais..." autocomplete="off">
+                    <button type="submit" class="btn-busca-submit" aria-label="Pesquisar">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+
+            <div class="header-right">
+                <a href="/" class="btn-header-link" style="color: var(--inst-text-main); font-weight: 600; text-decoration: none; font-size: 0.92rem;">
+                    Voltar ao Início
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==========================================================
+         2. CONTEÚDO PRINCIPAL: POLÍTICA DE PRIVACIDADE
+         ========================================================== -->
+    <main class="institucional-main">
+
+        <!-- Trilha de Navegação -->
+        <nav class="inst-breadcrumb" aria-label="Trilha de navegação">
+            <a href="/">Início</a>
+            <span class="separador">/</span>
+            <span>Institucional</span>
+            <span class="separador">/</span>
+            <span class="ativo">Política de Privacidade</span>
+        </nav>
+
+        <!-- Cartão de Cabeçalho do Documento -->
+        <section class="inst-header-card">
+            <span class="inst-badge-versao">Documento Oficial • LGPD</span>
+            <h1 class="inst-titulo">Política de Privacidade</h1>
+            <p class="inst-subtitulo">
+                Transparência e rigor na proteção dos seus dados pessoais durante o uso da plataforma de comércio regional Itaim Vende.
+            </p>
+            <div class="inst-metadados">
+                <span><strong>Versão:</strong> 1.0</span>
+                <span><strong>Última atualização:</strong> 11 de Novembro de 2026</span>
+                <span><strong>Jurisdição:</strong> Brasil (Lei Geral de Proteção de Dados — Lei nº 13.709/2018)</span>
+            </div>
+        </section>
+
+        <!-- Abas Rápidas de Navegação entre Políticas -->
+        <div class="inst-nav-tabs">
+            <a href="/termos" class="inst-tab-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+                Termos de Uso
+            </a>
+            <a href="/politica-de-privacidade" class="inst-tab-link ativo">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+                Política de Privacidade
+            </a>
+            <a href="/politica-de-cookies" class="inst-tab-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M12 6a2 2 0 0 0-2 2c0 1.1.9 2 2 2"></path>
+                    <circle cx="8" cy="14" r="1"></circle>
+                    <circle cx="16" cy="14" r="1"></circle>
+                </svg>
+                Política de Cookies e Armazenamento
+            </a>
+            <button type="button" class="inst-tab-link btn-abrir-cookies-central" style="margin: 0; padding: 10px 18px; font-size: 0.9rem;" data-acao="abrir-cookies">
+                Gerenciar Preferências
+            </button>
+        </div>
+
+        <!-- Conteúdo Completo e Estruturado -->
+        <article class="inst-conteudo-wrapper">
+
+            <!-- 1. IDENTIFICAÇÃO E APRESENTAÇÃO -->
+            <section class="inst-secao" id="apresentacao">
+                <h2 class="inst-secao-titulo">
+                    <span class="numero">1.</span> Identificação e Apresentação da Plataforma
+                </h2>
+                <p class="inst-paragrafo">
+                    O <strong>Itaim Vende</strong> é uma plataforma digital de marketplace regional concebida para conectar compradores, pequenos produtores rurais, artesãos, comerciantes e prestadores de serviços no município de Paulistana - PI e municípios circunvizinhos que integram a microrregião do Vale do Itaim (incluindo Acauã, Betânia do Piauí, Jacobina do Piauí e Queimada Nova).
+                </p>
+                <p class="inst-paragrafo">
+                    Esta Política de Privacidade estabelece o compromisso formal da plataforma com a privacidade, a segurança da informação e a autodeterminação informativa dos titulares de dados, em estrita observância à Lei Geral de Proteção de Dados Pessoais (LGPD — Lei nº 13.709/2018) e ao Marco Civil da Internet (Lei nº 12.965/2014).
+                </p>
+
+                <div class="inst-aviso-box">
+                    <strong>Aviso de Transparência sobre o Controlador:</strong>
+                    O Itaim Vende opera atualmente como projeto acadêmico e tecnológico desenvolvido no âmbito do Instituto Federal do Piauí (IFPI) — Campus Paulistana.
+                    <br><br>
+                    <em>Pendência Institucional para Preenchimento Formal:</em> Razão social corporativa definitiva, número de inscrição no CNPJ/MF, endereço físico de sede e nomeação formal de Encarregado pelo Tratamento de Dados Pessoais (DPO) estatutário serão atualizados nesta seção assim que a formalização jurídica da entidade for concluída.
+                    <br><br>
+                    <strong>Canal Oficial de Atendimento a Privacidade:</strong> Para quaisquer solicitações, esclarecimentos ou exercício dos direitos de titular, utilize o canal direto: <code>privacidade@itaimvende.com.br</code> ou a Central de Suporte e Tickets interna da plataforma.
+                </div>
+            </section>
+
+            <!-- 2. DADOS PESSOAIS COLETADOS -->
+            <section class="inst-secao" id="dados-coletados">
+                <h2 class="inst-secao-titulo">
+                    <span class="numero">2.</span> Dados Pessoais Coletados
+                </h2>
+                <p class="inst-paragrafo">
+                    O Itaim Vende coleta exclusivamente os dados indispensáveis para o funcionamento do marketplace, a autenticação segura de contas, a publicação de anúncios e a prevenção contra fraudes comerciais. Os dados dividem-se em:
+                </p>
+
+                <h3 class="inst-subsecao-titulo">2.1. Dados Fornecidos Diretamente pelo Usuário</h3>
+                <ul class="inst-lista">
+                    <li><strong>No Cadastro de Conta (Obrigatórios):</strong> Nome completo, endereço de e-mail exclusivo, senha de acesso (protegida com hash criptográfico irreversível Bcrypt), identificador de usuário único com arroba (<code>@username</code>), cidade e estado de residência ou atuação comercial.</li>
+                    <li><strong>No Perfil do Usuário (Opcionais):</strong> Número de telefone celular ou WhatsApp (utilizado para geração de link direto de contato comercial entre as partes e verificação de titularidade por código OTP), biografia descritiva, imagem de avatar/foto de perfil, bairro e CEP.</li>
+                    <li><strong>Endereços de Entrega (Opcionais):</strong> Apelido do local (ex: "Casa", "Loja"), logradouro, número predial, complemento, bairro, cidade, estado e CEP cadastrados na seção de configurações.</li>
+                    <li><strong>Autenticação Federada com Google:</strong> Caso você opte por utilizar o recurso "Entrar com Google" (Google Identity Services), recebemos apenas seu nome de exibição, endereço de e-mail e foto de perfil associada à conta Google, mediante sua prévia e expressa autorização no fluxo de autenticação OAuth 2.0. Não temos acesso à sua senha da conta Google nem a outros serviços privados de sua conta Google.</li>
+                </ul>
+
+                <h3 class="inst-subsecao-titulo">2.2. Dados Gerados Durante o Uso da Plataforma</h3>
+                <ul class="inst-lista">
+                    <li><strong>Anúncios e Produtos:</strong> Título do item, descrição textual, preço anunciado, categoria do produto, condição física (novo, seminovo, usado ou com defeito), fotos reais enviadas para upload e localização do produto (cidade e bairro).</li>
+                    <li><strong>Mensagens e Negociações em Tempo Real:</strong> Conteúdo das conversas trocadas no chat interno entre comprador e vendedor, imagens enviadas nas conversas e propostas financeiras formais de preço (valores de contraproposta e status de aceite ou recusa).</li>
+                    <li><strong>Pedidos e Checkout:</strong> Histórico de pedidos realizados, produtos e quantidades solicitadas, montante financeiro recalculado no servidor, forma de pagamento informada (PIX, Cartão ou Em Mãos) e endereço selecionado para retirada/entrega.</li>
+                    <li><strong>Avaliações e Reputação:</strong> Notas numéricas (1 a 5 estrelas) e comentários textuais concedidos a vendedores após negociações realizadas.</li>
+                    <li><strong>Denúncias e Suporte:</strong> Motivo e narrativa fática de denúncias submetidas sobre anúncios suspeitos, protocolos de tickets e mensagens trocadas com a moderação da plataforma.</li>
+                </ul>
+
+                <h3 class="inst-subsecao-titulo">2.3. Dados Técnicos de Acesso e Auditoria</h3>
+                <p class="inst-paragrafo">
+                    Em estrito cumprimento ao artigo 15 da Lei Federal nº 12.965/2014 (Marco Civil da Internet), a aplicação registra automaticamente o <strong>endereço IP</strong>, data, hora e o identificador do navegador (<strong>User-Agent</strong>) em ações sensíveis de segurança, tais como: registros de auditoria (<code>AuditLog</code>), histórico de alteração de username (<code>UsernameHistory</code>) e solicitações de alteração de e-mail e telefone seguro.
+                </p>
+            </section>
+
+            <!-- 3. FINALIDADE E BASES LEGAIS -->
+            <section class="inst-secao" id="finalidades">
+                <h2 class="inst-secao-titulo">
+                    <span class="numero">3.</span> Finalidades do Tratamento e Bases Legais (LGPD)
+                </h2>
+                <p class="inst-paragrafo">
+                    Cada tratamento de dados pessoais realizado no Itaim Vende possui uma finalidade específica, legítima e respaldada pelas hipóteses do artigo 7º da LGPD:
+                </p>
+
+                <div class="inst-tabela-container">
+                    <table class="inst-tabela">
+                        <thead>
+                            <tr>
+                                <th>Finalidade do Tratamento</th>
+                                <th>Dados Envolvidos</th>
+                                <th>Base Legal (Art. 7º LGPD)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Criação de cadastro, autenticação e emissão de token de sessão JWT</td>
+                                <td>Nome, e-mail, senha criptografada e username</td>
+                                <td>Execução de Contrato (Inciso V)</td>
+                            </tr>
+                            <tr>
+                                <td>Publicação, edição e veiculação de anúncios na vitrine regional</td>
+                                <td>Título, descrição, preço, categoria, cidade e fotos</td>
+                                <td>Execução de Contrato (Inciso V)</td>
+                            </tr>
+                            <tr>
+                                <td>Comunicação e negociação de propostas entre comprador e vendedor no chat</td>
+                                <td>Mensagens, propostas de valor e identificadores dos usuários</td>
+                                <td>Execução de Contrato (Inciso V)</td>
+                            </tr>
+                            <tr>
+                                <td>Processamento de pedidos com recálculo financeiro seguro no servidor</td>
+                                <td>Itens, endereço de entrega e histórico de transação</td>
+                                <td>Execução de Contrato (Inciso V)</td>
+                            </tr>
+                            <tr>
+                                <td>Prevenção a fraudes cadastrais e proteção de identidade (cooldown de 30 dias para @)</td>
+                                <td>Username, histórico de alterações, IP e User-Agent</td>
+                                <td>Legítimo Interesse (Inciso IX)</td>
+                            </tr>
+                            <tr>
+                                <td>Verificação e recuperação de conta por código OTP</td>
+                                <td>E-mail, telefone celular e código numérico temporário</td>
+                                <td>Execução de Contrato e Segurança (Inciso V e IX)</td>
+                            </tr>
+                            <tr>
+                                <td>Guarda de registros de conexão e segurança da infraestrutura</td>
+                                <td>Endereço IP, data/hora e identificador de navegador</td>
+                                <td>Obrigação Legal — Marco Civil da Internet (Inciso II)</td>
+                            </tr>
+                            <tr>
+                                <td>Armazenamento de preferências visuais locais (tema escuro/claro)</td>
+                                <td>Configuração de tema persistida no navegador</td>
+                                <td>Consentimento / Legítimo Interesse (Inciso I e IX)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 4. COMPARTILHAMENTO DE DADOS -->
+            <section class="inst-secao" id="compartilhamento">
+                <h2 class="inst-secao-titulo">
+                    <span class="numero">4.</span> Compartilhamento de Dados e Subprocessadores
+                </h2>
+                <p class="inst-paragrafo">
+                    O Itaim Vende <strong>não comercializa, não aluga e não repassa</strong> seus dados pessoais a terceiros para fins de marketing ou publicidade comportamental. O compartilhamento ocorre estritamente nos seguintes cenários:
+                </p>
+
+                <ul class="inst-lista">
+                    <li><strong>Informações Públicas no Marketplace:</strong> Ao publicar um anúncio ou criar um perfil, seu nome de exibição, username público (<code>@</code>), imagem de avatar, cidade/bairro, anúncios ativos e avaliações recebidas tornam-se visíveis para qualquer visitante da plataforma. <em>Informações privadas como e-mail completo, senha, endereços IP e histórico de auditoria jamais são expostas publicamente.</em></li>
+                    <li><strong>Entre Usuários em Negociação:</strong> Durante o uso do chat ou fechamento de pedido, mensagens, propostas de preço e, quando aplicável, o endereço para entrega e número de telefone para contato são compartilhados entre os participantes daquela transação específica.</li>
+                    <li><strong>Provedores de Infraestrutura em Nuvem (Subprocessadores):</strong>
+                        <ul>
+                            <li><strong>Supabase Inc.:</strong> Provedor responsável pelo banco de dados relacional PostgreSQL em nuvem e pelo bucket de armazenamento S3 (Supabase Storage) onde as imagens comprimidas de anúncios e avatares ficam hospedadas de forma segura.</li>
+                            <li><strong>Resend Inc. / Provedor SMTP:</strong> Serviços utilizados exclusivamente para o disparo técnico de e-mails transacionais (envio de código OTP de verificação de identidade e alertas de mensagens recebidas quando o usuário está offline).</li>
+                            <li><strong>Google LLC:</strong> Utilizado como provedor de identidade federada unicamente quando o usuário aciona o botão de cadastro ou login via conta Google.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Obrigação Legal ou Ordem Judicial:</strong> Mediante requerimento formal fundamentado de autoridades públicas competentes, nos limites estritos da legislação brasileira.</li>
+                </ul>
+            </section>
+
+            <!-- 5. ARMAZENAMENTO E SEGURANÇA -->
+            <section class="inst-secao" id="seguranca">
+                <h2 class="inst-secao-titulo">
+                    <span class="numero">5.</span> Armazenamento e Medidas Técnicas de Segurança
+                </h2>
+                <p class="inst-paragrafo">
+                    Adotamos salvaguardas técnicas, administrativas e organizacionais alinhadas às melhores práticas de desenvolvimento defensivo para proteger os dados pessoais sob nossa custódia:
+                </p>
+
+                <div class="inst-destaque-box">
+                    <strong>Medidas Efetivamente Implementadas na Arquitetura do Itaim Vende:</strong>
+                    <ul class="inst-lista" style="margin-top: 8px; margin-bottom: 0;">
+                        <li><strong>Criptografia Forte de Senhas:</strong> As senhas são submetidas a hashing criptográfico com Bcrypt e fator de custo (salt) adaptativo. A senha em texto puro nunca é salva em banco de dados ou registrada em arquivos de log.</li>
+                        <li><strong>Autenticação por Tokens JWT:</strong> Sessões utilizam JSON Web Tokens assinados digitalmente com chave secreta estrita, com tempo de expiração determinado e validação de revogação.</li>
+                        <li><strong>Controle de Acesso Baseado em Papéis (RBAC):</strong> Middlewares verificam rigorosamente os privilégios dos usuários (Comprador, Vendedor, Moderador e Administrador), impedindo acesso não autorizado a rotas restritas.</li>
+                        <li><strong>Prevenção de Ataques de Força Bruta e DDoS:</strong> Limitadores de taxa adaptativos (Rate Limiting) nas rotas de autenticação (<code>POST /auth/login</code>) e validação de códigos OTP.</li>
+                        <li><strong>Higienização e Proteção contra XSS:</strong> Middlewares de sanitização aplicados em todas as entradas de dados contra ataques de Stored e Reflected Cross-Site Scripting.</li>
+                        <li><strong>Pipeline Defensivo de Imagens:</strong> Otimização com a biblioteca Sharp, convertendo fotos para WebP, expurgando metadados EXIF sensíveis de geolocalização e prevenindo Path Traversal.</li>
+                        <li><strong>Segurança das Credenciais de Infraestrutura:</strong> Todas as chaves secretas, senhas de banco e tokens de API permanecem confinados em variáveis de ambiente protegidas (<code>.env</code>), sem exposição em controle de versão.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 6. DIREITOS DOS TITULARES -->
+            <section class="inst-secao" id="direitos-titular">
+                <h2 class="inst-secao-titulo">
+                    <span class="numero">6.</span> Seus Direitos como Titular de Dados Pessoais
+                </h2>
+                <p class="inst-paragrafo">
+                    Nos termos do artigo 18 da LGPD, você possui os seguintes direitos garantidos em relação aos dados tratados pelo Itaim Vende:
+                </p>
+
+                <div class="inst-direitos-grid">
+                    <div class="inst-direito-card">
+                        <h4>Confirmação e Acesso</h4>
+                        <p>Saber se realizamos o tratamento de dados pessoais sobre você e solicitar uma cópia clara e estruturada das suas informações cadastradas.</p>
+                    </div>
+
+                    <div class="inst-direito-card">
+                        <h4>Correção e Atualização</h4>
+                        <p>Corrigir ou atualizar dados incompletos, inexatos ou desatualizados diretamente na página de <a href="/configuracoes">Configurações</a> da sua conta.</p>
+                    </div>
+
+                    <div class="inst-direito-card">
+                        <h4>Anonimização ou Eliminação</h4>
+                        <p>Solicitar a eliminação dos seus dados pessoais tratados com base em consentimento ou a exclusão da sua conta, ressalvadas as hipóteses legais de retenção.</p>
+                    </div>
+
+                    <div class="inst-direito-card">
+                        <h4>Informação sobre Compartilhamento</h4>
+                        <p>Obter informações detalhadas sobre com quais entidades ou prestadores de infraestrutura seus dados foram compartilhados.</p>
+                    </div>
+
+                    <div class="inst-direito-card">
+                        <h4>Revogação do Consentimento</h4>
+                        <p>Revogar a qualquer momento seu consentimento para tecnologias e cookies opcionais por meio da nossa Central de Preferências.</p>
+                    </div>
+
+                    <div class="inst-direito-card">
+                        <h4>Portabilidade dos Dados</h4>
+                        <p>Solicitar a transferência dos seus dados cadastrais e de anúncios a outro fornecedor de serviço, mediante requisição expressa.</p>
+                    </div>
+                </div>
+
+                <p class="inst-paragrafo">
+                    Para exercer qualquer um destes direitos, basta enviar um e-mail para <strong><code>privacidade@itaimvende.com.br</code></strong> informando seu nome completo, e-mail cadastrado e a solicitação desejada. As solicitações serão processadas sem custos e respondidas nos prazos fixados pela autoridade competente (ANPD).
+                </p>
+            </section>
+
+            <!-- 7. RETENÇÃO E EXCLUSÃO DE DADOS -->
+            <section class="inst-secao" id="retencao">
+                <h2 class="inst-secao-titulo">
+                    <span class="numero">7.</span> Retenção, Descarte e Exclusão de Informações
+                </h2>
+                <p class="inst-paragrafo">
+                    Os dados pessoais são conservados enquanto o seu cadastro permanecer ativo na plataforma. Ao solicitar o encerramento da conta ou a exclusão de um anúncio:
+                </p>
+                <ul class="inst-lista">
+                    <li><strong>Anúncios e Imagens:</strong> Quando um anúncio é excluído ou removido pela moderação, o registro correspondente é marcado com exclusão lógica e os arquivos de imagem associados são eliminados permanentemente do bucket do Supabase Storage, impedindo o acúmulo de arquivos órfãos.</li>
+                    <li><strong>Dados da Conta:</strong> Ao solicitar o encerramento da conta, os dados pessoais são desvinculados da vitrine pública. Informações mínimas poderão ser conservadas pelo prazo necessário para cumprimento de deveres legais (como os registros de conexão por 6 meses pelo Marco Civil da Internet) ou para a defesa em eventuais litígios judiciais.</li>
+                    <li><strong>Mensagens de Chat:</strong> Conversas pretéritas podem permanecer visíveis no histórico da contraparte com quem você negociou, desprovidas de dados pessoais desnecessários.</li>
+                </ul>
+            </section>
+
+            <!-- 8. DISPOSIÇÕES FINAIS E ATUALIZAÇÕES -->
+            <section class="inst-secao" id="alteracoes">
+                <h2 class="inst-secao-titulo">
+                    <span class="numero">8.</span> Atualizações desta Política
+                </h2>
+                <p class="inst-paragrafo">
+                    Esta Política de Privacidade poderá ser atualizada periodicamente para refletir melhorias contínuas na plataforma, novas funcionalidades ou adequações a atos normativos da Autoridade Nacional de Proteção de Dados (ANPD).
+                </p>
+                <p class="inst-paragrafo">
+                    Modificações substantivas serão comunicadas por meio de aviso destacado em nossa página inicial ou via notificação interna na plataforma antes de entrarem em vigor.
+                </p>
+            </section>
+
+        </article>
+
+    </main>
+
+    <!-- ==========================================================
+         3. RODAPÉ GLOBAL
+         ========================================================== -->
+    <footer class="footer-principal">
+        <div class="footer-container">
+            <div class="footer-col">
+                <img src="../../assets/logos/header1-logo.png" alt="Itaim Vende" class="footer-logo-img">
+                <p class="footer-sobre">
+                    Portal de compras, vendas e trocas regional de Paulistana e Vale do Itaim.
+                </p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Políticas e Termos</h4>
+                <ul class="footer-links">
+                    <li><a href="/termos">Termos de Uso</a></li>
+                    <li><a href="/politica-de-privacidade" style="color: var(--inst-primary); font-weight: 600;">Política de Privacidade</a></li>
+                    <li><a href="/politica-de-cookies">Política de Cookies</a></li>
+                    <li><a href="#" data-acao="abrir-cookies" id="link-footer-preferencias-cookies">Preferências de Cookies</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Cidades Atendidas</h4>
+                <ul class="footer-links">
+                    <li><a href="/">Paulistana - PI</a></li>
+                    <li><a href="/">Acauã - PI</a></li>
+                    <li><a href="/">Betânia do Piauí</a></li>
+                    <li><a href="/">Jacobina do Piauí</a></li>
+                    <li><a href="/">Queimada Nova</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Minha Conta</h4>
+                <ul class="footer-links">
+                    <li><a href="/login">Entrar / Cadastro</a></li>
+                    <li><a href="/meus-anuncios">Meus Anúncios</a></li>
+                    <li><a href="/favoritos">Meus Favoritos</a></li>
+                    <li><a href="/perfil">Meu Perfil</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <span>© 2026 Itaim Vende. Todos os direitos reservados.</span>
+            <div class="footer-legal-links" style="display: flex; gap: 0.75rem; align-items: center; justify-content: center; flex-wrap: wrap;">
+                <a href="/termos" style="color: inherit; text-decoration: underline;">Termos de Uso</a>
+                <span>&bull;</span>
+                <a href="/politica-de-privacidade" style="color: inherit; text-decoration: underline;">Política de Privacidade</a>
+                <span>&bull;</span>
+                <a href="/politica-de-cookies" style="color: inherit; text-decoration: underline;">Política de Cookies</a>
+                <span>&bull;</span>
+                <a href="#" data-acao="abrir-cookies" style="color: inherit; text-decoration: underline;">Preferências de Cookies</a>
+            </div>
+            <span>Compre, venda e anuncie com facilidade.</span>
+        </div>
+    </footer>
+
+    <!-- Scripts do Sistema -->
+    <script src="../../js/core/rotas/index.js"></script>
+    <script src="../../js/core/cookies/consentimento-cookies.js"></script>
+</body>
+
+</html>
+

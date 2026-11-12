@@ -199,12 +199,44 @@
     justify-content: center;
     gap: 8px;
     cursor: pointer;
-    border: none;
+    border: 1px solid var(--border-color);
+    background-color: #FFFFFF;
+    color: var(--text-secondary);
     transition: all var(--transition);
 }
 
+.cfg-tema-card:not(.ativo) .btn-ativar-tema {
+    background-color: #FFFFFF !important;
+    color: var(--text-secondary) !important;
+    border: 1px solid var(--border-color) !important;
+    box-shadow: none !important;
+}
+
+.cfg-tema-card:not(.ativo):hover .btn-ativar-tema,
+.cfg-tema-card:not(.ativo) .btn-ativar-tema:hover {
+    background-color: var(--light-bg, #F8FAFC) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .cfg-tema-card:not(.ativo) .btn-ativar-tema {
+    background-color: #1A2433 !important;
+    color: #F1F5F9 !important;
+    border: 1px solid #2C3946 !important;
+    box-shadow: none !important;
+}
+
+[data-theme="dark"] .cfg-tema-card:not(.ativo):hover .btn-ativar-tema,
+[data-theme="dark"] .cfg-tema-card:not(.ativo) .btn-ativar-tema:hover {
+    background-color: #243144 !important;
+    border-color: var(--primary) !important;
+    color: #FFFFFF !important;
+}
+
 .cfg-tema-card.ativo .btn-ativar-tema {
-    background-color: var(--primary);
-    color: #FFFFFF;
+    background-color: var(--primary) !important;
+    color: #FFFFFF !important;
+    border: 1px solid var(--primary) !important;
+    box-shadow: 0 4px 12px rgba(68, 189, 50, 0.28) !important;
     pointer-events: none;
 }

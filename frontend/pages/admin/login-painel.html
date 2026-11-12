@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Itaim Vende - Acesso Restrito ao Painel de Controle e Infraestrutura (Administradores)">
+    <title>Acesso ao Painel de Controle - Itaim Vende</title>
+
+    <!-- Anti-FOUC: Aplicação imediata do tema escuro/claro -->
+    <script>
+        (function() {
+            try {
+                var tema = localStorage.getItem('itaim_tema') === 'dark' ? 'dark' : 'light';
+                var d = document.documentElement;
+                d.setAttribute('data-theme', tema);
+                if (tema === 'dark') {
+                    d.classList.add('dark-theme');
+                } else {
+                    d.classList.remove('dark-theme');
+                }
+            } catch (e) {}
+        })();
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../assets/logos/header-logo.png">
+
+    <!-- CSS Core do Sistema de Autenticação + Estilos Exclusivos do Painel -->
+    <link rel="stylesheet" href="../../css/core/style.css">
+    <link rel="stylesheet" href="../../css/pages/admin/login-painel.css?v=1">
+</head>
+
+<body>
+    <main class="auth-wrapper auth-floating-wrapper">
+        <!-- ==============================================================
+             CARTÃO FLUTUANTE CENTRALIZADO (LAYOUT MODERNO DIVIDIDO)
+             ============================================================== -->
+        <div class="auth-floating-card" role="region" aria-label="Painel de Acesso Administrativo">
+
+            <!-- ==============================================================
+                 BLOCO ESQUERDO: IDENTIDADE VISUAL & CENTRAL ADMINISTRATIVA
+                 ============================================================== -->
+            <aside class="auth-brand-block" id="painel-marca" aria-label="Marca Itaim Vende">
+                <div class="brand-logo-centered-box">
+                    <a href="/" class="brand-logo-link" title="Itaim Vende - Início">
+                        <img src="../../assets/logos/logo-itaimvende-contorno-branco.png"
+                            alt="Itaim Vende - Compra, Venda e Trocas" class="brand-logo-center-img" id="img-logo">
+                    </a>
+
+                    <div class="brand-slogan-box">
+                        <span class="brand-slogan-text">O MELHOR DA NOSSA REGIÃO</span>
+                        <div class="brand-slogan-line" aria-hidden="true"></div>
+                    </div>
+
+                    <!-- Badge da Área Administrativa -->
+                    <div class="auth-painel-badge">
+                        <i class="fa-solid fa-gauge-high"></i>
+                        <span>Painel de Controle & Diagnóstico</span>
+                    </div>
+
+                    <p style="color: rgba(255, 255, 255, 0.85); font-size: 0.82rem; margin-top: 14px; text-align: center; max-width: 240px; line-height: 1.4;">
+                        Telemetria em tempo real, integridade do banco de dados e observabilidade da plataforma.
+                    </p>
+                </div>
+            </aside>
+
+            <!-- ==============================================================
+                 BLOCO DIREITO: FORMULÁRIO DE LOGIN ADMINISTRATIVO
+                 ============================================================== -->
+            <section class="auth-form-block" id="painel-principal" aria-label="Painel de Autenticação de Administrador">
+                <div class="auth-card-inner">
+
+                    <div class="view-secao secao-ativa container-login" id="secao-login-painel" style="width: 100%;">
+                        <div style="text-align: center; margin-bottom: 20px;">
+                            <h1 class="titulo-login" style="margin-bottom: 6px;">ACESSO AO PAINEL</h1>
+                            <p style="font-size: 0.85rem; color: #64748B; margin: 0; line-height: 1.4;">
+                                Identifique-se com suas credenciais de Administrador ou Desenvolvedor.
+                            </p>
+                        </div>
+
+                        <!-- Card de Bloqueio por Excesso de Tentativas (Ativado quando > 5 falhas) -->
+                        <div class="card-bloqueio-alerta" id="card-bloqueio-alerta" role="alert">
+                            <i class="fa-solid fa-lock" style="font-size: 1.8rem; color: #EF4444;"></i>
+                            <strong>Acesso Temporariamente Bloqueado</strong>
+                            <span>Você excedeu o limite máximo de 5 tentativas de login. Aguarde o tempo restante:</span>
+                            <div class="card-bloqueio-timer" id="card-bloqueio-timer">15:00</div>
+                        </div>
+
+                        <!-- Formulário de Autenticação -->
+                        <form id="form-login-painel" class="form-auth" novalidate>
+                            <!-- Indicador de Tentativas Restantes -->
+                            <div class="box-tentativas-status">
+                                <span><i class="fa-solid fa-shield-halved"></i> Segurança do Acesso:</span>
+                                <span class="badge-tentativas-pill" id="badge-tentativas">5 restantes</span>
+                            </div>
+
+                            <!-- Campo Usuário / E-mail -->
+                            <div class="campo-grupo">
+                                <label for="input-usuario-adm" class="campo-rotulo">Usuário ou E-mail Admin</label>
+                                <div class="campo-input-wrapper">
+                                    <i class="fa-regular fa-user campo-icone-esquerda"></i>
+                                    <input type="text" id="input-usuario-adm" class="campo-auth"
+                                        placeholder="Ex: kayky ou admin@gmail.com" autocomplete="username" required
+                                        autofocus>
+                                </div>
+                            </div>
+
+                            <!-- Campo Senha -->
+                            <div class="campo-grupo">
+                                <div class="campo-rotulo-linha">
+                                    <label for="input-senha-adm" class="campo-rotulo">Senha de Acesso</label>
+                                </div>
+                                <div class="campo-input-wrapper">
+                                    <i class="fa-solid fa-key campo-icone-esquerda"></i>
+                                    <input type="password" id="input-senha-adm" class="campo-auth"
+                                        placeholder="Sua senha de administrador" autocomplete="current-password"
+                                        required>
+                                    <button type="button" class="btn-toggle-senha" id="btn-toggle-senha-adm"
+                                        aria-label="Alternar exibição da senha" tabindex="-1">
+                                        <i class="fa-regular fa-eye icone-aberto"></i>
+                                        <i class="fa-regular fa-eye-slash icone-fechado icone-oculto"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Feedback de Status / Erro / Sucesso -->
+                            <div id="status-msg-login" class="status-msg" style="display: none;" role="alert"></div>
+
+                            <!-- Botão Entrar -->
+                            <button type="submit" class="btn-auth-submit" id="btn-entrar-adm" style="margin-top: 14px;">
+                                <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                                <span>Entrar no Painel</span>
+                            </button>
+
+                            <!-- Links Auxiliares -->
+                            <div class="links-admin-auxiliares">
+                                <a href="/login-tickets" title="Acessar Moderação de Tickets">
+                                    <i class="fa-solid fa-shield-halved"></i> Moderação
+                                </a>
+                                <a href="/" title="Voltar para a Loja">
+                                    <i class="fa-solid fa-house"></i> Ir para o Site
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Script de Autenticação e Controle do Painel -->
+    <script src="../../js/pages/admin/login-painel.js?v=1"></script>
+</body>
+
+</html>
+

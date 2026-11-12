@@ -324,8 +324,19 @@ const FRONTEND_PAGES_MAP = {
   // Administração e Moderação
   'tickets': 'pages/admin/tickets.html',
   'moderacao': 'pages/admin/tickets.html',
+  'login-tickets': 'pages/admin/login-tickets.html',
+  'login-painel': 'pages/admin/login-painel.html',
+  'login-admin': 'pages/admin/login-painel.html',
   'painel': 'pages/admin/painel.html',
   'status': 'pages/admin/painel.html',
+
+  // Institucional, Privacidade, Cookies e Termos de Uso
+  'termos': 'pages/institucional/termos-de-uso.html',
+  'termos-de-uso': 'pages/institucional/termos-de-uso.html',
+  'privacidade': 'pages/institucional/politica-de-privacidade.html',
+  'politica-de-privacidade': 'pages/institucional/politica-de-privacidade.html',
+  'cookies': 'pages/institucional/politica-de-cookies.html',
+  'politica-de-cookies': 'pages/institucional/politica-de-cookies.html',
 
   // 404
   '404': '404.html',
@@ -400,8 +411,124 @@ app.get('/', (req, res) => {
 app.use(express.static(FRONTEND_DIR, { index: false }));
 app.use('/frontend', express.static(FRONTEND_DIR, { index: false }));
 
+/**
+ * Utilitário para escapar caracteres especiais em atributos HTML
+ */
+function escapeHtmlAttr(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+/**
+ * Injeta metadados Open Graph e Twitter Cards dinamicamente no HTML da página do anúncio
+ * para visualização profissional ao compartilhar via WhatsApp, Facebook, Twitter, Telegram etc.
+ */
+async function renderizarPaginaProdutoComMetadados(req, res, filePath) {
+  try {
+    let html = await fs.promises.readFile(filePath, 'utf8');
+
+    const identifier = (req.query.id || req.query.slug || req.query.produto || '').trim();
+    const protocol = req.headers['x-forwarded-proto'] || req.protocol || 'http';
+    const host = req.get('host') || 'itaimvende.com.br';
+    const baseUrl = `${protocol}://${host}`;
+
+    let product = null;
+    if (identifier) {
+      try {
+        product = await prisma.product.findFirst({
+          where: {
+            OR: [{ id: identifier }, { slug: identifier }],
+            deletedAt: null,
+          },
+          include: {
+            category: true,
+            images: { orderBy: { orderIndex: 'asc' } },
+            seller: {
+              select: {
+                id: true,
+                name: true,
+                city: true,
+                neighborhood: true,
+                isVerified: true,
+              },
+            },
+          },
+        });
+      } catch (errDb) {
+        console.error('[OpenGraph] Erro ao consultar banco de dados para metadados:', errDb.message);
+      }
+    }
+
+    if (product) {
+      const isDoacao = (product.listingType === 'DOACAO' || Number(product.price) <= 0);
+      const precoTexto = isDoacao
+        ? 'Doação (Gratuito)'
+        : Number(product.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+      const cidade = (product.city || product.seller?.city || 'Paulistana').trim();
+      const localizacao = `${cidade} - PI`;
+
+      const pageTitle = `${product.title} - Itaim Vende`;
+      const ogTitle = `${product.title} | ${precoTexto} - Itaim Vende`;
+
+      let descLimpa = (product.description || '').replace(/[\r\n\t]+/g, ' ').replace(/\s+/g, ' ').trim();
+      if (!descLimpa) {
+        descLimpa = `${product.title} anunciado em ${localizacao}. Veja fotos e detalhes no Itaim Vende.`;
+      } else if (descLimpa.length > 140) {
+        descLimpa = descLimpa.substring(0, 137) + '...';
+      }
+      const ogDescription = `Preço: ${precoTexto} | Local: ${localizacao}. ${descLimpa}`;
+
+      const canonicalUrl = `${baseUrl}/produto?id=${encodeURIComponent(product.id)}`;
+
+      let imageUrl = '';
+      if (product.images && product.images.length > 0) {
+        const coverImg = product.images.find((img) => img.isCover) || product.images[0];
+        imageUrl = coverImg.url;
+      }
+      if (!imageUrl) {
+        imageUrl = `${baseUrl}/assets/logos/header1-logo.png`;
+      } else if (!imageUrl.startsWith('http://') && !imageUrl.startsWith('https://')) {
+        imageUrl = `${baseUrl}${imageUrl.startsWith('/') ? '' : '/'}${imageUrl}`;
+      }
+
+      html = html
+        .replace(/<title>.*?<\/title>/i, `<title>${escapeHtmlAttr(pageTitle)}</title>`)
+        .replace(/<meta name="description" content=".*?"/i, `<meta name="description" content="${escapeHtmlAttr(ogDescription)}"`)
+        .replace(/<link rel="canonical"[^>]*href=".*?"[^>]*>/i, `<link rel="canonical" id="meta-canonical-url" href="${escapeHtmlAttr(canonicalUrl)}">`)
+        .replace(/<meta property="og:title" content=".*?"/i, `<meta property="og:title" content="${escapeHtmlAttr(ogTitle)}"`)
+        .replace(/<meta property="og:description" content=".*?"/i, `<meta property="og:description" content="${escapeHtmlAttr(ogDescription)}"`)
+        .replace(/<meta property="og:image" content=".*?"/i, `<meta property="og:image" content="${escapeHtmlAttr(imageUrl)}"`)
+        .replace(/<meta property="og:image:alt" content=".*?"/i, `<meta property="og:image:alt" content="${escapeHtmlAttr(product.title)}"`)
+        .replace(/<meta property="og:url" content=".*?"/i, `<meta property="og:url" content="${escapeHtmlAttr(canonicalUrl)}"`)
+        .replace(/<meta name="twitter:title" content=".*?"/i, `<meta name="twitter:title" content="${escapeHtmlAttr(ogTitle)}"`)
+        .replace(/<meta name="twitter:description" content=".*?"/i, `<meta name="twitter:description" content="${escapeHtmlAttr(ogDescription)}"`)
+        .replace(/<meta name="twitter:image" content=".*?"/i, `<meta name="twitter:image" content="${escapeHtmlAttr(imageUrl)}"`);
+    } else {
+      const fallbackUrl = `${baseUrl}/produto`;
+      const fallbackImg = `${baseUrl}/assets/logos/header1-logo.png`;
+      html = html
+        .replace(/<link rel="canonical"[^>]*href=".*?"[^>]*>/i, `<link rel="canonical" id="meta-canonical-url" href="${escapeHtmlAttr(fallbackUrl)}">`)
+        .replace(/<meta property="og:image" content=".*?"/i, `<meta property="og:image" content="${escapeHtmlAttr(fallbackImg)}"`)
+        .replace(/<meta property="og:url" content=".*?"/i, `<meta property="og:url" content="${escapeHtmlAttr(fallbackUrl)}"`)
+        .replace(/<meta name="twitter:image" content=".*?"/i, `<meta name="twitter:image" content="${escapeHtmlAttr(fallbackImg)}"`);
+    }
+
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    return res.send(html);
+  } catch (errGeral) {
+    console.error('[OpenGraph] Falha ao injetar metadados, servindo arquivo estático:', errGeral.message);
+    return res.sendFile(filePath);
+  }
+}
+
 // Roteador Universal de Páginas do Frontend (Clean URLs, aliases e retrocompatibilidade)
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
   if (req.method !== 'GET' && req.method !== 'HEAD') {
     return next();
   }
@@ -426,6 +553,9 @@ app.use((req, res, next) => {
   if (arquivoPagina) {
     const filePath = path.resolve(FRONTEND_DIR, arquivoPagina);
     if (fs.existsSync(filePath)) {
+      if (arquivoPagina === 'pages/produtos/produto.html' || arquivoPagina.endsWith('produto.html')) {
+        return renderizarPaginaProdutoComMetadados(req, res, filePath);
+      }
       return res.sendFile(filePath);
     }
   }

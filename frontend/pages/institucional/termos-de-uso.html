@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Termos de Uso do Itaim Vende - Conheça as regras, diretrizes de convivência, responsabilidades e funcionamento da vitrine digital de classificados de Paulistana e Vale do Itaim.">
+    <title>Termos de Uso — Itaim Vende</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Segoe+UI&display=swap" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../assets/logos/header-logo.png">
+
+    <!-- CSS Global e da Página -->
+    <link rel="stylesheet" href="../../css/core/style.css">
+    <link rel="stylesheet" href="../../css/core/header-global.css">
+    <link rel="stylesheet" href="../../css/pages/home/home/home-footer.css">
+    <link rel="stylesheet" href="../../css/pages/institucional/institucional.css">
+
+    <!-- Detecção e Aplicação Imediata de Tema para Evitar FOUC -->
+    <script>
+        (function () {
+            try {
+                var tema = localStorage.getItem('itaim_tema') === 'dark' ? 'dark' : 'light';
+                document.documentElement.setAttribute('data-theme', tema);
+                if (tema === 'dark') document.documentElement.classList.add('dark-theme');
+            } catch (e) {}
+        })();
+    </script>
+</head>
+
+<body class="institucional-layout">
+
+    <!-- ==========================================================
+         1. CABEÇALHO GLOBAL DO MARKETPLACE
+         ========================================================== -->
+    <header class="header-principal">
+        <div class="header-container">
+            <div class="header-left">
+                <a href="/" class="header-logo-link" title="Itaim Vende - Início">
+                    <img src="../../assets/logos/header1-logo.png" alt="Itaim Vende" class="header-logo-img">
+                </a>
+            </div>
+
+            <div class="header-center">
+                <form class="busca-form" role="search" action="/categoria" method="GET">
+                    <input type="search" class="campo-busca" name="q" placeholder="Buscar produtos, vendedores e muito mais..." autocomplete="off">
+                    <button type="submit" class="btn-busca-submit" aria-label="Pesquisar">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+
+            <div class="header-right">
+                <a href="/" class="btn-header-link" style="color: var(--inst-text-main); font-weight: 600; text-decoration: none; font-size: 0.92rem;">
+                    Voltar ao Início
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==========================================================
+         2. CONTEÚDO PRINCIPAL: TERMOS DE USO
+         ========================================================== -->
+    <main class="institucional-main">
+
+        <!-- Trilha de Navegação -->
+        <nav class="inst-breadcrumb" aria-label="Trilha de navegação">
+            <a href="/">Início</a>
+            <span class="separador">/</span>
+            <span>Institucional</span>
+            <span class="separador">/</span>
+            <span class="ativo">Termos de Uso</span>
+        </nav>
+
+        <!-- Cartão de Cabeçalho do Documento -->
+        <section class="inst-header-card">
+            <span class="inst-badge-versao">Documento Oficial &bull; Diretrizes da Plataforma</span>
+            <h1 class="inst-titulo">Termos e Condições de Uso</h1>
+            <p class="inst-subtitulo">
+                Regras gerais, diretrizes de convivência, limites de responsabilidade e funcionamento da vitrine comunitária de classificados do Itaim Vende.
+            </p>
+            <div class="inst-metadados">
+                <span><strong>Versão:</strong> 1.0</span>
+                <span><strong>Última atualização:</strong> 11 de Novembro de 2026</span>
+                <span><strong>Jurisdição:</strong> Brasil (Marco Civil da Internet, Código Civil e CDC)</span>
+            </div>
+        </section>
+
+        <!-- Abas Rápidas de Navegação entre Políticas -->
+        <div class="inst-nav-tabs">
+            <a href="/termos" class="inst-tab-link ativo">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+                Termos de Uso
+            </a>
+            <a href="/politica-de-privacidade" class="inst-tab-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+                Política de Privacidade
+            </a>
+            <a href="/politica-de-cookies" class="inst-tab-link">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M12 6a2 2 0 0 0-2 2c0 1.1.9 2 2 2"></path>
+                    <circle cx="8" cy="14" r="1"></circle>
+                    <circle cx="16" cy="14" r="1"></circle>
+                </svg>
+                Política de Cookies e Armazenamento
+            </a>
+            <button type="button" class="btn-abrir-cookies-central" data-acao="abrir-cookies" style="margin: 0; padding: 10px 18px; font-size: 0.9rem;">
+                Gerenciar Preferências
+            </button>
+        </div>
+
+        <!-- Conteúdo Completo e Estruturado -->
+        <article class="inst-conteudo-wrapper">
+
+            <!-- 1. APRESENTAÇÃO E ACEITAÇÃO -->
+            <section class="inst-secao" id="apresentacao-aceitacao">
+                <h2 class="inst-secao-titulo">
+                    <span class="numero">1.</span> Apresentação e Aceitação dos Termos
+                </h2>
+                <p class="inst-paragrafo">
+                    Bem-vindo ao <strong>Itaim Vende</strong>. Este instrumento constitui contrato juridicamente vinculante entre você (denominado "Usuário", seja na condição de visitante, comprador, vendedor ou anunciante) e os responsáveis pela plataforma digital Itaim Vende.
+                </p>
+                <p class="inst-paragrafo">
+                    O objetivo destes <strong>Termos e Condições de Uso</strong> é estabelecer com máxima transparência os direitos, obrigações, limitações de responsabilidade e diretrizes éticas aplicáveis à navegação no website, publicação de anúncios, utilização dos canais de conversa e interação em todo o ambiente do marketplace.
+                </p>
+                <p class="inst-paragrafo">
+                    Ao navegar na plataforma, cadastrar uma conta ou publicar anúncios, o Usuário declara ter lido, compreendido e concordado integralmente com as disposições aqui constantes e com a nossa <a href="/politica-de-privacidade" style="color: var(--inst-primary); text-decoration: underline;">Política de Privacidade</a>. Caso não concorde com qualquer cláusula deste termo, o Usuário deve abster-se imediatamente de utilizar os serviços disponibilizados.
+                </p>
+
+                <div class="inst-aviso-box">
+                    <strong>Aplicabilidade a Visitantes e Usuários Cadastrados:</strong>
+                    A navegação em páginas públicas e a visualização da vitrine aplicam-se a qualquer visitante. A publicação de anúncios, envio de mensagens no chat, gerenciamento de favoritos, submissão de avaliações e denúncias requerem cadastro prévio e autenticação por credencial válida.
+                </div>
+            </section>
+
+            <!-- 2. FUNCIONAMENTO DA PLATAFORMA (VITRINE E CONVERSA) -->
+            <section class="inst-secao" id="funcionamento-plataforma">
+                <h2 class="inst-secao-titulo">
+                    <span class="numero">2.</span> Natureza e Funcionamento da Plataforma: Vitrine Regional e Facilitação de Contato
+                </h2>
+                <p class="inst-paragrafo">
+                    O <strong>Itaim Vende</strong> é uma plataforma digital de classificados comunitários concebida com foco geográfico prioritário no município de <strong>Paulistana - PI</strong> e municípios que integram a microrregião do <strong>Vale do Itaim</strong> (Acauã, Betânia do Piauí, Jacobina do Piauí, Queimada Nova, entre outros). Sua funcionalidade essencial consiste em operar como uma <strong>vitrine eletrônica de divulgação de produtos, serviços, trocas e doações</strong>, aproximando pessoas da própria localidade.
+                </p>
+
+                <div class="inst-aviso-box">
+                    <strong>Delimitação Explícita da Atuação da Plataforma:</strong>
+                    O Usuário reconhece e aceita de forma expressa que o Itaim Vende:
+                    <ul class="inst-lista" style="margin-top: 10px;">
+                        <li><strong>É uma vitrine de anúncios e contato:</strong> Fornece infraestrutura tecnológica e espaço virtual para que os próprios cidadãos e comerciantes divulguem o que desejam vender, trocar ou doar.</li>
+                        <li><strong>Não é intermediador financeiro:</strong> O Itaim Vende não processa compras online, não retém valores, não recebe dinheiro de compradores, não realiza pagamentos a vendedores e não opera custódia de garantia financeira (escrow).</li>
+                        <li><strong>Não opera logística, envios ou frete:</strong> A plataforma não transporta mercadorias, não possui caminhões ou centros de distribuição, não opera envios postais pelos Correios e não cobra ou calcula fretes. O recolhimento ou entrega da mercadoria é ajustado diretamente entre comprador e vendedor.</li>
+                        <li><strong>Não é proprietário nem fabricante dos itens anunciados:</strong> O Itaim Vende não detém a posse física dos produtos, não inspeciona a qualidade material prévia dos itens e não presta garantia mercantil sobre os bens negociados.</li>
+                        <li><strong>Não garante o fechamento de transações:</strong> A conclusão do negócio, a entrega do item e o pagamento são eventos futuros, incertos e de responsabilidade exclusiva dos Usuários acordantes.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 3. CADASTRO, IDENTIFICADORES E SEGURANÇA DA CONTA -->
+            <section class="inst-secao" id="cadastro-contas">
+                <h2 class="inst-secao-titulo">
+                    <span class="numero">3.</span> Cadastro de Usuários, Credenciais e Segurança
+                </h2>
+                <p class="inst-paragrafo">
+                    Para anunciar produtos, iniciar conversas no chat interno ou salvar favoritos na nuvem, o interessado deve criar uma conta mediante o fornecimento de informações cadastrais verídicas, exatas e completas (nome, e-mail e telefone celular ativo).
+                </p>
+                <ul class="inst-lista">
+                    <li><strong>Guarda e Sigilo das Credenciais:</strong> A senha de acesso à conta é estritamente pessoal e intransferível. O Usuário é o único responsável pela guarda, confidencialidade e por todas as operações efetuadas através de sua conta autenticada.</li>
+                    <li><strong>Identificador de Nome de Usuário (@):</strong> Cada titular dispõe de um identificador público exclusivo (@username). Para coibir práticas de falsidade ideológica, a alteração do nome de usuário é submetida a uma regra de intervalo mínimo de 30 dias (cooldown) e ao bloqueio sistemático de termos protegidos ou reservados da administração.</li>
+                    <li><strong>Validação de Contato por Código de Confirmação (OTP):</strong> Alterações cadastrais sensíveis (como inclusão ou troca de número de telefone/WhatsApp e e-mail) dependem de validação biométrica de posse através de código numérico de uso único (OTP), prevenindo sequestro de contas.</li>
+                    <li><strong>Encerramento e Suspensão de Conta:</strong> O titular pode, a qualquer tempo e por iniciativa própria, suspender temporariamente suas atividades ou solicitar a exclusão definitiva da conta e anonimização de seus dados na Central de Privacidade, nos moldes do Art. 18 da LGPD.</li>
+                </ul>
+            </section>
+
+            <!-- 4. REGRAS PARA PUBLICAÇÃO DE ANÚNCIOS -->
+            <section class="inst-secao" id="publicacao-anuncios">
+                <h2 class="inst-secao-titulo">
+                    <span class="numero">4.</span> Regras para Publicação e Manutenção de Anúncios
+                </h2>
+                <p class="inst-paragrafo">
+                    Ao criar um anúncio no Itaim Vende, o anunciante assume o compromisso de agir com boa-fé, lealdade e transparência para com os potenciais compradores locais, observando os seguintes requisitos:
+                </p>
+                <ul class="inst-lista">
+                    <li><strong>Veracidade e Fidelidade Descritiva:</strong> As características, dimensões, marcas, eventuais avarias ou defeitos de funcionamento e o estado real de conservação (novo, seminovo ou usado) devem ser expostos com precisão e clareza.</li>
+                    <li><strong>Imagens Fidedignas e Próprias:</strong> As fotografias inseridas devem corresponder ao exato produto que está à venda. É expressamente vedado o uso de imagens de catálogos comerciais alheios que ocultem o desgaste real do produto, imagens de banco de dados da internet sem licença ou fotografias de terceiros sem autorização prévia.</li>
+                    <li><strong>Preço Real e Transparente:</strong> O valor monetário informado no anúncio deve ser o preço à vista integral do bem em reais (BRL). É vedada a prática de indicar valor irrisório (ex.: R$ 1,00 ou R$ 0,00) com intuito de burlar mecanismos de ordenação da vitrine, salvo nas categorias expressamente destinadas a "Doação" ou "Troca".</li>
+                    <li><strong>Atualização Imediata do Status:</strong> Assim que a negociação for concluída presencialmente ou o bem for vendido por outro meio, o anunciante tem a obrigação de marcar o anúncio como "Vendido" ou "Pausado" na aba Meus Anúncios, evitando perda de tempo dos demais membros da comunidade.</li>
+                    <li><strong>Vedação a Anúncios Duplicados e Spam:</strong> É proibido publicar múltiplos anúncios idênticos ou com variações insignificantes com o objetivo de monopolizar a listagem da vitrine.</li>
+                </ul>
+            </section>
+
+            <!-- 5. PRODUTOS E ATIVIDADES ESTRITAMENTE PROIBIDAS -->
+            <section class="inst-secao" id="produtos-proibidos">
+                <h2 class="inst-secao-titulo">
+                    <span class="numero">5.</span> Produtos, Itens e Atividades Expressamente Proibidas
+                </h2>
+                <p class="inst-paragrafo">
+                    É <strong>terminantemente vedado</strong> anunciar, promover, divulgar, transacionar ou buscar adquirir através do Itaim Vende qualquer produto, serviço ou conteúdo que configure infração legal, viole direitos humanos ou coloque em risco a integridade física, ambiental ou patrimonial coletiva.
+                </p>
+                <p class="inst-paragrafo">
+                    Sem prejuízo das demais vedações estabelecidas na legislação brasileira, é expressamente proibida a publicação de anúncios envolvendo:
+                </p>
+
+                <div class="inst-tabela-responsiva">
+                    <table class="inst-tabela">
+                        <thead>
+                            <tr>
+                                <th style="width: 32%;">Categoria Proibida</th>
+                                <th>Exemplos de Itens e Motivação Legal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Armas, Munições e Explosivos</strong></td>
+                                <td>Armas de fogo de qualquer calibre, armas de pressão/airsoft sem nota e porte legal, réplicas idênticas, pólvora, fogos de artifício e artefatos explosivos (Estatuto do Desarmamento — Lei nº 10.826/2003).</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Drogas e Entorpecentes</strong></td>
+                                <td>Substâncias ilícitas, entorpecentes, insumos para cultivo de drogas proibidas, cigarros eletrônicos sem registro e produtos alucinógenos (Lei de Drogas — Lei nº 11.343/2006).</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Fauna Silvestre e Animais Protegidos</strong></td>
+                                <td>Aves e animais silvestres da Caatinga e de qualquer bioma brasileiro sem autorização expressa do IBAMA, órgãos estaduais do meio ambiente e documentação fiscal legítima (Lei de Crimes Ambientais — Lei nº 9.605/1998).</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Medicamentos e Saúde Controlada</strong></td>
+                                <td>Medicamentos de qualquer espécie (mesmo de venda livre ou veterinários), produtos químicos perigosos, anestésicos, agrotóxicos sem receituário emitido por profissional habilitado e lentes graduadas sem registro na ANVISA.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Receptação e Itens Ilícitos</strong></td>
+                                <td>Produtos furtados, roubados, sem comprovação de procedência lícita ou vinculados a qualquer investigação policial (Art. 180 do Código Penal Brasileiro).</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Falsificações e Propriedade Intelectual</strong></td>
+                                <td>Produtos pirateados, cópias não autorizadas, vestuário falsificado com uso indevido de marcas registradas alheias, softwares craqueados e credenciais de contas de streaming (Lei de Direitos Autorais e Lei de Propriedade Industrial).</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Documentos e Instrumentos Fraudulentos</strong></td>
+                                <td>RG, CPF, CNH, diplomas universitários, certificados escolares, notas fiscais em branco, cartões bancários de terceiros ou dispositivos programados para fraudar leitores e antenas.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Exploração Sexual e Conteúdo Violento</strong></td>
+                                <td>Serviços sexuais pagos, pornografia de qualquer natureza, material pedófilo (com imediata comunicação às autoridades policiais), apologia à violência, racismo e discursos de ódio.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Fraudes Financeiras e Pirâmides</strong></td>
+                                <td>Ofertas de enriquecimento rápido sem produto real, pirâmides financeiras, investimentos não regulados pela CVM, empréstimos fraudulentos e vendas de notas falsas.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p class="inst-paragrafo" style="margin-top: 14px;">
+                    O rol acima é meramente exemplificativo. Qualquer outro item ou serviço cuja comercialização, posse ou trânsito configure infração penal, cível, tributária ou ambiental ensejará a imediata remoção do anúncio, exclusão da conta e, caso cabível, envio das informações de conexão às autoridades públicas competentes, nos termos do Art. 10 da Lei nº 12.965/2014 (Marco Civil da Internet).
+                </p>
+            </section>
+
+            <!-- 6. NEGOCIAÇÕES DIRETAS E GUIA DE SEGURANÇA LOCAL -->
+            <section class="inst-secao" id="negociacoes-seguranca">
+                <h2 class="inst-secao-titulo">
+                    <span class="numero">6.</span> Negociações entre Usuários e Guia de Segurança Comunitária
+                </h2>
+                <p class="inst-paragrafo">
+                    Como o Itaim Vende opera exclusivamente como catalisador de encontros comerciais locais, as tratativas de preço, modalidade de pagamento (em espécie, PIX ou troca) e localização para a entrega do bem ocorrem <strong>sob autonomia e risco integral dos próprios Usuários acordantes</strong>.
+                </p>
+
+                <div class="inst-aviso-box">
+                    <strong>Diretrizes e Boas Práticas para Negociação Segura em Paulistana e Região:</strong>
+                    Para garantir que sua experiência de compra e venda seja satisfatória e livre de incidentes, siga rigorosamente as seguintes recomendações:
+                    <ol class="inst-lista" style="margin-top: 8px;">
+                        <li><strong>Prefira sempre locais públicos e iluminados:</strong> Agende a entrega ou conferência do produto em horários diurnos e em pontos de expressiva movimentação de Paulistana ou de sua cidade (exemplos: Praça da Matriz, Praça Central, Avenida Marechal Deodoro, comércio central movimentado ou postos de combustíveis conhecidos). Evite ruas desertas, locais ermos ou residências de pessoas com quem nunca negociou.</li>
+                        <li><strong>Nunca pague sinal, caução ou reserva antecipada:</strong> Desconfie veementemente de vendedores que exijam depósitos bancários, PIX ou transferências a título de "garantir o produto", "pagar o frete antecipado" ou "segurar a venda para outro comprador". Pague exclusivamente no momento em que estiver com o produto em mãos e após conferi-lo.</li>
+                        <li><strong>Inspecione o produto minuciosamente antes de pagar:</strong> Se for um aparelho eletrônico, celular ou eletrodoméstico, teste o carregamento, ligue o dispositivo, verifique a tela e teste as funções básicas. No caso de smartphones, solicite conferência de IMEI junto aos órgãos de telefonia para certificar a procedência.</li>
+                        <li><strong>Veículos e Motocicletas:</strong> Jamais entregue o veículo ou o documento de transferência antes da efetiva compensação dos valores na sua conta bancária. Realize a vistoria prévia e certifique-se junto ao DETRAN sobre multas, gravames e procedência cadastral.</li>
+                        <li><strong>Compareça Acompanhado:</strong> Sempre que for buscar ou entregar uma mercadoria de alto valor, vá acompanhado de um amigo ou familiar de confiança.</li>
+                        <li><strong>Desconfie de Oportunidades "Milagrosas":</strong> Preços absurdamente abaixo do padrão regional de mercado, pressa exagerada do vendedor ou histórias dramáticas para justificar uma venda urgente costumam ser indícios de tentativas de fraude.</li>
+                    </ol>
+                </div>
+            </section>
+
+            <!-- 7. COMUNICAÇÃO E CONVIVÊNCIA COMUNITÁRIA -->
+            <section class="inst-secao" id="convivencia-comunitaria">
+                <h2 class="inst-secao-titulo">
+                    <span class="numero">7.</span> Comunicação, Convivência e Conduta no Chat
+                </h2>
+                <p class="inst-paragrafo">
+                    A plataforma oferece aos usuários logados um sistema de chat interno em tempo real via WebSocket, além de facilitar a abertura de conversas direcionadas no WhatsApp quando autorizado pelo anunciante. A utilização dessas ferramentas é restrita a negociações comerciais limpas, civilizadas e respeitosas.
+                </p>
+                <p class="inst-paragrafo">
+                    Constituem violações graves deste regulamento:
+                </p>
+                <ul class="inst-lista">
+                    <li>Praticar qualquer ato de assédio, coerção, perseguição, difamação, injúria ou ameaça contra outros membros da comunidade.</li>
+                    <li>Utilizar vocabulário chulo, ofensivo, preconceituoso ou discriminatório em razão de raça, cor, etnia, religião, orientação sexual ou condição social.</li>
+                    <li>Enviar links externos maliciosos, formulários de captura de senhas (phishing), propagandas não autorizadas de outros serviços ou spams repetitivos.</li>
+                    <li>Pressionar vendedores a desrespeitar preços combinados ou utilizar a ferramenta para aplicar golpes de falso comprovante de PIX.</li>
+                </ul>
+            </section>
+
+            <!-- 8. SISTEMA DE DENÚNCIAS E MODERAÇÃO ADMINISTRATIVA -->
+            <section class="inst-secao" id="denuncias-moderacao">
+                <h2 class="inst-secao-titulo">
+                    <span class="numero">8.</span> Mecanismo de Denúncias e Moderação de Conteúdo
+                </h2>
+                <p class="inst-paragrafo">
+                    Em conformidade com o princípio de transparência e cooperação previsto no Marco Civil da Internet (Art. 19 da Lei nº 12.965/2014), o Itaim Vende disponibiliza um sistema estruturado de denúncias integrado a cada anúncio da vitrine.
+                </p>
+                <ul class="inst-lista">
+                    <li><strong>Como Denunciar:</strong> Em qualquer página de anúncio, o Usuário pode acionar o botão <em>"Denunciar Anúncio"</em>, selecionar o motivo correspondente (Golpe ou Fraude, Conteúdo Impróprio, Spam/Anúncio Falso, Já Vendido/Indisponível ou Outro) e descrever o ocorrido.</li>
+                    <li><strong>Geração de Protocolo Oficial (Ticket):</strong> Ao enviar a denúncia, o sistema gera automaticamente um protocolo de rastreabilidade (exemplo: <code>TK-84A12B</code>), possibilitando que o denunciante acompanhe a resolução da demanda.</li>
+                    <li><strong>Poder de Moderação e Medidas Administrativas:</strong> A equipe de moderação administrativa reserva-se o direito de, a seu exclusivo critério e a qualquer tempo:
+                        <ul class="inst-lista" style="margin-top: 6px;">
+                            <li>Remover temporária ou definitivamente anúncios que infrinjam estes Termos de Uso.</li>
+                            <li>Ao deferir a remoção de um anúncio ilícito, proceder à <strong>purga física imediata e irreversível dos arquivos de imagem</strong> armazenados no bucket do Supabase Storage.</li>
+                            <li>Suspender preventivamente ou banir de forma perpétua contas de usuários reincidentes ou envolvidos em tentativas comprovadas de fraude.</li>
+                            <li>Descartar denúncias manifestamente infundadas ou fruto de má-fé concorrencial entre usuários.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- 9. PROPRIEDADE INTELECTUAL E DIREITOS DE MARCA -->
+            <section class="inst-secao" id="propriedade-intelectual">
+                <h2 class="inst-secao-titulo">
+                    <span class="numero">9.</span> Propriedade Intelectual e Proteção de Ativos
+                </h2>
+                <p class="inst-paragrafo">
+                    Todos os direitos sobre o nome comercial <strong>Itaim Vende</strong>, elementos gráficos, logotipos, ícones de interface, ilustrações do mascote regional (Tatu do Vale), código-fonte da aplicação web, scripts de backend, estrutura de banco de dados e layout visual pertencem exclusivamente ao projeto Itaim Vende e aos seus desenvolvedores.
+                </p>
+                <p class="inst-paragrafo">
+                    É proibida a reprodução, cópia, engenharia reversa, raspagem massiva automatizada de dados (web scraping) ou exploração comercial não autorizada de qualquer componente estrutural da plataforma.
+                </p>
+                <p class="inst-paragrafo">
+                    Ao publicar textos e fotografias de produtos, o anunciante declara deter os respectivos direitos de uso e concede ao Itaim Vende uma licença gratuita, não exclusiva e temporária para veiculação do conteúdo estritamente para os fins de exibição na vitrine online e divulgação regional.
+                </p>
+            </section>
+
+            <!-- 10. PRIVACIDADE E PROTEÇÃO DE DADOS (LGPD) -->
+            <section class="inst-secao" id="privacidade-lgpd">
+                <h2 class="inst-secao-titulo">
+                    <span class="numero">10.</span> Privacidade e Proteção de Dados Pessoais
+                </h2>
+                <p class="inst-paragrafo">
+                    O Itaim Vende trata a privacidade e a segurança das informações dos seus usuários com a máxima seriedade, atuando em estrita consonância com a <strong>Lei Geral de Proteção de Dados Pessoais (LGPD — Lei nº 13.709/2018)</strong>.
+                </p>
+                <p class="inst-paragrafo">
+                    Para compreender detalhadamente quais dados pessoais são coletados durante o uso da vitrine, como são armazenados em nuvem, quais as bases legais de tratamento e de que forma você pode exercer os direitos previstos no Art. 18 da LGPD (incluindo acesso ao seu <strong>Dossiê Digital Completo</strong>, exportação em arquivo <strong>JSON</strong> para portabilidade e exclusão definitiva com confirmação por senha), consulte o documento oficial:
+                </p>
+                <p class="inst-paragrafo" style="margin-top: 12px;">
+                    Acesse aqui a <a href="/politica-de-privacidade" style="color: var(--inst-primary); font-weight: 700; text-decoration: underline;">Política de Privacidade Integral do Itaim Vende</a> e conheça também a nossa <a href="/politica-de-cookies" style="color: var(--inst-primary); font-weight: 700; text-decoration: underline;">Política de Cookies e Armazenamento Web</a>.
+                </p>
+            </section>
+
+            <!-- 11. ATUALIZAÇÕES E ALTERAÇÕES DOS TERMOS -->
+            <section class="inst-secao" id="atualizacoes-termos">
+                <h2 class="inst-secao-titulo">
+                    <span class="numero">11.</span> Atualizações e Vigência destes Termos
+                </h2>
+                <p class="inst-paragrafo">
+                    O Itaim Vende reserva-se o direito de modificar, complementar ou atualizar estes Termos de Uso a qualquer momento, a fim de adequá-los a novas exigências regulatórias, decisões judiciais, melhorias tecnológicas ou lançamento de novos recursos operacionais.
+                </p>
+                <p class="inst-paragrafo">
+                    A versão em vigor será sempre identificada no cabeçalho do documento com a indicação precisa da <strong>Data da Última Atualização</strong>. Alterações substanciais nas regras de convivência ou na modelagem do serviço serão devidamente comunicadas através de notificações na plataforma ou avisos visuais na página inicial.
+                </p>
+                <p class="inst-paragrafo">
+                    A continuidade na utilização da plataforma após a data de publicação das alterações importará na aceitação tácita e irrestrita das novas condições estabelecidas.
+                </p>
+            </section>
+
+            <!-- 12. DISPOSIÇÕES GERAIS E FORO COMPETENTE -->
+            <section class="inst-secao" id="disposicoes-gerais">
+                <h2 class="inst-secao-titulo">
+                    <span class="numero">12.</span> Disposições Gerais, Legislação e Foro
+                </h2>
+                <p class="inst-paragrafo">
+                    A tolerância quanto ao eventual descumprimento de qualquer disposição destes Termos de Uso não configurará novação, renúncia ou perdão de direitos, podendo a exigibilidade ser pleiteada a qualquer tempo.
+                </p>
+                <p class="inst-paragrafo">
+                    Caso qualquer cláusula deste instrumento seja considerada nula, inválida ou inexequível por decisão de autoridade judiciária competente, as cláusulas remanescentes permanecerão em pleno vigor e eficácia, mantendo-se a integridade do pactuado.
+                </p>
+                <p class="inst-paragrafo">
+                    Estes Termos de Uso são regidos e interpretados segundo o ordenamento jurídico da <strong>República Federativa do Brasil</strong>. Para dirimir quaisquer litígios, controvérsias ou dúvidas decorrentes da interpretação ou execução deste instrumento que não possam ser solucionadas amigavelmente entre as partes, fica eleito como competente o <strong>Foro da Comarca de Paulistana, Estado do Piauí</strong>, com expressa renúncia a qualquer outro foro, por mais privilegiado ou especial que seja.
+                </p>
+            </section>
+
+        </article>
+
+    </main>
+
+    <!-- ==========================================================
+         3. RODAPÉ INSTITUCIONAL UNIFICADO E RESPONSIVO
+         ========================================================== -->
+    <footer class="footer-principal">
+        <div class="footer-container">
+            <div class="footer-col">
+                <img src="../../assets/logos/header1-logo.png" alt="Itaim Vende" class="footer-logo-img">
+                <p class="footer-sobre">
+                    Portal de compras, vendas e trocas regional de Paulistana e Vale do Itaim.
+                </p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Políticas e Termos</h4>
+                <ul class="footer-links">
+                    <li><a href="/termos" style="color: var(--inst-primary); font-weight: 600;">Termos de Uso</a></li>
+                    <li><a href="/politica-de-privacidade">Política de Privacidade</a></li>
+                    <li><a href="/politica-de-cookies">Política de Cookies</a></li>
+                    <li><a href="#" data-acao="abrir-cookies" id="link-footer-preferencias-cookies">Preferências de Cookies</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Cidades Atendidas</h4>
+                <ul class="footer-links">
+                    <li><a href="/">Paulistana - PI</a></li>
+                    <li><a href="/">Acauã - PI</a></li>
+                    <li><a href="/">Betânia do Piauí</a></li>
+                    <li><a href="/">Jacobina do Piauí</a></li>
+                    <li><a href="/">Queimada Nova</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Minha Conta</h4>
+                <ul class="footer-links">
+                    <li><a href="/login">Entrar / Cadastro</a></li>
+                    <li><a href="/meus-anuncios">Meus Anúncios</a></li>
+                    <li><a href="/favoritos">Meus Favoritos</a></li>
+                    <li><a href="/perfil">Meu Perfil</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <span>© 2026 Itaim Vende. Todos os direitos reservados.</span>
+            <div class="footer-legal-links" style="display: flex; gap: 0.75rem; align-items: center; justify-content: center; flex-wrap: wrap;">
+                <a href="/termos" style="color: inherit; text-decoration: underline;">Termos de Uso</a>
+                <span>&bull;</span>
+                <a href="/politica-de-privacidade" style="color: inherit; text-decoration: underline;">Política de Privacidade</a>
+                <span>&bull;</span>
+                <a href="/politica-de-cookies" style="color: inherit; text-decoration: underline;">Política de Cookies</a>
+                <span>&bull;</span>
+                <a href="#" data-acao="abrir-cookies" style="color: inherit; text-decoration: underline;">Preferências de Cookies</a>
+            </div>
+            <span>Compre, venda e anuncie com facilidade.</span>
+        </div>
+    </footer>
+
+    <!-- Scripts do Sistema -->
+    <script src="../../js/core/rotas/index.js"></script>
+    <script src="../../js/core/cookies/consentimento-cookies.js"></script>
+</body>
+
+</html>
+

@@ -133,10 +133,20 @@
         if (cardClaro) {
             cardClaro.classList.toggle('ativo', !isDark);
             cardClaro.setAttribute('aria-pressed', !isDark ? 'true' : 'false');
+            const btnClaro = cardClaro.querySelector('.btn-ativar-tema');
+            if (btnClaro) {
+                btnClaro.classList.toggle('cfg-btn-primario', !isDark);
+                btnClaro.classList.toggle('cfg-btn-neutro', isDark);
+            }
         }
         if (cardEscuro) {
             cardEscuro.classList.toggle('ativo', isDark);
             cardEscuro.setAttribute('aria-pressed', isDark ? 'true' : 'false');
+            const btnEscuro = cardEscuro.querySelector('.btn-ativar-tema');
+            if (btnEscuro) {
+                btnEscuro.classList.toggle('cfg-btn-primario', isDark);
+                btnEscuro.classList.toggle('cfg-btn-neutro', !isDark);
+            }
         }
 
         // Sincroniza switch direto na página de Configurações

@@ -60,6 +60,14 @@ jobs:
         working-directory: backend
         run: npx prisma db push --skip-generate
 
+      - name: Aplicar Extensões e Índices no PostgreSQL
+        working-directory: backend
+        run: node scripts/setup-unaccent.js || true
+
+      - name: Povoar Dados Iniciais de Teste (Seed)
+        working-directory: backend
+        run: node prisma/seed.js || true
+
       - name: Executar Testes Unitários com Cobertura de Código
         working-directory: backend
         run: npm run test:unit:coverage

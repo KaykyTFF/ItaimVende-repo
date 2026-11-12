@@ -170,6 +170,38 @@
     animation: pulsoHeart 0.3s ease;
 }
 
+/* Botão Compartilhar no Topo da Foto */
+.carrossel-foto-box .btn-compartilhar-topo {
+    position: absolute;
+    top: 14px;
+    right: 58px;
+    z-index: 4;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(2px);
+    border: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition, 0.25s cubic-bezier(0.4, 0, 0.2, 1));
+    color: #475569;
+}
+
+.carrossel-foto-box .btn-compartilhar-topo:hover {
+    transform: scale(1.15);
+    background-color: #FFFFFF;
+    color: #38A129;
+}
+
+.carrossel-foto-box .btn-compartilhar-topo svg {
+    width: 18px;
+    height: 18px;
+}
+
 /* Setas do Carrossel */
 .carrossel-seta {
     position: absolute;

@@ -1,0 +1,69 @@
+/**
+ * ITAIM VENDE - LOGIN DO PAINEL DE CONTROLE ADMINISTRATIVO (CSS)
+ * Arquivo: frontend/css/pages/admin/login-painel.css
+ */
+
+@import url('./login-tickets.css');
+
+/* Badge Exclusivo do Painel de Controle */
+.auth-painel-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(56, 161, 41, 0.16);
+    border: 1px solid rgba(56, 161, 41, 0.45);
+    color: #38A129;
+    padding: 7px 16px;
+    border-radius: 9999px;
+    font-size: 0.82rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 24px;
+    backdrop-filter: blur(8px);
+}
+
+[data-theme="dark"] .auth-painel-badge {
+    background: rgba(56, 161, 41, 0.22);
+    border-color: rgba(56, 161, 41, 0.6);
+    color: #44BD32;
+}
+
+/* Links de Navegação Auxiliar no Rodapé do Card */
+.links-admin-auxiliares {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 24px;
+    padding-top: 18px;
+    border-top: 1px solid #E2E8F0;
+    font-size: 0.84rem;
+}
+
+[data-theme="dark"] .links-admin-auxiliares {
+    border-top-color: #2C3946;
+}
+
+.links-admin-auxiliares a {
+    color: #64748B;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.links-admin-auxiliares a:hover {
+    color: #38A129;
+}
+
+[data-theme="dark"] .links-admin-auxiliares a {
+    color: #94A3B8;
+}
+
+[data-theme="dark"] .links-admin-auxiliares a:hover {
+    color: #44BD32;
+}
+

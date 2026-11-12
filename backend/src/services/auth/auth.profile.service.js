@@ -384,10 +384,10 @@ export async function changeUserPassword(userId, { currentPassword, newPassword 
  * Exclui ou anonimiza permanentemente a conta do usuário conforme diretrizes da LGPD
  * @param {string} userId - ID do usuário autenticado solicitando exclusão
  */
-export async function deleteUserAccount(userId) {
+export async function deleteUserAccount(userId, currentPassword) {
   const user = await prisma.user.findUnique({
     where: { id: userId },
-    select: { id: true, email: true, role: true },
+    select: { id: true, email: true, role: true, password: true },
   });
 
   if (!user) {
@@ -396,6 +396,17 @@ export async function deleteUserAccount(userId) {
 
   if (user.role === 'ADMIN') {
     throw new AppError('Contas de administrador não podem ser excluídas diretamente.', 403);
+  }
+
+  // Validação de segurança em operação sensível (quando senha for fornecida)
+  if (currentPassword) {
+    const isGoogleAccount = !user.password || user.password === '' || user.password.startsWith('GOOGLE_OAUTH');
+    if (!isGoogleAccount) {
+      const senhaValida = await bcrypt.compare(currentPassword, user.password);
+      if (!senhaValida) {
+        throw new AppError('Senha incorreta. A confirmação da senha é necessária para autorizar a exclusão da conta.', 401, 'INVALID_PASSWORD');
+      }
+    }
   }
 
   const timestamp = Date.now();
