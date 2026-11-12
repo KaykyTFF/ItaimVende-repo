@@ -252,6 +252,7 @@
             menuPopover.classList.add('aberto');
             menuPopover.setAttribute('aria-hidden', 'false');
             btnCompartilhar?.setAttribute('aria-expanded', 'true');
+            btnCompartilharTopo?.setAttribute('aria-expanded', 'true');
         }
 
         function fecharMenu() {
@@ -259,6 +260,7 @@
             menuPopover.classList.remove('aberto');
             menuPopover.setAttribute('aria-hidden', 'true');
             btnCompartilhar?.setAttribute('aria-expanded', 'false');
+            btnCompartilharTopo?.setAttribute('aria-expanded', 'false');
         }
 
         function alternarMenu(e) {
