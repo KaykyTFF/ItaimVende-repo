@@ -10,11 +10,11 @@
 
 /* 2. Design Moderno: Topo, Navegação e Carrossel */
 @import url('./produto/produto-breadcrumbs.css?v=20');
-@import url('./produto/produto-carrossel-galeria.css?v=20');
+@import url('./produto/produto-carrossel-galeria.css?v=21');
 
 /* 3. Detalhes, Vendedor e Ações */
 @import url('./produto/produto-detalhes-info.css?v=20');
-@import url('./produto/produto-vendedor-sidebar.css?v=20');
+@import url('./produto/produto-vendedor-sidebar.css?v=22');
 
 /* 4. Responsividade Moderna */
 @import url('./produto/produto-responsive.css?v=20');
