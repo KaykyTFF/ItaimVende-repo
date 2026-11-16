@@ -574,6 +574,10 @@
             localStorage.removeItem('itaim_ultimo_email');
             localStorage.removeItem('itaim_modo_dev');
             localStorage.removeItem('itaim_favoritos');
+            localStorage.removeItem('itaim_painel_auth');
+            localStorage.removeItem('itaim_tickets_auth');
+            sessionStorage.removeItem('itaim_painel_auth');
+            sessionStorage.removeItem('itaim_tickets_auth');
         } catch(e) {}
         if (window.ItaimSessao && typeof window.ItaimSessao.atualizarHeaderUsuario === 'function') {
             window.ItaimSessao.atualizarHeaderUsuario();

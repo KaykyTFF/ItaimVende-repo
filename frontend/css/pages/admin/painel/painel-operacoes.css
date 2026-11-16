@@ -8,7 +8,7 @@
 }
 
 .operacao-card {
-    background: #FFFFFF;
+    background: var(--bg-card);
     border: 1px solid var(--bg-card-border);
     border-radius: var(--radius-md);
     padding: 20px;
@@ -21,7 +21,7 @@
 }
 
 .operacao-card:hover {
-    border-color: var(--brand-primary);
+    border-color: var(--bg-card-border-glow);
     box-shadow: var(--shadow-card-hover);
 }
 
@@ -101,7 +101,7 @@
 }
 
 .btn-op-action {
-    background: #FFFFFF;
+    background: var(--bg-card-subtle);
     border: 1px solid var(--bg-card-border);
     color: var(--text-primary);
     font-family: inherit;
@@ -114,15 +114,15 @@
 }
 
 .btn-op-action:hover {
-    background: #F8FAFC;
+    background: var(--bg-card-hover);
     border-color: var(--brand-primary);
     color: var(--brand-primary);
 }
 
 .btn-op-danger {
-    background: #FEE2E2;
-    border: 1px solid #FECACA;
-    color: #DC2626;
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #EF4444;
     font-family: inherit;
     font-size: 0.82rem;
     font-weight: 600;
@@ -133,8 +133,8 @@
 }
 
 .btn-op-danger:hover:not(:disabled) {
-    background: #FCA5A5;
-    color: #991B1B;
+    background: #DC2626;
+    color: #FFFFFF;
 }
 
 .btn-op-danger:disabled {
@@ -143,7 +143,7 @@
 }
 
 .btn-op-success {
-    background: var(--brand-gradient);
+    background: var(--brand-primary);
     color: #ffffff;
     border: none;
     font-family: inherit;
@@ -152,17 +152,18 @@
     padding: 8px 16px;
     border-radius: var(--radius-sm);
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(68, 189, 50, 0.25);
+    box-shadow: none;
     transition: all 0.2s;
 }
 
 .btn-op-success:hover {
-    box-shadow: 0 6px 18px rgba(68, 189, 50, 0.35);
+    background: var(--brand-primary-hover);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     transform: translateY(-1px);
 }
 
 .btn-op-secondary {
-    background: #F1F5F9;
+    background: var(--bg-card-subtle);
     border: 1px solid var(--bg-card-border);
     color: var(--text-secondary);
     font-family: inherit;
@@ -175,6 +176,6 @@
 }
 
 .btn-op-secondary:hover {
-    background: #E2E8F0;
+    background: var(--bg-card-hover);
     color: var(--text-primary);
 }

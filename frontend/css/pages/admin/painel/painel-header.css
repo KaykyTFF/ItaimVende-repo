@@ -152,12 +152,12 @@
 .btn-diagnostico {
     background: var(--brand-primary);
     color: #FFFFFF;
-    box-shadow: 0 4px 14px rgba(68, 189, 50, 0.25);
+    box-shadow: none;
 }
 
 .btn-diagnostico:hover {
     background: var(--brand-primary-hover);
-    box-shadow: 0 6px 20px rgba(68, 189, 50, 0.35);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     transform: translateY(-1px);
 }
 

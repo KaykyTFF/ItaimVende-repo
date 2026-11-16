@@ -261,13 +261,21 @@
     // 5. INICIALIZAÇÃO DOS EVENTOS DO FORMULÁRIO
     // =========================================================================
     document.addEventListener('DOMContentLoaded', () => {
-        // Se já estiver logado como dev, redireciona diretamente para tickets
+        // Remove possíveis sessões antigas salvas em localStorage
         try {
-            const authExistente = sessionStorage.getItem(STORAGE_KEY_AUTH) || localStorage.getItem(STORAGE_KEY_AUTH);
+            localStorage.removeItem(STORAGE_KEY_AUTH);
+            localStorage.removeItem('itaim_painel_auth');
+        } catch (e) {}
+
+        // Se já estiver logado como dev nesta sessão ativa, redireciona diretamente para tickets
+        try {
+            const authExistente = sessionStorage.getItem(STORAGE_KEY_AUTH) ||
+                                  sessionStorage.getItem('itaim_painel_auth');
             if (authExistente) {
                 const dados = JSON.parse(authExistente);
-                if (dados && dados.username) {
-                    window.location.replace('tickets.html');
+                if (dados && dados.sessaoAtiva === true && dados.username) {
+                    const isPages = window.location.pathname.includes('/pages/');
+                    window.location.replace(isPages ? 'tickets.html' : '/tickets');
                     return;
                 }
             }
@@ -344,17 +352,21 @@
                         cargo: resultado.dev.role,
                         email: emailDev,
                         avatar: resultado.dev.avatar,
+                        sessaoAtiva: true,
                         autenticadoEm: Date.now()
                     };
 
-                    // Salva a sessão estritamente isolada da moderação (NÃO afeta o login da loja)
+                    // Salva a sessão estritamente em sessionStorage (NÃO persiste após fechar ou sem login)
                     sessionStorage.setItem(STORAGE_KEY_AUTH, JSON.stringify(sessaoDev));
-                    localStorage.setItem(STORAGE_KEY_AUTH, JSON.stringify(sessaoDev));
+                    sessionStorage.setItem('itaim_painel_auth', JSON.stringify(sessaoDev));
+                    localStorage.removeItem(STORAGE_KEY_AUTH);
+                    localStorage.removeItem('itaim_painel_auth');
 
                     exibirFeedback(`Bem-vindo(a), ${resultado.dev.nome}! Redirecionando para moderação...`, 'sucesso');
 
                     setTimeout(() => {
-                        window.location.href = 'tickets.html';
+                        const isPages = window.location.pathname.includes('/pages/');
+                        window.location.href = isPages ? 'tickets.html' : '/tickets';
                     }, 400);
 
                 } else {

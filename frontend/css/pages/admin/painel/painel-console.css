@@ -34,7 +34,7 @@
 
 .console-select:focus {
     border-color: var(--brand-primary);
-    box-shadow: 0 0 0 3px rgba(68, 189, 50, 0.15);
+    box-shadow: none;
 }
 
 .console-select option {
@@ -58,11 +58,11 @@
 
 .console-input:focus {
     border-color: var(--brand-primary);
-    box-shadow: 0 0 0 3px rgba(68, 189, 50, 0.15);
+    box-shadow: none;
 }
 
 .btn-send {
-    background: var(--brand-gradient);
+    background: var(--brand-primary);
     color: #ffffff;
     font-weight: 700;
     padding: 10px 20px;
@@ -70,12 +70,13 @@
     border-radius: var(--radius-sm);
     cursor: pointer;
     transition: all 0.2s;
-    box-shadow: 0 4px 12px rgba(68, 189, 50, 0.25);
+    box-shadow: none;
 }
 
 .btn-send:hover {
+    background: var(--brand-primary-hover);
     transform: translateY(-1px);
-    box-shadow: 0 6px 18px rgba(68, 189, 50, 0.35);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .console-quick-links {
@@ -100,9 +101,9 @@
 }
 
 .quick-link-btn:hover {
-    background: #E2E8F0;
+    background: var(--bg-card-hover);
     color: var(--text-primary);
-    border-color: #CBD5E1;
+    border-color: var(--bg-card-border-glow);
 }
 
 .console-output-area {

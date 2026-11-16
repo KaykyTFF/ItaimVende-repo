@@ -2,23 +2,24 @@
    TÚNEL CLOUDFLARE & PUBLICAÇÃO DO SITE
    ========================================================================== */
 .btn-cloud-tunnel {
-    background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
+    background: #2563EB;
     color: #ffffff;
-    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
+    box-shadow: none;
 }
 
 .btn-cloud-tunnel:hover {
-    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+    background: #1D4ED8;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     transform: translateY(-1px);
 }
 
 .btn-cloud-tunnel.active {
-    background: var(--brand-gradient);
-    box-shadow: 0 4px 14px rgba(68, 189, 50, 0.35);
+    background: var(--brand-primary);
+    box-shadow: none;
 }
 
 .painel-tunnel-card {
-    background: #FFFFFF;
+    background: var(--bg-card);
     border: 1px solid var(--bg-card-border);
     border-radius: var(--radius-lg);
     padding: 24px 28px;
@@ -42,7 +43,7 @@
     left: 0;
     right: 0;
     height: 4px;
-    background: var(--brand-gradient);
+    background: var(--brand-primary);
 }
 
 .tunnel-header-row {
@@ -63,7 +64,7 @@
     width: 48px;
     height: 48px;
     border-radius: var(--radius-md);
-    background: rgba(68, 189, 50, 0.12);
+    background: rgba(56, 161, 41, 0.12);
     color: var(--brand-primary);
     display: flex;
     align-items: center;
@@ -74,9 +75,9 @@
 }
 
 .tunnel-icon-wrapper.active {
-    background: rgba(16, 185, 129, 0.18);
-    color: #10b981;
-    box-shadow: 0 0 16px rgba(16, 185, 129, 0.25);
+    background: rgba(56, 161, 41, 0.16);
+    color: var(--brand-primary);
+    box-shadow: none;
 }
 
 .tunnel-status-line {
@@ -113,13 +114,13 @@
 
 .tunnel-pill-badge.online {
     background: rgba(16, 185, 129, 0.12);
-    color: #059669;
+    color: #10B981;
     border: 1px solid var(--success-border);
 }
 
 .tunnel-pill-badge.offline {
     background: rgba(239, 68, 68, 0.12);
-    color: #DC2626;
+    color: #EF4444;
     border: 1px solid var(--danger-border);
 }
 
@@ -130,26 +131,27 @@
 }
 
 .btn-iniciar-tunnel {
-    background: var(--brand-gradient);
+    background: var(--brand-primary);
     color: #ffffff;
     font-weight: 700;
     padding: 10px 20px;
     border: none;
     border-radius: var(--radius-sm);
     cursor: pointer;
-    box-shadow: 0 4px 14px rgba(68, 189, 50, 0.3);
+    box-shadow: none;
     transition: all 0.2s;
 }
 
 .btn-iniciar-tunnel:hover {
-    box-shadow: 0 6px 20px rgba(68, 189, 50, 0.45);
+    background: var(--brand-primary-hover);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     transform: translateY(-1px);
 }
 
 .btn-desligar-tunnel {
-    background: #FEE2E2;
-    color: #DC2626;
-    border: 1px solid #FECACA;
+    background: rgba(239, 68, 68, 0.12);
+    color: #EF4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
     font-weight: 700;
     padding: 10px 20px;
     border-radius: var(--radius-sm);
@@ -158,8 +160,8 @@
 }
 
 .btn-desligar-tunnel:hover {
-    background: #FCA5A5;
-    color: #991B1B;
+    background: #DC2626;
+    color: #FFFFFF;
 }
 
 /* Link Box */
@@ -196,32 +198,31 @@
 .tunnel-url-wrapper {
     display: flex;
     align-items: center;
-    background: #FFFFFF;
+    background: var(--bg-card);
     border: 1px solid var(--bg-card-border);
     border-radius: var(--radius-sm);
     overflow: hidden;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: border-color 0.2s;
 }
 
 .tunnel-url-wrapper:focus-within {
     border-color: var(--brand-primary);
-    box-shadow: 0 0 0 3px rgba(68, 189, 50, 0.15);
 }
 
 .tunnel-url-input {
     flex: 1;
     background: transparent;
     border: none;
-    color: var(--brand-primary);
+    color: var(--text-primary);
     font-family: var(--font-mono);
-    font-size: 0.95rem;
+    font-size: 0.92rem;
     font-weight: 600;
     padding: 10px 14px;
     outline: none;
 }
 
 .btn-copy-url {
-    background: #F8FAFC;
+    background: var(--bg-card-subtle);
     border: none;
     border-left: 1px solid var(--bg-card-border);
     color: var(--text-primary);
@@ -237,7 +238,7 @@
 }
 
 .btn-copy-url:hover {
-    background: #E2E8F0;
+    background: var(--bg-card-hover);
 }
 
 .tunnel-quick-buttons {
@@ -248,7 +249,7 @@
 }
 
 .btn-tunnel-action {
-    background: #FFFFFF;
+    background: var(--bg-card);
     border: 1px solid var(--bg-card-border);
     color: var(--text-primary);
     font-family: inherit;
@@ -265,7 +266,7 @@
 }
 
 .btn-tunnel-action:hover {
-    background: #F8FAFC;
+    background: var(--bg-card-hover);
     border-color: var(--brand-primary);
     color: var(--brand-primary);
     transform: translateY(-1px);
@@ -284,13 +285,13 @@
 }
 
 .qrcode-content {
-    background: #FFFFFF;
+    background: var(--bg-card);
     border: 1px solid var(--bg-card-border);
     border-radius: var(--radius-lg);
     padding: 24px 28px;
     max-width: 360px;
     width: 90%;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
     display: flex;
     flex-direction: column;
     align-items: center;

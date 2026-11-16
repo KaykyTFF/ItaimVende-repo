@@ -319,16 +319,21 @@
     // 4. INICIALIZAÇÃO E EVENTOS DO FORMULÁRIO
     // =========================================================================
     document.addEventListener('DOMContentLoaded', () => {
-        // Redireciona caso já possua sessão ativa de administrador
+        // Remove possíveis sessões antigas salvas em localStorage
         try {
-            const authExistente = sessionStorage.getItem(STORAGE_KEY_AUTH) || 
-                                  localStorage.getItem(STORAGE_KEY_AUTH) ||
-                                  sessionStorage.getItem('itaim_tickets_auth') ||
-                                  localStorage.getItem('itaim_tickets_auth');
+            localStorage.removeItem(STORAGE_KEY_AUTH);
+            localStorage.removeItem('itaim_tickets_auth');
+        } catch (e) {}
+
+        // Redireciona caso já possua sessão ativa de administrador nesta aba
+        try {
+            const authExistente = sessionStorage.getItem(STORAGE_KEY_AUTH) ||
+                                  sessionStorage.getItem('itaim_tickets_auth');
             if (authExistente) {
                 const dados = JSON.parse(authExistente);
-                if (dados && (dados.username || dados.nome)) {
-                    window.location.replace('painel.html');
+                if (dados && dados.sessaoAtiva === true && (dados.username || dados.nome)) {
+                    const isPages = window.location.pathname.includes('/pages/');
+                    window.location.replace(isPages ? 'painel.html' : '/painel');
                     return;
                 }
             }
@@ -388,24 +393,17 @@
                 if (resultado.sucesso) {
                     limparBloqueioEFalhas();
 
-                    // Salva a sessão do administrador
-                    sessionStorage.setItem(STORAGE_KEY_AUTH, JSON.stringify(resultado.admin));
-                    localStorage.setItem(STORAGE_KEY_AUTH, JSON.stringify(resultado.admin));
+                    const sessaoAdmin = {
+                        ...resultado.admin,
+                        sessaoAtiva: true,
+                        autenticadoEm: Date.now()
+                    };
 
-                    // Sincroniza com tickets para permitir trânsito livre entre áreas de gestão
-                    sessionStorage.setItem('itaim_tickets_auth', JSON.stringify(resultado.admin));
-                    localStorage.setItem('itaim_tickets_auth', JSON.stringify(resultado.admin));
-
-                    // Salva também o perfil logado no padrão do sistema
-                    localStorage.setItem('itaim_usuario_logado', JSON.stringify({
-                        id: resultado.admin.id,
-                        name: resultado.admin.nome,
-                        nome: resultado.admin.nome,
-                        username: resultado.admin.username,
-                        role: resultado.admin.role,
-                        papel: resultado.admin.papel,
-                        email: resultado.admin.email
-                    }));
+                    // Salva a sessão do administrador estritamente em sessionStorage
+                    sessionStorage.setItem(STORAGE_KEY_AUTH, JSON.stringify(sessaoAdmin));
+                    sessionStorage.setItem('itaim_tickets_auth', JSON.stringify(sessaoAdmin));
+                    localStorage.removeItem(STORAGE_KEY_AUTH);
+                    localStorage.removeItem('itaim_tickets_auth');
 
                     exibirFeedback(`Bem-vindo(a), ${resultado.admin.nome}! Acesso concedido ao Painel de Controle...`, 'sucesso');
 
