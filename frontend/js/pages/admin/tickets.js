@@ -26,6 +26,68 @@
     let filtroCategoriaSuporte = '';
     let termoBuscaSuporte = '';
 
+    let acaoConfirmacaoPendente = null;
+
+    function configurarModalConfirmacao() {
+        const modal = document.getElementById('modal-confirmar-tickets');
+        const btnFechar = document.getElementById('btn-fechar-confirmar-tk');
+        const btnCancelar = document.getElementById('btn-cancelar-confirmar-tk');
+        const btnConfirmar = document.getElementById('btn-acao-confirmar-tk');
+
+        if (!modal) return;
+
+        function fecharModalConfirmacao() {
+            modal.classList.remove('aberto');
+            acaoConfirmacaoPendente = null;
+        }
+
+        btnFechar?.addEventListener('click', fecharModalConfirmacao);
+        btnCancelar?.addEventListener('click', fecharModalConfirmacao);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) fecharModalConfirmacao();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('aberto')) {
+                fecharModalConfirmacao();
+            }
+        });
+
+        btnConfirmar?.addEventListener('click', async () => {
+            const callback = acaoConfirmacaoPendente;
+            fecharModalConfirmacao();
+            if (typeof callback === 'function') {
+                await callback();
+            }
+        });
+    }
+
+    function abrirModalConfirmacaoTickets({ tipo = 'perigo', icone = 'fa-right-from-bracket', titulo = 'Confirmar ação', texto = '', textoConfirmar = 'Confirmar', aoConfirmar = null }) {
+        const modal = document.getElementById('modal-confirmar-tickets');
+        const elIcone = document.getElementById('modal-confirmar-tk-icone');
+        const elTitulo = document.getElementById('modal-confirmar-tk-titulo');
+        const elTexto = document.getElementById('modal-confirmar-tk-texto');
+        const btnConfirmar = document.getElementById('btn-acao-confirmar-tk');
+
+        if (!modal) {
+            if (typeof aoConfirmar === 'function') aoConfirmar();
+            return;
+        }
+
+        if (elIcone) {
+            elIcone.className = `modal-confirmar-tk-icone ${tipo}`;
+            elIcone.innerHTML = `<i class="fa-solid ${icone}"></i>`;
+        }
+        if (elTitulo) elTitulo.textContent = titulo;
+        if (elTexto) elTexto.textContent = texto;
+        if (btnConfirmar) {
+            btnConfirmar.className = `btn-modal-tk-confirmar ${tipo}`;
+            btnConfirmar.textContent = textoConfirmar;
+        }
+
+        acaoConfirmacaoPendente = aoConfirmar;
+        modal.classList.add('aberto');
+    }
+
     // =========================================================================
     // 1. INICIALIZAÇÃO E CONTROLE DE ACESSO RBAC
     // =========================================================================
@@ -35,6 +97,7 @@
         configurarEventosToolbar();
         configurarEventosSuporte();
         configurarModalDetalhes();
+        configurarModalConfirmacao();
         
         // Configuração do botão Ver Site
         const btnVerSite = document.getElementById('btn-ver-site');
@@ -51,16 +114,23 @@
         if (btnLogout) {
             btnLogout.addEventListener('click', (e) => {
                 e.preventDefault();
-                if (confirm('Deseja encerrar a sessão de moderação?')) {
-                    try {
-                        sessionStorage.removeItem('itaim_tickets_auth');
-                        localStorage.removeItem('itaim_tickets_auth');
-                        sessionStorage.removeItem('itaim_painel_auth');
-                        localStorage.removeItem('itaim_painel_auth');
-                    } catch (err) {}
-                    const isPages = (window.location.pathname || '').includes('/pages/');
-                    window.location.href = isPages ? 'login-tickets.html' : '/login-tickets';
-                }
+                abrirModalConfirmacaoTickets({
+                    tipo: 'perigo',
+                    icone: 'fa-right-from-bracket',
+                    titulo: 'Encerrar sessão de moderação?',
+                    texto: 'Você será desconectado da Central de Tickets e precisará informar suas credenciais novamente para voltar ao painel.',
+                    textoConfirmar: 'Sim, sair',
+                    aoConfirmar: () => {
+                        try {
+                            sessionStorage.removeItem('itaim_tickets_auth');
+                            localStorage.removeItem('itaim_tickets_auth');
+                            sessionStorage.removeItem('itaim_painel_auth');
+                            localStorage.removeItem('itaim_painel_auth');
+                        } catch (err) {}
+                        const isPages = (window.location.pathname || '').includes('/pages/');
+                        window.location.href = isPages ? 'login-tickets.html' : '/login-tickets';
+                    }
+                });
             });
         }
 
@@ -556,17 +626,38 @@
                 const vendedor = btn.dataset.vendedor;
 
                 if (action === 'remover') {
-                    if (confirm(`Confirma a remoção imediata do anúncio "${titulo}"? As imagens serão purgadas do armazenamento.`)) {
-                        await executarRemocaoAnuncio(id);
-                    }
+                    abrirModalConfirmacaoTickets({
+                        tipo: 'perigo',
+                        icone: 'fa-trash-can',
+                        titulo: 'Remover anúncio denunciado?',
+                        texto: `Confirma a remoção imediata do anúncio "${titulo}"? As imagens serão purgadas do armazenamento.`,
+                        textoConfirmar: 'Sim, remover',
+                        aoConfirmar: async () => {
+                            await executarRemocaoAnuncio(id);
+                        }
+                    });
                 } else if (action === 'suspender') {
-                    if (confirm(`Confirma a suspensão preventiva da conta do vendedor "${vendedor}"? Seus anúncios ficarão ocultos.`)) {
-                        await executarSuspensaoConta(id);
-                    }
+                    abrirModalConfirmacaoTickets({
+                        tipo: 'aviso',
+                        icone: 'fa-user-slash',
+                        titulo: 'Suspender conta do vendedor?',
+                        texto: `Confirma a suspensão preventiva da conta do vendedor "${vendedor}"? Seus anúncios ficarão ocultos.`,
+                        textoConfirmar: 'Sim, suspender',
+                        aoConfirmar: async () => {
+                            await executarSuspensaoConta(id);
+                        }
+                    });
                 } else if (action === 'descartar') {
-                    if (confirm('Deseja descartar este ticket como denúncia improcedente?')) {
-                        await executarDescarteTicket(id);
-                    }
+                    abrirModalConfirmacaoTickets({
+                        tipo: 'neutro',
+                        icone: 'fa-ban',
+                        titulo: 'Descartar denúncia?',
+                        texto: 'Deseja descartar este ticket como denúncia improcedente?',
+                        textoConfirmar: 'Sim, descartar',
+                        aoConfirmar: async () => {
+                            await executarDescarteTicket(id);
+                        }
+                    });
                 } else if (action === 'detalhes') {
                     abrirModalDossie(id);
                 }

@@ -56,7 +56,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <!-- CSS -->
-    <link rel="stylesheet" href="../../css/pages/admin/tickets.css?v=3">
+    <link rel="stylesheet" href="../../css/pages/admin/tickets.css?v=4">
     <link rel="icon" type="image/png" href="../../assets/logos/header-logo.png">
 </head>
 <body class="tickets-body">
@@ -305,6 +305,26 @@
         </div>
     </div>
 
+    <!-- ==========================================================
+         MODAL DE CONFIRMAÇÃO DE AÇÕES E LOGOUT (ESTILO DO SITE)
+         ========================================================== -->
+    <div class="modal-confirmar-tk-backdrop" id="modal-confirmar-tickets" role="dialog" aria-modal="true" aria-labelledby="modal-confirmar-tk-titulo">
+        <div class="modal-confirmar-tk-card">
+            <button type="button" class="modal-confirmar-tk-fechar" id="btn-fechar-confirmar-tk" aria-label="Fechar">&times;</button>
+            <div class="modal-confirmar-tk-icone" id="modal-confirmar-tk-icone" aria-hidden="true">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </div>
+            <h3 class="modal-confirmar-tk-titulo" id="modal-confirmar-tk-titulo">Encerrar sessão de moderação?</h3>
+            <p class="modal-confirmar-tk-texto" id="modal-confirmar-tk-texto">
+                Você será desconectado da Central de Tickets e precisará fazer login novamente para acessar o painel.
+            </p>
+            <div class="modal-confirmar-tk-acoes">
+                <button type="button" class="btn-modal-tk-cancelar" id="btn-cancelar-confirmar-tk">Cancelar</button>
+                <button type="button" class="btn-modal-tk-confirmar perigo" id="btn-acao-confirmar-tk">Sim, sair</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Toast de Feedback -->
     <div id="tickets-toast" class="tickets-toast" style="position: fixed; bottom: 24px; right: 24px; z-index: 2000; display: none;"></div>
 
@@ -314,7 +334,7 @@
     <script src="../../js/core/api/index.js"></script>
     <script src="../../js/core/sessao/index.js"></script>
     <script src="../../js/core/categorias/index.js"></script>
-    <script src="../../js/pages/admin/tickets.js?v=18"></script>
+    <script src="../../js/pages/admin/tickets.js?v=19"></script>
 </body>
 </html>
 
