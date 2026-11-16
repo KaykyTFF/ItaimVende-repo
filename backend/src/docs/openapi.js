@@ -580,6 +580,36 @@ export const openapiSpec = {
     // -------------------------------------------------------------------------
     // USUÁRIOS & NOMES DE USUÁRIO (CANÔNICA REST)
     // -------------------------------------------------------------------------
+    '/account/username': {
+      patch: {
+        tags: ['Autenticação & Contas'],
+        summary: 'Altera o nome de usuário (@username) com regra de cooldown de 30 dias',
+        description: 'Regra de negócio inovadora contra fraudes: após alterado, o @username fica bloqueado para novas trocas por 30 dias corridos no servidor.',
+        security: [{ bearerAuth: [] }],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                required: ['username'],
+                properties: {
+                  username: { type: 'string', example: 'produtor_paulistana' },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          200: { description: 'Username atualizado e novo ciclo de cooldown de 30 dias registrado.' },
+          400: { description: 'Formato inválido ou nome de usuário reservado pelo sistema.' },
+          401: { description: 'Não autenticado.' },
+          403: { description: 'Cooldown de 30 dias ainda ativo (código USERNAME_COOLDOWN_ACTIVE).' },
+          409: { description: 'Nome de usuário já está em uso por outra conta.' },
+        },
+      },
+    },
+
     '/account/phone-reversals': {
       post: {
         tags: ['Autenticação & Contas'],
@@ -818,13 +848,14 @@ export const openapiSpec = {
             'application/json': {
               schema: {
                 type: 'object',
-                required: ['title', 'description', 'price', 'categoryId'],
+                required: ['title', 'description', 'price'],
                 properties: {
                   title: { type: 'string', example: 'Queijo de Cabra Artesanal 500g' },
                   description: { type: 'string', example: 'Produção própria no interior de Paulistana.' },
                   price: { type: 'number', example: 28.5 },
-                  categoryId: { type: 'string', example: 'cat_agro' },
-                  condition: { type: 'string', enum: ['NOVO', 'USADO'], example: 'NOVO' },
+                  categoryId: { type: 'integer', example: 5 },
+                  category: { type: 'string', example: 'Agro' },
+                  condition: { type: 'string', enum: ['NOVO', 'SEMINOVO', 'USADO', 'DEFEITO'], example: 'NOVO' },
                   city: { type: 'string', example: 'Paulistana' },
                   neighborhood: { type: 'string', example: 'Lagoa dos Bois' },
                   images: {
@@ -1095,8 +1126,13 @@ export const openapiSpec = {
                 required: ['content'],
                 properties: {
                   content: { type: 'string', example: 'Aceita R$ 40,00 para fechar hoje?' },
-                  type: { type: 'string', enum: ['TEXT', 'PROPOSAL', 'IMAGE'], default: 'TEXT' },
-                  proposalAmount: { type: 'number', example: 40.0 },
+                  messageType: {
+                    type: 'string',
+                    enum: ['TEXT', 'IMAGE', 'OFFER_PROPOSAL', 'OFFER', 'SYSTEM'],
+                    default: 'TEXT',
+                    example: 'OFFER_PROPOSAL',
+                  },
+                  offerValue: { type: 'number', nullable: true, example: 40.0 },
                 },
               },
             },
@@ -1179,7 +1215,7 @@ export const openapiSpec = {
             'application/json': {
               schema: {
                 type: 'object',
-                required: ['items', 'paymentMethod'],
+                required: ['items', 'shippingAddress'],
                 properties: {
                   items: {
                     type: 'array',
@@ -1187,13 +1223,22 @@ export const openapiSpec = {
                       type: 'object',
                       required: ['productId', 'quantity'],
                       properties: {
-                        productId: { type: 'string', example: 'prd_cm39abc987' },
-                        quantity: { type: 'integer', minimum: 1, example: 2 },
+                        productId: { type: 'string', example: 'cmw80ig5u000ctttgdi5x8uni' },
+                        quantity: { type: 'integer', minimum: 1, example: 1 },
                       },
                     },
                   },
-                  paymentMethod: { type: 'string', enum: ['PIX', 'CREDIT_CARD', 'CASH_ON_DELIVERY'], example: 'PIX' },
-                  addressId: { type: 'string', nullable: true },
+                  shippingAddress: {
+                    type: 'string',
+                    example: 'Av. Transnordestina, 500 - Centro, Paulistana - PI',
+                  },
+                  paymentMethod: {
+                    type: 'string',
+                    enum: ['PIX', 'CREDIT_CARD', 'IN_PERSON', 'pix', 'credit_card', 'boleto'],
+                    default: 'pix',
+                    example: 'PIX',
+                  },
+                  notes: { type: 'string', nullable: true },
                 },
               },
             },
@@ -1586,14 +1631,17 @@ export const openapiSpec = {
             'application/json': {
               schema: {
                 type: 'object',
-                required: ['street', 'neighborhood', 'city', 'state', 'zipCode'],
+                required: ['city', 'state'],
                 properties: {
+                  nickname: { type: 'string', default: 'Casa', example: 'Casa' },
                   street: { type: 'string', example: 'Rua Senador Cândido Ferraz, 120' },
-                  neighborhood: { type: 'string', example: 'Centro' },
+                  number: { type: 'string', nullable: true, example: '120' },
+                  complement: { type: 'string', nullable: true },
+                  neighborhood: { type: 'string', nullable: true, example: 'Centro' },
                   city: { type: 'string', example: 'Paulistana' },
                   state: { type: 'string', example: 'PI' },
-                  zipCode: { type: 'string', example: '64750000' },
-                  isPrimary: { type: 'boolean', default: false },
+                  postalCode: { type: 'string', nullable: true, example: '64750000' },
+                  isDefault: { type: 'boolean', default: false },
                 },
               },
             },
@@ -1651,13 +1699,13 @@ export const openapiSpec = {
     // -------------------------------------------------------------------------
     // UPLOADS & MÍDIA
     // -------------------------------------------------------------------------
-    '/upload': {
+    '/upload/single': {
       post: {
         tags: ['Uploads de Mídia'],
-        summary: 'Envia e otimiza imagens de produtos ou avatar',
-        description: `Recebe arquivo em multipart/form-data. Executa:
+        summary: 'Envia e otimiza uma imagem única (perfil, chat ou produto)',
+        description: `Recebe arquivo no campo \`image\` via multipart/form-data. Executa:
         - Auto-rotação EXIF de fotos de smartphone.
-        - Redimensionamento e compressão para formato ultraotimizado WebP com Sharp.
+        - Redimensionamento e compressão para formato otimizado WebP com Sharp.
         - Envio para o bucket do Supabase Storage.`,
         security: [{ bearerAuth: [] }],
         requestBody: {
@@ -1666,9 +1714,9 @@ export const openapiSpec = {
             'multipart/form-data': {
               schema: {
                 type: 'object',
+                required: ['image'],
                 properties: {
-                  file: { type: 'string', format: 'binary' },
-                  category: { type: 'string', enum: ['perfil', 'vendas'], default: 'vendas' },
+                  image: { type: 'string', format: 'binary' },
                 },
               },
             },
@@ -1686,7 +1734,37 @@ export const openapiSpec = {
               },
             },
           },
-          400: { description: 'Arquivo não suportado ou excede 10MB.' },
+          400: { description: 'Arquivo não suportado ou excede o limite permitido.' },
+          401: { description: 'Não autenticado.' },
+        },
+      },
+    },
+
+    '/upload/vendas': {
+      post: {
+        tags: ['Uploads de Mídia'],
+        summary: 'Envia e otimiza até 6 imagens de anúncio em lote',
+        security: [{ bearerAuth: [] }],
+        requestBody: {
+          required: true,
+          content: {
+            'multipart/form-data': {
+              schema: {
+                type: 'object',
+                required: ['images'],
+                properties: {
+                  images: {
+                    type: 'array',
+                    items: { type: 'string', format: 'binary' },
+                  },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          201: { description: 'Imagens processadas em WebP e enviadas ao Storage.' },
+          400: { description: 'Formato inválido ou limite de arquivos excedido.' },
           401: { description: 'Não autenticado.' },
         },
       },
