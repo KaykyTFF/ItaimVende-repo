@@ -13,10 +13,10 @@ Este diretório consolida todos os artefatos formais produzidos durante o ciclo 
 
 | Entregável / Fase | Artefato Formal | Descrição |
 | :---: | :--- | :--- |
-| **Entregável 1: Modelo V e Métodos Ágeis** | [`00-relatorio-partes-1-e-2.md`](00-relatorio-partes-1-e-2.md) | Relatório acadêmico unificado: Diagrama em V, 8 Casos do Modelo V, Verificação vs. Validação, 4 Histórias BDD, DoD, Ciclos TDD, Pipeline de CI, Pair Programming, Pirâmide de Testes (88 testes na entrega inicial, expandidos para 150 testes atuais) e reflexões críticas. |
+| **Entregável 1: Modelo V e Métodos Ágeis** | [`Relatorio_Testes_Itaim_Vende.pdf`](Relatorio_Testes_Itaim_Vende.pdf) | Relatório acadêmico unificado: Diagrama em V, 8 Casos do Modelo V, Verificação vs. Validação, 4 Histórias BDD, DoD, Ciclos TDD, Pipeline de CI, Pair Programming, Pirâmide de Testes (88 testes na entrega inicial, expandidos para 150 testes atuais) e reflexões críticas. |
 | **Fase 1: Planejamento** | [`01-plano-de-testes.md`](01-plano-de-testes.md) | Escopo, objetivos, pirâmide de testes, ambiente de homologação, matriz de riscos, papéis, cronograma e critérios formais de entrada/saída. |
 | **Fase 2: Projeto e Rastreabilidade** | [`02-casos-de-teste-e-rastreabilidade.md`](02-casos-de-teste-e-rastreabilidade.md) | Especificação detalhada dos 20 casos de teste (12 colunas), aprofundamento das técnicas (PE, AVL, TD) e Matriz de Rastreabilidade Bidirecional. |
-| **Entregável 3: Planilha de Testes (Fase 2)** | [`planilha-casos-de-teste-e-rastreabilidade.csv`](planilha-casos-de-teste-e-rastreabilidade.csv) | Planilha delimitada por ponto e vírgula contendo os 20 casos de teste estruturados nas 12 colunas obrigatórias da atividade. |
+| **Entregável 3: Planilha de Testes (Fase 2)** | [`planilha-casos-de-teste-e-rastreabilidade.xlsx`](planilha-casos-de-teste-e-rastreabilidade.xlsx) | Planilha estruturada contendo os 20 casos de teste, técnicas aplicadas e rastreabilidade com os requisitos da API. |
 | **Fase 3: Execução e Defeitos** | [`03-execucao-e-relatorios-de-defeitos.md`](03-execucao-e-relatorios-de-defeitos.md) | Log de execução dos 20 casos de teste e 5 relatórios formais de defeito (BUG-01 a BUG-05: reais e injetados, 100% saneados). |
 | **Fase 4: Monitoramento e Controle** | [`04-painel-de-metricas.md`](04-painel-de-metricas.md) | Painel comparativo em dois pontos temporais (T1 meio vs T2 fim), densidade de defeitos, curva de queima e registro das ações de controle executadas. |
 | **Fase 5: Encerramento do Projeto** | [`05-relatorio-final-de-testes.md`](05-relatorio-final-de-testes.md) | Validação dos critérios de saída, consolidação dos resultados, lições aprendidas e parecer formal de liberação para homologação e produção. |
@@ -48,3 +48,13 @@ npm --prefix backend run test:all
 - **Cobertura de Código em Regras de Negócio e Schemas:** **97,28% de linhas** (exigência mínima: 70%)
 - **Defeitos Registrados e Corrigidos:** **5 defeitos** (BUG-01 a BUG-05, 100% saneados)
 - **Pipeline de Integração Contínua (CI):** Ativo via GitHub Actions em [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml) com Node.js 20.x e PostgreSQL 15
+- **Quadro do Backlog (Scrum):** [GitHub Projects #4 — Itaim Vende](https://github.com/users/KaykyTFF/projects/4) e artefatos em [`/scrum`](../../scrum/)
+
+---
+
+## Declaração de Uso de Inteligência Artificial
+
+Ferramentas de Inteligência Artificial Generativa foram utilizadas exclusivamente como apoio técnico pela equipe:
+- **Onde:** formatação dos relatórios em Markdown, revisão da especificação OpenAPI / coleção Postman e estruturação inicial de casos de teste automatizados em `node:test`.
+- **Para quê:** acelerar a escrita repetitiva de cenários de entrada/saída, padronizar tabelas de rastreabilidade e checar aderência entre schemas Zod, rotas REST e documentação.
+- **Responsabilidade:** todas as regras de negócio, fluxos de teste, execuções reais no banco/CI e validações finais foram conduzidas, revisadas e compreendidas pelos integrantes da equipe.

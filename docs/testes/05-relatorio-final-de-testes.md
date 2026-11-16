@@ -62,3 +62,18 @@ Com base na verificação estrita dos critérios de saída, na taxa de **100% de
 
 A API **Itaim Vende (v2.0.0)** atende a todos os requisitos de qualidade, confiabilidade, segurança e conformidade da atividade de **Processo de Testes de Software**, encontrando-se apta para demonstração acadêmica e implantação no ambiente de produção.
 
+---
+
+## 6. Declaração de Uso de Inteligência Artificial (Onde e Para Quê)
+
+Em conformidade com as regras gerais da disciplina, a equipe declara o uso de ferramentas de Inteligência Artificial Generativa como apoio técnico nas seguintes frentes:
+
+- **Onde foi utilizada:**
+  - Estruturação e revisão dos casos de teste automatizados em [`backend/tests/`](../../backend/tests/) (`node:test`).
+  - Organização e padronização documental dos artefatos de Fase 1 a Fase 5 em [`docs/testes/`](./) e revisão da coleção Postman / OpenAPI.
+- **Para quê:**
+  - Acelerar a criação de cenários de erro/borda (partição de equivalência e valor limite), verificar consistência entre schemas Zod, Prisma e OpenAPI, e formatar matrizes de rastreabilidade.
+- **Validação pela equipe:**
+  - Todas as regras de negócio, critérios de aceitação, execuções reais contra o PostgreSQL, análise de defeitos e funcionamento do pipeline no GitHub Actions foram implementados, executados e validados integralmente pelos 5 integrantes da equipe, que dominam o código e os testes entregues.
+
+
