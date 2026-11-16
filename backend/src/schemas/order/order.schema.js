@@ -9,6 +9,5 @@ export const createOrderSchema = z.object({
     z.string().min(5, 'Endereço deve ser especificado.'),
     z.record(z.any()),
   ]),
-  paymentMethod: z.enum(['pix', 'credit_card', 'boleto', 'PIX', 'CREDIT_CARD', 'IN_PERSON']).default('pix'),
   notes: z.string().optional(),
 });

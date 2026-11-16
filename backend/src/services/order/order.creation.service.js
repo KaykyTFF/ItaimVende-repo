@@ -8,7 +8,7 @@ import { enviarEmailProdutoVendido } from '../email/email.service.js';
  * Criação segura de pedido calculando preços reais a partir do banco de dados
  */
 export async function createOrder(buyerId, orderData) {
-  const { items, shippingAddress, paymentMethod, notes } = orderData;
+  const { items, shippingAddress, notes } = orderData;
 
   const productIds = items.map((i) => i.productId);
   const dbProducts = await prisma.product.findMany({
@@ -43,7 +43,7 @@ export async function createOrder(buyerId, orderData) {
         code: orderCode,
         buyerId,
         totalAmount: parseFloat(calculatedTotal.toFixed(2)),
-        status: 'PENDING_PAYMENT',
+        status: 'PENDING',
         shippingAddress:
           typeof shippingAddress === 'string'
             ? shippingAddress

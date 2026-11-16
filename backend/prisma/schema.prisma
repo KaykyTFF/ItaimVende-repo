@@ -301,12 +301,11 @@ model Message {
 }
 
 // =============================================================================
-// 4. MÓDULO DE TRANSAÇÕES, PEDIDOS & PAGAMENTOS
+// 4. MÓDULO DE TRANSAÇÕES & PEDIDOS
 // =============================================================================
 
 enum OrderStatus {
-  PENDING_PAYMENT
-  PAID
+  PENDING
   PROCESSING
   SHIPPED
   DELIVERED
@@ -315,24 +314,17 @@ enum OrderStatus {
   DISPUTED
 }
 
-enum PaymentMethod {
-  PIX
-  CREDIT_CARD
-  IN_PERSON
-}
-
 model Order {
   id              String        @id @default(cuid())
   code            String        @unique
   buyerId         String
   buyer           User          @relation(fields: [buyerId], references: [id])
   totalAmount     Decimal       @db.Decimal(10, 2)
-  status          OrderStatus   @default(PENDING_PAYMENT)
+  status          OrderStatus   @default(PENDING)
   shippingAddress String        @db.Text
   notes           String?
 
   items           OrderItem[]
-  payments        Payment[]
 
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
@@ -350,21 +342,6 @@ model OrderItem {
   title     String
   quantity  Int      @default(1)
   unitPrice Decimal  @db.Decimal(10, 2)
-
-  @@index([orderId])
-}
-
-model Payment {
-  id         String        @id @default(cuid())
-  orderId    String
-  order      Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  method     PaymentMethod @default(PIX)
-  amount     Decimal       @db.Decimal(10, 2)
-  status     String        @default("PENDING")
-  gatewayId  String?
-  qrCode     String?       @db.Text
-  paidAt     DateTime?
-  createdAt  DateTime      @default(now())
 
   @@index([orderId])
 }

@@ -200,7 +200,6 @@ describe('Suíte de Testes Unitários — Schemas e Validações de Entrada (Zod
           { productId: 'prod_456', quantity: 1 },
         ],
         shippingAddress: 'Rua Senador Candido Ferraz, 100 - Centro, Paulistana - PI',
-        paymentMethod: 'PIX',
       });
       assert.equal(res.success, true);
       assert.equal(res.data.items.length, 2);

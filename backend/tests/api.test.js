@@ -194,7 +194,7 @@ describe('Suite de Testes de Conformidade REST e Integração da API Itaim Vende
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         items: [{ productId: 'prd_1', quantity: 1 }],
-        paymentMethod: 'PIX',
+        shippingAddress: 'Rua Centro, 100 - Paulistana, PI',
       }),
     });
     

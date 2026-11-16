@@ -45,6 +45,11 @@
       "key": "adminPassword",
       "value": "admin123",
       "type": "string"
+    },
+    {
+      "key": "demoProductId",
+      "value": "cmw80ig5u000ctttgdi5x8uni",
+      "type": "string"
     }
   ],
   "item": [
@@ -86,7 +91,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Cliente Demonstração\",\n  \"email\": \"cliente.demo@itaimvende.com.br\",\n  \"password\": \"Senha@123456\",\n  \"phone\": \"89994001122\",\n  \"city\": \"Paulistana\",\n  \"state\": \"PI\"\n}"
+              "raw": "{\n  \"name\": \"Cliente Demonstração\",\n  \"email\": \"cliente.demo.{{}}@itaimvende.com.br\",\n  \"password\": \"Senha@123456\",\n  \"phone\": \"89994001122\",\n  \"city\": \"Paulistana\",\n  \"state\": \"PI\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/auth/register",
@@ -742,7 +747,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"productId\": \"{{productId}}\"\n}"
+              "raw": "{\n  \"productId\": \"{{demoProductId}}\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/chat/conversations",
@@ -755,7 +760,20 @@
               ]
             }
           },
-          "response": []
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const res = pm.response.json();",
+                  "const id = (res.data && res.data.id) || (res.conversation && res.conversation.id) || res.id;",
+                  "if (id) pm.collectionVariables.set('conversationId', id);"
+                ]
+              }
+            }
+          ]
         },
         {
           "name": "POST /chat/conversations/:id/messages - Proposta de Preço (201 Created)",
@@ -844,7 +862,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"items\": [\n    {\n      \"productId\": \"{{productId}}\",\n      \"quantity\": 1\n    }\n  ],\n  \"shippingAddress\": \"Av. Transnordestina, 500 - Centro, Paulistana - PI\",\n  \"paymentMethod\": \"PIX\"\n}"
+              "raw": "{\n  \"items\": [\n    {\n      \"productId\": \"{{demoProductId}}\",\n      \"quantity\": 1\n    }\n  ],\n  \"shippingAddress\": \"Av. Transnordestina, 500 - Centro, Paulistana - PI\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/orders",
@@ -1125,7 +1143,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"reason\": \"FRAUDE\",\n  \"description\": \"Vendedor solicitou pagamento adiantado via PIX sem garantia de entrega.\",\n  \"contactEmail\": \"denunciante@exemplo.com\"\n}"
+              "raw": "{\n  \"reason\": \"FRAUD\",\n  \"description\": \"Vendedor solicitou pagamento adiantado via PIX sem garantia de entrega.\",\n  \"contactEmail\": \"denunciante@exemplo.com\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/reports/{{productId}}",

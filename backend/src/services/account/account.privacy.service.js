@@ -52,13 +52,6 @@ export async function getUserPrivacyDossier(userId) {
           status: true,
           totalAmount: true,
           createdAt: true,
-          payments: {
-            select: {
-              method: true,
-              amount: true,
-              status: true,
-            },
-          },
           items: {
             select: {
               id: true,
@@ -197,7 +190,6 @@ export async function getUserPrivacyDossier(userId) {
       codigo: o.code,
       status: o.status,
       valor_total: Number(o.totalAmount),
-      forma_pagamento: o.payments?.[0]?.method || 'PIX',
       data_pedido: o.createdAt,
       itens_comprados: o.items || [],
     })),

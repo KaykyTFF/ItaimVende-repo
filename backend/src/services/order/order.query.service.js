@@ -21,7 +21,6 @@ export async function getUserOrders(buyerId) {
           },
         },
       },
-      payments: true,
     },
   });
 
@@ -49,7 +48,6 @@ export async function getOrderDetails(userId, userRole, identifier) {
           },
         },
       },
-      payments: true,
     },
   });
 
