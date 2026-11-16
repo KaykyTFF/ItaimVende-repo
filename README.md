@@ -611,7 +611,7 @@ A interface Swagger documenta integralmente esquemas de dados de entrada e saida
 
 ## 17. Testes Automatizados
 
-O projeto possui **88 testes automatizados**, executados com o Node.js Test Runner (`node:test`).
+O projeto possui **150 testes automatizados** (**82 unitários** + **68 de integração/E2E**), executados com o Node.js Test Runner (`node:test`).
 
 Para executar os testes pela raiz do projeto:
 
@@ -625,16 +625,16 @@ Ou diretamente no backend:
 npm --prefix backend run test
 ```
 
-A suíte cobre autenticação, validação de dados, regras de negócio, notificações, operações da API e conformidade REST.
+A suíte cobre autenticação, validação de dados, regras de negócio, notificações, privacidade (LGPD), avaliações, compartilhamento Open Graph, operações da API e conformidade REST.
 
 **Último resultado registrado no projeto:**
 
 | Indicador | Resultado |
 | :--- | :---: |
-| Testes executados | 88 |
-| Aprovados | 88 |
+| Testes executados | 150 |
+| Aprovados | 150 |
 | Falhas | 0 |
-| Cobertura de regras de negócio | 97,03% |
+| Cobertura de regras de negócio e schemas | 97,28% |
 
 Os planos, casos de teste, registros de execução e métricas estão disponíveis em [`docs/testes/`](docs/testes/).
 
@@ -677,7 +677,7 @@ Seguindo as diretrizes da disciplina, a equipe estruturou a divisao de papeis ma
 
 | Integrante | Foco Principal | Papel Sprint 1 | Papel Sprint 2 | Contribuicoes Efetivas Comprovadas por Commits no Git |
 | :--- | :--- | :--- | :--- | :--- |
-| **Kayky Terles** | Lider Tecnico e Backend | Product Owner | Product Owner | Arquitetura REST em camadas, autenticacao JWT, criptografia Bcrypt, Google OAuth, regras de integridade e calculo financeiro compulsorio de pedidos no servidor (`/orders`), regra de cooldown de 30 dias para username (`@`), extensao PostgreSQL `unaccent` para busca fonetica, pipeline Sharp WebP, integracao Supabase Storage, esteira de 88 testes automatizados e suite unitaria Zod. |
+| **Kayky Terles** | Lider Tecnico e Backend | Product Owner | Product Owner | Arquitetura REST em camadas, autenticacao JWT, criptografia Bcrypt, Google OAuth, regras de integridade e calculo financeiro compulsorio de pedidos no servidor (`/orders`), regra de cooldown de 30 dias para username (`@`), extensao PostgreSQL `unaccent` para busca fonetica, pipeline Sharp WebP, integracao Supabase Storage, esteira de 150 testes automatizados e suite unitaria Zod. |
 | **Pedro Ravy** | Backend e Usabilidade | Desenvolvedor | Desenvolvedor | Filtros de busca regional no Prisma (cidades e bairros do Vale do Itaim), regra de avaliacoes com trava de uma nota por comprador (EVAL-01), persistencia da central de tickets e suporte em banco (`MOD-1`), inclusao do campo Biografia e fundo neutro no perfil (`PRF-2` e `PRF-3`), botoes solidos em Meus Anuncios (`UI-1`) e trava de rolagem e zoom no recorte mobile de fotos (`MOB-1`). |
 | **Josimar** | Frontend | Scrum Master | Desenvolvedor | Padronizacao do Skeleton Shimmer universal em todo o frontend (`UI-S1-04`), correcao de contraste no tema escuro (`UI-S1-05`), suporte do formulario de anuncio ao tema escuro (`UI-S1-06`), integracao da tela administrativa de tickets (`tickets.html` e controle de sessao `MOD-1`), e organizacao do catalogo de 19 categorias (`CAT-1`). |
 | **Giselly** | Frontend | Desenvolvedora | Scrum Master | Redesenho das telas de login, modal de aviso para visitantes (`UI-S1-07`), botao Entrar e proporcoes do botao Vender (`UI-S1-08` e `UI-S1-09`), estabilidade visual com `scrollbar-gutter` (`UI-S1-10`), redesign de denuncias (`UI-S1-14`, `UI-S1-15` e `UI-S1-16`), baloes de proposta de negociacao no chat (`UI-S1-17`), implementacao do debounce de 400ms com feedback em tempo real (`MELH-1`), nova pagina 404 regional com arte do tatu (`UI-2`), pagina de busca com slider de preco (`UI-6` e `UI-7`), integracao do botao WhatsApp (`UI-8` e `UI-9`) e bloqueio visual do cooldown de 30 dias para username (`H13`). |
@@ -700,7 +700,7 @@ Definido formalmente na Sprint 0:
 Uma historia so foi declarada pronta mediante atendimento integral a dez criterios estabelecidos na Sprint 0:
 
 1. **Revisao por Colega:** Codigo integrado a branch principal exclusivamente via Pull Request revisado e aprovado por outro integrante.
-2. **Testes Automatizados Aprovados:** 100% dos testes unitarios e de integracao da funcionalidade executando com sucesso no pipeline (mantendo 88 testes aprovados).
+2. **Testes Automatizados Aprovados:** 100% dos testes unitarios e de integracao da funcionalidade executando com sucesso no pipeline (mantendo 150 testes aprovados).
 3. **Criterios de Aceitacao BDD:** Validacao de todos os cenarios Dado/Quando/Entao junto ao Product Owner.
 4. **Documentacao OpenAPI 3.0.3:** Endpoints, schemas e respostas descritos no Swagger UI e serializados no `openapi.json`.
 5. **Colecao Postman:** Exemplos de sucesso e casos de erro atualizados na colecao oficial `itaim-vende.postman_collection.json`.

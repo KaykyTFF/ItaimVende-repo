@@ -30,6 +30,21 @@
       "key": "conversationId",
       "value": "",
       "type": "string"
+    },
+    {
+      "key": "sellerId",
+      "value": "cmv5iadfu0001ttiw8da3zj7o",
+      "type": "string"
+    },
+    {
+      "key": "adminEmail",
+      "value": "admin@gmail.com",
+      "type": "string"
+    },
+    {
+      "key": "adminPassword",
+      "value": "admin123",
+      "type": "string"
     }
   ],
   "item": [
@@ -84,7 +99,21 @@
               ]
             }
           },
-          "response": []
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.token) {",
+                  "    pm.collectionVariables.set('token', res.token);",
+                  "}"
+                ]
+              }
+            }
+          ]
         },
         {
           "name": "POST /auth/register - E-mail Duplicado (409 Conflict)",
@@ -98,7 +127,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Duplicado\",\n  \"email\": \"admin@itaimvende.com.br\",\n  \"password\": \"Senha@123456\"\n}"
+              "raw": "{\n  \"name\": \"Duplicado\",\n  \"email\": \"admin@gmail.com\",\n  \"password\": \"Senha@123456\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/auth/register",
@@ -146,15 +175,17 @@
             {
               "listen": "test",
               "script": {
+                "type": "text/javascript",
                 "exec": [
                   "const res = pm.response.json();",
                   "if (res.token) {",
-                  "    pm.collectionVariables.set('token', res.token);",
                   "    pm.collectionVariables.set('adminToken', res.token);",
-                  "    console.log('Token armazenado com sucesso!');",
+                  "    if (!pm.collectionVariables.get('token')) {",
+                  "        pm.collectionVariables.set('token', res.token);",
+                  "    }",
+                  "    console.log('adminToken armazenado com sucesso!');",
                   "}"
-                ],
-                "type": "text/javascript"
+                ]
               }
             }
           ],
@@ -168,7 +199,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"admin@itaimvende.com.br\",\n  \"password\": \"Admin@123456\"\n}"
+              "raw": "{\n  \"email\": \"{{adminEmail}}\",\n  \"password\": \"{{adminPassword}}\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/auth/login",
@@ -195,7 +226,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"admin@itaimvende.com.br\",\n  \"password\": \"SenhaIncorretaXYZ\"\n}"
+              "raw": "{\n  \"email\": \"admin@gmail.com\",\n  \"password\": \"SenhaIncorretaXYZ\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/auth/login",
@@ -222,7 +253,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"admin@itaimvende.com.br\"\n}"
+              "raw": "{\n  \"email\": \"admin@gmail.com\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/auth/forgot-password",
@@ -249,7 +280,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"admin@itaimvende.com.br\",\n  \"code\": \"000000\"\n}"
+              "raw": "{\n  \"email\": \"admin@gmail.com\",\n  \"code\": \"000000\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/auth/verify-reset-code",
@@ -311,14 +342,14 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/auth/user/usr_admin",
+              "raw": "{{baseUrl}}/auth/user/{{sellerId}}",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
                 "auth",
                 "user",
-                "usr_admin"
+                "{{sellerId}}"
               ]
             }
           },
@@ -349,13 +380,13 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/users/usr_admin",
+              "raw": "{{baseUrl}}/users/{{sellerId}}",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
                 "users",
-                "usr_admin"
+                "{{sellerId}}"
               ]
             }
           },
@@ -411,6 +442,36 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "PATCH /account/username - Alterar @username com Cooldown 30 Dias (200 OK / 403 Cooldown)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"vendedor_paulistana\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/account/username",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "account",
+                "username"
+              ]
+            }
+          }
         }
       ]
     },
@@ -515,7 +576,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"title\": \"Mel Silvestre de Paulistana 500g\",\n  \"description\": \"Produção própria no interior do semiárido, 100% puro e natural.\",\n  \"price\": 25.00,\n  \"categoryId\": \"cat_agro\",\n  \"condition\": \"NOVO\",\n  \"city\": \"Paulistana\",\n  \"neighborhood\": \"Centro\",\n  \"images\": []\n}"
+              "raw": "{\n  \"title\": \"Mel Silvestre de Paulistana 500g\",\n  \"description\": \"Produção própria no interior do semiárido, 100% puro e natural.\",\n  \"price\": 25,\n  \"category\": \"Agro\",\n  \"condition\": \"NOVO\",\n  \"city\": \"Paulistana\",\n  \"neighborhood\": \"Centro\",\n  \"images\": []\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/products",
@@ -527,7 +588,51 @@
               ]
             }
           },
-          "response": []
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.data && res.data.id) {",
+                  "    pm.collectionVariables.set('productId', res.data.id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUT /products/:id - Atualizar Anúncio (200 OK)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Mel Silvestre de Paulistana 500g (Atualizado)\",\n  \"price\": 28\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products/{{productId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "products",
+                "{{productId}}"
+              ]
+            }
+          }
         },
         {
           "name": "GET /products/:id - Não Encontrado (404 Not Found)",
@@ -668,7 +773,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"content\": \"Faço uma oferta de R$ 20,00 para retirar pessoalmente hoje.\",\n  \"type\": \"PROPOSAL\",\n  \"proposalAmount\": 20.00\n}"
+              "raw": "{\n  \"content\": \"Faço uma oferta de R$ 20,00 para retirar pessoalmente hoje.\",\n  \"messageType\": \"OFFER_PROPOSAL\",\n  \"offerValue\": 20\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/chat/conversations/{{conversationId}}/messages",
@@ -739,7 +844,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"items\": [\n    {\n      \"productId\": \"{{productId}}\",\n      \"quantity\": 1\n    }\n  ],\n  \"paymentMethod\": \"PIX\"\n}"
+              "raw": "{\n  \"items\": [\n    {\n      \"productId\": \"{{productId}}\",\n      \"quantity\": 1\n    }\n  ],\n  \"shippingAddress\": \"Av. Transnordestina, 500 - Centro, Paulistana - PI\",\n  \"paymentMethod\": \"PIX\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/orders",
@@ -907,14 +1012,14 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/reviews/user/usr_admin",
+              "raw": "{{baseUrl}}/reviews/user/{{sellerId}}",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
                 "reviews",
                 "user",
-                "usr_admin"
+                "{{sellerId}}"
               ]
             }
           },
@@ -939,14 +1044,14 @@
               "raw": "{\n  \"rating\": 5,\n  \"comment\": \"Excelente atendimento, produto entregue super rápido em Paulistana!\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/reviews/user/usr_admin",
+              "raw": "{{baseUrl}}/reviews/user/{{sellerId}}",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
                 "reviews",
                 "user",
-                "usr_admin"
+                "{{sellerId}}"
               ]
             }
           },
@@ -958,13 +1063,13 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/users/usr_admin/reviews",
+              "raw": "{{baseUrl}}/users/{{sellerId}}/reviews",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
                 "users",
-                "usr_admin",
+                "{{sellerId}}",
                 "reviews"
               ]
             }
@@ -990,13 +1095,13 @@
               "raw": "{\n  \"rating\": 5,\n  \"comment\": \"Excelente produto do semiárido!\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/users/usr_admin/reviews",
+              "raw": "{{baseUrl}}/users/{{sellerId}}/reviews",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
                 "users",
-                "usr_admin",
+                "{{sellerId}}",
                 "reviews"
               ]
             }
@@ -1093,7 +1198,7 @@
             "header": [
               {
                 "key": "Authorization",
-                "value": "Bearer {{token}}"
+                "value": "Bearer {{adminToken}}"
               },
               {
                 "key": "Content-Type",
@@ -1161,7 +1266,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"street\": \"Av. Transnordestina, 500\",\n  \"neighborhood\": \"Alto da Boa Vista\",\n  \"city\": \"Paulistana\",\n  \"state\": \"PI\",\n  \"zipCode\": \"64750000\",\n  \"isPrimary\": true\n}"
+              "raw": "{\n  \"nickname\": \"Casa\",\n  \"street\": \"Av. Transnordestina, 500\",\n  \"neighborhood\": \"Alto da Boa Vista\",\n  \"city\": \"Paulistana\",\n  \"state\": \"PI\",\n  \"postalCode\": \"64750000\",\n  \"isDefault\": true\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/addresses",

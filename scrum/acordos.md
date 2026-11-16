@@ -42,7 +42,7 @@ Completando o modelo pedido na atividade:
 No nosso time, uma historia so e considerada pronta se cumprir todos os dez itens abaixo:
 
 1. **Revisao por colega:** O codigo so entra na branch principal por meio de Pull Request revisado e aprovado por outro integrante da equipe. Ninguem sobre codigo direto na main.
-2. **Testes automatizados passando:** Todos os testes unitarios e de integracao da funcionalidade foram escritos e estao passando com sucesso na esteira do GitHub Actions, mantendo os 88 testes do projeto aprovados.
+2. **Testes automatizados passando:** Todos os testes unitarios e de integracao da funcionalidade foram escritos e estao passando com sucesso na esteira do GitHub Actions, mantendo os 150 testes do projeto aprovados.
 3. **Criterios de aceitacao conferidos:** Validamos todos os cenarios de Dado, Quando e Entao junto com o Product Owner.
 4. **Documentado no OpenAPI:** O endpoint, seus campos de envio e as respostas de sucesso e erro estao descritos na documentacao interativa do Swagger UI e no arquivo openapi.json.
 5. **Colecao de testes atualizada:** A colecao do Postman contem os exemplos de chamada de sucesso e os casos de erro da funcionalidade.

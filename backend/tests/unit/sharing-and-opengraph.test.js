@@ -109,12 +109,11 @@ describe('Suíte de Testes Unitários — Compartilhamento de Anúncios e Metada
             assert.ok(conteudoHtml.includes('<link rel="canonical" id="meta-canonical-url"'), 'Deve conter tag canônica');
         });
 
-        test('CT-SH06: produto.html deve conter o botão de compartilhamento na barra lateral com popover', () => {
-            assert.ok(conteudoHtml.includes('id="btn-compartilhar-anuncio"'), 'Deve conter botão principal de compartilhamento');
+        test('CT-SH06: produto.html deve conter o botão de compartilhamento sobre a foto com popover', () => {
+            assert.ok(conteudoHtml.includes('id="btn-compartilhar-topo"'), 'Deve conter botão principal de compartilhamento sobre a foto');
             assert.ok(conteudoHtml.includes('id="menu-compartilhar-popover"'), 'Deve conter container do popover');
             assert.ok(conteudoHtml.includes('id="btn-share-whatsapp"'), 'Deve conter opção Compartilhar pelo WhatsApp');
             assert.ok(conteudoHtml.includes('id="btn-share-copiar-link"'), 'Deve conter opção Copiar link');
-            assert.ok(conteudoHtml.includes('id="btn-compartilhar-topo"'), 'Deve conter botão de compartilhamento rápido no topo da imagem');
         });
     });
 
@@ -125,8 +124,7 @@ describe('Suíte de Testes Unitários — Compartilhamento de Anúncios e Metada
         const caminhoCssTema = path.join(projectRoot, 'frontend/css/core/theme/theme-produto.css');
         const conteudoCssTema = fs.readFileSync(caminhoCssTema, 'utf-8');
 
-        test('CT-SH07: produto-vendedor-sidebar.css deve estilizar o botão e o popover com animação e responsividade', () => {
-            assert.ok(conteudoCssSidebar.includes('.btn-compartilhar-anuncio'), 'Deve conter estilo do botão compartilhar');
+        test('CT-SH07: produto-vendedor-sidebar.css deve estilizar o popover de compartilhamento com animação e responsividade', () => {
             assert.ok(conteudoCssSidebar.includes('.menu-compartilhar-popover'), 'Deve conter estilo do popover');
             assert.ok(conteudoCssSidebar.includes('.item-compartilhar'), 'Deve conter estilo dos itens do popover');
             assert.ok(conteudoCssSidebar.includes('.icone-share-wpp'), 'Deve conter estilo do ícone WhatsApp');
