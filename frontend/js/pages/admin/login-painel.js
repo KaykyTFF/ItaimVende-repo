@@ -126,12 +126,17 @@
 
     function atualizarBadgeTentativas() {
         const badgeEl = document.getElementById('badge-tentativas');
+        const numEl = document.getElementById('num-tentativas');
         if (!badgeEl) return;
 
         const falhas = obterFalhasAtuais();
         const restantes = Math.max(0, MAX_TENTATIVAS - falhas);
 
-        badgeEl.textContent = `${restantes} de ${MAX_TENTATIVAS} restantes`;
+        if (numEl) {
+            numEl.textContent = restantes;
+        } else {
+            badgeEl.textContent = `${restantes}/5 restantes`;
+        }
         badgeEl.className = 'badge-tentativas-pill';
 
         if (restantes <= 1) {
@@ -344,11 +349,11 @@
                 const iconFechado = btnToggleSenha.querySelector('.icone-fechado');
                 if (iconAberto && iconFechado) {
                     if (novoTipo === 'text') {
-                        iconAberto.classList.add('icone-oculto');
-                        iconFechado.classList.remove('icone-oculto');
-                    } else {
                         iconAberto.classList.remove('icone-oculto');
                         iconFechado.classList.add('icone-oculto');
+                    } else {
+                        iconAberto.classList.add('icone-oculto');
+                        iconFechado.classList.remove('icone-oculto');
                     }
                 }
             });

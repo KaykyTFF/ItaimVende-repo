@@ -3,30 +3,30 @@
  * Arquivo: frontend/css/pages/admin/login-painel.css
  */
 
-@import url('./login-tickets.css');
+@import url('./login-tickets.css?v=4');
 
 /* Badge Exclusivo do Painel de Controle */
 .auth-painel-badge {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: rgba(56, 161, 41, 0.16);
-    border: 1px solid rgba(56, 161, 41, 0.45);
-    color: #38A129;
+    background: rgba(15, 23, 42, 0.78);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    color: #FFFFFF;
     padding: 7px 16px;
     border-radius: 9999px;
     font-size: 0.82rem;
-    font-weight: 800;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     margin-top: 24px;
-    backdrop-filter: blur(8px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
 }
 
 [data-theme="dark"] .auth-painel-badge {
-    background: rgba(56, 161, 41, 0.22);
-    border-color: rgba(56, 161, 41, 0.6);
-    color: #44BD32;
+    background: rgba(15, 23, 42, 0.85);
+    border-color: rgba(255, 255, 255, 0.25);
+    color: #FFFFFF;
 }
 
 /* Links de Navegação Auxiliar no Rodapé do Card */
