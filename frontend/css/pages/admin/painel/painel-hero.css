@@ -51,7 +51,8 @@
     width: 52px;
     height: 52px;
     border-radius: 50%;
-    background: rgba(16, 185, 129, 0.12);
+    background: var(--bg-card-subtle);
+    border: 1px solid var(--bg-card-border);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -59,37 +60,26 @@
 }
 
 .status-indicator-ring::after {
-    content: '';
-    position: absolute;
-    inset: -4px;
-    border-radius: 50%;
-    border: 2px solid rgba(16, 185, 129, 0.35);
-    animation: pulseWave 2s infinite ease-out;
-}
-
-@keyframes pulseWave {
-    0% { transform: scale(0.9); opacity: 0.8; }
-    50% { transform: scale(1.15); opacity: 0; }
-    100% { transform: scale(0.9); opacity: 0; }
+    display: none;
 }
 
 .status-pulse-dot {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
-    background: var(--success-green);
-    box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    background: var(--brand-primary);
+    box-shadow: none;
+    transition: background-color 0.3s ease;
 }
 
 .status-pulse-dot.warning {
     background: var(--warning-amber);
-    box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+    box-shadow: none;
 }
 
 .status-pulse-dot.critical {
     background: var(--danger-red);
-    box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
+    box-shadow: none;
 }
 
 .hero-label {

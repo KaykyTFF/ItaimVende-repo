@@ -53,7 +53,7 @@
 
 .btn-primary-small:hover {
     background: var(--brand-primary-hover);
-    box-shadow: 0 4px 14px rgba(68, 189, 50, 0.3);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     transform: translateY(-1px);
 }
 

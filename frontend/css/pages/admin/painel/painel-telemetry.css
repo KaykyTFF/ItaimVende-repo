@@ -46,8 +46,7 @@
     height: 8px;
     border-radius: 50%;
     background: var(--brand-primary);
-    box-shadow: 0 0 10px rgba(68, 189, 50, 0.6);
-    animation: pulseDot 1.5s infinite;
+    box-shadow: none;
 }
 
 @keyframes pulseDot {
