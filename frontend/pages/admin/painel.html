@@ -56,41 +56,36 @@
     <!-- Guarda de Autenticação Estrita do Painel (Exclusivo Administradores e Desenvolvedores) -->
     <script>
         (function() {
+            var isPages = (window.location.pathname || '').includes('/pages/');
+            var urlDestino = isPages ? 'login-painel.html' : '/login-painel';
             try {
-                var auth = sessionStorage.getItem('itaim_painel_auth') || 
-                           localStorage.getItem('itaim_painel_auth') || 
-                           sessionStorage.getItem('itaim_tickets_auth') || 
-                           localStorage.getItem('itaim_tickets_auth');
+                // Remove sessões antigas persistidas indevidamente em localStorage
+                localStorage.removeItem('itaim_painel_auth');
+                localStorage.removeItem('itaim_tickets_auth');
 
-                var usuarioGeral = localStorage.getItem('itaim_usuario_logado');
-                var roleGeral = '';
-                if (usuarioGeral) {
-                    try {
-                        var parsedUser = JSON.parse(usuarioGeral);
-                        roleGeral = (parsedUser.role || parsedUser.papel || '').toUpperCase();
-                    } catch (e) {}
-                }
+                var auth = sessionStorage.getItem('itaim_painel_auth') || 
+                           sessionStorage.getItem('itaim_tickets_auth');
 
                 var temAcessoAdmin = false;
                 if (auth) {
-                    try {
-                        var parsedAuth = JSON.parse(auth);
-                        if (parsedAuth && (parsedAuth.username || parsedAuth.nome)) {
-                            temAcessoAdmin = true;
-                        }
-                    } catch (e) {}
-                }
-
-                if (!temAcessoAdmin && (roleGeral === 'ADMIN' || roleGeral === 'MODERATOR')) {
-                    temAcessoAdmin = true;
+                    var parsedAuth = JSON.parse(auth);
+                    var role = ((parsedAuth && (parsedAuth.role || parsedAuth.papel)) || '').toUpperCase();
+                    if (
+                        parsedAuth &&
+                        parsedAuth.sessaoAtiva === true &&
+                        (parsedAuth.username || parsedAuth.nome) &&
+                        (role === 'ADMIN' || role === 'MODERATOR')
+                    ) {
+                        temAcessoAdmin = true;
+                    }
                 }
 
                 if (!temAcessoAdmin) {
-                    var isPages = (window.location.pathname || '').includes('/pages/');
-                    var urlDestino = isPages ? 'login-painel.html' : '/login-painel';
+                    document.documentElement.style.display = 'none';
                     window.location.replace(urlDestino);
                 }
             } catch (err) {
+                document.documentElement.style.display = 'none';
                 window.location.replace('login-painel.html');
             }
         })();
@@ -775,6 +770,6 @@
     <script src="../../js/core/rotas/index.js"></script>
     <script src="../../js/core/api/index.js"></script>
     <script src="../../js/core/sessao/index.js"></script>
-    <script src="../../js/pages/admin/painel.js?v=2.0"></script>
+    <script src="../../js/pages/admin/painel.js?v=2.1"></script>
 </body>
 </html>

@@ -55,22 +55,29 @@
                     try {
                         sessionStorage.removeItem('itaim_tickets_auth');
                         localStorage.removeItem('itaim_tickets_auth');
+                        sessionStorage.removeItem('itaim_painel_auth');
+                        localStorage.removeItem('itaim_painel_auth');
                     } catch (err) {}
-                    window.location.href = 'login-tickets.html';
+                    const isPages = (window.location.pathname || '').includes('/pages/');
+                    window.location.href = isPages ? 'login-tickets.html' : '/login-tickets';
                 }
             });
         }
 
         // Verifica autenticação exclusiva e isolada da moderação (independente da loja)
         try {
+            localStorage.removeItem('itaim_tickets_auth');
+            localStorage.removeItem('itaim_painel_auth');
+
             let usuario = null;
-            const ticketsAuthStr = sessionStorage.getItem('itaim_tickets_auth') || localStorage.getItem('itaim_tickets_auth');
+            const ticketsAuthStr = sessionStorage.getItem('itaim_tickets_auth') || sessionStorage.getItem('itaim_painel_auth');
             if (ticketsAuthStr) {
                 usuario = JSON.parse(ticketsAuthStr);
             }
 
-            if (!usuario || !usuario.username) {
-                window.location.href = 'login-tickets.html';
+            if (!usuario || usuario.sessaoAtiva !== true || (!usuario.username && !usuario.nome)) {
+                const isPages = (window.location.pathname || '').includes('/pages/');
+                window.location.replace(isPages ? 'login-tickets.html' : '/login-tickets');
                 return;
             }
 

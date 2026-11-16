@@ -485,13 +485,13 @@
             // Tratamento especial para Tickets & Moderação:
             if (rotaAtual === 'tickets' || rotaAtual === 'moderacao' || path.includes('tickets.html')) {
                 try {
+                    localStorage.removeItem('itaim_tickets_auth');
+                    localStorage.removeItem('itaim_painel_auth');
                     const ticketsAuth = sessionStorage.getItem('itaim_tickets_auth') || 
-                                       localStorage.getItem('itaim_tickets_auth') ||
-                                       sessionStorage.getItem('itaim_painel_auth') ||
-                                       localStorage.getItem('itaim_painel_auth');
+                                       sessionStorage.getItem('itaim_painel_auth');
                     if (ticketsAuth) {
                         const parsed = JSON.parse(ticketsAuth);
-                        if (parsed && (parsed.username || parsed.nome)) {
+                        if (parsed && parsed.sessaoAtiva === true && (parsed.username || parsed.nome)) {
                             return true; // Autenticado com sucesso no painel de tickets!
                         }
                     }
@@ -499,7 +499,7 @@
 
                 // Se não está autenticado na moderação, redireciona estritamente para o login dos tickets
                 const isEmPages = path.includes('/pages/');
-                const urlLoginTickets = window.ItaimRotas ? window.ItaimRotas.obterUrl('login-tickets') : (isEmPages ? 'login-tickets.html' : 'pages/admin/login-tickets.html');
+                const urlLoginTickets = window.ItaimRotas ? window.ItaimRotas.obterUrl('login-tickets') : (isEmPages ? 'login-tickets.html' : '/login-tickets');
                 window.location.replace(urlLoginTickets);
                 return false;
             }
@@ -507,29 +507,22 @@
             // Tratamento especial para o Painel de Controle & Observabilidade:
             if (rotaAtual === 'painel' || rotaAtual === 'status' || path.includes('painel.html')) {
                 try {
+                    localStorage.removeItem('itaim_painel_auth');
+                    localStorage.removeItem('itaim_tickets_auth');
                     const painelAuth = sessionStorage.getItem('itaim_painel_auth') || 
-                                       localStorage.getItem('itaim_painel_auth') || 
-                                       sessionStorage.getItem('itaim_tickets_auth') || 
-                                       localStorage.getItem('itaim_tickets_auth');
+                                       sessionStorage.getItem('itaim_tickets_auth');
                     if (painelAuth) {
                         const parsed = JSON.parse(painelAuth);
-                        if (parsed && (parsed.username || parsed.nome)) {
+                        const role = ((parsed && (parsed.role || parsed.papel)) || '').toUpperCase();
+                        if (parsed && parsed.sessaoAtiva === true && (parsed.username || parsed.nome) && (role === 'ADMIN' || role === 'MODERATOR')) {
                             return true; // Autenticado com sucesso no painel!
                         }
                     }
                 } catch (e) {}
 
-                if (usuarioEstaAutenticado()) {
-                    const usuario = obterUsuario();
-                    const role = (usuario && (usuario.role || usuario.papel || '')).toUpperCase();
-                    if (role === 'ADMIN' || role === 'MODERATOR') {
-                        return true;
-                    }
-                }
-
-                // Se não está autenticado como administrador, redireciona estritamente para o login do painel
+                // Se não está autenticado como administrador no painel, redireciona estritamente para o login do painel
                 const isEmPages = path.includes('/pages/');
-                const urlLoginPainel = window.ItaimRotas ? window.ItaimRotas.obterUrl('login-painel') : (isEmPages ? 'login-painel.html' : 'pages/admin/login-painel.html');
+                const urlLoginPainel = window.ItaimRotas ? window.ItaimRotas.obterUrl('login-painel') : (isEmPages ? 'login-painel.html' : '/login-painel');
                 window.location.replace(urlLoginPainel);
                 return false;
             }

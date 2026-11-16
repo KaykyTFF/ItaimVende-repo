@@ -55,23 +55,30 @@
         const btnLogout = document.getElementById('btn-logout-painel');
 
         try {
+            localStorage.removeItem('itaim_painel_auth');
+            localStorage.removeItem('itaim_tickets_auth');
+
             const rawAuth = sessionStorage.getItem('itaim_painel_auth') || 
-                            localStorage.getItem('itaim_painel_auth') || 
-                            sessionStorage.getItem('itaim_tickets_auth') || 
-                            localStorage.getItem('itaim_tickets_auth');
+                            sessionStorage.getItem('itaim_tickets_auth');
             if (rawAuth) {
                 const adminData = JSON.parse(rawAuth);
+                if (!adminData || adminData.sessaoAtiva !== true || (!adminData.username && !adminData.nome)) {
+                    const isPages = window.location.pathname.includes('/pages/');
+                    window.location.replace(isPages ? 'login-painel.html' : '/login-painel');
+                    return;
+                }
                 if (elNomeAdmin && adminData.nome) elNomeAdmin.textContent = adminData.nome;
                 if (elRoleAdmin && adminData.cargo) elRoleAdmin.textContent = adminData.cargo.split('&')[0].trim();
             } else {
-                const userGeral = localStorage.getItem('itaim_usuario_logado');
-                if (userGeral) {
-                    const parsedUser = JSON.parse(userGeral);
-                    if (elNomeAdmin && (parsedUser.name || parsedUser.nome)) elNomeAdmin.textContent = parsedUser.name || parsedUser.nome;
-                    if (elRoleAdmin && parsedUser.role) elRoleAdmin.textContent = parsedUser.role;
-                }
+                const isPages = window.location.pathname.includes('/pages/');
+                window.location.replace(isPages ? 'login-painel.html' : '/login-painel');
+                return;
             }
-        } catch (e) {}
+        } catch (e) {
+            const isPages = window.location.pathname.includes('/pages/');
+            window.location.replace(isPages ? 'login-painel.html' : '/login-painel');
+            return;
+        }
 
         if (btnLogout) {
             btnLogout.addEventListener('click', (e) => {
