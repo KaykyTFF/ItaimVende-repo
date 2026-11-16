@@ -92,7 +92,7 @@
             ],
             "example": "SELLER"
           },
-          "avatarUrl": {
+          "avatar": {
             "type": "string",
             "nullable": true,
             "example": "https://pgrznndtajjzpwqgtkkz.supabase.co/storage/v1/object/public/marketplace/avatar.webp"
@@ -112,7 +112,7 @@
             "nullable": true,
             "example": "PI"
           },
-          "verified": {
+          "isVerified": {
             "type": "boolean",
             "example": true
           },
@@ -471,6 +471,15 @@
                   "state": {
                     "type": "string",
                     "example": "PI"
+                  },
+                  "role": {
+                    "type": "string",
+                    "enum": [
+                      "BUYER",
+                      "SELLER"
+                    ],
+                    "default": "BUYER",
+                    "example": "BUYER"
                   }
                 }
               }
@@ -829,10 +838,6 @@
                     "type": "string",
                     "example": "João da Silva Sauro"
                   },
-                  "phone": {
-                    "type": "string",
-                    "example": "89994001122"
-                  },
                   "city": {
                     "type": "string",
                     "example": "Paulistana"
@@ -841,12 +846,21 @@
                     "type": "string",
                     "example": "PI"
                   },
+                  "neighborhood": {
+                    "type": "string",
+                    "example": "Centro"
+                  },
+                  "postalCode": {
+                    "type": "string",
+                    "example": "64750000"
+                  },
                   "bio": {
                     "type": "string",
                     "example": "Produtor rural no Vale do Itaim"
                   },
-                  "avatarUrl": {
-                    "type": "string"
+                  "avatar": {
+                    "type": "string",
+                    "example": "https://pgrznndtajjzpwqgtkkz.supabase.co/storage/v1/object/public/marketplace/avatar.webp"
                   }
                 }
               }

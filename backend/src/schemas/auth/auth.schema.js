@@ -13,7 +13,7 @@ export const registerSchema = z.object({
   state: z.string().optional().or(z.literal('')),
   neighborhood: z.string().optional().or(z.literal('')),
   postalCode: z.string().optional().or(z.literal('')),
-  role: z.enum(['buyer', 'seller', 'admin', 'BUYER', 'SELLER', 'ADMIN']).optional(),
+  role: z.enum(['buyer', 'seller', 'BUYER', 'SELLER']).optional(),
 });
 
 export const loginSchema = z.object({

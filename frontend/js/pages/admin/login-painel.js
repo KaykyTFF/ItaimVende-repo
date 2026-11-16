@@ -299,7 +299,7 @@
                             papel: role,
                             cargo: role === 'ADMIN' ? 'Administrador Geral' : 'Moderador',
                             email: usuarioBackend.email,
-                            avatar: usuarioBackend.avatarUrl || '../../assets/icons/icon-user.png',
+                            avatar: usuarioBackend.avatar || usuarioBackend.avatarUrl || '../../assets/icons/icon-user.png',
                             autenticadoEm: Date.now()
                         }
                     };

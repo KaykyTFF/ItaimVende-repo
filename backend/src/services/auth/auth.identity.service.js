@@ -44,7 +44,7 @@ export async function registerUser({ name, username, email, password, phone, cit
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
-  const normalizedRole = ['ADMIN', 'SELLER', 'BUYER', 'MODERATOR'].includes((role || '').toUpperCase())
+  const normalizedRole = ['SELLER', 'BUYER'].includes((role || '').toUpperCase())
     ? role.toUpperCase()
     : 'BUYER';
 
