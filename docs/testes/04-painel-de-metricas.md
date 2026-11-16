@@ -20,8 +20,8 @@ Conforme exigido pelas boas práticas do processo de testes, as medições foram
 | **Casos de Teste Executados** | 12 (60,0%) | 20 (100,0%) | +40,0% (100% executados) |
 | **Casos de Teste Aprovados** | 9 (75,0%) | 20 (100,0%) | +25,0% (Zero falhas residuais) |
 | **Casos de Teste Reprovados** | 3 (25,0%) | 0 (0,0%) | -25,0% (Todos corrigidos e validados) |
-| **Total de Testes Automatizados no Repo** | 23 testes | 88 testes | +282,6% (Ampliação maciça da suíte) |
-| **Cobertura de Código (Regras e Schemas)** | 38,57% | 97,03% | +58,46% (Superou a meta mínima de 70%) |
+| **Total de Testes Automatizados no Repo** | 23 testes | 150 testes *(88 na Sprint 2 + 62 pós-incremento)* | +552,2% (Ampliação contínua da suíte) |
+| **Cobertura de Código (Regras e Schemas)** | 38,57% | 97,28% | +58,71% (Superou a meta mínima de 70%) |
 | **Defeitos Críticos (Abertos / Corrigidos)** | 1 / 0 | 0 / 1 | 100% dos críticos saneados |
 | **Defeitos Altos (Abertos / Corrigidos)** | 1 / 0 | 0 / 1 | 100% dos altos saneados |
 | **Defeitos Médios (Abertos / Corrigidos)** | 2 / 1 | 0 / 2 | 100% dos médios saneados |

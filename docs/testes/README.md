@@ -13,7 +13,7 @@ Este diretório consolida todos os artefatos formais produzidos durante o ciclo 
 
 | Entregável / Fase | Artefato Formal | Descrição |
 | :---: | :--- | :--- |
-| **Entregável 1: Modelo V e Métodos Ágeis** | [`00-relatorio-partes-1-e-2.md`](00-relatorio-partes-1-e-2.md) | Relatório acadêmico unificado: Diagrama em V, 8 Casos do Modelo V, Verificação vs. Validação, 4 Histórias BDD, DoD, Ciclos TDD, Pipeline de CI, Pair Programming, Pirâmide de Testes (88 testes) e reflexões críticas. |
+| **Entregável 1: Modelo V e Métodos Ágeis** | [`00-relatorio-partes-1-e-2.md`](00-relatorio-partes-1-e-2.md) | Relatório acadêmico unificado: Diagrama em V, 8 Casos do Modelo V, Verificação vs. Validação, 4 Histórias BDD, DoD, Ciclos TDD, Pipeline de CI, Pair Programming, Pirâmide de Testes (88 testes na entrega inicial, expandidos para 150 testes atuais) e reflexões críticas. |
 | **Fase 1: Planejamento** | [`01-plano-de-testes.md`](01-plano-de-testes.md) | Escopo, objetivos, pirâmide de testes, ambiente de homologação, matriz de riscos, papéis, cronograma e critérios formais de entrada/saída. |
 | **Fase 2: Projeto e Rastreabilidade** | [`02-casos-de-teste-e-rastreabilidade.md`](02-casos-de-teste-e-rastreabilidade.md) | Especificação detalhada dos 20 casos de teste (12 colunas), aprofundamento das técnicas (PE, AVL, TD) e Matriz de Rastreabilidade Bidirecional. |
 | **Entregável 3: Planilha de Testes (Fase 2)** | [`planilha-casos-de-teste-e-rastreabilidade.csv`](planilha-casos-de-teste-e-rastreabilidade.csv) | Planilha delimitada por ponto e vírgula contendo os 20 casos de teste estruturados nas 12 colunas obrigatórias da atividade. |
@@ -43,8 +43,8 @@ npm --prefix backend run test:all
 
 ## Resumo das Métricas Oficiais Atingidas
 
-- **Total de Testes Automatizados:** **88 testes** (30 unitários + 45 integração + 13 sistema/E2E)
+- **Total de Testes Automatizados:** **150 testes** (82 unitários + 68 de integração e sistema/E2E)
 - **Taxa de Sucesso:** **100% de aprovação** (0 falhas pendentes)
-- **Cobertura de Código em Regras de Negócio e Schemas:** **97,03% de linhas** (exigência mínima: 70%)
+- **Cobertura de Código em Regras de Negócio e Schemas:** **97,28% de linhas** (exigência mínima: 70%)
 - **Defeitos Registrados e Corrigidos:** **5 defeitos** (BUG-01 a BUG-05, 100% saneados)
 - **Pipeline de Integração Contínua (CI):** Ativo via GitHub Actions em [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml) com Node.js 20.x e PostgreSQL 15

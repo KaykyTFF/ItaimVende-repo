@@ -242,7 +242,7 @@ Cenario 2 — Carregamento da interface grafica interativa Swagger UI
 Cenario 1 — Execucao da suite de testes automatizados
   Dado que as dependencias foram instaladas e o ambiente de testes configurado
   Quando executo `npm --prefix backend test`
-  Entao a suite executa 88 testes automatizados (unitarios, integracao e sistema) obtendo 100% de aprovacao
+  Entao a suite executa 150 testes automatizados (unitarios, integracao e sistema) obtendo 100% de aprovacao
 
 Cenario 2 — Execucao da colecao Postman oficial
   Dado que importo a colecao itaim-vende.postman_collection.json no Postman
@@ -294,5 +294,5 @@ Relacionamos abaixo os treze requisitos obrigatorios da disciplina com as histor
 | **9** | Validacao de entrada e corpo de erro padronizado | **H1, H2, H4, H5, H10, H13** (Schemas Zod estritos e erros com `code`, `message`, `details`) | Cumprido |
 | **10** | Banco de dados real com script de criacao | **H1, H4, H8, H10, H13** (PostgreSQL no Supabase via Prisma ORM com schema declarativo) | Cumprido |
 | **11** | OpenAPI completo e README detalhado | **H11** (Swagger UI em `/api-docs` e `README.md` exaustivo com instrucoes de deploy) | Cumprido |
-| **12** | Pelo menos 10 testes e colecao Postman ou Insomnia | **H12** (88 testes automatizados via `npm test` e colecao `itaim-vende.postman_collection.json`) | Cumprido |
+| **12** | Pelo menos 10 testes e colecao Postman ou Insomnia | **H12** (150 testes automatizados via `npm test` e colecao `itaim-vende.postman_collection.json`) | Cumprido |
 | **13** | Repositorio no GitHub | **H12** (Repositorio publico com historico estruturado de commits e CI configurado) | Cumprido |
