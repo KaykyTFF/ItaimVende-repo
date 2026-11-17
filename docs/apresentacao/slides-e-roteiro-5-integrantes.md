@@ -1,223 +1,275 @@
-# Divisao da Apresentacao para 5 Pessoas — Itaim Vende API
+# Roteiro Definitivo da Apresentacao (12 Slides — 5 Integrantes) — Itaim Vende API
 
-Divisao equilibrada dos 12 slides entre 5 integrantes (cerca de 1m30 a 2m de fala para cada membro, totalizando 8 a 10 minutos com a demonstracao ao vivo), 100% revisada conforme a auditoria tecnica ([README_AUDITORIA_APRESENTACAO.md](../../README_AUDITORIA_APRESENTACAO.md)).
-
----
-
-## QUADRO RESUMO DA EQUIPE
-
-| Integrante | Responsabilidade | Slides | Tema de Dominio na Arguicao |
-| :--- | :--- | :---: | :--- |
-| **Integrante 1** | Negocio e Inovacao Regional | **1, 2 e 3** | Problema regional, zero comissao/frete, posicionamento frente a grandes plataformas |
-| **Integrante 2** | Arquitetura e Seguranca de Acesso | **4 e 5** | Camadas Express, Helmet, Cache-Control, JWT (`JWT_EXPIRES_IN`), posse e RBAC `ADMIN` |
-| **Integrante 3** | Mapa de Rotas e Padrao REST | **6 e 7** | Clean URLs, 14 modulos `/api/v1/` (122 rotas), verbos, status codes e erros Zod |
-| **Integrante 4** | Regras de Negocio e Banco | **8 e 9** | Transacao ACID (`$transaction`), chat offline, WhatsApp/Storage e Prisma `db push` |
-| **Integrante 5** | Qualidade, Demo ao Vivo e Fechamento | **10, 11 e 12** | Swagger OpenAPI 3.0.3, Postman (47 reqs), 150 testes (`node:test`), demo ao vivo e conclusao |
+Documento revisado e alinhado estritamente ao codigo-fonte atual do projeto e aos 13 requisitos da atividade **Projeto de API Propria** (Disciplina: Programacao para Internet II — IFPI Campus Paulistana — Prof. Me. Julian Rodrigues Valerio).
 
 ---
 
-## INTEGRANTE 1: Negocio e Inovacao Regional (Slides 1, 2 e 3)
+## Divisao Entre os 5 Integrantes
 
-### SLIDE 1: Capa
-**No slide:**
-- **Titulo:** Itaim Vende API
-- **Subtitulo:** Infraestrutura RESTful para o Comercio Regional do Semiarido Piauiense
-- **Rodape:** IFPI Campus Paulistana | Programacao para Internet II | Prof. Me. Julian Rodrigues Valerio
-- **Stack:** Node.js (v24) | Express 5.2 | PostgreSQL | Prisma ORM 6.19 | Socket.IO 4.8 | OpenAPI 3.0.3
-
-**Fala do Integrante 1 (Slide 1):**
-> "Bom dia, professor Julian e colegas. Nossa equipe vai apresentar hoje o projeto final da disciplina de Programacao para Internet II: a **Itaim Vende API**. Nosso objetivo foi construir uma API RESTful original voltada para o comercio local de Paulistana e da microrregiao do Vale do Itaim, indo muito alem de um CRUD simples."
+| Integrante | Slides | Eixo da Fala |
+| :--- | :---: | :--- |
+| **Integrante 1** | **1, 2 e 3** | Capa, problema regional, solucao e posicionamento/inovacao |
+| **Integrante 2** | **4 e 5** | Arquitetura em camadas do backend, middlewares, autenticacao e seguranca |
+| **Integrante 3** | **6 e 7** | Recursos e endpoints (`/api/v1`), principios REST, paginacao, filtros e ordenacao |
+| **Integrante 4** | **8 e 9** | Regras de negocio alem do CRUD, banco PostgreSQL, Prisma ORM e persistencia |
+| **Integrante 5** | **10, 11 e 12** | Testes automatizados, documentacao OpenAPI/Postman, demonstracao ao vivo e conclusao |
 
 ---
 
-### SLIDE 2: O Problema Real e a Solucao
-**No slide:**
-- **Contexto Observado pela Equipe:** Na vivencia local, pequenos vendedores divulgam ofertas em grupos informais de mensagens, sem catalogo por cidade e bairro.
-- **Necessidades Locais:** Organizacao regional das ofertas e liberdade para combinar retirada ou entrega direta.
-- **Nossa Proposta:** Vitrine digital e negociacao direta (modelo sem intermediacao financeira, sem comissao e sem logistica imposta).
-- **Foco:** Comercio local de Paulistana e municipios vizinhos do Vale do Itaim.
-
-**Fala do Integrante 1 (Slide 2):**
-> "Para comecar, partimos de um contexto observado pela equipe no comercio de Paulistana e cidades vizinhas: pequenos produtores e lojistas costumam divulgar mercadorias em grupos informais de mensagens, onde as ofertas se perdem e falta um catalogo estruturado por cidade e bairro. O Itaim Vende nasce para suprir essa lacuna: ele funciona como uma vitrine digital e canal direto de negociacao, sem intermediacao financeira, sem cobrar comissao pelo marketplace e sem exigir um sistema de frete."
+## PARTE 1: CONTEUDO DOS 12 SLIDES
 
 ---
 
-### SLIDE 3: Posicionamento Regional e Inovacao
-**No slide:**
-
-| Eixo de Valor | Solucao no Itaim Vende API |
-| :--- | :--- |
-| **Foco Regional** | Filtros nativos por cidades e bairros do Vale do Itaim |
-| **Modelo sem intermediacao financeira** | Zero comissao e sem gateway de pagamento |
-| **Negociacao Direta** | Contrapropostas formais no chat + contato via WhatsApp |
-| **Notificacoes** | Aviso interno no banco + gatilho e-mail offline (Resend/SMTP ou log em dev) |
-| **Reputacao Independente** | Calculada no PostgreSQL via transacao (`prisma.$transaction`) |
-
-- **Como a regionalizacao ajuda:** Da visibilidade direta a pequenos comerciantes e produtores locais no catalogo da microrregiao.
-- **Eixos do Edital:** Dados e Dominio | Impacto Social | Regra de Negocio | Tempo Real
-
-**Fala do Integrante 1 (Slide 3 + Passagem):**
-> "Nosso diferencial esta no alinhamento completo a realidade regional do Vale do Itaim. Estruturamos uma API sob medida com filtros por cidade e bairro, contato direto via chat com contrapropostas e WhatsApp, modelo sem intermediacao financeira nem cobranca de comissao pelo marketplace, reputacao calculada em transacao no PostgreSQL e notificacoes persistidas no sistema com integracao de envio por e-mail quando o usuario esta offline via Resend/SMTP — ou log simulado no terminal sem chaves configuradas. Agora passo a palavra para o [Integrante 2], que vai explicar a arquitetura e a seguranca do sistema."
+### SLIDE 1 — Capa (Integrante 1)
+**Titulo:** Itaim Vende API  
+**Subtitulo:** API RESTful para Marketplace Regional no Semiarido Piauiense  
+**Identificacao:** Instituto Federal do Piaui (IFPI) — Campus Paulistana | Programacao para Internet II | Prof. Me. Julian Rodrigues Valerio  
+**Tecnologias:** Node.js (v24) | Express 5.2 | PostgreSQL (Supabase) | Prisma ORM 6.19 | Socket.IO 4.8 | Zod 4.6 | OpenAPI 3.0.3
 
 ---
 
-## INTEGRANTE 2: Arquitetura e Seguranca de Acesso (Slides 4 e 5)
+### SLIDE 2 — Problema e Motivacao (Integrante 1)
+**Topicos para o slide:**
+- **Contexto observado pela equipe:** Pequenos produtores e lojistas de Paulistana e municipios vizinhos (Acaua, Betania do Piaui, Jacobina, Queimada Nova) divulgam produtos de forma dispersa em grupos de mensagens.
+- **Dificuldades locais:**
+  - Falta de catalogo estruturado por cidade, bairro e categoria.
+  - Barreiras praticas de frete e comissoes para produtos locais e pereciveis.
+- **Motivacao:** Criar uma API propria e vitrine regional para aproximar compradores e anunciantes locais com negociacao direta.
 
-### SLIDE 4: Arquitetura da API
-**No slide:**
+**Sugestao visual:** Fluxo simples em 3 etapas: `Produtor / Comerciante Local -> Catalogo Regional Itaim Vende -> Contato Direto (Chat / WhatsApp)`.
+
+---
+
+### SLIDE 3 — Solucao e Inovacao (Integrante 1)
+**Como o marketplace funciona:**
+- Vitrine regional focada em Paulistana e cidades do Vale do Itaim, com filtros por cidade e bairro.
+- Negociacao direta por chat em tempo real (com contrapropostas formais) e link de contato via WhatsApp.
+- Sem intermediacao financeira: a API nao integra gateway de pagamento nem cobra comissao sobre vendas.
+
+**Comparativo (conforme `RELATORIO_INOVACAO.md`):**
+
+| Criterio | Referencias Pesquisadas (Mercado Livre API / OLX) | Itaim Vende API |
+| :--- | :--- | :--- |
+| **Foco geografico** | Ampla escala nacional/estadual | Hiperlocal: municipios e bairros do Vale do Itaim |
+| **Negociacao** | Foco em checkout integrado ou chat sem proposta formal | Propostas formais de valor no chat + contato WhatsApp |
+| **Tempo real e offline** | Fluxos atrelados a portal ou apps proprios | Socket.IO + notificacao persistida e gatilho por e-mail para offline |
+| **Busca regional** | Busca textual convencional | PostgreSQL `unaccent` para tolerar digitacao sem acentos |
+
+**Eixos de inovacao adotados e onde aparecem nos endpoints:**
+- **Dados e Dominio / Impacto Social:** `GET /api/v1/products` (`city`, `neighborhood`, `search` com `unaccent`).
+- **Tempo Real e Eventos:** `POST /api/v1/chat/conversations/:id/messages` e `PATCH /api/v1/chat/messages/:id/status`.
+- **Regra de Negocio:** `POST /api/v1/reviews/user/:userId`, `POST /api/v1/orders`, `DELETE /api/v1/reports/:id/product`.
+
+---
+
+### SLIDE 4 — Arquitetura do Backend (Integrante 2)
+**Sugestao de diagrama (Fluxograma):**
 ```
-[ Cliente REST (Browser / Swagger) ]          [ Socket.IO Client (WebSocket) ]
-               |                                             |
-               v                                             v
-[ 1. Middlewares Globais (server.js) ]        [ Canal Complementar Socket.IO ]
-  Helmet (CSP off) -> CORS -> Logger ->         Handshake JWT (io.use), salas
-  Rate-Limit (/api) -> JSON 5MB -> Sanitize     user:<id> e conversation:<id>
-               |
-               v
-[ 2. Roteamento (/api/v1: 122 Endpoints = 14 Modulos + 2 Raiz) ]
-  (+ 4 Swagger: /api/v1/docs, /api-docs, /api/v1/docs/openapi.json, /api-docs/openapi.json)
-               |
-               v
-[ 3. Middlewares de Rota -> Controller -> Service -> Prisma / Supabase ]
-  Rate-limit rota -> Auth/RBAC -> Multer/Zod -> Controller -> Service -> PostgreSQL (errorHandler ao final)
+[ Cliente HTTP ] ---> [ Middlewares Globais (server.js) ] ---> [ Routes (/api/v1) ]
+                           |                                          |
+                           | (Erro)                                   v (Middlewares de Rota)
+                           v                                   [ Rate-limit / Auth / RBAC / Multer / Zod ]
+                     [ errorHandler ] <----------------------------------+
+                                                                         |
+                                                                         v
+[ PostgreSQL (Supabase) / Storage / Email ] <--- [ Prisma ORM / Adapters ] <--- [ Services ] <--- [ Controllers ]
+
+[ Canal Complementar: Socket.IO Server (httpServer) ]
+  - Handshake JWT proprio (io.use), salas user:<id> e conversation:<id> (separado do fluxo REST)
 ```
-- **Principios REST:** Stateless | Cliente-Servidor | Cacheable (`Cache-Control: public, max-age=300` em `/categories`) | Camadas | Interface Uniforme
 
-**Fala do Integrante 2 (Slide 4):**
-> "Obrigado, [Integrante 1]. Este e o fluxo real de execucao em `server.js`. Primeiro rodam os middlewares globais: Helmet (sem CSP para servir os scripts locais), CORS, logger, rate limiter em `/api`, parser JSON de 5MB e `sanitizeInput`. Depois o `v1Router` resolve entre 122 endpoints (14 modulos + 2 rotas raiz, alem de 4 rotas Swagger), executando os middlewares proprios da rota antes do controller — limitadores especificos, autenticacao JWT, `requireRole`, Multer em `/upload` e validacao Zod — para entao chamar Service e Prisma ORM no PostgreSQL, com `errorHandler` ao final. Paralelamente, o Socket.IO atua como canal complementar em tempo real separado do fluxo REST stateless."
+**Tabela — Componentes e Responsabilidades:**
 
----
-
-### SLIDE 5: Esquema de Acesso e Seguranca (RBAC)
-**No slide:**
-
-**1. Visitante (Publico)**
-- Acessa vitrine, categorias, anuncios e perfil publico.
-- Ao clicar para interagir: Modal de Login preserva o destino (`returnTo`).
-
-**2. Usuario Autenticado (`BUYER` / `SELLER`)**
-- Token JWT (`HS256`, expiracao configuravel via `JWT_EXPIRES_IN` — padrao `2h`, `7d` em dev) + guarda anti-FOUC (`protegerPagina` — apenas UX, nao substitui o backend).
-- `authenticateToken` bloqueia contas `BANNED`/`SUSPENDED` (`403`) e operacoes comuns exigem posse do recurso (`sellerId`/`targetId`).
-
-**3. Administrador / Moderador (`ADMIN` / `MODERATOR`)**
-- `/api/v1/reports`: acesso restrito a `ADMIN` e `MODERATOR` (`403 Forbidden` para usuarios comuns).
-- `/api/v1/system`: acesso exclusivo de `ADMIN` via `requireRole('ADMIN')`.
-- *(Ressalvas de dev: perfis locais em `login-painel.js`, fallback de `JWT_SECRET` em `env.js` e bypass loopback `127.0.0.1` em `/system`).*
-
-**Fala do Integrante 2 (Slide 5 + Passagem):**
-> "Dentro dessa arquitetura, como controlamos quem pode acessar o que? No frontend, `protegerPagina()` em `sessao-ui.js` impede que visitantes visualizem telas privadas, mas deixamos claro que a protecao visual no navegador nao substitui a autorizacao do backend. Toda seguranca efetiva esta no servidor: o login emite um token JWT HS256 com validade configuravel (padrao de 2 horas) e `authenticateToken` confere no banco se a conta esta ativa. Usuarios comuns acessam os recursos sob checagem de posse; ja o RBAC separa moderacao em `/api/v1/reports` (para ADMIN e MODERATOR) e gestao em `/api/v1/system` (exclusivo ADMIN). Passo agora a palavra para o [Integrante 3], que vai mostrar o mapa completo de rotas."
+| Componente | Onde Esta | Responsabilidade Real |
+| :--- | :--- | :--- |
+| **Middlewares Globais** | `server.js` | Executam em todas as requisicoes (ou `/api`): `helmet`, `cors`, `requestLogger`, `globalLimiter`, `json`/`urlencoded` (5MB) e `sanitizeInput`. |
+| **Routes (`/api/v1`)** | `src/routes/*.routes.js` | Mapeiam endpoints e aplicam middlewares **especificos da rota** (limitadores por dominio, `authenticateToken`, `requireRole`, `multer`, `validate`). |
+| **Controllers** | `src/controllers/` | Recebem `req`/`res`, extraem contexto (`req.user`, `params`, `query`, `body`) e acionam os services. |
+| **Services** | `src/services/` | Executam regras de negocio, calculos, checagens de posse e chamadas ao Prisma ou adapters. |
+| **Prisma ORM / Adapters** | `src/config/prisma.js`, `src/adapters/storage/` | Persistencia relacional no PostgreSQL e armazenamento em nuvem (Supabase Storage) com fallback local. |
+| **errorHandler** | `src/middlewares/error.middleware.js` | Fluxo excepcional centralizado no fim do `app`: converte erros Zod, JWT, Prisma (`P2002`, `P2025`) e `AppError` em JSON padronizado. |
+| **Socket.IO** | `src/sockets/socket.manager.js` | Canal complementar em tempo real acoplado ao `httpServer`, com autenticacao JWT propria no handshake (`io.use`). |
 
 ---
 
-## INTEGRANTE 3: Mapa de Rotas e Padrao REST (Slides 6 e 7)
+### SLIDE 5 — Autenticacao e Seguranca (Integrante 2)
+**Fluxo de Autenticacao (Diagrama):**
+```
+POST /api/v1/auth/login -> Valida senha (bcrypt) -> Gera JWT (HS256, ENV.JWT_EXPIRES_IN)
+Cliente envia: Authorization: Bearer <token>
+  -> authenticateToken verifica assinatura e consulta status no banco:
+     - Token ausente/invalido/expirado -> 401 UNAUTHORIZED / TOKEN_EXPIRED
+     - Conta BANNED ou SUSPENDED       -> 403 ACCOUNT_SUSPENDED
+     - Conta ACTIVE                    -> Injeta req.user e segue
+```
 
-### SLIDE 6: Mapa de Rotas do Sistema
-**No slide:**
+**Autenticacao vs Autorizacao (o que o codigo realmente faz):**
+- **Autenticacao (`authenticateToken`):** Confirma quem e o usuario pelo JWT e valida status ativo no banco.
+- **Autorizacao por posse:** Usuarios comuns (`BUYER` e `SELLER`) compartilham as mesmas permissoes de rotas no backend — nao ha restricao de rota separando `BUYER` de `SELLER`. O controle ocorre por posse (`sellerId === req.user.id`, `targetId === req.user.id`).
+- **Autorizacao por papel (`requireRole`):** `/api/v1/reports` (moderacao) aceita `ADMIN` e `MODERATOR`; `/api/v1/system` aceita apenas `ADMIN` *(com ressalva de bypass loopback `127.0.0.1` quando `NODE_ENV !== 'production'`)*.
 
-**Frontend (Clean URLs sem `.html`)**
-- **Publicas:** `/home`, `/categoria`, `/produto`, `/vendedor`, `/termos`, `/privacidade`, `/cookies`
-- **Protegidas (UI):** `/vender`, `/meus-anuncios`, `/conversas`, `/perfil`, `/configuracoes`, `/favoritos`, `/notificacoes`
-- **Admin:** `/login-painel`, `/painel`, `/tickets`
+**Tabela — Mecanismos de Seguranca Confirmados:**
 
-**Backend (122 Endpoints sob `/api/v1/`: 14 Modulos + 2 Rotas Raiz + 4 Swagger)**
-- `/auth`, `/account` e `/users` (Identidade, OTP, LGPD e perfis)
-- `/products` e `/categories` (Catalogo regional e contatos)
-- `/reviews` (Avaliacoes e reputacao ACID)
-- `/chat` e `/notifications` (Tempo real, propostas e alertas)
-- `/favorites`, `/orders`, `/addresses` (Interacoes e pedidos sem taxas)
-- `/reports` (`ADMIN`, `MODERATOR`), `/upload`, `/system` (`ADMIN`)
-- Raiz `/api/v1`: `/health` e `/usernames/availability` | Docs: `/api/v1/docs`, `/api-docs`, `/api/v1/docs/openapi.json`, `/api-docs/openapi.json`
+| Mecanismo | Implementacao Real | Observacao / Ressalva |
+| :--- | :--- | :--- |
+| **JWT Bearer** | `jsonwebtoken` (`HS256`), padrao `2h` em `env.js` (`7d` no `.env` local) | Fallback de `JWT_SECRET` existe apenas fora de producao. |
+| **Validacao Zod** | `validate.middleware.js` (`body`, `params`, `query`) | Retorna HTTP `400` (`code: VALIDATION_ERROR`, `message`, `detalhes`/`details`/`errors`). |
+| **Rate Limiting** | `globalLimiter` (120 req/min prod), `authLimiter` (20/15min), `uploadLimiter` (30/15min) | Rotas `/account` possuem skip para header `x-test-runner`. |
+| **Helmet & Sanitizacao** | `helmet` + `sanitizeInput` in-place | `helmet` roda com `contentSecurityPolicy: false` e `crossOriginResourcePolicy: false`. |
 
-**Fala do Integrante 3 (Slide 6):**
-> "Obrigado, [Integrante 2]. Todo esse controle de acesso se reflete no nosso mapa de rotas. No frontend, usamos Clean URLs mapeadas em `rotas-mapa.js` e no `server.js`: o usuario navega por `/home`, `/vender` ou `/conversas` sem precisar expor extensoes `.html`. Ja no backend, o edital exigia no minimo 4 recursos; nos implementamos 122 endpoints registrados sob `/api/v1/`, distribuidos em 14 modulos especializados (incluindo `/account`) e 2 rotas na raiz do roteador (`/health` e `/usernames/availability`), alem de 4 rotas Swagger. Os recursos principais seguem substantivos no plural em minusculo, mantendo tambem rotas com verbos consumidas diretamente pelo frontend atual e pelos testes."
-
----
-
-### SLIDE 7: Padrao REST, Verbos, Status e Erros
-**No slide:**
-- **Verbos Semanticos:** `GET` (Consultar) | `POST` (Criar) | `PUT` (Substituir) | `PATCH` (Status/Leitura) | `DELETE` (Remover)
-- **Status Codes Implementados:**
-  - Sucesso: `200 OK` | `201 Created` | `204 No Content`
-  - Erro: `400 Bad Request` | `401 Unauthorized` | `403 Forbidden` | `404 Not Found` | `409 Conflict`
-- **Erro Padronizado Real (Zod / `validate.middleware.js`):**
-  ```json
-  {
-    "success": false,
-    "code": "VALIDATION_ERROR",
-    "message": "Falha na validação dos dados enviados.",
-    "detalhes": [{ "field": "email", "message": "Invalid input..." }]
-  }
-  ```
-
-**Fala do Integrante 3 (Slide 7 + Passagem):**
-> "Alem da organizacao por modulos, aplicamos cada verbo HTTP e codigo de status conforme o protocolo. Usamos PATCH para alteracoes parciais, como pausar um anuncio ou aceitar uma proposta no chat, e DELETE retorna 204 sem corpo quando aplicavel. Nas rotas protegidas com schemas Zod, o `validate.middleware.js` intercepta dados fora do formato antes de chegar ao controller e devolve erro 400 padronizado com `code: VALIDATION_ERROR` e o detalhamento exato dos campos invalidos. Agora o [Integrante 4] vai mostrar as regras de negocio e a estrutura do banco de dados."
+**Exemplo real de erro padronizado (Zod):**
+```json
+{
+  "success": false,
+  "code": "VALIDATION_ERROR",
+  "message": "Falha na validação dos dados enviados.",
+  "detalhes": [{ "field": "email", "message": "Invalid input: expected string, received undefined" }]
+}
+```
 
 ---
 
-## INTEGRANTE 4: Regras de Negocio e Banco de Dados (Slides 8 e 9)
+### SLIDE 6 — Recursos e Endpoints da API (Integrante 3)
+**Visao Geral Quantitativa (verificada em `backend/src/server.js` e `backend/src/routes/`):**
+- **122 endpoints da API** registrados sob `/api/v1/` (tambem acessiveis via alias `/api`):
+  - Distribuidos em **14 modulos especializados** + **2 rotas na raiz do roteador `/api/v1`** (`GET /health` e `GET /usernames/availability`).
+- **4 caminhos adicionais de documentacao Swagger/OpenAPI** (fora da contagem dos 122 endpoints da API): `/api/v1/docs`, `/api-docs`, `/api/v1/docs/openapi.json` e `/api-docs/openapi.json`.
 
-### SLIDE 8: Regras de Negocio Alem do CRUD
-**No slide:**
-1. **Reputacao em `prisma.$transaction` (`POST /reviews/user/:userId`):** Cria, edita ou exclui avaliacao recalculando `ratingAverage` e `ratingCount` em `User`. Duplicidade verificada via `findFirst` no service (sem `@@unique` no banco).
-2. **Negociacao no Chat + Notificacao e E-mail Offline:** Contrapropostas (`OFFER_PROPOSAL`) via Socket.IO; notificacao persistida em `Notification`; e-mail externo depende de Resend/SMTP (usa fallback de log no terminal sem chaves configuradas).
-3. **Compartilhamento WhatsApp e Contagem de Contatos:** Mensagem para WhatsApp no frontend + endpoint `POST /api/v1/products/:id/contact` no backend *(UI atual ainda nao chama esse endpoint no clique)*.
-4. **Moderacao com Limpeza no Storage (`DELETE /reports/:id/product`):** Marca produto como `REJEITADO` (soft delete), remove `ProductImage` e apaga arquivos no Supabase Storage.
+**Tabela — Modulos e Exemplos Reais de Endpoints:**
 
-**Fala do Integrante 4 (Slide 8):**
-> "Obrigado, [Integrante 3]. Aqui estao as regras que mostram o que a API faz alem de um CRUD simples. Primeiro, nas avaliacoes, o service verifica duplicidade com `findFirst` — ressaltando que nao ha constraint `@@unique` no banco — e usa `prisma.$transaction` ao criar, editar ou excluir para atualizar a media e a contagem em `User` no mesmo bloco. Segundo, no chat Socket.IO, eventos mapeados (mensagens/propostas no chat, favoritos, nova avaliacao, pedidos, remocao na moderacao e alteracoes de conta) gravam na tabela `Notification` e atualizam em tempo real via Socket.IO quando habilitados nas preferencias; quando o destinatario esta offline (`!isUserOnline`), o backend aciona o e-mail via Resend/SMTP ou cai em fallback de log no terminal quando nao ha chaves configuradas. Terceiro, temos compartilhamento formatado para WhatsApp e o endpoint `/products/:id/contact` no backend (ressalvando que a UI atual ainda nao dispara essa contagem no clique). Por fim, a moderacao apaga as referencias e exclui as fotos no Supabase Storage."
-
----
-
-### SLIDE 9: Banco de Dados e Persistencia
-**No slide:**
-- **SGBD:** PostgreSQL hospedado no Supabase (com extensao `unaccent` ativa)
-- **ORM e Sincronizacao:** Prisma Client 6.19.3 com `schema.prisma` aplicado via `prisma db push` + `setup-unaccent.js` (sem migrations versionadas)
-- **Relacionamentos Centrais:**
-  - `User` 1:N `Product` (com `city`, `state`, `neighborhood`)
-  - `User` 1:N `Review` (relacao dupla: autor e vendedor avaliado; unicidade verificada pelo service, sem `@@unique` no banco)
-  - `Conversation` 1:N `Message` (`OFFER_PROPOSAL`, `offerValue`, `offerStatus`)
-  - `Product` 1:N `Report` (protocolo `TK-...` derivado do ID)
-- **Otimizacao:** Indices compostos em `Product`, `User`, `Conversation`, `Message` e indice GIN `Product_title_unaccent_trgm_idx`.
-
-**Fala do Integrante 4 (Slide 9 + Passagem):**
-> "Toda essa estrutura roda no PostgreSQL hospedado no Supabase, modelada no `schema.prisma` e sincronizada via `prisma db push` junto com o script `setup-unaccent.js`, sem migrations versionadas. Temos relacionamentos bem definidos entre usuarios, produtos localizados por cidade e bairro, conversas com propostas de preco e tickets de denuncia. Um destaque e a entidade Review, que possui relacao dupla com User para separar o autor da avaliacao do vendedor avaliado — com verificacao de duplicidade na logica do service — alem de indices compostos que mantem as consultas rapidas. Passo agora para o [Integrante 5], que vai apresentar documentacao, testes e a demonstracao ao vivo."
+| Modulo | Qtd. Rotas | Exemplos Reais de Rotas (`/api/v1/...`) |
+| :--- | :-: | :--- |
+| `auth` e `account` | 18 + 17 | `POST /auth/register`, `POST /auth/login`, `GET /auth/me`, `PATCH /account/username`, `GET /account/privacy/export` |
+| `products` e `categories` | 9 + 1 | `GET /products`, `POST /products`, `PATCH /products/:id/status`, `DELETE /products/:id`, `GET /categories` |
+| `reviews` e `users` | 6 + 3 | `GET /reviews/user/:userId`, `POST /reviews/user/:userId`, `POST /reviews/:id/replies`, `GET /users/:id` |
+| `chat` e `notifications` | 11 + 7 | `POST /chat/conversations`, `POST /chat/conversations/:id/messages`, `PATCH /chat/messages/:id/status`, `GET /notifications` |
+| `favorites`, `orders`, `addresses` | 7 + 3 + 6 | `PUT/DELETE /favorites/:productId`, `POST /orders`, `GET /addresses`, `PATCH /addresses/:id/primary` |
+| `reports`, `upload`, `system` | 10 + 9 + 13 | `POST /reports/:productId`, `DELETE /reports/:id/product`, `POST /upload/vendas`, `GET /system/status` |
+| Raiz `v1Router` | 2 | `GET /api/v1/health`, `GET /api/v1/usernames/availability` |
 
 ---
 
-## INTEGRANTE 5: Qualidade, Demo ao Vivo e Fechamento (Slides 10, 11 e 12)
+### SLIDE 7 — Principios REST e Comunicacao HTTP (Integrante 3)
+**Tabela — Principios REST vs Implementacao Real:**
 
-### SLIDE 10: Documentacao, Colecao e Testes
-**No slide:**
-- **4 Endpoints Swagger / OpenAPI 3.0.3 (`v2.0.0`):** `/api/v1/docs`, `/api-docs`, `/api/v1/docs/openapi.json` e `/api-docs/openapi.json`
-- **README Completo:** Instalacao, variaveis `.env` e declaracao de uso de IA
-- **Colecao Postman:** `itaim-vende.postman_collection.json` com **11 pastas e 47 requisicoes**
-- **Engenharia de Testes (`node:test`):**
-  - **82 testes unitarios** (31 suites) + **68 testes de integracao** (7 arquivos, incluindo fluxo E2E de avaliacoes)
-  - **Total: 150 testes executados em 38 suites — 150 aprovados e 0 falhos** *(com servidor local ativo; minimo do edital: 10)*
+| Principio / Criterio REST | Situacao no Projeto | Evidencia Real no Codigo |
+| :--- | :--- | :--- |
+| **Cliente-Servidor** | Aplicado | Backend Express serve JSON sob `/api/v1`; frontend estatico consome via `fetch` (`api-*.js`). |
+| **Stateless** | Aplicado no REST | Nenhuma sessao HTTP guardada no servidor; toda requisicao autenticada envia `Bearer <JWT>`. |
+| **Cacheable** | Aplicado em `/categories` | `category.controller.js:6` define `Cache-Control: public, max-age=300`. |
+| **Interface Uniforme** | Parcialmente aplicado | Respostas JSON padronizadas e verbos semanticos; porem coexistem rotas com verbos (`/auth/login`, `/favorites/:id/toggle`, `/system/data/*/:id/toggle`). |
+| **Arquitetura em Camadas** | Aplicado | Fluxo isolado entre middlewares globais, roteadores, controllers, services e Prisma ORM. |
+| **Versionamento** | Aplicado | Prefixo oficial `/api/v1/` em todas as rotas da API. |
+| **Verbos e Status HTTP** | Aplicado | `GET`, `POST`, `PUT`, `PATCH`, `DELETE`; codigos `200`, `201`, `204`, `400`, `401`, `403`, `404` e `409` confirmados no codigo. |
 
-**Fala do Integrante 5 (Slide 10):**
-> "Obrigado, [Integrante 4]. Para documentacao e consumo da API, entregamos quatro endpoints de documentacao seguindo OpenAPI 3.0.3 — `/api/v1/docs` e `/api-docs` com Swagger UI e `/api/v1/docs/openapi.json` e `/api-docs/openapi.json` com a especificacao JSON — alem do README e da colecao Postman com 11 pastas e 47 requisicoes. Na parte de testes, o edital pedia no minimo 10 testes automatizados. Nos implementamos **150 testes** usando o runner nativo `node:test`: sao 82 testes unitarios e 68 testes de integracao, incluindo o fluxo E2E de avaliacoes, contra a API e o PostgreSQL real. Com o servidor local ativo, todos os 150 testes passaram sem nenhuma falha."
-
----
-
-### SLIDE 11: Demonstracao ao Vivo
-**No slide:**
-1. **Saude, Docs e Cache:** `/api/v1/health`, `/api/v1/docs` e `Cache-Control: public, max-age=300` em `/categories`
-2. **Filtro Regional:** `GET /api/v1/products?city=Paulistana` e compartilhamento no WhatsApp
-3. **Avaliacao com Transacao:** `POST /api/v1/reviews/user/:id` usando conta de teste (Recalculo atomico e atualizacao no site)
-4. **Seguranca e RBAC (Contas de Teste):** Erro `400` Zod no registro, `401` sem token e **`403 Forbidden` em `GET /api/v1/reports` com conta de teste `BUYER`** *(sem usar bypass local de `/system`)*
-
-**Fala do Integrante 5 (Slide 11):**
-> "Agora vamos provar tudo isso funcionando ao vivo com contas de teste e o servidor conectado ao PostgreSQL. *(Executar na tela)*: Primeiro mostramos `/api/v1/health`, o Swagger UI em `/api/v1/docs` e o cabecalho de cache em `/categories`. Depois filtramos anuncios regionais de Paulistana e exibimos o compartilhamento para WhatsApp no produto. Em seguida enviamos uma avaliacao autenticada com conta compradora, vendo a transacao atualizar a media do vendedor no site. Para fechar a demo, mostramos a validacao Zod retornando 400 e uma conta de teste `BUYER` sendo barrada com 403 Forbidden em `/api/v1/reports`."
+**Exemplo real de Paginacao, Filtros e Ordenacao (`GET /api/v1/products`):**
+- **Parametros reais suportados em `product.query.service.js`:**
+  - **Paginacao:** `page` (padrao `1`), `limit` (padrao `24`, maximo `50`) -> retorna `pagination: { total, page, limit, totalPages }`.
+  - **Filtros:** `search`, `category`, `categoryId`, `city` (ou `cidade`), `neighborhood` (ou `bairro`), `minPrice`, `maxPrice`, `condition`.
+  - **Ordenacao (`sort`):** `newest` (padrao), `oldest`, `price_asc`, `price_desc`, `popular`.
+- **Requisicao de exemplo:** `GET /api/v1/products?city=Paulistana&condition=NOVO&minPrice=100&sort=price_asc&page=1&limit=12`
 
 ---
 
-### SLIDE 12: Conclusao
-**No slide:**
-- **122 Endpoints sob `/api/v1/` (14 Modulos + 2 Raiz) + 4 Swagger | 150 Testes Aprovados**
-- **PostgreSQL (`db push`) + Supabase Storage + Socket.IO (canal complementar) + OpenAPI 3.0.3**
-- **Impacto Social:** Ferramenta regional sem taxas nem intermediacao financeira para o semiarido
-- **Obrigado!** Perguntas da banca
+### SLIDE 8 — Regras de Negocio e Inovacao (Integrante 4)
+**Funcionalidades alem do CRUD implementadas nos services:**
 
-**Fala do Integrante 5 (Slide 12):**
-> "Com isso, encerramos nossa apresentacao entregando uma API RESTful funcional com 122 endpoints sob `/api/v1/`, documentacao OpenAPI, 150 testes automatizados aprovados com o servidor local ativo e repositorio versionado no GitHub sem arquivos `.env` expostos — mantendo transparencia tambem sobre os pontos de melhoria identificados na auditoria. Agradecemos ao professor Julian e colegas, e ficamos a disposicao para responder as perguntas da banca."
+1. **Avaliacoes e Reputacao (Diferencial de confianca sem pagamento online):**
+   - `POST /api/v1/reviews/user/:userId`: identifica o autor pelo JWT (`req.user.id`), impede autoavaliacao (`400`) e checa duplicidade no service via `findFirst` *(sem `@@unique` fisico no banco)*.
+   - Em `createReview`, `updateReview` e `deleteReview`, `prisma.$transaction` agrupa: gravacao/edicao/exclusao em `Review` -> consulta de todas as notas do vendedor -> calculo da media -> atualizacao de `ratingAverage` e `ratingCount` em `User`.
+2. **Pedidos com Integridade no Servidor (`POST /api/v1/orders`):**
+   - Cliente envia apenas IDs e quantidades; `order.creation.service.js` busca os precos vigentes no PostgreSQL e calcula `totalAmount` dentro de `prisma.$transaction` (sem cobrar comissao).
+3. **Chat com Propostas, Notificacoes e E-mail Offline (Eixo Tempo Real e Inovacao):**
+   - `POST /api/v1/chat/conversations/:id/messages` persiste mensagens/`OFFER_PROPOSAL`, atualiza `lastMessageAt` em `$transaction` e emite via Socket.IO; `PATCH /api/v1/chat/messages/:id/status` trata aceite/recusa impedindo aceitar a propria proposta.
+   - Eventos mapeados (chat/propostas, favoritos, nova avaliacao, pedidos, moderacao e mudancas de conta) gravam em `Notification`. Se destinatario offline (`!isUserOnline`), dispara e-mail via Resend/SMTP *(ou log simulado no terminal sem chave configurada no `.env`)*.
+4. **Moderacao e Anuncios com Limpeza no Storage:**
+   - Criacao de anuncio resolve categoria por nome/slug/`orderIndex` e gera slug unico; `DELETE /api/v1/reports/:id/product` (`ADMIN`/`MODERATOR`) marca anuncio como `REJEITADO`, apaga `ProductImage` e remove os arquivos no Supabase Storage.
+5. **Favoritos com Cooldown Anti-Spam (`PUT`/`DELETE`/`toggle`):**
+   - Alterna registro em `prisma.$transaction` atualizando `favoritesCount` em `Product`, com janela de 1 hora para evitar notificacoes repetidas ao vendedor.
+
+**Sugestao de fluxograma (para Avaliacao / Reputacao):**
+`POST /reviews/user/:id (JWT) -> Checa autoavaliacao e findFirst -> prisma.$transaction [Grava Review -> Le notas -> Recalcula media -> Atualiza User] -> 201 Created`
+
+---
+
+### SLIDE 9 — Banco de Dados e Persistencia (Integrante 4)
+**Tecnologia e Entidades (`backend/prisma/schema.prisma`):**
+- **SGBD:** PostgreSQL hospedado no Supabase (com extensao `unaccent` ativa no boot para buscas sem acentos).
+- **ORM:** Prisma Client `6.19.3`.
+- **Principais Modelos e Relacionamentos:**
+  - `User` 1:N `Product` (`sellerId`, `onDelete: Cascade`), com campos regionais (`city`, `state`, `neighborhood`).
+  - `User` 1:N `Review` em relacao dupla (`authorId` e `targetId`, sem `@@unique([authorId, targetId])`).
+  - `Conversation` (uniqueness `[productId, buyerId, sellerId]`) 1:N `Message` (`offerValue`, `offerStatus`).
+  - `Order` 1:N `OrderItem` N:1 `Product`; `Favorite` (`@@unique([userId, productId])`); `Report`; `Notification`; `Category`; `Address`; `AuditLog`.
+- **Uso real de `$transaction`:** Aplicado em operacoes especificas que envolvem multiplas tabelas/contadores (avaliacoes, pedidos, chat/propostas, favoritos, enderecos e alteracoes de conta), nao em todo o sistema.
+- **Estrategia de Sincronizacao e Pendencia do Edital:**
+  - O projeto utiliza `schema.prisma` aplicado com `npm run prisma:push` (`prisma db push`), script `backend/scripts/setup-unaccent.js` (indices + `unaccent`) e `backend/prisma/seed.js`.
+  - **Pendencia transparente:** Nao existem arquivos na pasta `backend/prisma/migrations/` nem script SQL `CREATE TABLE` completo separado.
+
+---
+
+### SLIDE 10 — Testes e Documentacao (Integrante 5)
+**Tabela — Resumo Real de Testes (`node --test`) e Documentacao:**
+
+| Artefato / Suite | Quantidade / Padrao | Condicao de Execucao / Observacao |
+| :--- | :--- | :--- |
+| **Testes Unitarios** (`tests/unit/*.test.js`) | **82 testes** em 31 suites (6 arquivos) | Executam offline (`npm run test:unit`) sem servidor HTTP; 82 aprovados. |
+| **Testes de Integracao** (`tests/*.test.js`) | **68 testes** em 7 arquivos | 10 (`reviews-e2e.test.js`) acessam o Prisma direto; 58 exigem **servidor HTTP ativo em `localhost:3000`** + PostgreSQL conectado. |
+| **Total Consolidado** | **150 testes** em 38 suites | **150/150 aprovados** quando executados com servidor local ativo e banco acessivel (`ECONNREFUSED` nos 58 HTTP se servidor desligado). |
+| **OpenAPI / Swagger** | OpenAPI `3.0.3` (`v2.0.0`) | `backend/src/docs/openapi.js` e `openapi.json`; Swagger UI em `/api/v1/docs` e `/api-docs`. |
+| **Colecao Postman** | **11 pastas / 47 requisicoes** | `itaim-vende.postman_collection.json` na raiz, com casos de sucesso e erro. |
+| **README.md** | Completo | Contem instalacao, variaveis de ambiente (`.env`), comandos e declaracao de uso de IA (Secao 19). |
+
+---
+
+### SLIDE 11 — Demonstracao Pratica (Integrante 5)
+**Roteiro objetivo ao vivo (7 passos usando endpoints reais):**
+1. **Consulta de anuncios (com filtro regional e paginacao):**
+   `GET /api/v1/products?city=Paulistana&page=1&limit=5&sort=newest` -> `200 OK`
+2. **Login com conta de teste:**
+   `POST /api/v1/auth/login` (`{ "email": "...", "password": "..." }`) -> `200 OK`
+3. **Obtencao do JWT:**
+   Copiar o valor do campo `token` retornado no corpo JSON da resposta de login.
+4. **Acesso a rota protegida com Bearer Token:**
+   `GET /api/v1/auth/me` com header `Authorization: Bearer <token>` -> `200 OK` *(e `401` sem token)*.
+5. **Criacao de anuncio:**
+   `POST /api/v1/products` com `Authorization: Bearer <token>` e payload validado por Zod (`title`, `description`, `price`, `condition`, `city`) -> `201 Created`.
+6. **Funcionalidade com regra de negocio:**
+   `POST /api/v1/reviews/user/:userId` com conta compradora -> grava avaliacao e recalcula `ratingAverage` e `ratingCount` do vendedor via `prisma.$transaction` (ou `GET /api/v1/reports` com token `BUYER` retornando `403 Forbidden`).
+7. **Consulta da documentacao Swagger:**
+   Abrir `http://localhost:3000/api/v1/docs` mostrando a especificacao OpenAPI `3.0.3` e testar um endpoint pela interface.
+
+---
+
+### SLIDE 12 — Conclusao (Integrante 5)
+- **Problema e Solucao:** Entregamos uma API RESTful orientada ao comercio regional de Paulistana e Vale do Itaim, conectando compradores e vendedores sem cobranca de comissao nem intermediacao de pagamento.
+- **Arquitetura e Resultados Alcançados:**
+  - Arquitetura em camadas no Express 5, Prisma ORM e PostgreSQL (Supabase), com canal complementar Socket.IO e Supabase Storage.
+  - **122 endpoints** sob `/api/v1/` (14 modulos + 2 rotas na raiz), **150 testes automatizados** (`82 unitarios + 68 de integracao`), Swagger OpenAPI `3.0.3` e colecao Postman com 47 requisicoes.
+- **Visao Critica e Evolucoes Futuras:** Reconhecemos com transparencia pontos de amadurecimento identificados no codigo (criacao de `migrations/` versionadas, indice `@@unique` em `Review`, remocao de credenciais/bypasses de desenvolvimento em `login-painel.js`/`system.routes.js` e reducao gradual de rotas com verbos nas URIs).
+
+---
+
+## PARTE 2: ROTEIRO DE APRESENTACAO ORAL (DIVISAO ENTRE OS 5 INTEGRANTES)
+
+### Integrante 1 (Slides 1, 2 e 3)
+- **Slide 1:** "Bom dia, professor Julian e colegas. Hoje vamos apresentar o projeto **Itaim Vende API**, desenvolvido para a disciplina de Programacao para Internet II no IFPI Campus Paulistana. Construimos uma API RESTful original voltada a um marketplace regional, usando Node.js, Express 5, PostgreSQL com Prisma ORM, Socket.IO, Zod e OpenAPI 3.0.3."
+- **Slide 2:** "O projeto nasceu de um contexto observado pela nossa equipe aqui em Paulistana e cidades vizinhas como Acaua, Betania, Jacobina e Queimada Nova: muitos produtores rurais e pequenos comerciantes divulgam suas ofertas em grupos informais de mensagens, onde os anuncios se perdem e nao ha busca organizada por cidade ou bairro. Nossa motivacao foi oferecer um catalogo estruturado e um canal direto para aproximar compradores e vendedores da regiao, sem impor frete nem reter pagamentos."
+- **Slide 3:** "Comparado a referencia de grandes plataformas que analisamos no nosso relatorio de inovacao — Mercado Livre e OLX — o Itaim Vende foca na escala hiperlocal do Vale do Itaim. Nosso diferencial aparece diretamente nos endpoints: em `GET /api/v1/products`, suportamos filtros especificos por cidade e bairro com normalizacao `unaccent`; no chat, permitimos contrapropostas formais com notificacoes persistidas e gatilho por e-mail para usuarios offline; e nas avaliacoes calculamos a reputacao no banco sem depender de pagamento online. Passo agora a palavra para o **[Integrante 2]**, que vai detalhar a arquitetura do backend e a seguranca."
+
+### Integrante 2 (Slides 4 e 5)
+- **Slide 4:** "Obrigado, **[Integrante 1]**. Este diagrama mostra o fluxo real do nosso backend em `server.js`. Toda requisicao passa primeiro pelos middlewares globais — Helmet, CORS, logger de requisicoes, limitador global em `/api`, parser JSON de 5MB e `sanitizeInput`. Em seguida, o roteador `/api/v1` direciona para a rota correspondente, onde atuam os middlewares especificos daquele endpoint (como limitadores de rota, autenticacao JWT, RBAC com `requireRole`, Multer para imagens e validacao Zod). Só entao o Controller aciona o Service e o Prisma ORM para acessar o PostgreSQL ou o Supabase Storage. Qualquer excecao propagada com `next(err)` cai no `errorHandler` ao final da aplicacao. Em paralelo, o Socket.IO opera no mesmo servidor HTTP como um canal complementar em tempo real, com handshake JWT proprio e separado do fluxo REST stateless."
+- **Slide 5:** "Na camada de seguranca, diferenciamos bem autenticacao de autorizacao. No login em `POST /api/v1/auth/login`, a senha e comparada com `bcrypt` e emitimos um token JWT assinado com `HS256` (validade configuravel via `JWT_EXPIRES_IN`, com padrao de 2 horas em `env.js`). Nas rotas protegidas, `authenticateToken` valida o token e confirma no PostgreSQL se a conta nao esta banida ou suspensa. Ja na autorizacao, `BUYER` e `SELLER` compartilham o mesmo nivel de acesso as rotas comuns mediante checagem de posse do dado; o RBAC por papel atua especificamente na area administrativa: `/api/v1/reports` exige `ADMIN` ou `MODERATOR`, e `/api/v1/system` exige apenas `ADMIN`. Tambem protegemos entradas com Zod e rate limiting, reconhecendo com transparencia pontos de melhoria de dev mapeados em auditoria, como credenciais de desenvolvimento em `login-painel.js` e o bypass de loopback em `/system` fora de producao. Passo agora para o **[Integrante 3]**."
+
+### Integrante 3 (Slides 6 e 7)
+- **Slide 6:** "Obrigado, **[Integrante 2]**. No nosso levantamento direto do codigo, a API possui **122 endpoints registrados** sob o prefixo `/api/v1/`, distribuidos em **14 modulos especializados** — incluindo `auth`, `account`, `products`, `categories`, `reviews`, `chat`, `notifications`, `favorites`, `orders`, `addresses`, `reports`, `upload`, `system` e `users` — mais **2 rotas na raiz** do roteador (`/health` e `/usernames/availability`). Separadamente disso, temos **4 caminhos para documentacao Swagger/OpenAPI**: `/api/v1/docs`, `/api-docs`, `/api/v1/docs/openapi.json` e `/api-docs/openapi.json`."
+- **Slide 7:** "Nesta tabela relacionamos cada principio REST a sua implementacao real. Somos cliente-servidor e stateless no REST; aplicamos o principio `Cacheable` na rota `GET /api/v1/categories`, que responde com o cabecalho `Cache-Control: public, max-age=300`; usamos todos os verbos semanticos e os codigos de status 200, 201, 204, 400, 401, 403, 404 e 409. Sobre a nomenclatura das URIs, os recursos centrais usam substantivos no plural, mas reconhecemos um desvio parcial onde endpoints com verbos como `/auth/login`, `/favorites/:productId/toggle` e `/system/data/*/:id/toggle` foram mantidos por serem consumidos pelo frontend. Por fim, na coleta de produtos, `GET /api/v1/products` implementa paginacao (`page`, `limit`), filtros (`city`, `neighborhood`, `category`, `condition`, `minPrice`, `maxPrice`, `search`) e ordenacao (`sort=newest|oldest|price_asc|price_desc|popular`). Passo a palavra para o **[Integrante 4]**."
+
+### Integrante 4 (Slides 8 e 9)
+- **Slide 8:** "Obrigado, **[Integrante 3]**. Para atender ao requisito de regras alem do CRUD, selecionamos nossos fluxos principais. Nas avaliacoes (`POST /api/v1/reviews/user/:userId`), o autor vem exclusivamente do JWT, bloqueamos autoavaliacao e verificamos duplicidade via `findFirst` no service; dentro de `prisma.$transaction`, gravamos a avaliacao, consultamos todas as notas do vendedor e recalculamos `ratingAverage` e `ratingCount` na tabela `User`. Em `POST /api/v1/orders`, o servidor ignora precos do cliente e recalcula o total diretamente do banco dentro de uma transacao. No chat e favoritos, atualizamos contadores e propostas atomicamente, com janela de 1 hora contra spam de notificacoes de favoritos e gatilho por e-mail quando o destinatario esta offline (via Resend/SMTP, ou log simulado no terminal sem chave configurada). Na moderacao, `DELETE /api/v1/reports/:id/product` marca o anuncio como `REJEITADO` e remove as imagens no Supabase Storage."
+- **Slide 9:** "Na persistencia, usamos PostgreSQL hospedado no Supabase e Prisma ORM 6.19.3. O `schema.prisma` modela usuarios, produtos localizados por cidade e bairro, relacionamentos duplos de `Review`, conversas, mensagens com `offerValue` e `offerStatus`, pedidos, favoritos e tickets de denuncia. Usamos `prisma.$transaction` nas operacoes criticas que coordenam multiplas tabelas, embora nem toda rotina do sistema seja transacional. Como estrategia de sincronizacao, utilizamos `prisma db push` junto ao script `setup-unaccent.js` e `seed.js` — registrando com transparencia a pendencia de ainda nao termos uma pasta `migrations/` versionadas nem script SQL de criacao completo. Agora passo para o **[Integrante 5]**."
+
+### Integrante 5 (Slides 10, 11 e 12)
+- **Slide 10:** "Obrigado, **[Integrante 4]**. Na parte de qualidade e documentacao, entregamos o Swagger UI em `/api/v1/docs` com OpenAPI 3.0.3, `README.md` com instrucoes e declaracao de uso de IA, e colecao Postman com 11 pastas e 47 requisicoes. Nos testes automatizados com `node:test`, temos **150 testes** no total: **82 unitarios**, que rodam offline sem servidor, e **68 de integracao** — sendo 10 em `reviews-e2e.test.js` direto no Prisma e 58 testes HTTP que exigem o servidor ativo na porta 3000 e conexao com o PostgreSQL. Com o servidor ligado, todos os 150 testes passam."
+- **Slide 11:** "Para demonstracao pratica agora ao vivo, seguiremos sete passos diretos com o servidor conectado: consultar `GET /api/v1/products` com filtro regional; fazer login em `POST /api/v1/auth/login`; extrair o token JWT da resposta; acessar a rota protegida `GET /api/v1/auth/me` com Bearer Token; publicar um anuncio em `POST /api/v1/products`; demonstrar uma regra de negocio nao-CRUD com avaliacao/reputacao (ou bloqueio `403` em `/reports`); e abrir o Swagger UI em `/api/v1/docs`."
+- **Slide 12:** "Concluimos mostrando que a Itaim Vende API resolve uma necessidade regional concreta em Paulistana e microrregiao, com arquitetura em camadas organizada, 122 endpoints sob `/api/v1/`, documentacao OpenAPI e 150 testes automatizados. Tambem mapeamos com rigor tecnico o que ainda precisa evoluir — como migrations versionadas no Prisma, restricao unica em `Review` no banco, ajustes de seguranca para ambiente produtivo e padronizacao das poucas URIs com verbos. Muito obrigado ao professor Julian e colegas; estamos prontos para a arguicao."
