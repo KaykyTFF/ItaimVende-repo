@@ -337,6 +337,8 @@ const FRONTEND_PAGES_MAP = {
   'politica-de-privacidade': 'pages/institucional/politica-de-privacidade.html',
   'cookies': 'pages/institucional/politica-de-cookies.html',
   'politica-de-cookies': 'pages/institucional/politica-de-cookies.html',
+  'apresentacao': 'pages/institucional/apresentacao-api.html',
+  'apresentacao-api': 'pages/institucional/apresentacao-api.html',
 
   // 404
   '404': '404.html',
