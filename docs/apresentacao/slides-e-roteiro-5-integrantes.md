@@ -112,7 +112,7 @@ Cliente envia: Authorization: Bearer <token>
 
 | Mecanismo | Implementacao Real | Observacao / Ressalva |
 | :--- | :--- | :--- |
-| **JWT Bearer** | `jsonwebtoken` (`HS256`), padrao `2h` em `env.js` (`7d` no `.env` local) | Fallback de `JWT_SECRET` existe apenas fora de producao. |
+| **JWT Bearer** | `jsonwebtoken` (`HS256`), padrao `2h` em `env.js` (`7d` no `.env` local) | Fallback de `JWT_SECRET` fora de producao; credenciais de dev em `login-painel.js` e `auth.identity.service.js` a remover. |
 | **Validacao Zod** | `validate.middleware.js` (`body`, `params`, `query`) | Retorna HTTP `400` (`code: VALIDATION_ERROR`, `message`, `detalhes`/`details`/`errors`). |
 | **Rate Limiting** | `globalLimiter` (120 req/min prod), `authLimiter` (20/15min), `uploadLimiter` (30/15min) | Rotas `/account` possuem skip para header `x-test-runner`. |
 | **Helmet & Sanitizacao** | `helmet` + `sanitizeInput` in-place | `helmet` roda com `contentSecurityPolicy: false` e `crossOriginResourcePolicy: false`. |
@@ -160,7 +160,7 @@ Cliente envia: Authorization: Bearer <token>
 | **Interface Uniforme** | Parcialmente aplicado | Respostas JSON padronizadas e verbos semanticos; porem coexistem rotas com verbos (`/auth/login`, `/favorites/:id/toggle`, `/system/data/*/:id/toggle`). |
 | **Arquitetura em Camadas** | Aplicado | Fluxo isolado entre middlewares globais, roteadores, controllers, services e Prisma ORM. |
 | **Versionamento** | Aplicado | Prefixo oficial `/api/v1/` em todas as rotas da API. |
-| **Verbos e Status HTTP** | Aplicado | `GET`, `POST`, `PUT`, `PATCH`, `DELETE`; codigos `200`, `201`, `204`, `400`, `401`, `403`, `404` e `409` confirmados no codigo. |
+| **Verbos e Status HTTP** | Aplicado (com ressalva) | `GET`, `POST`, `PUT`, `PATCH`, `DELETE`; codigos `200`, `201`, `204`, `400`, `401`, `403`, `404` e `409` confirmados *(ressalva: `GET /products/:id` faz fallback ao produto mais recente se houver anuncios no banco)*. |
 
 **Exemplo real de Paginacao, Filtros e Ordenacao (`GET /api/v1/products`):**
 - **Parametros reais suportados em `product.query.service.js`:**
@@ -229,11 +229,11 @@ Cliente envia: Authorization: Bearer <token>
 2. **Login com conta de teste:**
    `POST /api/v1/auth/login` (`{ "email": "...", "password": "..." }`) -> `200 OK`
 3. **Obtencao do JWT:**
-   Copiar o valor do campo `token` retornado no corpo JSON da resposta de login.
+   Copiar o valor do campo `token` retornado no nivel raiz do JSON da resposta de login (`{ success, message, user, token }`).
 4. **Acesso a rota protegida com Bearer Token:**
    `GET /api/v1/auth/me` com header `Authorization: Bearer <token>` -> `200 OK` *(e `401` sem token)*.
 5. **Criacao de anuncio:**
-   `POST /api/v1/products` com `Authorization: Bearer <token>` e payload validado por Zod (`title`, `description`, `price`, `condition`, `city`) -> `201 Created`.
+   `POST /api/v1/products` com `Authorization: Bearer <token>` e payload validado por Zod (`title`, `description`, `price` obrigatorios; opcionais `condition`, `city`, `neighborhood`) -> `201 Created`.
 6. **Funcionalidade com regra de negocio:**
    `POST /api/v1/reviews/user/:userId` com conta compradora -> grava avaliacao e recalcula `ratingAverage` e `ratingCount` do vendedor via `prisma.$transaction` (ou `GET /api/v1/reports` com token `BUYER` retornando `403 Forbidden`).
 7. **Consulta da documentacao Swagger:**
@@ -246,7 +246,7 @@ Cliente envia: Authorization: Bearer <token>
 - **Arquitetura e Resultados Alcançados:**
   - Arquitetura em camadas no Express 5, Prisma ORM e PostgreSQL (Supabase), com canal complementar Socket.IO e Supabase Storage.
   - **122 endpoints** sob `/api/v1/` (14 modulos + 2 rotas na raiz), **150 testes automatizados** (`82 unitarios + 68 de integracao`), Swagger OpenAPI `3.0.3` e colecao Postman com 47 requisicoes.
-- **Visao Critica e Evolucoes Futuras:** Reconhecemos com transparencia pontos de amadurecimento identificados no codigo (criacao de `migrations/` versionadas, indice `@@unique` em `Review`, remocao de credenciais/bypasses de desenvolvimento em `login-painel.js`/`system.routes.js` e reducao gradual de rotas com verbos nas URIs).
+- **Visao Critica e Evolucoes Futuras:** Reconhecemos com transparencia pontos de amadurecimento identificados no codigo (criacao de `migrations/` versionadas, indice `@@unique` em `Review`, remocao de credenciais/bypasses de desenvolvimento em `login-painel.js`, `auth.identity.service.js`, `system.routes.js` e `account.routes.js`, alem da reducao gradual de rotas com verbos nas URIs).
 
 ---
 

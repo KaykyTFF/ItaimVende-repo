@@ -7,6 +7,7 @@
 **Projeto:** Itaim Vende — Plataforma e API RESTful Regional  
 **Padrao Arquitetural:** RESTful / OpenAPI 3.0.3 / Node.js & PostgreSQL  
 **Repositorio:** [README.md](../../README.md)  
+**Relatorio de Inovacao:** [RELATORIO_INOVACAO.md](../../RELATORIO_INOVACAO.md)  
 **Auditoria Tecnica:** [README_AUDITORIA_APRESENTACAO.md](../../README_AUDITORIA_APRESENTACAO.md)  
 **Colecao Postman:** [itaim-vende.postman_collection.json](../../itaim-vende.postman_collection.json)  
 **Dicionario de Rotas Frontend:** [rotas-mapa.js](../../frontend/js/core/rotas/rotas-mapa.js)  
@@ -57,7 +58,7 @@ Este documento contem o material de apoio tecnico, arquitetural e verbal atualiz
 ---
 
 ### Slide 3: Posicionamento Regional e Eixos de Inovacao
-Posicionamento arquitetural e funcional comprovado no codigo-fonte do **Itaim Vende** (sem atribuir comportamentos generalizados a todas as plataformas externas):
+Posicionamento arquitetural e funcional comprovado no codigo-fonte do **Itaim Vende** e contextualizado em [RELATORIO_INOVACAO.md](../../RELATORIO_INOVACAO.md) frente a duas referencias analisadas pela equipe (**Mercado Livre Developers API** e **OLX Brasil** — sem atribuir comportamentos generalizados a todas as plataformas externas):
 
 | Eixo de Valor | Decisao de Projeto no Itaim Vende | Implementacao Verificavel no Codigo |
 | :--- | :--- | :--- |
@@ -67,10 +68,10 @@ Posicionamento arquitetural e funcional comprovado no codigo-fonte do **Itaim Ve
 | **Notificacoes e Contingencia** | Avisos internos persistidos no banco + atualizacao em tempo real | Eventos especificos (chat/propostas, favoritos, nova avaliacao, pedidos, moderacao e alteracoes de conta) gravam na tabela `Notification` e emitem `notification_new`/`badge_update` via Socket.IO; gatilho de e-mail externo para offline via Resend/SMTP (ou fallback simulado no terminal sem chave configurada) |
 | **Reputacao Independente** | Avaliacao entre usuarios sem depender de pagamento interno | `POST /api/v1/reviews/user/:userId` calcula `ratingAverage` e `ratingCount` via `prisma.$transaction` |
 
-**Eixos de Inovacao Atendidos:**
+**Eixos de Inovacao Atendidos (cf. [RELATORIO_INOVACAO.md](../../RELATORIO_INOVACAO.md)):**
 1. **Dados e Dominio:** Cobertura regional do semiarido piauiense com filtros por cidade/bairro e normalizacao de acentos (`unaccent`).
 2. **Impacto Social:** Ferramenta regional sem cobranca de comissao para dar visibilidade ao comercio local.
-3. **Regra de Negocio Nao-Trivial:** Reputacao em `$transaction`, purga de midias no Storage, cooldown de 30 dias em username e calculo server-side em pedidos.
+3. **Regra de Negocio Nao-Trivial:** Reputacao em `$transaction`, favoritos com deduplicacao de notificacao em 1 hora (`$transaction` + `favoritesCount`), purga de midias no Storage, cooldown de 30 dias em username e calculo server-side em pedidos.
 4. **Tempo Real e Eventos:** Socket.IO com salas por usuario/conversa e persistencia de notificacoes internas para eventos mapeados (com disparo externo de e-mail condicionado a configuracao Resend/SMTP).
 
 > [!NOTE]
@@ -116,10 +117,21 @@ Fluxo real de execucao implementado em [server.js](../../backend/src/server.js) 
   - Erros propagados via next(err) -> errorHandler (final do app)|
 ```
 
+- **Componentes e Responsabilidades no Backend (`backend/src/`):**
+
+| Camada | Diretorio / Arquivo | Responsabilidade Principal |
+| :--- | :--- | :--- |
+| **Entrada e Middlewares** | `server.js`, `middlewares/` | Seguranca (Helmet, CORS), Rate Limiting, Parsing, `sanitizeInput`, JWT, RBAC e validacao Zod |
+| **Routes** | `routes/<modulo>/*.routes.js` | Mapeamento de endpoints sob `/api/v1/` e encadeamento de middlewares |
+| **Controllers** | `controllers/<modulo>/` | Extracao de dados de `req`, acionamento dos services e emissao de respostas HTTP |
+| **Services** | `services/<modulo>/` | Regras de negocio, `$transaction` pontuais, integracoes e limpeza no Supabase Storage |
+| **Persistencia e Adapters** | `prisma/`, `adapters/`, `config/` | PostgreSQL (Prisma ORM `6.19.3`), Supabase Storage, Socket.IO e EmailService (Resend/SMTP) |
+
 - **Principios REST Atendidos:**
   - **Cliente-Servidor e Camadas:** Separacao entre middlewares globais, roteadores, middlewares de rota, controllers, services e persistencia Prisma, com tratamento global de erros ao final do pipeline (`errorHandler`).
   - **Stateless:** Nenhuma sessao HTTP mantida em memoria para rotas REST; autenticacao via Bearer Token JWT.
   - **Cacheable:** `Cache-Control: public, max-age=300` implementado e validado em `GET /api/v1/categories` ([category.controller.js](../../backend/src/controllers/category/category.controller.js#L6)).
+  - **Interface Uniforme:** Envelope JSON consistente, recursos identificados por URIs sob `/api/v1/` e codigos de status HTTP semanticos (ressalvando rotas legadas/pragmaticas com verbos consumidas pelo frontend).
   - **Canal Complementar Socket.IO:** O servidor Socket.IO (`initSocketServer(httpServer)`) compartilha o servidor HTTP como canal complementar em tempo real para eventos e badges, operando separado do fluxo HTTP REST stateless.
 
 > [!NOTE]
@@ -163,10 +175,10 @@ Controle de acesso dividido entre interface (UX no navegador) e autorizacao efet
 
 1. **Guarda de Interface no Frontend ([sessao-ui.js](../../frontend/js/core/sessao/sessao-ui.js#L445-L556) e [painel.html](../../frontend/pages/admin/painel.html#L57-L85)):**
    - **Apenas Protecao Visual/UX:** `protegerPagina()` e o script inline de `painel.html` evitam flash visual (anti-FOUC) e redirecionam visitantes para `/login` ou `/login-painel`, mas **nao substituem a seguranca de API no backend** (pois qualquer codigo no navegador pode ser inspecionado ou ignorado).
-   - **Pontos de Melhoria Identificados no Frontend/Config:** Em [login-painel.js](../../frontend/js/pages/admin/login-painel.js#L25-L79, L225-L315), alem da chamada a `/api/v1/auth/login`, existem credenciais de desenvolvimento hardcoded no JavaScript de cliente que devem ser removidas antes de implantacao definitiva em producao.
+   - **Pontos de Melhoria Identificados no Frontend/Config/Backend:** Em [login-painel.js](../../frontend/js/pages/admin/login-painel.js#L25-L79, L225-L315), alem da chamada a `/api/v1/auth/login`, existem credenciais de desenvolvimento hardcoded no JavaScript de cliente; no backend, [auth.identity.service.js](../../backend/src/services/auth/auth.identity.service.js#L259-L260) contem verificacao de senha padrao em codigo para conta admin semeada, e [account.routes.js](../../backend/src/routes/account/account.routes.js#L39) ignora rate limit quando o cabecalho `x-test-runner` esta presente — pontos mapeados para endurecimento antes de implantacao definitiva em producao.
 
 2. **Governanca no Backend ([auth.middleware.js](../../backend/src/middlewares/auth.middleware.js) e [system.routes.js](../../backend/src/routes/system/system.routes.js)):**
-   - **JWT Stateless:** Emitido no login/cadastro usando `jsonwebtoken` (`HS256`), com expiracao configuravel via `ENV.JWT_EXPIRES_IN` (padrao `'2h'` em [env.js](../../backend/src/config/env.js#L55) e `.env.example`; `'7d'` no `.env` local). Em [env.js](../../backend/src/config/env.js#L54), existe fallback de `JWT_SECRET` apenas para ambiente nao produtivo (em `production`, a ausencia da variavel interrompe o boot).
+   - **JWT Stateless:** Emitido no login/cadastro usando `jsonwebtoken` (`HS256`), retornando `token` no nivel raiz do JSON em `POST /api/v1/auth/login` (`{ success: true, message, user, token }`), com expiracao configuravel via `ENV.JWT_EXPIRES_IN` (padrao `'2h'` em [env.js](../../backend/src/config/env.js#L55) e `.env.example`; `'7d'` no `.env` local). Em [env.js](../../backend/src/config/env.js#L54), existe fallback de `JWT_SECRET` apenas para ambiente nao produtivo (em `production`, a ausencia da variavel interrompe o boot).
    - **Verificacao Ativa de Conta:** `authenticateToken` consulta o usuario no PostgreSQL e bloqueia contas `BANNED` ou `SUSPENDED` com HTTP `403` (`ACCOUNT_SUSPENDED`).
    - **Segregacao Real de Papeis (RBAC):** O enum `UserRole` define `BUYER`, `SELLER`, `MODERATOR` e `ADMIN`. No codigo atual das rotas:
      - `BUYER` e `SELLER` possuem as mesmas permissoes de acesso a endpoints, operando com **validacao de posse** (`sellerId === req.user.id` ou `targetId === req.user.id`).
@@ -232,9 +244,10 @@ Inventario verificado em `backend/src/server.js:244-275` e `backend/src/routes/`
 | 14 | `users` | `/api/v1/users/:id`, `/:userId/reviews` | `GET, POST` | Publico / JWT | 3 |
 | - | Raiz `v1Router` | `/api/v1/health`, `/api/v1/usernames/availability` | `GET` | Publico / Optional | 2 |
 
-**Padroes de Nomenclatura e Resposta REST:**
+**Padroes de Nomenclatura, Consulta e Resposta REST:**
 - **Nomenclatura:** Os recursos principais de dados utilizam substantivos no plural em minusculas (`/products`, `/categories`, `/reviews`, `/users`, `/orders`, `/favorites`, `/notifications`, `/reports`, `/addresses`), coexistindo com modulos singulares (`/auth`, `/account`, `/chat`, `/upload`, `/system`) e endpoints com verbos usados diretamente pelo frontend e pelos testes (como `/auth/login`, `/favorites/:productId/toggle` e `/system/data/*/:id/toggle`).
-- **Status Codes Empregados:** `200 OK`, `201 Created`, `204 No Content`, `400 Bad Request`, `401 Unauthorized`, `403 Forbidden`, `404 Not Found`, `409 Conflict`, `500/503`.
+- **Consultas de Colecao (`GET /api/v1/products` em [product.query.service.js](../../backend/src/services/product/product.query.service.js)):** Paginacao (`page`, padrao `1`; `limit`, padrao `24`, teto `50`), filtros (`search` com `unaccent_text`, `categoryId`, `category`, `city`/`cidade`, `neighborhood`/`bairro`, `minPrice`, `maxPrice`, `condition` em `NOVO|SEMINOVO|USADO|DEFEITO`) e ordenacao (`sort=newest|oldest|price_asc|price_desc|popular`).
+- **Status Codes Empregados:** `200 OK`, `201 Created`, `204 No Content`, `400 Bad Request`, `401 Unauthorized`, `403 Forbidden`, `404 Not Found`, `409 Conflict`, `500/503`. *(Ressalva em codigo: em `product.query.service.js:281-293`, `GET /api/v1/products/:id` possui fallback para retornar o anuncio ativo mais recente caso o identificador nao exista e haja produtos no banco, retornando `404` apenas se a tabela estiver vazia).*
 
 > [!NOTE]
 > **Roteiro de Fala (Slide 7):**
@@ -265,6 +278,9 @@ Regras reais implementadas e comprovadas nos services do backend:
 5. **Integridade de Precos Server-Side ([order.creation.service.js](../../backend/src/services/order/order.creation.service.js#L10-L71)):**
    - Em `POST /api/v1/orders`, o backend ignora valores enviados pelo cliente e consulta os precos vigentes diretamente no banco para calcular `totalAmount` dentro de `prisma.$transaction`, sem adicionar taxas ou comissoes.
 
+6. **Favoritos com Contagem Atomica e Anti-Spam de Notificacao ([favorite.mutation.service.js](../../backend/src/services/favorite/favorite.mutation.service.js#L1-L100)):**
+   - Utiliza chave composta `userId_productId` (`@@unique([userId, productId])`) e `prisma.$transaction` para inserir/remover em `Favorite` e incrementar/decrementar `favoritesCount` em `Product`, evitando auto-notificacao ao proprio vendedor (`sellerId !== userId`) e aplicando cooldown de 1 hora (`umaHoraAtras`) contra spam de notificacoes ao favoritar repetidamente.
+
 > [!NOTE]
 > **Roteiro de Fala (Slide 8):**
 > "Aqui estao as regras que vao alem do CRUD simples. Primeiro, no sistema de avaliacoes, o `findFirst` no service barra avaliacoes duplicadas em fluxo normal — ressaltando que nao ha `@@unique` no banco — e usamos `prisma.$transaction` ao criar, editar ou excluir avaliacoes para manter `ratingAverage` e `ratingCount` sincronizados com a tabela `User`. Segundo, no chat Socket.IO, eventos mapeados (como mensagens/propostas no chat, favoritos, nova avaliacao, pedidos, remocao na moderacao e mudancas na conta) sao persistidos na tabela `Notification` e enviados em tempo real quando habilitados nas preferencias; para usuarios offline, o backend chama o envio de e-mail via Resend/SMTP, operando em fallback simulado no terminal se nao houver chaves configuradas. Terceiro, o compartilhamento no WhatsApp e o endpoint `/products/:id/contact` existem, ressalvando que a UI atual ainda nao aciona essa contagem no clique. Por fim, a moderacao em `DELETE /reports/:id/product` remove imagens no Supabase Storage."
@@ -292,14 +308,15 @@ Estrutura verificada em [validate.middleware.js](../../backend/src/middlewares/v
   }
   ```
 - **Mapeamento de Erros do Prisma no Middleware Global:** Trata automaticamente `P2002` -> `409 DUPLICATE_ENTRY`, `P2025` -> `404 NOT_FOUND`, `P2003` -> `400 FOREIGN_KEY_VIOLATION`, `TokenExpiredError` -> `401 TOKEN_EXPIRED` e falhas de conexao -> `503 DATABASE_UNAVAILABLE`.
-- **Politica de Credenciais e Pontos de Melhoria Auditados:** `backend/.env` nao e versionado no Git (confirmado via `git ls-files`). Contudo, a auditoria identificou tres ressalvas tecnicas que permanecem no codigo como pontos de melhoria antes de producao:
+- **Politica de Credenciais e Pontos de Melhoria Auditados:** `backend/.env` nao e versionado no Git (confirmado via `git ls-files`). Contudo, a auditoria identificou pontos de melhoria no codigo atual antes de producao:
   1. Credenciais de desenvolvimento presentes em texto claro no arquivo cliente [login-painel.js](../../frontend/js/pages/admin/login-painel.js#L25-L79).
-  2. Fallback de `JWT_SECRET` para ambiente nao produtivo em [env.js](../../backend/src/config/env.js#L54) (em `production`, o boot exige a variavel).
-  3. Bypass de desenvolvimento para `127.0.0.1` na rota `/api/v1/system/*` em [system.routes.js](../../backend/src/routes/system/system.routes.js#L35-L44).
+  2. Verificacoes de senha padrao de desenvolvimento presentes em [auth.identity.service.js](../../backend/src/services/auth/auth.identity.service.js#L259-L260) para conta admin semeada.
+  3. Fallback de `JWT_SECRET` para ambiente nao produtivo em [env.js](../../backend/src/config/env.js#L54) (em `production`, o boot exige a variavel).
+  4. Bypass de desenvolvimento para `127.0.0.1` na rota `/api/v1/system/*` em [system.routes.js](../../backend/src/routes/system/system.routes.js#L35-L44) e bypass de rate limit com cabecalho `x-test-runner` em [account.routes.js](../../backend/src/routes/account/account.routes.js#L39).
 
 > [!NOTE]
 > **Roteiro de Fala (Slide 9):**
-> "As entradas principais da API sao validadas com schemas Zod atraves do `validate.middleware.js`, respondendo com codigo 400 e payload padronizado (`code: VALIDATION_ERROR` e detalhamento dos campos). Alem disso, o `error.middleware.js` centraliza erros de JSON malformado, expiracao de JWT e codigos do Prisma. Quanto a credenciais, o arquivo `backend/.env` esta fora do GitHub, porem mantemos transparencia sobre tres pontos de melhoria identificados no codigo atual: credenciais de desenvolvimento em `login-painel.js`, fallback de `JWT_SECRET` em `env.js` fora de producao e bypass de loopback `127.0.0.1` em `/system` em modo desenvolvimento."
+> "As entradas principais da API sao validadas com schemas Zod atraves do `validate.middleware.js`, respondendo com codigo 400 e payload padronizado (`code: VALIDATION_ERROR` e detalhamento dos campos). Alem disso, o `error.middleware.js` centraliza erros de JSON malformado, expiracao de JWT e codigos do Prisma. Quanto a credenciais, o arquivo `backend/.env` esta fora do GitHub, porem mantemos transparencia sobre os pontos de melhoria mapeados na auditoria para endurecimento em producao: credenciais de dev em `login-painel.js` e `auth.identity.service.js`, fallback de `JWT_SECRET` em `env.js` fora de producao e bypasses de desenvolvimento em `/system` (`127.0.0.1`) e `/account` (`x-test-runner`)."
 
 ---
 
@@ -307,7 +324,7 @@ Estrutura verificada em [validate.middleware.js](../../backend/src/middlewares/v
 Verificado diretamente em [schema.prisma](../../backend/prisma/schema.prisma) e [setup-unaccent.js](../../backend/scripts/setup-unaccent.js):
 
 - **Banco de Dados:** PostgreSQL hospedado no Supabase (`CONECTADO E RESPONDENDO` no boot).
-- **ORM e Sincronizacao:** Prisma Client `6.19.3` com schema declarativo sincronizado via `prisma db push` (`"prisma:push": "prisma db push"` em `backend/package.json`) e extensoes SQL (`unaccent` e `pg_trgm`) via `scripts/setup-unaccent.js`. *(Observacao: nao utiliza pasta `prisma/migrations/`).*
+- **ORM e Sincronizacao:** Prisma Client `6.19.3` com schema declarativo sincronizado via `prisma db push` (`"prisma:push": "prisma db push"` em `backend/package.json`), extensoes SQL (`unaccent` e `pg_trgm`) via `scripts/setup-unaccent.js` e dados iniciais via `prisma/seed.js`. *(Observacao importante: o projeto nao utiliza pasta `prisma/migrations/` nem script SQL isolado de `CREATE TABLE`; por isso, o requisito de script de criacao ou migracoes e classificado como parcialmente atendido).*
 - **Modelos e Relacionamentos Centrais:**
   - `User` 1:N `Product` (`sellerId`, `onDelete: Cascade`), com campos `city`, `state`, `neighborhood`, `ratingAverage`, `ratingCount`.
   - `User` 1:N `Review` em relacao dupla (`ReviewsGiven` via `authorId` e `ReviewsReceived` via `targetId`). *(Nota: a unicidade de uma avaliacao por comprador/vendedor e verificada pela logica do service, sem garantia de unicidade fisica no banco).*
@@ -360,21 +377,29 @@ Resultados reais comprovados por execucao direta com `node --test` (`node:test`)
 ---
 
 ### Slide 13: Roteiro da Demonstracao ao Vivo (Live Demo)
-Passo a passo verificado em auditoria pratica com contas de teste para apresentar em ate 3 minutos:
+Passo a passo testado para execucao ao vivo com contas de teste e banco PostgreSQL/Supabase ativo:
 
-1. **Passo 1: Healthcheck, Swagger UI e Cache HTTP:**
-   - Acessar `http://localhost:3000/api/v1/health` (`200`, banco conectado) e `http://localhost:3000/api/v1/docs` (OpenAPI `3.0.3`).
-   - Mostrar o header `Cache-Control: public, max-age=300` em `GET /api/v1/categories`.
-2. **Passo 2: Filtro Regional e Compartilhamento:**
-   - Consultar `GET /api/v1/products?city=Paulistana` exibindo anuncios reais da regiao no banco e demonstrar o compartilhamento pelo WhatsApp na pagina do produto.
-3. **Passo 3: Avaliacao Autenticada com Transacao:**
-   - Executar `POST /api/v1/reviews/user/:userId` com token JWT de conta de teste compradora e exibir a media e total atualizados em `GET /api/v1/reviews/user/:userId` e no perfil do vendedor no frontend.
-4. **Passo 4: Seguranca, Validacao Zod e Bloqueio RBAC Real com Contas de Teste:**
-   - Mostrar erro `400 VALIDATION_ERROR` em payload invalido no `/auth/register`, `401 UNAUTHORIZED` sem token em `/auth/me` e **`403 Forbidden` ao chamar `GET /api/v1/reports` com token de conta de teste `BUYER`**. *(Nao utilizar `/api/v1/system` via `127.0.0.1` em modo `development` como evidencia de RBAC, pois o servidor aplica bypass local para loopback nesse ambiente).*
+1. **Passo 1 — Consulta Publica, Filtros e Cache HTTP:**
+   - `GET http://localhost:3000/api/v1/health` (`200`, banco conectado).
+   - `GET http://localhost:3000/api/v1/categories` mostrando o header `Cache-Control: public, max-age=300`.
+   - `GET http://localhost:3000/api/v1/products?city=Paulistana&page=1&limit=5&sort=price_asc` exibindo paginacao, filtro regional e ordenacao reais.
+2. **Passo 2 — Login e Extracao de Token JWT:**
+   - `POST http://localhost:3000/api/v1/auth/login` com conta de teste (`BUYER`/`SELLER`) retornando `200` e `token` JWT no nivel raiz do JSON (`{ success: true, message, user, token }`).
+3. **Passo 3 — Rota Protegida Autenticada:**
+   - `GET http://localhost:3000/api/v1/auth/me` enviando `Authorization: Bearer <TOKEN>` (retornando `200` com o usuario autenticado; e `401 UNAUTHORIZED` quando chamado sem token).
+4. **Passo 4 — Validacao Zod (400) e Criacao de Recurso (201):**
+   - Enviar payload invalido em `POST /api/v1/products` ou `/auth/register` para evidenciar `400 VALIDATION_ERROR` com detalhamento de campos.
+   - Enviar `POST /api/v1/products` com `Authorization: Bearer <TOKEN>` e JSON valido (`title`, `description`, `price` obrigatorios; opcionais `city`, `neighborhood`, `condition`), obtendo `201 Created`.
+5. **Passo 5 — Regra de Negocio (`$transaction`) e Compartilhamento:**
+   - `POST /api/v1/reviews/user/:userId` com token de conta compradora atualizando `ratingAverage` e `ratingCount` em transacao unica, exibido em `GET /api/v1/reviews/user/:userId` e no perfil do vendedor; demonstrar tambem o botao WhatsApp na pagina do produto.
+6. **Passo 6 — Segregacao RBAC (`403 Forbidden` Real):**
+   - Chamar `GET http://localhost:3000/api/v1/reports` usando token de conta comum (`BUYER`/`SELLER`), comprovando o bloqueio `403 Forbidden`. *(Nao utilizar `/api/v1/system` via `127.0.0.1` em modo `development` como evidencia de RBAC, pois o servidor aplica bypass local para loopback nesse ambiente).*
+7. **Passo 7 — Documentacao OpenAPI Interativa:**
+   - Abrir `http://localhost:3000/api/v1/docs` no navegador mostrando o Swagger UI `OpenAPI 3.0.3`.
 
 > [!NOTE]
 > **Roteiro de Fala (Slide 13):**
-> "Agora faremos a demonstracao pratica ao vivo utilizando contas de teste com o servidor e o PostgreSQL do Supabase em execucao. Mostraremos o `/health`, o Swagger UI em `/api/v1/docs` e o cache HTTP em `/categories`; depois o filtro regional de anuncios de Paulistana; o envio de uma avaliacao autenticada atualizando a media na mesma transacao; e, por fim, a validacao Zod retornando 400 e uma conta `BUYER` sendo barrada com 403 Forbidden em `/api/v1/reports`."
+> "Agora executaremos a demonstracao ao vivo com o servidor local conectado ao PostgreSQL do Supabase. Seguimos o fluxo completo: consultamos `/health`, o cache HTTP em `/categories` e a listagem paginada e ordenada de `/products` filtrada por Paulistana; fazemos login em `POST /auth/login` obtendo o `token` na raiz da resposta; acessamos `/auth/me` com Bearer JWT (e mostramos o 401 sem token); exibimos a validacao Zod retornando 400 e criamos um anuncio real com 201; demonstramos a regra de negocio de avaliacao com `$transaction`; comprovamos o RBAC com 403 Forbidden ao tentar acessar `/reports` com conta comum; e encerramos no Swagger UI em `/api/v1/docs`."
 
 ---
 
@@ -399,16 +424,16 @@ Passo a passo verificado em auditoria pratica com contas de teste para apresenta
 | **1** | **Recursos (min. 4)** | **CONFIRMADO** | 14 modulos especializados e 2 rotas raiz montados em [server.js](../../backend/src/server.js#L244-L270), totalizando 122 endpoints sob `/api/v1/` (mais 4 de documentacao Swagger). |
 | **2** | **Principios REST** | **CONFIRMADO** | Stateless via JWT, `Cache-Control: public, max-age=300` em [category.controller.js](../../backend/src/controllers/category/category.controller.js#L6), arquitetura em camadas (com Socket.IO como canal complementar separado do REST). |
 | **3** | **Nomenclatura (plural, sem verbos)** | **PARCIAL** | Recursos principais no plural sem verbos (`/products`, `/reviews`, `/users`, etc.); modulos singulares (`/auth`, `/account`, `/chat`, `/upload`, `/system`) e rotas com verbos (`/auth/login`, `/favorites/:productId/toggle`, `/system/data/*/:id/toggle`) sao utilizados diretamente pelo frontend e testes. |
-| **4** | **Verbos e Status HTTP** | **CONFIRMADO** | `GET, POST, PUT, PATCH, DELETE` e codigos `200, 201, 204, 400, 401, 403, 404, 409` tratados nas rotas e em [error.middleware.js](../../backend/src/middlewares/error.middleware.js). |
-| **5** | **Paginacao, Filtro e Ordenacao** | **CONFIRMADO** | `GET /api/v1/products` com `page`, `limit`, `sort`, `city`, `neighborhood`, `category`, `search`, `minPrice`, `maxPrice`, `condition` em [product.query.service.js](../../backend/src/services/product/product.query.service.js). |
+| **4** | **Verbos e Status HTTP** | **CONFIRMADO (com ressalva)** | `GET, POST, PUT, PATCH, DELETE` e codigos `200, 201, 204, 400, 401, 403, 404, 409` tratados nas rotas e em [error.middleware.js](../../backend/src/middlewares/error.middleware.js). *(Ressalva: `GET /api/v1/products/:id` retorna o produto mais recente como fallback em `product.query.service.js:281-293` quando existem anuncios no banco).* |
+| **5** | **Paginacao, Filtro e Ordenacao** | **CONFIRMADO** | `GET /api/v1/products` com `page`, `limit` (padrao `24`, teto `50`), `sort` (`newest`, `oldest`, `price_asc`, `price_desc`, `popular`), `city`/`cidade`, `neighborhood`/`bairro`, `category`, `categoryId`, `search`, `minPrice`, `maxPrice`, `condition` em [product.query.service.js](../../backend/src/services/product/product.query.service.js). |
 | **6** | **Versionamento na URI** | **CONFIRMADO** | Rotas montadas sob `/api/v1/` em [server.js](../../backend/src/server.js#L273). |
-| **7** | **Inovacao Tecnica (nao-CRUD)** | **CONFIRMADO** | Reputacao em `$transaction` ([review.mutation.service.js](../../backend/src/services/review/review.mutation.service.js)), busca `unaccent`, Socket.IO com notificacoes persistidas em `Notification` para eventos mapeados + gatilho de e-mail offline (`isUserOnline`) e cooldown de 30 dias em username. |
+| **7** | **Inovacao Tecnica (nao-CRUD)** | **CONFIRMADO** | Reputacao em `$transaction` ([review.mutation.service.js](../../backend/src/services/review/review.mutation.service.js)), favoritos com deduplicacao 1h e `favoritesCount` ([favorite.mutation.service.js](../../backend/src/services/favorite/favorite.mutation.service.js)), busca `unaccent`, Socket.IO com notificacoes persistidas em `Notification` + gatilho de e-mail offline e cooldown de 30 dias em username. |
 | **8** | **Autenticacao e RBAC (min. 2 papeis)** | **CONFIRMADO (com ressalva)** | JWT `authenticateToken` + segregacao real por papel no backend: usuarios comuns autenticados (`BUYER`/`SELLER`, validados por posse) vs `ADMIN`/`MODERATOR` em `/api/v1/reports` ([report.routes.js](../../backend/src/routes/report/report.routes.js)) e exclusivo `ADMIN` em `/api/v1/system` ([system.routes.js](../../backend/src/routes/system/system.routes.js)). |
 | **9** | **Validacao e Erros Padronizados** | **CONFIRMADO** | Zod em [validate.middleware.js](../../backend/src/middlewares/validate.middleware.js) + tratamento central em [error.middleware.js](../../backend/src/middlewares/error.middleware.js). |
-| **10** | **Persistencia em BD Real** | **CONFIRMADO (via `db push`)** | PostgreSQL no Supabase via [schema.prisma](../../backend/prisma/schema.prisma), `npm run prisma:push` e [setup-unaccent.js](../../backend/scripts/setup-unaccent.js) (nao utiliza `migrations/`). |
+| **10** | **Persistencia em BD Real** | **PARCIAL** | PostgreSQL real no Supabase via [schema.prisma](../../backend/prisma/schema.prisma), `npm run prisma:push`, [setup-unaccent.js](../../backend/scripts/setup-unaccent.js) e [seed.js](../../backend/prisma/seed.js); **nao ha pasta `prisma/migrations/` nem script SQL isolado de `CREATE TABLE`**. |
 | **11** | **Documentacao (OpenAPI + README)** | **CONFIRMADO** | Swagger UI em `/api/v1/docs`, OpenAPI 3.0.3 em [openapi.json](../../backend/src/docs/openapi.json) e [README.md](../../README.md). |
 | **12** | **Testes (min. 10) e Postman** | **CONFIRMADO** | **150/150 testes passando** com servidor ativo (`82 unitarios + 68 de integracao`, incluindo fluxo E2E de avaliacoes) + [itaim-vende.postman_collection.json](../../itaim-vende.postman_collection.json) (11 pastas, 47 requisicoes). |
-| **13** | **Versionamento no GitHub** | **PARCIAL** | Historico Git ativo e `.env` fora do repositório, porem ha credenciais de dev hardcoded no cliente em `login-painel.js`, fallback de `JWT_SECRET` em `env.js` e bypass de dev `127.0.0.1` em `system.routes.js`. |
+| **13** | **Versionamento no GitHub** | **PARCIAL** | Historico Git ativo e `.env` fora do repositorio; porem ha credenciais de dev hardcoded em `login-painel.js`, senha padrao em `auth.identity.service.js`, fallback de `JWT_SECRET` em `env.js`, bypass de dev `127.0.0.1` em `system.routes.js` e skip `x-test-runner` em `account.routes.js`. |
 
 ---
 
